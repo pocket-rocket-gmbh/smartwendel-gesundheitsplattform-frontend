@@ -18,7 +18,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     // No token and restricted path -> redirect to login page.
     if (token === null && isRestrictedPath) {
-      console.log("not allowed")
       router.replace({ path: '/login' })
       return
     }
@@ -28,6 +27,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       const response = await privateApi?.call('get', '/users/me', null)
       if (response?.status === ResultStatus.SUCCESSFUL) {
         userStore.currentUser = response.data.resource
+        userStore.loggedIn = true
       }
     }
   

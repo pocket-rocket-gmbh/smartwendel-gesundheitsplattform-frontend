@@ -23,6 +23,7 @@ export function useUser() {
       localStorage.removeItem('auth._token.jwt')
     }
     userStore.currentUser = null
+    userStore.loggedIn = false
     router.push({ path: '/' })
     snackbar.showSuccess('Sie wurden erfolgreich abgemeldet')
   }

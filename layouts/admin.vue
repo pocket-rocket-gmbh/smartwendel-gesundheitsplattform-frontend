@@ -5,14 +5,12 @@
         <img class="mt-3 ml-3" src="~/assets/images/logo.png" height="60" />
       </router-link>
       <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="text-h6">
-            Gesundheitsplattform
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            Smart Wendeler Land
-          </v-list-item-subtitle>
-        </v-list-item-content>
+        <v-list-item-title class="text-h6">
+          Gesundheitsplattform
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          Smart Wendeler Land
+        </v-list-item-subtitle>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -25,12 +23,17 @@
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link to="/admin/matomo" nuxt>
-          <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken
-        </v-list-item>
-        <v-divider></v-divider>
         <v-list-item link to="/admin" nuxt>
           Dashboard
+        </v-list-item>
+        <v-list-item link to="/admin/care_facilities" nuxt>
+          Einrichtungen
+        </v-list-item>
+        <v-list-item link to="/admin/categories" nuxt>
+          Leistungsbereiche
+        </v-list-item>
+        <v-list-item @click="useUser().logout()">
+          <v-icon>mdi-logout</v-icon> Logout
         </v-list-item>
       </v-list>
     </v-navigation-drawer>

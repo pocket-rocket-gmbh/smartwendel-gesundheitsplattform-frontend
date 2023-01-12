@@ -1,6 +1,13 @@
 <template>
   <div>
-    Hallo
+    
+    <v-row>
+      <v-col md="7">
+        <PublicLandingHeader />
+        <PublicLandingChooseCategory />
+      </v-col>
+    </v-row>
+    
   </div>
 </template>
 

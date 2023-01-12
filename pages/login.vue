@@ -62,10 +62,10 @@ export default defineComponent({
 
         // set user
         userStore.currentUser = result.data.user
+        userStore.loggedIn = true
 
         if (userStore.currentUser) {
           // move to dashboard
-          console.log(result.data.user.role)
           if (lastRoute.value && lastRoute.value !== '/password_forgotten') {
             router.push({ path: lastRoute.value })
           } else if (result.data.user.role === 'user') {
