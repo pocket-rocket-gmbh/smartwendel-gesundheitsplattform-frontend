@@ -53,6 +53,7 @@
           <span v-else-if="item[field.value] && field.enum_values && field.type === 'enum'">
             {{ field.enum_values[item[field.value]] }}
           </span>
+          <span v-else-if="field.type === 'array'">{{ item[field.value].join(', ') }}</span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item.id, null)">mdi-pencil</v-icon></td>
@@ -74,6 +75,9 @@ export default defineComponent({
       type: Boolean
     },
     endpoint: {
+      type: String
+    },
+    overwriteMoveEndpoint: {
       type: String
     },
     defaultSortBy: {
@@ -115,7 +119,7 @@ export default defineComponent({
     }
 
     const move = async (entry, nextEntry) => {
-      const result = await useTableMove().move(entry, nextEntry, props.endpoint)
+      const result = await useTableMove().move(entry, nextEntry, props.overwriteMoveEndpoint)
       if (result) {
         getItems()
       }

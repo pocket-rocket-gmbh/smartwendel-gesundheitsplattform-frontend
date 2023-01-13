@@ -11,15 +11,21 @@
       default-sort-by="menu_order"
       @openCreateEditDialogue="openCreateEditDialogue"
       @openDeleteDialogue="openDeleteDialogue"
+      @openAddSubCategoriesDialogue="openAddSubCategoriesDialogue"
     />
 
-    <AdminCareFacilitiesCreateEdit
+    <AdminCategoriesAddSubCategories
+      v-if="addSubCategoriesDialogueOpen"
+      :category-id="itemId"
+      @close="itemId = null; addSubCategoriesDialogueOpen = false;"
+    />
+
+    <AdminCategoriesCreateEdit
       :item-id="itemId"
       v-if="createEditDialogueOpen"
       @close="createEditDialogueOpen = false"
       endpoint="categories"
       concept-name="Leistungsbereich"
-      :payload="{ active: true }"
     />
 
     <DeleteItem
@@ -43,18 +49,16 @@ export default defineComponent({
     const fields = ref([
       { text: '', type: 'move_down' },
       { text: '', type: 'move_up' },
-      { text: 'Name', value: 'name', type: 'string' }
+      { text: 'Name', value: 'name', type: 'string' },
+      { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubCategoriesDialogue', tooltip: 'Leistungsarten hinzufügen' },
     ])
     
-    const dialog = ref(false)
-    const item = ref({ name: '' })
-    const loading = ref(false)
     const createEditDialogueOpen = ref(false)
     const confirmDeleteDialogueOpen = ref(false)
+    const addSubCategoriesDialogueOpen = ref(false)
     const itemId = ref(null)
 
     const openCreateEditDialogue = (id:string) => {
-      console.log(id)
       itemId.value = id
       createEditDialogueOpen.value = true
     }
@@ -64,21 +68,21 @@ export default defineComponent({
       confirmDeleteDialogueOpen.value = true
     }
 
+    const openAddSubCategoriesDialogue = (id:string) => {
+      itemId.value = id
+      addSubCategoriesDialogueOpen.value = true
+    }
+
     return {
       fields,
-      loading,
-      dialog,
-      item,
       createEditDialogueOpen,
       confirmDeleteDialogueOpen,
+      addSubCategoriesDialogueOpen,
       itemId,
       openCreateEditDialogue,
-      openDeleteDialogue
+      openDeleteDialogue,
+      openAddSubCategoriesDialogue
     }
   }
 })
 </script>
-<style lang="sass">
-.v-dialog--custom
-  width: 30%
-</style>

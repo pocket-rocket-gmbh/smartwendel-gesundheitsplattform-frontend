@@ -1,11 +1,11 @@
 <template>
   <v-dialog
     v-model="dialog"
-    width="500"
+    :width="size"
     transition="dialog-bottom-transition"
     @click:outside="emitClose()"
   >
-    <v-card class="dialog-500">
+    <v-card :class="`dialog-${size}`">
       <v-card-title class="text-h5">
         {{ conceptName }}
       </v-card-title>
@@ -40,9 +40,29 @@ import { ResultStatus } from '@/types/serverCallResult'
 export default defineComponent({
   emits: ['close'],
   props: {
-    itemId: String,
-    endpoint: String,
-    conceptName: String
+    itemId: {
+      type: String
+    },
+    endpoint: {
+      type: String,
+      required: true
+    },
+    conceptName: {
+      type: String
+    },
+    size: {
+      type: Number,
+      default: 500
+    },
+    itemPlaceholder: {
+      type: Object
+    },
+    overwriteGetItemEndpoint: {
+      type: String
+    },
+    overwriteUpdateItemEndpoint: {
+      type: String
+    }
   },
   setup (props, { emit }) {
     const loadingItem = ref(false)
@@ -57,7 +77,13 @@ export default defineComponent({
     createUpdateApi.setBaseApi(usePrivateApi())
 
     const getItem = async () => {
-      showApi.setEndpoint(`${props.endpoint}/${props.itemId}`)
+
+      let endpoint = `${props.endpoint}/${props.itemId}`
+      if (props.overwriteGetItemEndpoint) {
+        endpoint = props.overwriteGetItemEndpoint
+      }
+
+      showApi.setEndpoint(endpoint)
 
       loadingItem.value = true
       await showApi.getItem()
@@ -87,7 +113,12 @@ export default defineComponent({
     }
 
     const save = async () => {
-      createUpdateApi.setEndpoint(`${props.endpoint}/${props.itemId}`)
+      let endpoint = `${props.endpoint}/${props.itemId}`
+      if (props.overwriteUpdateItemEndpoint) {
+        endpoint = props.overwriteUpdateItemEndpoint
+      }
+
+      createUpdateApi.setEndpoint(endpoint)
       loadingItem.value = true
       const result = await createUpdateApi.updateItem(item.value, 'Erfolgreich aktualisiert')
       loadingItem.value = false
@@ -102,6 +133,9 @@ export default defineComponent({
     onMounted(() => {
       if (props.itemId) {
         getItem()
+      }
+      if (props.itemPlaceholder && !item.value.id) {
+        item.value = props.itemPlaceholder
       }
     })
     

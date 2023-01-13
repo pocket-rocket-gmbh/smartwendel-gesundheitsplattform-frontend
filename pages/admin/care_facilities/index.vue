@@ -13,6 +13,7 @@
 
     <AdminCareFacilitiesCreateEdit
       :item-id="itemId"
+      :item-placeholder="itemPlaceholder"
       v-if="createEditDialogueOpen"
       @close="createEditDialogueOpen = false"
       endpoint="care_facilities"
@@ -41,6 +42,12 @@ export default defineComponent({
     const fields = ref([
       { text: 'Name', value: 'name', type: 'string' }
     ])
+
+    const itemPlaceholder = ref({
+      name: '',
+      description: '',
+      category_ids: []
+    })
     
     const dialog = ref(false)
     const item = ref({ name: '' })
@@ -68,6 +75,7 @@ export default defineComponent({
       createEditDialogueOpen,
       confirmDeleteDialogueOpen,
       itemId,
+      itemPlaceholder,
       openCreateEditDialogue,
       openDeleteDialogue
     }

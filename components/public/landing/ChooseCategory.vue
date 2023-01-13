@@ -5,9 +5,8 @@
       <div class="choose-box py-2 px-4" v-if="chooseBoxOpen">
         <div v-for="category in categories" :key="category.id">
           <div class="category-headline mb-1"><i>{{ category.name }}</i></div>
-          <div class="ml-5">
-            <div class="pa-2 selectable">Stationär</div>
-            <div class="pa-2 selectable">Ambulant</div>
+          <div class="ml-5" v-if="category.sub_categories.length > 0">
+            <div class="pa-2 selectable" v-for="sub in category.sub_categories" :key="sub.id">{{ sub.name }}</div>
           </div>
         </div>
       </div>
