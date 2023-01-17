@@ -11,3 +11,5 @@ export { useErrors } from './ui/errors'
 export { useTableMove } from './ui/tableMove'
 
 export { useUser } from './user/user'
+
+export { useUuidGenerator } from './misc/uuid'

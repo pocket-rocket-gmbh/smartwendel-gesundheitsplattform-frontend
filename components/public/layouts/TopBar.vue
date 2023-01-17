@@ -2,7 +2,6 @@
   <v-app-bar
     density="compact"
     :flat="true"
-    color="primary"
     class="navigation top-bar"
   >
     <v-spacer></v-spacer>
@@ -36,5 +35,6 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-
+.navigation.top-bar
+  background: linear-gradient(270deg, #017DC2 0.29%, #015281 100%)
 </style>

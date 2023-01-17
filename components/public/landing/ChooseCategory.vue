@@ -6,7 +6,7 @@
         <div v-for="category in categories" :key="category.id">
           <div class="category-headline mb-1"><i>{{ category.name }}</i></div>
           <div class="ml-5" v-if="category.sub_categories.length > 0">
-            <div class="pa-2 selectable" v-for="sub in category.sub_categories" :key="sub.id">{{ sub.name }}</div>
+            <div class="pa-2 selectable" v-for="sub_category in category.sub_categories" :key="sub_category.id" @click="setFilterAndMove(category.id, sub_category.id)">{{ sub_category.name }}</div>
           </div>
         </div>
       </div>
@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useFilterStore } from '@/store/filter'
 export default defineComponent({
   setup () {
     const chooseBoxOpen = ref(false)
@@ -24,10 +25,20 @@ export default defineComponent({
     categoriesApi.setBaseApi(usePublicApi())
     categoriesApi.setEndpoint(`categories`)
     const categories = categoriesApi.items
+    const router = useRouter()
 
     const getCategories = async () => {
       const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
       await categoriesApi.retrieveCollection(options)
+    }
+
+    const setFilterAndMove = (categoryId:string, subCategoryId: string) => {
+      useFilterStore().$patch({
+        'currentCategoryId': categoryId,
+        'currentSubCategoryId': subCategoryId
+      })
+
+      router.push({ path: '/public/search'})
     }
 
     onMounted(() => {
@@ -36,7 +47,8 @@ export default defineComponent({
 
     return {
       chooseBoxOpen,
-      categories
+      categories,
+      setFilterAndMove
     }
   }
 })
