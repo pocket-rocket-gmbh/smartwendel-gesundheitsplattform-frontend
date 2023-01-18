@@ -3,15 +3,18 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --hostname 'localhost' --port 8084",
+    "start": "node .output/server/index.mjs",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
+  },
+  "engines": {
+    "node": "16.4.2"
   },
   "devDependencies": {
     "nuxt": "3.0.0"
   },
   "dependencies": {
-    "@heroicons/vue": "^2.0.13",
     "@mdi/font": "^7.1.96",
     "@nuxtjs/vuetify": "^1.12.3",
     "@pinia/nuxt": "^0.4.6",
