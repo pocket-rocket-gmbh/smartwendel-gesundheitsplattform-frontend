@@ -2,6 +2,7 @@
   <v-app-bar
     density="compact"
     :flat="true"
+    class="second-bar"
   >
     <v-spacer></v-spacer>
     <v-list-item>
@@ -29,5 +30,6 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-
+.second-bar
+  background: transparent
 </style>

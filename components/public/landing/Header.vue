@@ -1,5 +1,5 @@
 <template>
-  <img src="@/assets/images/logo.png" class="logo mb-10" />
+  <img src="@/assets/images/logo.png" class="logo my-10" />
   <h1>
     Ihre Gesundheits plattform im Landkreis St. Wendel
   </h1>
@@ -20,7 +20,7 @@ export default defineComponent({
 h1
   color: #015281
   font-size: 55px
-  font-weight: 500
+  font-weight: 600
   text-transform: uppercase
   line-height: 120%
 p

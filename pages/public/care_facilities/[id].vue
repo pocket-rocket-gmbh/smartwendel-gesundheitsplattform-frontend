@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-row>
       <v-col md="8">
         <PublicCareFacilitiesMain
@@ -10,7 +10,7 @@
         Right
       </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script lang="ts">

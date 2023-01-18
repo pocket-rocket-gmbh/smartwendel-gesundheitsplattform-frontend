@@ -4,9 +4,7 @@
     <PublicLayoutsSecondBar />
 
     <v-main>
-      <v-container>
-        <slot />
-      </v-container>
+      <slot />
     </v-main>
     <PublicLayoutsFooter />
   </v-app>
