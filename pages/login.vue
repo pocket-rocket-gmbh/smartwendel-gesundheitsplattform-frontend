@@ -15,7 +15,7 @@
           <v-text-field v-model="password"
             type="password"
             label="Passwort"
-            :error-messages="useErrors().mapError(errors)"
+            :error-messages="useErrors().mappedErrorCode(errors)"
             hide-details="auto"
           />
         </div>

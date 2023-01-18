@@ -130,6 +130,10 @@ export default defineComponent({
       }
     }
 
+    useNuxtApp().$bus.$on("setPayloadFromSlotChild", (payload) => {
+      item.value[payload.name] = payload.value
+    })
+
     onMounted(() => {
       if (props.itemId) {
         getItem()

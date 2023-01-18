@@ -52,18 +52,14 @@
               </ClientOnly>
             </v-window-item>
             <v-window-item value="option-3">
-
-              <v-select
-                hide-details="auto"
-                v-model="slotProps.item.category_ids"
-                :items="categories"
-                item-title="name"
-                item-value="id"
-                label="Leistungsbereiche wählen"
-                single-line
-                :multiple="true"
+              <AdminCareFacilitiesChooseCategories
+                :pre-set-category-ids="slotProps.item.category_ids"
+                :pre-set-sub-category-ids="slotProps.item.sub_category_ids"
+                :pre-set-tags="slotProps.item.tags"
+                @setCategoryIds="setCategoryIds"
+                @setSubCategoryIds="setSubCategoryIds"
+                @setTags="setTags"
               />
-
             </v-window-item>
           </v-window>
         </v-col>
@@ -72,10 +68,12 @@
   </CreateEdit>
 </template>
 <script lang="ts">
+import { emit } from 'process'
+
 export default defineComponent({
   setup() {
     const tab = ref('option-1')
-
+    
     const textOptions = ref({
       debug: false,
       placeholder: 'Einrichtung Beschreibung',
@@ -84,23 +82,24 @@ export default defineComponent({
       toolbar: "essential"
     })
 
-    const categoriesApi = useCollectionApi()
-    categoriesApi.setBaseApi(usePrivateApi())
-    categoriesApi.setEndpoint(`categories`)
-    const categories = categoriesApi.items
-
-    const getCategories = async () => {
-      await categoriesApi.retrieveCollection()
+    const setCategoryIds = (categoryIds:any) => {
+      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'category_ids', value: categoryIds })
     }
 
-    onMounted(() => {
-      getCategories()
-    })
+    const setSubCategoryIds = (subCategoryIds:any) => {
+      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'sub_category_ids', value: subCategoryIds })
+    }
+
+    const setTags = (tags:any) => {
+      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tags', value: tags })
+    }
 
     return {
       tab,
       textOptions,
-      categories
+      setCategoryIds,
+      setSubCategoryIds,
+      setTags
     }
   }
 })
