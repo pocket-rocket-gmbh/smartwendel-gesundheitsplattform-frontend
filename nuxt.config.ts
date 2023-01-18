@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icons'
   ],
+  experimental: {
+    treeshakeClientOnly: false
+  },
   runtimeConfig: {
     public: {
       API_BASE_URL: process.env.API_BASE_URL,

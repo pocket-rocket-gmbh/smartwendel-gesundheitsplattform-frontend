@@ -68,8 +68,6 @@
   </CreateEdit>
 </template>
 <script lang="ts">
-import { emit } from 'process'
-
 export default defineComponent({
   setup() {
     const tab = ref('option-1')
