@@ -2,38 +2,44 @@
   <div>
     <PublicSearchTheBasicSearchBox />
 
-    <v-row>
+    <v-row class="mt-8">
       <v-col md="2">
-        <h2 class="is-primary">Suche filtern</h2>
+        <h2 class="is-primary is-uppercase mb-4">Suche filtern</h2>
 
-        <PublicFilterSelect
-          :key="currentCategoryId"
-          color="is-primary"
-          filter-name="category"
-          label="Leistungsbereich"
-          endpoint="categories"
-        />
+        <div class="mb-4">
+          <PublicFilterSelect
+            :key="currentCategoryId"
+            color="is-primary"
+            filter-name="category"
+            label="Leistungsbereich"
+            endpoint="categories"
+          />
+        </div>
 
-        <PublicFilterSelect
-          :disabled="!currentCategoryId"
-          :key="currentCategoryId"
-          color="is-primary"
-          filter-name="subCategory"
-          label="Leistungsart"
-          :endpoint="`categories/${currentCategoryId}/sub_categories`"
-        />
+        <div class="mb-4">
+          <PublicFilterSelect
+            :disabled="!currentCategoryId"
+            :key="currentCategoryId"
+            color="is-primary"
+            filter-name="subCategory"
+            label="Leistungsart"
+            :endpoint="`categories/${currentCategoryId}/sub_categories`"
+          />
+        </div>
 
-        <PublicFilterSelect
-          :disabled="!currentSubCategoryId || !currentCategoryId"
-          :key="currentSubCategoryId"
-          color="is-primary"
-          filter-name="subCategoryTags"
-          label="Leistung"
-          :endpoint="`categories/${currentCategoryId}/sub_categories`"
-        />
+        <div class="mb-4">
+          <PublicFilterSelect
+            :disabled="!currentSubCategoryId || !currentCategoryId"
+            :key="currentSubCategoryId"
+            color="is-primary"
+            filter-name="subCategoryTags"
+            label="Leistung"
+            :endpoint="`categories/${currentCategoryId}/sub_categories`"
+          />
+        </div>
       </v-col>
       <v-col md="10">
-        Right
+        <PublicSearchTheFilteredCareFacilities />
       </v-col>
     </v-row>
   </div>

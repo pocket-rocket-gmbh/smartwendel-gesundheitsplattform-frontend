@@ -40,6 +40,7 @@ export default defineComponent({
     })
 
     const fields = ref([
+      { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
       { text: 'Name', value: 'name', type: 'string' }
     ])
 

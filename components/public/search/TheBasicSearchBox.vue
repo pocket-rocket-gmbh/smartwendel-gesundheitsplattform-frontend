@@ -18,7 +18,23 @@
           endpoint="categories"
         />
       </v-col>
-      <v-col></v-col>
+      <v-col>
+        <div class="field">
+          <label class="label">Ort, Adresse, PLZ</label>
+          <input type="text" class="input" />
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col align="right">
+        <v-btn
+          variant="flat"
+          color="info"
+          rounded="pill"
+        >
+          Suche starten
+        </v-btn>
+      </v-col>
     </v-row>
   </div>
 </template>
