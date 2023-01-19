@@ -38,7 +38,8 @@ export function useCollectionApi() {
         filtersParam += '&filter_' + element.field + "=" + element.value        
       })
     }
-
+    console.log("Filter param")
+    console.log(filtersParam)
     let initialQueryOperator = '?'
     if (endpoint.includes("?")) {
       initialQueryOperator = '&'

@@ -57,20 +57,22 @@ export default defineComponent({
         useFilterStore().$patch({
           'currentCategoryId': e.target.value,
           'currentSubCategoryId': null,
-          'currentSubCategoryTag': null
+          'currentSubCategoryTags': null
         })
       }
       if (props.filterName === 'subCategory') {
         useFilterStore().$patch({
           'currentSubCategoryId': e.target.value,
-          'currentSubCategoryTag': null
+          'currentSubCategoryTags': null
         })
       }
       if (props.filterName === 'subCategoryTags') {
         useFilterStore().$patch({
-          'currentSubCategoryTag': e.target.value
+          'currentSubCategoryTags': e.target.querySelectorAll(`[value="${e.target.value}"]`)[0].text
         })
       }
+
+      useNuxtApp().$bus.$emit('updateFacilitiesBasedOnFilterChange', props.filterName)
     }
 
     const api = useCollectionApi()

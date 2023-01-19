@@ -67,7 +67,6 @@ export default defineComponent({
     const itemId = ref(null)
 
     const openCreateEditDialogue = (id:string) => {
-      console.log(id)
       itemId.value = id
       createEditDialogueOpen.value = true
     }

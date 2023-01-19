@@ -34,22 +34,79 @@
         </v-btn>
       </v-col>
     </v-row>
+
+    <div>{{ careFacility.categories }}</div>
+    <div>{{ careFacility.sub_categories }}</div>
+    <div>{{ careFacility.tags }}</div>
   </div>
 </template>
 
 <script lang="ts">
+import { useFilterStore } from '@/store/filter'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   setup() {
+
+    const filters = ref([])
+
+    const currentCategoryId = computed(() => {
+      return useFilterStore().currentCategoryId
+    })
+    const currentSubCategoryId = computed(() => {
+      return useFilterStore().currentSubCategoryId
+    })
+    const currentSubCategoryTags = computed(() => {
+      return useFilterStore().currentSubCategoryTags
+    })
+
     const careFaclitiesApi = useCollectionApi()
     careFaclitiesApi.setBaseApi(usePublicApi())
     careFaclitiesApi.setEndpoint(`care_facilities`)
-    const careFaclities = careFaclitiesApi.items
+    const careFaclities = ref([])
+
+    if (useNuxtApp().$bus) {
+      useNuxtApp().$bus.$on("updateFacilitiesBasedOnFilterChange", (toUpdate:string) => {
+        
+
+        if (toUpdate === 'category') {
+          console.log("set category filter")
+          console.log(filters.value)
+          const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_category')
+          if (foundFilter) {
+            filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_category')
+          }
+          filters.value.push ( { field: 'care_facility_category', value: currentCategoryId.value } )
+          getCareFacilities()
+          return
+        }
+        if (toUpdate === 'subCategory') {
+          console.log("set sub category filter")
+          const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_sub_category')
+          if (foundFilter) {
+            filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_sub_category')
+          }
+          filters.value.push ( { field: 'care_facility_sub_category', value: currentSubCategoryId.value } )
+          getCareFacilities()
+          return
+        }
+        if (toUpdate === 'subCategoryTags') {
+          console.log("set tags filter")
+          const foundFilter = filters.value.find((f:any) => f.field === 'tags')
+          if (foundFilter) {
+            filters.value = filters.value.filter((f:any) => f.field !== 'tags')
+          }
+          filters.value.push ( { field: 'tags', value: currentSubCategoryTags.value } )
+          getCareFacilities()
+          return
+        }
+      })
+    }
 
     const getCareFacilities = async () => {
-      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
-      await careFaclitiesApi.retrieveCollection(options)
+      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: filters.value }
+      await careFaclitiesApi.retrieveCollection(options as any)
+      careFaclities.value = careFaclitiesApi.items.value
     }
 
     onMounted(() => {
