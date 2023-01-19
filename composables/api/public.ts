@@ -5,7 +5,7 @@ import { ServerCallResult } from '@/types/serverCallResult'
 
 export function usePublicApi() {
   const config = useRuntimeConfig()
-  const token = `${config.public.PUBLIC_API_USERNAME}:${config.public.PUBLIC_API_PASSWORD}`
+  const token = `${config.PUBLIC_API_USERNAME}:${config.PUBLIC_API_PASSWORD}`
   const encodedToken = Buffer.from(token).toString('base64')
 
   const serverInterface = useServerInterface()  

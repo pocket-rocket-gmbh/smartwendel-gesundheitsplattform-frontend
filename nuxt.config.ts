@@ -14,10 +14,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       API_BASE_URL: process.env.API_BASE_URL,
-      PUBLIC_API_USERNAME: process.env.PUBLIC_API_USERNAME,
-      PUBLIC_API_PASSWORD: process.env.PUBLIC_API_PASSWORD,
-      REGISTER_TOKEN: process.env.REGISTER_TOKEN
-    }
+      LOGIN_PASSWORD: process.env.LOGIN_PASSWORD
+    },
+    
+    PUBLIC_API_USERNAME: process.env.PUBLIC_API_USERNAME,
+    PUBLIC_API_PASSWORD: process.env.PUBLIC_API_PASSWORD,
+    REGISTER_TOKEN: process.env.REGISTER_TOKEN
   },
   app: {
     head: {

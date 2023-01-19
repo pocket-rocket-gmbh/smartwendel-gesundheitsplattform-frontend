@@ -40,7 +40,7 @@
         <v-chip
           size="small"
           v-for="cat in careFacility.categories" :key="cat.id"
-          class="mr-2"
+          class="mr-2 mt-2"
           color="primary"
           variant="outlined"
         >
@@ -49,7 +49,7 @@
         <v-chip
           size="small"
           v-for="subCat in careFacility.sub_categories"
-          :key="subCat.id" class="mr-2"
+          :key="subCat.id" class="mr-2 mt-2"
           color="info"
           variant="outlined"
         >
@@ -58,7 +58,7 @@
         <v-chip
           size="small"
           v-for="(tag, index) in careFacility.tags"
-          :key="index" class="mr-2"
+          :key="index" class="mr-2 mt-2"
           color="error"
           variant="outlined"
         >
