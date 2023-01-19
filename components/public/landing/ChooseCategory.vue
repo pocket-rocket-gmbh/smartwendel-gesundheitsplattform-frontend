@@ -57,7 +57,7 @@ export default defineComponent({
 <style lang="sass" scoped>
 .choose-category
   position: relative
-  width: 50%
+  width: 70%
   .category-input
     border: 2px solid #015281
     border-radius: 58px

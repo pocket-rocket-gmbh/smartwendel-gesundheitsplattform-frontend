@@ -1,8 +1,8 @@
 <template>
   <header class="background">
-    <v-container class="limited">
+    <v-container class="limited offset">
       <v-row>
-        <v-col md="7">
+        <v-col md="5">
           <PublicLandingHeader />
           <PublicLandingChooseCategory />
         </v-col>

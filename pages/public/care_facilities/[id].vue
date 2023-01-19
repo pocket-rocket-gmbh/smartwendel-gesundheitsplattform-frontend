@@ -1,5 +1,5 @@
 <template>
-  <v-container class="limited">
+  <v-container class="limited offset">
     <PublicCareFacilitiesImages
       :care-facility="careFacility"
     />

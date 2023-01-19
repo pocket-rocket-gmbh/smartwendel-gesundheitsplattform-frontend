@@ -32,6 +32,8 @@
       :endpoint="`categories/${currentCategoryId}/sub_categories`"
     />
   </div>
+
+  <div class="text-info is-clickable font-weight-bold" @click="emitResetFilter"><nuxt-icon filled name="trash" class="mr-1" /> Alle Filter löschen</div>
 </template>
 
 <script lang="ts">
@@ -45,9 +47,20 @@ export default defineComponent({
       return useFilterStore().currentSubCategoryId
     })
 
+    const emitResetFilter = () => {
+      useFilterStore().$patch({
+        'currentCategoryId': null,
+        'currentSubCategoryId': null,
+        'currentSubCategoryTags': null
+      })
+      useNuxtApp().$bus.$emit('updateFacilitiesBasedOnFilterChange', null)
+      useNuxtApp().$bus.$emit('clearSearch', null)
+    }
+
     return {
       currentCategoryId,
-      currentSubCategoryId
+      currentSubCategoryId,
+      emitResetFilter
     }
   }
 })

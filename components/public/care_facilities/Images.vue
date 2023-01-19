@@ -40,12 +40,12 @@ export default defineComponent({
 .image-area
   position: relative
   &.has-logo
-    margin-bottom: 70px
+    margin-bottom: 3%
   .logo img
-    max-width: 300px
+    max-width: 15%
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
     border-radius: 20px
     position: absolute
     left: 40px
-    bottom: -40px
+    bottom: -5%
 </style>

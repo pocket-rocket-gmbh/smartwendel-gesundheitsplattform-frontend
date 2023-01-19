@@ -1,43 +1,76 @@
 <template>
-  <div class="item mb-6" v-for="careFacility in careFaclities" :key="careFacility.id">
-    <v-row>
-      <v-col>
-        <h2 class="is-primary is-uppercase">{{ careFacility.name }}</h2>
-        <div v-if="careFacility.kind" class="text-info font-weight-bold">
-          {{ useKindsCareFacilities().getNameFromId(careFacility.kind) }}
-        </div>
-        <v-row>
-          <v-col>
-            <div class="text-dark-grey font-weight-bold mt-4">
-              <div v-if="careFacility.street">{{ careFacility.street }}</div>
-              <div v-if="careFacility.zip || careFacility.town">{{ careFacility.zip }} {{ careFacility.town }}</div>
-              <div v-if="careFacility.community">{{ careFacility.community }}</div>
-            </div>
-          </v-col>
-          <v-col>
-            <div class="text-dark-grey font-weight-bold mt-4">
-              <div v-if="careFacility.phone"><nuxt-icon name="phone" filled class="mr-2" />{{ careFacility.phone }}</div>
-              <div v-if="careFacility.email"><nuxt-icon name="email" filled class="mr-2" />{{ careFacility.email }}</div>
-            </div>
-          </v-col>
-        </v-row>
-        
-      </v-col>
-      <v-col align="right">
-        <v-btn
-          variant="flat"
-          color="info"
-          rounded="pill"
-          :href="`/public/care_facilities/${careFacility.id}`"
+  <Loading v-if="loading" />
+  <div v-else-if="careFaclities.length > 0">
+    <div class="item mb-6" v-for="careFacility in careFaclities" :key="careFacility.id">
+      <v-row>
+        <v-col>
+          <h2 class="is-primary is-uppercase">{{ careFacility.name }}</h2>
+          <div v-if="careFacility.kind" class="text-info font-weight-bold">
+            {{ useKindsCareFacilities().getNameFromId(careFacility.kind) }}
+          </div>
+          <v-row>
+            <v-col>
+              <div class="text-dark-grey font-weight-bold mt-4">
+                <div v-if="careFacility.street">{{ careFacility.street }}</div>
+                <div v-if="careFacility.zip || careFacility.town">{{ careFacility.zip }} {{ careFacility.town }}</div>
+                <div v-if="careFacility.community">{{ careFacility.community }}</div>
+              </div>
+            </v-col>
+            <v-col>
+              <div class="text-dark-grey font-weight-bold mt-4">
+                <div v-if="careFacility.phone"><nuxt-icon name="phone" filled class="mr-2" />{{ careFacility.phone }}</div>
+                <div v-if="careFacility.email"><nuxt-icon name="email" filled class="mr-2" />{{ careFacility.email }}</div>
+              </div>
+            </v-col>
+          </v-row>
+          
+        </v-col>
+        <v-col align="right">
+          <v-btn
+            variant="flat"
+            color="info"
+            rounded="pill"
+            :href="`/public/care_facilities/${careFacility.id}`"
+          >
+            Details ansehen
+          </v-btn>
+        </v-col>
+      </v-row>
+      <div class="mt-4">
+        <v-chip
+          size="small"
+          v-for="cat in careFacility.categories" :key="cat.id"
+          class="mr-2"
+          color="primary"
+          variant="outlined"
         >
-          Details ansehen
-        </v-btn>
-      </v-col>
-    </v-row>
-
-    <div>{{ careFacility.categories }}</div>
-    <div>{{ careFacility.sub_categories }}</div>
-    <div>{{ careFacility.tags }}</div>
+          {{ cat.name }}
+        </v-chip>
+        <v-chip
+          size="small"
+          v-for="subCat in careFacility.sub_categories"
+          :key="subCat.id" class="mr-2"
+          color="info"
+          variant="outlined"
+        >
+          {{ subCat.name }}
+        </v-chip>
+        <v-chip
+          size="small"
+          v-for="(tag, index) in careFacility.tags"
+          :key="index" class="mr-2"
+          color="error"
+          variant="outlined"
+        >
+          {{ tag }}
+        </v-chip>
+      </div>
+    </div>
+  </div>
+  <div v-else-if="!loading">
+    <div class="item">
+      Leider keine Ergebnisse. Bitte passen Sie Ihre Suche an.
+    </div>
   </div>
 </template>
 
@@ -49,6 +82,8 @@ export default defineComponent({
   setup() {
 
     const filters = ref([])
+    const searchQuery = ref(null)
+    const loading = ref(false)
 
     const currentCategoryId = computed(() => {
       return useFilterStore().currentCategoryId
@@ -67,54 +102,72 @@ export default defineComponent({
 
     if (useNuxtApp().$bus) {
       useNuxtApp().$bus.$on("updateFacilitiesBasedOnFilterChange", (toUpdate:string) => {
-        
+        if (!toUpdate) {
+          filters.value = []
+          searchQuery.value = null
+        } else {
+          updateFilters(toUpdate)
+        }
+        getCareFacilities()
+      })
 
-        if (toUpdate === 'category') {
-          console.log("set category filter")
-          console.log(filters.value)
-          const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_category')
-          if (foundFilter) {
-            filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_category')
-          }
-          filters.value.push ( { field: 'care_facility_category', value: currentCategoryId.value } )
-          getCareFacilities()
-          return
-        }
-        if (toUpdate === 'subCategory') {
-          console.log("set sub category filter")
-          const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_sub_category')
-          if (foundFilter) {
-            filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_sub_category')
-          }
-          filters.value.push ( { field: 'care_facility_sub_category', value: currentSubCategoryId.value } )
-          getCareFacilities()
-          return
-        }
-        if (toUpdate === 'subCategoryTags') {
-          console.log("set tags filter")
-          const foundFilter = filters.value.find((f:any) => f.field === 'tags')
-          if (foundFilter) {
-            filters.value = filters.value.filter((f:any) => f.field !== 'tags')
-          }
-          filters.value.push ( { field: 'tags', value: currentSubCategoryTags.value } )
-          getCareFacilities()
-          return
-        }
+      useNuxtApp().$bus.$on("emitFacilitySearch", (query:string) => {
+        searchQuery.value = query
+        getCareFacilities()
       })
     }
 
+    const updateFilters = (toUpdate:string) => {
+      if (toUpdate === 'category') {
+        const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_category')
+        if (foundFilter) {
+          filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_category')
+        }
+        filters.value.push ( { field: 'care_facility_category', value: currentCategoryId.value } )
+        return
+      }
+      if (toUpdate === 'subCategory') {
+        const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_sub_category')
+        if (foundFilter) {
+          filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_sub_category')
+        }
+        filters.value.push ( { field: 'care_facility_sub_category', value: currentSubCategoryId.value } )
+        return
+      }
+      if (toUpdate === 'subCategoryTags') {
+        const foundFilter = filters.value.find((f:any) => f.field === 'tags')
+        if (foundFilter) {
+          filters.value = filters.value.filter((f:any) => f.field !== 'tags')
+        }
+        filters.value.push ( { field: 'tags', value: currentSubCategoryTags.value } )
+        return
+      }
+    }
+
     const getCareFacilities = async () => {
-      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: filters.value }
+      loading.value = true
+      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: searchQuery.value, concat: false, filters: filters.value }
       await careFaclitiesApi.retrieveCollection(options as any)
       careFaclities.value = careFaclitiesApi.items.value
+      loading.value = false
     }
 
     onMounted(() => {
+      if (currentCategoryId.value) {
+        updateFilters('category')
+      }
+      if (currentSubCategoryId.value) {
+        updateFilters('subCategory')
+      }
+      if (currentSubCategoryTags.value) {
+        updateFilters('currentSubCategoryTags')
+      }
       getCareFacilities()
     })
 
     return {
-      careFaclities
+      careFaclities,
+      loading
     }
   }
 })

@@ -6,7 +6,7 @@
       <v-col>
         <div class="field">
           <label class="label">Einrichtung, Arzt, Name etc.</label>
-          <input type="text" class="input" />
+          <input type="text" class="input" v-model="searchQuery" />
         </div>
       </v-col>
       <v-col>
@@ -18,19 +18,13 @@
           endpoint="categories"
         />
       </v-col>
-      <v-col>
-        <div class="field">
-          <label class="label">Ort, Adresse, PLZ</label>
-          <input type="text" class="input" />
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col align="right">
         <v-btn
+          class="mt-7"
           variant="flat"
           color="info"
           rounded="pill"
+          @click="emitSearch"
         >
           Suche starten
         </v-btn>
@@ -47,14 +41,25 @@ export default defineComponent({
     const searchQuery = ref('')
     const filterStore = useFilterStore()
 
+    if (useNuxtApp().$bus) {
+      useNuxtApp().$bus.$on("clearSearch", () => {
+        searchQuery.value = ''
+      })
+    }
+    
     const currentCategoryId = computed(() => {
       return filterStore.currentCategoryId
     })
 
+    const emitSearch = () => {
+      useNuxtApp().$bus.$emit('emitFacilitySearch', searchQuery.value)
+    }
+
     return {
       useFilterStore,
       searchQuery,
-      currentCategoryId
+      currentCategoryId,
+      emitSearch
     }
   }
 })
