@@ -22,6 +22,16 @@ import { defineComponent } from 'vue'
 import { useAuthStore } from '@/store/auth'
 export default defineComponent({
   setup () {
+
+    onMounted(() => {
+      const auth = localStorage.getItem('smartwendel_gesundheitsplattform_authenticated')
+      if (auth && auth === 'true') {
+        useAuthStore().$patch({
+          'authenticated': true
+        })
+      }
+    })
+
     const authenticated = computed(() => {
       return useAuthStore().authenticated
     })

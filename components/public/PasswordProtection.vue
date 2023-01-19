@@ -32,6 +32,7 @@ export default defineComponent({
         useAuthStore().$patch({
           'authenticated': true
         })
+        localStorage.setItem('smartwendel_gesundheitsplattform_authenticated', 'true')
       } else {
         animated.value = true
         setTimeout(() => {
