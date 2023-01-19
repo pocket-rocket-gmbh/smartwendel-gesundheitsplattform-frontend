@@ -1,6 +1,6 @@
 <template>
   <header class="background">
-    <v-container>
+    <v-container class="limited">
       <v-row>
         <v-col md="7">
           <PublicLandingHeader />

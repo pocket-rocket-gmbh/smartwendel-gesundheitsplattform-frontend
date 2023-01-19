@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="limited">
     <v-row>
       <v-col md="8">
         <PublicCareFacilitiesMain

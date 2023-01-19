@@ -1,7 +1,28 @@
 <template>
   <div class="item mb-6" v-for="careFacility in careFaclities" :key="careFacility.id">
     <v-row>
-      <v-col><h2 class="is-primary is-uppercase">{{ careFacility.name }}</h2></v-col>
+      <v-col>
+        <h2 class="is-primary is-uppercase">{{ careFacility.name }}</h2>
+        <div v-if="careFacility.kind" class="text-info font-weight-bold">
+          {{ useKindsCareFacilities().getNameFromId(careFacility.kind) }}
+        </div>
+        <v-row>
+          <v-col>
+            <div class="text-dark-grey font-weight-bold mt-4">
+              <div v-if="careFacility.street">{{ careFacility.street }}</div>
+              <div v-if="careFacility.zip || careFacility.town">{{ careFacility.zip }} {{ careFacility.town }}</div>
+              <div v-if="careFacility.community">{{ careFacility.community }}</div>
+            </div>
+          </v-col>
+          <v-col>
+            <div class="text-dark-grey font-weight-bold mt-4">
+              <div v-if="careFacility.phone"><nuxt-icon name="phone" filled class="mr-2" />{{ careFacility.phone }}</div>
+              <div v-if="careFacility.email"><nuxt-icon name="email" filled class="mr-2" />{{ careFacility.email }}</div>
+            </div>
+          </v-col>
+        </v-row>
+        
+      </v-col>
       <v-col align="right">
         <v-btn
           variant="flat"
@@ -18,6 +39,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
 export default defineComponent({
   setup() {
     const careFaclitiesApi = useCollectionApi()

@@ -18,7 +18,7 @@
       @close="createEditDialogueOpen = false"
       endpoint="care_facilities"
       concept-name="Einrichtung"
-      :payload="{ active: true }"
+      :payload="{ active: true, kind: 'doctor' }"
     />
 
     <DeleteItem

@@ -13,3 +13,4 @@ export { useTableMove } from './ui/tableMove'
 export { useUser } from './user/user'
 
 export { useUuidGenerator } from './misc/uuid'
+export { useKindsCareFacilities } from './misc/kindsCareFacilities'
