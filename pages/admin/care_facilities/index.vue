@@ -9,6 +9,7 @@
       endpoint="care_facilities"
       @openCreateEditDialogue="openCreateEditDialogue"
       @openDeleteDialogue="openDeleteDialogue"
+      @openAddImagesDialogue="openAddImagesDialogue"
     />
 
     <AdminCareFacilitiesCreateEdit
@@ -19,6 +20,12 @@
       endpoint="care_facilities"
       concept-name="Einrichtung"
       :payload="{ active: true, kind: 'doctor' }"
+    />
+
+    <AdminCareFacilitiesAddImages
+      :item-id="itemId"
+      v-if="addImagesDialogueOpen"
+      @close="itemId = null; addImagesDialogueOpen = false"
     />
 
     <DeleteItem
@@ -41,7 +48,8 @@ export default defineComponent({
 
     const fields = ref([
       { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
-      { text: 'Name', value: 'name', type: 'string' }
+      { text: 'Name', value: 'name', type: 'string' },
+      { text: '', value: 'mdi-image-plus', type: 'icon', emit: 'openAddImagesDialogue', tooltip: 'Bilder hinzufügen' },
     ])
 
     const itemPlaceholder = ref({
@@ -55,6 +63,7 @@ export default defineComponent({
     const loading = ref(false)
     const createEditDialogueOpen = ref(false)
     const confirmDeleteDialogueOpen = ref(false)
+    const addImagesDialogueOpen = ref(false)
     const itemId = ref(null)
 
     const openCreateEditDialogue = (id:string) => {
@@ -68,6 +77,11 @@ export default defineComponent({
       confirmDeleteDialogueOpen.value = true
     }
 
+    const openAddImagesDialogue = (id:string) => {
+      itemId.value = id
+      addImagesDialogueOpen.value = true
+    }
+
     return {
       fields,
       loading,
@@ -75,10 +89,12 @@ export default defineComponent({
       item,
       createEditDialogueOpen,
       confirmDeleteDialogueOpen,
+      addImagesDialogueOpen,
       itemId,
       itemPlaceholder,
       openCreateEditDialogue,
-      openDeleteDialogue
+      openDeleteDialogue,
+      openAddImagesDialogue
     }
   }
 })

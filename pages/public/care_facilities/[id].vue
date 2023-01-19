@@ -1,5 +1,8 @@
 <template>
   <v-container class="limited">
+    <PublicCareFacilitiesImages
+      :care-facility="careFacility"
+    />
     <v-row>
       <v-col md="8">
         <PublicCareFacilitiesMain
@@ -7,7 +10,9 @@
         />
       </v-col>
       <v-col md="4">
-        Right
+        <PublicCareFacilitiesRight
+          :care-facility="careFacility"
+        />
       </v-col>
     </v-row>
   </v-container>
