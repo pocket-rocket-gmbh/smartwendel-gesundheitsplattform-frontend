@@ -1,8 +1,10 @@
 <template>
+
+
   <v-app-bar
     density="compact"
     :flat="true"
-    class="second-bar"
+    class="navigation top-bar"
   >
     <v-spacer></v-spacer>
     <v-list-item>
@@ -30,6 +32,6 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.second-bar
-  background: transparent
+.navigation.top-bar
+  background: linear-gradient(270deg, #017DC2 0.29%, #015281 100%)
 </style>
