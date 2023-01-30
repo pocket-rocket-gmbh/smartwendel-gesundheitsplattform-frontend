@@ -17,39 +17,16 @@
   </v-container>
   <v-container>
       <v-row>
-        <v-col md="6" class="d-flex justify-center align-center">
+        <v-col md="6" class="d-flex justify-center align-center" v-for="(item, index) in itens" :key="index">
           <v-card class="rounded-xl">
             <div class="d-flex notes-card">
-              <img src="@/assets/images/affenpocken.png" />
+              <img class="is-clickable" :src="item.content.image" />
               <div>
                 <v-card-title class="note-title">
-                  Affenpocken
+                  {{ item.content.heading }}
                 </v-card-title>
                 <div class="px-5 pb-5">
-                  <p>Bei Affenpocken handelt es sich um eine seltene Viruserkrankung, die durch das Affenpockenvirus verursacht wird. Affenpocken sind mit ...</p>
-                </div>
-                <v-card-actions>
-                  <v-btn
-                    class="note-text-link"
-                    size="small"
-                  >
-                  Mehr erfahren >
-                  </v-btn>
-                </v-card-actions>
-              </div>
-            </div>
-          </v-card>
-        </v-col>
-        <v-col md="6" class="d-flex justify-center align-center">
-          <v-card class="rounded-xl">
-            <div class="d-flex notes-card">
-              <img src="@/assets/images/pexels.png" />
-              <div>
-                <v-card-title class="note-title">
-                  Grippeimpfung Winter 2022/2023
-                </v-card-title>
-                <div class="px-5 pb-5">
-                  <p>Eine echte Virusgruppe ist keine einfach Erkältungs krankheit, sondern eine ernstzunehmende Erkrankung. Insbesondere chronisch ...</p>
+                  <p>{{ item.content.description }}</p>
                 </div>
                 <v-card-actions>
                   <v-btn
@@ -72,9 +49,32 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import image1 from '@/assets/images/current-notes/affenpocken.png'
+import image2 from '@/assets/images/current-notes/pexels.png'
 export default defineComponent({
   setup() {
-    
+    const itens = [
+        {
+        'content': {
+          heading: 'Affenpocken',
+          description: 'Bei Affenpocken handelt es sich um eine seltene Viruserkrankung, die durch das Affenpockenvirus verursacht wird. Affenpocken sind mit ...',
+          image: image1,
+          link: ''
+          }
+        },
+        {
+        'content': {
+          heading: 'Grippeimpfung Winter 2022/2023',
+          description: 'Eine echte Virusgruppe ist keine einfach Erkältungs krankheit, sondern eine ernstzunehmende Erkrankung. Insbesondere chronisch ...',
+          image: image2,
+          link: ''
+          }
+        }
+      ]
+
+      return {
+      itens
+    }
   },
 })
 </script>

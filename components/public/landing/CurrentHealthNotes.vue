@@ -16,63 +16,17 @@
     </v-row>
   </v-container>
   <v-container>
-      <v-row>
-        <v-col md="4" class="flex-column justify-center align-center ">
+      <v-row class="d-flex">
+        <v-col md="4" class="flex-column justify-center align-center" v-for="(item, index) in itens" :key="index">
           <v-card class="rounded-xl">
             <div class="flex-column notes-card">
-              <img src="@/assets/images/ernaehrung.jpg" height="300"/>
+              <img class="is-clickable" :src="item.content.image" height="300"/>
               <div>
                 <v-card-title class="note-title">
-                  Was ist eine gesunde Ernährung?
+                  {{ item.content.heading }}
                 </v-card-title>
                 <div class="px-5 pb-5">
-                  <p>Was für die einen ungesund ist, bekommt anderen recht gut. Heißt auch: Jeder bekommt einen Klinik und Praxis und natürlich die interdisziplinäre ...</p>
-                </div>
-                <v-card-actions>
-                  <v-btn
-                    class="note-text-link"
-                    size="small"
-                  >
-                  Mehr erfahren >
-                  </v-btn>
-                </v-card-actions>
-              </div>
-            </div>
-          </v-card>
-        </v-col>
-        <v-col md="4" class="d-flex justify-center align-center">
-          <v-card class="rounded-xl">
-            <div class="flex-column notes-card">
-              <img src="@/assets/images/diabetes.jpg" height="300"/>
-              <div>
-                <v-card-title class="note-title">
-                  Diabätisforum 2023
-                </v-card-title>
-                <div class="px-5 pb-5">
-                  <p>Das Forum für professionelle Diabetiker-Versorgung: Themen wie Qualitätsmanagement in Klinik und Praxis und natürlich die interdisziplinäre ...</p>
-                </div>
-                <v-card-actions>
-                  <v-btn
-                    class="note-text-link"
-                    size="small"
-                  >
-                  Mehr erfahren >
-                  </v-btn>
-                </v-card-actions>
-              </div>
-            </div>
-          </v-card>
-        </v-col>
-        <v-col md="4" class="d-flex justify-center align-center">
-          <v-card class="rounded-xl">
-            <div class="flex-column notes-card">
-              <img src="@/assets/images/grippeimpfung.png" height="300"/>
-              <div>
-                <v-card-title class="note-title">
-                  Tai Chi für mehr innere Balance
-                </v-card-title>
-                <div class="px-5 pb-5">
-                  <p>Ruhe Harmonie und Ausgelassenheit verspricht Tai Chi. Die fernöstlichen Heilmethoden verhelfen dem Körper zu neuer Energie und sind dabei ...</p>
+                  <p>{{ item.content.description }}</p>
                 </div>
                 <v-card-actions>
                   <v-btn
@@ -92,9 +46,41 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import image1 from '@/assets/images/health-notes/ernaehrung.jpg'
+import image2 from '@/assets/images/health-notes/diabetes.jpg'
+import image3 from '@/assets/images/health-notes/grippeimpfung.png'
 export default defineComponent({
   setup() {
-    
+    const itens = [
+        {
+        'content': {
+          heading: 'Was ist eine gesunde Ernährung?',
+          description: 'Was für die einen ungesund ist, bekommt anderen recht gut. Heißt auch: Jeder bekommt einen Klinik und Praxis und natürlich die interdisziplinäre ...',
+          image: image1,
+          link: ''
+          }
+        },
+        {
+        'content': {
+          heading: 'Diabätisforum 2023',
+          description: 'Das Forum für professionelle Diabetiker-Versorgung: Themen wie Qualitätsmanagement in Klinik und Praxis und natürlich die interdisziplinäre ...',
+          image: image2,
+          link: ''
+          }
+        },
+        {
+        'content': {
+          heading: 'Tai Chi für mehr innere Balance',
+          description: 'Ruhe Harmonie und Ausgelassenheit verspricht Tai Chi. Die fernöstlichen Heilmethoden verhelfen dem Körper zu neuer Energie und sind dabei ...<',
+          image: image3,
+          link: ''
+          }
+        }
+      ]
+
+      return {
+      itens
+    }
   },
 })
 </script>

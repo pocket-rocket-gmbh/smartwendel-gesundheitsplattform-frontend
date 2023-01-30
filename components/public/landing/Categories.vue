@@ -18,7 +18,7 @@
           </v-btn>
         </v-col>
         <v-col class="d-flex flex-wrap align-content-center justify-end">
-          <v-card class="rounded-xl pa-3 d-flex ml-5 my-5 align-content-center justify-center" v-for="(item, index) in itens" :key="index" min-width="300" min-height="100" elevation="10">
+          <v-card class="rounded-xl pa-3 d-flex ml-5 my-5 align-content-center justify-center is-clickable" v-for="(item, index) in itens" :key="index" min-width="300" min-height="100" elevation="10">
             <div class="d-flex align-center notes-card">
               <img :src="item.content.icon" height="50"/>
               <div class="d-flex align-center">

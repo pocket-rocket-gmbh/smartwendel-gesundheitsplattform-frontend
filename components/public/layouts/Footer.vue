@@ -8,7 +8,7 @@
       class="d-flex justify-md-start justify-sm-center"
       >
       <div>
-        <h2 class="footer-title text-uppercase mb-8">immer informiert – Mehr News vom SMART WENDELER LAND Mit dem Newsletter von Smart Wendeler land</h2>
+        <h2 class="footer-title text-uppercase mb-8">immer informiert – <br/> Mit dem Newsletter von Smart Wendeler land</h2>
         <p class="has-text-white mb-8">Alles zu aktuellen Gesundheitsangeboten und Gesundheitsthemen in deinem SMART WENDELER LAND. Jetzt anmelden und immer up to date sein:</p>
         <v-row>
           <v-col 
