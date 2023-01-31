@@ -20,7 +20,7 @@
         <v-col md="4" class="flex-column justify-center align-center" v-for="(item, index) in itens" :key="index">
           <v-card class="rounded-xl">
             <div class="flex-column notes-card">
-              <img class="is-clickable" :src="item.content.image" height="300"/>
+              <img class="is-clickable is-fullwidth" :src="item.content.image" height="300"/>
               <div>
                 <v-card-title class="has-font-size-medium is-light-blue font-weight-bold">
                   {{ item.content.heading }}

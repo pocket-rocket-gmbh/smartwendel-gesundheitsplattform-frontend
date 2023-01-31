@@ -17,7 +17,7 @@ export default defineComponent({
 h1
   color: #015281
   font-size: 55px
-  font-weight: 500
+  font-weight: 900
   text-transform: uppercase
   line-height: 150%
 p

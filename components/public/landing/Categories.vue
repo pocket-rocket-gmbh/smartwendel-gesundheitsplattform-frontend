@@ -38,7 +38,6 @@
   
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
 import icon1 from '@/assets/images/categories/icon-aerzte.png'
 import icon2 from '@/assets/images/categories/icon-krankenhaus.png'
 import icon3 from '@/assets/images/categories/icon-pflegeeinrichtung.png'

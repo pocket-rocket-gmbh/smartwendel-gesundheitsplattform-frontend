@@ -29,4 +29,14 @@ header
   -moz-background-size: cover
   -o-background-size: cover
   background-size: cover
+
+.background::before 
+    content: ""
+    position: absolute
+    top: 0px
+    right: 0px
+    bottom: 0px
+    left: 0px
+    background-color: rgba(0,0,0,0.10)
+
 </style>
