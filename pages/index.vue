@@ -9,6 +9,9 @@
       </v-row>
     </v-container>
   </header>
+  <PublicLandingCurrentNotes />
+  <PublicLandingCategories />
+  <PublicLandingCurrentHealthNotes />
 </template>
 
 <script lang="ts">
@@ -19,8 +22,7 @@ export default defineComponent({
 <style lang="sass" scoped>
 header
   height: 100vh
-  // slide into second navbar
-  margin-top: -50px
+  
 .background
   background: url('@/assets/images/home.jpg') no-repeat center center fixed
   -webkit-background-size: cover
