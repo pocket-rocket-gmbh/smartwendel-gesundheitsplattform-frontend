@@ -1,5 +1,5 @@
 <template>
-  <div class="basic-search-box">
+  <div class="basic-search-box mt-4">
     <h2 class="is-uppercase">Wählen Sie hier Ihre Suchkriterien aus</h2>
 
     <v-row>
