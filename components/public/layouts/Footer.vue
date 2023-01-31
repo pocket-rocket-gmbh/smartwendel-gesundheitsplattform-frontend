@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer mt-15">
   <v-row no-gutters justify="space-between mx-10 mt-10">
     <v-col 
       cols="12"
@@ -8,7 +8,7 @@
       class="d-flex justify-md-start justify-sm-center"
       >
       <div>
-        <h2 class="footer-title text-uppercase mb-8">immer informiert – <br/> Mit dem Newsletter von Smart Wendeler land</h2>
+        <h2 class="footer-title has-font-size-big text-uppercase mb-8">immer informiert – <br/> Mit dem Newsletter von Smart Wendeler land</h2>
         <p class="has-text-white mb-8">Alles zu aktuellen Gesundheitsangeboten und Gesundheitsthemen in deinem SMART WENDELER LAND. Jetzt anmelden und immer up to date sein:</p>
         <v-row>
           <v-col 
@@ -37,7 +37,7 @@
           size="large"
           icon
           color="white"
-          class="social-buttons"
+          class="social-buttons mx-3"
           >
           <v-icon>mdi-facebook</v-icon>
         </v-btn>
@@ -47,7 +47,7 @@
           size="large"
           icon
           color="white"
-          class="social-buttons"
+          class="social-buttons mx-3"
           >
           <v-icon>mdi-instagram</v-icon>
         </v-btn>
@@ -57,7 +57,7 @@
           size="large"
           icon
           color="white"
-          class="social-buttons"
+          class="social-buttons mx-3"
           >
           <v-icon>mdi-youtube</v-icon>
         </v-btn>
@@ -67,7 +67,7 @@
           size="large"
           icon
           color="white"
-          class="social-buttons"
+          class="social-buttons mx-3"
           >
           <v-icon>mdi-linkedin</v-icon>
         </v-btn>
@@ -76,10 +76,10 @@
       </div>
     </v-col>
   </v-row>
-  <div class="divider"></div>
+  <div class="divider my-10 mx-10"></div>
   <div class="mx-10">
 
-    <p class="has-text-white footer-title outer-footer">Kreisverwaltung Landkreis St. Wendel</p>
+    <p class="has-text-white footer-title mb-5">Kreisverwaltung Landkreis St. Wendel</p>
     <v-row no-gutters justify="space-between">
       <v-col 
       cols="12"
@@ -126,25 +126,15 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .footer
-  margin-top: 5rem
   a
     color: white
 
 .footer-title
   color: white
-  font-size: 1.8rem
 
 .social-buttons
-  margin: 0 10px
   border: 3px solid
 
 .divider
   border: 2px white solid
-  margin: 50px 0
-
-.news-letter
-  margin-top: 30px
-
-.outer-footer
-  margin-bottom: 20px
 </style>

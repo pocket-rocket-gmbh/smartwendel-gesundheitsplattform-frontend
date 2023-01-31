@@ -1,7 +1,7 @@
 <template>
   <v-container>
       <v-row justify="space-between">
-        <v-col md="4" class="justify-center align-center dark-grey">
+        <v-col md="4" class="justify-center align-center is-dark-grey">
           <h2 class="is-primary is-uppercase mb-5">Pflege, Ärtze, <br/> Krankenhäuser und co.</h2>
           <p class="text-justify">
             Über diese Suchfunktion finden Sie sicher schnell die passenende Einrichtung und den richtigen Ansprechpartner.
@@ -10,10 +10,11 @@
              Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher finden Sie unter mehr als 1.000 gelisteten Anbieten die Leistung, nach der Sie suchen. Informieren Sie sich über die Angebote oder nehmen Sie direkt Kontakt auf und vereinbaren Sie ihr persönliches Beratungsgespräch.
           </p>
           <v-btn
-            class="rounded-xl text-white mt-8"
-            rounded
-            color="#3CB5E7"
-            >
+            variant="flat"
+            color="info"
+            rounded="pill"
+            class="mt-8"
+          >
             Auf der Karte Suchen
           </v-btn>
         </v-col>
@@ -22,7 +23,7 @@
             <div class="d-flex align-center notes-card">
               <img :src="item.content.icon" height="50"/>
               <div class="d-flex align-center">
-                <v-card-title class="note-title d-flex align-center">
+                <v-card-title class="has-font-size-medium is-light-blue font-weight-bold d-flex align-center">
                   <span v-html="item.content.heading"></span>
                 </v-card-title>
               </div>
@@ -95,21 +96,6 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 
-.note-title
-  color: #3CB5E7
-  font-weight: 600
-  font-size: 18px
-
-.note-text-link
-  color: #017DC2
-  font-size: 18px
-
-.vertical-center
-  margin: 0
-  position: absolute
-  top: 50%
-  -ms-transform: translateY(-50%)
-  transform: translateY(-50%)
 
 
 </style>

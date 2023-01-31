@@ -2,7 +2,7 @@
   <header class="background">
     <v-container class="limited offset">
       <v-row>
-        <v-col md="5">
+        <v-col md="6">
           <PublicLandingHeader />
           <PublicLandingChooseCategory />
         </v-col>

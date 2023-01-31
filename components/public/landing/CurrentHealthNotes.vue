@@ -6,9 +6,9 @@
       </v-col>
       <v-col md="3" class="d-flex justify-end align-center">
         <v-btn
-          class="rounded-xl text-white"
-          rounded
-          color="#3CB5E7"
+            variant="flat"
+            color="info"
+            rounded="pill"
           >
           Alle Informationen ansehen
         </v-btn>
@@ -22,7 +22,7 @@
             <div class="flex-column notes-card">
               <img class="is-clickable" :src="item.content.image" height="300"/>
               <div>
-                <v-card-title class="note-title">
+                <v-card-title class="has-font-size-medium is-light-blue font-weight-bold">
                   {{ item.content.heading }}
                 </v-card-title>
                 <div class="px-5 pb-5">
@@ -30,7 +30,7 @@
                 </div>
                 <v-card-actions>
                   <v-btn
-                    class="note-text-link"
+                    class="has-font-size-small-medium is-dark-blue"
                     size="small"
                   >
                   Mehr erfahren >
@@ -86,15 +86,6 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-
-.note-title
-  color: #3CB5E7
-  font-weight: 600
-  font-size: 22px
-
-.note-text-link
-  color: #017DC2
-  font-size: 18px
-
+@import "@/assets/sass/main.sass"
 
 </style>

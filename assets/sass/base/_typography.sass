@@ -1,5 +1,10 @@
 @import url("https://use.typekit.net/lbh6wkf.css")
 
+$dark-grey: #58595E
+$primary-color: #015281
+$light-blue: #3CB5E7
+$dark-blue: #017DC2
+
 $font-family: "remora-sans-w1", sans-serif
 
 .v-application, html, body, h1, h2, h3, h4, h5, p, div, a, i
@@ -9,12 +14,12 @@ h1
   color: white
   margin-bottom: 10px
   &.is-primary
-    color: #015281
+    color: $primary-color
 
 h2
   color: white
   &.is-primary
-    color: #015281
+    color: $primary-color
     font-size: 28px
 
 a
@@ -23,5 +28,26 @@ a
   &:visited
     color: inherit
 
-.text-dark-grey
-  color: #58595E
+
+//font-sizes
+
+.has-font-size-small-medium
+  font-size: 18px
+
+.has-font-size-medium
+  font-size: 22px
+
+.has-font-size-big
+  font-size: 26px
+
+
+//colors
+
+.is-dark-grey
+  color: $dark-grey
+
+.is-light-blue
+  color: $light-blue
+
+.is-dark-blue
+  color: $dark-blue

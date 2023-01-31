@@ -1,12 +1,20 @@
 <template>
-  <div :class="['image-area', { 'has-logo' : careFacility.logo_url }]" v-if="careFacility.sanitized_images">
+  <div :class="['image-area mt-10', { 'has-logo' : careFacility.logo_url }]" v-if="careFacility.sanitized_images">
     <v-row>
-      <v-col md="8">
+      <v-col md="8" class="d-flex flex-wrap align-content-bottom justify-center">
         <img class="image left" v-if="careFacility.sanitized_images[0]" :src="careFacility.sanitized_images[0].url" />
       </v-col>
-      <v-col md="4">
-        <v-row><v-col><img class="image right-top" v-if="careFacility.sanitized_images[1]" :src="careFacility.sanitized_images[1].url" /></v-col></v-row>
-        <v-row><v-col><img class="image right-bottom" v-if="careFacility.sanitized_images[2]" :src="careFacility.sanitized_images[2].url" /></v-col></v-row>
+      <v-col md="4" class="d-flex flex-wrap align-content-center justify-end">
+        <v-row>
+          <v-col class="d-flex flex-wrap align-content-bottom justify-center">
+            <img class="image right-top" v-if="careFacility.sanitized_images[1]" :src="careFacility.sanitized_images[1].url" />
+            </v-col>
+          </v-row>
+        <v-row>
+          <v-col class="d-flex flex-wrap align-content-bottom justify-center">
+            <img class="image right-bottom" v-if="careFacility.sanitized_images[2]" :src="careFacility.sanitized_images[2].url" />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <div class="logo" v-if="careFacility.logo_url">
@@ -39,8 +47,10 @@ export default defineComponent({
 
 .image-area
   position: relative
+  
   &.has-logo
     margin-bottom: 3%
+    background-color: white
   .logo img
     max-width: 15%
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
@@ -48,4 +58,5 @@ export default defineComponent({
     position: absolute
     left: 40px
     bottom: -5%
+    background-color: white
 </style>

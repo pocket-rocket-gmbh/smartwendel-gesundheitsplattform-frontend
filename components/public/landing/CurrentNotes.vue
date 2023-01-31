@@ -6,9 +6,9 @@
       </v-col>
       <v-col md="3" class="d-flex justify-end align-center">
         <v-btn
-          class="rounded-xl text-white"
-          rounded
-          color="#3CB5E7"
+            variant="flat"
+            color="info"
+            rounded="pill"
           >
           Alle Informationen ansehen
         </v-btn>

@@ -1,7 +1,7 @@
 <template>
   <div class="my-15">
-    <h1>Ihre Gesundheits- und Pflegeplattform im Landkreis Sankt Wendel</h1>
-    <p>Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unsere umfangreiche Pflegeangebote aus der Region Sankt Wendel</p>
+    <h1>Ihre Gesundheits- und <br/> Pflegeplattform im <br/> Landkreis Sankt Wendel</h1>
+    <p class="has-font-size-medium">Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unsere umfangreiche Pflegeangebote aus der Region Sankt Wendel</p>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ h1
   font-size: 55px
   font-weight: 500
   text-transform: uppercase
-  line-height: 120%
+  line-height: 150%
 p
   color: #015281
   font-style: normal
