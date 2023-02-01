@@ -1,6 +1,6 @@
 <template>
   <div class="choose-category" v-if="categories.length > 0">
-    <div class="category-input py-2 px-4" @click="chooseBoxOpen = !chooseBoxOpen">Wählen Sie einen Bereich</div>
+    <div class="category-input py-2 px-4 mt-4" @click="chooseBoxOpen = !chooseBoxOpen">Wählen Sie einen Bereich</div>
     <transition>
       <div class="choose-box py-2 px-4" v-if="chooseBoxOpen">
         <div v-for="category in categories" :key="category.id">
