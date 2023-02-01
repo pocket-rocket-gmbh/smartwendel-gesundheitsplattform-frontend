@@ -8,16 +8,16 @@
   >
     <v-spacer></v-spacer>
     <v-list-item>
-      <router-link class="mr-4" to="/">Pflegeeinrichtungen</router-link>
+      <router-link class="mr-4" to="/">Pflege</router-link>
     </v-list-item>
     <v-list-item>
-      <router-link class="mr-4" to="/">Gesundheit & Prävention</router-link>
+      <router-link class="mr-4" to="/">Gesundheit</router-link>
+    </v-list-item>
+    <v-list-item>
+      <router-link class="mr-4" to="/">Prävention</router-link>
     </v-list-item>
     <v-list-item>
       <router-link class="mr-4" to="/">Informationen</router-link>
-    </v-list-item>
-    <v-list-item>
-      <router-link class="mr-4" to="/">Neuigkeiten</router-link>
     </v-list-item>
     <v-list-item>
       <router-link class="mr-4" to="/">Über uns</router-link>
