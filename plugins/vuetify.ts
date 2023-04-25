@@ -5,7 +5,7 @@ import * as directives from 'vuetify/directives'
 export default defineNuxtPlugin(nuxtApp => {
   const defaultTheme: ThemeDefinition = {
     colors: {
-      primary: '#015281',
+      primary: '#007344',
       secondary: '#C2C2C2',
       success: '#ABC812',
       error: '#A42258',

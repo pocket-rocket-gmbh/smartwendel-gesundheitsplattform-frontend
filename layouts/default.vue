@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <PublicAccessibilityPanel />
 
     <div v-if="!authenticated">
       <PublicPasswordProtection />
@@ -7,12 +8,12 @@
 
     <div v-else>
       <PublicLayoutsTopBar />
-      <PublicLayoutsSecondBar />
 
       <v-main>
         <slot />
       </v-main>
       <PublicLayoutsFooter />
+
     </div>
   </v-app>
 </template>
