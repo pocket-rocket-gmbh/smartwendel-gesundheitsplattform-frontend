@@ -1,5 +1,5 @@
 <template>
-  <header class="background">
+  <div class="background">
     <v-container class="limited offset">
       <v-row>
         <v-col md="6">
@@ -8,10 +8,18 @@
         </v-col>
       </v-row>
     </v-container>
-  </header>
+  </div>
   <PublicLandingCurrentNotes />
+  <v-container>
+    <div class="divider my-10"></div>
+  </v-container>
   <PublicLandingCategories />
-  <PublicLandingCurrentHealthNotes />
+  <PublicLandingCurrentRecommendations/>
+  <PublicLandingCurrentEvents />
+  <v-container>
+    <div class="divider my-10"></div>
+  </v-container>
+  <PublicLandingHelplinks />
 </template>
 
 <script lang="ts">
@@ -25,18 +33,17 @@ header
   
 .background
   background: url('@/assets/images/home.svg') no-repeat center center fixed
+  height: 100vh
   -webkit-background-size: cover
   -moz-background-size: cover
   -o-background-size: cover
   background-size: cover
 
 .background::before 
-    content: ""
-    position: absolute
-    top: 0px
-    right: 0px
-    bottom: 0px
-    left: 0px
-    background-color: rgba(0,0,0,0.10)
+  content: ""
+  top: 0px
+  right: 0px
+  bottom: 0px
+  left: 0px
 
 </style>

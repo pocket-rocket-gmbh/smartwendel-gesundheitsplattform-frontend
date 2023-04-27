@@ -1,17 +1,21 @@
 <template>
   <v-container class="my-5">
-    <v-row justify="space-between">
-      <v-col class="d-flex justify-start align-center is-uppercase">
-        <h2 class="is-primary">Neuigkeiten</h2>
+    <v-row no-gutters>
+      <v-col class="d-flex align-center">
+        <div>
+          <img src="~/assets/images/logo.png" width="190"/>
+        </div>
+       <div class="mx-15">
+        <h2 class="is-primary">Kurse & Veranstaltungen</h2>
+       </div>
       </v-col>
-
       <v-col md="3" class="d-flex justify-end align-start">
         <v-btn
             variant="flat"
             color="info"
             rounded="pill"
           >
-          Mehr Themen
+          Mehr Kurse
         </v-btn>
       </v-col>
     </v-row>
@@ -58,8 +62,7 @@
     >
     &lt; Weninger anzeigen
     </v-btn>
-  </v-container>
-  
+  </v-container>  
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -74,24 +77,24 @@ export default defineComponent({
     const itens = [
         {
         'content': {
-          heading: 'Affenpocken',
-          description: 'Bei Affenpocken handelt es sich um eine seltene Viruserkrankung, die durch das Affenpockenvirus verursacht wird. Affenpocken sind mit ...',
+          heading: 'Rückenfit',
+          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et ...',
           image: image1,
           link: ''
           }
         },
         {
         'content': {
-          heading: 'Grippeimpfung Winter 2022/2023',
-          description: 'Eine echte Virusgruppe ist keine einfach Erkältungs krankheit, sondern eine ernstzunehmende Erkrankung. Insbesondere chronisch ...',
+          heading: 'Yoga für Einsteiger',
+          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et ...',
           image: image2,
           link: ''
           }
         },
         {
         'content': {
-          heading: 'Grippeimpfung Winter 2022/2023',
-          description: 'Eine echte Virusgruppe ist keine einfach Erkältungs krankheit, sondern eine ernstzunehmende Erkrankung. Insbesondere chronisch ...',
+          heading: 'test',
+          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et ...',
           image: image2,
           link: ''
           }

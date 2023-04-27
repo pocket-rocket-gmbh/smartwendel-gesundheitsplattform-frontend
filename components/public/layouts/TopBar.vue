@@ -18,7 +18,7 @@
                     <span>
                       <v-icon class="mr-3">mdi-menu-down</v-icon>
                     </span>
-                  </div>
+                  </div> 
                 </v-list-item-title>
               </template>
 
