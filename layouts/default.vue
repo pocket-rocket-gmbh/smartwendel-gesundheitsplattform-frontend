@@ -2,11 +2,9 @@
   <v-app>
     <PublicAccessibilityPanel />
 
-    <div v-if="!authenticated">
-      <PublicPasswordProtection />
-    </div>
 
-    <div v-else>
+
+    <div>
       <PublicLayoutsTopBar />
 
       <v-main>

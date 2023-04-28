@@ -1,24 +1,27 @@
 <template>
-  <v-container class="my-5">
+  <div class="mx-15">
+    <div class="my-5">
     <v-row justify="space-between">
       <v-col class="d-flex justify-start align-center is-uppercase">
         <h2 class="is-primary">Neuigkeiten</h2>
       </v-col>
 
-      <v-col md="3" class="d-flex justify-end align-start">
-        <v-btn
-            variant="flat"
-            color="info"
-            rounded="pill"
-          >
-          Mehr Themen
-        </v-btn>
+      <v-col md="3" class="d-flex text--red justify-end align-start default-button">
+        <v-btn 
+          variant="flat"
+          color="#007344"
+          rounded="pill"
+        >
+          <span class = "text-white">
+            Mehr Themen
+          </span>
+      </v-btn>
       </v-col>
     </v-row>
-  </v-container>
-  <v-container>
+  </div>
+  <div>
       <v-row>
-        <v-col md="6" class="d-flex justify-center align-center" v-for="(item, index) in limitedCategories" :key="index">
+        <v-col md="6" class="d-flex justify-start align-center" v-for="(item, index) in limitedCategories" :key="index">
           <v-card class="rounded-xl">
             <div class="d-flex notes-card">
               <img class="is-clickable" :src="item?.content.image" />
@@ -58,7 +61,9 @@
     >
     &lt; Weninger anzeigen
     </v-btn>
-  </v-container>
+  </div>
+  </div>
+
   
 </template>
 <script lang="ts">
@@ -125,14 +130,17 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 
-  .note-title
-    color: #3CB5E7
-    font-weight: 600
-    font-size: 22px
+.note-title
+  color: #3CB5E7
+  font-weight: 600
+  font-size: 22px
 
-  .note-text-link
-    color: #017DC2
-    font-size: 18px
+.note-text-link
+  color: #017DC2
+  font-size: 18px
+
+.default-button
+  color: red
 
 
 </style>

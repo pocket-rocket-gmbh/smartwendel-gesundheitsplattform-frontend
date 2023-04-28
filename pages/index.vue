@@ -1,25 +1,22 @@
 <template>
-  <div class="background">
-    <v-container class="limited offset">
+  <div>
+    <div class="background">
       <v-row>
-        <v-col md="6">
+        <v-col class="flex-column align-start justify-start ma-15" md="5" xl="4">
           <PublicLandingHeader />
           <PublicLandingChooseCategory />
         </v-col>
-      </v-row>
-    </v-container>
+        </v-row>
+    </div>
+    <PublicLandingCurrentNotes />
+      <div class="divider ma-10"></div>
+    <PublicLandingCategories />
+    <PublicLandingCurrentRecommendations/>
+    <PublicLandingCurrentEvents />
+      <div class="divider ma-10"></div>
+    <PublicLandingHelplinks />
   </div>
-  <PublicLandingCurrentNotes />
-  <v-container>
-    <div class="divider my-10"></div>
-  </v-container>
-  <PublicLandingCategories />
-  <PublicLandingCurrentRecommendations/>
-  <PublicLandingCurrentEvents />
-  <v-container>
-    <div class="divider my-10"></div>
-  </v-container>
-  <PublicLandingHelplinks />
+  
 </template>
 
 <script lang="ts">

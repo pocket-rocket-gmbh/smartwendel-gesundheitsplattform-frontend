@@ -2,18 +2,19 @@
       <div class="footer pt-15 px-5">
         <v-row>
           <v-col cols="12" md="6">
-            <div>
+            <div class="my-10">
               <p class="text-uppercase">Benachrichtigung zu neuen Projekten</p>
               <p class="has-text-white">Jetzt zum SMART WENDELER LAND NEWSLETTER anmelden und über neue Projekte informiert werden:</p>
               <div class="gap-2" />
             </div>
             <PublicNewsLetter />
           </v-col>
-          <v-col class="d-flex justify-md-end">
-            <div class="flex-column justify-end mb-10">
+          <v-col class="d-flex justify-md-end my-10">
+            <div class="flex-column justify-end">
               <p class="footer-title">Mehr News vom SMART WENDELER LAND</p>
               <div class="gap-2" />
-              <v-btn
+              <div class="my-10">
+                <v-btn
                 href="https://www.facebook.com/Landkreis.StWendel/" target="_blank"
                 variant="outlined"
                 size="large"
@@ -49,6 +50,7 @@
                 >
                 <v-icon>mdi-linkedin</v-icon>
               </v-btn>
+              </div>
             </div>
           </v-col>
         </v-row>
@@ -80,33 +82,13 @@
             <p class="has-text-white is-clickable"><router-link to="/privacy_policy">Datenschutzerklärung</router-link></p>
             <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
           </v-col>
-            <v-col cols="12" md="3" sm="6" class="flex-column justify-center align-center">
-              <div class="mb-3">
-                <v-btn 
-                  prepend-icon="mdi-apple"
-                  variant="outlined"
-                  size="large"
-                  rounded="pill"
-                  width="100%"
-                  href="https://apps.apple.com/de/app/id1668891185" 
-                  target="_blank"
-                  >
-                  Download AppStore
-                </v-btn>
+            <v-col md="3" sm="6" class="flex-column justify-center align-center">
+              <div>
+                Werden Sie Partner und registrieren Sie Ihre Institution
               </div>
-            <div>
-              <v-btn 
-                prepend-icon="mdi-google-play"
-                variant="outlined"
-                size="large"
-                rounded="pill"
-                width="100%"
-                href="https://play.google.com/store/apps/details?id=smartwendel.pocketrocket.io"
-                target="_blank"
-                >
-                Download PLayStore
-              </v-btn>
-            </div>
+              <div>
+                >> HIER ANMELDEN
+              </div>
           </v-col>
         </v-row>
       </div>

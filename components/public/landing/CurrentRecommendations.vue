@@ -1,20 +1,20 @@
 <template>
-  <v-container class="pa-15 bg-green">
+  <div class="pa-15 bg-gradient">
     <div class="d-flex align-center justify-center is-uppercase">
       <h2 >Wir zeigen Ihnen, was Sie für ihren Gesundheitszustand und Wohlbefinden tuen können!</h2>
     </div>
-    <div class="d-flex align-center justify-center is-uppercase">
+    <div class="d-flex align-center justify-center text-white is-uppercase my-5">
       <h3>Bitte wählen Sie, was am ehesten auf Sie zutrifft:</h3>
     </div>
     <v-row>
-      <v-col class="flex-column justify-center text-center align-center" v-for="(item, index) in itens" :key="index">
-        <img class="is-clickable" :src="item.content.image" width="130"/>
-        <div class="has-font-size-medium is-light-blue font-weight-bold">
+      <v-col class="flex-column justify-center text-center text-white align-center my-5" v-for="(item, index) in itens" :key="index">
+        <img class="is-clickable" :src="item.content.image" width="150"/>
+        <div class="has-font-size-medium font-weight-bold">
           {{ item.content.heading }}
         </div>
       </v-col>
     </v-row>
-  </v-container>  
+  </div>  
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -73,7 +73,7 @@ export default defineComponent({
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .bg-gradient
-  color: linear-gradient(90deg, #91A80D 42.99%, #BAC323 68.59%, #9EA100 95.04%)
+  background: linear-gradient(90.63deg, #00783B 6.11%, #009E55 36.69%, #006B38 89.88%)
 
 
 </style>

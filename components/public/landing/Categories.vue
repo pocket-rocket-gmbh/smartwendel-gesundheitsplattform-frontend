@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div class="mx-15">
       <v-row justify="space-between">
         <v-col md="4" class="justify-center align-center is-dark-grey">
           <h2 class="is-primary is-uppercase mb-5">Pflege, Ärtze, <br/> Krankenhäuser und co.</h2>
@@ -11,16 +11,18 @@
           </p>
           <v-btn
             variant="flat"
-            color="info"
+            color="#007344"
             rounded="pill"
             class="mt-8"
           >
-          Alle Einrichtungen
-          </v-btn>
+            <span class = "text-white">
+              Alle Einrichtungen
+            </span>
+        </v-btn>
         </v-col>
-        <v-col class="d-flex">
+        <v-col class="d-flex" md="6">
           <v-row>
-            <v-col class="d-flex" v-for="(item, index) in itens" :key="index">
+            <v-col xl="6" class="d-flex" v-for="(item, index) in itens" :key="index">
               <div class="ml-15 pa-2 d-flex ml-5 align-end">
                 <div class="d-flex align-center is-clickable">
                   <img :src="item.content.icon" />
@@ -35,7 +37,7 @@
           </v-row>
         </v-col>
       </v-row>
-  </v-container>
+  </div>
 </template>
 <script lang="ts">
 import icon1 from '@/assets/images/categories/icon_advice_center.png'

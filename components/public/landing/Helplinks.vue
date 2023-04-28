@@ -1,7 +1,7 @@
 <template>
-  <v-container class="my-15">
+  <div class="ma-15">
     <div class="d-flex align-center justify-center is-uppercase my-15">
-      <h3 >Sie benötigen ärztliche Hilfe?</h3>
+      <div class="has-font-size-medium" >Sie benötigen ärztliche Hilfe?</div>
     </div>
     <v-row>
       <v-col  v-for="(item, index) in itens" :key="index">
@@ -19,7 +19,7 @@
         </div>
       </v-col>
     </v-row>
-  </v-container>  
+  </div>  
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

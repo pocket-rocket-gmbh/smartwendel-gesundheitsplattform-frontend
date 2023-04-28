@@ -1,6 +1,6 @@
-<template>aaaa
-  <div class="my-10 header">
-    <div class="title header">Ihre Gesundheits- und Pflegeplattform im Landkreis Sankt Wendel</div>
+<template>
+  <div class="mt-15 my-15 pl-3">
+    <h1 class="title">Ihre Gesundheits- und Pflegeplattform im Landkreis Sankt Wendel</h1>
     <p class="has-font-size-medium sub-title">Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unsere umfangreiche Pflegeangebote aus der Region Sankt Wendel</p>
   </div>
 </template>
@@ -26,5 +26,5 @@ export default defineComponent({
   line-height: 160%
 
 .header
-  margin-top: 50%
+  margin-top: 20%
 </style>

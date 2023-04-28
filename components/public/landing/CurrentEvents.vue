@@ -1,51 +1,54 @@
 <template>
-  <v-container class="my-5">
-    <v-row no-gutters>
-      <v-col class="d-flex align-center">
-        <div>
-          <img src="~/assets/images/logo.png" width="190"/>
-        </div>
-       <div class="mx-15">
-        <h2 class="is-primary">Kurse & Veranstaltungen</h2>
-       </div>
-      </v-col>
-      <v-col md="3" class="d-flex justify-end align-start">
-        <v-btn
+  <div class="mx-15">
+    <div class="my-15">
+      <v-row no-gutters>
+        <v-col class="d-flex align-center">
+          <div>
+            <img src="~/assets/images/logo.png" width="190"/>
+          </div>
+          <div class="mx-15">
+            <h2 class="is-primary">Kurse & Veranstaltungen</h2>
+          </div>
+        </v-col>
+        <v-col md="3" class="d-flex justify-end align-start">
+          <v-btn 
             variant="flat"
-            color="info"
+            color="#007344"
             rounded="pill"
-          >
-          Mehr Kurse
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
-  <v-container>
-      <v-row>
-        <v-col md="6" class="d-flex justify-center align-center" v-for="(item, index) in limitedCategories" :key="index">
-          <v-card class="rounded-xl">
-            <div class="d-flex notes-card">
-              <img class="is-clickable" :src="item?.content.image" />
-              <div>
-                <v-card-title class="note-title">
-                  {{ item.content.heading }}
-                </v-card-title>
-                <div class="px-5 pb-5">
-                  <p>{{ item.content.description }}</p>
-                </div>
-                <v-card-actions>
-                  <v-btn
-                    class="note-text-link"
-                    size="small"
-                  >
-                  Mehr erfahren >
-                  </v-btn>
-                </v-card-actions>
-              </div>
-            </div>
-          </v-card>
+            >
+            <span class = "text-white">
+              Mehr Kurse
+            </span>
+          </v-btn>
         </v-col>
       </v-row>
+    </div>
+  <div>
+  <v-row>
+    <v-col md="6" class="d-flex justify-start align-center" v-for="(item, index) in limitedCategories" :key="index">
+      <v-card class="rounded-xl">
+        <div class="d-flex notes-card">
+          <img class="is-clickable" :src="item?.content.image" />
+          <div>
+            <v-card-title class="note-title">
+              {{ item.content.heading }}
+            </v-card-title>
+            <div class="px-5 pb-5">
+              <p>{{ item.content.description }}</p>
+            </div>
+            <v-card-actions>
+              <v-btn
+                class="note-text-link"
+                size="small"
+              >
+              Mehr erfahren >
+              </v-btn>
+            </v-card-actions>
+          </div>
+        </div>
+      </v-card>
+    </v-col>
+    </v-row>
       <v-btn
       class="note-text-link mt-15"
       size="small"
@@ -59,10 +62,12 @@
       class="note-text-link mt-15"
       size="small"
       @click="showLessArticles()"
-    >
-    &lt; Weninger anzeigen
-    </v-btn>
-  </v-container>  
+      >
+      &lt; Weninger anzeigen
+      </v-btn>
+    </div>  
+  </div>
+ 
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

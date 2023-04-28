@@ -1,5 +1,6 @@
 <template>
         <v-app-bar class="hero-menu pa-3">
+          {{ sub_categoryId.name }}
           <v-toolbar-title scroll-threshold="1" scroll-off-screen="true">
             <div class="d-flex">
               <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" height="90" />
@@ -21,10 +22,9 @@
                   </div> 
                 </v-list-item-title>
               </template>
-
               <v-list>
-                <v-list-item v-for="(sub_category, index) in category.sub_categories" :key="index">
-                  <nuxt-link :to="`/public/categories/${sub_category.id}`"> {{ sub_category.name }} </nuxt-link>
+                <v-list-item>
+                  <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">{{ sub_category.name }}</div>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -123,13 +123,14 @@
 import { defineComponent } from 'vue'
 import { useUserStore } from "@/store/user"
 export default defineComponent({
-  setup() {
+  setup(props) {
     const currentUser = ref(null)
     const userStore = useUserStore()
     const router = useRouter()
     const drawer = ref(false)
     const menu = ref(false)
     const categories = ref([])
+    const sub_categoryId = ref ({})
 
     const categoriesApi = useCollectionApi()
     categoriesApi.setBaseApi(usePrivateApi())
@@ -148,6 +149,11 @@ export default defineComponent({
         router.push({ path: '/' })
       }
     }
+    const setItemsAndGo = (category, sub_category) => {
+      router.push({path: `/public/categories/${category.id}`, query: { sub_category_id: sub_category.id }})
+      sub_categoryId.value = sub_category.id
+    }
+
 
     const userIsAdmin = computed(() => {
       if (currentUser.value) {
@@ -179,7 +185,9 @@ export default defineComponent({
       userStore,
       drawer,
       userIsAdmin,
-      reload
+      reload,
+      setItemsAndGo,
+      sub_categoryId
     }
   }
 })

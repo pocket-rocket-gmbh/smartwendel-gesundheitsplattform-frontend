@@ -2,21 +2,19 @@
   <div class="choose-category" v-if="categories.length > 0">
     <div>
       <div class="category-input is-dark-grey py-2 d-flex align-center">
-        <transition>
           <v-text-field
             @click="chooseBoxOpen = !chooseBoxOpen"
             variant="plain"
             autocomplete="off"
             v-model="searchTerm"
             placeholder="Suchebegriff eingeben"
-            class="px-5 py-3"
+            class="px-5 py-3 font-weight-bold"
             @input="getFilteredData()"
           >
           <template v-slot:append-inner>
             <v-icon class="pt-3">mdi-magnify</v-icon>
           </template>
           </v-text-field>
-        </transition>
         <ul
           v-if="searchTerm?.length"
           class=""
@@ -90,7 +88,6 @@ export default defineComponent({
 <style lang="sass" scoped>
 .choose-category
   position: relative
-  width: 70%
   .category-input
     border: 2px solid white
     background: white
@@ -98,6 +95,7 @@ export default defineComponent({
     border-radius: 50px
     cursor: pointer
     color: grey
+    width: 70%
     font-weight: 700
   .choose-box
     border-radius: 20px
@@ -107,7 +105,7 @@ export default defineComponent({
     position: absolute
     top: 50px
     left: 0
-    width: 100%
+    width: 60%
     z-index: 100
     font-size: 18px
     .selectable

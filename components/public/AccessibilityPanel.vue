@@ -37,8 +37,6 @@ export default defineComponent({
   display: grid
   place-items: center
   z-index: 10000
-  transition-timing-function: ease-out
-  transition: .3s
   font-weight: 700
 
 .divider
