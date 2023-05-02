@@ -76,7 +76,7 @@ export default defineComponent({
     const articleLimit = ref(2)
     const showingAllArticles = ref(false)
 
-    const itens = [
+    const items = [
         {
         'content': {
           heading: 'Affenpocken',
@@ -104,7 +104,7 @@ export default defineComponent({
       ]
       
       const limitedCategories = computed(() => { 
-        return articleLimit.value ? itens.slice(0,articleLimit.value) : articleLimit.value
+        return articleLimit.value ? items.slice(0,articleLimit.value) : articleLimit.value
       })
 
       const showMoreArticles = () => {
@@ -118,7 +118,7 @@ export default defineComponent({
       }
 
       return {
-      itens,
+      items,
       showMoreArticles,
       showLessArticles,
       limitedCategories,

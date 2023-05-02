@@ -7,7 +7,7 @@
       <h3>Bitte wählen Sie, was am ehesten auf Sie zutrifft:</h3>
     </div>
     <v-row>
-      <v-col class="flex-column justify-center text-center text-white align-center my-5" v-for="(item, index) in itens" :key="index">
+      <v-col class="flex-column justify-center text-center text-white align-center my-5" v-for="(item, index) in items" :key="index">
         <img class="is-clickable" :src="item.content.image" width="150"/>
         <div class="has-font-size-medium font-weight-bold">
           {{ item.content.heading }}
@@ -25,7 +25,7 @@ import image4 from '@/assets/images/current-recommendations/icon_course.png'
 import image5 from '@/assets/images/current-recommendations/icon_freetime.png'
 export default defineComponent({
   setup() {
-    const itens = [
+    const items = [
         {
         'content': {
           heading: 'Sport & Bewegung',
@@ -64,7 +64,7 @@ export default defineComponent({
       ]
 
       return {
-      itens
+      items
     }
   },
 })

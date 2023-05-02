@@ -4,7 +4,7 @@
       <div class="has-font-size-medium" >Sie benötigen ärztliche Hilfe?</div>
     </div>
     <v-row>
-      <v-col  v-for="(item, index) in itens" :key="index">
+      <v-col  v-for="(item, index) in items" :key="index">
         <div class="justify-center text-center align-center">
           <img class="is-clickable" :src="item.content.image" width="130" />
         <h3 class="is-dark-grey my-5 font-weight-bold" >
@@ -28,7 +28,7 @@ import image2 from '@/assets/images/help-links/icon_telephone.png'
 import image3 from '@/assets/images/help-links/icon-calender.png'
 export default defineComponent({
   setup() {
-    const itens = [
+    const items = [
         {
         'content': {
           heading: 'Sport & Bewegung',
@@ -56,7 +56,7 @@ export default defineComponent({
       ]
 
       return {
-      itens
+      items
     }
   },
 })

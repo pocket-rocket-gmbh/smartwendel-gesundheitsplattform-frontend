@@ -22,7 +22,7 @@
         </v-col>
         <v-col class="d-flex" md="6">
           <v-row>
-            <v-col xl="6" class="d-flex" v-for="(item, index) in itens" :key="index">
+            <v-col xl="6" class="d-flex" v-for="(item, index) in items" :key="index">
               <div class="ml-15 pa-2 d-flex ml-5 align-end">
                 <div class="d-flex align-center is-clickable">
                   <img :src="item.content.icon" />
@@ -53,7 +53,7 @@ import icon10 from '@/assets/images/categories/icon_school.png'
 
 export default defineComponent({
   setup() {
-    const itens = [
+    const items = [
         {
         'content': {
           heading: 'Ämter',
@@ -117,7 +117,7 @@ export default defineComponent({
       ]
 
     return {
-      itens,
+      items,
       
     }
   }

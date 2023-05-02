@@ -1,6 +1,5 @@
 <template>
         <v-app-bar class="hero-menu pa-3">
-          {{ sub_categoryId.name }}
           <v-toolbar-title scroll-threshold="1" scroll-off-screen="true">
             <div class="d-flex">
               <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" height="90" />
@@ -12,8 +11,8 @@
             >
               <template v-slot:activator="{ props }">
                 <v-list-item-title  color="primary" v-bind="props">
-                  <div class="is-clickable mx-1">
-                    <span>
+                  <div>
+                    <span class="is-clickable mx-1">
                     {{ category.name }}
                     </span>
                     <span>
@@ -24,7 +23,15 @@
               </template>
               <v-list>
                 <v-list-item>
-                  <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">{{ sub_category.name }}</div>
+                  <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">
+                    <v-list v-if="sub_category">
+                      <v-list-item>
+                        <span class="is-clickable">
+                          {{ sub_category.name }}
+                        </span>
+                      </v-list-item>
+                          </v-list>
+                  </div>
                 </v-list-item>
               </v-list>
             </v-menu>
