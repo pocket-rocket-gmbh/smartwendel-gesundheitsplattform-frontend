@@ -26,7 +26,7 @@
             <div class="d-flex notes-card">
               <img class="is-clickable" :src="item?.content.image" />
               <div>
-                <v-card-title class="note-title">
+                <v-card-title class="note-title is-primary">
                   {{ item.content.heading }}
                 </v-card-title>
                 <div class="px-5 pb-5">
@@ -34,6 +34,7 @@
                 </div>
                 <v-card-actions>
                   <v-btn
+                    color="secondary"
                     class="note-text-link"
                     size="small"
                   >
@@ -131,12 +132,10 @@ export default defineComponent({
 <style lang="sass" scoped>
 
 .note-title
-  color: #3CB5E7
   font-weight: 600
   font-size: 22px
 
 .note-text-link
-  color: #017DC2
   font-size: 18px
 
 .default-button

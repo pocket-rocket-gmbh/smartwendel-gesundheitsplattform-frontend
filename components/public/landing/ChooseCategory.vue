@@ -22,11 +22,11 @@
           <li
             v-for="category in categories"
             :key="category.id"
-            @click="setFilterAndMove(category.id, category.sub_category.id)"
+            @click="setFilterAndMove(category?.id, category.sub_category?.id)"
             class=""
           >
             <div class="choose-box py-2 px-4">
-              <div class="results-content-wrap" v-for="sub_category in category.sub_categories" :key="sub_category.id" @click="setFilterAndMove(category.id, sub_category.id)">
+              <div class="results-content-wrap" v-for="sub_category in category.sub_categories" :key="sub_category?.id" @click="setFilterAndMove(category.id, sub_category.id)">
                 <p class="category-headline"><span v-if="category.name">{{ category.name }}</span></p>
                 <p class="is-clickable pa-2 selectable" v-if="sub_category.name">{{ sub_category.name }}</p>
               </div>

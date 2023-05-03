@@ -11,7 +11,7 @@
           </p>
           <v-btn
             variant="flat"
-            color="#007344"
+            color="secondary"
             rounded="pill"
             class="mt-8"
           >
@@ -27,7 +27,7 @@
                 <div class="d-flex align-center is-clickable">
                   <img :src="item.content.icon" />
                   <div class="d-flex align-center">
-                    <v-card-title class="has-font-size-medium is-light-blue font-weight-bold d-flex align-center is-clickable">
+                    <v-card-title class="has-font-size-medium font-weight-bold d-flex align-center is-clickable">
                       <span v-html="item.content.heading"></span>
                     </v-card-title>
                   </div>

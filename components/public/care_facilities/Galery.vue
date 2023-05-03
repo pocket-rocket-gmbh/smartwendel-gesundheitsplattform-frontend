@@ -1,8 +1,16 @@
 <template>
   <div v-if="showingGalery">
     <div class="curtain" />
-  <div class="img-galery">
-    <img class="close is-clickable" src="~/assets/icons/icon-times.svg" height="20"  @click="emitClose()" />  
+    <div class="img-galery">
+      <img class="close is-clickable" src="~/assets/icons/icon-times.svg" height="20"  @click="emitClose()" />
+      <v-carousel hide-delimiters progress="primary" show-arrows="hover">
+        <v-carousel-item
+          v-for="(image, index) in careFacility.sanitized_images"
+          :key="index"
+          :src="image?.url"
+          cover
+        />
+      </v-carousel>
     </div>
   </div>
 </template>
@@ -27,9 +35,6 @@ export default defineComponent({
       emit('close')
     }
    
-
-     
-
     return {
       emitClose
     }
@@ -50,8 +55,9 @@ export default defineComponent({
   z-index: 100000
   border-radius: 20px
   overflow: hidden
-  min-height: 400px
+  min-height: 30vh
   width: 50vw
+  top: 50%
   &.is-desktop
     top: 35%
     width: 50vw

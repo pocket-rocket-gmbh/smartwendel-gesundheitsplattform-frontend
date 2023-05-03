@@ -31,24 +31,20 @@
         rounded="pill"
         color="primary"
         width="100%"
-        href="https://apps.apple.com/de/app/id1668891185" 
-        target="_blank"
         >
-      weitere Informationen
+          weitere Informationen
     </v-btn>
     </div>
     <div class="my-4">
-      <v-btn 
+      <v-btn
         variant="outlined"
         size="large"
         rounded="pill"
         color="primary"
         width="100%"
-        href="https://apps.apple.com/de/app/id1668891185" 
-        target="_blank"
         >
-        Kontakt aufnehmen
-    </v-btn>
+          Kontakt aufnehmen
+      </v-btn>
     </div>
   </div>
 </template>
