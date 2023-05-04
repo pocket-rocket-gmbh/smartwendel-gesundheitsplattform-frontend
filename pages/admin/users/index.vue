@@ -1,24 +1,12 @@
 <template>
   <div>
-   <h2>Kategorien</h2>
-
+    <h2>Benutzer</h2>
     <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neue Einrichtung</v-btn>
-
     <DataTable
       :fields="fields"
-      endpoint="care_facilities"
+      endpoint="users"
       @openCreateEditDialogue="openCreateEditDialogue"
       @openDeleteDialogue="openDeleteDialogue"
-    />
-
-    <AdminCareFacilitiesCreateEdit
-      :item-id="itemId"
-      :item-placeholder="itemPlaceholder"
-      v-if="createEditDialogueOpen"
-      @close="createEditDialogueOpen = false"
-      endpoint="care_facilities"
-      concept-name="Einrichtung"
-      :payload="{ active: true, kind: 'doctor' }"
     />
 
     <DeleteItem
@@ -30,37 +18,29 @@
     />
   </div>
 </template>
-
 <script lang="ts">
 export default defineComponent({
-  name: 'AdminCareFacilitiesIndex',
+  name: 'AdminUsersIndex',
   setup() {
     definePageMeta({
       layout: "admin",
     })
 
     const fields = ref([
-      { text: '', type: 'move_down' },
-      { text: '', type: 'move_up' },
-      { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
-      { text: 'Name', value: 'name', type: 'string' },
-      { text: 'Einrichtungsart', value: '', type: 'string' },
-      { text: 'Status', value: '', type: 'string' },
-      { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
+      { text: 'Aktiv', endpoint: 'users', type: 'switch', fieldToSwitch: 'is_active' },
+      { text: 'Vorname', value: 'firstname', type: 'string' },
+      { text: 'Nachname', value: 'lastname', type: 'string' },
+      { text: 'E-Mail', value: 'email', type: 'string' },
+      { text: 'Rolle', value: 'role', type: 'string' },
+      { text: 'Zuletzt gesehen', value: 'last_seen', type: 'datetime' },
+      { text: '', value: 'mdi-email-outline', type: 'icon', emit: 'mailUser', tooltip: 'E-Mail an Benutzer' },
     ])
 
-    const itemPlaceholder = ref({
-      name: '',
-      description: '',
-      category_ids: []
-    })
-    
     const dialog = ref(false)
     const item = ref({ name: '' })
     const loading = ref(false)
     const createEditDialogueOpen = ref(false)
     const confirmDeleteDialogueOpen = ref(false)
-    const addImagesDialogueOpen = ref(false)
     const itemId = ref(null)
 
     const openCreateEditDialogue = (id:string) => {
@@ -80,9 +60,7 @@ export default defineComponent({
       item,
       createEditDialogueOpen,
       confirmDeleteDialogueOpen,
-      addImagesDialogueOpen,
       itemId,
-      itemPlaceholder,
       openCreateEditDialogue,
       openDeleteDialogue
     }
@@ -90,6 +68,6 @@ export default defineComponent({
 })
 </script>
 <style lang="sass">
-.v-dialog--custom
-  width: 30%
+@import "@/assets/sass/main.sass"
+
 </style>

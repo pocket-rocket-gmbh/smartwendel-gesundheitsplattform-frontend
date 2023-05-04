@@ -42,11 +42,17 @@
         rounded="pill"
         color="primary"
         width="100%"
+        @click="facilityContactFormModalOpen = true"
         >
           Kontakt aufnehmen
       </v-btn>
     </div>
   </div>
+  <PublicCareFacilitiesContactForm
+      v-if="facilityContactFormModalOpen"
+      :careFacility-id="careFacility.id"
+      @close="facilityContactFormModalOpen = false"
+    />
 </template>
 
 <script lang="ts">
@@ -56,7 +62,14 @@ export default defineComponent({
       type: Object,
       required: true
     }
+  },
+  setup () {
+    const facilityContactFormModalOpen = ref(false)
+    return {
+      facilityContactFormModalOpen
+    }
   }
+
 })
 </script>
 
