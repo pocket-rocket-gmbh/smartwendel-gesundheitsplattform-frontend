@@ -1,12 +1,20 @@
 <template>
   <div>
     <h2>Benutzer</h2>
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neue Einrichtung</v-btn>
+    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neuer Benutzer</v-btn>
     <DataTable
       :fields="fields"
       endpoint="users"
       @openCreateEditDialogue="openCreateEditDialogue"
       @openDeleteDialogue="openDeleteDialogue"
+      @mailUser="mailUser"
+    />
+
+    <AdminUsersCreateEdit
+      :item-id="itemId"
+      v-if="createEditDialogueOpen"
+      @close="itemId = null; createEditDialogueOpen = false"
+      @refreshCollection="getItem()"
     />
 
     <DeleteItem
@@ -42,6 +50,7 @@ export default defineComponent({
     const createEditDialogueOpen = ref(false)
     const confirmDeleteDialogueOpen = ref(false)
     const itemId = ref(null)
+    const filter = ref({ page: 1, per_page: 1000, sort_by: 'created_at', sort_order: 'DESC', searchQuery: null, concat: false, filters: [] })
 
     const openCreateEditDialogue = (id:string) => {
       itemId.value = id
@@ -53,14 +62,39 @@ export default defineComponent({
       confirmDeleteDialogueOpen.value = true
     }
 
+    onMounted(() => {
+      getItem()
+    })
+
+    const mailUser = async (id:String) => {
+      const user = users.value.find(user => user.id === id)
+      if (process.client && user) {
+        window.location.href = `mailto:${user.email}`
+      }
+    }
+
+    const api = useCollectionApi()
+    api.setBaseApi(usePrivateApi())
+    api.setEndpoint('users')
+    const users = api.items
+
+    const getItem = async () => {
+      loading.value = true
+      await api.retrieveCollection(filter.value)
+      loading.value = false
+    }
+
     return {
+      getItem,
       fields,
       loading,
       dialog,
+      mailUser,
       item,
       createEditDialogueOpen,
       confirmDeleteDialogueOpen,
       itemId,
+      users,
       openCreateEditDialogue,
       openDeleteDialogue
     }

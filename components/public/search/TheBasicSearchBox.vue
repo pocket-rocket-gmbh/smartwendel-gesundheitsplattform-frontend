@@ -2,7 +2,7 @@
   <div class="basic-search-box pa-8 mt-10">
     <v-row>
       <v-col>
-        <h2 class="is-uppercase">Wählen Sie hier Ihre Suchkriterien aus</h2>
+        <h2 class="is-uppercase text-white">Wählen Sie hier Ihre Suchkriterien aus</h2>
       </v-col>
       <v-col class="is-white d-flex align-center justify-end">
         <p>Hilfe ?</p>
@@ -30,7 +30,7 @@
           color="is-white"
           filter-name="category"
           label="Ort, Adresse oder PLZ"
-          endpoint="categories"
+          endpoint=""
         />
       </v-col>
     </v-row>

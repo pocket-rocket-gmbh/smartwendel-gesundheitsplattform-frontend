@@ -1,7 +1,7 @@
 <template>
   <div class="pa-15 bg-gradient">
     <div class="d-flex align-center justify-center is-uppercase">
-      <h2 >Wir zeigen Ihnen, was Sie für ihren Gesundheitszustand und Wohlbefinden tuen können!</h2>
+      <h2 class="text-white">Wir zeigen Ihnen, was Sie für ihren Gesundheitszustand und Wohlbefinden tuen können!</h2>
     </div>
     <div class="d-flex align-center justify-center text-white is-uppercase my-5">
       <h3>Bitte wählen Sie, was am ehesten auf Sie zutrifft:</h3>
