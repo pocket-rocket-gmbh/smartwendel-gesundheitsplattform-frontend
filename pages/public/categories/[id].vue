@@ -2,7 +2,7 @@
   <div class=" d-inline align-center justify-center">
     <div class="title-bar is-uppercase has-font-size-big d-flex align-center justify-center">
     <div>
-      <h2>{{ category?.name }}</h2>
+      <h2 class="is-white">{{ category?.name }}</h2>
     </div>
   </div>
 

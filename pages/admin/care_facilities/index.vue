@@ -1,6 +1,6 @@
 <template>
   <div>
-   <h2>Kategorien</h2>
+   <h2>Einrichtungen</h2>
 
     <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neue Einrichtung</v-btn>
 
