@@ -1,17 +1,22 @@
 <template>
-  <header class="background">
-    <v-container class="limited offset">
+  <div>
+    <div class="background">
       <v-row>
-        <v-col md="6">
+        <v-col class="flex-column align-start justify-start ma-15" md="5" xl="4">
           <PublicLandingHeader />
           <PublicLandingChooseCategory />
         </v-col>
-      </v-row>
-    </v-container>
-  </header>
-  <PublicLandingCurrentNotes />
-  <PublicLandingCategories />
-  <PublicLandingCurrentHealthNotes />
+        </v-row>
+    </div>
+    <PublicLandingCurrentNotes />
+      <div class="divider ma-10"></div>
+    <PublicLandingCategories />
+    <PublicLandingCurrentRecommendations/>
+    <PublicLandingCurrentEvents />
+      <div class="divider ma-10"></div>
+    <PublicLandingHelplinks />
+  </div>
+  
 </template>
 
 <script lang="ts">
@@ -25,18 +30,17 @@ header
   
 .background
   background: url('@/assets/images/home.svg') no-repeat center center fixed
+  height: 100vh
   -webkit-background-size: cover
   -moz-background-size: cover
   -o-background-size: cover
   background-size: cover
 
 .background::before 
-    content: ""
-    position: absolute
-    top: 0px
-    right: 0px
-    bottom: 0px
-    left: 0px
-    background-color: rgba(0,0,0,0.10)
+  content: ""
+  top: 0px
+  right: 0px
+  bottom: 0px
+  left: 0px
 
 </style>

@@ -3,32 +3,44 @@
   <div v-else-if="careFaclities.length > 0">
     <div class="item mb-6" v-for="careFacility in careFaclities" :key="careFacility.id">
       <v-row>
-        <v-col>
-          <h2 class="is-primary is-uppercase">{{ careFacility.name }}</h2>
-          <div v-if="careFacility.kind" class="text-info font-weight-bold">
+        <v-col md="8">
+          <h2 class="is-dark-grey is-uppercase">{{ careFacility.name }}</h2>
+          <div v-if="careFacility.kind" class="is-primary font-weight-bold">
             {{ useKindsCareFacilities().getNameFromId(careFacility.kind) }}
           </div>
           <v-row>
             <v-col>
-              <div class="text-dark-grey font-weight-bold mt-4">
+              <div class="text-dark-grey mt-4">
                 <div v-if="careFacility.street">{{ careFacility.street }}</div>
                 <div v-if="careFacility.zip || careFacility.town">{{ careFacility.zip }} {{ careFacility.town }}</div>
                 <div v-if="careFacility.community">{{ careFacility.community }}</div>
               </div>
             </v-col>
             <v-col>
-              <div class="text-dark-grey font-weight-bold mt-4">
-                <div v-if="careFacility.phone"><nuxt-icon name="phone" filled class="mr-2" />{{ careFacility.phone }}</div>
-                <div v-if="careFacility.email"><nuxt-icon name="email" filled class="mr-2" />{{ careFacility.email }}</div>
+              <div class="text-dark-grey mt-4">
+                <div v-if="careFacility.phone"><v-icon color="primary" class="mr-2">mdi-phone-outline</v-icon>{{ careFacility.phone }}</div>
+                <div v-if="careFacility.email"><v-icon color="primary" class="mr-2">mdi-email-outline</v-icon>{{ careFacility.email }} {{ filterCriteria }}</div>
               </div>
             </v-col>
           </v-row>
-          
+          <div>
+            <v-btn 
+              append-icon="mdi-map-marker-outline"
+              size="small"
+              class="mt-4 pa-1"
+              variant="text"
+              color="primary"
+              rounded="pill"
+              @click=""
+                >
+                Auf karte zeigen
+            </v-btn>
+          </div>
         </v-col>
         <v-col align="right">
           <v-btn
             variant="flat"
-            color="info"
+            color="secondary"
             rounded="pill"
             :href="`/public/care_facilities/${careFacility.id}`"
           >
@@ -36,35 +48,6 @@
           </v-btn>
         </v-col>
       </v-row>
-      <div class="mt-4">
-        <v-chip
-          size="small"
-          v-for="cat in careFacility.categories" :key="cat.id"
-          class="mr-2 mt-2"
-          color="primary"
-          variant="outlined"
-        >
-          {{ cat.name }}
-        </v-chip>
-        <v-chip
-          size="small"
-          v-for="subCat in careFacility.sub_categories"
-          :key="subCat.id" class="mr-2 mt-2"
-          color="info"
-          variant="outlined"
-        >
-          {{ subCat.name }}
-        </v-chip>
-        <v-chip
-          size="small"
-          v-for="(tag, index) in careFacility.tags"
-          :key="index" class="mr-2 mt-2"
-          color="error"
-          variant="outlined"
-        >
-          {{ tag }}
-        </v-chip>
-      </div>
     </div>
   </div>
   <div v-else-if="!loading">
@@ -79,11 +62,14 @@ import { useFilterStore } from '@/store/filter'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  setup() {
-
+  props: {
+    filterCriteria : String
+  },
+  setup(props) {
     const filters = ref([])
     const searchQuery = ref(null)
     const loading = ref(false)
+    const filter = props.filterCriteria
 
     const currentCategoryId = computed(() => {
       return useFilterStore().currentCategoryId
@@ -146,7 +132,7 @@ export default defineComponent({
 
     const getCareFacilities = async () => {
       loading.value = true
-      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: searchQuery.value, concat: false, filters: filters.value }
+      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: filter, searchQuery: searchQuery.value, concat: false, filters: filters.value }
       await careFaclitiesApi.retrieveCollection(options as any)
       careFaclities.value = careFaclitiesApi.items.value
       loading.value = false
@@ -166,9 +152,13 @@ export default defineComponent({
 
     })
 
+    watch(filter, () => {
+      getCareFacilities()
+    })
+
     return {
       careFaclities,
-      loading
+      loading,
     }
   }
 })

@@ -1,16 +1,40 @@
 <template>
   <div class="choose-category" v-if="categories.length > 0">
-    <div class="category-input py-2 px-4 mt-4" @click="chooseBoxOpen = !chooseBoxOpen">Wählen Sie einen Bereich</div>
-    <transition>
-      <div class="choose-box py-2 px-4" v-if="chooseBoxOpen">
-        <div v-for="category in categories" :key="category.id">
-          <div class="category-headline mb-1"><i>{{ category.name }}</i></div>
-          <div class="ml-5" v-if="category.sub_categories.length > 0">
-            <div class="pa-2 selectable" v-for="sub_category in category.sub_categories" :key="sub_category.id" @click="setFilterAndMove(category.id, sub_category.id)">{{ sub_category.name }}</div>
-          </div>
-        </div>
+    <div>
+      <div class="category-input is-dark-grey py-2 d-flex align-center">
+          <v-text-field
+            @click="chooseBoxOpen = !chooseBoxOpen"
+            variant="plain"
+            autocomplete="off"
+            v-model="searchTerm"
+            placeholder="Suchebegriff eingeben"
+            class="px-5 py-3 font-weight-bold"
+            @input="getFilteredData()"
+          >
+          <template v-slot:append-inner>
+            <v-icon class="pt-3">mdi-magnify</v-icon>
+          </template>
+          </v-text-field>
+        <ul
+          v-if="searchTerm?.length"
+          class=""
+        >
+          <li
+            v-for="category in categories"
+            :key="category.id"
+            @click="setFilterAndMove(category?.id, category.sub_category?.id)"
+            class=""
+          >
+            <div class="choose-box py-2 px-4">
+              <div class="results-content-wrap" v-for="sub_category in category.sub_categories" :key="sub_category?.id" @click="setFilterAndMove(category.id, sub_category.id)">
+                <p class="category-headline"><span v-if="category.name">{{ category.name }}</span></p>
+                <p class="is-clickable pa-2 selectable" v-if="sub_category.name">{{ sub_category.name }}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
@@ -26,6 +50,7 @@ export default defineComponent({
     categoriesApi.setEndpoint(`categories`)
     const categories = categoriesApi.items
     const router = useRouter()
+    const searchTerm = ref('')
 
     const getCategories = async () => {
       const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
@@ -41,6 +66,10 @@ export default defineComponent({
       router.push({ path: '/public/search'})
     }
 
+    const getFilteredData = async () => {
+      await categoriesApi.retrieveCollection()
+    }
+
     onMounted(() => {
       getCategories()
     })
@@ -48,7 +77,9 @@ export default defineComponent({
     return {
       chooseBoxOpen,
       categories,
-      setFilterAndMove
+      setFilterAndMove,
+      searchTerm,
+      getFilteredData
     }
   }
 })
@@ -57,12 +88,14 @@ export default defineComponent({
 <style lang="sass" scoped>
 .choose-category
   position: relative
-  width: 70%
   .category-input
-    border: 2px solid #015281
-    border-radius: 58px
+    border: 2px solid white
+    background: white
+    height: 50px
+    border-radius: 50px
     cursor: pointer
-    color: #015281
+    color: grey
+    width: 70%
     font-weight: 700
   .choose-box
     border-radius: 20px
@@ -72,7 +105,7 @@ export default defineComponent({
     position: absolute
     top: 50px
     left: 0
-    width: 100%
+    width: 60%
     z-index: 100
     font-size: 18px
     .selectable
@@ -82,4 +115,9 @@ export default defineComponent({
   .category-headline
     text-transform: uppercase
     font-weight: 700
+
+.v-input__icon.v-input__icon--append-outer i
+  font-size: 48px
+
+
 </style>

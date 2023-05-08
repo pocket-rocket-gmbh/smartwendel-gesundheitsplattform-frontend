@@ -1,28 +1,32 @@
 <template>
-  <v-container class="my-5">
-    <v-row>
+  <div class="mx-15">
+    <div class="my-5">
+    <v-row justify="space-between">
       <v-col class="d-flex justify-start align-center is-uppercase">
-        <h2 class="is-primary">Wichtige aktuelle Hinweise</h2>
+        <h2 class="is-primary">Neuigkeiten</h2>
       </v-col>
-      <v-col md="3" class="d-flex justify-end align-center">
-        <v-btn
-            variant="flat"
-            color="info"
-            rounded="pill"
-          >
-          Alle Informationen ansehen
-        </v-btn>
+
+      <v-col md="3" class="d-flex text--red justify-end align-start default-button">
+        <v-btn 
+          variant="flat"
+          color="#007344"
+          rounded="pill"
+        >
+          <span class = "text-white">
+            Mehr Themen
+          </span>
+      </v-btn>
       </v-col>
     </v-row>
-  </v-container>
-  <v-container>
+  </div>
+  <div>
       <v-row>
-        <v-col md="6" class="d-flex justify-center align-center" v-for="(item, index) in itens" :key="index">
+        <v-col md="6" class="d-flex justify-start align-center" v-for="(item, index) in limitedCategories" :key="index">
           <v-card class="rounded-xl">
             <div class="d-flex notes-card">
-              <img class="is-clickable" :src="item.content.image" />
+              <img class="is-clickable" :src="item?.content.image" />
               <div>
-                <v-card-title class="note-title">
+                <v-card-title class="note-title is-primary">
                   {{ item.content.heading }}
                 </v-card-title>
                 <div class="px-5 pb-5">
@@ -30,6 +34,7 @@
                 </div>
                 <v-card-actions>
                   <v-btn
+                    color="secondary"
                     class="note-text-link"
                     size="small"
                   >
@@ -41,10 +46,25 @@
           </v-card>
         </v-col>
       </v-row>
-  </v-container>
-  <v-container>
-    <div class="divider my-10"></div>
-  </v-container>
+      <v-btn
+      class="note-text-link mt-15"
+      size="small"
+      v-if="!showingAllArticles"
+      @click="showMoreArticles()"
+    >
+    Mehr anzeigen >
+    </v-btn>
+    <v-btn
+      v-if="showingAllArticles"
+      class="note-text-link mt-15"
+      size="small"
+      @click="showLessArticles()"
+    >
+    &lt; Weninger anzeigen
+    </v-btn>
+  </div>
+  </div>
+
   
 </template>
 <script lang="ts">
@@ -53,7 +73,11 @@ import image1 from '@/assets/images/current-notes/affenpocken.png'
 import image2 from '@/assets/images/current-notes/pexels.png'
 export default defineComponent({
   setup() {
-    const itens = [
+
+    const articleLimit = ref(2)
+    const showingAllArticles = ref(false)
+
+    const items = [
         {
         'content': {
           heading: 'Affenpocken',
@@ -69,11 +93,37 @@ export default defineComponent({
           image: image2,
           link: ''
           }
+        },
+        {
+        'content': {
+          heading: 'Grippeimpfung Winter 2022/2023',
+          description: 'Eine echte Virusgruppe ist keine einfach Erkältungs krankheit, sondern eine ernstzunehmende Erkrankung. Insbesondere chronisch ...',
+          image: image2,
+          link: ''
+          }
         }
       ]
+      
+      const limitedCategories = computed(() => { 
+        return articleLimit.value ? items.slice(0,articleLimit.value) : articleLimit.value
+      })
+
+      const showMoreArticles = () => {
+        articleLimit.value = 99
+        showingAllArticles.value = true
+      }
+
+      const showLessArticles = () => {
+        articleLimit.value = 2
+        showingAllArticles.value = false
+      }
 
       return {
-      itens
+      items,
+      showMoreArticles,
+      showLessArticles,
+      limitedCategories,
+      showingAllArticles
     }
   },
 })
@@ -81,14 +131,15 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 
-  .note-title
-    color: #3CB5E7
-    font-weight: 600
-    font-size: 22px
+.note-title
+  font-weight: 600
+  font-size: 22px
 
-  .note-text-link
-    color: #017DC2
-    font-size: 18px
+.note-text-link
+  font-size: 18px
+
+.default-button
+  color: red
 
 
 </style>

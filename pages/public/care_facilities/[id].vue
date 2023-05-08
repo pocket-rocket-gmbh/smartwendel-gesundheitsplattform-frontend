@@ -13,6 +13,21 @@
         <PublicCareFacilitiesRight
           :care-facility="careFacility"
         />
+        <div class="mt-5">
+          <PublicCareFacilitiesDocuments
+          :care-facility="careFacility"
+        />
+        </div>
+      </v-col>
+    </v-row>
+    <div class="divider my-10"></div>
+    <v-row>
+      <v-col>
+        <div class="my-5">
+          <PublicCareFacilitiesTopics
+          :care-facility="careFacility"
+        />
+        </div>
       </v-col>
     </v-row>
   </v-container>

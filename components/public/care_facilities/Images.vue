@@ -13,6 +13,7 @@
         <v-row>
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
             <img class="image right-bottom" v-if="careFacility.sanitized_images[2]" :src="careFacility.sanitized_images[2].url" />
+              <v-btn class="show-more" @click="showGalery()" >alle Bilder zeigen</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -21,20 +22,37 @@
       <img :src="careFacility.logo_url" />
     </div>
   </div>
+  <PublicCareFacilitiesGalery :care-facility="careFacility" :showingGalery="showingGalery"  @close="showingGalery = false"/>
 </template>
 
 <script lang="ts">
 export default defineComponent({
   props: {
     careFacility: {
-      type: Object,
-      required: true
+        type: Object,
+        required: true
+    }
+  },
+  setup () {
+    const showingGalery = ref(false)
+    const showGalery = () => {
+      showingGalery.value = true
+    }
+   
+    return {
+      showingGalery,
+      showGalery
     }
   }
 })
 </script>
 
 <style lang="sass" scoped>
+.show-more
+  position: absolute
+  bottom: 0
+  right: 0
+  margin: 30px
 .image
   max-width: 100%
   &.left

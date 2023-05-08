@@ -1,5 +1,5 @@
 <template>
-  <h2 class="is-primary is-uppercase mb-4">Suche filtern</h2>
+  <h2 class="is-dark-grey is-uppercase mb-4">Suche filtern</h2>
 
   <div class="mb-4">
     <PublicFilterSelect
@@ -10,7 +10,6 @@
       endpoint="categories"
     />
   </div>
-
   <div class="mb-4">
     <PublicFilterSelect
       :disabled="!currentCategoryId"
@@ -32,8 +31,20 @@
       :endpoint="`categories/${currentCategoryId}/sub_categories`"
     />
   </div>
-
-  <div class="text-info is-clickable font-weight-bold" @click="emitResetFilter"><nuxt-icon filled name="trash" class="mr-1" /> Alle Filter löschen</div>
+  <div>
+    <v-btn 
+      prepend-icon="mdi-trash-can-outline"
+      size="small"
+      class="mt-4"
+      variant="text"
+      color="secondary"
+      rounded="pill"
+      @click="emitResetFilter"
+        >
+        Alle Filter löschen
+    </v-btn>
+  </div>
+    
 </template>
 
 <script lang="ts">
@@ -65,3 +76,8 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
+
+</style>

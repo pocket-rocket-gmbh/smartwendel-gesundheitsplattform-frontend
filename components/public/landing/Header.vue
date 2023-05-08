@@ -1,7 +1,7 @@
 <template>
-  <div class="my-10">
-    <h1>Ihre Gesundheits- und <br/> Pflegeplattform im <br/> Landkreis Sankt Wendel</h1>
-    <p class="has-font-size-medium">Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unsere umfangreiche Pflegeangebote aus der Region Sankt Wendel</p>
+  <div class="mt-15 my-15 pl-3">
+    <h1 class="title">Ihre Gesundheits- und Pflegeplattform im Landkreis Sankt Wendel</h1>
+    <p class="has-font-size-medium sub-title">Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unsere umfangreiche Pflegeangebote aus der Region Sankt Wendel</p>
   </div>
 </template>
 
@@ -14,15 +14,17 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-h1
-  color: #015281
+.title
+  color: white
   font-size: 55px
-  font-weight: 900
   text-transform: uppercase
   line-height: 150%
-p
-  color: #015281
+.sub-title
+  color: white
   font-style: normal
   font-weight: 400
   line-height: 160%
+
+.header
+  margin-top: 20%
 </style>
