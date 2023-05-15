@@ -1,10 +1,8 @@
 <template>
-  <div :class="[(isProjectPage ? 'mapwidgetProject' : 'mapwidget')]" :id="mapWidgetId"></div>
-  <div align="right" class=" my-2" :class="[(isProjectPage ? 'caption-text' : 'has-text-white')]">
+  <div class="mapwidget" :id="mapWidgetId"></div>
+  <div align="right" class="my-2 has-text-white">
     <p>© GeoBasis-DE / BKG (2023)</p> 
   </div>
-
-
 </template>
 
 <script lang="ts">
@@ -76,8 +74,7 @@ export default defineComponent({
     attributionFontSize: {
       type: Number,
       default: 12
-    },
-    isProjectPage: Boolean
+    }
   },
   emits: [
     'markerClick', 'scroll'
@@ -369,12 +366,9 @@ export default defineComponent({
 	}
 }
 
-.mapwidgetProject {
-  height: 60vh;
-}
 
 div.clustericon {
-  background-color: #2b79c2;
+  background-color: #007344;
   padding-top: 2px;
   text-align: center;
   font-size: 24px;

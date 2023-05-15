@@ -73,6 +73,7 @@
   <div  class="map-widget">
     <ClientOnly>
       <lazy-MapWidget
+        :locations="locations"
         v-if="showingMap"
         ref="map"
         :auto-fit="false"
@@ -83,24 +84,64 @@
         :min-zoom="11"
        />
     </ClientOnly>
-     
-
   </div>          
   
 </template>
 <script lang="ts">
-import { useFilterStore } from '@/store/filter';
+import { Ref } from 'vue'
+import { useFilterStore } from '@/store/filter'
+import { MapLocation } from '@/types/MapLocation'
 
 export default defineComponent({
   setup () {
     const searchQuery = ref('')
     const filterStore = useFilterStore()
     const showingMap = ref(true)
+    const map = ref(null)
+    const locations: Ref<MapLocation[]> = ref([])
+
+    const api = useCollectionApi()
+    api.setBaseApi(usePublicApi())
+    api.setEndpoint('care_facilities')
+    const facilities = api.items
 
     if (useNuxtApp().$bus) {
       useNuxtApp().$bus.$on("clearSearch", () => {
         searchQuery.value = ''
       })
+    }
+
+    onMounted(() => {
+      getfacilities(false)
+    })
+
+    const getfacilities = async (concat = false) => {
+      await api.retrieveCollection()
+      updateLocations()
+    }
+
+    const updateLocations = () => {
+
+    locations.value = []
+
+    facilities.value.forEach((facility) => {
+      facility.locations.forEach((location: any) => {
+        locations.value.push({
+          id: facility.id,
+          longitude: parseFloat(location.longitude),
+          latitude: parseFloat(location.latitude),
+          draggable: false,
+          tooltipHtml: `<div style="width: 200px;"><img src="${facility.logo_url}" style="width: 100%;" /><div style="white-space: normal;">${facility.name}</div></div>`
+        })
+      })
+    })
+
+    // Give the ref some time to update.
+    setTimeout(function () {
+      if (map.value) { // take in to account that the map has not yet been loaded into the dom
+        map.value.refreshView()
+      }
+    }, 10)
     }
 
     const emitResetFilter = () => {
@@ -130,8 +171,11 @@ export default defineComponent({
       currentCategoryId,
       emitSearch,
       showingMap,
+      map,
       mapToogle,
-      emitResetFilter
+      emitResetFilter,
+      locations,
+      facilities
     }
   }
 })

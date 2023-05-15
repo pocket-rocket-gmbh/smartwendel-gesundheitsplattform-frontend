@@ -5,7 +5,7 @@ export function useUser() {
   const userStore = useUserStore()
   const router = useRouter()
   const snackbar = useSnackbar()
-  const currentUser = userStore.currentUser as any
+  const currentUser = userStore.currentUser
 
   const loggedIn = ():Boolean => {
     return currentUser !== null
@@ -15,15 +15,11 @@ export function useUser() {
     if (currentUser) {
       return currentUser.role === 'root' || currentUser.role === 'admin'
     }
-    return false
   }
 
   const logout = () => {
-    if (process.client) {
-      localStorage.removeItem('auth._token.jwt')
-    }
+    localStorage.removeItem('auth._token.jwt')
     userStore.currentUser = null
-    userStore.loggedIn = false
     router.push({ path: '/' })
     snackbar.showSuccess('Sie wurden erfolgreich abgemeldet')
   }

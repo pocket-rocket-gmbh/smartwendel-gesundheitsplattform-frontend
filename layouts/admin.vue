@@ -28,7 +28,7 @@
         <v-list-item link to="/admin/filter" nuxt>
           Filter
         </v-list-item>
-        <v-list-item link to="/admin/sections" nuxt>
+        <v-list-item link to="/admin/categories" nuxt>
           Bereiche
         </v-list-item>
         <v-list-item link to="/admin/care_facilities" nuxt>
@@ -51,9 +51,6 @@
         </v-list-item>
         <v-list-item link to="/admin/users" nuxt>
           Benutzer
-        </v-list-item>
-        <v-list-item link to="/admin/categories" nuxt>
-          Leistungsbereiche
         </v-list-item>
         <v-list-item @click="useUser().logout()">
           <v-icon>mdi-logout</v-icon> Logout
