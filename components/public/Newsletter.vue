@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb-10">
     <v-row v-if="!sucessMessage">
       <v-col cols="8" md="6" class="d-flex justify-start justify-sm-left">
         <v-text-field
@@ -27,9 +27,8 @@
         </v-btn>
       </v-col>
     </v-row>
-    <ClientOnly>
       <v-row v-if="!sucessMessage">
-        <v-col class="d-flex justify-start justify-sm-left has-text-white">
+        <v-col class="d-flex justify-start justify-sm-left">
           <v-checkbox v-model="terms">
             <template v-slot:label>
               <div>
@@ -64,7 +63,6 @@
       <div class="has-text-white pa-4">
         <h3 v-if="error">Bitte überprüfe deine Email-Adresse. Zu der von dir eingegebenen Email-Adresse gibt es bereits ein Nutzerkonto.</h3>
       </div>
-    </ClientOnly>
   </div>
 </template>
 

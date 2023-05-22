@@ -54,7 +54,7 @@ export default defineComponent({
       else {
         locations.value.push({
           id: 'new',
-          longitude: 7.10083, // TODO determine default center coordinates from project
+          longitude: 7.10083,
           latitude: 49.53123,
           draggable: true
         })

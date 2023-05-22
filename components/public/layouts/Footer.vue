@@ -1,98 +1,79 @@
 <template>
-      <div class="footer pt-15 px-5">
-        <v-row>
-          <v-col cols="12" md="6">
-            <div class="my-10">
-              <p class="text-uppercase">Benachrichtigung zu neuen Projekten</p>
-              <p class="has-text-white">Jetzt zum SMART WENDELER LAND NEWSLETTER anmelden und über neue Projekte informiert werden:</p>
-              <div class="gap-2" />
-            </div>
-            <PublicNewsLetter />
-          </v-col>
-          <v-col class="d-flex justify-md-end my-10">
-            <div class="flex-column justify-end">
-              <p class="footer-title">Mehr News vom SMART WENDELER LAND</p>
-              <div class="gap-2" />
-              <div class="my-10">
-                <v-btn
-                href="https://www.facebook.com/Landkreis.StWendel/" target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-                >
-                <v-icon>mdi-facebook</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.instagram.com/sankt.wendeler.land/?hl=de" target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-                >
-                <v-icon>mdi-instagram</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about" target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-                >
-                <v-icon>mdi-youtube</v-icon>
-              </v-btn>
-                <v-btn
-                href="https://www.linkedin.com/showcase/smart-wendeler-land" target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons"
-                >
-                <v-icon>mdi-linkedin</v-icon>
-              </v-btn>
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-        <div class="divider mb-10"></div>
-        <p class="has-text-white footer-title mb-5">Landkreis Sankt Wendel</p>
-        <v-row >
-          <v-col cols="6" md="3" sm="6" class="flex-column justify-center align-center">
-            <p class="has-text-white">Mommstraße 21-31</p>
-            <p class="has-text-white">66606 St. Wendel</p>
-            <div v-if="display.smAndDown && !display.smAndUp">
-              <span>&nbsp;</span>
-              <p class="has-text-white is-clickable"><router-link to="/terms_of_use">Nutzungsbedingungen</router-link></p>
-              <p class="has-text-white is-clickable"><router-link to="/rules_of_conduct">Verhaltensregeln</router-link></p>
-              <p class="has-text-white is-clickable"><router-link to="/privacy_policy">Datenschutzerklärung</router-link></p>
-              <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
-            </div>
-          </v-col>
-          <v-col cols="6" md="3" sm="6" class="justify-center align-center">
-            <p class="has-text-white">Tel.: 06851 801-0</p>
-            <p class="has-text-white">Fax: 06851 801-2290</p>
-            <span>&nbsp;</span>
-            <p class="has-text-white">digitalregion.landkreis-st-wendel.de</p>
-            <p class="has-text-white font-italic">smartcity@lkwnd.de</p>
-          </v-col>
-          <v-col md="1" v-if="display.mdAndDown && !display.mdAndUp"></v-col>
-          <v-col v-if="display.smAndUp" class="flex-column justify-center align-center">
-            <p class="has-text-white is-clickable"><router-link to="/terms_of_use">Nutzungsbedingungen</router-link></p>
-            <p class="has-text-white is-clickable"><router-link to="/rules_of_conduct">Verhaltensregeln</router-link></p>
-            <p class="has-text-white is-clickable"><router-link to="/privacy_policy">Datenschutzerklärung</router-link></p>
-            <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
-          </v-col>
-            <v-col md="3" sm="6" class="flex-column justify-center align-center">
-              <div>
-                Werden Sie Partner und registrieren Sie Ihre Institution
-              </div>
-              <div>
-                >> HIER ANMELDEN
-              </div>
-          </v-col>
-        </v-row>
-      </div>
-
+  <div class="footer pt-15 px-5 is-dark-grey">
+    <v-row>
+      <v-col cols="12" md="6">
+        <div class="my-10">
+          <h2 class="text-uppercase">immer informiert – <br>Mit dem Newsletter von Smart Wendeler land</h2>
+          <p>Alles zu aktuellen Gesundheitsangeboten und Gesundheitsthemen in deinem SMART WENDELER LAND. Jetzt anmelden und immer up to date sein:</p>
+          <div class="gap-2" />
+        </div>
+        <PublicNewsLetter />
+      </v-col>
+      <v-col class="d-flex justify-md-end my-10 align-center">
+        <div class="flex-column">
+          <div class="gap-2" />
+          <div class="my-10">
+            <v-btn
+            href="https://www.facebook.com/Landkreis.StWendel/" target="_blank"
+            variant="outlined"
+            size="large"
+            icon
+            class="social-buttons mr-5"
+            >
+            <v-icon>mdi-facebook</v-icon>
+          </v-btn>
+          <v-btn
+            href="https://www.instagram.com/sankt.wendeler.land/?hl=de" target="_blank"
+            variant="outlined"
+            size="large"
+            icon
+            class="social-buttons mr-5"
+            >
+            <v-icon>mdi-instagram</v-icon>
+          </v-btn>
+          <v-btn
+            href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about" target="_blank"
+            variant="outlined"
+            size="large"
+            icon
+            class="social-buttons mr-5"
+            >
+            <v-icon>mdi-youtube</v-icon>
+          </v-btn>
+            <v-btn
+            href="https://www.linkedin.com/showcase/smart-wendeler-land" target="_blank"
+            variant="outlined"
+            size="large"
+            icon
+            class="social-buttons"
+            >
+            <v-icon>mdi-linkedin</v-icon>
+          </v-btn>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+    <div class="divider mb-10"></div>
+    <v-row class="mb-10 font-weight-bold">
+      <v-col class="flex-column justify-center">
+        <h2 class="mb-5">Landkreis Sankt Wendel</h2>
+        <p class="has-text-white is-clickable"><router-link to="/terms_of_use">Kontakt</router-link></p>
+          <p class="has-text-white is-clickable"><router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link></p>
+          <p class="has-text-white is-clickable"><router-link to="/privacy_policy">Datenschutzerklärung</router-link></p>
+          <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
+      </v-col>
+      <v-col class="d-flex justify-md-end my-10 align-center">
+        <div class="flex-column">
+            <div>
+            Werden Sie Partner und registrieren Sie Ihre Institution
+          </div>
+          <div>
+            >> HIER ANMELDEN
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -103,13 +84,14 @@ const display = ref(useDisplay())
 </script>
 
 <style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
 
 
 .social-buttons
   border: 3px solid
 
 .divider
-  border: 2px &dark-grey solid
+  border: 1px $dark-grey solid
 
 .input-field
   border: 2px solid red

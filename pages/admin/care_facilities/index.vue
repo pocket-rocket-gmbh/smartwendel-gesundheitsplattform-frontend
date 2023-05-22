@@ -44,8 +44,8 @@ export default defineComponent({
       { text: '', type: 'move_up' },
       { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
       { text: 'Name', value: 'name', type: 'string' },
-      { text: 'Einrichtungsart', value: '', type: 'string' },
-      { text: 'Status', value: '', type: 'string' },
+      { text: 'Einrichtungsart', value: 'kind', type: 'string' },
+      { text: 'Status', value: 'status', type: 'string' },
       { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
     ])
 

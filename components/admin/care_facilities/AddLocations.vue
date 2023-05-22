@@ -1,5 +1,4 @@
 <template>
-
     <div>    
       <div>
         <v-btn
@@ -8,7 +7,7 @@
           @click="openLocationDialog(null)">
           Ort hinzufügen
         </v-btn>
-        <v-table >
+        <v-table>
           <thead>
             <tr>
               <th>Lat / Long </th>
@@ -24,8 +23,9 @@
                   id: location.id,
                   longitude: parseFloat(location.longitude),
                   latitude: parseFloat(location.latitude),
-                  draggable: true
-                })">mdi-pencil</v-icon>
+                  draggable: true,
+                  tooltipHtml: ''
+                  })">mdi-pencil</v-icon>
               </td>
               <td><v-icon class="is-clickable" @click="deleteLocation(location.id)">mdi-delete</v-icon></td>
             </tr>
@@ -42,8 +42,6 @@
       @save="saveLocation()"
     />
 
-
-
 </template>
 
 <script lang="ts">
@@ -53,7 +51,10 @@ import { MapLocation } from '@/types/MapLocation'
 export default defineComponent({
   emits: ['close'],
   props: {
-    itemId: String
+    itemId: {
+      type :String,
+      required: true
+    }
   },
   setup (props, { emit }) {
     const loadingItem = ref(false)
@@ -70,7 +71,6 @@ export default defineComponent({
     const emitClose = () => {
       emit('close')
     }
-
     const api = useCollectionApi()
     api.setBaseApi(usePrivateApi())
 
@@ -88,7 +88,6 @@ export default defineComponent({
     }
 
     const saveLocation = async () => {
-
       const locationId = createEditDialog.value.getLocationCoordinates().id 
       const longitude = createEditDialog.value.getLocationCoordinates().longitude
       const latitude = createEditDialog.value.getLocationCoordinates().latitude
@@ -104,7 +103,7 @@ export default defineComponent({
         })
       }
       else {
-        api.setEndpoint(`/locations/care_facility/${props.itemId}`)
+        api.setEndpoint(`locations/care_facility/${props.itemId}`)
         await api.createItem({
           careFacility_id: props.itemId,
           longitude: longitude,
@@ -113,12 +112,11 @@ export default defineComponent({
       }
 
       await getCareFacility()
-
       loadingItem.value = false      
     }
 
     const deleteLocation = async (locationId: string) => {
-      api.setEndpoint(`/locations/care_facility/${locationId}`)
+      api.setEndpoint(`/locations/${locationId}`)
       loadingItem.value = true
       const result = await api.deleteItem('Ort erfolgreich gelöscht')
       if (result.status === ResultStatus.SUCCESSFUL) {

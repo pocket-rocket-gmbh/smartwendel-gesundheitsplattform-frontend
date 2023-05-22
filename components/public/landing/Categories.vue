@@ -89,31 +89,7 @@ export default defineComponent({
           heading: 'Apotheken',
           icon: icon6
           }
-        },
-        {
-        'content': {
-          heading: 'Seniorenheime',
-          icon: icon7
-          }
-        },
-        {
-        'content': {
-          heading: 'Seniorenheime',
-          icon: icon8
-          }
-        },
-        {
-        'content': {
-          heading: 'Seniorenheime',
-          icon: icon9
-          }
-        },
-        {
-        'content': {
-          heading: 'Seniorenheime',
-          icon: icon10
-          }
-        },
+        }
       ]
 
     return {

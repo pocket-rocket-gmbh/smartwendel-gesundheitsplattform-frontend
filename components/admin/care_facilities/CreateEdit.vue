@@ -4,9 +4,9 @@
       <v-row>
         <v-col cols="12" md="8" offset="2">
           <div class="pa-10">
+            {{ slotProps.item }}
             Hier können Sie eine eigene Detailseite für Ihre Einrichtung anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen. Klicken Sie hier, für eine beispielhafte Vorschau einer ausgebauten Einrichtungsseite.
           </div>
-          {{ slotProps.item }}
           <div class="field">
             <div>
               <b>Name der Einrichting*</b> (Hinterlegen Sie den Namen Ihrer Einrichtung)
@@ -155,7 +155,8 @@
             <div class="mt-15 mb-5">
               <b>Standorte </b> (Falls Ihre Einrichtung mehr als einen Standort besitzt, tragen Sie hier alle weiteren Standorte ein)
             </div>
-            <AdminCareFacilitiesAddLocations 
+            <AdminCareFacilitiesAddLocations
+              v-if="slotProps.item.id"
               :item-id="slotProps.item.id"
               />
       

@@ -1,7 +1,7 @@
 <template>
   <div class="mapwidget" :id="mapWidgetId"></div>
   <div align="right" class="my-2 has-text-white">
-    <p>© GeoBasis-DE / BKG (2023)</p> 
+    <p>© GeoBasis-DE / BKG (2023)</p>
   </div>
 </template>
 
@@ -82,7 +82,7 @@ export default defineComponent({
   setup(props: any, { emit }) {
 
     const mapMarkerIcon = L.icon({
-        iconUrl: '/map-marker-green.png',
+        iconUrl: '/map-marker-green.svg',
         shadowUrl: null,
         iconSize:     [60, 60], // size of the icon
         shadowSize:   [0, 0], // size of the shadow
@@ -224,6 +224,7 @@ export default defineComponent({
         programmaticScrollInProgress = true
         if (props.autoFit && locationMarkers.length > 0) {
           const group: L.FeatureGroup<any> = L.featureGroup(locationMarkers)
+
           map.fitBounds(group.getBounds())
 
           // For single locations zoom out to make sure the sourroundings are visible.

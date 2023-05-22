@@ -12,7 +12,7 @@
     <span class="px-5 is-clickable">{{ item.name }}</span>
       </div>
  </div>
- <div class="mt-10" v-for="(categories, index) in category.sub_categories" :kex="index" >
+ <div class="mt-10" v-for="(categories, index) in category?.sub_categories" :kex="index" >
   {{categories.name}}
  </div>
 
@@ -32,7 +32,7 @@ export default defineComponent({
     })
 
     const showApi = useCollectionApi()
-    showApi.setBaseApi(usePrivateApi())
+    showApi.setBaseApi(usePublicApi())
 
     const getCategory = async () => {
       showApi.setEndpoint(`categories/${categoryId.value}`)

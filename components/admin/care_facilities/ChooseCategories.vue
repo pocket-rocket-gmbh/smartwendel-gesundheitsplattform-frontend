@@ -3,7 +3,7 @@
     <div v-if="choosenSubCategory">
       <div @click="choosenSubCategory = null" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
       <h3>Leistungsbereich {{ choosenCategory.name }}</h3>
-      <h3>Leistungsart {{ choosenSubCategory.name }}</h3>
+      <h3>Leistungsart d{{ choosenSubCategory.name }}</h3>
       <p class="my-3">Leistungen</p>
 
       <div class="item" v-for="(tag, index) in choosenSubCategory.tags" :key="index">
