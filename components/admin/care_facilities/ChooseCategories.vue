@@ -6,17 +6,22 @@
       <h3>Kategorie {{ choosenSubCategory.name }}</h3>
       <p class="my-3">Tags</p>
 
-      <div class="item" v-for="(tag, index) in choosenSubSubCategory.tags" :key="index">
-        <div>
-          <v-icon class="is-clickable" @click="toggleChoosenTags(tag)" v-if="choosenTags.includes(tag)">
-            mdi-checkbox-marked-circle-outline
-          </v-icon>
-          <v-icon class="is-clickable" @click="toggleChoosenTags(tag)" v-else>
-            mdi-checkbox-blank-circle-outline
-          </v-icon>
+      <div v-if="choosenSubSubCategory.tags > 0">
+        <div class="item" v-for="(tag, index) in choosenSubSubCategory.tags" :key="index">
+          <div>
+            <v-icon class="is-clickable" @click="toggleChoosenTags(tag)" v-if="choosenTags.includes(tag)">
+              mdi-checkbox-marked-circle-outline
+            </v-icon>
+            <v-icon class="is-clickable" @click="toggleChoosenTags(tag)" v-else>
+              mdi-checkbox-blank-circle-outline
+            </v-icon>
+          </div>
+          <div>{{ tag }}</div>
+          <div></div>
         </div>
-        <div>{{ tag }}</div>
-        <div></div>
+      </div>
+      <div v-else>
+        <i>Keine Tags verfügbar</i>
       </div>
     </div>
     <div v-else-if="choosenSubCategory && !choosenSubSubCategory">
@@ -24,17 +29,22 @@
       <h3>Bereich {{ choosenCategory.name }}</h3>
       <h3>Kategorie {{ choosenSubCategory.name }}</h3>
       <p class="my-3">Unter-Kategorien</p>
-      <div class="item" v-for="subSubCategory in choosenSubCategory.sub_sub_categories" :key="subSubCategory.id">
-        <div>
-          <v-icon class="is-clickable" @click="toggleChoosenSubSubCategoryIds(subSubCategory.id)" v-if="choosenSubSubCategoryIds.includes(subSubCategory.id)">
-            mdi-checkbox-marked-circle-outline
-          </v-icon>
-          <v-icon class="is-clickable" @click="toggleChoosenSubSubCategoryIds(subSubCategory.id)" v-else>
-            mdi-checkbox-blank-circle-outline
-          </v-icon>
+      <div v-if="choosenSubCategory.sub_sub_categories.length > 0">
+        <div class="item" v-for="subSubCategory in choosenSubCategory.sub_sub_categories" :key="subSubCategory.id">
+          <div>
+            <v-icon class="is-clickable" @click="toggleChoosenSubSubCategoryIds(subSubCategory.id)" v-if="choosenSubSubCategoryIds.includes(subSubCategory.id)">
+              mdi-checkbox-marked-circle-outline
+            </v-icon>
+            <v-icon class="is-clickable" @click="toggleChoosenSubSubCategoryIds(subSubCategory.id)" v-else>
+              mdi-checkbox-blank-circle-outline
+            </v-icon>
+          </div>
+          <div>{{ subSubCategory.name }}</div>
+          <div><v-icon v-if="choosenSubSubCategoryIds.includes(subSubCategory.id)" @click="choosenSubSubCategory = subSubCategory">mdi-arrow-right</v-icon></div>
         </div>
-        <div>{{ subSubCategory.name }}</div>
-        <div><v-icon v-if="choosenSubSubCategoryIds.includes(subSubCategory.id)" @click="choosenSubSubCategory = subSubCategory">mdi-arrow-right</v-icon></div>
+      </div>
+      <div v-else>
+        <i>Keine Unter-Kategorien verfügbar</i>
       </div>
     </div>
     <div v-else-if="!choosenSubCategory && choosenCategory">
@@ -42,17 +52,22 @@
       <h3>Bereich {{ choosenCategory.name }}</h3>
       <p class="my-3">Kategorien</p>
 
-      <div class="item" v-for="subCategory in choosenCategory.sub_categories" :key="subCategory.id">
-        <div>
-          <v-icon class="is-clickable" @click="toggleChoosenSubCategoryIds(subCategory.id)" v-if="choosenSubCategoryIds.includes(subCategory.id)">
-            mdi-checkbox-marked-circle-outline
-          </v-icon>
-          <v-icon class="is-clickable" @click="toggleChoosenSubCategoryIds(subCategory.id)" v-else>
-            mdi-checkbox-blank-circle-outline
-          </v-icon>
+      <div v-if="choosenCategory.sub_categories.length > 0">
+        <div class="item" v-for="subCategory in choosenCategory.sub_categories" :key="subCategory.id">
+          <div>
+            <v-icon class="is-clickable" @click="toggleChoosenSubCategoryIds(subCategory.id)" v-if="choosenSubCategoryIds.includes(subCategory.id)">
+              mdi-checkbox-marked-circle-outline
+            </v-icon>
+            <v-icon class="is-clickable" @click="toggleChoosenSubCategoryIds(subCategory.id)" v-else>
+              mdi-checkbox-blank-circle-outline
+            </v-icon>
+          </div>
+          <div>{{ subCategory.name }}</div>
+          <div><v-icon v-if="choosenSubCategoryIds.includes(subCategory.id)" @click="choosenSubCategory = subCategory">mdi-arrow-right</v-icon></div>
         </div>
-        <div>{{ subCategory.name }}</div>
-        <div><v-icon v-if="choosenSubCategoryIds.includes(subCategory.id)" @click="choosenSubCategory = subCategory">mdi-arrow-right</v-icon></div>
+      </div>
+      <div v-else>
+        <i>Keine Kategorien verfügbar</i>
       </div>
     </div>
     <div v-else-if="!choosenSubCategory && !choosenCategory">
