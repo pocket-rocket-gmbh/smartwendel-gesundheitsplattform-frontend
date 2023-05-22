@@ -2,9 +2,9 @@
   <div>
     <div v-if="choosenSubCategory">
       <div @click="choosenSubCategory = null" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
-      <h3>Leistungsbereich {{ choosenCategory.name }}</h3>
-      <h3>Leistungsart d{{ choosenSubCategory.name }}</h3>
-      <p class="my-3">Leistungen</p>
+      <h3>Bereich {{ choosenCategory.name }}</h3>
+      <h3>Kategorie {{ choosenSubCategory.name }}</h3>
+      <p class="my-3">Kategorien</p>
 
       <div class="item" v-for="(tag, index) in choosenSubCategory.tags" :key="index">
         <div>
@@ -21,8 +21,8 @@
     </div>
     <div v-else-if="!choosenSubCategory && choosenCategory">
       <div @click="choosenSubCategory = null; choosenCategory = null;" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
-      <h3>Leistungsbereich {{ choosenCategory.name }}</h3>
-      <p class="my-3">Leistungsarten</p>
+      <h3>Unter-Kategorie {{ choosenCategory.name }}</h3>
+      <p class="my-3">Unter-Kategorien</p>
 
       <div class="item" v-for="subCategory in choosenCategory.sub_categories" :key="subCategory.id">
         <div>
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div v-else-if="!choosenSubCategory && !choosenCategory">
-      <p class="my-3">Leistungsbereich</p>
+      <p class="my-3">Bereich</p>
 
       <div class="item" v-for="category in categories" :key="category.id">
         <div>

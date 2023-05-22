@@ -29,7 +29,7 @@
           Filter
         </v-list-item>
         <v-list-item link to="/admin/categories" nuxt>
-          Bereiche
+          Bereiche & Kategorien
         </v-list-item>
         <v-list-item link to="/admin/care_facilities" nuxt>
           Einrichtungen

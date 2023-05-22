@@ -6,7 +6,7 @@
       :key="currentCategoryId"
       color="is-primary"
       filter-name="category"
-      label="Leistungsbereich"
+      label="Bereich"
       endpoint="categories"
     />
   </div>
@@ -16,7 +16,7 @@
       :key="currentCategoryId"
       color="is-primary"
       filter-name="subCategory"
-      label="Leistungsart"
+      label="Kategorien"
       :endpoint="`categories/${currentCategoryId}/sub_categories`"
     />
   </div>
