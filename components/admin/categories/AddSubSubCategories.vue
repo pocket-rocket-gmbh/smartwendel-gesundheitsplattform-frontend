@@ -37,6 +37,7 @@
         :item-id="itemId"
         endpoint="categories"
         term="diese Unter-Kategorie"
+        @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
       />
       
       <DataTable

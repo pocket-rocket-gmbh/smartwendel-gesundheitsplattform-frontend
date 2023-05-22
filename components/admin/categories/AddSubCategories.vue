@@ -44,6 +44,7 @@
         :item-id="itemId"
         endpoint="categories"
         term="diese Kategorie"
+        @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
       />
       
       <DataTable

@@ -27,6 +27,7 @@
       :item-id="itemId"
       endpoint="care_facilities"
       term="diese Einrichtung"
+      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
   </div>
 </template>

@@ -78,7 +78,16 @@
             />
           </div>
           <div class="field">
-              <div class="mt-15 mb-5">
+            <div class="mt-15 mb-5">
+              <b>Tags zuordnen*</b> (Ordnen Sie Ihrer Einrichtung zielgruppengerechte Tags zu)
+            </div>
+            <AdminCareFacilitiesChooseTags
+              :pre-set-tag-ids="slotProps.item.tag_ids"
+              @setCareFacilityTags="setCareFacilityTags"
+            />
+          </div>
+          <div class="field">
+            <div class="mt-15 mb-5">
               <b>Filter zuordnen*</b> (Ordnen Sie Ihrer Einrichtung zielgruppengerechte Filter zu)
             </div>
             <AdminCareFacilitiesChooseCategories
@@ -211,6 +220,10 @@ export default defineComponent({
       useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tags', value: tags })
     }
 
+    const setCareFacilityTags = (tagIds:any) => {
+      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tag_ids', value: tagIds })
+    }
+
     const setLogo = (image:any) => {
       useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'logo', value: image })
     }
@@ -236,6 +249,7 @@ export default defineComponent({
       setTags,
       setLogo,
       kindsCareFacilities,
+      setCareFacilityTags,
       communities
     }
   }
