@@ -84,9 +84,11 @@
             <AdminCareFacilitiesChooseCategories
               :pre-set-category-ids="slotProps.item.category_ids"
               :pre-set-sub-category-ids="slotProps.item.sub_category_ids"
+              :pre-set-sub-sub-category-ids="slotProps.item.sub_sub_category_ids"
               :pre-set-tags="slotProps.item.tags"
               @setCategoryIds="setCategoryIds"
               @setSubCategoryIds="setSubCategoryIds"
+              @setSubSubCategoryIds="setSubSubCategoryIds"
               @setTags="setTags"
             />
           </div>
@@ -201,6 +203,10 @@ export default defineComponent({
       useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'sub_category_ids', value: subCategoryIds })
     }
 
+    const setSubSubCategoryIds = (subSubCategoryIds:any) => {
+      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'sub_sub_category_ids', value: subSubCategoryIds })
+    }
+
     const setTags = (tags:any) => {
       useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tags', value: tags })
     }
@@ -226,6 +232,7 @@ export default defineComponent({
       textOptions,
       setCategoryIds,
       setSubCategoryIds,
+      setSubSubCategoryIds,
       setTags,
       setLogo,
       kindsCareFacilities,

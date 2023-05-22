@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-if="choosenSubCategory">
-      <div @click="choosenSubCategory = null" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
-      <h3>Bereich {{ choosenCategory.name }}</h3>
+    <div v-if="choosenSubSubCategory">
+      <div @click="choosenSubSubCategory = null" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
+      <h3>Unter-Kategorie {{ choosenSubSubCategory.name }}</h3>
       <h3>Kategorie {{ choosenSubCategory.name }}</h3>
-      <p class="my-3">Kategorien</p>
+      <p class="my-3">Tags</p>
 
-      <div class="item" v-for="(tag, index) in choosenSubCategory.tags" :key="index">
+      <div class="item" v-for="(tag, index) in choosenSubSubCategory.tags" :key="index">
         <div>
           <v-icon class="is-clickable" @click="toggleChoosenTags(tag)" v-if="choosenTags.includes(tag)">
             mdi-checkbox-marked-circle-outline
@@ -19,10 +19,28 @@
         <div></div>
       </div>
     </div>
+    <div v-else-if="choosenSubCategory && !choosenSubSubCategory">
+      <div @click="choosenSubCategory = null" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
+      <h3>Bereich {{ choosenCategory.name }}</h3>
+      <h3>Kategorie {{ choosenSubCategory.name }}</h3>
+      <p class="my-3">Unter-Kategorien</p>
+      <div class="item" v-for="subSubCategory in choosenSubCategory.sub_sub_categories" :key="subSubCategory.id">
+        <div>
+          <v-icon class="is-clickable" @click="toggleChoosenSubSubCategoryIds(subSubCategory.id)" v-if="choosenSubSubCategoryIds.includes(subSubCategory.id)">
+            mdi-checkbox-marked-circle-outline
+          </v-icon>
+          <v-icon class="is-clickable" @click="toggleChoosenSubSubCategoryIds(subSubCategory.id)" v-else>
+            mdi-checkbox-blank-circle-outline
+          </v-icon>
+        </div>
+        <div>{{ subSubCategory.name }}</div>
+        <div><v-icon v-if="choosenSubSubCategoryIds.includes(subSubCategory.id)" @click="choosenSubSubCategory = subSubCategory">mdi-arrow-right</v-icon></div>
+      </div>
+    </div>
     <div v-else-if="!choosenSubCategory && choosenCategory">
       <div @click="choosenSubCategory = null; choosenCategory = null;" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
-      <h3>Unter-Kategorie {{ choosenCategory.name }}</h3>
-      <p class="my-3">Unter-Kategorien</p>
+      <h3>Bereich {{ choosenCategory.name }}</h3>
+      <p class="my-3">Kategorien</p>
 
       <div class="item" v-for="subCategory in choosenCategory.sub_categories" :key="subCategory.id">
         <div>
@@ -58,12 +76,15 @@
 
 <script lang="ts">
 export default defineComponent({
-  emit: ['setCategoryIds', 'setSubCategoryIds', 'setTags'],
+  emit: ['setCategoryIds', 'setSubCategoryIds', 'setSubSubCategoryIds', 'setTags'],
   props: {
     preSetCategoryIds: {
       type: Array
     },
     preSetSubCategoryIds: {
+      type: Array
+    },
+    preSetSubSubCategoryIds: {
       type: Array
     },
     preSetTags: {
@@ -75,9 +96,11 @@ export default defineComponent({
 
     const choosenCategory = ref(null)
     const choosenSubCategory = ref(null)
+    const choosenSubSubCategory = ref(null)
 
     const choosenCategoryIds = ref([])
     const choosenSubCategoryIds = ref([])
+    const choosenSubSubCategoryIds = ref([])
     const choosenTags = ref([])
 
     const categoriesApi = useCollectionApi()
@@ -111,6 +134,17 @@ export default defineComponent({
       emit('setSubCategoryIds', choosenSubCategoryIds)
     }
 
+    const toggleChoosenSubSubCategoryIds = async (subSubCategoryId:string) => {
+      const foundSubSubCategory = choosenSubSubCategoryIds.value.find((cat:any) => cat === subSubCategoryId)
+      if (foundSubSubCategory) {
+        choosenSubSubCategoryIds.value = choosenSubSubCategoryIds.value.filter((cat:any) => cat !== subSubCategoryId)
+      } else {
+        choosenSubSubCategoryIds.value.push(subSubCategoryId)
+      }
+
+      emit('setSubSubCategoryIds', choosenSubSubCategoryIds)
+    }
+
     const toggleChoosenTags = async (tag:string) => {
       const foundTag = choosenTags.value.find((t:any) => t === tag)
       if (foundTag) {
@@ -123,28 +157,33 @@ export default defineComponent({
     }
 
     onMounted(() => {
-
-      if (props.preSetCategoryIds) {
-        choosenCategoryIds.value = props.preSetCategoryIds
-      }
-      if (props.preSetSubCategoryIds) {
-        choosenSubCategoryIds.value = props.preSetSubCategoryIds
-      }
-      if (props.preSetTags) {
-        choosenTags.value = props.preSetTags
-      }
-
       getCategories()
+    })
+
+    watch(() => props.preSetCategoryIds, (first) => {
+      choosenCategoryIds.value = first
+    })
+    watch(() => props.preSetSubCategoryIds, (first) => {
+      choosenSubCategoryIds.value = first
+    })
+    watch(() => props.preSetSubSubCategoryIds, (first) => {
+      choosenSubSubCategoryIds.value = first
+    })
+    watch(() => props.preSetTags, (first) => {
+      choosenTags.value = first
     })
 
     return {
       categories,
       choosenCategory,
       choosenSubCategory,
+      choosenSubSubCategory,
       toggleChoosenCategoryIds,
       toggleChoosenSubCategoryIds,
+      toggleChoosenSubSubCategoryIds,
       choosenCategoryIds,
       choosenSubCategoryIds,
+      choosenSubSubCategoryIds,
       toggleChoosenTags,
       choosenTags
     }
