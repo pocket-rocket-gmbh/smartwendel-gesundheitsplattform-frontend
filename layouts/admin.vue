@@ -25,11 +25,11 @@
         <v-list-item link to="/admin" nuxt>
           Dashboard
         </v-list-item>
-        <v-list-item link to="/admin/filter" nuxt>
-          Filter
+        <v-list-item link to="/admin/tags" nuxt>
+          Tags
         </v-list-item>
         <v-list-item link to="/admin/categories" nuxt>
-          Bereiche
+          Bereiche & Kategorien
         </v-list-item>
         <v-list-item link to="/admin/care_facilities" nuxt>
           Einrichtungen

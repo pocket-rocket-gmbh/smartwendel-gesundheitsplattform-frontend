@@ -2,7 +2,7 @@
   <div>
    <h2>Bereiche</h2>
 
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neuer Leistungsbereich</v-btn>
+    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neuer Bereich</v-btn>
 
     <DataTable
       :fields="fields"
@@ -24,8 +24,9 @@
       :item-id="itemId"
       v-if="createEditDialogueOpen"
       @close="createEditDialogueOpen = false"
+      :item-placeholder="itemPlaceholder"
       endpoint="categories"
-      concept-name="Leistungsbereich"
+      concept-name="Bereich"
     />
 
     <DeleteItem
@@ -33,7 +34,8 @@
       @close="itemId = null; confirmDeleteDialogueOpen = false"
       :item-id="itemId"
       endpoint="categories"
-      term="diesen Leistungsbereich"
+      term="diesen Bereich"
+      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
   </div>
 </template>
@@ -50,13 +52,18 @@ export default defineComponent({
       { text: '', type: 'move_down' },
       { text: '', type: 'move_up' },
       { text: 'Name', value: 'name', type: 'string' },
-      { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubCategoriesDialogue', tooltip: 'Leistungsarten hinzufügen' },
+      { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubCategoriesDialogue', tooltip: 'Kategorien hinzufügen' },
     ])
     
     const createEditDialogueOpen = ref(false)
     const confirmDeleteDialogueOpen = ref(false)
     const addSubCategoriesDialogueOpen = ref(false)
     const itemId = ref(null)
+
+    const itemPlaceholder = ref({
+      name: '',
+      scope: 'care_facility'
+    })
 
     const openCreateEditDialogue = (id:string) => {
       itemId.value = id
@@ -81,7 +88,8 @@ export default defineComponent({
       itemId,
       openCreateEditDialogue,
       openDeleteDialogue,
-      openAddSubCategoriesDialogue
+      openAddSubCategoriesDialogue,
+      itemPlaceholder
     }
   }
 })
