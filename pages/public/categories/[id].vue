@@ -2,18 +2,15 @@
   <div class=" d-inline align-center justify-center">
     <div class="title-bar is-uppercase has-font-size-big d-flex align-center justify-center">
     <div>
-      <h2>{{ category?.name }}</h2>
+      <h2 class="is-white">{{ category?.name }}</h2>
     </div>
   </div>
 
   </div>
   <div class="menu-bar d-flex is-uppercase align-center justify-center" >
     <div v-for="(item, index) in category?.sub_categories" :key="index">
-    <span class="px-5 is-clickable">{{ item.name }}</span>
+    <div class="px-5 is-clickable" :class="['pa-2',(selectedSubCategoryId != item.id ? '' : 'is-selected')]" >{{ item.name }}</div>
       </div>
- </div>
- <div class="mt-10" v-for="(categories, index) in category.sub_categories" :kex="index" >
-  {{categories.name}}
  </div>
 
 </template>
@@ -25,14 +22,18 @@ export default defineComponent({
     const route = useRoute()
     const category = ref([])
     const loading = ref(false)
-
+    const selectedSubCategoryId = ref(null)
 
     const categoryId = computed(() => {
       return route.params.id
     })
 
+    const getSubCategoryId = () => {
+      route.query.sub_category_id = selectedSubCategoryId.value
+    }
+
     const showApi = useCollectionApi()
-    showApi.setBaseApi(usePrivateApi())
+    showApi.setBaseApi(usePublicApi())
 
     const getCategory = async () => {
       showApi.setEndpoint(`categories/${categoryId.value}`)
@@ -46,10 +47,13 @@ export default defineComponent({
 
     onMounted(() => {
       getCategory()
+      getSubCategoryId()
     })
 
     return {
-      category
+      category,
+      getSubCategoryId,
+      selectedSubCategoryId
     }
   }
 })
@@ -71,6 +75,9 @@ export default defineComponent({
   color: $dark-green
   left: 50%
   transform: translate(50%)
+
+.is-selected
+  background: red
 
 
 </style>

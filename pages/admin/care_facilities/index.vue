@@ -1,6 +1,6 @@
 <template>
   <div>
-   <h2>Kategorien</h2>
+   <h2>Einrichtungen</h2>
 
     <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neue Einrichtung</v-btn>
 
@@ -27,6 +27,7 @@
       :item-id="itemId"
       endpoint="care_facilities"
       term="diese Einrichtung"
+      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
   </div>
 </template>
@@ -44,8 +45,8 @@ export default defineComponent({
       { text: '', type: 'move_up' },
       { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
       { text: 'Name', value: 'name', type: 'string' },
-      { text: 'Einrichtungsart', value: '', type: 'string' },
-      { text: 'Status', value: '', type: 'string' },
+      { text: 'Einrichtungsart', value: 'kind', type: 'string' },
+      { text: 'Status', value: 'status', type: 'string' },
       { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
     ])
 

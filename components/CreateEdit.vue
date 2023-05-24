@@ -6,14 +6,13 @@
     @click:outside="emitClose()"
   >
     <v-card :class="`dialog-${size}`">
-      <v-card-title class="text-h5">
-        {{ conceptName }}
+      <v-card-title class="text-h5 has-bg-primary py-5 text-white">
+        <span v-if="itemId">{{ conceptName }} bearbeiten</span>
+        <span v-else>{{ conceptName }} erstellen</span>
       </v-card-title>
       
       <slot :item="item" :errors="errors" />
-
-      <v-divider></v-divider>
-      <v-card-actions>
+      <v-card-actions class="card-actions">
         <v-btn
           text
           @click="emitClose()"

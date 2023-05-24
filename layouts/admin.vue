@@ -25,11 +25,11 @@
         <v-list-item link to="/admin" nuxt>
           Dashboard
         </v-list-item>
-        <v-list-item link to="/admin/filter" nuxt>
-          Filter
+        <v-list-item link to="/admin/tags" nuxt>
+          Tags
         </v-list-item>
-        <v-list-item link to="/admin/sections" nuxt>
-          Bereiche
+        <v-list-item link to="/admin/categories" nuxt>
+          Bereiche & Kategorien
         </v-list-item>
         <v-list-item link to="/admin/care_facilities" nuxt>
           Einrichtungen
@@ -51,9 +51,6 @@
         </v-list-item>
         <v-list-item link to="/admin/users" nuxt>
           Benutzer
-        </v-list-item>
-        <v-list-item link to="/admin/categories" nuxt>
-          Leistungsbereiche
         </v-list-item>
         <v-list-item @click="useUser().logout()">
           <v-icon>mdi-logout</v-icon> Logout

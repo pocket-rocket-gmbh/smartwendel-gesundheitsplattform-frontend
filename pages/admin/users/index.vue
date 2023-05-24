@@ -22,7 +22,7 @@
       @close="itemId = null; confirmDeleteDialogueOpen = false"
       :item-id="itemId"
       endpoint="care_facilities"
-      term="diese Einrichtung"
+      term="diese Benutzer"
     />
   </div>
 </template>

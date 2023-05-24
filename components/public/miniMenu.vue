@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-menu v-if="currentUser"
+    <v-menu v-if="useUser().loggedIn()"
     v-model="menu"
     :close-on-content-click="false"
     >
@@ -18,8 +18,8 @@
       </template>
       <v-card class="mx-auto ma-2" width="300" v-if="currentUser">
         <v-list class="card-header">
-          <v-list-item-content >
-            <v-list-item-title>{{currentUser}}</v-list-item-title>
+          <v-list-item-content>
+            <v-list-item-title>{{currentUser.name}}</v-list-item-title>
             <v-list-item-subtitle>{{currentUser.role}}</v-list-item-subtitle>
             <v-list-item-subtitle>{{currentUser.email}}</v-list-item-subtitle>
           </v-list-item-content>

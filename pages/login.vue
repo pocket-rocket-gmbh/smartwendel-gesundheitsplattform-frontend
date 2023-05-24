@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row class="my-15">
     <v-col sm="3" md="4" offset-sm="4">
       <v-card  :class="['pa-6', {'shake' : animated}]">
         <img class="is-fullwidth" src="~/assets/images/logo.png" />

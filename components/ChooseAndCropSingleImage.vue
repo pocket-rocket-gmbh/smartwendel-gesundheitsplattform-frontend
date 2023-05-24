@@ -77,5 +77,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+.img-container
+  max-width: 300px
 
 </style>

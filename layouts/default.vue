@@ -1,17 +1,12 @@
 <template>
   <v-app>
     <PublicAccessibilityPanel />
-
-
-
     <div>
       <PublicLayoutsTopBar />
-
       <v-main>
         <slot />
       </v-main>
       <PublicLayoutsFooter />
-
     </div>
   </v-app>
 </template>
