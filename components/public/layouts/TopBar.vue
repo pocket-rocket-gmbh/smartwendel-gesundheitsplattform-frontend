@@ -12,16 +12,16 @@
         <template v-slot:activator="{ props }">
           <v-list-item-title  color="primary" v-bind="props">
             <div>
-              <span class="is-clickable mx-1">
+              <span class="is-clickable mx-1" @click="setItemsAndGo(category, null)">
               {{ category.name }}
               </span>
               <span>
-                <v-icon class="mr-3">mdi-menu-down</v-icon>
+                <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-menu-down</v-icon>
               </span>
             </div> 
           </v-list-item-title>
         </template>
-        <v-list>
+        <v-list v-if="category.sub_categories.length > 0">
           <v-list-item>
             <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">
               <v-list v-if="sub_category">
@@ -89,7 +89,7 @@
         </div>
         <div v-if="!currentUser" class="mb-5">
           <v-icon class="mr-2">mdi-login</v-icon>
-          <router-link class="mr-6" to="/login">Login / Registrieren</router-link>
+          <router-link v-if="!useUser().loggedIn()" class="mr-6" to="/login">Login / Registrieren</router-link>
         </div>
       <template v-slot:activator="{ props }">
         <div class="account-button"
@@ -156,8 +156,14 @@ export default defineComponent({
       }
     }
     const setItemsAndGo = (category:any, sub_category:any) => {
-      router.push({path: `/public/categories/${category.id}`, query: { sub_category_id: sub_category.id }})
-      sub_categoryId.value = sub_category.id
+      if (category.sub_categories.length > 0) {
+        router.push({path: `/public/categories/${category.id}`, query: { sub_category_id: sub_category.id }})
+        if(sub_category.id) {
+          sub_categoryId.value = sub_category.id
+        }
+      } else {
+        router.push({path: `/public/categories/${category.id}`, query: null})
+      }
     }
 
     const reload = () => {
