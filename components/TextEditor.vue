@@ -19,7 +19,8 @@ export default defineComponent({
   emits: ['update:modelValue'],
   props: {
     modelValue: {
-      required: true
+      required: true,
+      type: String
     },
   },
   setup (props, {emit}) {

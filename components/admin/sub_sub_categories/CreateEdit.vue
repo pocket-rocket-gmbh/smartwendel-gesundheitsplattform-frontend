@@ -9,12 +9,7 @@
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         />
       </div>
-      <TextEditor
-        :item-id="slotProps.item.id"
-        :value="slotProps.item.description" 
-        :description="slotProps.item.description"
-        :endpoint="`categories`"
-      />
+      <TextEditor v-model="slotProps.item.description" />
       <div class="field">
         <v-combobox
           v-model="slotProps.item.tags"
@@ -41,16 +36,8 @@
     
   </CreateEdit>
 </template>
-<script lang="ts">
-export default defineComponent({
-  setup() {
-    const setLogo = (image:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'logo', value: image })
-    }
-
-    return {
-      setLogo
-    }
-  }
-})
+<script lang="ts" setup>
+const setLogo = (image:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'image', value: image })
+}
 </script>
