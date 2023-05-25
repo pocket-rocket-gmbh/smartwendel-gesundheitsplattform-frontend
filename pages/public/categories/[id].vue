@@ -1,18 +1,41 @@
 <template>
-  <div class=" d-inline align-center justify-center">
-    <div class="title-bar is-uppercase has-font-size-big d-flex align-center justify-center">
-    <div>
-      <h2 class="is-white">{{ category?.name }}</h2>
+  <div>
+    <div class=" d-inline align-center justify-center">
+      <div class="title-bar is-uppercase has-font-size-big d-flex align-center justify-center">
+      <div>
+        <h2 class="is-white">{{ category?.name }}</h2>
+      </div>
+    </div>
+    </div>
+    <div class="menu-bar d-flex is-uppercase align-center justify-center">
+      <v-slide-group
+        size="large"
+        class="category-chips my-8"
+        multiple
+        column
+      >
+      <v-chip
+          size="x-large"
+          @click=""
+        >      
+        Alle
+        </v-chip>
+        <v-chip
+          filter-icon="mdi-plus"
+          v-for="item in category?.sub_categories"
+          size="x-large"
+          :key="item.id"
+          item-title="name_with_projects_count"
+          input-value="id"
+          @click=""
+          class="mx-1"
+          prepend-icon="mdi-checkbox-multiple-blank"
+        >      
+          {{ item.name }}
+        </v-chip>
+      </v-slide-group>
     </div>
   </div>
-
-  </div>
-  <div class="menu-bar d-flex is-uppercase align-center justify-center" >
-    <div v-for="(item, index) in category?.sub_categories" :key="index">
-    <div class="px-5 is-clickable" :class="['pa-2',(selectedSubCategoryId != item.id ? '' : 'is-selected')]" >{{ item.name }}</div>
-      </div>
- </div>
-
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
