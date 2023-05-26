@@ -3,7 +3,7 @@
     <v-file-input
       hide-details="auto"
       v-model="image"
-      label="Logo wählen"
+      :label="`${labelText} wählen`"
       filled
       prepend-icon="mdi-camera"
       @change="handleFile()"
@@ -31,11 +31,16 @@ export default defineComponent({
   props: {
     preSetImageUrl: {
       type: String
+    },
+    label: {
+      type: String,
+      default: "Logo"
     }
   },
   setup(props, { emit }) {
     const image = ref({}) as any
     const imgUrl = ref(null)
+    const labelText = ref(props.label)
     const errorFileSizeTooLarge = ref(false)
     const croppedImage = ref(null)
 
@@ -70,7 +75,8 @@ export default defineComponent({
       errorFileSizeTooLarge,
       handleFile,
       croppedImage,
-      setImage
+      setImage,
+      labelText
     }
   },
 })

@@ -5,7 +5,7 @@
     transition="dialog-bottom-transition"
     @click:outside="emitClose()"
   >
-    <v-card :class="`dialog-${size}`">
+    <v-card :class="`dialog-${size}`" :height="`${height}`">
       <v-card-title class="text-h5 has-bg-primary py-5 text-white">
         <span v-if="itemId">{{ conceptName }} bearbeiten</span>
         <span v-else>{{ conceptName }} erstellen</span>
@@ -53,6 +53,9 @@ export default defineComponent({
       type: Number,
       default: 500
     },
+    height: {
+      type: Number,
+    },
     itemPlaceholder: {
       type: Object
     },
@@ -96,6 +99,9 @@ export default defineComponent({
       } else {
         create()
       }
+    }
+    const setLogo = (image) => {
+      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'logo', value: image })
     }
 
     const create = async () => {
@@ -152,7 +158,8 @@ export default defineComponent({
       item,
       handleCta,
       emitClose,
-      errors
+      errors,
+      setLogo
     }
   }
 })
