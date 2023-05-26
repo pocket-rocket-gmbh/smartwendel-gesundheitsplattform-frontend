@@ -1,84 +1,67 @@
 <template>
-  <div>
-    <div class=" d-inline align-center justify-center">
-      <div class="title-bar is-uppercase has-font-size-big d-flex align-center justify-center">
-      <div>
-        <h2 class="is-white">{{ category?.name }}</h2>
-      </div>
-    </div>
-    </div>
-    <div class="menu-bar d-flex is-uppercase align-center justify-center">
-      <v-slide-group
-        size="large"
-        class="category-chips my-8"
-        multiple
-        column
-      >
-      <v-chip
-          size="x-large"
-          @click=""
-        >      
-        Alle
-        </v-chip>
-        <v-chip
-          filter-icon="mdi-plus"
-          v-for="item in category?.sub_categories"
-          size="x-large"
-          :key="item.id"
-          item-title="name_with_projects_count"
-          input-value="id"
-          @click=""
-          class="mx-1"
-          prepend-icon="mdi-checkbox-multiple-blank"
-        >      
-          {{ item.name }}
-        </v-chip>
-      </v-slide-group>
-    </div>
+  <div v-if="finishedLoading">
+    <PublicCategoriesHeader :category="category" />
+    <PublicCategoriesFilter :category="category"/>
+    <PublicCategoriesContent :sub-sub-categories="subSubCategories" :sub-category="subCategory" />
   </div>
+
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
+<script lang="ts" setup>
+const route = useRoute()
+const loading = ref(false)
 
-  setup(props) {
-    const route = useRoute()
-    const category = ref([])
-    const loading = ref(false)
-    const selectedSubCategoryId = ref(null)
+const categoryId = computed(() => {
+  return route.params.id as string
+})
 
-    const categoryId = computed(() => {
-      return route.params.id
-    })
+const subCategoryId = computed(() => {
+  return route.query.sub_category_id as string
+})
 
-    const getSubCategoryId = () => {
-      route.query.sub_category_id = selectedSubCategoryId.value
-    }
+const finishedLoading = computed (() => {
+  return category.value !== null && subSubCategories.value !== null && subCategory.value !== null
+})
 
-    const showApi = useCollectionApi()
-    showApi.setBaseApi(usePublicApi())
+const category = ref(null)
+const showApi = useCollectionApi()
+showApi.setBaseApi(usePublicApi())
 
-    const getCategory = async () => {
-      showApi.setEndpoint(`categories/${categoryId.value}`)
+const getCategory = async () => {
+  showApi.setEndpoint(`categories/${categoryId.value}`)
+  loading.value = true
+  await showApi.getItem()
+  loading.value = false
+  category.value = showApi.item.value as any
+}
 
-      loading.value = true
-      await showApi.getItem()
-      loading.value = false
-      category.value = showApi.item.value
-    }
+const subCategory = ref(null)
+const listSubCategoryApi = useCollectionApi()
+listSubCategoryApi.setBaseApi(usePublicApi())
 
+const getSubCategory = async () => {
+  listSubCategoryApi.setEndpoint(`categories/${subCategoryId.value}`)
+  loading.value = true
+  await listSubCategoryApi.getItem()
+  loading.value = false
+  subCategory.value = listSubCategoryApi.item.value as any
+}
 
-    onMounted(() => {
-      getCategory()
-      getSubCategoryId()
-    })
+const subSubCategories = ref(null)
+const listApi = useCollectionApi()
+listApi.setBaseApi(usePublicApi())
 
-    return {
-      category,
-      getSubCategoryId,
-      selectedSubCategoryId
-    }
-  }
+const getSubSubCategories = async () => {
+  listApi.setEndpoint(`categories/${categoryId.value}/sub_categories/${subCategoryId.value}/sub_sub_categories`)
+  loading.value = true
+  await listApi.retrieveCollection()
+  loading.value = false
+  subSubCategories.value = listApi.items.value as any
+}
+
+onMounted(() => {
+  getCategory()
+  getSubCategory()
+  getSubSubCategories()
 })
 </script>
 
@@ -88,16 +71,6 @@ export default defineComponent({
 .title-bar
   background: linear-gradient(90deg, #91A80D 46.67%, #BAC323 84.36%, #9EA100 97.5%)
   height: 200px
-
-.menu-bar
-  background: $light-grey
-  border-radius: 20px
-  margin-top: -20px
-  height: 60px
-  width: 50%
-  color: $dark-green
-  left: 50%
-  transform: translate(50%)
 
 .is-selected
   background: red

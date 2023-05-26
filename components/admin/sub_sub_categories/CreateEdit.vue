@@ -38,6 +38,6 @@
 </template>
 <script lang="ts" setup>
 const setLogo = (image:any) => {
-  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'image', value: image })
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'file', value: image })
 }
 </script>

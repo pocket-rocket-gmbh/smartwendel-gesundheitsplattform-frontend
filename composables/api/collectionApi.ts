@@ -84,6 +84,7 @@ export function useCollectionApi() {
     if (result.status === ResultStatus.SUCCESSFUL) {
       item.value = result.data['resource']
     }
+    return result
   }
 
   const getPlain = async () => {   
