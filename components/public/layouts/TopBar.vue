@@ -26,7 +26,7 @@
             <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">
               <v-list v-if="sub_category">
                 <v-list-item>
-                  <span class="is-clickable">
+                  <span class="is-clickable" v-if="sub_category.sub_sub_categories.length > 0">
                     {{ sub_category.name }}
                   </span>
                 </v-list-item>
@@ -164,6 +164,7 @@ export default defineComponent({
       } else {
         router.push({path: `/public/categories/${category.id}`, query: null})
       }
+      useNuxtApp().$bus.$emit('setSubCategory', sub_category.id)
     }
 
     const reload = () => {

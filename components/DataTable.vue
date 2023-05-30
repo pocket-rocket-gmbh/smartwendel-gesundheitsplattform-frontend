@@ -92,10 +92,6 @@ export default defineComponent({
   setup (props, { emit }) {
     const loading = ref(false)
 
-    useNuxtApp().$bus.$on("triggerGetItems", () => {
-      getItems()
-    })
-
     const emitOpenDeleteDialogue = (itemId) => {
       emit('openDeleteDialogue', itemId)
     }
@@ -138,6 +134,8 @@ export default defineComponent({
     }
 
     onMounted(() => {
+        useNuxtApp().$bus.$on("triggerGetItems", () => {
+      })
       getItems()
     })
 

@@ -1,8 +1,15 @@
 <template>
   <div v-if="finishedLoading">
-    <PublicCategoriesHeader :category="category" />
-    <PublicCategoriesFilter :category="category"/>
-    <PublicCategoriesContent :sub-sub-categories="subSubCategories" :sub-category="subCategory" />
+    <div class="header">
+      <PublicCategoriesHeader :category="category" />
+      <PublicCategoriesFilter :category="category"/>
+    </div>
+    <div class="content">
+      <PublicCategoriesContent
+      :sub-categories="subCategories"
+      :category-id="category.id"
+    />
+    </div>
   </div>
 
 </template>
@@ -46,6 +53,19 @@ const getSubCategory = async () => {
   subCategory.value = listSubCategoryApi.item.value as any
 }
 
+const subCategories = ref(null)
+const listSubCategoriesApi = useCollectionApi()
+listSubCategoriesApi.setBaseApi(usePublicApi())
+
+const getSubCategories = async () => {
+  listSubCategoriesApi.setEndpoint(`categories/${categoryId.value}/sub_categories`)
+  const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
+  loading.value = true
+  await listSubCategoriesApi.retrieveCollection(options)
+  loading.value = false
+  subCategories.value = listSubCategoriesApi.items.value as any
+}
+
 const subSubCategories = ref(null)
 const listApi = useCollectionApi()
 listApi.setBaseApi(usePublicApi())
@@ -61,6 +81,7 @@ const getSubSubCategories = async () => {
 onMounted(() => {
   getCategory()
   getSubCategory()
+  getSubCategories()
   getSubSubCategories()
 })
 </script>
@@ -75,5 +96,9 @@ onMounted(() => {
 .is-selected
   background: red
 
+.header
+  position: sticky
+  top: 30px
+  z-index: 1
 
 </style>
