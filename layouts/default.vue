@@ -7,6 +7,7 @@
         <slot />
       </v-main>
       <PublicLayoutsFooter />
+      <PublicLayoutsSubFooter />
     </div>
   </v-app>
 </template>

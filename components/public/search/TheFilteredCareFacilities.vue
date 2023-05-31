@@ -160,6 +160,7 @@ export default defineComponent({
         updateFilters('currentSubSubCategoryId')
       }
       getCareFacilities()
+      getFilter()
 
     })
 
