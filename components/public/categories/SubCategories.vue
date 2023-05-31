@@ -10,12 +10,10 @@
     </v-row>
     <v-row>
       <PublicContentBox
-      v-for="subSubCategory in subSubCategories" :key="subSubCategory.id"
-      :item="subSubCategory"
-    />
-    
+        v-for="subSubCategory in subSubCategories" :key="subSubCategory.id"
+        :item="subSubCategory"
+      />
     </v-row>
-    
   </div>
 </template>
 

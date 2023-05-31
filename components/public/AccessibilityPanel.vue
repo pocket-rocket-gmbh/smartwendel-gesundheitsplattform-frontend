@@ -9,20 +9,6 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  setup () {
-      const errors = ref([])
-
-  
-     
-    return {
-      errors
-    }
-  }
-})
-</script>
 <style style lang="sass" scoped>
 
 .accessibility-panel
