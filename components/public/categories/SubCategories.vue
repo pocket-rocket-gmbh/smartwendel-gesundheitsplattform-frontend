@@ -1,7 +1,7 @@
 <template>
   <div class="mx-15 my-10" v-if="subSubCategories?.length > 0">
-    <v-row class="sub-category" :id="subCategory?.id.replaceAll('-', '')" >
-      <v-col class="d-flex is-dark-grey">
+    <v-row class="sub-category text-center align-center" :id="subCategory?.id.replaceAll('-', '')" >
+      <v-col md="6" :offset="3" class="d-flex is-dark-grey">
         <div>
           <h2 class="is-uppercase my-5">{{ subCategory?.name }}</h2>
           <span class="my-5" v-html="subCategory?.description"></span>
@@ -35,11 +35,11 @@ const subCategoryId = computed(() => {
 const selectedId = ref(subCategoryId.value)
 
 const goToSubCategory= () => {
-  const id = selectedId.value;
+  const id = selectedId.value
   if (id) {
-    const el = document.getElementById(id.replaceAll('-', ''));
+    const el = document.getElementById(id.replaceAll('-', ''))
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block:'center'  });
+      el.scrollIntoView({ behavior: 'smooth', block:'center'  })
     }
   }
 }
@@ -69,6 +69,8 @@ const getSubSubCategories = async () => {
 
 </script>
 <style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
 .sub-category
   scroll-margin: -200px
+  
 </style>

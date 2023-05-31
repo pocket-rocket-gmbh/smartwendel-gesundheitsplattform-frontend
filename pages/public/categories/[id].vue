@@ -47,8 +47,9 @@ listSubCategoryApi.setBaseApi(usePublicApi())
 
 const getSubCategory = async () => {
   listSubCategoryApi.setEndpoint(`categories/${subCategoryId.value}`)
+  const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
   loading.value = true
-  await listSubCategoryApi.getItem()
+  await listSubCategoryApi.getItem(options)
   loading.value = false
   subCategory.value = listSubCategoryApi.item.value as any
 }

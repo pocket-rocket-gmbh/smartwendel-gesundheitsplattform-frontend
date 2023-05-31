@@ -4,7 +4,6 @@
       <v-row>
         <v-col cols="12" md="8" offset="2">
           <div class="pa-10">
-            {{ slotProps.item }}
             Hier können Sie eine eigene Detailseite für Ihre Einrichtung anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen. Klicken Sie hier, für eine beispielhafte Vorschau einer ausgebauten Einrichtungsseite.
           </div>
           <div class="field">
@@ -25,6 +24,7 @@
             <ChooseAndCropSingleImage
               height="20"
               :pre-set-image-url="slotProps.item.logo_url"
+              label="Logo wählen"
               @setImage="setLogo"
             />
           </div>
@@ -33,8 +33,9 @@
               <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
             </div>
             <ChooseAndCropSingleImage
-              :pre-set-image-url="slotProps.item.logo_url"
-              @setImage="setLogo"
+              :pre-set-image-url="slotProps.item.image_url"
+              label="Cover Bild wählen"
+              @setImage="setCoverBild"
             />
           </div>
           <div class="field">
@@ -42,12 +43,13 @@
               <b> Weitere Einrichtungsbilder</b> (Laden Sie weitere Bilder Ihrer Einrichtung hoch)
             </div>
             <ChooseAndCropSingleImage
-              :pre-set-image-url="slotProps.item.logo_url"
+              :pre-set-image-url="slotProps.item.sanitized_images"
+              label="Bilder hinzufügen"
               @setImage="setLogo"
             />
             <div>
               <v-icon>mdi-plus</v-icon>
-              <span>Weitere Bilder</span>
+              <span class="is-clickable">Weitere Bilder</span>
             </div>
           </div>
           <div class="field">
@@ -123,14 +125,6 @@
             </div>
             <div class="field">
               <v-text-field
-                v-model="slotProps.item.website"
-                hide-details="auto"
-                label="Webseite"
-                :error-messages="useErrors().checkAndMapErrors('website', slotProps.errors)"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
                 v-model="slotProps.item.street"
                 hide-details="auto"
                 label="Straße & Nummer"
@@ -175,16 +169,57 @@
           <div class="field">
             <div class="mt-15 mb-5">
               <b>Öffnungszeiten </b> (Geben Sie Ihre Öffnungszeiten an. Tragen Sie hierzu den oder die Wochentag/e in das vordere Feld ein und die genauen Zeiten in das hintere Feld)
+              <div class="field">
+                <v-text-field
+                  v-model="slotProps.item.opening_hours"
+                  hide-details="auto"
+                  label="Wochentag/en - Uhrzeiten"
+                  :error-messages="useErrors().checkAndMapErrors('opening_hours', slotProps.errors)"
+                />
+                <div>
+                  <v-icon>mdi-plus</v-icon>
+                  <span class="is-clickable">Weitere Öffnungszeiten</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="field">
             <div class="mt-15 mb-5">
               <b>Infobutton </b> (Tragen Sie den Link zu Ihrer eigenen Webseite ein. Falls Sie keine Webseite besitzen, lassen Sie dieses Feld einfach frei)
+              <div class="field">
+                <v-text-field
+                  v-model="slotProps.item.website"
+                  hide-details="auto"
+                  label="Link eintragen"
+                  :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
+                />
+              </div>
             </div>
           </div>
-          <div class="field">
+          <div class="field mt-15 mb-15">
             <div class="mt-15 mb-15">
               <b>Downloads</b> (Laden Sie Dokumente wie bspw. Transparenzberichte, Jobangebote oder Formulare hoch. Bitte hinterlegen Sie zu jedem Dokument einen Titel und eine kurze Beschreibung)
+                <div class="field split">
+                <v-text-field
+                
+                  hide-details="auto"
+                  label="Titel*"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+                <v-text-field
+                
+                  hide-details="auto"
+                  label="Beschreibung (max. 120 Zeichen)"
+                  :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
+                />
+              </div>
+              <div class="field">
+                <v-file-input clearable label="Datei Hochladen"></v-file-input>
+              </div>
+              <div>
+                <v-icon>mdi-plus</v-icon>
+                <span class="is-clickable">Weitere Downloads</span>
+              </div>
             </div>
           </div>
         </v-col>
@@ -228,6 +263,11 @@ export default defineComponent({
       useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'logo', value: image })
     }
 
+    const setCoverBild = (image:any) => {
+      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'file', value: image })
+    }
+
+
     const communitiesApi = useCollectionApi()
     communitiesApi.setBaseApi(usePrivateApi())
     communitiesApi.setEndpoint(`communities`)
@@ -248,6 +288,7 @@ export default defineComponent({
       setSubSubCategoryIds,
       setTags,
       setLogo,
+      setCoverBild,
       kindsCareFacilities,
       setCareFacilityTags,
       communities
