@@ -148,7 +148,8 @@ export default defineComponent({
       useFilterStore().$patch({
         'currentCategoryId': null,
         'currentSubCategoryId': null,
-        'currentSubCategoryTags': null
+        'currentSubSubCategoryId': null,
+        'currentTags': null
       })
       useNuxtApp().$bus.$emit('updateFacilitiesBasedOnFilterChange', null)
       useNuxtApp().$bus.$emit('clearSearch', null)

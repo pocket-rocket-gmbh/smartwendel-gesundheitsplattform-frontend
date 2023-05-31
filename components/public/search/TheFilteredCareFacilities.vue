@@ -77,8 +77,11 @@ export default defineComponent({
     const currentSubCategoryId = computed(() => {
       return useFilterStore().currentSubCategoryId
     })
-    const currentSubCategoryTags = computed(() => {
-      return useFilterStore().currentSubCategoryTags
+    const currentSubSubCategoryId = computed(() => {
+      return useFilterStore().currentSubSubCategoryId
+    })
+    const currentTags = computed(() => {
+      return useFilterStore().currentTags
     })
 
     const careFaclitiesApi = useCollectionApi()
@@ -120,12 +123,20 @@ export default defineComponent({
         filters.value.push ( { field: 'care_facility_sub_category', value: currentSubCategoryId.value } )
         return
       }
-      if (toUpdate === 'subCategoryTags') {
+      if (toUpdate === 'subSubCategory') {
+        const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_sub_sub_category')
+        if (foundFilter) {
+          filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_sub_sub_category')
+        }
+        filters.value.push ( { field: 'care_facility_sub_sub_category', value: currentSubSubCategoryId.value } )
+        return
+      }
+      if (toUpdate === 'tags') {
         const foundFilter = filters.value.find((f:any) => f.field === 'tags')
         if (foundFilter) {
           filters.value = filters.value.filter((f:any) => f.field !== 'tags')
         }
-        filters.value.push ( { field: 'tags', value: currentSubCategoryTags.value } )
+        filters.value.push ( { field: 'care_facility_tags', value: currentTags.value } )
         return
       }
     }
@@ -145,8 +156,8 @@ export default defineComponent({
       if (currentSubCategoryId.value) {
         updateFilters('subCategory')
       }
-      if (currentSubCategoryTags.value) {
-        updateFilters('currentSubCategoryTags')
+      if (currentSubSubCategoryId.value) {
+        updateFilters('currentSubSubCategoryId')
       }
       getCareFacilities()
 
