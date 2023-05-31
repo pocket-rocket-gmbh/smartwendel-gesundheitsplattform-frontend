@@ -5,6 +5,7 @@ export const useFilterStore = defineStore({
   state: () => ({
     currentCategoryId: null,
     currentSubCategoryId: null,
-    currentSubCategoryTags: null
+    currentSubSubCategoryId: null,
+    currentTags: null
   })
 })

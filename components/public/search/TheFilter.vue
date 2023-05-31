@@ -16,7 +16,7 @@
       :key="currentCategoryId"
       color="is-primary"
       filter-name="subCategory"
-      label="Kategorien"
+      label="Kategorie"
       :endpoint="`categories/${currentCategoryId}/sub_categories`"
     />
   </div>
@@ -26,11 +26,13 @@
       :disabled="!currentSubCategoryId || !currentCategoryId"
       :key="currentSubCategoryId"
       color="is-primary"
-      filter-name="subCategoryTags"
-      label="Leistung"
-      :endpoint="`categories/${currentCategoryId}/sub_categories`"
+      filter-name="subSubCategory"
+      label="Unter-Kategorie"
+      :endpoint="`categories/${currentCategoryId}/sub_categories/${currentSubCategoryId}/sub_sub_categories`"
     />
   </div>
+  <div>Weitere Auswahlmöglichkeiten</div>
+  <PublicTagSelect />
   <div>
     <v-btn 
       prepend-icon="mdi-trash-can-outline"
@@ -62,7 +64,8 @@ export default defineComponent({
       useFilterStore().$patch({
         'currentCategoryId': null,
         'currentSubCategoryId': null,
-        'currentSubCategoryTags': null
+        'currentSubSubCategoryId': null,
+        'currentTags': null
       })
       useNuxtApp().$bus.$emit('updateFacilitiesBasedOnFilterChange', null)
       useNuxtApp().$bus.$emit('clearSearch', null)

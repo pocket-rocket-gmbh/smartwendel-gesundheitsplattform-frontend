@@ -3,7 +3,7 @@
     <label class="label" v-if="label">{{ label }}</label>
     <select @change="setSelectValue" v-model="selected" :disabled="disabled">
       <option value="">Bitte wählen</option>
-      <option v-for="item in filteredItems" :key="item.id" :value="item.id">{{ item.name }}</option>
+      <option v-for="item in items" :key="item.id" :value="item.id">{{ item.name }}</option>
     </select>
   </div>
 </template>
@@ -42,33 +42,23 @@ export default defineComponent({
     const selected = ref('')
     const items = ref([])
 
-    const filteredItems = computed(() => {
-      if (props.filterName === 'subCategoryTags') {
-        const foundItem = items.value.filter((item:any) => item.id === useFilterStore().currentSubCategoryId)[0]
-        if (foundItem) {
-          return foundItem.tags.map((item:any) => { return { id: useUuidGenerator().getUuidV4(), name: item }})
-        }
-      }
-      return items.value
-    })
-
     const setSelectValue = (e:any) => {
       if (props.filterName === 'category') {
         useFilterStore().$patch({
           'currentCategoryId': e.target.value,
           'currentSubCategoryId': null,
-          'currentSubCategoryTags': null
+          'currentSubSubCategoryId': null
         })
       }
       if (props.filterName === 'subCategory') {
         useFilterStore().$patch({
           'currentSubCategoryId': e.target.value,
-          'currentSubCategoryTags': null
+          'currentSubSubCategoryId': null
         })
       }
-      if (props.filterName === 'subCategoryTags') {
+      if (props.filterName === 'subSubCategory') {
         useFilterStore().$patch({
-          'currentSubCategoryTags': e.target.querySelectorAll(`[value="${e.target.value}"]`)[0].text
+          'currentSubSubCategoryId': e.target.value
         })
       }
 
@@ -88,7 +78,9 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      await getItems()
+      if (!props.disabled) {
+        await getItems()
+      }
 
       // pre set values
       if (props.filterName === 'category' && useFilterStore().currentCategoryId) {
@@ -103,8 +95,7 @@ export default defineComponent({
     return {
       setSelectValue,
       items,
-      selected,
-      filteredItems
+      selected
     }
   },
 })
