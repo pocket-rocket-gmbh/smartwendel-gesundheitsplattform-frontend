@@ -69,6 +69,7 @@ export default defineComponent({
       })
       useNuxtApp().$bus.$emit('updateFacilitiesBasedOnFilterChange', null)
       useNuxtApp().$bus.$emit('clearSearch', null)
+      useNuxtApp().$bus.$emit('clearTags', null)
     }
 
     return {

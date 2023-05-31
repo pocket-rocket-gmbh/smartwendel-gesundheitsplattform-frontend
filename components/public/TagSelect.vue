@@ -11,6 +11,12 @@ api.setEndpoint(`tags?scope=care_facility`)
 const tags = api.items
 const selectedTags = ref([])
 
+if (useNuxtApp().$bus) {
+  useNuxtApp().$bus.$on("clearTags", () => {
+    selectedTags.value = []
+  })
+}
+
 const getTags = async () => {
   loading.value = true
   const options = { page: 1, per_page: 25, sort_by: 'name', sort_order: 'asc', searchQuery: null as any, concat: false, filters: null as any }
