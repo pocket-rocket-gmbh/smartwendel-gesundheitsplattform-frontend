@@ -1,6 +1,6 @@
 <template>
-  <div v-for="tag in tags" :key="tag.id">
-    <v-checkbox v-model="tagIds" :value="tag.id"> {{ tag.name }}</v-checkbox>
+  <div v-for="tag in tags" :key="tag.id" class="d-flex">
+    <v-checkbox v-model="tagIds" :value="tag.id">{{ tag.name }}</v-checkbox>
   </div>
 </template>
 

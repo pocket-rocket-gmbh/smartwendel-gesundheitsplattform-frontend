@@ -149,6 +149,7 @@ export default defineComponent({
         updateFilters('currentSubCategoryTags')
       }
       getCareFacilities()
+      getFilter()
 
     })
 

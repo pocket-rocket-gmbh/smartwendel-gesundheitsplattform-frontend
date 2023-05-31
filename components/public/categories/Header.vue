@@ -39,4 +39,6 @@ const category = ref(props.category)
 .is-selected
   background: red
 
+.header
+  z-index: -1!important
 </style>

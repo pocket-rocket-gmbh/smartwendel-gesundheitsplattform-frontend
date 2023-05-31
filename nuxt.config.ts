@@ -6,7 +6,8 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
-    'nuxt-icons'
+    'nuxt-icons',
+    '@nuxtjs/device'
   ],
   experimental: {
     treeshakeClientOnly: false
