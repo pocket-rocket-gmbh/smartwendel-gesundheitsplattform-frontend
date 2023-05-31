@@ -160,11 +160,9 @@ export default defineComponent({
         updateFilters('currentSubSubCategoryId')
       }
       getCareFacilities()
-      getFilter()
-
     })
 
-    watch(filter, () => {
+    watch(filter as any, () => {
       getCareFacilities()
     })
 
