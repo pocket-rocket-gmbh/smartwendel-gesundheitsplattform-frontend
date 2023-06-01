@@ -2,7 +2,7 @@
   <div v-if="finishedLoading">
     <div class="header">
       <PublicCategoriesHeader :category="category" />
-      <PublicCategoriesFilter :category="category"/>
+      <PublicCategoriesFilter :sub-categories="subCategories"/>
     </div>
     <div class="content">
       <PublicCategoriesContent
@@ -47,9 +47,8 @@ listSubCategoryApi.setBaseApi(usePublicApi())
 
 const getSubCategory = async () => {
   listSubCategoryApi.setEndpoint(`categories/${subCategoryId.value}`)
-  const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
   loading.value = true
-  await listSubCategoryApi.getItem(options)
+  await listSubCategoryApi.getItem()
   loading.value = false
   subCategory.value = listSubCategoryApi.item.value as any
 }
