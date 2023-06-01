@@ -68,19 +68,6 @@
           </div>
           <div class="field">
             <div class="mt-15 mb-5">
-              <b>Bereich*</b> (Wählen Sie den Bereich, der zu Ihrer Einrichtung passt. Es ist eine Mehrfachauswahl möglich)
-            </div>
-            <v-select
-              hide-details="auto"
-              v-model="slotProps.item.kind"
-              :items="kindsCareFacilities"
-              item-title="name"
-              item-value="id"
-              label="Art der Einrichtung"
-            />
-          </div>
-          <div class="field">
-            <div class="mt-15 mb-5">
               <b>Tags zuordnen*</b> (Ordnen Sie Ihrer Einrichtung zielgruppengerechte Tags zu)
             </div>
             <AdminCareFacilitiesChooseTags
@@ -170,21 +157,18 @@
             <div class="mt-15 mb-5">
               <b>Öffnungszeiten </b> (Geben Sie Ihre Öffnungszeiten an. Tragen Sie hierzu den oder die Wochentag/e in das vordere Feld ein und die genauen Zeiten in das hintere Feld)
               <div class="field">
-                <v-text-field
-                  v-model="slotProps.item.opening_hours"
+                <v-textarea
+                  rows="4"
                   hide-details="auto"
+                  v-model="slotProps.item.opening_hours"
                   label="Wochentag/en - Uhrzeiten"
                   :error-messages="useErrors().checkAndMapErrors('opening_hours', slotProps.errors)"
                 />
-                <div>
-                  <v-icon>mdi-plus</v-icon>
-                  <span class="is-clickable">Weitere Öffnungszeiten</span>
-                </div>
               </div>
             </div>
           </div>
           <div class="field">
-            <div class="mt-15 mb-5">
+            <div class="mt-15 mb-15">
               <b>Infobutton </b> (Tragen Sie den Link zu Ihrer eigenen Webseite ein. Falls Sie keine Webseite besitzen, lassen Sie dieses Feld einfach frei)
               <div class="field">
                 <v-text-field
@@ -193,32 +177,6 @@
                   label="Link eintragen"
                   :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
                 />
-              </div>
-            </div>
-          </div>
-          <div class="field mt-15 mb-15">
-            <div class="mt-15 mb-15">
-              <b>Downloads</b> (Laden Sie Dokumente wie bspw. Transparenzberichte, Jobangebote oder Formulare hoch. Bitte hinterlegen Sie zu jedem Dokument einen Titel und eine kurze Beschreibung)
-                <div class="field split">
-                <v-text-field
-                
-                  hide-details="auto"
-                  label="Titel*"
-                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
-                />
-                <v-text-field
-                
-                  hide-details="auto"
-                  label="Beschreibung (max. 120 Zeichen)"
-                  :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
-                />
-              </div>
-              <div class="field">
-                <v-file-input clearable label="Datei Hochladen"></v-file-input>
-              </div>
-              <div>
-                <v-icon>mdi-plus</v-icon>
-                <span class="is-clickable">Weitere Downloads</span>
               </div>
             </div>
           </div>
