@@ -22,7 +22,7 @@
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link to="/admin" nuxt>
+        <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()">
           Dashboard
         </v-list-item>
         <v-list-item link to="/admin/tags" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
@@ -34,10 +34,10 @@
         <v-list-item link to="/admin/care_facilities" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           Einrichtungen
         </v-list-item>
-        <v-list-item link to="/admin/news_articles" nuxt>
+        <v-list-item link to="/admin/news_articles" nuxt v-if="useUser().isAdmin()">
           News und Beiträge
         </v-list-item>
-        <v-list-item link to="/admin/courses_events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
+        <v-list-item link to="/admin/courses_events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list') && useUser().isAdmin()">
           Kurse und Veranstaltungen
         </v-list-item>
         <v-list-item link to="/admin/messages" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('messages', 'list')">

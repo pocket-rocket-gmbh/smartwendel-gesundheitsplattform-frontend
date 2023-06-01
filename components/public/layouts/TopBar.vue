@@ -40,8 +40,21 @@
         </div>
         <router-link class="mr-6 menu-list" to="/login" v-if="!useUser().loggedIn()">Login / Registrieren</router-link>
         <span class="is-clickable menu-list" v-if="!useUser().loggedIn()" @click="emitSetTutorial()">Tutorial</span>
-        <v-divider class="divider" :thickness="3" vertical color="blue" opacity="1"></v-divider>
-        <router-link class="mx-3 menu-list" to="/admin" v-if="useUser().isAdmin()">Dashboard</router-link>
+        <v-divider class="divider ml-3" :thickness="3" vertical color="blue" opacity="1"></v-divider>
+        <router-link
+          class="mx-3 menu-list"
+          to="/admin"
+          v-if="useUser().isAdmin()"
+        >
+          Dashboard
+        </router-link>
+        <router-link
+          class="mx-3 menu-list"
+          to="/admin/care_facilities"
+          v-else-if="useUser().isFacilityOwner()"
+        >
+          Meine Einrichtungen
+        </router-link>
         <PublicLayoutsMiniMenu
           :current-user="currentUser"
           :user-is-admin="userIsAdmin"
