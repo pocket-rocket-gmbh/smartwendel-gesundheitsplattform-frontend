@@ -37,7 +37,7 @@
       </v-menu>
     </div>
     <div class="align-center d-none d-sm-flex">
-      <router-link class="mx-3 menu-list" to="/admin" v-if="useUser().isAdmin()">Dashboard</router-link>
+      <router-link class="mx-3 menu-list" to="/admin">Dashboard</router-link>
       <v-divider v-if="!useUser().loggedIn()" class="divider" :thickness="3" vertical color="blue" opacity="1"></v-divider>
       <router-link class="mx-3 menu-list" to="/login" v-if="!useUser().loggedIn()">Login / Registrieren</router-link>
       <v-divider v-if="useUser().loggedIn()" class="divider" :thickness="3" vertical color="blue" opacity="1"></v-divider>
