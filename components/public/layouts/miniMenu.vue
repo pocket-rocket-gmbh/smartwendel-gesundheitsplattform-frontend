@@ -26,21 +26,13 @@
         </v-list>
         <v-divider></v-divider>
         <v-list>
+          <v-list-item class="is-clicable" v-if="useUser().isAdmin()" @click="closeMenuAndRouteTo(`/admin`)">
+            <v-icon class="mr-2">mdi-cog</v-icon>
+            Dashboard
+          </v-list-item>
           <v-list-item class="is-clicable" v-if="currentUser" @click="closeMenuAndRouteTo(`/public/users/${currentUser.id}`)">
             <v-icon class="mr-2">mdi-account</v-icon>
             Konto verwalten
-          </v-list-item>
-          <v-list-item class="is-clicable" v-if="currentUser" @click="closeMenuAndRouteTo(`/public/users/trophies`)">
-            <v-icon class="mr-2">mdi-trophy</v-icon>
-            Erfolge
-          </v-list-item>
-          <v-list-item class="is-clicable" v-if="useUser().isAdmin()" @click="closeMenuAndRouteTo(`/admin`)">
-            <v-icon class="mr-2">mdi-cog</v-icon>
-            Admin
-          </v-list-item>
-          <v-list-item class="is-clicable" @click="closeMenuAndRouteTo(`/public/pinboards/`)">
-            <v-icon class="mr-2">mdi-lightbulb-on-outline</v-icon>
-            Ideenpinnwand
           </v-list-item>
           <v-list-item class="is-clicable" @click="closeMenuAndRouteTo(`/terms_of_use`)">
             <v-icon class="mr-2">mdi-note-check-outline</v-icon>
