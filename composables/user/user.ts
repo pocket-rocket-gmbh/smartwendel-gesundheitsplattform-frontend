@@ -18,7 +18,6 @@ export function useUser() {
   }
 
   const isFacilityOwner = ():Boolean => {
-    console.log(currentUser.role)
     if (currentUser) {
       return currentUser.role === 'facility_owner'
     }
