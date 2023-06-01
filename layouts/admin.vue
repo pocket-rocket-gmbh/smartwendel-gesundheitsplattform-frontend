@@ -22,34 +22,34 @@
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link to="/admin" nuxt>
+        <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()">
           Dashboard
         </v-list-item>
-        <v-list-item link to="/admin/tags" nuxt>
+        <v-list-item link to="/admin/tags" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
           Tags
         </v-list-item>
-        <v-list-item link to="/admin/categories" nuxt>
+        <v-list-item link to="/admin/categories" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('categories', 'list')">
           Bereiche & Kategorien
         </v-list-item>
-        <v-list-item link to="/admin/care_facilities" nuxt>
+        <v-list-item link to="/admin/care_facilities" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           Einrichtungen
         </v-list-item>
-        <v-list-item link to="/admin/news_articles" nuxt>
+        <v-list-item link to="/admin/news_articles" nuxt v-if="useUser().isAdmin()">
           News und Beiträge
         </v-list-item>
-        <v-list-item link to="/admin/courses_events" nuxt>
+        <v-list-item link to="/admin/courses_events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list') && useUser().isAdmin()">
           Kurse und Veranstaltungen
         </v-list-item>
-        <v-list-item link to="/admin/messages" nuxt>
+        <v-list-item link to="/admin/messages" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('messages', 'list')">
           Nachrichten
         </v-list-item>
-        <v-list-item link to="/admin/tooltips" nuxt>
+        <v-list-item link to="/admin/tooltips" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')">
           Tooltips
         </v-list-item>
-        <v-list-item link to="/admin/gamification_games" nuxt>
+        <v-list-item link to="/admin/gamification_games" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('games', 'list')">
           Gamification
         </v-list-item>
-        <v-list-item link to="/admin/users" nuxt>
+        <v-list-item link to="/admin/users" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')">
           Benutzer
         </v-list-item>
         <v-list-item @click="useUser().logout()">
@@ -67,5 +67,6 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { useAccessPrivileges } from '~/composables';
 </script>

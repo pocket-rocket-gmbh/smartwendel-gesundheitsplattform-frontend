@@ -13,15 +13,14 @@ export default defineNuxtConfig({
     treeshakeClientOnly: false
   },
   runtimeConfig: {
-    // TODO: outsource in private scope. current not working well
-    // https://nuxt.com/docs/guide/going-further/runtime-config
+    PUBLIC_API_USERNAME: process.env.PUBLIC_API_USERNAME,
+    PUBLIC_API_PASSWORD: process.env.PUBLIC_API_PASSWORD,
+    REGISTER_TOKEN: process.env.REGISTER_TOKEN,
+    SENDINBLUE_API_KEY: process.env.SENDINBLUE_API_KEY,
     public: {
-      API_BASE_URL: process.env.API_BASE_URL,
-      LOGIN_PASSWORD: process.env.LOGIN_PASSWORD,
-      PUBLIC_API_USERNAME: process.env.PUBLIC_API_USERNAME,
-      PUBLIC_API_PASSWORD: process.env.PUBLIC_API_PASSWORD,
-      REGISTER_TOKEN: process.env.REGISTER_TOKEN
-    },
+      WEB_SOCKET_URL: process.env.WEB_SOCKET_URL,
+      API_BASE_URL: process.env.API_BASE_URL
+    }
   },
   app: {
     head: {

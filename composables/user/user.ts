@@ -17,6 +17,13 @@ export function useUser() {
     }
   }
 
+  const isFacilityOwner = ():Boolean => {
+    console.log(currentUser.role)
+    if (currentUser) {
+      return currentUser.role === 'facility_owner'
+    }
+  }
+
   const logout = () => {
     localStorage.removeItem('auth._token.jwt')
     userStore.currentUser = null
@@ -27,6 +34,7 @@ export function useUser() {
   return {
     loggedIn,
     isAdmin,
+    isFacilityOwner,
     currentUser,
     logout
   } 
