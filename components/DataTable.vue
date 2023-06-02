@@ -134,7 +134,8 @@ export default defineComponent({
     }
 
     onMounted(() => {
-        useNuxtApp().$bus.$on("triggerGetItems", () => {
+      useNuxtApp().$bus.$on("triggerGetItems", () => {
+        getItems()
       })
       getItems()
     })
