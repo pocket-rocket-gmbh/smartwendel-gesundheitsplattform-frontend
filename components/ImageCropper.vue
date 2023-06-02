@@ -6,7 +6,7 @@
       :stencil-props="{
         aspectRatio: aspectRatio
       }"
-      @change="onChange"
+      @change="onChange"      
     />
     <v-card-actions>
       <v-btn
@@ -36,8 +36,9 @@ export default defineComponent({
   props: {
     imgUrl: { type: String },
     cta: { type: String, default: 'Ausschneiden' },
-    aspectRatio: { default: 16/9 }
+    aspectRatio: { type: Number, default: 16/9 }
   },
+
   emits: ['close', 'crop'],
   setup(props, { emit }) {
     const image = ref("")

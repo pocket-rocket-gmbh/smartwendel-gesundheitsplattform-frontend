@@ -3,13 +3,13 @@
     <div class="my-5">
     <v-row justify="space-between">
       <v-col class="d-flex justify-start align-center is-uppercase">
-        <h2 class="is-primary">Neuigkeiten</h2>
+        <h2 class="is-green">Neuigkeiten</h2>
       </v-col>
 
       <v-col md="3" class="d-flex text--red justify-end align-start default-button">
         <v-btn 
           variant="flat"
-          color="#007344"
+          color="primary"
           rounded="pill"
         >
           <span class = "text-white">

@@ -40,20 +40,6 @@
           </div>
           <div class="field">
             <div class="mt-15 mb-5">
-              <b> Weitere Einrichtungsbilder</b> (Laden Sie weitere Bilder Ihrer Einrichtung hoch)
-            </div>
-            <ChooseAndCropSingleImage
-              :pre-set-image-url="slotProps.item.sanitized_images"
-              label="Bilder hinzufügen"
-              @setImage="setLogo"
-            />
-            <div>
-              <v-icon>mdi-plus</v-icon>
-              <span class="is-clickable">Weitere Bilder</span>
-            </div>
-          </div>
-          <div class="field">
-            <div class="mt-15 mb-5">
               <b>Beschreibung*</b> (Beschreiben Sie Ihre Einrichtung ausführlich. Sie können auch Bilder und Videos einbinden)
             </div>
             <ClientOnly>
@@ -151,11 +137,10 @@
               v-if="slotProps.item.id"
               :item-id="slotProps.item.id"
               />
-      
           </div>
           <div class="field">
             <div class="mt-15 mb-5">
-              <b>Öffnungszeiten </b> (Geben Sie Ihre Öffnungszeiten an. Tragen Sie hierzu den oder die Wochentag/e in das vordere Feld ein und die genauen Zeiten in das hintere Feld)
+              <b>Öffnungszeiten </b> (Geben Sie Ihre Öffnungszeiten an.)
               <div class="field">
                 <v-textarea
                   rows="4"

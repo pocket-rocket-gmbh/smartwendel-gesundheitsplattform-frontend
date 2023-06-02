@@ -19,6 +19,7 @@
         />
       </div>
       <ChooseAndCropSingleImage
+        :aspect-ratio="1/1"
         class="field"
         label="Bild"
         :pre-set-image-url="slotProps.item.image_url"

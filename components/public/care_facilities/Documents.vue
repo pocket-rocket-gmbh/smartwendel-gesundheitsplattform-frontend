@@ -1,7 +1,10 @@
 <template>
   <div class="box flex-column text-dark-grey font-weight-bold pa-5">
     <h2 class="is-primary is-uppercase mb-6">Dokumente</h2>
-    Dokumente!
+    <div class="flex-column">
+      <v-icon size="large" color="warning">mdi-file-pdf-box</v-icon>
+      <span>test</span>
+    </div>
   </div>
 </template>
 

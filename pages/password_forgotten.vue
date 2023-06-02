@@ -1,0 +1,124 @@
+<template>
+  <v-row class="my-10">
+    <v-col sm="3" md="4" offset-sm="4">
+      <v-card  :class="['pa-6', {'shake' : animated}]">
+        <img class="is-fullwidth" src="~/assets/images/logo.png" />
+
+        <div v-if="resetSuccessful" class="mt-3" align="center">
+          Das Zurücksetzen Deines Passworts wurde angefragt.<br/>Bitte folge den Anweisungen in der E-Mail.
+        </div>
+        <div v-else>
+          <div class="field">
+            <v-text-field v-model="email"
+              class="pt-6"
+              label="E-Mail Adresse"
+              hide-details="auto"
+              :error-messages="useErrors().checkAndMapErrors('email', errors)"
+            />
+          </div>
+          <v-btn
+            class="mb-6"
+            color="primary"
+            block
+            depressed
+            @click="auth"
+            >
+              Neues Passwort anfordern
+          </v-btn>
+          <v-btn
+            block
+            depressed
+            @click="goBack"
+            >
+              zurück
+          </v-btn>
+        </div>
+      </v-card>
+    </v-col>
+  </v-row>
+</template>
+
+<script lang="ts">
+import { ResultStatus } from '@/types/serverCallResult'
+
+export default defineComponent({
+  name: 'Login',
+  setup() {
+
+    const email = ref('')
+    const loading = ref(false)
+    const animated = ref(false)
+    const errors = ref({})
+    const resetSuccessful = ref(false)
+    const publicApi = usePublicApi()
+    const router = useRouter()
+    const route = useRoute()
+
+    const auth = async () => {
+      loading.value = true
+      errors.value = {}
+      const data = { email: email.value }
+
+      const result = await publicApi.call('post', '/users/reset-password', data)
+
+      if (result.status === ResultStatus.SUCCESSFUL) {
+        localStorage.setItem('project_platform._remembered_email', email.value)
+        resetSuccessful.value = true
+      } else {
+        errors.value = { errors: [{ field_name: 'email', code: 'reset_password.failed' }] }
+        loading.value = false
+
+        // animate shake
+        animated.value = true
+        setTimeout(() => {
+          animated.value = false
+        }, 1000)
+      }
+    }
+
+    const goBack = () => {
+      router.push({ path: '/login' })
+    }
+
+    onMounted(() => {
+      const rememberedEmail = localStorage.getItem('project_platform._remembered_email')
+      if (rememberedEmail) {
+        setTimeout(() => {
+          email.value = rememberedEmail
+        }, 300)
+      }
+    })
+
+    return {
+      email,
+      loading,
+      animated,
+      errors,
+      resetSuccessful,
+      auth,
+      goBack
+    }
+  }
+})
+</script>
+
+<style lang="css" scoped>
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+</style>

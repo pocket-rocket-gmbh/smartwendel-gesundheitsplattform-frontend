@@ -18,6 +18,7 @@
       v-if="addSubCategoriesDialogueOpen"
       :category-id="itemId"
       @close="itemId = null; addSubCategoriesDialogueOpen = false;"
+      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
 
     <AdminCategoriesCreateEdit

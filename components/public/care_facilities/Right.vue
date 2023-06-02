@@ -31,9 +31,12 @@
         rounded="pill"
         color="primary"
         width="100%"
+        :href="careFacility.website"
+        target="_blank"
         >
-          weitere Informationen
+          weitere Informationen 
     </v-btn>
+ 
     </div>
     <div class="my-4">
       <v-btn

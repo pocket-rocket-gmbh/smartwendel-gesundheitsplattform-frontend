@@ -1,14 +1,13 @@
 <template>
   <v-col md="6" class="d-flex flex-column mt-10">
-    <v-card class="rounded-xl mx-auto has-bg-light-grey content elevation-1 fill-height">
+    <v-card class="rounded-xl mx-auto has-bg-light-grey content elevation-1 fill-height d-flex flex-column" width="100%">
       <div class="d-flex notes-card">
-        <v-img
-          cover
-          width="200" 
-          heigth="200"
-          aspect-ratio="16/9"
-          :src="item.image_url"
-        />
+          <v-img
+            class="align-center"
+            cover
+            width="40%" 
+            :src="item.image_url"
+          />
         <div>
           <v-card-title class="note-title is-primary">
             {{ item.name }}
@@ -16,6 +15,7 @@
           <div class="px-5 pb-5">
             <p class="" v-html="item.description"></p>
           </div>
+          <v-spacer></v-spacer>
           <v-card-actions>
             <div class="content-footer">
               <v-btn
@@ -36,6 +36,7 @@
 <script lang="ts" setup>
 defineProps({
   item: {
+    type: Object,
     required: true
   }
 })
@@ -56,5 +57,7 @@ defineProps({
 
 .content-footer
   bottom: 0
+
+
 
 </style>

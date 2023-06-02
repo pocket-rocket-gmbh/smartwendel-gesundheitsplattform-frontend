@@ -36,36 +36,43 @@
     </v-row>
     <v-row class="mt-3">
       <v-col>
-        <v-btn 
-          append-icon="mdi-map-outline"
+        <v-btn
+          class="mx-3"
+          variant="outlined"
           size="large"
-          class="mt-4"
-          variant="text"
-          color="primary"
           rounded="pill"
-          @click="mapToogle"
-            >
-              Karte ausblenden
-          </v-btn>
+          color="white"
+          @click="mapToogle()"
+          >
+          <span v-if="showingMap">
+            Karte ausblenden
+          </span>
+          <span v-if="!showingMap">
+            Karte einblenden
+          </span>
+        </v-btn>
       </v-col>
       <v-col class="d-flex justify-end">
         <v-btn
-          class="ma-4"
+          class="mx-3"
           variant="outlined"
+          size="large"
           rounded="pill"
-          color="primary"
+          color="white"
           @click="emitResetFilter()"
           >
-            Felder löschen
+          Felder löschen
         </v-btn>
-        <v-btn
-          class="ma-4"
+        <v-btn 
           variant="flat"
-          color="primary"
+          color="white"
           rounded="pill"
-          @click="emitSearch"
-            >
-              Suche starten
+          size="large"
+          @click="emitSearch()"
+          >
+          <span class="text-black">
+            Suche starten
+          </span>
         </v-btn>
       </v-col>
     </v-row>
@@ -186,7 +193,7 @@ export default defineComponent({
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .basic-search-box
-  background: $dark-green-gradient
+  background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
   border-radius: 20px
 
