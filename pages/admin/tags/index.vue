@@ -2,6 +2,7 @@
   <div>
     <h2>Tags</h2>
     <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neuer Tag</v-btn>
+    <v-alert type="info" density="compact" closable class="mt-2">"Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten, Beispiele können zielgruppenspezifische Tags wie z.B. nach Alter oder Geschlecht sein.</v-alert>
     <DataTable
       :fields="fields"
       endpoint="tags"

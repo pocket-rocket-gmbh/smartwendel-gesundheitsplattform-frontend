@@ -38,12 +38,14 @@
           </div>
         </v-col>
         <v-col align="right">
-          <v-btn
-            variant="flat"
-            color="secondary"
+          <v-btn 
+            variant="outlined"
+            size="large"
             rounded="pill"
+            color="primary"
             :href="`/public/care_facilities/${careFacility.id}`"
-          >
+            target="_blank"
+            >
             Details ansehen
           </v-btn>
         </v-col>

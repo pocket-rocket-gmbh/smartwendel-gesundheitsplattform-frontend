@@ -23,7 +23,7 @@ const category = ref(props.category)
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .title-bar
-  background: linear-gradient(90deg, #91A80D 46.67%, #BAC323 84.36%, #9EA100 97.5%)
+  background: linear-gradient(89.48deg, #91A80D 19.14%, #BAC323 42.28%, #9EA100 83.7%)
   height: 200px
 
 .menu-bar

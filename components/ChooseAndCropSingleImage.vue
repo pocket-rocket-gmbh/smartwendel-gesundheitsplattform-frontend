@@ -13,6 +13,7 @@
   </div>
   <ImageCropper
     v-if="imgUrl"
+    :aspect-ratio="aspectRatioValue"
     :imgUrl="imgUrl"
     @close="imgUrl = null; image = {}"
     @crop="setImage"
@@ -35,11 +36,15 @@ export default defineComponent({
     label: {
       type: String,
       default: "Logo"
+    },
+    aspectRatio: {
+      type: Number,
     }
   },
   setup(props, { emit }) {
     const image = ref({}) as any
     const imgUrl = ref(null)
+    const aspectRatioValue = ref(props.aspectRatio)
     const labelText = ref(props.label)
     const errorFileSizeTooLarge = ref(false)
     const croppedImage = ref(null)
@@ -76,7 +81,8 @@ export default defineComponent({
       handleFile,
       croppedImage,
       setImage,
-      labelText
+      labelText,
+      aspectRatioValue
     }
   },
 })

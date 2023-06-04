@@ -2,23 +2,25 @@
   <div>
    <h2>Einrichtungen</h2>
 
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neue Einrichtung</v-btn>
+    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neue Einrichtung</v-btn>
 
     <DataTable
       :fields="fields"
       endpoint="care_facilities"
-      @openCreateEditDialogue="openCreateEditDialogue"
-      @openDeleteDialogue="openDeleteDialogue"
+      @openCreateEditDialogue="openCreateEditDialog"
+      @openDeleteDialogue="openDeleteDialog"
+      @openAddImagesDialog="openAddImagesDialog"
+      @openAddFilesDialog="openAddFilesDialog"
     />
 
     <AdminCareFacilitiesCreateEdit
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
-      v-if="createEditDialogueOpen"
-      @close="createEditDialogueOpen = false"
+      v-if="createEditDialogOpen"
+      @close="createEditDialogOpen = false"
       endpoint="care_facilities"
       concept-name="Einrichtung"
-      :payload="{ active: true, kind: 'doctor' }"
+      :payload="{ active: true, kind: 'facility' }"
     />
 
     <DeleteItem
@@ -28,6 +30,18 @@
       endpoint="care_facilities"
       term="diese Einrichtung"
       @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
+    />
+
+    <AdminCareFacilitiesAddImages
+      :item-id="itemId"
+      v-if="addImagesDialogOpen"
+      @close="itemId = null; addImagesDialogOpen = false"
+    />
+
+    <AdminCareFacilitiesAddFiles
+      :item-id="itemId"
+      v-if="addFilesDialogOpen"
+      @close="itemId = null; addFilesDialogOpen = false"
     />
   </div>
 </template>
@@ -47,6 +61,8 @@ export default defineComponent({
       { text: 'Name', value: 'name', type: 'string' },
       { text: 'Einrichtungsart', value: 'kind', type: 'string' },
       { text: 'Status', value: 'status', type: 'string' },
+      { text: '', value: 'mdi-image-plus', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
+      { text: '', value: 'mdi-file-document-plus', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Bilder hinzufügen' },
       { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
     ])
 
@@ -59,19 +75,30 @@ export default defineComponent({
     const dialog = ref(false)
     const item = ref({ name: '' })
     const loading = ref(false)
-    const createEditDialogueOpen = ref(false)
+    const createEditDialogOpen = ref(false)
     const confirmDeleteDialogueOpen = ref(false)
-    const addImagesDialogueOpen = ref(false)
+    const addImagesDialogOpen = ref(false)
+    const addFilesDialogOpen = ref(false)
     const itemId = ref(null)
 
-    const openCreateEditDialogue = (id:string) => {
+    const openCreateEditDialog = (id:string) => {
       itemId.value = id
-      createEditDialogueOpen.value = true
+      createEditDialogOpen.value = true
     }
 
-    const openDeleteDialogue = (id:string) => {
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
       confirmDeleteDialogueOpen.value = true
+    }
+
+    const openAddImagesDialog = (id: string) => {
+      itemId.value = id
+      addImagesDialogOpen.value = true
+    }
+
+    const openAddFilesDialog = (id: string) => {
+      itemId.value = id
+      addFilesDialogOpen.value = true
     }
 
     return {
@@ -79,13 +106,16 @@ export default defineComponent({
       loading,
       dialog,
       item,
-      createEditDialogueOpen,
+      createEditDialogOpen,
+      addFilesDialogOpen,
       confirmDeleteDialogueOpen,
-      addImagesDialogueOpen,
+      addImagesDialogOpen,
       itemId,
       itemPlaceholder,
-      openCreateEditDialogue,
-      openDeleteDialogue
+      openCreateEditDialog,
+      openDeleteDialog,
+      openAddImagesDialog,
+      openAddFilesDialog
     }
   }
 })
