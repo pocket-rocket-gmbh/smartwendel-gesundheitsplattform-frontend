@@ -53,7 +53,7 @@
                 Werden Sie Partner und registrieren Sie Ihre Institution
               </div>
             <div>
-              >> HIER ANMELDEN
+              <nuxt-link to="/register">>> HIER ANMELDEN</nuxt-link>
             </div>
           </div>
         </div>
