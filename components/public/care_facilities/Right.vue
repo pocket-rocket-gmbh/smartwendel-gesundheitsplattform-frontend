@@ -1,8 +1,10 @@
 <template>
   <div class="box flex-column text-dark-grey font-weight-bold pa-5">
     <h2 class="is-primary is-uppercase mb-6">Kontakt & Infos</h2>
+    {{ careFacility }}
     <div v-if="careFacility.phone" class="py-3">
       <span class="py-1">
+
         <v-icon color="primary">mdi-phone-outline</v-icon>
         {{ careFacility.phone }}
       </span>
@@ -31,7 +33,7 @@
         rounded="pill"
         color="primary"
         width="100%"
-        :href="careFacility.website"
+        :href="careFacility.url"
         target="_blank"
         >
           weitere Informationen 
@@ -58,22 +60,16 @@
     />
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  props: {
+<script lang="ts" setup>
+  const props = defineProps({
     careFacility: {
       type: Object,
       required: true
     }
-  },
-  setup () {
+  })
     const facilityContactFormModalOpen = ref(false)
-    return {
-      facilityContactFormModalOpen
-    }
-  }
 
-})
+
 </script>
 
 <style lang="sass" scoped>
