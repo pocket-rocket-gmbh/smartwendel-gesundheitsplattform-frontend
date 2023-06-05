@@ -8,23 +8,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  props: {
+<script lang="ts" setup>
+  defineProps({
     careFacility: {
       type: Object,
       required: true
     }
-  },
-  setup() {
-    
-    return {
-
-    }
-
-  }
-})
+  })
 </script>
 
 <style lang="sass" scoped>

@@ -2,21 +2,29 @@
   <div class="box flex-column text-dark-grey font-weight-bold pa-5">
     <h2 class="is-primary is-uppercase mb-6">Dokumente</h2>
     <div class="flex-column">
-      <v-icon size="large" color="warning">mdi-file-pdf-box</v-icon>
-      <span>test</span>
+      <div v-for="document in careFacility.sanitized_documents">
+        <v-btn
+            class="mx-3"
+            size="large"
+            color="red"
+            :href="document.url"
+            target="_blank"
+            density="compact" icon="mdi-file-pdf-box"
+            >
+        </v-btn>
+        {{ document.name }}
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  props: {
+<script lang="ts" setup>
+  defineProps({
     careFacility: {
       type: Object,
       required: true
     }
-  }
-})
+  })
 </script>
 
 <style lang="sass" scoped>

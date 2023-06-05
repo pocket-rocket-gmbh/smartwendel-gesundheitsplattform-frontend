@@ -3,7 +3,7 @@
     <v-row class="mb-10 font-weight-bold">
       <v-col class="flex-column justify-center">
         <h2 class="mb-5">Landkreis Sankt Wendel</h2>
-        <p class="has-text-white is-clickable"><router-link to="/terms_of_use">Kontakt</router-link></p>
+        <p class="has-text-white is-clickable"><router-link to="/contact">Kontakt</router-link></p>
         <p class="has-text-white is-clickable"><router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link></p>
         <p class="has-text-white is-clickable"><router-link to="/privacy_policy">Datenschutzerklärung</router-link></p>
         <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
