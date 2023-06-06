@@ -3,7 +3,8 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="8" offset="2">
-          <div class="pa-10">
+          <!-- facility / news / event -->
+          <div class="pa-10" v-if="slotProps.kind === 'facility'">
             Hier können Sie eine eigene Detailseite für Ihre Einrichtung anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen. Klicken Sie hier, für eine beispielhafte Vorschau einer ausgebauten Einrichtungsseite.
           </div>
           <div class="field">
@@ -171,7 +172,6 @@
   </CreateEdit>
 </template>
 <script lang="ts">
-import kindsCareFacilities from '@/data/kindsCareFacilities'
 export default defineComponent({
   setup() {
     const textOptions = ref({
@@ -232,7 +232,6 @@ export default defineComponent({
       setTags,
       setLogo,
       setCoverBild,
-      kindsCareFacilities,
       setCareFacilityTags,
       communities
     }
