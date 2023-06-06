@@ -36,7 +36,6 @@
       :item-id="itemId"
       endpoint="categories"
       term="diesen Bereich"
-      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
   </div>
 </template>
