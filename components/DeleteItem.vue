@@ -49,7 +49,7 @@ export default defineComponent({
 
     const deleteItem = async () => {
       await api.deleteItem('Der Eintrag wurde erfolgreich gelöscht')
-      emit('refreshCollection')
+      useNuxtApp().$bus.$emit("triggerGetItems")
       emit('close')
     }
 
