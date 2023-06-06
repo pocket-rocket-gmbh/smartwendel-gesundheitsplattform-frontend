@@ -29,7 +29,6 @@
       :item-id="itemId"
       endpoint="care_facilities"
       term="diese Einrichtung"
-      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
 
     <AdminCareFacilitiesAddImages
@@ -46,78 +45,56 @@
   </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  name: 'AdminCareFacilitiesIndex',
-  setup() {
-    definePageMeta({
-      layout: "admin",
-    })
-
-    const fields = ref([
-      { text: '', type: 'move_down' },
-      { text: '', type: 'move_up' },
-      { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
-      { text: 'Name', value: 'name', type: 'string' },
-      { text: 'Status', value: 'status', type: 'string' },
-      { text: '', value: 'mdi-image-plus', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
-      { text: '', value: 'mdi-file-document-plus', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Bilder hinzufügen' },
-      { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
-    ])
-
-    const itemPlaceholder = ref({
-      name: '',
-      description: '',
-      category_ids: []
-    })
-    
-    const dialog = ref(false)
-    const item = ref({ name: '' })
-    const loading = ref(false)
-    const createEditDialogOpen = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
-    const addImagesDialogOpen = ref(false)
-    const addFilesDialogOpen = ref(false)
-    const itemId = ref(null)
-
-    const openCreateEditDialog = (id:string) => {
-      itemId.value = id
-      createEditDialogOpen.value = true
-    }
-
-    const openDeleteDialog = (id:string) => {
-      itemId.value = id
-      confirmDeleteDialogueOpen.value = true
-    }
-
-    const openAddImagesDialog = (id: string) => {
-      itemId.value = id
-      addImagesDialogOpen.value = true
-    }
-
-    const openAddFilesDialog = (id: string) => {
-      itemId.value = id
-      addFilesDialogOpen.value = true
-    }
-
-    return {
-      fields,
-      loading,
-      dialog,
-      item,
-      createEditDialogOpen,
-      addFilesDialogOpen,
-      confirmDeleteDialogueOpen,
-      addImagesDialogOpen,
-      itemId,
-      itemPlaceholder,
-      openCreateEditDialog,
-      openDeleteDialog,
-      openAddImagesDialog,
-      openAddFilesDialog
-    }
-  }
+<script lang="ts" setup>
+definePageMeta({
+  layout: "admin",
 })
+
+const fields = ref([
+  { text: '', type: 'move_down' },
+  { text: '', type: 'move_up' },
+  { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
+  { text: 'Name', value: 'name', type: 'string' },
+  { text: 'Status', value: 'status', type: 'string' },
+  { text: '', value: 'mdi-image-plus', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
+  { text: '', value: 'mdi-file-document-plus', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Bilder hinzufügen' },
+  { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
+])
+
+const itemPlaceholder = ref({
+  name: '',
+  description: '',
+  category_ids: []
+})
+
+const dialog = ref(false)
+const item = ref({ name: '' })
+const loading = ref(false)
+const createEditDialogOpen = ref(false)
+const confirmDeleteDialogueOpen = ref(false)
+const addImagesDialogOpen = ref(false)
+const addFilesDialogOpen = ref(false)
+const itemId = ref(null)
+
+const openCreateEditDialog = (id:string) => {
+  itemId.value = id
+  createEditDialogOpen.value = true
+}
+
+const openDeleteDialog = (id:string) => {
+  itemId.value = id
+  confirmDeleteDialogueOpen.value = true
+}
+
+const openAddImagesDialog = (id: string) => {
+  itemId.value = id
+  addImagesDialogOpen.value = true
+}
+
+const openAddFilesDialog = (id: string) => {
+  itemId.value = id
+  addFilesDialogOpen.value = true
+}
 </script>
 <style lang="sass">
 .v-dialog--custom
