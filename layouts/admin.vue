@@ -34,11 +34,11 @@
         <v-list-item link to="/admin/care_facilities" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           Einrichtungen
         </v-list-item>
-        <v-list-item link to="/admin/news_articles" nuxt v-if="useUser().isAdmin()">
-          News und Beiträge
-        </v-list-item>
-        <v-list-item link to="/admin/courses_events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list') && useUser().isAdmin()">
+        <v-list-item link to="/admin/courses_events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           Kurse und Veranstaltungen
+        </v-list-item>
+        <v-list-item link to="/admin/news_articles" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('news_articles', 'list')">
+          News & Beiträge
         </v-list-item>
         <v-list-item link to="/admin/messages" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('messages', 'list')">
           Nachrichten
@@ -69,4 +69,5 @@
 
 <script lang="ts" setup>
 import { useAccessPrivileges } from '~/composables';
+import { useUser } from '~/composables';
 </script>

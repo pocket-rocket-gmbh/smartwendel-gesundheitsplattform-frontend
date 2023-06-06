@@ -1,17 +1,17 @@
 <template>
   <div>
     <h2>Gamification</h2>
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">?</v-btn>
+    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">?</v-btn>
     <DataTable
       :fields="fields"
       endpoint=""
-      @openCreateEditDialogue="openCreateEditDialogue"
-      @openDeleteDialogue="openDeleteDialogue"
+      @openCreateEditDialog="openCreateEditDialog"
+      @openDeleteDialog="openDeleteDialog"
     />
 
     <DeleteItem
-      v-if="confirmDeleteDialogueOpen"
-      @close="itemId = null; confirmDeleteDialogueOpen = false"
+      v-if="confirmDeleteDialogOpen"
+      @close="itemId = null; confirmDeleteDialogOpen = false"
       :item-id="itemId"
       endpoint=""
       term="diese ?"
@@ -28,24 +28,24 @@ export default defineComponent({
     const fields = ref([
       { text: '?', endpoint: '', type: 'switch', fieldToSwitch: 'is_active' },
       { text: '?', value: 'name', type: 'string' },
-      { text: '', value: 'mdi-image-plus', type: 'icon', emit: 'openAddImagesDialogue', tooltip: 'Bilder hinzufügen' },
+      { text: '', value: 'mdi-image-plus', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
     ])
     
     const dialog = ref(false)
     const item = ref({ name: '' })
     const loading = ref(false)
-    const createEditDialogueOpen = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
+    const createEditDialogOpen = ref(false)
+    const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
 
-    const openCreateEditDialogue = (id:string) => {
+    const openCreateEditDialog = (id:string) => {
       itemId.value = id
-      createEditDialogueOpen.value = true
+      createEditDialogOpen.value = true
     }
 
-    const openDeleteDialogue = (id:string) => {
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
-      confirmDeleteDialogueOpen.value = true
+      confirmDeleteDialogOpen.value = true
     }
 
     return {
@@ -53,11 +53,11 @@ export default defineComponent({
       loading,
       dialog,
       item,
-      createEditDialogueOpen,
-      confirmDeleteDialogueOpen,
+      createEditDialogOpen,
+      confirmDeleteDialogOpen,
       itemId,
-      openCreateEditDialogue,
-      openDeleteDialogue
+      openCreateEditDialog,
+      openDeleteDialog
     }
   }
 })

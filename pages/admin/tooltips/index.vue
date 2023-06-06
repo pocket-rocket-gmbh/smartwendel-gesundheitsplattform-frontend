@@ -5,8 +5,8 @@
     <DataTable
       :fields="fields"
       endpoint="tooltips"
-      @openCreateEditDialogue="openCreateEditDialogue"
-      @openDeleteDialogue="openDeleteDialogue"
+      @openCreateEditDialog="openCreateEditDialog"
+      @openDeleteDialog="openDeleteDialog"
     />
 
     <AdminTooltipsCreateEdit
@@ -17,8 +17,8 @@
     />
 
     <DeleteItem
-      v-if="confirmDeleteDialogueOpen"
-      @close="itemId = null; confirmDeleteDialogueOpen = false"
+      v-if="confirmDeleteDialogOpen"
+      @close="itemId = null; confirmDeleteDialogOpen = false"
       :item-id="itemId"
       endpoint="tooltips"
       term="dieser Tooltip"
@@ -42,7 +42,7 @@ export default defineComponent({
     const dialog = ref(false)
     const item = ref({ name: '' })
     const loading = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
+    const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
     const createEditDialogOpen = ref(false)
 
@@ -63,19 +63,14 @@ export default defineComponent({
       getItems()
     })
 
-    const openCreateEditDialogue = (id:string) => {
+    const openCreateEditDialog = (id:string) => {
       itemId.value = id
       createEditDialogOpen.value = true
     }
 
-    const openCreateEditDialog = (id) => {
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
-      createEditDialogOpen.value = true
-    }
-
-    const openDeleteDialogue = (id:string) => {
-      itemId.value = id
-      confirmDeleteDialogueOpen.value = true
+      confirmDeleteDialogOpen.value = true
     }
 
     return {
@@ -85,10 +80,10 @@ export default defineComponent({
       tooltips,
       item,
       createEditDialogOpen,
-      confirmDeleteDialogueOpen,
+      confirmDeleteDialogOpen,
       itemId,
-      openCreateEditDialogue,
-      openDeleteDialogue,
+      openCreateEditDialog,
+      openDeleteDialog,
       openCreateEditDialog,
       getItems
     }

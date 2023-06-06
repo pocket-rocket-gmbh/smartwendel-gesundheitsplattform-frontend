@@ -8,8 +8,8 @@
       endpoint="tags"
       default-sort-order="asc"
       default-sort-by="name"
-      @openCreateEditDialogue="openCreateEditDialogue"
-      @openDeleteDialogue="openDeleteDialogue"
+      @openCreateEditDialog="openCreateEditDialog"
+      @openDeleteDialog="openDeleteDialog"
     />
 
     <AdminTagsCreateEdit
@@ -21,8 +21,8 @@
     />
 
     <DeleteItem
-      v-if="confirmDeleteDialogueOpen"
-      @close="itemId = null; confirmDeleteDialogueOpen = false"
+      v-if="confirmDeleteDialogOpen"
+      @close="itemId = null; confirmDeleteDialogOpen = false"
       :item-id="itemId"
       endpoint="tags"
       term="diesen Tag"
@@ -52,17 +52,17 @@ export default defineComponent({
     const item = ref({ name: '' })
     const loading = ref(false)
     const createEditDialogOpen = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
+    const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
 
-    const openCreateEditDialogue = (id:string) => {
+    const openCreateEditDialog = (id:string) => {
       itemId.value = id
       createEditDialogOpen.value = true
     }
 
-    const openDeleteDialogue = (id:string) => {
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
-      confirmDeleteDialogueOpen.value = true
+      confirmDeleteDialogOpen.value = true
     }
 
     return {
@@ -72,10 +72,10 @@ export default defineComponent({
       item,
       createEditDialogOpen,
       itemPlaceholder,
-      confirmDeleteDialogueOpen,
+      confirmDeleteDialogOpen,
       itemId,
-      openCreateEditDialogue,
-      openDeleteDialogue
+      openCreateEditDialog,
+      openDeleteDialog
     }
   }
 })

@@ -15,16 +15,16 @@
         elevation="0"
         variant="outlined"
         class="mb-1 ml-4"
-        @click="itemId = null; createEditDialogueOpen = true"
+        @click="itemId = null; createEditDialogOpen = true"
       >
         Neue Unter-Kategorie
       </v-btn>
 
       <AdminSubSubCategoriesCreateEdit
         :item-id="itemId"
-        v-if="createEditDialogueOpen"
+        v-if="createEditDialogOpen"
         :item-placeholder="itemPlaceholder"
-        @close="createEditDialogueOpen = false"
+        @close="createEditDialogOpen = false"
         :endpoint="`categories/${categoryId}/sub_categories/${subCategoryId}`"
         :overwrite-get-item-endpoint="`categories/${itemId}`"
         :overwrite-update-item-endpoint="`categories/${itemId}`"
@@ -32,12 +32,11 @@
       />
 
       <DeleteItem
-        v-if="confirmDeleteDialogueOpen"
-        @close="itemId = null; confirmDeleteDialogueOpen = false"
+        v-if="confirmDeleteDialogOpen"
+        @close="itemId = null; confirmDeleteDialogOpen = false"
         :item-id="itemId"
         endpoint="categories"
         term="diese Unter-Kategorie"
-        @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
       />
       
       <DataTable
@@ -46,8 +45,8 @@
         overwrite-move-endpoint="categories"
         default-sort-order="asc"
         default-sort-by="menu_order"
-        @openCreateEditDialogue="openCreateEditDialogue"
-        @openDeleteDialogue="openDeleteDialogue"
+        @openCreateEditDialog="openCreateEditDialog"
+        @openDeleteDialog="openDeleteDialog"
       />
 
       <v-divider></v-divider>
@@ -76,8 +75,8 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const dialog = ref(true)
-    const createEditDialogueOpen = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
+    const createEditDialogOpen = ref(false)
+    const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
 
     const fields = ref([
@@ -87,14 +86,14 @@ export default defineComponent({
       { text: 'Tags', value: 'tags', type: 'array' }
     ])
 
-    const openCreateEditDialogue = (id:string) => {
+    const openCreateEditDialog = (id:string) => {
       itemId.value = id
-      createEditDialogueOpen.value = true
+      createEditDialogOpen.value = true
     }
 
-    const openDeleteDialogue = (id:string) => {
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
-      confirmDeleteDialogueOpen.value = true
+      confirmDeleteDialogOpen.value = true
     }
 
     const itemPlaceholder = ref({
@@ -110,10 +109,10 @@ export default defineComponent({
     return {
       dialog,
       emitClose,
-      createEditDialogueOpen,
-      confirmDeleteDialogueOpen,
-      openCreateEditDialogue,
-      openDeleteDialogue,
+      createEditDialogOpen,
+      confirmDeleteDialogOpen,
+      openCreateEditDialog,
+      openDeleteDialog,
       fields,
       itemId,
       itemPlaceholder
