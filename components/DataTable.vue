@@ -57,7 +57,7 @@
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item.id, null)">mdi-pencil</v-icon></td>
-        <td><v-icon class="is-clickable" @click="emitOpenDeleteDialogue(item.id)">mdi-delete</v-icon></td>
+        <td><v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)">mdi-delete</v-icon></td>
       </tr>
     </tbody>
   </v-table>
@@ -66,7 +66,7 @@
 <script>
 import { ResultStatus } from '@/types/serverCallResult'
 export default defineComponent({
-  emits: ['close', 'openCreateEditDialogue', 'openDeleteDialogue'],
+  emits: ['close', 'openCreateEditDialog', 'openDeleteDialog'],
   props: {
     fields: {
       type: Array
@@ -92,8 +92,8 @@ export default defineComponent({
   setup (props, { emit }) {
     const loading = ref(false)
 
-    const emitOpenDeleteDialogue = (itemId) => {
-      emit('openDeleteDialogue', itemId)
+    const emitopenDeleteDialog = (itemId) => {
+      emit('openDeleteDialog', itemId)
     }
 
     const handleEmitParent = (item, field, menu_order) => {
@@ -108,7 +108,7 @@ export default defineComponent({
 
     const emitParent = (itemId, fieldEmit) => {
       if (!fieldEmit) {
-        emit('openCreateEditDialogue', itemId)
+        emit('openCreateEditDialog', itemId)
       } else {
         emit(fieldEmit, itemId)
       }
@@ -141,7 +141,7 @@ export default defineComponent({
     })
 
     return {
-      emitOpenDeleteDialogue,
+      emitopenDeleteDialog,
       emitParent,
       handleEmitParent,
       move,

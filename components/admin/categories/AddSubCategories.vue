@@ -15,16 +15,16 @@
         elevation="0"
         variant="outlined"
         class="mb-1 ml-4"
-        @click="itemId = null; createEditDialogueOpen = true"
+        @click="itemId = null; createEditDialogOpen = true"
       >
         Neue Kategorie
       </v-btn>
 
       <AdminSubCategoriesCreateEdit
         :item-id="itemId"
-        v-if="createEditDialogueOpen"
+        v-if="createEditDialogOpen"
         :item-placeholder="itemPlaceholder"
-        @close="createEditDialogueOpen = false"
+        @close="createEditDialogOpen = false"
         :endpoint="`categories/${categoryId}`"
         :overwrite-get-item-endpoint="`categories/${itemId}`"
         :overwrite-update-item-endpoint="`categories/${itemId}`"
@@ -32,15 +32,15 @@
       />
 
       <AdminCategoriesAddSubSubCategories
-        v-if="addSubSubCategoriesDialogueOpen"
+        v-if="addSubSubCategoriesDialogOpen"
         :category-id="categoryId"
         :sub-category-id="itemId"
-        @close="itemId = null; addSubSubCategoriesDialogueOpen = false;"
+        @close="itemId = null; addSubSubCategoriesDialogOpen = false;"
       />
 
       <DeleteItem
-        v-if="confirmDeleteDialogueOpen"
-        @close="itemId = null; confirmDeleteDialogueOpen = false"
+        v-if="confirmDeleteDialogOpen"
+        @close="itemId = null; confirmDeleteDialogOpen = false"
         :item-id="itemId"
         endpoint="categories"
         term="diese Kategorie"
@@ -52,9 +52,9 @@
         overwrite-move-endpoint="categories"
         default-sort-order="asc"
         default-sort-by="menu_order"
-        @openCreateEditDialogue="openCreateEditDialogue"
-        @openDeleteDialogue="openDeleteDialogue"
-        @openAddSubSubCategoriesDialogue="openAddSubSubCategoriesDialogue"
+        @openCreateEditDialog="openCreateEditDialog"
+        @openDeleteDialog="openDeleteDialog"
+        @openAddSubSubCategoriesDialog="openAddSubSubCategoriesDialog"
       />
 
       <v-divider></v-divider>
@@ -79,9 +79,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const dialog = ref(true)
-    const createEditDialogueOpen = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
-    const addSubSubCategoriesDialogueOpen = ref(false)
+    const createEditDialogOpen = ref(false)
+    const confirmDeleteDialogOpen = ref(false)
+    const addSubSubCategoriesDialogOpen = ref(false)
     const itemId = ref(null)
 
     const fields = ref([
@@ -89,17 +89,17 @@ export default defineComponent({
       { text: '', type: 'move_up' },
       { text: 'Name', value: 'name', type: 'string' },
       { text: 'Unter-Kategorien', value: 'sub_sub_categories', type: 'associations_name' },
-      { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubSubCategoriesDialogue', tooltip: 'Unter-Kategorien hinzufügen' },
+      { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubSubCategoriesDialog', tooltip: 'Unter-Kategorien hinzufügen' },
     ])
 
-    const openCreateEditDialogue = (id:string) => {
+    const openCreateEditDialog = (id:string) => {
       itemId.value = id
-      createEditDialogueOpen.value = true
+      createEditDialogOpen.value = true
     }
 
-    const openDeleteDialogue = (id:string) => {
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
-      confirmDeleteDialogueOpen.value = true
+      confirmDeleteDialogOpen.value = true
     }
 
     const itemPlaceholder = ref({
@@ -107,9 +107,9 @@ export default defineComponent({
       scope: 'care_facility'
     })
 
-    const openAddSubSubCategoriesDialogue = (id:any) => {
+    const openAddSubSubCategoriesDialog = (id:any) => {
       itemId.value = id
-      addSubSubCategoriesDialogueOpen.value = true
+      addSubSubCategoriesDialogOpen.value = true
     }
 
     const emitClose = () => {
@@ -119,12 +119,12 @@ export default defineComponent({
     return {
       dialog,
       emitClose,
-      createEditDialogueOpen,
-      confirmDeleteDialogueOpen,
-      openCreateEditDialogue,
-      openDeleteDialogue,
-      addSubSubCategoriesDialogueOpen,
-      openAddSubSubCategoriesDialogue,
+      createEditDialogOpen,
+      confirmDeleteDialogOpen,
+      openCreateEditDialog,
+      openDeleteDialog,
+      addSubSubCategoriesDialogOpen,
+      openAddSubSubCategoriesDialog,
       fields,
       itemId,
       itemPlaceholder

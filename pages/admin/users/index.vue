@@ -1,25 +1,25 @@
 <template>
   <div>
     <h2>Benutzer</h2>
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogueOpen = true">Neuer Benutzer</v-btn>
+    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neuer Benutzer</v-btn>
     <DataTable
       :fields="fields"
       endpoint="users"
-      @openCreateEditDialogue="openCreateEditDialogue"
-      @openDeleteDialogue="openDeleteDialogue"
+      @openCreateEditDialog="openCreateEditDialog"
+      @openDeleteDialog="openDeleteDialog"
       @mailUser="mailUser"
     />
 
     <AdminUsersCreateEdit
       :item-id="itemId"
-      v-if="createEditDialogueOpen"
-      @close="itemId = null; createEditDialogueOpen = false"
+      v-if="createEditDialogOpen"
+      @close="itemId = null; createEditDialogOpen = false"
       @refreshCollection="getUsers()"
     />
 
     <DeleteItem
-      v-if="confirmDeleteDialogueOpen"
-      @close="itemId = null; confirmDeleteDialogueOpen = false"
+      v-if="confirmDeleteDialogOpen"
+      @close="itemId = null; confirmDeleteDialogOpen = false"
       :item-id="itemId"
       endpoint="users"
       term="diesen Benutzer"
@@ -42,19 +42,19 @@ const fields = ref([
 ])
 
 const loading = ref(false)
-const createEditDialogueOpen = ref(false)
-const confirmDeleteDialogueOpen = ref(false)
+const createEditDialogOpen = ref(false)
+const confirmDeleteDialogOpen = ref(false)
 const itemId = ref(null)
 const filter = ref({ page: 1, per_page: 1000, sort_by: 'created_at', sort_order: 'DESC', searchQuery: null, concat: false, filters: [] })
 
-const openCreateEditDialogue = (id:string) => {
+const openCreateEditDialog = (id:string) => {
   itemId.value = id
-  createEditDialogueOpen.value = true
+  createEditDialogOpen.value = true
 }
 
-const openDeleteDialogue = (id:string) => {
+const openDeleteDialog = (id:string) => {
   itemId.value = id
-  confirmDeleteDialogueOpen.value = true
+  confirmDeleteDialogOpen.value = true
 }
 
 onMounted(() => {

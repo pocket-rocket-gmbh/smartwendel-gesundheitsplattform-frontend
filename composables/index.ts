@@ -14,4 +14,3 @@ export { useUser } from './user/user'
 export { useAccessPrivileges } from './user/accessPrivileges'
 
 export { useUuidGenerator } from './misc/uuid'
-export { useKindsCareFacilities } from './misc/kindsCareFacilities'

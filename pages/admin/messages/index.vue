@@ -7,8 +7,8 @@
     />
 
     <DeleteItem
-      v-if="confirmDeleteDialogueOpen"
-      @close="itemId = null; confirmDeleteDialogueOpen = false"
+      v-if="confirmDeleteDialogOpen"
+      @close="itemId = null; confirmDeleteDialogOpen = false"
       :item-id="itemId"
       endpoint=""
       term="diese Nachricht"
@@ -32,12 +32,12 @@ export default defineComponent({
     const dialog = ref(false)
     const item = ref({ name: '' })
     const loading = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
+    const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
 
-    const openDeleteDialogue = (id:string) => {
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
-      confirmDeleteDialogueOpen.value = true
+      confirmDeleteDialogOpen.value = true
     }
 
     return {
@@ -45,9 +45,9 @@ export default defineComponent({
       loading,
       dialog,
       item,
-      confirmDeleteDialogueOpen,
+      confirmDeleteDialogOpen,
       itemId,
-      openDeleteDialogue
+      openDeleteDialog
     }
   }
 })

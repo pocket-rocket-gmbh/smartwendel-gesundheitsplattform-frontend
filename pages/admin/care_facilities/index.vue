@@ -6,26 +6,25 @@
 
     <DataTable
       :fields="fields"
-      endpoint="care_facilities"
-      @openCreateEditDialogue="openCreateEditDialog"
-      @openDeleteDialogue="openDeleteDialog"
+      endpoint="care_facilities?kind=facility"
+      @openCreateEditDialog="openCreateEditDialog"
+      @openDeleteDialog="openDeleteDialog"
       @openAddImagesDialog="openAddImagesDialog"
       @openAddFilesDialog="openAddFilesDialog"
     />
 
     <AdminCareFacilitiesCreateEdit
+      v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
-      v-if="createEditDialogOpen"
       @close="createEditDialogOpen = false"
       endpoint="care_facilities"
       concept-name="Einrichtung"
-      :payload="{ active: true, kind: 'facility' }"
     />
 
     <DeleteItem
-      v-if="confirmDeleteDialogueOpen"
-      @close="itemId = null; confirmDeleteDialogueOpen = false"
+      v-if="confirmDeleteDialogOpen"
+      @close="itemId = null; confirmDeleteDialogOpen = false"
       :item-id="itemId"
       endpoint="care_facilities"
       term="diese Einrichtung"
@@ -63,15 +62,14 @@ const fields = ref([
 
 const itemPlaceholder = ref({
   name: '',
+  kind: 'facility',
+  is_active: false,
   description: '',
   category_ids: []
 })
 
-const dialog = ref(false)
-const item = ref({ name: '' })
-const loading = ref(false)
 const createEditDialogOpen = ref(false)
-const confirmDeleteDialogueOpen = ref(false)
+const confirmDeleteDialogOpen = ref(false)
 const addImagesDialogOpen = ref(false)
 const addFilesDialogOpen = ref(false)
 const itemId = ref(null)
@@ -83,7 +81,7 @@ const openCreateEditDialog = (id:string) => {
 
 const openDeleteDialog = (id:string) => {
   itemId.value = id
-  confirmDeleteDialogueOpen.value = true
+  confirmDeleteDialogOpen.value = true
 }
 
 const openAddImagesDialog = (id: string) => {
