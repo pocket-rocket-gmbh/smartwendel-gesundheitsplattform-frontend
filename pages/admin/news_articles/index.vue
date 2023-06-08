@@ -57,7 +57,6 @@ const itemPlaceholder = ref({
 })
 
 const openCreateEditDialog = (id:string) => {
-  console.log(id)
   itemId.value = id
   createEditDialogOpen.value = true
 }

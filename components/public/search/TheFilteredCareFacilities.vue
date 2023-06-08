@@ -5,9 +5,6 @@
       <v-row>
         <v-col md="8">
           <h2 class="is-dark-grey is-uppercase">{{ careFacility.name }}</h2>
-          <div v-if="careFacility.kind" class="is-primary font-weight-bold">
-            {{ useKindsCareFacilities().getNameFromId(careFacility.kind) }}
-          </div>
           <v-row>
             <v-col>
               <div class="text-dark-grey mt-4">
@@ -31,7 +28,7 @@
               variant="text"
               color="primary"
               rounded="pill"
-              @click=""
+              @click="showCareFacilityInMap(careFacility.id)"
                 >
                 Auf karte zeigen
             </v-btn>
@@ -170,7 +167,7 @@ export default defineComponent({
 
     return {
       careFaclities,
-      loading,
+      loading
     }
   }
 })

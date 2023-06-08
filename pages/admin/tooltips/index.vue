@@ -51,7 +51,6 @@ export default defineComponent({
     api.setEndpoint('tooltips')
     const tooltips = api.items
 
-    console.log(tooltips)
     const getItems = async () => {
       loading.value = true
       const options = { page: 1, per_page: 1000, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }

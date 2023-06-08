@@ -130,7 +130,6 @@ export default defineComponent({
     const updateLocations = () => {
 
     locations.value = []
-
     facilities.value.forEach((facility) => {
       facility.locations.forEach((location: any) => {
         locations.value.push({

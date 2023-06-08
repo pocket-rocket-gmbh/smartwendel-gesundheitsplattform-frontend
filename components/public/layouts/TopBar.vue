@@ -38,7 +38,7 @@
             </v-list>
           </v-menu>
         </div>
-        <router-link class="mr-6 menu-list" to="public/search">Anbietersuche</router-link>
+        <router-link class="mr-6 menu-list" to="/public/search">Anbietersuche</router-link>
         <v-divider v-if="!currentUser" class="divider mr-3" :thickness="3" vertical color="blue" opacity="1"></v-divider>
         <router-link class="mr-6 menu-list" to="/login" v-if="!useUser().loggedIn()">Login / Registrieren</router-link>
         <v-divider v-if="currentUser" class="divider ml-3" :thickness="3" vertical color="blue" opacity="1"></v-divider>

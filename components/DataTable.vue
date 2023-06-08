@@ -50,8 +50,8 @@
             :notification-pre-filled-text="field.notificationPreFilledText"
             :notification-cta-link="field.notificationCtaLink"
           />
-          <span v-else-if="item[field.value] && field.enum_values && field.type === 'enum'">
-            {{ field.enum_values[item[field.value]] }}
+          <span v-else-if="item[field.value] && field.enum_name && field.type === 'enum'" :class="useEnums().getClassName(field.enum_name, item[field.value])">
+            {{ useEnums().getName(field.enum_name, item[field.value]) }}
           </span>
           <span v-else-if="field.type === 'array'">{{ item[field.value].join(', ') }}</span>
           <span v-else>{{ item[field.value] }}</span>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { useEnums } from '@/composables/data/enums'
 import { ResultStatus } from '@/types/serverCallResult'
 export default defineComponent({
   emits: ['close', 'openCreateEditDialog', 'openDeleteDialog'],
@@ -145,7 +146,8 @@ export default defineComponent({
       emitParent,
       handleEmitParent,
       move,
-      items
+      items,
+      useEnums
     }
   }
 })

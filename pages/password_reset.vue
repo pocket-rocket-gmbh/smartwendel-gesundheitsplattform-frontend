@@ -62,8 +62,6 @@ const passwordToken = computed(() => {
   return route.query.token
 })
 
-console.log(passwordToken)
-
 const getUserByToken = async () => {
   const result = await publicApi.call('get', `/users/find-by-token/${passwordToken.value}`)
 

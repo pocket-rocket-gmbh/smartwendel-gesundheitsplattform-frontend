@@ -12,6 +12,7 @@
 <script lang="ts" setup>
 const props = defineProps({
   category: {
+    type: Object,
     required: true
   },
 })
