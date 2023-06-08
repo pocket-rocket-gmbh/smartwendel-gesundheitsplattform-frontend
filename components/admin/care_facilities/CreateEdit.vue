@@ -71,7 +71,7 @@
                 :items="eventTyp"
                 item-title="name"
                 item-value="id"
-                label="Status"
+                label="Art"
                 single-line
               />
             </div>
@@ -144,22 +144,60 @@
               @setTags="setTags"
             />
           </div>
-          <div class="field" v-if="slotProps.item.kind === 'news'">
+          <div class="field" v-if="slotProps.item.kind !== 'facility'">
             <div class="mt-15 mb-5">
               <b>Veröffentlichkeitsdatum</b> (Hinterlegen Sie ein Veröffentlichkeitsdatum)
               </div>
-              <div class="mb-15">
-                <Datepicker
-                  inline
-                  autoApply
-                  :enableTimePicker="false"
-                  locale="de"
-                  v-model="slotProps.start_time"
-                  label="Projekt Start"
+              <div class="mb-15 justify-center">
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <Datepicker
+                      inline
+                      autoApply
+                      :enableTimePicker="false"
+                      locale="de"
+                      v-model="slotProps.item.start_time"
+                      label="Start"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <Datepicker
+                      inline
+                      autoApply
+                      :enableTimePicker="false"
+                      locale="de"
+                      v-model="slotProps.item.end_time"
+                      label="End"
+                    />
+                  </v-col>
+                </v-row>
+              </div>
+            </div>
+            <div v-if="slotProps.item.kind === 'news'" class="mb-15">
+              <b>Autor*</b> (Geben Sie Details als Verfasser an)
+              <div class="field">
+                <v-text-field
+                 
+                  hide-details="auto"
+                  label="Name*"
+                  :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
+                />
+              </div>
+              <div class="field split">
+                <v-text-field
+                 
+                  hide-details="auto"
+                  label="Telefonnummer"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+                <v-text-field
+                 
+                  hide-details="auto"
+                  label="E-Mail"
+                  :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
                 />
               </div>
             </div>
-
           <div class="mb-15" v-if="slotProps.item.kind !== 'news'">
             <div class="mt-15 mb-5">
               <div v-if="slotProps.item.kind === 'facility'">
@@ -308,8 +346,8 @@ export default defineComponent({
     ])
 
     const eventTyp = ref([
-      { name: 'Kurs', id: 'is_checked'},
-      { name: 'Veranstaltung', id: 'confirmed'}
+      { name: 'Kurs', id: ''},
+      { name: 'Veranstaltung', id: ''}
     ])
 
     const communitiesApi = useCollectionApi()
