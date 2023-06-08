@@ -8,11 +8,14 @@
             <div v-if="slotProps.item.kind === 'facility'">
               Hier können Sie eine eigene Detailseite für Ihre Einrichtung anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen. Klicken Sie hier, für eine beispielhafte Vorschau einer ausgebauten Einrichtungsseite.
             </div>
-            <div v-if="slotProps.item.kind === 'news'">
+            <div v-else-if="slotProps.item.kind === 'news'">
               Hier können Sie News oder Beiträge anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
             </div>
-            <div v-if="slotProps.item.kind === 'event'">
-              Hier können Sie eigene Kurse oder Veranstaltungen anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
+            <div v-else-if="slotProps.item.kind === 'event'">
+              Hier können Sie eigene Veranstaltungen anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
+            </div>
+            <div v-else-if="slotProps.item.kind === 'course'">
+              Hier können Sie eigene Kurse anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
             </div>
           </div>
           <div class="field" v-if="slotProps.item.kind === 'facility'">
