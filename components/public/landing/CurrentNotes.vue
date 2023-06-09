@@ -46,22 +46,30 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-btn
-      class="note-text-link mt-15"
-      size="small"
-      v-if="!showingAllArticles"
-      @click="showMoreArticles()"
-    >
-    Mehr anzeigen >
-    </v-btn>
-    <v-btn
-      v-if="showingAllArticles"
-      class="note-text-link mt-15"
-      size="small"
-      @click="showLessArticles()"
-    >
-    &lt; Weninger anzeigen
-    </v-btn>
+      <v-row>
+      <v-col cols="12" md="6" offset="5" class="mt-10">
+        <v-btn 
+          v-if="!showingAllArticles"
+          variant="outlined"
+          size="large"
+          rounded="pill"
+          color="primary"
+          @click="showMoreArticles()"
+          >
+          Mehr anzeigen
+        </v-btn>
+        <v-btn 
+          v-if="showingAllArticles"
+          variant="outlined"
+          size="large"
+          rounded="pill"
+          color="primary"
+          @click="showLessArticles()"
+          >
+          Weniger anzeigen
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
   </div>
 

@@ -16,7 +16,7 @@
       :key="currentCategoryId"
       color="is-primary"
       filter-name="subCategory"
-      label="Kategorie"
+      label="Schwerpunkt"
       :endpoint="`categories/${currentCategoryId}/sub_categories`"
     />
   </div>
@@ -27,7 +27,7 @@
       :key="currentSubCategoryId"
       color="is-primary"
       filter-name="subSubCategory"
-      label="Unter-Kategorie"
+      label="Schwerpunkt-Kategorie"
       :endpoint="`categories/${currentCategoryId}/sub_categories/${currentSubCategoryId}/sub_sub_categories`"
     />
   </div>

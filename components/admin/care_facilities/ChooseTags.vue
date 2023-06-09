@@ -1,7 +1,9 @@
 <template>
-  <div v-for="tag in tags" :key="tag.id" class="d-flex">
-    <v-checkbox v-model="tagIds" :value="tag.id">{{ tag.name }}</v-checkbox>
-  </div>
+  <v-row>
+    <v-col cols="6" md="4" v-for="(tag) in tags.slice(0, 10)" :key="tag.id">
+      <v-checkbox class="mb-n10" :label="tag.name" v-model="tagIds" :value="tag.id" />
+    </v-col>
+  </v-row>
 </template>
 
 <script setup lang="ts">

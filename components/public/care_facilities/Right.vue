@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="my-4">
+    <div class="my-4" v-if="careFacility.website">
       <v-btn 
         append-icon="mdi-open-in-new"
         variant="outlined"
@@ -31,12 +31,11 @@
         rounded="pill"
         color="primary"
         width="100%"
-        :href="careFacility.url"
+        :href="careFacility.website"
         target="_blank"
         >
           weitere Informationen 
     </v-btn>
- 
     </div>
     <div class="my-4">
       <v-btn

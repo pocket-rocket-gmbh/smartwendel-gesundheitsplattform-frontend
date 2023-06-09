@@ -28,7 +28,7 @@
       <div @click="choosenSubCategory = null" class="is-clickable mb-3"><v-icon>mdi-arrow-left</v-icon></div>
       <h3>Bereich {{ choosenCategory.name }}</h3>
       <h3>Kategorie {{ choosenSubCategory.name }}</h3>
-      <p class="my-3">Unter-Kategorien</p>
+      <p class="my-3">Unter-Kategorie</p>
       <div v-if="choosenSubCategory.sub_sub_categories.length > 0">
         <div class="item" v-for="subSubCategory in choosenSubCategory.sub_sub_categories" :key="subSubCategory.id">
           <div>

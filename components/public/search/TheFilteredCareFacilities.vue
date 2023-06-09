@@ -1,6 +1,9 @@
 <template>
   <Loading v-if="loading" />
   <div v-else-if="careFaclities.length > 0">
+    <div class="ml-2 my-2">
+      <span>{{ careFaclities.length }} Treffer</span>
+    </div>
     <div class="item mb-6" v-for="careFacility in careFaclities" :key="careFacility.id">
       <v-row>
         <v-col md="8">

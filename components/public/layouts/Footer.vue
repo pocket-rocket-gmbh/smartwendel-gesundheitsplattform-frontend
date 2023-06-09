@@ -48,7 +48,7 @@
               <v-icon>mdi-linkedin</v-icon>
           </v-btn>
           </div>
-            <div class="flex-column mt-10">
+            <div class="flex-column mt-10" v-if="!useUser().loggedIn()">
               <div>
                 Werden Sie Partner und registrieren Sie Ihre Institution
               </div>
