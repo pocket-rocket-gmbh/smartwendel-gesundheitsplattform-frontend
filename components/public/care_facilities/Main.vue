@@ -1,10 +1,7 @@
 <template>
   <div>
-    <h1 class="is-dark-grey">{{ careFacility.name }}</h1>
-    <div v-if="careFacility.kind" class="is-primary font-weight-bold">
-      {{ useKindsCareFacilities().getNameFromId(careFacility.kind) }}
-    </div>
-    <div class="mt-4" v-html="careFacility.description"></div>
+    <h1 class="is-dark-grey">{{ careFacility.name }}aa</h1>
+   <div class="mt-4" v-html="careFacility.description"></div>
   </div>
 </template>
 

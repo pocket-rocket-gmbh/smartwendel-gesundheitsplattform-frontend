@@ -54,9 +54,9 @@ const fields = ref([
   { text: '', type: 'move_up' },
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Name', value: 'name', type: 'string' },
-  { text: 'Status', value: 'status', type: 'string' },
-  { text: '', value: 'mdi-image-plus', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
-  { text: '', value: 'mdi-file-document-plus', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Bilder hinzufügen' },
+  { text: 'Status', type: 'enum', value: 'status', enum_name: 'facilitiesStatus'},
+  { text: '', value: 'mdi-image-plus-outline', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
+  { text: '', value: 'mdi-file-document-plus-outline', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Datei hinzufügen' },
   { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
 ])
 

@@ -9,16 +9,19 @@
           <p class="text-justify mt-5">
              Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher finden Sie unter mehr als 1.000 gelisteten Anbieten die Leistung, nach der Sie suchen. Informieren Sie sich über die Angebote oder nehmen Sie direkt Kontakt auf und vereinbaren Sie ihr persönliches Beratungsgespräch.
           </p>
-          <v-btn
-            variant="flat"
-            color="secondary"
-            rounded="pill"
-            class="mt-8"
-          >
-            <span class = "text-white">
-              Alle Einrichtungen
-            </span>
-        </v-btn>
+          <div class="my-5">
+            <v-btn 
+              variant="flat"
+              color="primary"
+              rounded="pill"
+              size="large"
+              @click="goToSearch()"
+              >
+              <span>
+                Alle Einrichtungen
+              </span>
+            </v-btn>
+          </div>
         </v-col>
         <v-col class="d-flex" md="6">
           <v-row>
@@ -46,13 +49,15 @@ import icon3 from '@/assets/images/categories/icon_care_facilities.png'
 import icon4 from '@/assets/images/categories/icon_doctor.png'
 import icon5 from '@/assets/images/categories/icon_fitness.png'
 import icon6 from '@/assets/images/categories/icon_hospitals.png'
-import icon7 from '@/assets/images/categories/icon_offices.png'
-import icon8 from '@/assets/images/categories/icon_pharmacies.png'
-import icon9 from '@/assets/images/categories/icon_retirement.png'
-import icon10 from '@/assets/images/categories/icon_school.png'
 
 export default defineComponent({
   setup() {
+    const router = useRouter()
+
+    const goToSearch = () => {
+      router.push({ path: '/public/search'})
+    }
+
     const items = [
         {
         'content': {
@@ -94,7 +99,7 @@ export default defineComponent({
 
     return {
       items,
-      
+      goToSearch
     }
   }
 })

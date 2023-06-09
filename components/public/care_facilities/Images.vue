@@ -13,7 +13,7 @@
         <v-row>
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
             <img class="image right-bottom" v-if="careFacility.sanitized_images[1]" :src="careFacility.sanitized_images[1].url" />
-              <v-btn class="show-more" @click="showGalery()" >alle Bilder zeigen</v-btn>
+              <v-btn class="show-more" v-if="careFacility.sanitized_images.length > 0" @click="showGalery()" >alle Bilder zeigen</v-btn>
           </v-col>
         </v-row>
       </v-col>

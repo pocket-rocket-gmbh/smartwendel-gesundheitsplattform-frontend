@@ -77,7 +77,7 @@
       </v-col>
     </v-row>
   </div>
-  <div  class="map-widget">
+  <div class="map-widget">
     <ClientOnly>
       <lazy-MapWidget
         :locations="locations"
@@ -130,7 +130,6 @@ export default defineComponent({
     const updateLocations = () => {
 
     locations.value = []
-
     facilities.value.forEach((facility) => {
       facility.locations.forEach((location: any) => {
         locations.value.push({
@@ -197,6 +196,8 @@ export default defineComponent({
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
   border-radius: 20px
 
+.map-widget
+  margin-top: -10px
 
 
 </style>

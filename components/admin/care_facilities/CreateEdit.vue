@@ -4,12 +4,43 @@
       <v-row>
         <v-col cols="12" md="8" offset="2">
           <!-- facility / news / event -->
-          <div class="pa-10" v-if="slotProps.kind === 'facility'">
-            Hier können Sie eine eigene Detailseite für Ihre Einrichtung anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen. Klicken Sie hier, für eine beispielhafte Vorschau einer ausgebauten Einrichtungsseite.
+          <div class="py-10">
+            <div v-if="slotProps.item.kind === 'facility'">
+              Hier können Sie eine eigene Detailseite für Ihre Einrichtung anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen. Klicken Sie hier, für eine beispielhafte Vorschau einer ausgebauten Einrichtungsseite.
+            </div>
+            <div v-else-if="slotProps.item.kind === 'news'">
+              Hier können Sie News oder Beiträge anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
+            </div>
+            <div v-else-if="slotProps.item.kind === 'event'">
+              Hier können Sie eigene Veranstaltungen anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
+            </div>
+            <div v-else-if="slotProps.item.kind === 'course'">
+              Hier können Sie eigene Kurse anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
+            </div>
+          </div>
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
+            <div class="mt-1 mb-15">
+              <b>Status</b>
+              <v-select
+                hide-details="auto"
+                v-model="slotProps.item.status"
+                :items="status"
+                item-title="name"
+                item-value="id"
+                label="Status"
+                single-line
+              />
+            </div>
           </div>
           <div class="field">
-            <div>
+            <div v-if="slotProps.item.kind === 'facility'">
               <b>Name der Einrichting*</b> (Hinterlegen Sie den Namen Ihrer Einrichtung)
+            </div>
+            <div v-if="slotProps.item.kind === 'news'">
+              <b>Titel*</b> (Hinterlegen Sie den Namen des Beitrags)
+            </div>
+            <div v-if="slotProps.item.kind === 'event'">
+              <b>Kurs-/ Veranstaltungsname*</b> (Hinterlegen Sie den Namen des Kurses oder der Veranstaltung)
             </div>
               <v-text-field
                 v-model="slotProps.item.name"
@@ -18,7 +49,7 @@
                 :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
               />
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
               <b>Logo</b>(Laden Sie das Logo Ihrer Einrichtung hoch)
             </div>
@@ -29,9 +60,33 @@
               @setImage="setLogo"
             />
           </div>
+          <div class="field" v-if="slotProps.item.kind === 'event'">
+            <div class="mt-15 mb-5">
+              <div>
+                <b> Art*</b> (Geben Sie an, ob es sich um einen Kurs oder um eine Veranstaltung handelt)
+              </div>
+              <v-select
+                hide-details="auto"
+                v-model="slotProps.item.status"
+                :items="eventTyp"
+                item-title="name"
+                item-value="id"
+                label="Art"
+                single-line
+              />
+            </div>
+          </div>
           <div class="field">
             <div class="mt-15 mb-5">
-              <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
+              <div v-if="slotProps.item.kind === 'facility'">
+                <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
+              </div>
+              <div v-if="slotProps.item.kind === 'news'">
+                <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
+              </div>
+              <div v-if="slotProps.item.kind === 'event'">
+                <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
+              </div>
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
@@ -40,8 +95,14 @@
             />
           </div>
           <div class="field">
-            <div class="mt-15 mb-5">
+            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'facility'">
               <b>Beschreibung*</b> (Beschreiben Sie Ihre Einrichtung ausführlich. Sie können auch Bilder und Videos einbinden)
+            </div>
+            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'news'">
+              <b>Beschreibung*</b> (Bearbeiten Sie den Inhalt Ihres Beitrages. Sie können auch Bilder und Videos einbinden)
+            </div>
+            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'event'">
+              <b>Beschreibung*</b> (Beschreiben Sie den Kurs oder die Veranstaltung ausführlich. Sie können auch Bilder und Videos einbinden)
             </div>
             <ClientOnly>
               <QuillEditor
@@ -54,15 +115,21 @@
             </ClientOnly>
           </div>
           <div class="field">
-            <div class="mt-15 mb-5">
+            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'facility'">
               <b>Tags zuordnen*</b> (Ordnen Sie Ihrer Einrichtung zielgruppengerechte Tags zu)
+            </div>
+            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'news'">
+              <b>Tags zuordnen*</b> (Ordnen Sie dem Beitrag zielgruppengerechte Filter zu)
+            </div>
+            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'event'">
+              <b>Tags zuordnen*</b> (Ordnen Sie dem Kurs oder der Veranstaltung zielgruppengerechte Filter zu)
             </div>
             <AdminCareFacilitiesChooseTags
               :pre-set-tag-ids="slotProps.item.tag_ids"
               @setCareFacilityTags="setCareFacilityTags"
             />
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
               <b>Filter zuordnen*</b> (Ordnen Sie Ihrer Einrichtung zielgruppengerechte Filter zu)
             </div>
@@ -77,9 +144,68 @@
               @setTags="setTags"
             />
           </div>
-          <div>
+          <div class="field" v-if="slotProps.item.kind !== 'facility'">
             <div class="mt-15 mb-5">
-              <b>Kontakt & Infos* </b>(Geben Sie weitere Details zu Ihrer Einrichtung an. Geben Sie bei der Adresse bitte den Hauptsitz Ihrer Einrichtung an)
+              <b>Veröffentlichkeitsdatum</b> (Hinterlegen Sie ein Veröffentlichkeitsdatum)
+              </div>
+              <div class="mb-15 justify-center">
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <Datepicker
+                      inline
+                      autoApply
+                      :enableTimePicker="false"
+                      locale="de"
+                      v-model="slotProps.item.start_time"
+                      label="Start"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <Datepicker
+                      inline
+                      autoApply
+                      :enableTimePicker="false"
+                      locale="de"
+                      v-model="slotProps.item.end_time"
+                      label="End"
+                    />
+                  </v-col>
+                </v-row>
+              </div>
+            </div>
+            <div v-if="slotProps.item.kind === 'news'" class="mb-15">
+              <b>Autor*</b> (Geben Sie Details als Verfasser an)
+              <div class="field">
+                <v-text-field
+                 
+                  hide-details="auto"
+                  label="Name*"
+                  :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
+                />
+              </div>
+              <div class="field split">
+                <v-text-field
+                 
+                  hide-details="auto"
+                  label="Telefonnummer"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+                <v-text-field
+                 
+                  hide-details="auto"
+                  label="E-Mail"
+                  :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
+                />
+              </div>
+            </div>
+          <div class="mb-15" v-if="slotProps.item.kind !== 'news'">
+            <div class="mt-15 mb-5">
+              <div v-if="slotProps.item.kind === 'facility'">
+                <b>Kontakt & Infos* </b>(Geben Sie weitere Details zu Ihrer Einrichtung an. Geben Sie bei der Adresse bitte den Hauptsitz Ihrer Einrichtung an)
+              </div>
+              <div v-if="slotProps.item.kind === 'event'">
+                <b>Kursanbieter*</b>(Geben Sie Details zu Ihrer Einrichtung als Kurs- oder Veranstaltungsanbieter an)
+              </div>
             </div>
             <div class="field">
               <v-text-field
@@ -130,7 +256,7 @@
               />
               </div>
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
               <b>Standorte </b> (Falls Ihre Einrichtung mehr als einen Standort besitzt, tragen Sie hier alle weiteren Standorte ein)
             </div>
@@ -139,7 +265,7 @@
               :item-id="slotProps.item.id"
               />
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
               <b>Öffnungszeiten </b> (Geben Sie Ihre Öffnungszeiten an.)
               <div class="field">
@@ -153,7 +279,7 @@
               </div>
             </div>
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-15">
               <b>Infobutton </b> (Tragen Sie den Link zu Ihrer eigenen Webseite ein. Falls Sie keine Webseite besitzen, lassen Sie dieses Feld einfach frei)
               <div class="field">
@@ -172,7 +298,10 @@
   </CreateEdit>
 </template>
 <script lang="ts">
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 export default defineComponent({
+  components: { Datepicker },
   setup() {
     const textOptions = ref({
       debug: false,
@@ -210,6 +339,16 @@ export default defineComponent({
       useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'file', value: image })
     }
 
+    const status = ref([
+      { name: 'In Prüfung', id: 'is_checked'},
+      { name: 'Freigegeben', id: 'confirmed'},
+      { name: 'Abgelehnt', id: 'rejected'}
+    ])
+
+    const eventTyp = ref([
+      { name: 'Kurs', id: ''},
+      { name: 'Veranstaltung', id: ''}
+    ])
 
     const communitiesApi = useCollectionApi()
     communitiesApi.setBaseApi(usePrivateApi())
@@ -233,7 +372,9 @@ export default defineComponent({
       setLogo,
       setCoverBild,
       setCareFacilityTags,
-      communities
+      communities,
+      status,
+      eventTyp
     }
   }
 })

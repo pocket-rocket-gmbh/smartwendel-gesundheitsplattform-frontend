@@ -73,7 +73,7 @@ export default defineComponent({
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .bg-gradient
-  background: linear-gradient(90.63deg, #00783B 6.11%, #009E55 36.69%, #006B38 89.88%)
+  background: linear-gradient(85.85deg, #91A80D 5.31%, #BAC323 35.73%, #9EA100 77.83%)
 
 
 </style>

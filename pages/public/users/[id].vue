@@ -1,16 +1,17 @@
 <template>
-  <div class="box">
-    <div class="main" v-if="item">
-      <div class="headline mb-3">Hallo {{ item.firstname }} {{ item.lastname }}</div>
-      <div class="mb-3">Willkommen in Deinem persönlichen Account. Hier kannst du deine Daten und dein Passwort ändern.</div>
-      <v-divider class="mb-10"></v-divider>
-      <v-row justify="center">
-        <v-col
-        cols="12"
-        xs="12"
-        md="6"
-        lg="6"
-        >
+  <v-container>
+    <div class="box my-15">
+      <div class="main" v-if="item">
+        <div class="headline mb-3">Hallo {{ item.firstname }} {{ item.lastname }}</div>
+          <div class="mb-3">Willkommen in Deinem persönlichen Account. Hier kannst du deine Daten und dein Passwort ändern.</div>
+          <v-divider class="mb-10"></v-divider>
+          <v-row justify="center">
+            <v-col
+            cols="12"
+            xs="12"
+            md="6"
+            lg="6"
+            >
           <div class="mb-4">Persönliche Daten</div>
           <v-text-field 
             v-model="item.firstname"
@@ -59,6 +60,9 @@
       </v-row>
     </div>
   </div>
+
+  </v-container>
+
 </template>
 
 <script lang="ts">

@@ -6,7 +6,9 @@
     <v-row>
       <v-col  v-for="(item, index) in items" :key="index">
         <div class="justify-center text-center align-center">
-          <img class="is-clickable" :src="item.content.image" width="130" />
+          <div class="icons d-flex justify-center align-center ma-5">
+            <img class="is-clickable" :src="item.content.image" min-width="50" max-width="50"/>
+          </div>
         <h3 class="is-dark-grey my-5 font-weight-bold" >
           {{ item.content.heading }}
         </h3>
@@ -24,8 +26,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import image1 from '@/assets/images/help-links/icon_ambulance.png'
-import image2 from '@/assets/images/help-links/icon_telephone.png'
-import image3 from '@/assets/images/help-links/icon-calender.png'
+import image2 from '@/assets/images/help-links/icon_suitcase.png'
+import image3 from '@/assets/images/help-links/icon_pinmap.png'
 export default defineComponent({
   setup() {
     const items = [
