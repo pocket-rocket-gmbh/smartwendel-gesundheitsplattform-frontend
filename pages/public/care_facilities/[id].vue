@@ -20,6 +20,7 @@
         </div>
       </v-col>
     </v-row>
+    {{ careFacility?.kind }}
     <div class="divider my-10"></div>
     <v-row>
       <v-col>

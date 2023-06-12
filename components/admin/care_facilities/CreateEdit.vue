@@ -140,7 +140,7 @@
                       autoApply
                       :enableTimePicker="false"
                       locale="de"
-                      v-model="slotProps.item.start_time"
+                      v-model="slotProps.item.course_start"
                       label="Start"
                     />
                   </v-col>
@@ -150,7 +150,7 @@
                       autoApply
                       :enableTimePicker="false"
                       locale="de"
-                      v-model="slotProps.item.end_time"
+                      v-model="slotProps.item.course_end"
                       label="End"
                     />
                   </v-col>

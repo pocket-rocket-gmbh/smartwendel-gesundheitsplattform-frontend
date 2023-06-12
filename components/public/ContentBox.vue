@@ -19,24 +19,13 @@
         <v-card-actions>
           <div class="content-footer">
             <v-btn
-              v-if="itemType === 'news'"
+              v-if="itemType === 'news' || itemType === 'events'"
               color="secondary"
               class="note-text-link"
               size="small"
-              :href="'https://' + item.url"
-              target="_blank"
+              :href="`/public/care_facilities/${item?.id}`"
               >
-              Mehr erfahren news >
-            </v-btn>
-            <v-btn
-              v-if="itemType === 'events'"
-              color="secondary"
-              class="note-text-link"
-              size="small"
-              :href="'https://' + item.url"
-              target="_blank"
-              >
-              Mehr erfahren events >
+              Mehr erfahren >
             </v-btn>
             <v-btn
               v-if="item.url"
