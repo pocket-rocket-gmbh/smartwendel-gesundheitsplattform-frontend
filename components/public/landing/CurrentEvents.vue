@@ -23,33 +23,12 @@
         </v-col>
       </v-row>
     </div>
-  <div>
-  <v-row>
-    <v-col md="6" class="d-flex justify-start align-center" v-for="(item, index) in limitedCategories" :key="index">
-      <v-card class="rounded-xl">
-        <div class="d-flex notes-card">
-          <img class="is-clickable" :src="item?.content.image" />
-          <div>
-            <v-card-title class="note-title is-primary">
-              {{ item.content.heading }}
-            </v-card-title>
-            <div class="px-5 pb-5">
-              <p>{{ item.content.description }}</p>
-            </div>
-            <v-card-actions>
-              <v-btn
-                color="secondary"
-                class="note-text-link"
-                size="small"
-              >
-              Mehr erfahren >
-              </v-btn>
-            </v-card-actions>
-          </div>
-        </div>
-      </v-card>
-    </v-col>
-    </v-row>
+    <PublicContentBox
+      v-for="courses in eventArticles" :key="courses.id"
+      :item="courses"
+      :item-type="'events'"
+    />
+  <!-- <div>
     <v-row>
       <v-col cols="12" md="6" offset="5" class="mt-10">
         <v-btn 
@@ -74,67 +53,34 @@
         </v-btn>
       </v-col>
     </v-row>
-    </div>  
+    </div>   -->
   </div>
  
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import image1 from '@/assets/images/current-notes/affenpocken.png'
-import image2 from '@/assets/images/current-notes/pexels.png'
 export default defineComponent({
   setup() {
+  const loading = ref(false)
+  const eventArticles = ref(null)
 
-    const articleLimit = ref(2)
-    const showingAllArticles = ref(false)
+  const listApi = useCollectionApi()
+  listApi.setBaseApi(usePublicApi())
 
-    const items = [
-        {
-        'content': {
-          heading: 'Rückenfit',
-          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et ...',
-          image: image1,
-          link: ''
-          }
-        },
-        {
-        'content': {
-          heading: 'Yoga für Einsteiger',
-          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et ...',
-          image: image2,
-          link: ''
-          }
-        },
-        {
-        'content': {
-          heading: 'test',
-          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et ...',
-          image: image2,
-          link: ''
-          }
-        }
-      ]
-      
-      const limitedCategories = computed(() => { 
-        return articleLimit.value ? items.slice(0,articleLimit.value) : articleLimit.value
-      })
+  const getCoursesArticles = async () => {
+      listApi.setEndpoint(`care_facilities?kind=event`)
+      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
+      loading.value = true
+      await listApi.retrieveCollection(options)
+      loading.value = false
+      console.log(listApi.items.value)
+      eventArticles.value = listApi.items.value as any
+    }
 
-      const showMoreArticles = () => {
-        articleLimit.value = 99
-        showingAllArticles.value = true
-      }
-
-      const showLessArticles = () => {
-        articleLimit.value = 2
-        showingAllArticles.value = false
-      }
-
+    onMounted(() => {
+      getCoursesArticles()
+  })
       return {
-      items,
-      showMoreArticles,
-      showLessArticles,
-      limitedCategories,
-      showingAllArticles
+        eventArticles,
     }
   },
 })

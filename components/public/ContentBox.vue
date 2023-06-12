@@ -18,31 +18,51 @@
         <v-spacer></v-spacer>
         <v-card-actions>
           <div class="content-footer">
-          <v-btn
-            v-if="item.url"
-            color="secondary"
-            class="note-text-link"
-            size="small"
-            :href="'https://' + item.url"
-            target="_blank"
-          >
-            Mehr erfahren >
-          </v-btn>
-        </div>
+            <v-btn
+              v-if="itemType === 'news'"
+              color="secondary"
+              class="note-text-link"
+              size="small"
+              :href="'https://' + item.url"
+              target="_blank"
+              >
+              Mehr erfahren news >
+            </v-btn>
+            <v-btn
+              v-if="itemType === 'events'"
+              color="secondary"
+              class="note-text-link"
+              size="small"
+              :href="'https://' + item.url"
+              target="_blank"
+              >
+              Mehr erfahren events >
+            </v-btn>
+            <v-btn
+              v-if="item.url"
+              color="secondary"
+              class="note-text-link"
+              size="small"
+              :href="'https://' + item.url"
+              target="_blank"
+              >
+              Mehr erfahren >
+            </v-btn>
+          </div>
         </v-card-actions>
       </div>
     </div>
   </v-card>
 </v-col>
-
-
-  
 </template>
 <script lang="ts" setup>
 defineProps({
   item: {
     type: Object,
     required: true
+  },
+  itemType: {
+    type: String,
   }
 })
 

@@ -18,7 +18,7 @@
               Hier können Sie eigene Kurse anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
             </div>
           </div>
-          <div class="field" v-if="slotProps.item.kind === 'facility'">
+          <div class="field">
             <div class="mt-1 mb-15">
               <b>Status</b>
               <v-select

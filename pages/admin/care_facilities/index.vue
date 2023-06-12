@@ -62,6 +62,7 @@ const itemPlaceholder = ref({
   name: '',
   kind: 'facility',
   is_active: false,
+  status: 'is_checked',
   description: '',
   category_ids: []
 })

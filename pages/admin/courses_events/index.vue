@@ -40,7 +40,7 @@ const fields = ref([
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Beginn', value: 'course_start', type: 'datetime' },
   { text: 'Ende', value: 'course_end', type: 'datetime' },
-  { text: 'Status', value: '', type: 'string' },
+  { text: 'Status', type: 'enum', value: 'status', enum_name: 'facilitiesStatus'},
   { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
 ])
 
@@ -51,6 +51,7 @@ const itemId = ref(null)
 const itemPlaceholder = ref({
   name: '',
   kind: 'event',
+  status: 'is_checked',
   is_active: false,
   description: '',
   category_ids: []
