@@ -19,9 +19,12 @@
         <v-card-actions>
           <div class="content-footer">
           <v-btn
+            v-if="item.url"
             color="secondary"
             class="note-text-link"
             size="small"
+            :href="'https://' + item.url"
+            target="_blank"
           >
             Mehr erfahren >
           </v-btn>

@@ -60,7 +60,6 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn
-          text
           @click="emitClose()"
         >
           Schließen
@@ -107,7 +106,7 @@ export default defineComponent({
       scope: 'care_facility'
     })
 
-    const openAddSubSubCategoriesDialog = (id:any) => {
+    const openAddSubSubCategoriesDialog = (id:String) => {
       itemId.value = id
       addSubSubCategoriesDialogOpen.value = true
     }
