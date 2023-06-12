@@ -1,7 +1,12 @@
 <template>
   <div class="my-5">
     <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
-      <p class="px-5 is-clickable is-dark-grey" v-for="item in subCategories" @click="setSubCategoryAndScroll(item.id)"><span :class="[(selectedId ===  item.id ? 'text-decoration-underline' : '')]" v-if="item?.sub_sub_categories.length > 0">{{ item?.name }}</span></p>
+      <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item.id)">
+        <div>
+          <span class="px-5 is-clickable is-dark-grey" :class="[(selectedId ===  item.id ? 'text-decoration-underline' : '')]" v-show="item.sub_sub_categories.length > 0">{{ item?.name }}
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
