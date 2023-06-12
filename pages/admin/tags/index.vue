@@ -38,8 +38,6 @@ export default defineComponent({
       layout: "admin",
     })
     const fields = ref([
-      { text: '', type: 'move_down' },
-      { text: '', type: 'move_up' },
       { text: 'Name', value: 'name', type: 'string' },
     ])
 

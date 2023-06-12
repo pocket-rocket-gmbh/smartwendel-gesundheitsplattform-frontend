@@ -25,9 +25,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import image1 from '@/assets/images/help-links/icon_ambulance.png'
-import image2 from '@/assets/images/help-links/icon_suitcase.png'
-import image3 from '@/assets/images/help-links/icon_pinmap.png'
+import image1 from '@/assets/images/help-links/icon_ambulance.svg'
+import image2 from '@/assets/images/help-links/icon_suitcase.svg'
+import image3 from '@/assets/images/help-links/icon_pinmap.svg'
 export default defineComponent({
   setup() {
     const items = [

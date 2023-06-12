@@ -33,8 +33,6 @@ definePageMeta({
 })
 
 const fields = ref([
-  { text: '', type: 'move_down' },
-  { text: '', type: 'move_up' },
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Titel', value: 'name', type: 'string' },
   { text: 'Bereich', value: '', type: 'string' },
