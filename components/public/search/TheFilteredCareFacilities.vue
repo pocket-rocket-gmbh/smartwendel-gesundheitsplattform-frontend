@@ -72,6 +72,7 @@ export default defineComponent({
     const searchQuery = ref(null)
     const loading = ref(false)
     const filter = props.filterCriteria
+    const facilityIdFilter = ref(null);
 
     const currentCategoryId = computed(() => {
       return useFilterStore().currentCategoryId
@@ -99,12 +100,12 @@ export default defineComponent({
         } else {
           updateFilters(toUpdate)
         }
-        getCareFacilities()
+        getCareFacilities("updateFacilitiesBasedOnFilterChange")
       })
 
       useNuxtApp().$bus.$on("emitFacilitySearch", (query:string) => {
         searchQuery.value = query
-        getCareFacilities()
+        getCareFacilities("emitFacilitySearch")
       })
     }
 
@@ -143,12 +144,19 @@ export default defineComponent({
       }
     }
 
-    const getCareFacilities = async () => {
+    const getCareFacilities = async (from?:string) => {
+      console.log("called from", from)
       loading.value = true
       const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: filter, searchQuery: searchQuery.value, concat: false, filters: filters.value }
       await careFaclitiesApi.retrieveCollection(options as any)
       careFaclities.value = careFaclitiesApi.items.value
       loading.value = false
+
+      if(facilityIdFilter.value) {
+        careFaclities.value = careFaclities.value.filter(facility => facility.id === facilityIdFilter.value)
+      }
+
+      useNuxtApp().$bus.$emit('facilitiesUpdated', careFaclities.value)
     }
 
     onMounted(() => {
@@ -161,16 +169,23 @@ export default defineComponent({
       if (currentSubSubCategoryId.value) {
         updateFilters('currentSubSubCategoryId')
       }
-      getCareFacilities()
+      getCareFacilities("mount")
     })
 
+    const showCareFacilityInMap = async (careFacilityId: string) => {
+      facilityIdFilter.value = careFacilityId;
+      await getCareFacilities("click")
+      facilityIdFilter.value = null;
+    }
+
     watch(filter as any, () => {
-      getCareFacilities()
+      getCareFacilities("watch")
     })
 
     return {
       careFaclities,
-      loading
+      loading,
+      showCareFacilityInMap
     }
   }
 })

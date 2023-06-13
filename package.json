@@ -24,6 +24,7 @@
     "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.4.0",
     "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
     "luxon": "^3.3.0",
     "mitt": "^3.0.0",
     "nuxt-icons": "^3.2.1",

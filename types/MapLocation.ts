@@ -3,5 +3,7 @@ export type MapLocation = {
     longitude: number,
     latitude: number,
     draggable: boolean,
-    tooltipHtml: string
+    name: string,
+    imageUrl?: string,
+    url: string,
   }
