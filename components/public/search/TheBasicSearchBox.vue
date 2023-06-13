@@ -42,14 +42,7 @@
         </v-btn>
       </v-col>
       <v-col class="d-flex justify-end">
-        <v-btn
-          class="mx-3"
-          variant="outlined"
-          size="large"
-          rounded="pill"
-          color="white"
-          @click="filterStore.clearSearch()"
-        >
+        <v-btn class="mx-3" variant="outlined" size="large" rounded="pill" color="white" @click="emitResetFilter()">
           Felder löschen
         </v-btn>
         <v-btn variant="flat" color="white" rounded="pill" size="large" @click="emitSearch()">
@@ -59,75 +52,151 @@
     </v-row>
   </div>
   <div class="map-widget">
-    <ClientMap
-      :locations="locations"
-      v-if="showingMap"
-      ref="map"
-      :auto-fit="false"
-      :center-point="{
-        lng: 7.131735,
-        lat: 49.523656,
-      }"
-      :min-zoom="11"
-    />
+    <ClientOnly>
+      <MapWidget
+        :locations="locations"
+        v-if="showingMap"
+        ref="map"
+        :auto-fit="false"
+        :center-point="{
+          lng: 7.131735,
+          lat: 49.523656,
+        }"
+        :min-zoom="11"
+      />
+    </ClientOnly>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts">
+import { useFilterStore } from "@/store/filter";
 import { MapLocation } from "@/types/MapLocation";
-import { useFilterStore } from "~/store/facilitySearchFilter";
+import axios from "axios";
 
-const filterStore = useFilterStore();
+export default defineComponent({
+  setup() {
+    const searchQuery = ref("");
+    const filterStore = useFilterStore();
+    const showingMap = ref(true);
+    const map = ref(null);
+    const locations = ref<MapLocation[]>([]);
 
-const showingMap = ref(true);
-const map = ref(null);
-const locations = ref<MapLocation[]>([]);
+    const api = useCollectionApi();
+    api.setBaseApi(usePublicApi());
+    api.setEndpoint("care_facilities");
+    let facilities = api.items;
 
-watch(
-  () => filterStore.careFaclities,
-  () => updateLocations()
-);
-
-const getLocationsFromFacilies = async (facilities: any[]) => {
-  locations.value = [];
-
-  for (const facility of facilities) {
-    if (facility.latitude && facility.longitude) {
-      locations.value.push({
-        id: facility.id,
-        longitude: parseFloat(facility.longitude),
-        latitude: parseFloat(facility.latitude),
-        draggable: false,
-        name: facility.name,
-        url: `care_facilities/${facility.id}`,
-        imageUrl: facility.logo_url,
+    if (useNuxtApp().$bus) {
+      useNuxtApp().$bus.$on("clearSearch", () => {
+        searchQuery.value = "";
+      });
+      useNuxtApp().$bus.$on("facilitiesUpdated", (updatedFacilities: any) => {
+        facilities.value = updatedFacilities;
+        updateLocations();
       });
     }
 
-    facility.locations.forEach((location: any) => {
-      locations.value.push({
-        id: facility.id,
-        longitude: parseFloat(location.longitude),
-        latitude: parseFloat(location.latitude),
-        draggable: false,
-        name: facility.name,
-        url: `care_facilities/${facility.id}`,
-        imageUrl: facility.logo_url,
-      });
+    onMounted(() => {
+      getfacilities(false);
     });
-  }
-};
 
-const updateLocations = () => {
-  getLocationsFromFacilies(filterStore.careFaclities);
-};
+    const getfacilities = async (concat = false) => {
+      await api.retrieveCollection();
+      updateLocations();
+    };
 
-const mapToogle = () => {
-  showingMap.value = !showingMap.value;
-};
+    const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
+      const { data } = await axios.get(
+        `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`
+      );
 
-const emitSearch = () => {
-  filterStore.loadCareFacilities();
-};
+      if (!data.length) {
+        return null;
+      }
+
+      const bestResult = data[0];
+
+      return [bestResult.lat, bestResult.lon];
+    };
+
+    const getLocationsFromFacilies = async (facilities: any[]) => {
+      locations.value = [];
+
+      // locations.value wird doppelt genommen weil der filter doppelt geupdated wird, und weil das hier in nem async context ist wird das leider nicht neu geleert
+
+      for (const facility of facilities) {
+        if (facility.zip && facility.street) {
+          const response = await getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
+
+          if (response) {
+            const [lat, lon] = response;
+
+            locations.value.push({
+              id: facility.id,
+              latitude: lat,
+              longitude: lon,
+              name: facility.name,
+              draggable: false,
+              url: facility.website,
+              imageUrl: facility.logo_url,
+            });
+          }
+        }
+
+        facility.locations.forEach((location: any) => {
+          locations.value.push({
+            id: facility.id,
+            longitude: parseFloat(location.longitude),
+            latitude: parseFloat(location.latitude),
+            draggable: false,
+            name: facility.name,
+            url: `care_facilities/${facility.id}`,
+            imageUrl: facility.logo_url,
+          });
+        });
+      }
+    };
+
+    const updateLocations = () => {
+      getLocationsFromFacilies(facilities.value);
+    };
+
+    const emitResetFilter = () => {
+      useFilterStore().$patch({
+        currentCategoryId: null,
+        currentSubCategoryId: null,
+        currentSubSubCategoryId: null,
+        currentTags: null,
+      });
+      useNuxtApp().$bus.$emit("updateFacilitiesBasedOnFilterChange", null);
+      useNuxtApp().$bus.$emit("clearSearch", null);
+      useNuxtApp().$bus.$emit("clearTags", null);
+    };
+
+    const mapToogle = () => {
+      showingMap.value = !showingMap.value;
+    };
+    const currentCategoryId = computed(() => {
+      return filterStore.currentCategoryId;
+    });
+
+    const emitSearch = () => {
+      useNuxtApp().$bus.$emit("emitFacilitySearch", searchQuery.value);
+    };
+
+    return {
+      useFilterStore,
+      searchQuery,
+      currentCategoryId,
+      emitSearch,
+      showingMap,
+      map,
+      mapToogle,
+      emitResetFilter,
+      locations,
+      facilities,
+    };
+  },
+});
 </script>
 
 <style lang="sass" scoped>
