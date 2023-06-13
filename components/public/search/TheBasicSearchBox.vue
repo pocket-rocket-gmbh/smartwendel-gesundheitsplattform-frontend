@@ -52,19 +52,17 @@
     </v-row>
   </div>
   <div class="map-widget">
-    <ClientOnly>
-      <MapWidget
-        :locations="locations"
-        v-if="showingMap"
-        ref="map"
-        :auto-fit="false"
-        :center-point="{
-          lng: 7.131735,
-          lat: 49.523656,
-        }"
-        :min-zoom="11"
-      />
-    </ClientOnly>
+    <MapWidget
+      :locations="locations"
+      v-if="showingMap"
+      ref="map"
+      :auto-fit="false"
+      :center-point="{
+        lng: 7.131735,
+        lat: 49.523656,
+      }"
+      :min-zoom="11"
+    />
   </div>
 </template>
 <script lang="ts">
