@@ -3,7 +3,7 @@
 
   <div class="mb-4">
     <PublicFilterSelect
-      :key="currentCategoryId"
+      :key="filterStore.currentCategoryId"
       color="is-primary"
       filter-name="category"
       label="Bereich"
@@ -12,29 +12,29 @@
   </div>
   <div class="mb-4">
     <PublicFilterSelect
-      :disabled="!currentCategoryId"
-      :key="currentCategoryId"
+      :disabled="!filterStore.currentCategoryId"
+      :key="filterStore.currentCategoryId"
       color="is-primary"
       filter-name="subCategory"
       label="Schwerpunkt"
-      :endpoint="`categories/${currentCategoryId}/sub_categories`"
+      :endpoint="`categories/${filterStore.currentCategoryId}/sub_categories`"
     />
   </div>
 
   <div class="mb-4">
     <PublicFilterSelect
-      :disabled="!currentSubCategoryId || !currentCategoryId"
-      :key="currentSubCategoryId"
+      :disabled="!filterStore.currentSubCategoryId || !filterStore.currentCategoryId"
+      :key="filterStore.currentSubCategoryId"
       color="is-primary"
       filter-name="subSubCategory"
       label="Schwerpunkt-Kategorie"
-      :endpoint="`categories/${currentCategoryId}/sub_categories/${currentSubCategoryId}/sub_sub_categories`"
+      :endpoint="`categories/${filterStore.currentCategoryId}/sub_categories/${filterStore.currentSubCategoryId}/sub_sub_categories`"
     />
   </div>
   <div>Weitere Auswahlmöglichkeiten</div>
   <PublicTagSelect />
   <div>
-    <v-btn 
+    <v-btn
       prepend-icon="mdi-trash-can-outline"
       size="small"
       class="mt-4"
@@ -42,46 +42,22 @@
       color="secondary"
       rounded="pill"
       @click="emitResetFilter"
-        >
-        Alle Filter löschen
+    >
+      Alle Filter löschen
     </v-btn>
   </div>
-    
 </template>
 
-<script lang="ts">
-import { useFilterStore } from '@/store/filter'
-export default defineComponent({
-  setup () {
-    const currentCategoryId = computed(() => {
-      return useFilterStore().currentCategoryId
-    })
-    const currentSubCategoryId = computed(() => {
-      return useFilterStore().currentSubCategoryId
-    })
+<script setup lang="ts">
+import { useFilterStore } from "~/store/facilitySearchFilter";
 
-    const emitResetFilter = () => {
-      useFilterStore().$patch({
-        'currentCategoryId': null,
-        'currentSubCategoryId': null,
-        'currentSubSubCategoryId': null,
-        'currentTags': null
-      })
-      useNuxtApp().$bus.$emit('updateFacilitiesBasedOnFilterChange', null)
-      useNuxtApp().$bus.$emit('clearSearch', null)
-      useNuxtApp().$bus.$emit('clearTags', null)
-    }
+const filterStore = useFilterStore();
 
-    return {
-      currentCategoryId,
-      currentSubCategoryId,
-      emitResetFilter
-    }
-  }
-})
+const emitResetFilter = () => {
+  filterStore.clearSearch();
+};
 </script>
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
-
 </style>

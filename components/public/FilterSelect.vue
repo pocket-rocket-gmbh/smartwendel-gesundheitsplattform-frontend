@@ -8,98 +8,59 @@
   </div>
 </template>
 
-<script lang="ts">
-import { useFilterStore } from '@/store/filter'
-export default defineComponent({
-  props: {
-    label: {
-      type: String,
-      required: false
-    },
-    endpoint: {
-      type: String,
-      required: true
-    },
-    preSelectedValue: {
-      type: String,
-      required: false
-    },
-    filterName: {
-      type: String,
-      required: true
-    },
-    color: {
-      type: String,
-      required: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props) {
-    const loading = ref(false)
-    const selected = ref('')
-    const items = ref([])
+<script setup lang="ts">
+import { CategoriesFilter, useFilterStore } from "~/store/facilitySearchFilter";
 
-    const setSelectValue = (e:any) => {
-      if (props.filterName === 'category') {
-        useFilterStore().$patch({
-          'currentCategoryId': e.target.value,
-          'currentSubCategoryId': null,
-          'currentSubSubCategoryId': null
-        })
-      }
-      if (props.filterName === 'subCategory') {
-        useFilterStore().$patch({
-          'currentSubCategoryId': e.target.value,
-          'currentSubSubCategoryId': null
-        })
-      }
-      if (props.filterName === 'subSubCategory') {
-        useFilterStore().$patch({
-          'currentSubSubCategoryId': e.target.value
-        })
-      }
+const props = defineProps<{
+  label: string;
+  endpoint: string;
+  filterName: CategoriesFilter;
+  preSelectedValue?: string;
+  color?: string;
+  disabled?: boolean;
+}>();
 
-      useNuxtApp().$bus.$emit('updateFacilitiesBasedOnFilterChange', props.filterName)
-    }
+const filterStore = useFilterStore();
 
-    const api = useCollectionApi()
-    api.setBaseApi(usePublicApi())
-    api.setEndpoint(props.endpoint)
+const selected = ref("");
+const items = ref([]);
 
-    const getItems = async () => {
-      loading.value = true
-      const options = { page: 1, per_page: 25, sort_by: 'name', sort_order: 'asc', searchQuery: null, concat: false, filters: [] }
-      await api.retrieveCollection(options)
-      items.value = api.items.value as any
-      loading.value = false
-    }
+const setSelectValue = (e: Event) => {
+  filterStore.updateCategoriesFilter(props.filterName, (e.target as HTMLSelectElement).value);
+};
 
-    onMounted(async () => {
-      if (!props.disabled) {
-        await getItems()
-      }
+const getItems = async () => {
+  const api = useCollectionApi();
+  api.setBaseApi(usePublicApi());
+  api.setEndpoint(props.endpoint);
 
-      // pre set values
-      if (props.filterName === 'category' && useFilterStore().currentCategoryId) {
-        selected.value = useFilterStore().currentCategoryId
-      }
+  const options = {
+    page: 1,
+    per_page: 25,
+    sort_by: "name",
+    sort_order: "asc",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any[],
+  };
+  await api.retrieveCollection(options);
+  items.value = api.items.value as any;
+};
 
-      if (props.filterName === 'subCategory' && useFilterStore().currentSubCategoryId) {
-        selected.value = useFilterStore().currentSubCategoryId
-      }
-    })
+onMounted(async () => {
+  if (!props.disabled) {
+    await getItems();
+  }
 
-    return {
-      setSelectValue,
-      items,
-      selected
-    }
-  },
-})
+  // pre set values
+  if (props.filterName === "category" && filterStore.currentCategoryId) {
+    selected.value = useFilterStore().currentCategoryId;
+  }
+
+  if (props.filterName === "subCategory" && useFilterStore().currentSubCategoryId) {
+    selected.value = useFilterStore().currentSubCategoryId;
+  }
+});
 </script>
 
-<style lang="sass" scoped>
-</style>
+<style lang="sass" scoped></style>
