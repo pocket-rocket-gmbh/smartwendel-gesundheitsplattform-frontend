@@ -70,6 +70,8 @@ const setFilterAndMove = (categoryId: string, subCategoryId: string) => {
     filterStore.updateCategoriesFilter("subCategory", subCategoryId);
   }
 
+  console.log(categoryId, subCategoryId);
+
   router.push({ path: "/public/search" });
 };
 
@@ -87,6 +89,7 @@ const filteredCategories = computed(() => {
     return nameMatch || subCategoryMatch;
   });
 
+  console.log(filtered);
   return filtered;
 });
 
