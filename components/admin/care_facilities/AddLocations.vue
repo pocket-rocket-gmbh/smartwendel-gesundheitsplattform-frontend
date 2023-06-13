@@ -24,7 +24,9 @@
                   longitude: parseFloat(location.longitude),
                   latitude: parseFloat(location.latitude),
                   draggable: true,
-                  tooltipHtml: ''
+                  name: careFacility.name,
+                  url: careFacility.website,
+                  imageUrl: careFacility.logo_url
                   })">mdi-pencil</v-icon>
               </td>
               <td><v-icon class="is-clickable" @click="deleteLocation(location.id)">mdi-delete</v-icon></td>

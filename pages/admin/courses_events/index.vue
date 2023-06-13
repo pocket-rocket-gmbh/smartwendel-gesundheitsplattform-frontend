@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Kurse und Veranstaltungen</h2>
-    <v-btn elevation="0" variant="outlined" @click="itemPlaceholder.kind = 'course'; itemId = null; createEditDialogOpen = true">Kurs anlegen</v-btn>
+    <v-btn elevation="0" variant="outlined" class="mr-5" @click="itemPlaceholder.kind = 'course'; itemId = null; createEditDialogOpen = true">Kurs anlegen</v-btn>
     <v-btn elevation="0" variant="outlined" @click="itemPlaceholder.kind = 'event'; itemId = null; createEditDialogOpen = true">Vernanstaltung anlegen</v-btn>
     <DataTable
       :fields="fields"

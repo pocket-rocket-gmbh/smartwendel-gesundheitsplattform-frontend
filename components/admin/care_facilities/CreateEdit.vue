@@ -60,22 +60,6 @@
               @setImage="setLogo"
             />
           </div>
-          <div class="field" v-if="slotProps.item.kind === 'event'">
-            <div class="mt-15 mb-5">
-              <div>
-                <b> Art*</b> (Geben Sie an, ob es sich um einen Kurs oder um eine Veranstaltung handelt)
-              </div>
-              <v-select
-                hide-details="auto"
-                v-model="slotProps.item.status"
-                :items="eventTyp"
-                item-title="name"
-                item-value="id"
-                label="Art"
-                single-line
-              />
-            </div>
-          </div>
           <div class="field">
             <div class="mt-15 mb-5">
               <div v-if="slotProps.item.kind === 'facility'">

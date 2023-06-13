@@ -5,368 +5,312 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, onMounted, onUnmounted } from 'vue'
-import * as L from "leaflet"
-import { MapLocation } from '@/types/MapLocation'
+<script setup lang="ts">
+import { PropType, onMounted, onUnmounted } from "vue";
+import { LatLngExpression, Map } from "leaflet";
+import { MapLocation } from "@/types/MapLocation";
 
-class LocationMarker extends L.Marker {
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-  id: string
-
-  constructor(id: string, latLng: L.LatLngExpression, options?: L.MarkerOptions) {
-    super(latLng, options)
-    this.id = id
-  }
-
-  getId() {
-    return this.id
-  }
-}
-
-export default defineComponent({
-  name: 'MapWidget',
-  props: {
-    zoomControl: {
-      type: Boolean,
-      default: true
-    },
-    minZoom: {
-      type: Number,
-      default: 1
-    },
-    maxZoom: {
-      type: Number,
-      default: 17
-    },
-    defaultZoom: {
-      type: Number
-    },
-    autoFit: {
-      type: Boolean,
-      default: false
-    },
-    locations: {
-      type: Array as PropType<MapLocation[]>,
-      default(): MapLocation[] {
-        return []
-      }
-    },
-    centerPoint: {
-      type: Object as PropType<L.LatLngExpression>
-    },
-    zoom: {
-      type: Boolean,
-      default: true
-    },
-    centerZoom: {
-      type: Boolean,
-      default: false
-    },
-    drag: {
-      type: Boolean,
-      default: true
-    },
-    tap: {
-      type: Boolean,
-      default: true
-    },
-    attributionFontSize: {
-      type: Number,
-      default: 12
-    }
+const props = defineProps({
+  zoomControl: {
+    type: Boolean,
+    default: true,
   },
-  emits: [
-    'markerClick', 'scroll'
-  ],
-  setup(props: any, { emit }) {
+  minZoom: {
+    type: Number,
+    default: 1,
+  },
+  maxZoom: {
+    type: Number,
+    default: 17,
+  },
+  defaultZoom: {
+    type: Number,
+  },
+  autoFit: {
+    type: Boolean,
+    default: false,
+  },
+  locations: {
+    type: Array as PropType<MapLocation[]>,
+    default(): MapLocation[] {
+      return [];
+    },
+  },
+  centerPoint: {
+    type: Object as PropType<LatLngExpression>,
+  },
+  zoom: {
+    type: Boolean,
+    default: true,
+  },
+  centerZoom: {
+    type: Boolean,
+    default: false,
+  },
+  drag: {
+    type: Boolean,
+    default: true,
+  },
+  tap: {
+    type: Boolean,
+    default: true,
+  },
+  attributionFontSize: {
+    type: Number,
+    default: 12,
+  },
+});
 
-    const mapMarkerIcon = L.icon({
-        iconUrl: '/map-marker-green.svg',
-        shadowUrl: null,
-        iconSize:     [60, 60], // size of the icon
-        shadowSize:   [0, 0], // size of the shadow
-        iconAnchor:   [30, 51], // point of the icon which will correspond to marker's location
-        shadowAnchor: [0, 0],  // the same for the shadow
-        popupAnchor:  [-5, -55] // point from which the popup should open relative to the iconAnchor
+const emit = defineEmits<{
+  (event: "markerClick", target: any): void;
+  (event: "scroll"): void;
+}>();
+
+const mapWidgetId = "map" + Math.floor(Math.random() * 100000000000); // THIS IS A WORKAROUND  'const mapWidgetId = 'map' + self.crypto.randomUUID()'
+
+let locationMarkers: Array<any> = []; // TEMP ANY LocationMarker
+let map: Map = null;
+let clusterlayer: any = null;
+
+let programmaticScrollInProgress = false;
+
+watch(props, () => {
+  refreshView();
+});
+
+onUnmounted(() => {
+  // clearMap();
+});
+
+onMounted(async () => {
+  // HERE is where to load Leaflet components!
+  const L = await import("leaflet");
+
+  map = L.map(mapWidgetId, {
+    zoomControl: props.zoomControl,
+  });
+  //tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // OpenStreetMaps for testing.
+  L.tileLayer(
+    "https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=4j93vp78lAxWgkgEuWgF",
+    {
+      // MapTiler Development for usage on developer workstations.
+      //tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=5ublSVwnjyc9Ansfmc7r', { // MapTiler Production: Commit only with this line active!!!.
+      minZoom: props.minZoom,
+      maxZoom: props.maxZoom,
+    }
+  ).addTo(map);
+  createAttribution();
+  if (!props.zoom) {
+    disableZoom();
+  } else {
+    // Enable mouse wheel zoom after map has been clicked once to avoid zooming when scrolling over the page.
+    map.scrollWheelZoom.disable();
+    map.once("focus", function () {
+      map.scrollWheelZoom.enable();
+    });
+  }
+  if (props.centerZoom) {
+    enableCenterZoom();
+  }
+  if (!props.drag) {
+    disableDragging();
+  }
+  if (!props.tap) {
+    disableTapping();
+  }
+  map.on("moveend", function () {
+    if (!programmaticScrollInProgress) {
+      emit("scroll");
+    }
+  });
+  if (props.centerPoint) {
+    programmaticScrollInProgress = true;
+    map.setView(props.centerPoint, getZoom());
+    programmaticScrollInProgress = false;
+  }
+
+  // @ts-expect-error no type
+  L.mask("/LKWND.geojson", { fillOpacity: 0.7, restrictBounds: false }).addTo(map);
+
+  refreshView();
+});
+
+const refreshView = async () => {
+  const L = await import("leaflet");
+
+  clearMap();
+
+  locationMarkers = [];
+
+  // @ts-expect-error no type
+  clusterlayer = L.markerClusterGroup({
+    iconCreateFunction: function (cluster: any) {
+      return L.divIcon({
+        html: cluster.getAllChildMarkers().length.toString(),
+        className: "clustericon",
+        iconSize: L.point(40, 40),
+      });
+    },
+    showCoverageOnHover: false,
+  });
+
+  const mapMarkerIcon = L.icon({
+    iconUrl: "/map-marker-green.svg",
+    shadowUrl: null,
+    iconSize: [60, 60], // size of the icon
+    shadowSize: [0, 0], // size of the shadow
+    iconAnchor: [30, 51], // point of the icon which will correspond to marker's location
+    shadowAnchor: [0, 0], // the same for the shadow
+    popupAnchor: [-5, -55], // point from which the popup should open relative to the iconAnchor
+  });
+
+  props.locations.forEach((location: MapLocation) => {
+    const marker = new L.Marker([location.latitude, location.longitude], {
+      icon: mapMarkerIcon,
+      draggable: location.draggable,
     });
 
-    const mapWidgetId = 'map' + Math.floor(Math.random() * 100000000000) // THIS IS A WORKAROUND  'const mapWidgetId = 'map' + self.crypto.randomUUID()'
+    marker.bindTooltip(location.name);
 
-    let locationMarkers: Array<LocationMarker> = []
-    let map: L.Map = null
-    let clusterlayer: any = null
+    const popup = L.popup().setContent(
+      `
+<div class="popup">
+  ${location.imageUrl ? '<img class="background" src="' + location.imageUrl + '" />' : ""}
+  <h2 class="name">
+    <div style="text-align: center">
+      <span>${location.name}</span> 
+    </div>
+    </h2>
+  <div class="action">
+    <a class="link" style="text-align: center" href="${location.url}" target="_blank">Mehr Details</a>
+  </div>
+</div>
+`
+    );
 
-    let programmaticScrollInProgress = false
+    marker.bindPopup(location.name);
+    marker.bindPopup(popup);
 
-    let maskPlugin: HTMLScriptElement = null
-    let clusterPlugin: HTMLScriptElement = null
+    locationMarkers.push(marker);
 
-    onUnmounted(() => {
-      clearMap()
-      document.head.removeChild(maskPlugin)
-      document.head.removeChild(clusterPlugin)
-    })
+    marker.on("click", function (marker: any) {
+      emit("markerClick", marker.sourceTarget);
+    });
 
-    onMounted(async () => {
-      if (process.client) {
-        // Load mask plugin to grey out any area outside the Landkreis.
-        maskPlugin = document.createElement("script")
-        maskPlugin.setAttribute(
-          "src",
-          "/js/leaflet.mask.js"
-        )
-        document.head.appendChild(maskPlugin)
-        // Load clustering plugin to create marker clusters for zoomed out areas.
-        clusterPlugin = document.createElement("script")
-        clusterPlugin.setAttribute(
-          "src",
-          "/js/leaflet.markercluster-src.js"
-        )
-        document.head.appendChild(clusterPlugin)
-        map = L.map(mapWidgetId, {
-          zoomControl: props.zoomControl
-        })
-        //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // OpenStreetMaps for testing.
-        L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=4j93vp78lAxWgkgEuWgF', { // MapTiler Development for usage on developer workstations.
-        //L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=5ublSVwnjyc9Ansfmc7r', { // MapTiler Production: Commit only with this line active!!!.
-          minZoom: props.minZoom,
-          maxZoom: props.maxZoom
-        }).addTo(map)
-        createAttribution()
-        if (!props.zoom) {
-          disableZoom()
-        }
-        else {
-          // Enable mouse wheel zoom after map has been clicked once to avoid zooming when scrolling over the page.
-          map.scrollWheelZoom.disable()
-          map.once('focus', function() { map.scrollWheelZoom.enable() })
-        }
-        if (props.centerZoom) {
-          enableCenterZoom()
-        }
-        if (!props.drag) {
-          disableDragging()
-        }
-        if (!props.tap) {
-          disableTapping()
-        }
-        map.on('moveend', function() {
-          if (!programmaticScrollInProgress)
-          {
-            emit('scroll')
-          }
-        })
-        if (props.centerPoint) {
-          programmaticScrollInProgress = true
-          map.setView(props.centerPoint, getZoom())
-          programmaticScrollInProgress = false
-        }
-        await leafletPluginCall(() => {
-          // @ts-ignore:
-          L.mask('/LKWND.geojson', { fillOpacity: 0.7 }).addTo(map)
-        })
-        refreshView()
+    clusterlayer.addLayer(marker);
+  });
+
+  clusterlayer.on("click", function (cluster: any) {
+    // If this is a cluster click and not a marker click.
+    if (cluster.layer._childCount) {
+      // Zoom to bounds if the map is not at its highest zoom level.
+      //@ts-expect-error wrong type
+      if (map._zoom < props.maxZoom) {
+        cluster.layer.zoomToBounds();
       }
-    })
-
-    const refreshView = async () => {
-
-      clearMap()
-
-      locationMarkers = []
-
-      await leafletPluginCall(() => {
-
-        // @ts-ignore:
-        clusterlayer = L.markerClusterGroup({
-          iconCreateFunction: function (cluster: any) {
-            return L.divIcon({ html: cluster.getAllChildMarkers().length.toString(), className: 'clustericon', iconSize: L.point(40, 40) });
-          },
-          showCoverageOnHover: false
-        })
-
-        props.locations.forEach((location: MapLocation) => {
-          const marker = new LocationMarker(location.id, [location.latitude, location.longitude], { icon: mapMarkerIcon, draggable: location.draggable })
-
-          if (location.tooltipHtml) {
-            marker.bindTooltip(location.tooltipHtml)
-          }
-
-          locationMarkers.push(marker)
-
-          marker.on('click', function (marker: any) {
-            emit('markerClick', marker.sourceTarget)
-          })
-
-          clusterlayer.addLayer(marker)
-        })
-
-        clusterlayer.on('click', function (cluster: any) {
-          // If this is a cluster click and not a marker click.
-          if (cluster.layer._childCount) {
-            // Zoom to bounds if the map is not at its highest zoom level.
-            if (map._zoom < props.maxZoom) {
-              cluster.layer.zoomToBounds()
-            }
-            // Otherwise perform spider legging.
-            else {
-              cluster.layer.spiderfy()
-            }
-          }
-        })
-
-        map.addLayer(clusterlayer)
-      })
-
-      // Fit all visible locations into view after a timeout to make sure the mask layer does not conflict with this.
-      setTimeout(() => {
-        programmaticScrollInProgress = true
-        if (props.autoFit && locationMarkers.length > 0) {
-          const group: L.FeatureGroup<any> = L.featureGroup(locationMarkers)
-
-          map.fitBounds(group.getBounds())
-
-          // For single locations zoom out to make sure the sourroundings are visible.
-          if (locationMarkers.length == 1) {
-            const currentZoom = map.getZoom()
-            map.setZoom(currentZoom > 0 ? currentZoom - 3 : currentZoom)
-          }
-        }
-        map.invalidateSize()
-        programmaticScrollInProgress = false
-      }, 100)
-    }
-
-    const clearMap = () => {
-      if (clusterlayer) {
-        map.removeLayer(clusterlayer)
-        clusterlayer.clearLayers()
-        clusterlayer = null
-      }
-    }
-
-    const getZoom = () => {
-      if (props.defaultZoom) {
-        return props.defaultZoom
-      }
-
-      return props.minZoom
-    }
-
-    const getLocations = (): Array<MapLocation> => {
-
-      const result: Array<MapLocation> = []
-
-      locationMarkers.forEach((element) => {
-        result.push({
-          id: element.getId(),
-          longitude: element.getLatLng().lng,
-          latitude: element.getLatLng().lat,
-          draggable: false,
-          tooltipHtml: null // Not needed for location information.
-        })
-      })
-
-      return result
-    }
-
-    const getVisibleRectangle = () => {
-      return map.getBounds()
-    }
-
-    const createAttribution = () => {
-      map.attributionControl.addAttribution(`<span style="font-size: ${props.attributionFontSize}px"><a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a></span>`)
-      map.attributionControl.setPrefix('')
-      map.attributionControl.getContainer().style.height = `${props.attributionFontSize + 4}px`
-      map.attributionControl.getContainer().style.paddingRight = '2px'
-      map.attributionControl.getContainer().style.paddingLeft = '2px'
-      map.attributionControl.getContainer().style.paddingTop = getTopPaddingFromFontSize(props.attributionFontSize)
-      map.attributionControl.getContainer().style.lineHeight = `${props.attributionFontSize}px`
-    }
-
-    const getTopPaddingFromFontSize = (fontsize: number) => {
-      if (fontsize < 8) {
-        return '0px'
-      }
-      else if (fontsize < 10) {
-        return '1px'
-      }
+      // Otherwise perform spider legging.
       else {
-        return '2px'
+        cluster.layer.spiderfy();
       }
     }
+  });
 
-    const disableAll = () => {
-      disableZoom()
-      disableDragging()
-      disableTapping()
-    }
+  map.addLayer(clusterlayer);
 
-    const disableZoom = () => {
-      map.touchZoom.disable()
-      map.doubleClickZoom.disable()
-      map.scrollWheelZoom.disable()
-      map.boxZoom.disable()
-      map.keyboard.disable()
-    }
+  const group = L.featureGroup(locationMarkers);
+  if (!group || !group.getBounds().isValid()) return;
 
-    const enableCenterZoom = () => {
-      map.options.scrollWheelZoom = "center"
-    }
+  map.fitBounds(group.getBounds(), {
+    padding: [100, 100],
+  });
+};
 
-    const disableDragging = () => {
-      map.dragging.disable()
-      map.keyboard.disable()
-    }
-
-    const disableTapping = () => {
-      if (map.tap) {
-        map.tap.disable()
-      }
-    }
-
-    // Helpers to access plugin functionality (plugins are loaded asynchronously and therefore are available after some time depending on the loading times).
-    // This function tries to load the passed code until it is successful with a limited amount of calls.
-    const leafletPluginCall = async (pluginCall: () => void) => {
-        let tries = 0
-        while (tries < 50)
-        {
-          try {
-            pluginCall()
-            tries = 50
-          }
-          catch (error) {
-            tries += 1
-            await new Promise((r) => setTimeout(r, 50))
-          }
-        }
-    }
-
-    return {
-      mapWidgetId,
-      refreshView,
-      getLocations,
-      getVisibleRectangle,
-      disableAll
-    }
+const clearMap = () => {
+  if (clusterlayer) {
+    map.removeLayer(clusterlayer);
+    clusterlayer.clearLayers();
+    clusterlayer = null;
   }
-})
+};
+
+const getZoom = () => {
+  if (props.defaultZoom) {
+    return props.defaultZoom;
+  }
+
+  return props.minZoom;
+};
+
+const createAttribution = () => {
+  map.attributionControl.addAttribution(
+    `<span style="font-size: ${props.attributionFontSize}px"><a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a></span>`
+  );
+  map.attributionControl.setPrefix("");
+  map.attributionControl.getContainer().style.height = `${props.attributionFontSize + 4}px`;
+  map.attributionControl.getContainer().style.paddingRight = "2px";
+  map.attributionControl.getContainer().style.paddingLeft = "2px";
+  map.attributionControl.getContainer().style.paddingTop = getTopPaddingFromFontSize(props.attributionFontSize);
+  map.attributionControl.getContainer().style.lineHeight = `${props.attributionFontSize}px`;
+};
+
+const getTopPaddingFromFontSize = (fontsize: number) => {
+  if (fontsize < 8) {
+    return "0px";
+  } else if (fontsize < 10) {
+    return "1px";
+  } else {
+    return "2px";
+  }
+};
+
+const disableAll = () => {
+  disableZoom();
+  disableDragging();
+  disableTapping();
+};
+
+const disableZoom = () => {
+  map.touchZoom.disable();
+  map.doubleClickZoom.disable();
+  map.scrollWheelZoom.disable();
+  map.boxZoom.disable();
+  map.keyboard.disable();
+};
+
+const enableCenterZoom = () => {
+  map.options.scrollWheelZoom = "center";
+};
+
+const disableDragging = () => {
+  map.dragging.disable();
+  map.keyboard.disable();
+};
+
+const disableTapping = () => {
+  if (map.tap) {
+    map.tap.disable();
+  }
+};
+
+defineExpose({
+  refreshView,
+});
 </script>
 
-<style>
+<style lang="scss">
 .mapwidget {
   height: 60vh;
   z-index: 0;
 }
 
-
-@media only screen and (max-width:960px) {
-	.mapwidget {
-		height: 60vh;
-	}
+@media only screen and (max-width: 960px) {
+  .mapwidget {
+    height: 60vh;
+  }
 }
-
 
 div.clustericon {
   background-color: #007344;
@@ -375,5 +319,60 @@ div.clustericon {
   font-size: 24px;
   border-radius: 25px;
   color: white;
+}
+
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  width: 250px;
+  min-height: 125px;
+  text-align: left;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+  justify-content: space-between;
+  display: flex;
+
+  .leaflet-popup-content {
+    min-width: 250px;
+    max-width: 250px;
+    display: flex;
+    text-align: center;
+    margin: 0;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+
+    .popup {
+      .background {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .name {
+        font-size: 22px;
+        line-height: 1.3;
+        margin-top: 0.5rem;
+      }
+
+      .action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+
+        .link {
+          text-decoration: none;
+          color: #212120;
+          font-weight: bold;
+          background-color: #91a80d;
+          color: white;
+          border-radius: 1rem;
+          padding: 1rem;
+        }
+      }
+    }
+  }
 }
 </style>

@@ -5,7 +5,7 @@
 
         // define a Common JS module that relies on 'leaflet'
     } else if (typeof exports === "object") {
-        module.exports = factory(require("leaflet"));
+        module.exports = factory(import("leaflet"));
     }
 
     // attach your plugin to the global 'L' variable
@@ -13,7 +13,7 @@
         factory(L);
     }
 })(function (L) {
-    L.Mask = L.LayerGroup.extend({
+    L.Mask = L.LayerGroup?.extend({
         options: {
             color: "#3388FF",
             weight: 2,
@@ -105,7 +105,7 @@
             for (var i = 0, len = coords.length; i < len; i++) {
                 var coords2 = coords[i];
                 for (var j = 0, lenJ = coords2.length; j < lenJ; j++) {
-                    this._bounds.extend(new L.latLng(coords2[1], coords2[0], coords2[2]));
+                    this._bounds?.extend(new L.latLng(coords2[1], coords2[0], coords2[2]));
                 }
             }
         },
