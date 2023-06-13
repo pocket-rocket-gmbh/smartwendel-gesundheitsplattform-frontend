@@ -82,7 +82,7 @@ watch(props, () => {
 });
 
 onUnmounted(() => {
-  // clearMap();
+  clearMap();
 });
 
 onMounted(async () => {
@@ -207,7 +207,7 @@ const refreshView = async () => {
     // If this is a cluster click and not a marker click.
     if (cluster.layer._childCount) {
       // Zoom to bounds if the map is not at its highest zoom level.
-      //@ts-expect-error wrong type
+      // @ts-expect-error wrong type
       if (map._zoom < props.maxZoom) {
         cluster.layer.zoomToBounds();
       }

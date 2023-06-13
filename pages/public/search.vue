@@ -6,12 +6,12 @@
         <v-col align="right">
           <div class="sort-order mt-3">
             <v-select
-                variant="underlined"
-                v-model="filterCriteria"
-                :items="items"
-                label="Sortierung"
-              />
-            </div>
+              variant="underlined"
+              v-model="filterStore.filterSort"
+              :items="filterSortingDirections"
+              label="Sortierung"
+            />
+          </div>
         </v-col>
       </v-row>
       <v-row class="mt-1">
@@ -19,32 +19,30 @@
           <PublicSearchTheFilter />
         </v-col>
         <v-col md="8" lg="9" class="filtered-items mb-10">
-          <PublicSearchTheFilteredCareFacilities :filterCriteria="filterCriteria"/>
+          <PublicSearchTheFilteredCareFacilities />
         </v-col>
       </v-row>
     </v-container>
   </ClientOnly>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
 
-  setup(props) {
-    const filterCriteria = ref('ASC')
-    const items = 
-      ['ASC', 'DESC']
+<script setup lang="ts">
+import { useFilterStore, filterSortingDirections } from "~/store/facilitySearchFilter";
 
-    onMounted(() => {
-    
-    })
+const filterStore = useFilterStore();
 
-    return {
-      filterCriteria,
-      items
-    }
+watch(
+  () => filterStore.filterSort,
+  () => {
+    filterStore.loadCareFacilities();
   }
-})
+);
+
+onMounted(() => {
+  filterStore.loadCareFacilities();
+});
 </script>
+
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 
