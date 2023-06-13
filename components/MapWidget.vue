@@ -77,15 +77,12 @@ let clusterlayer: any = null;
 
 let programmaticScrollInProgress = false;
 
-let maskPlugin: HTMLScriptElement = null;
-let clusterPlugin: HTMLScriptElement = null;
-
 watch(props, () => {
   refreshView();
 });
 
 onUnmounted(() => {
-  clearMap();
+  // clearMap();
 });
 
 onMounted(async () => {
@@ -188,7 +185,7 @@ const refreshView = async () => {
     </div>
     </h2>
   <div class="action">
-    <a class="link" style="text-align: center" href="${location.url}" target="_self">Mehr Details</a>
+    <a class="link" style="text-align: center" href="${location.url}" target="_blank">Mehr Details</a>
   </div>
 </div>
 `
