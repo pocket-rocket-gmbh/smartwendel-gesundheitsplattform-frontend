@@ -7,7 +7,9 @@
 
 <script setup lang="ts">
 import { PropType, onMounted, onUnmounted } from "vue";
-import { LatLngExpression, Map } from "leaflet";
+import L, { LatLngExpression, Map } from "leaflet";
+import "../public/js/leaflet.mask";
+import "leaflet.markercluster";
 import { MapLocation } from "@/types/MapLocation";
 
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -86,9 +88,6 @@ onUnmounted(() => {
 });
 
 onMounted(async () => {
-  // HERE is where to load Leaflet components!
-  const L = await import("leaflet");
-
   map = L.map(mapWidgetId, {
     zoomControl: props.zoomControl,
   });
@@ -139,8 +138,6 @@ onMounted(async () => {
 });
 
 const refreshView = async () => {
-  const L = await import("leaflet");
-
   clearMap();
 
   locationMarkers = [];
