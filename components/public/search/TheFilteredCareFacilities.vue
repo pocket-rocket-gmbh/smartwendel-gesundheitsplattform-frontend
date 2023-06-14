@@ -1,10 +1,10 @@
 <template>
-  <Loading v-if="loading" />
-  <div v-else-if="careFaclities.length > 0">
+  <Loading v-if="filterStore.loading" />
+  <div v-else-if="filterStore.careFaclities.length > 0">
     <div class="ml-2 my-2">
-      <span>{{ careFaclities.length }} Treffer</span>
+      <span>{{ filterStore.careFaclities.length }} Treffer</span>
     </div>
-    <div class="item mb-6" v-for="careFacility in careFaclities" :key="careFacility.id">
+    <div class="item mb-6" v-for="careFacility in filterStore.careFaclities" :key="careFacility.id">
       <v-row>
         <v-col md="8">
           <h2 class="is-dark-grey is-uppercase">{{ careFacility.name }}</h2>
@@ -18,13 +18,17 @@
             </v-col>
             <v-col>
               <div class="text-dark-grey mt-4">
-                <div v-if="careFacility.phone"><v-icon color="primary" class="mr-2">mdi-phone-outline</v-icon>{{ careFacility.phone }}</div>
-                <div v-if="careFacility.email"><v-icon color="primary" class="mr-2">mdi-email-outline</v-icon>{{ careFacility.email }} {{ filterCriteria }}</div>
+                <div v-if="careFacility.phone">
+                  <v-icon color="primary" class="mr-2">mdi-phone-outline</v-icon>{{ careFacility.phone }}
+                </div>
+                <div v-if="careFacility.email">
+                  <v-icon color="primary" class="mr-2">mdi-email-outline</v-icon>{{ careFacility.email }}
+                </div>
               </div>
             </v-col>
           </v-row>
           <div>
-            <v-btn 
+            <v-btn
               append-icon="mdi-map-marker-outline"
               size="small"
               class="mt-4 pa-1"
@@ -32,163 +36,49 @@
               color="primary"
               rounded="pill"
               @click="showCareFacilityInMap(careFacility.id)"
-                >
-                Auf karte zeigen
+            >
+              Auf karte zeigen
             </v-btn>
           </div>
         </v-col>
         <v-col align="right">
-          <v-btn 
+          <v-btn
             variant="outlined"
             size="large"
             rounded="pill"
             color="primary"
             :href="`/public/care_facilities/${careFacility.id}`"
             target="_blank"
-            >
+          >
             Details ansehen
           </v-btn>
         </v-col>
       </v-row>
     </div>
   </div>
-  <div v-else-if="!loading">
-    <div class="item">
-      Leider keine Ergebnisse. Bitte passen Sie Ihre Suche an.
-    </div>
+  <div v-else-if="!filterStore.loading">
+    <div class="item">Leider keine Ergebnisse. Bitte passen Sie Ihre Suche an.</div>
   </div>
 </template>
 
-<script lang="ts">
-import { useFilterStore } from '@/store/filter'
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { useFilterStore } from "~/store/facilitySearchFilter";
 
-export default defineComponent({
-  props: {
-    filterCriteria : String
-  },
-  setup(props) {
-    const filters = ref([])
-    const searchQuery = ref(null)
-    const loading = ref(false)
-    const filter = props.filterCriteria
-    const facilityIdFilter = ref(null);
+const filterStore = useFilterStore();
 
-    const currentCategoryId = computed(() => {
-      return useFilterStore().currentCategoryId
-    })
-    const currentSubCategoryId = computed(() => {
-      return useFilterStore().currentSubCategoryId
-    })
-    const currentSubSubCategoryId = computed(() => {
-      return useFilterStore().currentSubSubCategoryId
-    })
-    const currentTags = computed(() => {
-      return useFilterStore().currentTags
-    })
+onMounted(() => {
+  filterStore.loadCareFacilities();
+});
 
-    const careFaclitiesApi = useCollectionApi()
-    careFaclitiesApi.setBaseApi(usePublicApi())
-    careFaclitiesApi.setEndpoint(`care_facilities`)
-    const careFaclities = ref([])
-
-    if (useNuxtApp().$bus) {
-      useNuxtApp().$bus.$on("updateFacilitiesBasedOnFilterChange", (toUpdate:string) => {
-        if (!toUpdate) {
-          filters.value = []
-          searchQuery.value = null
-        } else {
-          updateFilters(toUpdate)
-        }
-        getCareFacilities("updateFacilitiesBasedOnFilterChange")
-      })
-
-      useNuxtApp().$bus.$on("emitFacilitySearch", (query:string) => {
-        searchQuery.value = query
-        getCareFacilities("emitFacilitySearch")
-      })
-    }
-
-    const updateFilters = (toUpdate:string) => {
-      if (toUpdate === 'category') {
-        const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_category')
-        if (foundFilter) {
-          filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_category')
-        }
-        filters.value.push ( { field: 'care_facility_category', value: currentCategoryId.value } )
-        return
-      }
-      if (toUpdate === 'subCategory') {
-        const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_sub_category')
-        if (foundFilter) {
-          filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_sub_category')
-        }
-        filters.value.push ( { field: 'care_facility_sub_category', value: currentSubCategoryId.value } )
-        return
-      }
-      if (toUpdate === 'subSubCategory') {
-        const foundFilter = filters.value.find((f:any) => f.field === 'care_facility_sub_sub_category')
-        if (foundFilter) {
-          filters.value = filters.value.filter((f:any) => f.field !== 'care_facility_sub_sub_category')
-        }
-        filters.value.push ( { field: 'care_facility_sub_sub_category', value: currentSubSubCategoryId.value } )
-        return
-      }
-      if (toUpdate === 'tags') {
-        const foundFilter = filters.value.find((f:any) => f.field === 'tags')
-        if (foundFilter) {
-          filters.value = filters.value.filter((f:any) => f.field !== 'tags')
-        }
-        filters.value.push ( { field: 'care_facility_tags', value: currentTags.value } )
-        return
-      }
-    }
-
-    const getCareFacilities = async (from?:string) => {
-      console.log("called from", from)
-      loading.value = true
-      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: filter, searchQuery: searchQuery.value, concat: false, filters: filters.value }
-      await careFaclitiesApi.retrieveCollection(options as any)
-      careFaclities.value = careFaclitiesApi.items.value
-      loading.value = false
-
-      if(facilityIdFilter.value) {
-        careFaclities.value = careFaclities.value.filter(facility => facility.id === facilityIdFilter.value)
-      }
-
-      useNuxtApp().$bus.$emit('facilitiesUpdated', careFaclities.value)
-    }
-
-    onMounted(() => {
-      if (currentCategoryId.value) {
-        updateFilters('category')
-      }
-      if (currentSubCategoryId.value) {
-        updateFilters('subCategory')
-      }
-      if (currentSubSubCategoryId.value) {
-        updateFilters('currentSubSubCategoryId')
-      }
-      getCareFacilities("mount")
-    })
-
-    const showCareFacilityInMap = async (careFacilityId: string) => {
-      facilityIdFilter.value = careFacilityId;
-      await getCareFacilities("click")
-      facilityIdFilter.value = null;
-    }
-
-    watch(filter as any, () => {
-      getCareFacilities("watch")
-    })
-
-    return {
-      careFaclities,
-      loading,
-      showCareFacilityInMap
-    }
-  }
-})
+const showCareFacilityInMap = async (careFacilityId: string) => {
+  filterStore.mapFilter = careFacilityId;
+  await filterStore.loadCareFacilities();
+  filterStore.mapFilter = null;
+  window.scrollTo({
+    behavior: "smooth",
+    top: 0,
+  });
+};
 </script>
 
 <style lang="sass" scoped>

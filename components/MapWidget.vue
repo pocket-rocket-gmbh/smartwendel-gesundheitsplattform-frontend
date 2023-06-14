@@ -7,7 +7,9 @@
 
 <script setup lang="ts">
 import { PropType, onMounted, onUnmounted } from "vue";
-import { LatLngExpression, Map } from "leaflet";
+import L, { LatLngExpression, Map } from "leaflet";
+import "../public/js/leaflet.mask";
+import "leaflet.markercluster";
 import { MapLocation } from "@/types/MapLocation";
 
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -82,13 +84,10 @@ watch(props, () => {
 });
 
 onUnmounted(() => {
-  // clearMap();
+  clearMap();
 });
 
 onMounted(async () => {
-  // HERE is where to load Leaflet components!
-  const L = await import("leaflet");
-
   map = L.map(mapWidgetId, {
     zoomControl: props.zoomControl,
   });
@@ -139,8 +138,6 @@ onMounted(async () => {
 });
 
 const refreshView = async () => {
-  const L = await import("leaflet");
-
   clearMap();
 
   locationMarkers = [];
@@ -207,7 +204,7 @@ const refreshView = async () => {
     // If this is a cluster click and not a marker click.
     if (cluster.layer._childCount) {
       // Zoom to bounds if the map is not at its highest zoom level.
-      //@ts-expect-error wrong type
+      // @ts-expect-error wrong type
       if (map._zoom < props.maxZoom) {
         cluster.layer.zoomToBounds();
       }
