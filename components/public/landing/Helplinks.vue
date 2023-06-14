@@ -1,8 +1,5 @@
 <template>
   <div class="ma-15">
-    <div class="d-flex align-center justify-center is-uppercase my-15">
-      <div class="has-font-size-medium" >Sie benötigen ärztliche Hilfe?</div>
-    </div>
     <v-row>
       <v-col  v-for="(item, index) in items" :key="index">
         <div class="justify-center text-center align-center">

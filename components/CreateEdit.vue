@@ -4,6 +4,7 @@
     :width="size"
     transition="dialog-bottom-transition"
     @click:outside="emitClose()"
+    persistent
   >
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <v-card-title class="text-h5 has-bg-primary py-5 text-white">
@@ -146,10 +147,22 @@ export default defineComponent({
       if (props.itemPlaceholder && !item.value.id) {
         item.value = props.itemPlaceholder
       }
+
+      document.addEventListener('keyup', function(e) {
+        if (e.key === 'Escape') {
+          const confirmed = confirm('Wenn Sie fortfahren, werden Ihre Änderungen verworfen.')
+          if (confirmed) {
+            emit('close')
+          }
+        }
+      })
     })
-    
+
     const emitClose = () => {
-      emit('close')
+      const confirmed = confirm('Wenn Sie fortfahren, werden Ihre Änderungen verworfen.')
+      if (confirmed) {
+        emit('close')
+      }
     }
 
     return {
