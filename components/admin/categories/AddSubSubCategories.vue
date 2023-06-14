@@ -7,7 +7,7 @@
   >
     <v-card class="dialog-700">
       <v-card-title class="text-h5">
-        Unter-Kategorien
+        {{ subCategory?.name }}: Unter-Kategorien
       </v-card-title>
 
       <v-btn
@@ -52,7 +52,6 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn
-          text
           @click="emitClose()"
         >
           Schließen
@@ -82,9 +81,24 @@ export default defineComponent({
     const fields = ref([
       { text: '', type: 'move_down' },
       { text: '', type: 'move_up' },
-      { text: 'Name', value: 'name', type: 'string' },
+      { text: 'Bezeichnung', value: 'name', type: 'string' },
       { text: 'Tags', value: 'tags', type: 'array' }
     ])
+
+
+    const subCategory = ref(null)
+    const api = useCollectionApi()
+    api.setBaseApi(usePrivateApi())
+
+    const getCategory = async () => {
+      api.setEndpoint(`categories/${props.subCategoryId}`)
+      await api.getItem()
+      subCategory.value = api.item.value as any
+    }
+
+    onMounted(() => {
+      getCategory()
+    })
 
     const openCreateEditDialog = (id:string) => {
       itemId.value = id
@@ -115,7 +129,8 @@ export default defineComponent({
       openDeleteDialog,
       fields,
       itemId,
-      itemPlaceholder
+      itemPlaceholder,
+      subCategory
     }
   }
 })

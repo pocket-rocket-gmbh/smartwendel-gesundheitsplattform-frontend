@@ -7,7 +7,7 @@
   >
     <v-card class="dialog-700">
       <v-card-title class="text-h5">
-        Kategorien
+        {{ category?.name }}: Kategorien
       </v-card-title>
 
       <v-btn
@@ -45,7 +45,6 @@
         endpoint="categories"
         term="diese Kategorie"
       />
-      
       <DataTable
         :fields="fields"
         :endpoint="`categories/${categoryId}/sub_categories`"
@@ -86,7 +85,7 @@ export default defineComponent({
     const fields = ref([
       { text: '', type: 'move_down' },
       { text: '', type: 'move_up' },
-      { text: 'Name', value: 'name', type: 'string' },
+      { text: 'Bezeichnung', value: 'name', type: 'string' },
       { text: 'Unter-Kategorien', value: 'sub_sub_categories', type: 'associations_name' },
       { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubSubCategoriesDialog', tooltip: 'Unter-Kategorien hinzufügen' },
     ])
@@ -94,6 +93,16 @@ export default defineComponent({
     const openCreateEditDialog = (id:string) => {
       itemId.value = id
       createEditDialogOpen.value = true
+    }
+
+    const category = ref(null)
+    const api = useCollectionApi()
+    api.setBaseApi(usePrivateApi())
+
+    const getCategory = async () => {
+      api.setEndpoint(`categories/${props.categoryId}`)
+      await api.getItem()
+      category.value = api.item.value as any
     }
 
     const openDeleteDialog = (id:string) => {
@@ -115,6 +124,9 @@ export default defineComponent({
       emit('close')
     }
 
+    onMounted(() => {
+      getCategory()
+    })
     return {
       dialog,
       emitClose,
@@ -126,7 +138,8 @@ export default defineComponent({
       openAddSubSubCategoriesDialog,
       fields,
       itemId,
-      itemPlaceholder
+      itemPlaceholder,
+      category
     }
   }
 })

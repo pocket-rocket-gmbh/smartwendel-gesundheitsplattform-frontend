@@ -46,9 +46,6 @@
         <v-list-item link to="/admin/tooltips" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')">
           Tooltips
         </v-list-item>
-        <v-list-item link to="/admin/gamification_games" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('games', 'list')">
-          Gamification
-        </v-list-item>
         <v-list-item link to="/admin/users" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')">
           Benutzer
         </v-list-item>

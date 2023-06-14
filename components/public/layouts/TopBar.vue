@@ -65,7 +65,6 @@
         <v-app-bar-nav-icon
           @click="drawer = !drawer"
         />
-        <NotificationsMenu v-if="currentUser" />
       </div>
     </v-app-bar>
     <v-navigation-drawer

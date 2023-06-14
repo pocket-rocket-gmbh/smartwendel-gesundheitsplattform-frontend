@@ -14,15 +14,27 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          variant="outlined"
-          color="error"
-          elevation="0"
-          @click="deleteItem()"
-        >
-          Löschen
-        </v-btn>
+        <v-row>
+          <v-col md="6" class="d-flex justify-start">
+            <v-btn
+              variant="outlined"
+              elevation="0"
+              @click="emitClose()"
+            >
+              abbrechen
+            </v-btn>
+          </v-col>
+          <v-col md="6" class="d-flex justify-end">
+            <v-btn
+              variant="outlined"
+              color="error"
+              elevation="0"
+              @click="deleteItem()"
+            >
+              Löschen
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -1,5 +1,8 @@
 const errorCodes: { [key: string]: string } = { 
   'Invalid credentials': 'Benutzername oder Passwort falsch',
+  'tag.name.invalid': 'das Feld "Bezeichnung" darf nicht leer sein',
+  'category.name.invalid': 'das Feld "Bezeichnung" darf nicht leer sein',
+  'category.name.taken': 'Bereich existiert bereits',
   'warehouse::article.name.invalid': 'Ein Artikel-Name muss angegeben werden.',
   'warehouse::article.number.taken': 'Ein Artikel mit dieser Artikelnummer existiert bereits',
   'password.not_filled': 'Ein Passwort muss angegeben werden.',

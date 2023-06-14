@@ -42,11 +42,11 @@
     </v-list>
       <v-card-text>
         <div class="field mb-15">
-          <b>Downloads</b> (Laden Sie Dokumente wie bspw. Transparenzberichte, Jobangebote oder Formulare hoch. Bitte hinterlegen Sie zu jedem Dokument einen Titel)
+          <b>Downloads</b> (Laden Sie hier Dokumente (Transparenz-Berichte, Jobangebote, Formulare, etc.) hoch und benennen Sie das entsprechende Dokument. Erlaubt sind lediglich Dateien im PDF-Format.)
           <div class="field">
             <v-text-field
               hide-details="auto"
-              label="Name*"
+              label="Bezeichnung*"
               v-model="filename"
             />
           </div>

@@ -5,7 +5,7 @@
         <v-text-field
           v-model="slotProps.item.name"
           hide-details="auto"
-          label="Names"
+          label="Bereichsbezeichnung"
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         />
       </div>
