@@ -31,7 +31,7 @@
         rounded="pill"
         color="primary"
         width="100%"
-        :href="careFacility.website"
+        :href="'https://' + careFacility.website"
         target="_blank"
         >
           weitere Informationen 

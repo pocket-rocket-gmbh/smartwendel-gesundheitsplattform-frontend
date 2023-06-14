@@ -49,9 +49,7 @@ export default defineComponent({
     })
 
     const fields = ref([
-      { text: '', type: 'move_down' },
-      { text: '', type: 'move_up' },
-      { text: 'Name', value: 'name', type: 'string' },
+      { text: 'Bereichsbezeichnung', value: 'name', type: 'string' },
       { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubCategoriesDialog', tooltip: 'Kategorien hinzufügen' },
     ])
     

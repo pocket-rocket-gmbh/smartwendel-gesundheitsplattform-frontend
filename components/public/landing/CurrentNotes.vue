@@ -1,51 +1,29 @@
 <template>
   <div class="mx-15">
     <div class="my-5">
-    <v-row justify="space-between">
-      <v-col class="d-flex justify-start align-center is-uppercase">
-        <h2 class="is-green">Neuigkeiten</h2>
-      </v-col>
-
-      <v-col md="3" class="d-flex text--red justify-end align-start default-button">
-        <v-btn 
-          variant="flat"
-          color="primary"
-          rounded="pill"
-        >
-          <span class = "text-white">
-            Mehr Themen
-          </span>
-      </v-btn>
-      </v-col>
-    </v-row>
-  </div>
-  <div>
-      <v-row>
-        <v-col md="6" class="d-flex justify-start align-center" v-for="(item, index) in limitedCategories" :key="index">
-          <v-card class="rounded-xl">
-            <div class="d-flex notes-card">
-              <img class="is-clickable" :src="item?.content.image" />
-              <div>
-                <v-card-title class="note-title is-primary">
-                  {{ item.content.heading }}
-                </v-card-title>
-                <div class="px-5 pb-5">
-                  <p>{{ item.content.description }}</p>
-                </div>
-                <v-card-actions>
-                  <v-btn
-                    color="secondary"
-                    class="note-text-link"
-                    size="small"
-                  >
-                  Mehr erfahren >
-                  </v-btn>
-                </v-card-actions>
-              </div>
-            </div>
-          </v-card>
+      <v-row justify="space-between">
+        <v-col class="d-flex justify-start align-center is-uppercase">
+          <h2 class="is-green">Neuigkeiten</h2>
+        </v-col>
+        <v-col md="3" class="d-flex text--red justify-end align-start default-button">
+          <v-btn 
+            variant="flat"
+            color="primary"
+            rounded="pill"
+          >
+            <span class = "text-white">
+              Mehr Themen
+            </span>
+          </v-btn>
         </v-col>
       </v-row>
+    </div>
+    <PublicContentBox
+      v-for="news in newsArticles" :key="news.id"
+      :item="news"
+      :item-type="'news'"
+    />
+    <!-- <div>
       <v-row>
       <v-col cols="12" md="6" offset="5" class="mt-10">
         <v-btn 
@@ -70,68 +48,34 @@
         </v-btn>
       </v-col>
     </v-row>
-  </div>
+    </div> -->
   </div>
 
-  
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import image1 from '@/assets/images/current-notes/affenpocken.png'
-import image2 from '@/assets/images/current-notes/pexels.png'
 export default defineComponent({
   setup() {
+  const loading = ref(false)
+  const newsArticles = ref(null)
 
-    const articleLimit = ref(2)
-    const showingAllArticles = ref(false)
+  const listApi = useCollectionApi()
+  listApi.setBaseApi(usePublicApi())
 
-    const items = [
-        {
-        'content': {
-          heading: 'Affenpocken',
-          description: 'Bei Affenpocken handelt es sich um eine seltene Viruserkrankung, die durch das Affenpockenvirus verursacht wird. Affenpocken sind mit ...',
-          image: image1,
-          link: ''
-          }
-        },
-        {
-        'content': {
-          heading: 'Grippeimpfung Winter 2022/2023',
-          description: 'Eine echte Virusgruppe ist keine einfach Erkältungs krankheit, sondern eine ernstzunehmende Erkrankung. Insbesondere chronisch ...',
-          image: image2,
-          link: ''
-          }
-        },
-        {
-        'content': {
-          heading: 'Grippeimpfung Winter 2022/2023',
-          description: 'Eine echte Virusgruppe ist keine einfach Erkältungs krankheit, sondern eine ernstzunehmende Erkrankung. Insbesondere chronisch ...',
-          image: image2,
-          link: ''
-          }
-        }
-      ]
-      
-      const limitedCategories = computed(() => { 
-        return articleLimit.value ? items.slice(0,articleLimit.value) : articleLimit.value
-      })
+  const getNewsArticles = async () => {
+      listApi.setEndpoint(`care_facilities?kind=news`)
+      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
+      loading.value = true
+      await listApi.retrieveCollection(options)
+      loading.value = false
+      console.log(listApi.items.value)
+      newsArticles.value = listApi.items.value as any
+    }
 
-      const showMoreArticles = () => {
-        articleLimit.value = 99
-        showingAllArticles.value = true
-      }
-
-      const showLessArticles = () => {
-        articleLimit.value = 2
-        showingAllArticles.value = false
-      }
-
+    onMounted(() => {
+      getNewsArticles()
+  })
       return {
-      items,
-      showMoreArticles,
-      showLessArticles,
-      limitedCategories,
-      showingAllArticles
+      newsArticles,
     }
   },
 })

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="is-dark-grey">{{ careFacility.name }}aa</h1>
+    <h1 class="is-dark-grey">{{ careFacility.name }}</h1>
    <div class="mt-4" v-html="careFacility.description"></div>
   </div>
 </template>

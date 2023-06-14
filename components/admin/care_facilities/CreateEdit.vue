@@ -18,7 +18,7 @@
               Hier können Sie eigene Kurse anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
             </div>
           </div>
-          <div class="field" v-if="slotProps.item.kind === 'facility'">
+          <div class="field">
             <div class="mt-1 mb-15">
               <b>Status</b>
               <v-select
@@ -34,7 +34,7 @@
           </div>
           <div class="field">
             <div v-if="slotProps.item.kind === 'facility'">
-              <b>Name der Einrichting*</b> (Hinterlegen Sie den Namen Ihrer Einrichtung)
+              <b>Name der Einrichting*</b> (Hinterlegen Sie hier den Namen ihrer Einrichtung)
             </div>
             <div v-if="slotProps.item.kind === 'news'">
               <b>Titel*</b> (Hinterlegen Sie den Namen des Beitrags)
@@ -51,7 +51,7 @@
           </div>
           <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
-              <b>Logo</b>(Laden Sie das Logo Ihrer Einrichtung hoch)
+              <b>Logo</b>(Laden Sie hier Ihr Logo hoch. )
             </div>
             <ChooseAndCropSingleImage
               height="20"
@@ -63,13 +63,13 @@
           <div class="field">
             <div class="mt-15 mb-5">
               <div v-if="slotProps.item.kind === 'facility'">
-                <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
+                <b>Coverbild*</b> (Laden Sie hier ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt.)
               </div>
               <div v-if="slotProps.item.kind === 'news'">
-                <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
+                <b>Coverbild*</b> (Laden Sie hier ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt.)
               </div>
               <div v-if="slotProps.item.kind === 'event'">
-                <b>Coverbild*</b> (Laden Sie im Besten Fall ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt)
+                <b>Coverbild*</b> (Laden Sie hier ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt.)
               </div>
             </div>
             <ChooseAndCropSingleImage
@@ -80,7 +80,7 @@
           </div>
           <div class="field">
             <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'facility'">
-              <b>Beschreibung*</b> (Beschreiben Sie Ihre Einrichtung ausführlich. Sie können auch Bilder und Videos einbinden)
+              <b>Beschreibung*</b> (Nutzen Sie dieses Feld um Ihre Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Ihre Leistungen, Ansprechpartner etc.)
             </div>
             <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'news'">
               <b>Beschreibung*</b> (Bearbeiten Sie den Inhalt Ihres Beitrages. Sie können auch Bilder und Videos einbinden)
@@ -100,13 +100,13 @@
           </div>
           <div class="field">
             <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'facility'">
-              <b>Tags zuordnen*</b> (Ordnen Sie Ihrer Einrichtung zielgruppengerechte Tags zu)
+              <b>Tags zuordnen*</b> (Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten.)
             </div>
             <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'news'">
-              <b>Tags zuordnen*</b> (Ordnen Sie dem Beitrag zielgruppengerechte Filter zu)
+              <b>Tags zuordnen*</b> (Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten.)
             </div>
             <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'event'">
-              <b>Tags zuordnen*</b> (Ordnen Sie dem Kurs oder der Veranstaltung zielgruppengerechte Filter zu)
+              <b>Tags zuordnen*</b> (Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten.)
             </div>
             <AdminCareFacilitiesChooseTags
               :pre-set-tag-ids="slotProps.item.tag_ids"
@@ -115,7 +115,7 @@
           </div>
           <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
-              <b>Filter zuordnen*</b> (Ordnen Sie Ihrer Einrichtung zielgruppengerechte Filter zu)
+              <b>Filter zuordnen*</b> (Ordnen Sie Ihre Einrichtung zielgruppenorientiert in die verschiedenen Bereiche der Platform zu. Mithilfe der Pfeile können Sie sich durch die einzelnen Bereiche und deren Kategorien bewegen.)
             </div>
             <AdminCareFacilitiesChooseCategories
               :pre-set-category-ids="slotProps.item.category_ids"
@@ -140,7 +140,7 @@
                       autoApply
                       :enableTimePicker="false"
                       locale="de"
-                      v-model="slotProps.item.start_time"
+                      v-model="slotProps.item.course_start"
                       label="Start"
                     />
                   </v-col>
@@ -150,7 +150,7 @@
                       autoApply
                       :enableTimePicker="false"
                       locale="de"
-                      v-model="slotProps.item.end_time"
+                      v-model="slotProps.item.course_end"
                       label="End"
                     />
                   </v-col>
@@ -161,7 +161,6 @@
               <b>Autor*</b> (Geben Sie Details als Verfasser an)
               <div class="field">
                 <v-text-field
-                 
                   hide-details="auto"
                   label="Name*"
                   :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
@@ -169,13 +168,11 @@
               </div>
               <div class="field split">
                 <v-text-field
-                 
                   hide-details="auto"
                   label="Telefonnummer"
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
                 <v-text-field
-                 
                   hide-details="auto"
                   label="E-Mail"
                   :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
@@ -185,7 +182,7 @@
           <div class="mb-15" v-if="slotProps.item.kind !== 'news'">
             <div class="mt-15 mb-5">
               <div v-if="slotProps.item.kind === 'facility'">
-                <b>Kontakt & Infos* </b>(Geben Sie weitere Details zu Ihrer Einrichtung an. Geben Sie bei der Adresse bitte den Hauptsitz Ihrer Einrichtung an)
+                <b>Kontakt & Infos* </b>(Hinterlegen Sie hier alle Infos zu ihrem Hauptstandort.)
               </div>
               <div v-if="slotProps.item.kind === 'event'">
                 <b>Kursanbieter*</b>(Geben Sie Details zu Ihrer Einrichtung als Kurs- oder Veranstaltungsanbieter an)
@@ -225,7 +222,7 @@
               <v-text-field
                 v-model="slotProps.item.town"
                 hide-details="auto"
-                label="Stadt"
+                label="Ort"
                 :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
               />
             </div>
@@ -242,7 +239,7 @@
           </div>
           <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
-              <b>Standorte </b> (Falls Ihre Einrichtung mehr als einen Standort besitzt, tragen Sie hier alle weiteren Standorte ein)
+              <b>Standorte </b> (Falls Ihre Einrichtung mehrere Standorte besitzt, tragen Sie hier alle weiteren Standorte ein.)
             </div>
             <AdminCareFacilitiesAddLocations
               v-if="slotProps.item.id"
@@ -265,7 +262,7 @@
           </div>
           <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-15">
-              <b>Infobutton </b> (Tragen Sie den Link zu Ihrer eigenen Webseite ein. Falls Sie keine Webseite besitzen, lassen Sie dieses Feld einfach frei)
+              <b>Infobutton </b> (Besitzt Ihre Einrichtung eine eigene Website / Social-Media-Platform, tragen Sie hier den entsprechenden Link ein.)
               <div class="field">
                 <v-text-field
                   v-model="slotProps.item.website"

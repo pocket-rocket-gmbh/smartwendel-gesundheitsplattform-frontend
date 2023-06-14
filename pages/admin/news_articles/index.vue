@@ -33,14 +33,12 @@ definePageMeta({
 })
 
 const fields = ref([
-  { text: '', type: 'move_down' },
-  { text: '', type: 'move_up' },
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Titel', value: 'name', type: 'string' },
   { text: 'Bereich', value: '', type: 'string' },
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Autor', value: '', type: 'string' },
-  { text: 'Status', value: '', type: 'string' },
+  { text: 'Status', type: 'enum', value: 'status', enum_name: 'facilitiesStatus'},
   { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
 ])
 
@@ -51,6 +49,7 @@ const itemId = ref(null)
 const itemPlaceholder = ref({
   name: '',
   kind: 'news',
+  status: 'is_checked',
   is_active: false,
   description: '',
   category_ids: []

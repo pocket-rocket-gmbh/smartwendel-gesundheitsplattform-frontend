@@ -20,7 +20,7 @@
           :key="filterStore.currentCategoryId"
           color="is-white"
           filter-name="category"
-          label="Schwerpunkt"
+          label="Bereich"
           endpoint="categories"
         />
       </v-col>
