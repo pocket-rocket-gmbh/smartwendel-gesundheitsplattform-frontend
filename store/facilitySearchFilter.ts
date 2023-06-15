@@ -94,7 +94,6 @@ export const useFilterStore = defineStore({
 
       const careFaclitiesApi = useCollectionApi();
       careFaclitiesApi.setBaseApi(usePublicApi());
-      console.log(endpoint)
       careFaclitiesApi.setEndpoint(endpoint);
 
       await careFaclitiesApi.retrieveCollection(options as any);
