@@ -64,7 +64,7 @@ export const useFilterStore = defineStore({
 
       this.loadCareFacilities();
     },
-    async loadCareFacilities(endpoint: string = "care_facilities") {
+    async loadCareFacilities(endpoint: string = "care_facilities?kind=facility") {
       this.loading = true;
 
       const filters = [];
@@ -94,6 +94,7 @@ export const useFilterStore = defineStore({
 
       const careFaclitiesApi = useCollectionApi();
       careFaclitiesApi.setBaseApi(usePublicApi());
+      console.log(endpoint)
       careFaclitiesApi.setEndpoint(endpoint);
 
       await careFaclitiesApi.retrieveCollection(options as any);
