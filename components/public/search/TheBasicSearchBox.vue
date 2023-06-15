@@ -100,6 +100,7 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
         name: facility.name,
         url: `care_facilities/${facility.id}`,
         imageUrl: facility.logo_url,
+        kind: facility.kind,
       });
     }
 
@@ -112,6 +113,7 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
         name: facility.name,
         url: `care_facilities/${facility.id}`,
         imageUrl: facility.logo_url,
+        kind: facility.kind,
       });
     });
   }

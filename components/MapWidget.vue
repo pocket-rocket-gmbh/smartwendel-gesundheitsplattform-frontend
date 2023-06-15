@@ -75,7 +75,8 @@ const mapWidgetId = "map" + Math.floor(Math.random() * 100000000000); // THIS IS
 
 let locationMarkers: Array<any> = []; // TEMP ANY LocationMarker
 let map: Map = null;
-let clusterlayer: any = null;
+let facilitiesClusterlayer: any = null;
+let eventsClusterlayer: any = null;
 
 let programmaticScrollInProgress = false;
 
@@ -143,7 +144,18 @@ const refreshView = async () => {
   locationMarkers = [];
 
   // @ts-expect-error no type
-  clusterlayer = L.markerClusterGroup({
+  facilitiesClusterlayer = L.markerClusterGroup({
+    iconCreateFunction: function (cluster: any) {
+      return L.divIcon({
+        html: cluster.getAllChildMarkers().length.toString(),
+        className: "clustericon",
+        iconSize: L.point(40, 40),
+      });
+    },
+    showCoverageOnHover: false,
+  });
+  // @ts-expect-error no type
+  eventsClusterlayer = L.markerClusterGroup({
     iconCreateFunction: function (cluster: any) {
       return L.divIcon({
         html: cluster.getAllChildMarkers().length.toString(),
@@ -154,17 +166,16 @@ const refreshView = async () => {
     showCoverageOnHover: false,
   });
 
-  const mapMarkerIcon = L.icon({
-    iconUrl: "/map-marker-green.svg",
-    shadowUrl: null,
-    iconSize: [60, 60], // size of the icon
-    shadowSize: [0, 0], // size of the shadow
-    iconAnchor: [30, 51], // point of the icon which will correspond to marker's location
-    shadowAnchor: [0, 0], // the same for the shadow
-    popupAnchor: [-5, -55], // point from which the popup should open relative to the iconAnchor
-  });
-
   props.locations.forEach((location: MapLocation) => {
+    const mapMarkerIcon = L.icon({
+      iconUrl: location.kind === "facility" ? "/map-marker-green.svg" : "/map-marker-orange.svg",
+      shadowUrl: null,
+      iconSize: [60, 60], // size of the icon
+      shadowSize: [0, 0], // size of the shadow
+      iconAnchor: [30, 51], // point of the icon which will correspond to marker's location
+      shadowAnchor: [0, 0], // the same for the shadow
+      popupAnchor: [-5, -55], // point from which the popup should open relative to the iconAnchor
+    });
     const marker = new L.Marker([location.latitude, location.longitude], {
       icon: mapMarkerIcon,
       draggable: location.draggable,
@@ -178,7 +189,7 @@ const refreshView = async () => {
   ${location.imageUrl ? '<img class="background" src="' + location.imageUrl + '" />' : ""}
   <h2 class="name">
     <div style="text-align: center">
-      <span>${location.name}</span> 
+      <span>${location.name}</span>
     </div>
     </h2>
   <div class="action">
@@ -197,10 +208,14 @@ const refreshView = async () => {
       emit("markerClick", marker.sourceTarget);
     });
 
-    clusterlayer.addLayer(marker);
+    if (location.kind === "event") {
+      eventsClusterlayer.addLayer(marker);
+    } else {
+      facilitiesClusterlayer.addLayer(marker);
+    }
   });
 
-  clusterlayer.on("click", function (cluster: any) {
+  const handleClusterClick = (cluster: any) => {
     // If this is a cluster click and not a marker click.
     if (cluster.layer._childCount) {
       // Zoom to bounds if the map is not at its highest zoom level.
@@ -213,9 +228,13 @@ const refreshView = async () => {
         cluster.layer.spiderfy();
       }
     }
-  });
+  };
 
-  map.addLayer(clusterlayer);
+  facilitiesClusterlayer.on("click", handleClusterClick);
+  eventsClusterlayer.on("click", handleClusterClick);
+
+  map.addLayer(facilitiesClusterlayer);
+  map.addLayer(eventsClusterlayer);
 
   const group = L.featureGroup(locationMarkers);
   if (!group || !group.getBounds().isValid()) return;
@@ -226,10 +245,15 @@ const refreshView = async () => {
 };
 
 const clearMap = () => {
-  if (clusterlayer) {
-    map.removeLayer(clusterlayer);
-    clusterlayer.clearLayers();
-    clusterlayer = null;
+  if (facilitiesClusterlayer) {
+    map.removeLayer(facilitiesClusterlayer);
+    facilitiesClusterlayer.clearLayers();
+    facilitiesClusterlayer = null;
+  }
+  if (eventsClusterlayer) {
+    map.removeLayer(eventsClusterlayer);
+    eventsClusterlayer.clearLayers();
+    eventsClusterlayer = null;
   }
 };
 
