@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, indexMain) in items" :key="item.id">
+      <tr v-for="(item, indexMain) in items" :key="item.id" :class="[(item === activeItems ? 'activeItems' : '')]">
         <td v-for="(field, index) in fields" :key="index" class="is-clickable" @click="handleEmitParent(item, field, indexMain)" :width="field.width">
           <span v-if="field.type === 'projectTimeRange'">{{ useDatetime().getProjectTimeRangeString(item) }}</span>
           <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
@@ -50,9 +50,24 @@
             :notification-pre-filled-text="field.notificationPreFilledText"
             :notification-cta-link="field.notificationCtaLink"
           />
-          <span v-else-if="item[field.value] && field.enum_name && field.type === 'enum'" :class="useEnums().getClassName(field.enum_name, item[field.value])">
-            {{ useEnums().getName(field.enum_name, item[field.value]) }}
-          </span>
+          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
+            <span>
+              <v-chip v-if="field.enum_name === 'facilitiesStatus'" class="is-clickable" @click="showDropdown(item.id)" :color="useEnums().getClassName(field.enum_name, item[field.value])">{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip>
+            </span>
+              <div v-if="showingDropdown === item.id" class="dropdown">
+                  <v-select
+                    variant="underlined"
+                    hide-details="auto"
+                    v-model="item.status"
+                    :items="ItemStatus"
+                    item-title="name"
+                    item-value="id"
+                    label="Status"
+                    single-line
+                    @update:modelValue="setStatus(item.id)"
+                  />
+              </div>
+          </div>
           <span v-else-if="field.type === 'array'">{{ item[field.value].join(', ') }}</span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
@@ -90,14 +105,38 @@ export default defineComponent({
       default: 'desc'
     }
   },
-  setup (props, { emit }) {
+  setup (props, { emit, expose }) {
     const loading = ref(false)
+    const showingDropdown = ref(null)
+
+    const showDropdown = (id) => {
+      const itemId = id
+      showingDropdown.value = itemId
+    }
+    
+    const setStatus = (id) => {
+      showingDropdown.value = null
+     console.log(id)
+    }
+
+    const ItemStatus = ref([
+      { name: 'In Prüfung', id: 'is_checked'},
+      { name: 'Freigegeben', id: 'confirmed'},
+      { name: 'Abgelehnt', id: 'rejected'}
+    ])
+
+    const resetActiveItems = () => {
+      activeItems.value = null
+    }
+
+    expose({ resetActiveItems })
 
     const emitopenDeleteDialog = (itemId) => {
       emit('openDeleteDialog', itemId)
     }
-
+    const activeItems = ref(null)
     const handleEmitParent = (item, field, menu_order) => {
+      activeItems.value = item
       if (field.type === 'move_up') {
         move(item, items.value[menu_order -= 1])
       } else if (field.type === 'move_down') {
@@ -147,7 +186,12 @@ export default defineComponent({
       handleEmitParent,
       move,
       items,
-      useEnums
+      useEnums,
+      showDropdown,
+      showingDropdown,
+      ItemStatus,
+      setStatus,
+      activeItems
     }
   }
 })
@@ -156,4 +200,9 @@ export default defineComponent({
 <style lang="sass">
 .small
   font-size: 8px
+
+.dropdown
+  position: absolute
+  margin-left: 100px
+  margin-top: -50px
 </style>

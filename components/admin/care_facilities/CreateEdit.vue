@@ -47,6 +47,7 @@
                 :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
               />
               <v-text-field
+                v-if="slotProps.item.kind !== 'news'"
                 v-model="slotProps.item.name"
                 hide-details="auto"
                 label="Name"

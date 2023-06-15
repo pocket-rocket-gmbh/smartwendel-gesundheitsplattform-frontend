@@ -12,12 +12,13 @@
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @openAddSubCategoriesDialog="openAddSubCategoriesDialog"
+      ref="dataTable"
     />
 
     <AdminCategoriesAddSubCategories
       v-if="addSubCategoriesDialogOpen"
       :category-id="itemId"
-      @close="itemId = null; addSubCategoriesDialogOpen = false;"
+      @close="handleDialogClosed"
       @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
 
@@ -52,7 +53,7 @@ export default defineComponent({
       { text: 'Bereichsbezeichnung', value: 'name', type: 'string' },
       { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubCategoriesDialog', tooltip: 'Kategorien hinzufügen' },
     ])
-    
+    const dataTable = ref(null)
     const createEditDialogOpen = ref(false)
     const confirmDeleteDialogOpen = ref(false)
     const addSubCategoriesDialogOpen = ref(false)
@@ -78,6 +79,14 @@ export default defineComponent({
       addSubCategoriesDialogOpen.value = true
     }
 
+    const handleDialogClosed = () => {
+      dataTable.value.resetActiveItems()
+      itemId.value = null
+      createEditDialogOpen.value = false
+      confirmDeleteDialogOpen.value = false
+      addSubCategoriesDialogOpen.value = false
+    }
+
     return {
       fields,
       createEditDialogOpen,
@@ -87,7 +96,9 @@ export default defineComponent({
       openCreateEditDialog,
       openDeleteDialog,
       openAddSubCategoriesDialog,
-      itemPlaceholder
+      itemPlaceholder,
+      handleDialogClosed,
+      dataTable
     }
   }
 })
