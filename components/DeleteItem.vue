@@ -7,7 +7,7 @@
   >
     <v-card>
       <v-card-title class="text-h5">
-        Löschen
+        Löschens
       </v-card-title>
       <v-card-text>
         Möchten Sie {{ term }} wirklich löschen?
@@ -60,9 +60,12 @@ export default defineComponent({
     }
 
     const deleteItem = async () => {
-      await api.deleteItem('Der Eintrag wurde erfolgreich gelöscht')
-      useNuxtApp().$bus.$emit("triggerGetItems")
-      emit('close')
+      const confirmed = confirm('Fortfahren ?')
+      if (confirmed) {
+        await api.deleteItem('Der Eintrag wurde erfolgreich gelöscht')
+        useNuxtApp().$bus.$emit("triggerGetItems")
+        emit('close')
+      }
     }
 
     return {

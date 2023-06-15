@@ -35,7 +35,7 @@ definePageMeta({
 const fields = ref([
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Titel', value: 'name', type: 'string' },
-  { text: 'Bereich', value: '', type: 'string' },
+  { text: 'Bereich', value: 'categories', type: 'associations_name' },
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Autor', value: '', type: 'string' },
   { text: 'Status', type: 'enum', value: 'status', enum_name: 'facilitiesStatus'},

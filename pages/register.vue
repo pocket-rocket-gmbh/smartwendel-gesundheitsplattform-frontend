@@ -8,7 +8,7 @@
             <v-text-field
               v-model="careFacilityName"
               type="text"
-              label="Name der Einrichtung *"
+              label="Name der Einrichtung/ Unternehmen/Verband/Verein/Behörde *"
               :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
               hide-details="auto"
             />

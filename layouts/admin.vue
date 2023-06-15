@@ -25,7 +25,7 @@
         <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()">
           Dashboard
         </v-list-item>
-        <v-list-item link to="/admin/tags" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
+        <v-list-item link to="/admin/tags" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list') && useUser().isAdmin()">
           Tags
         </v-list-item>
         <v-list-item link to="/admin/categories" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('categories', 'list')">

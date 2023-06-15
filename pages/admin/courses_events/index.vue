@@ -36,7 +36,8 @@ definePageMeta({
 const fields = ref([
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Titel', value: 'name', type: 'string' },
-  { text: 'Bereich', value: '', type: 'string' },
+  { text: 'Kind', value: 'kind', type: 'string' },
+  { text: 'Bereich', value: 'categories', type: 'associations_name' },
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Beginn', value: 'course_start', type: 'datetime' },
   { text: 'Ende', value: 'course_end', type: 'datetime' },

@@ -83,6 +83,7 @@ export default defineComponent({
       name: ''
     })
     const roles = ref([
+      { name: 'Einrichtung', id: 'facility_owner'},
       { name: 'Standard Benutzer', id: 'user'},
       { name: 'Administrator', id: 'admin'}
     ])

@@ -8,9 +8,6 @@
             <div v-if="slotProps.item.kind === 'facility'">
               Hier können Sie eine eigene Detailseite für Ihre Einrichtung anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen. Klicken Sie hier, für eine beispielhafte Vorschau einer ausgebauten Einrichtungsseite.
             </div>
-            <div v-else-if="slotProps.item.kind === 'news'">
-              Hier können Sie News oder Beiträge anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
-            </div>
             <div v-else-if="slotProps.item.kind === 'event'">
               Hier können Sie eigene Veranstaltungen anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
             </div>
@@ -18,7 +15,7 @@
               Hier können Sie eigene Kurse anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
             </div>
           </div>
-          <div class="field">
+          <div class="field" v-if="useUser().isAdmin()">
             <div class="mt-1 mb-15">
               <b>Status</b>
               <v-select
@@ -43,6 +40,14 @@
               <b>Kurs-/ Veranstaltungsname*</b> (Hinterlegen Sie den Namen des Kurses oder der Veranstaltung)
             </div>
               <v-text-field
+                v-if="slotProps.item.kind === 'news'"
+                v-model="slotProps.item.name"
+                hide-details="auto"
+                label="Überschrift"
+                :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              />
+              <v-text-field
+                v-if="slotProps.item.kind !== 'news'"
                 v-model="slotProps.item.name"
                 hide-details="auto"
                 label="Name"
@@ -66,7 +71,7 @@
                 <b>Coverbild*</b> (Laden Sie hier ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt.)
               </div>
               <div v-if="slotProps.item.kind === 'news'">
-                <b>Coverbild*</b> (Laden Sie hier ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt.)
+                <b>Coverbild*</b> (Laden Sie hier ein für Ihren Beitrag passendes Bild hoch. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt.)
               </div>
               <div v-if="slotProps.item.kind === 'event'">
                 <b>Coverbild*</b> (Laden Sie hier ein Bild hoch, worauf Ihre Einrichtung abgebildet ist. Falls Sie kein passendes Bild zur Verfügung haben, wird an dieser Stelle ein passendes Standardbild hinterlegt.)
@@ -83,7 +88,7 @@
               <b>Beschreibung*</b> (Nutzen Sie dieses Feld um Ihre Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Ihre Leistungen, Ansprechpartner etc.)
             </div>
             <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'news'">
-              <b>Beschreibung*</b> (Bearbeiten Sie den Inhalt Ihres Beitrages. Sie können auch Bilder und Videos einbinden)
+              <b>Inhalt*</b>
             </div>
             <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'event'">
               <b>Beschreibung*</b> (Beschreiben Sie den Kurs oder die Veranstaltung ausführlich. Sie können auch Bilder und Videos einbinden)
@@ -113,7 +118,7 @@
               @setCareFacilityTags="setCareFacilityTags"
             />
           </div>
-          <div class="field" v-if="slotProps.item.kind === 'facility'">
+          <div class="field">
             <div class="mt-15 mb-5">
               <b>Filter zuordnen*</b> (Ordnen Sie Ihre Einrichtung zielgruppenorientiert in die verschiedenen Bereiche der Platform zu. Mithilfe der Pfeile können Sie sich durch die einzelnen Bereiche und deren Kategorien bewegen.)
             </div>
@@ -130,7 +135,7 @@
           </div>
           <div class="field" v-if="slotProps.item.kind !== 'facility'">
             <div class="mt-15 mb-5">
-              <b>Veröffentlichkeitsdatum</b> (Hinterlegen Sie ein Veröffentlichkeitsdatum)
+              <b>Veröffentlichkeitsdatum</b> (Wählen Sie einen Zeitraum  (Start- und End-Datum), wann ihr Beitrag auf der Platform angezeigt werden soll. Wenn der Inhalt dauerhaft angezeigt werden soll, müssen Sie hier keine Infos hinterlegen.)
               </div>
               <div class="mb-15 justify-center">
                 <v-row>
@@ -158,7 +163,7 @@
               </div>
             </div>
             <div v-if="slotProps.item.kind === 'news'" class="mb-15">
-              <b>Autor*</b> (Geben Sie Details als Verfasser an)
+              <b>Autor*</b> (Geben Sie hier Infos zum Verfasser des Beitrags an.)
               <div class="field">
                 <v-text-field
                   hide-details="auto"

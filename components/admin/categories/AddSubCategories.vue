@@ -3,7 +3,7 @@
     v-model="dialog"
     width="700"
     transition="dialog-bottom-transition"
-    @click:outside="emitClose()"
+    @click:outside="close()"
   >
     <v-card class="dialog-700">
       <v-card-title class="text-h5">
@@ -126,10 +126,13 @@ export default defineComponent({
 
     onMounted(() => {
       getCategory()
+    
     })
+    
     return {
       dialog,
       emitClose,
+      close,
       createEditDialogOpen,
       confirmDeleteDialogOpen,
       openCreateEditDialog,

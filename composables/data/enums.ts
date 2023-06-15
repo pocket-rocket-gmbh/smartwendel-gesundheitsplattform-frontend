@@ -2,56 +2,33 @@ export function useEnums() {
 
   // Define enums here
   const facilitiesStatus = [
-    { value: 'is_checked', name: 'In Prüfung', class: 'has-box-warning' },
-    { value: 'confirmed', name: 'Freigegeben', class: 'has-box-success' },
-    { value: 'rejected', name: 'Abgelehnt', class: 'has-box-danger' }
-  ]
-  const projectKinds = [
-    { value: 'upvote', name: 'Like', class: '' },
-    { value: 'upvote_downvote', name: 'Like & Dislike', class: '' }
+    { value: 'is_checked', name: 'In Prüfung', class: 'warning' },
+    { value: 'confirmed', name: 'Freigegeben', class: 'success' },
+    { value: 'rejected', name: 'Abgelehnt', class: 'error' }
   ]
 
-  const pinboardStatus = [
-    { value: 'is_checked', name: 'In Prüfung', class: 'has-box-warning' },
-    { value: 'confirmed', name: 'Freigegeben', class: 'has-box-success' },
-    { value: 'rejected', name: 'Abgelehnt', class: 'has-box-danger' }
-  ]
-
-  const gamificationKinds = [
-    { value: 'comment', name: 'Kommentare', class: '' },
-    { value: 'poll', name: 'Umfrage', class: '' },
-    { value: 'rating', name: 'Bewertung', class: '' },
-    { value: 'login', name: 'Login', class: '' }
-  ]
-
-  const userKind = [
-    { value: 'user', name: 'Benutzer', class: '' },
-    { value: 'admin', name: 'Admin', class: '' }
+  const facilitiesKind = [
+    { value: 'event', name: 'Vernanstaltung', class: '' },
+    { value: 'course', name: 'Kurs', class: '' },
   ]
 
   type EnumValue = {
     value: string;
     name: string;
     class: string;
-  };
+  }
   
   // insert enums in Interface
   interface Enums {
-    facilitiesStatus: EnumValue[];
-    projectKinds: EnumValue[];
-    pinboardStatus: EnumValue[];
-    gamificationKinds: EnumValue[];
-    userKind: EnumValue[];
+    facilitiesStatus: EnumValue[],
+    facilitiesKind: EnumValue[]
   }
   
   // insert enums in JSON
   const enums: Record<keyof Enums, EnumValue[]> = {
     facilitiesStatus,
-    projectKinds,
-    pinboardStatus,
-    gamificationKinds,
-    userKind
-  };
+    facilitiesKind
+  }
 
   const getName = (enumName: keyof Enums, value:string) => {
     const found = enums[enumName].find((val:any) => val.value === value) as EnumValue | undefined
@@ -72,8 +49,7 @@ export function useEnums() {
   // return enums
   return {
     facilitiesStatus,
-    projectKinds,
-    pinboardStatus,
+    facilitiesKind,
     getName,
     getClassName
   }
