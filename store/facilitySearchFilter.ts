@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-export const filterSortingDirections = ["Aufsteigend", "Fallend"] as const;
+export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 
@@ -32,7 +32,48 @@ const initialFilterState: Filter = {
 export const useFilterStore = defineStore({
   id: "filter",
   state: () => initialFilterState,
+  getters: {
+    filterInfo: (state) => {
+      return {
+        currentSearchQuery: state.currentSearchQuery,
+        currentCategoryId: state.currentCategoryId,
+        currentSubCategoryId: state.currentSubCategoryId,
+        currentSubSubCategoryId: state.currentSubSubCategoryId,
+        currentTags: state.currentTags,
+        filterSort: state.filterSort,
+      };
+    },
+  },
   actions: {
+    setFilterInfo(newFilterInfo: typeof this.filterInfo) {
+      this.currentSearchQuery = newFilterInfo.currentSearchQuery;
+      this.currentCategoryId = newFilterInfo.currentCategoryId;
+      this.currentSubCategoryId = newFilterInfo.currentSubCategoryId;
+      this.currentSubSubCategoryId = newFilterInfo.currentSubSubCategoryId;
+      this.currentTags = newFilterInfo.currentTags;
+      this.filterSort = newFilterInfo.filterSort;
+    },
+    updateUrlQuery() {
+      const filterUrl = `?filter=${JSON.stringify(this.filterInfo)}`;
+      const url = `${window.location.origin}${window.location.pathname}${filterUrl}`;
+      window.history.pushState({ path: url }, "", url);
+    },
+    updateFromUrlQuery() {
+      const getCurrentQueryParams = (): { [key: string]: string } => {
+        const params: { [key: string]: string } = {};
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.forEach((value, key) => {
+          params[key] = value;
+        });
+        return params;
+      };
+
+      const { filter } = getCurrentQueryParams();
+
+      if (!filter) return;
+
+      this.setFilterInfo(JSON.parse(filter));
+    },
     clearSearch() {
       this.currentSearchQuery = "";
       this.currentCategoryId = null;
@@ -61,8 +102,6 @@ export const useFilterStore = defineStore({
       if (toUpdate === "tags" && Array.isArray(value)) {
         this.currentTags = value;
       }
-
-      this.loadCareFacilities();
     },
     async loadCareFacilities(endpoint: string = "care_facilities?kind=facility") {
       this.loading = true;
@@ -133,6 +172,8 @@ export const useFilterStore = defineStore({
       if (this.mapFilter) {
         this.careFaclities = this.careFaclities.filter((facility) => facility.id === this.mapFilter);
       }
+
+      this.updateUrlQuery();
     },
   },
 });
