@@ -8,12 +8,18 @@
 <script setup lang="ts">
 import { PropType, onMounted, onUnmounted } from "vue";
 import L, { LatLngExpression, Map } from "leaflet";
-import "../public/js/leaflet.mask";
+import "../js/leaflet.mask";
 import "leaflet.markercluster";
 import { MapLocation } from "@/types/MapLocation";
 
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+
+type Location = {
+  id: string;
+  longitude: number;
+  latitude: number;
+};
 
 const props = defineProps({
   zoomControl: {
@@ -73,7 +79,7 @@ const emit = defineEmits<{
 
 const mapWidgetId = "map" + Math.floor(Math.random() * 100000000000); // THIS IS A WORKAROUND  'const mapWidgetId = 'map' + self.crypto.randomUUID()'
 
-let locationMarkers: Array<any> = []; // TEMP ANY LocationMarker
+let locationMarkers: Array<L.Marker<any>> = []; // TEMP ANY LocationMarker
 let map: Map = null;
 let facilitiesClusterlayer: any = null;
 let eventsClusterlayer: any = null;
@@ -244,6 +250,20 @@ const refreshView = async () => {
   });
 };
 
+const getLocations = (): Array<Location> => {
+  const result: Location[] = [];
+
+  locationMarkers.forEach((element) => {
+    result.push({
+      id: element.getElement().id,
+      longitude: element.getLatLng().lng,
+      latitude: element.getLatLng().lat,
+    });
+  });
+
+  return result;
+};
+
 const clearMap = () => {
   if (facilitiesClusterlayer) {
     map.removeLayer(facilitiesClusterlayer);
@@ -318,6 +338,7 @@ const disableTapping = () => {
 
 defineExpose({
   refreshView,
+  getLocations,
 });
 </script>
 

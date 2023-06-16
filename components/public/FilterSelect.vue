@@ -26,7 +26,9 @@ const selected = ref("");
 const items = ref([]);
 
 const setSelectValue = (e: Event) => {
-  filterStore.updateCategoriesFilter(props.filterName, (e.target as HTMLSelectElement).value);
+  const value = (e.target as HTMLSelectElement).value;
+  filterStore.updateCategoriesFilter(props.filterName, value);
+  selected.value = value;
 };
 
 const getItems = async () => {
