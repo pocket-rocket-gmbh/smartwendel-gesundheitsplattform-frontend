@@ -2,54 +2,42 @@
  <v-select
     variant="underlined"
     hide-details="auto"
-    v-model="item.status"
-    :items="ItemStatus"
+    v-model="model"
+    :items="selectedEnum"
     item-title="name"
-    item-value="id"
+    item-value="value"
     label="Status"
     single-line
-    
+    @update:model-value="save"
   />
 </template>
-<script lang="ts">
-import SendNotification from '@/components/SendNotification.vue'
-export default defineComponent({
-  components: { SendNotification },
-  props: {
-    item: Object,
-    endpoint: String,
-    fieldToSwitch: String,
-  },
-  setup (props) {
-    const switchValue = ref(props.item[props.fieldToSwitch])
-    const updateApi = useCollectionApi()
-    updateApi.setBaseApi(usePrivateApi())
-    const sendNotificationDialogOpen = ref(false)
+<script lang="ts" setup>
+import { useEnums } from '@/composables/data/enums'
 
-    onMounted(() => {
-      switchValue.value = props.item[props.fieldToSwitch]
-    })
-
-    const ItemStatus = ref([
-      { name: 'In Prüfung', id: 'is_checked'},
-      { name: 'Freigegeben', id: 'confirmed'},
-      { name: 'Abgelehnt', id: 'rejected'}
-    ])
-
-    const save = async () => {
-      updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`)
-      let data = {}
-      data[props.fieldToSwitch] = switchValue.value
-
-      await updateApi.updateItem(data, null)
-    }
-
-    return {
-      switchValue,
-      sendNotificationDialogOpen,
-      save,
-      ItemStatus
-    }
-  }
+const props = defineProps({ 
+  item: Object,
+  endpoint: String,
+  fieldName: String,
+  enumName: String
 })
+
+const enums = useEnums();
+const selectedEnum = enums[props.enumName];
+
+const model = ref(null)
+const value = ref(props.item[props.fieldName])
+const updateApi = useCollectionApi()
+updateApi.setBaseApi(usePrivateApi())
+
+onMounted(() => {
+  model.value = props.item[props.fieldName]
+})
+
+const save = async () => {
+  updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`)
+  let data = {}
+  data[props.fieldName] = model.value
+
+  await updateApi.updateItem(data, null)
+}
 </script>
