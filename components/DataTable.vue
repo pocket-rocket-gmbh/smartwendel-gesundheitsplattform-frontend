@@ -52,11 +52,11 @@
           />
 
           <TableDropdown
-            v-else-if="field.enum === 'facilitiesStatus' && showingDropdown === item.id" class="dropdown"  @click.stop=""
+            v-else-if="field.type === 'enumDropdown'"
             :item="item"
+            :enum-name="field.enum_name"
             :endpoint="field.endpoint"
-            :field-to-switch="field.fieldToSwitch"
-            :ItemStatus="ItemStatus"
+            :fieldName="field.value"
           />
           <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
             <span>
@@ -75,7 +75,6 @@
 
 <script>
 import { useEnums } from '@/composables/data/enums'
-import { ResultStatus } from '@/types/serverCallResult'
 export default defineComponent({
   emits: ['close', 'openCreateEditDialog', 'openDeleteDialog'],
   props: {
@@ -136,7 +135,7 @@ export default defineComponent({
         move(item, items.value[menu_order -= 1])
       } else if (field.type === 'move_down') {
         move(item, items.value[menu_order += 1])
-      } else if (field.type !== 'switch') {
+      } else if (field.type !== 'switch' && field.type !== 'enumDropdown') {
         emitParent(item.id, field.emit)
       }
     }
@@ -150,7 +149,13 @@ export default defineComponent({
     }
 
     const move = async (entry, nextEntry) => {
-      const result = await useTableMove().move(entry, nextEntry, props.overwriteMoveEndpoint)
+
+      let endpoint = props.overwriteMoveEndpoint
+      if (!props.overwriteMoveEndpoint) {
+        endpoint = props.endpoint
+      }
+
+      const result = await useTableMove().move(entry, nextEntry, endpoint)
       if (result) {
         getItems()
       }

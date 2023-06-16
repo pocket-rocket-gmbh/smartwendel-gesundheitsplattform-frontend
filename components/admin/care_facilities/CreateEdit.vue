@@ -217,6 +217,16 @@
                 :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
               />
             </div>
+            <div class="field">
+              <v-select
+                hide-details="auto"
+                v-model="slotProps.item.community_id"
+                :items="communities"
+                item-title="name"
+                item-value="id"
+                label="Gemeinde"
+              />
+            </div>
             <div class="field split">
               <v-text-field
                 v-model="slotProps.item.zip"
@@ -224,23 +234,16 @@
                 label="PLZ"
                 :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
               />
-              <v-text-field
-                v-model="slotProps.item.town"
-                hide-details="auto"
-                label="Ort"
-                :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
-              />
-            </div>
-            <div class="field">
               <v-select
                 hide-details="auto"
-                v-model="slotProps.item.community"
-                :items="communities"
+                v-model="slotProps.item.town"
+                :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
-                label="Gemeinde"
+                label="Ort"
               />
-              </div>
+            </div>
+            
           </div>
           <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
@@ -345,6 +348,17 @@ export default defineComponent({
       await communitiesApi.retrieveCollection()
     }
 
+    const getTownsByCommunityId = (communityId:string) => {
+      const found = communities.value.find((community:any) => community.id === communityId)
+
+      if (found) {
+        useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'zip', value: found.zip })
+        return found.towns
+      } else {
+        []
+      }
+    }
+
     onMounted(() => {
       getCommunities()
     })
@@ -360,7 +374,8 @@ export default defineComponent({
       setCareFacilityTags,
       communities,
       status,
-      eventTyp
+      eventTyp,
+      getTownsByCommunityId
     }
   }
 })
