@@ -18,7 +18,7 @@
                   {{ category.name }}
                   </span>
                   <span>
-                    <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-menu-down</v-icon>
+                    <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-menu-down-outline</v-icon>
                   </span>
                 </div> 
               </v-list-item-title>

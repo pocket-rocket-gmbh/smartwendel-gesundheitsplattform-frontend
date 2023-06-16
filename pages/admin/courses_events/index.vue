@@ -5,7 +5,7 @@
     <v-btn elevation="0" variant="outlined" @click="itemPlaceholder.kind = 'event'; itemId = null; createEditDialogOpen = true">Vernanstaltung anlegen</v-btn>
     <DataTable
       :fields="fields"
-      endpoint="care_facilities?kind=event"
+      endpoint="care_facilities?kind=event,course"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
     />
