@@ -1,28 +1,29 @@
 <template>
   <v-row class="my-15">
     <v-col sm="3" md="4" offset-sm="4">
-      <v-card  :class="['pa-6', {'shake' : animated}]">
-        <img class="is-fullwidth" src="~/assets/images/logo.png" />
-
-        <div class="mb-3">
-          <v-text-field v-model="email"
-            class="pt-6"
-            label="E-Mail Adresse"
-            hide-details="auto"
-          />
-        </div>
-        <div class="mb-3">
-          <v-text-field v-model="password"
-            type="password"
-            label="Passwort"
-            :error-messages="useErrors().mappedErrorCode(errors)"
-            hide-details="auto"
-          />
-        </div>
-        <v-btn color="primary" block depressed @click="auth">Login</v-btn>
-        <nuxt-link to="/password_forgotten"><div align="center" class="mt-2">Passwort vergessen?</div></nuxt-link>
-        <nuxt-link to="/register"><div align="center" class="mt-6">Noch keinen Account? Jetzt registrieren!</div></nuxt-link>
-      </v-card>
+      <v-form @submit.prevent="auth">
+        <v-card  :class="['pa-6', {'shake' : animated}]">
+          <img class="is-fullwidth" src="~/assets/images/logo.png" />
+          <div class="mb-3">
+            <v-text-field v-model="email"
+              class="pt-6"
+              label="E-Mail Adresse"
+              hide-details="auto"
+            />
+          </div>
+          <div class="mb-3">
+            <v-text-field v-model="password"
+              type="password"
+              label="Passwort"
+              :error-messages="useErrors().mappedErrorCode(errors)"
+              hide-details="auto"
+            />
+          </div>
+          <v-btn color="primary" block depressed type="submit">Login</v-btn>
+          <nuxt-link to="/password_forgotten"><div align="center" class="mt-2">Passwort vergessen?</div></nuxt-link>
+          <nuxt-link to="/register"><div align="center" class="mt-6">Noch keinen Account? Jetzt registrieren!</div></nuxt-link>
+        </v-card>
+      </v-form>
     </v-col>
   </v-row>
 </template>

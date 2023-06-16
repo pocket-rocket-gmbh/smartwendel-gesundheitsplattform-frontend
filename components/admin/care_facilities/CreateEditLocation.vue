@@ -12,14 +12,12 @@
         Ort erstellen
       </v-card-title>
       <v-container>
-        <ClientOnly>
-          <lazy-MapWidget
-            class="mapwidget"
-            ref="map"
-            :locations="locations"
-            :auto-fit=true
-          />
-        </ClientOnly>
+        <ClientMap
+          class="mapwidget"
+          ref="map"
+          :locations="locations"
+          :auto-fit=true
+        />
       </v-container>
       <v-divider></v-divider>
       <v-card-actions>

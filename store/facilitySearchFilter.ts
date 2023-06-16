@@ -64,7 +64,7 @@ export const useFilterStore = defineStore({
 
       this.loadCareFacilities();
     },
-    async loadCareFacilities(endpoint: string = "care_facilities?kind=facility,event") {
+    async loadCareFacilities(endpoint: string = "care_facilities?kind=facility") {
       this.loading = true;
 
       const filters = [];
