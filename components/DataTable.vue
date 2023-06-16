@@ -75,7 +75,6 @@
 
 <script>
 import { useEnums } from '@/composables/data/enums'
-import { ResultStatus } from '@/types/serverCallResult'
 export default defineComponent({
   emits: ['close', 'openCreateEditDialog', 'openDeleteDialog'],
   props: {
@@ -150,7 +149,13 @@ export default defineComponent({
     }
 
     const move = async (entry, nextEntry) => {
-      const result = await useTableMove().move(entry, nextEntry, props.overwriteMoveEndpoint)
+
+      let endpoint = props.overwriteMoveEndpoint
+      if (!props.overwriteMoveEndpoint) {
+        endpoint = props.endpoint
+      }
+
+      const result = await useTableMove().move(entry, nextEntry, endpoint)
       if (result) {
         getItems()
       }
