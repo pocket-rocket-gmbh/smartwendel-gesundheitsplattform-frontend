@@ -1,23 +1,13 @@
 <template>
   <v-container class="limited offset">
-    <PublicCareFacilitiesImages
+    <PublicNewsImages
       :care-facility="careFacility"
     />
     <v-row>
-      <v-col md="8">
-        <PublicCareFacilitiesMain
+      <v-col>
+        <PublicNewsMain
           :care-facility="careFacility"
         />
-      </v-col>
-      <v-col md="4">
-        <PublicCareFacilitiesRight
-          :care-facility="careFacility"
-        />
-        <div class="mt-5">
-          <PublicCareFacilitiesDocuments
-          :care-facility="careFacility"
-        />
-        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -49,7 +39,7 @@ export default defineComponent({
     onMounted(() => {
       getCareFacility()
     })
-console.log(careFacility)
+
     return {
       careFacility
     }

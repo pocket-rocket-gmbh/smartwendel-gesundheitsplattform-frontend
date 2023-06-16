@@ -50,23 +50,18 @@
             :notification-pre-filled-text="field.notificationPreFilledText"
             :notification-cta-link="field.notificationCtaLink"
           />
+
+          <TableDropdown
+            v-else-if="field.enum === 'facilitiesStatus' && showingDropdown === item.id" class="dropdown"  @click.stop=""
+            :item="item"
+            :endpoint="field.endpoint"
+            :field-to-switch="field.fieldToSwitch"
+            :ItemStatus="ItemStatus"
+          />
           <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
             <span>
-              <v-chip v-if="field.enum_name === 'facilitiesStatus'" class="is-clickable" @click="showDropdown(item.id)" :color="useEnums().getClassName(field.enum_name, item[field.value])">{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip>
+              <v-chip v-if="field.enum_name === 'facilitiesStatus'" class="is-clickable" @click.stop="showDropdown(item.id)" :color="useEnums().getClassName(field.enum_name, item[field.value])">{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip>
             </span>
-              <div v-if="showingDropdown === item.id" class="dropdown">
-                  <v-select
-                    variant="underlined"
-                    hide-details="auto"
-                    v-model="item.status"
-                    :items="ItemStatus"
-                    item-title="name"
-                    item-value="id"
-                    label="Status"
-                    single-line
-                    @update:modelValue="setStatus(item.id)"
-                  />
-              </div>
           </div>
           <span v-else-if="field.type === 'array'">{{ item[field.value].join(', ') }}</span>
           <span v-else>{{ item[field.value] }}</span>

@@ -10,24 +10,15 @@
             <h2 class="is-primary">Kurse & Veranstaltungen</h2>
           </div>
         </v-col>
-        <v-col md="3" class="d-flex justify-end align-start">
-          <v-btn 
-            variant="flat"
-            color="#007344"
-            rounded="pill"
-            >
-            <span class = "text-white">
-              Mehr Kurse
-            </span>
-          </v-btn>
-        </v-col>
       </v-row>
     </div>
-    <PublicContentBox
+    <v-row>
+      <PublicContentBox
       v-for="courses in eventArticles" :key="courses.id"
       :item="courses"
       :item-type="'events'"
     />
+    </v-row>
   <!-- <div>
     <v-row>
       <v-col cols="12" md="6" offset="5" class="mt-10">
