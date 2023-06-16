@@ -26,7 +26,7 @@
       </v-col>
       <v-col>
         <PublicFilterSelect
-          :key="filterStore.currentCategoryId"
+          :key="filterStore.currentSubCategoryId"
           color="is-white"
           filter-name="category"
           label="Ort, Adresse oder PLZ"

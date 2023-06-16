@@ -39,6 +39,7 @@ watch(
 );
 
 onMounted(() => {
+  filterStore.updateFromUrlQuery()
   filterStore.loadCareFacilities();
 });
 </script>
