@@ -51,6 +51,7 @@
                 v-model="slotProps.item.name"
                 hide-details="auto"
                 label="Name"
+                :rules="[rules.required]"
                 :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
               />
           </div>
@@ -176,6 +177,8 @@
                 v-model="slotProps.item.phone"
                 hide-details="auto"
                 label="Telefonnummer"
+                :rules="[rules.required]"
+                :type="'number'"
                 :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
               />
             </div>
@@ -184,6 +187,7 @@
                 v-model="slotProps.item.email"
                 hide-details="auto"
                 label="E-Mail"
+                :rules="[rules.required, rules.email]"
                 :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
             </div>
@@ -192,6 +196,7 @@
                 v-model="slotProps.item.street"
                 hide-details="auto"
                 label="Straße und Nummer"
+                :rules="[rules.required]"
                 :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
               />
             </div>
@@ -203,6 +208,7 @@
                 item-title="name"
                 item-value="id"
                 label="Gemeinde"
+                :rules="[rules.required]"
               />
             </div>
             <div class="field split">
@@ -210,6 +216,8 @@
                 v-model="slotProps.item.zip"
                 hide-details="auto"
                 label="PLZ"
+                :type="'number'"
+                :rules="[rules.required, rules.zip]"
                 :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
               />
               <v-select
@@ -219,6 +227,7 @@
                 item-title="name"
                 item-value="name"
                 label="Ort"
+                :rules="[rules.required]"
               />
             </div>
             
@@ -267,6 +276,8 @@
 <script lang="ts">
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { rules } from '../../../data/validationRules'
+
 export default defineComponent({
   components: { Datepicker },
   setup() {
@@ -353,7 +364,8 @@ export default defineComponent({
       communities,
       status,
       eventTyp,
-      getTownsByCommunityId
+      getTownsByCommunityId,
+      rules
     }
   }
 })
