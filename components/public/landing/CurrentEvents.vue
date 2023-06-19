@@ -19,32 +19,20 @@
       :item-type="'events'"
     />
     </v-row>
-  <!-- <div>
+  <div>
     <v-row>
       <v-col cols="12" md="6" offset="5" class="mt-10">
-        <v-btn 
-          v-if="!showingAllArticles"
+        <v-btn
           variant="outlined"
           size="large"
           rounded="pill"
           color="primary"
-          @click="showMoreArticles()"
           >
           Mehr anzeigen
         </v-btn>
-        <v-btn 
-          v-if="showingAllArticles"
-          variant="outlined"
-          size="large"
-          rounded="pill"
-          color="primary"
-          @click="showLessArticles()"
-          >
-          Weniger anzeigen
-        </v-btn>
       </v-col>
     </v-row>
-    </div>   -->
+    </div>
   </div>
  
 </template>

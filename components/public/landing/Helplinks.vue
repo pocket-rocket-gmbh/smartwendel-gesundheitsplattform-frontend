@@ -12,8 +12,10 @@
         <div class=" my-5 is-dark-grey ">
           {{ item.content.description }}
         </div>
-        <div class="is-red">
-          {{ item.content.link }}
+        <div>
+          <a :href="item.content.linkText" target="_blank" class="is-red is-clickable">
+            {{ item.content.linkText }}
+          </a>
         </div>
         </div>
       </v-col>
@@ -33,7 +35,8 @@ export default defineComponent({
           heading: 'Sport & Bewegung',
           image: image1,
           description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-          link: 'Bereitschaftsdienst 123456'
+          linkText:'Anleitung',
+          link: 'https://www.drk.de/hilfe-in-deutschland/erste-hilfe/'
           }
         },
         {
@@ -41,7 +44,8 @@ export default defineComponent({
           heading: 'Ernährung',
           image: image2,
           description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-          link: 'Bereitschaftsdienst 123456'
+          linkText: 'Notruf 112',
+          link: ''
           }
         },
         {
@@ -49,7 +53,8 @@ export default defineComponent({
           heading: 'Mentale Gesundheit',
           image: image3,
           description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-          link: 'Bereitschaftsdienst 123456',
+          linkText: 'Notruf 22833',
+          link: '',
           }
         }
       ]

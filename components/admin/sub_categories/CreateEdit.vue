@@ -9,7 +9,15 @@
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         />
       </div>
-      <TextEditor v-model="slotProps.item.description" />
+
+      <v-textarea
+        v-model="slotProps.item.description"
+        hide-details="auto"
+        label="Beschreibung"
+        :rules="[v => (v || '' ).length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
+        :error-messages="useErrors().checkAndMapErrors('Beschreibung', slotProps.errors)"
+        />
+
     </v-card-text>
   </CreateEdit>
 </template>

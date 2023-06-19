@@ -4,9 +4,6 @@
       <v-col>
         <h2 class="is-uppercase text-white">Wählen Sie hier Ihre Suchkriterien aus</h2>
       </v-col>
-      <v-col class="is-white d-flex align-center justify-end">
-        <p>Hilfe ?</p>
-      </v-col>
     </v-row>
     <v-row>
       <v-col>
@@ -18,7 +15,7 @@
       <v-col>
         <PublicFilterSelect
           :key="filterStore.currentCategoryId"
-          color="is-white"
+          color="dark-grey"
           filter-name="category"
           label="Bereich"
           endpoint="categories"
