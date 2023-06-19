@@ -2,13 +2,13 @@ export function useEnums() {
 
   // Define enums here
   const facilitiesStatus = [
-    { value: 'is_checked', name: 'In Prüfung', class: 'warning' },
-    { value: 'confirmed', name: 'Freigegeben', class: 'success' },
-    { value: 'rejected', name: 'Abgelehnt', class: 'error' }
+    { value: 'is_checked', name: 'In Prüfung', class: 'is-yellow' },
+    { value: 'confirmed', name: 'Freigegeben', class: 'is-green' },
+    { value: 'rejected', name: 'Abgelehnt', class: 'is-red' }
   ]
 
   const facilitiesKind = [
-    { value: 'event', name: 'Vernanstaltung', class: '' },
+    { value: 'event', name: 'Veranstaltung', class: '' },
     { value: 'course', name: 'Kurs', class: '' },
   ]
 

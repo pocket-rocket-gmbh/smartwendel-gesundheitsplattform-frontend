@@ -8,6 +8,7 @@
       endpoint="care_facilities?kind=event,course"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      defaultSortBy="kind"
     />
 
     <AdminCareFacilitiesCreateEdit
@@ -36,7 +37,7 @@ definePageMeta({
 const fields = ref([
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Titel', value: 'name', type: 'string' },
-  { text: 'Kind', value: 'kind', type: 'string' },
+  { text: 'Kind', endpoint: 'care_facilities', value: 'kind', type: 'enum', enum_name: 'facilitiesKind', },
   { text: 'Bereich', value: 'categories', type: 'associations_name' },
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Beginn', value: 'course_start', type: 'datetime' },
