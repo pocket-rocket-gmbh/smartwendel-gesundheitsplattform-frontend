@@ -1,6 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
+
 export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
@@ -103,6 +104,7 @@ export const useFilterStore = defineStore({
         this.currentTags = value;
       }
     },
+
     async loadCareFacilities(endpoint: string = "care_facilities?kind=facility") {
       this.loading = true;
 
