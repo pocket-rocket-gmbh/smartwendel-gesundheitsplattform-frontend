@@ -1,5 +1,6 @@
 <template>
  <v-select
+    class="table-dropdown"
     variant="underlined"
     hide-details="auto"
     v-model="model"
@@ -41,3 +42,8 @@ const save = async () => {
   await updateApi.updateItem(data, null)
 }
 </script>
+
+<style lang="sass" scoped>
+.table-dropdown
+  width: 50%
+</style>

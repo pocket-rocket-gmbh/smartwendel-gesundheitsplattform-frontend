@@ -23,13 +23,13 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()">
-          Dashboard
+          Admin-Bereich
         </v-list-item>
         <v-list-item link to="/admin/tags" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
           Tags
         </v-list-item>
         <v-list-item link to="/admin/categories" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('categories', 'list')">
-          Bereiche & Kategorien
+          Bereiche und Kategorien
         </v-list-item>
         <v-list-item link to="/admin/care_facilities" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           Einrichtungen
@@ -38,7 +38,7 @@
           Kurse und Veranstaltungen
         </v-list-item>
         <v-list-item link to="/admin/news_articles" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('news_articles', 'list')">
-          News & Beiträge
+          Beiträge
         </v-list-item>
         <v-list-item link to="/admin/messages" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('messages', 'list')">
           Nachrichten

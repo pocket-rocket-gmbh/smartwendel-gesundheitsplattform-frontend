@@ -28,7 +28,7 @@ export default defineComponent({
     const items = [
         {
         'content': {
-          heading: 'Sport & Bewegung',
+          heading: 'Sport und Bewegung',
           image: image1,
           link: ''
           }

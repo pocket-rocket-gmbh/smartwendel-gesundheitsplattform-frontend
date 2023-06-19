@@ -136,58 +136,36 @@
           <div class="field" v-if="slotProps.item.kind !== 'facility'">
             <div class="mt-15 mb-5">
               <b>Veröffentlichkeitsdatum</b> (Wählen Sie einen Zeitraum  (Start- und End-Datum), wann ihr Beitrag auf der Platform angezeigt werden soll. Wenn der Inhalt dauerhaft angezeigt werden soll, müssen Sie hier keine Infos hinterlegen.)
-              </div>
-              <div class="mb-15 justify-center">
-                <v-row>
-                  <v-col cols="12" md="6">
-                    <Datepicker
-                      inline
-                      autoApply
-                      :enableTimePicker="false"
-                      locale="de"
-                      v-model="slotProps.item.course_start"
-                      label="Start"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <Datepicker
-                      inline
-                      autoApply
-                      :enableTimePicker="false"
-                      locale="de"
-                      v-model="slotProps.item.course_end"
-                      label="End"
-                    />
-                  </v-col>
-                </v-row>
-              </div>
             </div>
-            <div v-if="slotProps.item.kind === 'news'" class="mb-15">
-              <b>Autor*</b> (Geben Sie hier Infos zum Verfasser des Beitrags an.)
-              <div class="field">
-                <v-text-field
-                  hide-details="auto"
-                  label="Name*"
-                  :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
-                />
-              </div>
-              <div class="field split">
-                <v-text-field
-                  hide-details="auto"
-                  label="Telefonnummer"
-                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
-                />
-                <v-text-field
-                  hide-details="auto"
-                  label="E-Mail"
-                  :error-messages="useErrors().checkAndMapErrors('town', slotProps.errors)"
-                />
-              </div>
+            <div class="mb-15 justify-center">
+              <v-row>
+                <v-col cols="12" md="6">
+                  <Datepicker
+                    inline
+                    autoApply
+                    :enableTimePicker="false"
+                    locale="de"
+                    v-model="slotProps.item.course_start"
+                    label="Start"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <Datepicker
+                    inline
+                    autoApply
+                    :enableTimePicker="false"
+                    locale="de"
+                    v-model="slotProps.item.course_end"
+                    label="End"
+                  />
+                </v-col>
+              </v-row>
             </div>
+          </div>
           <div class="mb-15" v-if="slotProps.item.kind !== 'news'">
             <div class="mt-15 mb-5">
               <div v-if="slotProps.item.kind === 'facility'">
-                <b>Kontakt & Infos* </b>(Hinterlegen Sie hier alle Infos zu ihrem Hauptstandort.)
+                <b>Kontakt und Infos* </b>(Hinterlegen Sie hier alle Infos zu ihrem Hauptstandort.)
               </div>
               <div v-if="slotProps.item.kind === 'event'">
                 <b>Kursanbieter*</b>(Geben Sie Details zu Ihrer Einrichtung als Kurs- oder Veranstaltungsanbieter an)
@@ -213,7 +191,7 @@
               <v-text-field
                 v-model="slotProps.item.street"
                 hide-details="auto"
-                label="Straße & Nummer"
+                label="Straße und Nummer"
                 :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
               />
             </div>

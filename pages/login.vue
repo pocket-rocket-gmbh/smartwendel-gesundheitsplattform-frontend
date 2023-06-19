@@ -9,6 +9,7 @@
               class="pt-6"
               label="E-Mail Adresse"
               hide-details="auto"
+              @keyup.enter="auth"
             />
           </div>
           <div class="mb-3">
@@ -66,7 +67,7 @@ export default defineComponent({
         userStore.loggedIn = true
 
         if (userStore.currentUser) {
-          // move to dashboard
+          // move to Admin-Bereich
           if (lastRoute.value && lastRoute.value !== '/password_forgotten') {
             router.push({ path: lastRoute.value })
           } else if (result.data.user.role === 'user') {

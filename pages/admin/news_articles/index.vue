@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>News und Beiträge</h2>
+    <h2>Beiträge</h2>
     <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Newsartikel anlegen</v-btn>
     <DataTable
       :fields="fields"
@@ -15,7 +15,7 @@
       :item-placeholder="itemPlaceholder"
       @close="createEditDialogOpen = false"
       endpoint="care_facilities"
-      concept-name="News & Beiträge"
+      concept-name="Beiträge"
     />
 
     <DeleteItem
@@ -38,8 +38,7 @@ const fields = ref([
   { text: 'Bereich', value: 'categories', type: 'associations_name' },
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Autor', value: '', type: 'string' },
-  { text: 'Status', type: 'enum', value: 'status', enum_name: 'facilitiesStatus'},
-  { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
+  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus' },
 ])
 
 const createEditDialogOpen = ref(false)

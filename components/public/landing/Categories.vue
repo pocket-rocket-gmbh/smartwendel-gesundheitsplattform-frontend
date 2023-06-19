@@ -67,7 +67,7 @@ export default defineComponent({
         },
         {
         'content': {
-          heading: 'Ärztinnen & Ärzte',
+          heading: 'Ärztinnen und Ärzte',
           icon: icon2
           }
         },

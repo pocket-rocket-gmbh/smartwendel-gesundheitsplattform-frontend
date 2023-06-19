@@ -7,7 +7,7 @@
             <img src="~/assets/images/logo.png" width="190"/>
           </div>
           <div class="mx-15">
-            <h2 class="is-primary">Kurse & Veranstaltungen</h2>
+            <h2 class="is-primary">Kurse und Veranstaltungen</h2>
           </div>
         </v-col>
       </v-row>

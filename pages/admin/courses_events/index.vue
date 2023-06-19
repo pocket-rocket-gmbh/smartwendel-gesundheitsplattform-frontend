@@ -2,7 +2,7 @@
   <div>
     <h2>Kurse und Veranstaltungen</h2>
     <v-btn elevation="0" variant="outlined" class="mr-5" @click="itemPlaceholder.kind = 'course'; itemId = null; createEditDialogOpen = true">Kurs anlegen</v-btn>
-    <v-btn elevation="0" variant="outlined" @click="itemPlaceholder.kind = 'event'; itemId = null; createEditDialogOpen = true">Vernanstaltung anlegen</v-btn>
+    <v-btn elevation="0" variant="outlined" @click="itemPlaceholder.kind = 'event'; itemId = null; createEditDialogOpen = true">Veranstaltung anlegen</v-btn>
     <DataTable
       :fields="fields"
       endpoint="care_facilities?kind=event,course"
@@ -41,8 +41,7 @@ const fields = ref([
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Beginn', value: 'course_start', type: 'datetime' },
   { text: 'Ende', value: 'course_end', type: 'datetime' },
-  { text: 'Status', type: 'enum', value: 'status', enum_name: 'facilitiesStatus'},
-  { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
+  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus' },
 ])
 
 const createEditDialogOpen = ref(false)
