@@ -5,11 +5,7 @@ export function useSnackbar() {
   const snackbarStore = useSnackbarStore()
 
   const show = (message: string, color: string, timeout: number) => {
-    snackbarStore.$patch((state) => {
-      state.content = message
-      state.color = color
-      state.timeout = timeout
-    })
+    snackbarStore.showSnackbar(message, color ,timeout)
   }
 
   const showInfo = (message: string) => {
