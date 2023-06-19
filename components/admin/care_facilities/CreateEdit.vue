@@ -31,7 +31,7 @@
           </div>
           <div class="field">
             <div v-if="slotProps.item.kind === 'facility'">
-              <b>Name der Einrichting*</b> (Hinterlegen Sie hier den Namen ihrer Einrichtung) test
+              <b>Name der Einrichting*</b> (Hinterlegen Sie hier den Namen ihrer Einrichtung)
             </div>
             <div v-if="slotProps.item.kind === 'news'">
               <b>Titel*</b> (Hinterlegen Sie den Namen des Beitrags)
