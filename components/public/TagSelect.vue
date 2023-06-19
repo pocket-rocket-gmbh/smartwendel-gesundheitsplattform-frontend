@@ -40,8 +40,8 @@ const getTags = async () => {
   const options = {
     page: 1,
     per_page: 25,
-    sort_by: "name",
-    sort_order: "asc",
+    sort_by: "menu_order",
+    sort_order: "ASC",
     searchQuery: null as any,
     concat: false,
     filters: null as any,

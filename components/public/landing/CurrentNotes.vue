@@ -5,24 +5,17 @@
         <v-col class="d-flex justify-start align-center is-uppercase">
           <h2 class="is-green">Neuigkeiten</h2>
         </v-col>
-        <v-col md="3" class="d-flex text--red justify-end align-start default-button">
-          <v-btn 
-            variant="flat"
-            color="primary"
-            rounded="pill"
-          >
-            <span class = "text-white">
-              Mehr Themen
-            </span>
-          </v-btn>
-        </v-col>
       </v-row>
     </div>
-    <PublicContentBox
+    <v-row>
+      <PublicContentBox
       v-for="news in newsArticles" :key="news.id"
       :item="news"
       :item-type="'news'"
     />
+
+    </v-row>
+
     <!-- <div>
       <v-row>
       <v-col cols="12" md="6" offset="5" class="mt-10">

@@ -18,7 +18,7 @@
                   {{ category.name }}
                   </span>
                   <span>
-                    <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-menu-down</v-icon>
+                    <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-menu-down-outline</v-icon>
                   </span>
                 </div> 
               </v-list-item-title>
@@ -47,7 +47,7 @@
           to="/admin"
           v-if="useUser().isAdmin()"
         >
-          Dashboard
+          Admin-Bereich
         </router-link>
         <router-link
           class="mx-3 menu-list"
@@ -123,7 +123,7 @@
           </template>
           <v-divider v-if="userIsAdmin" class="my-5"></v-divider>
             <v-list-item v-if="userIsAdmin">
-              <router-link class="mr-6" to="/admin">Dashboard</router-link>
+              <router-link class="mr-6" to="/admin">Admin-Bereich</router-link>
             </v-list-item>
           <v-divider v-if="currentUser" class="my-5"></v-divider>
             <v-list-item v-if="currentUser">

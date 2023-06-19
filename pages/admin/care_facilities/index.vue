@@ -52,10 +52,9 @@ definePageMeta({
 const fields = ref([
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Name', value: 'name', type: 'string' },
-  { text: 'Status', type: 'enum', value: 'status', enum_name: 'facilitiesStatus'},
+  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus' },
   { text: '', value: 'mdi-image-plus-outline', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
   { text: '', value: 'mdi-file-document-plus-outline', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Datei hinzufügen' },
-  { text: '', value: 'mdi-email-outline', type: 'icon', emit: '', tooltip: '' },
 ])
 
 const itemPlaceholder = ref({
