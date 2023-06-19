@@ -7,30 +7,21 @@
     persistent
   >
     <v-card :class="`dialog-${size}`" :height="`${height}`">
-      <v-card-title class="text-h5 has-bg-primary py-5 text-white">
-        <span v-if="itemId">{{ conceptName }} bearbeiten</span>
-        <span v-else>{{ conceptName }} erstellen</span>
-      </v-card-title>
-      
-      <slot :item="item" :errors="errors" />
-      <v-card-actions class="card-actions">
-        <v-btn
-          text
-          @click="emitClose()"
-        >
-          Schließen
-        </v-btn>
-        <v-btn
-          color="blue darken-1"
-          variant="outlined"
-          dark
-          text
-          @click="handleCta()"
-          :loading="loadingItem"
-        >
-          Speichern
-        </v-btn>
-      </v-card-actions>
+      <v-form ref="form">
+        <v-card-title class="text-h5 has-bg-primary py-5 text-white">
+          <span v-if="itemId">{{ conceptName }} bearbeiten</span>
+          <span v-else>{{ conceptName }} erstellen</span>
+        </v-card-title>
+
+        <slot :item="item" :errors="errors" />
+
+        <v-card-actions class="card-actions">
+          <v-btn @click="emitClose()"> Schließen </v-btn>
+          <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
+            Speichern
+          </v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -72,6 +63,9 @@ export default defineComponent({
     const dialog = ref(true)
     const errors = ref([])
     const item = ref({})
+    const form = ref()
+
+    const snackbar = useSnackbar();
 
     const showApi = useCollectionApi()
     showApi.setBaseApi(usePrivateApi())
@@ -94,7 +88,15 @@ export default defineComponent({
       item.value = showApi.item.value
     }
 
-    const handleCta = () => {
+    const handleCta = async () => {
+      const { valid } = await form.value.validate();
+
+      if (!valid) {
+        const formErrors = await form.value.errors;
+        errors.value = formErrors.map(err => err.errorMessages[0]);
+        snackbar.showError("Speichern fehlgeschlagen! Es gibt ungültige Felder!")
+        return;
+      }
       if (props.itemId) {
         save()
       } else {
@@ -172,7 +174,8 @@ export default defineComponent({
       handleCta,
       emitClose,
       errors,
-      setLogo
+      setLogo,
+      form
     }
   }
 })
