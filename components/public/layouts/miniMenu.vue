@@ -28,7 +28,7 @@
         <v-list>
           <v-list-item class="is-clicable" v-if="useUser().isAdmin()" @click="closeMenuAndRouteTo(`/admin`)">
             <v-icon class="mr-2">mdi-cog</v-icon>
-            Admin-Bereich
+            Dashboard
           </v-list-item>
           <v-list-item class="is-clicable" v-if="currentUser" @click="closeMenuAndRouteTo(`/public/users/${currentUser.id}`)">
             <v-icon class="mr-2">mdi-account</v-icon>

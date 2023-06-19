@@ -47,7 +47,7 @@
           to="/admin"
           v-if="useUser().isAdmin()"
         >
-          Admin-Bereich
+          Dashboard
         </router-link>
         <router-link
           class="mx-3 menu-list"
@@ -123,7 +123,7 @@
           </template>
           <v-divider v-if="userIsAdmin" class="my-5"></v-divider>
             <v-list-item v-if="userIsAdmin">
-              <router-link class="mr-6" to="/admin">Admin-Bereich</router-link>
+              <router-link class="mr-6" to="/admin">Dashboard</router-link>
             </v-list-item>
           <v-divider v-if="currentUser" class="my-5"></v-divider>
             <v-list-item v-if="currentUser">
