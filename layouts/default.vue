@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <ClientSnackbar />
+    <Snackbar />
 
     <div>
       <PublicLayoutsTopBar />
