@@ -45,6 +45,18 @@
     >
       Alle Filter löschen
     </v-btn>
+
+    <v-btn
+      prepend-icon="mdi-content-copy"
+      size="small"
+      class="mt-4"
+      variant="text"
+      color="primary"
+      rounded="pill"
+      @click="copySearchFilterUrl"
+    >
+      Such-Filter kopieren
+    </v-btn>
   </div>
 </template>
 
@@ -52,10 +64,16 @@
 import { useFilterStore } from "~/store/facilitySearchFilter";
 
 const filterStore = useFilterStore();
+const snackbar = useSnackbar();
 
 const emitResetFilter = () => {
   filterStore.clearSearch();
 };
+
+const copySearchFilterUrl = () => {
+  snackbar.showSuccess("Filter in Zwischenablage gespeichert!");
+  navigator.clipboard.writeText(window.location.href);
+}
 </script>
 
 <style lang="sass" scoped>

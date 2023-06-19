@@ -1,15 +1,11 @@
 <template>
-  <div>Todo</div>
+  <v-snackbar v-model="snackbar.visible" :color="snackbar.color" :timeout="snackbar.timeout">
+    {{ snackbar.content }}
+  </v-snackbar>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  name: 'Snackbar',
-  setup() {
-    const show = ref(false)
-    return {
-      show
-    }
-  }
-})
+<script setup lang="ts">
+import { useSnackbarStore } from "~/store/snackbar";
+
+const snackbar = useSnackbarStore();
 </script>

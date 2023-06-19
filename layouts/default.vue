@@ -1,5 +1,7 @@
 <template>
   <v-app>
+    <Snackbar />
+
     <div>
       <PublicLayoutsTopBar />
       <v-main>
