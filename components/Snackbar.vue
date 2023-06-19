@@ -8,4 +8,8 @@
 import { useSnackbarStore } from "~/store/snackbar";
 
 const snackbar = useSnackbarStore();
+
+onMounted(()=>{
+  console.log("snackbar")
+})
 </script>
