@@ -60,7 +60,9 @@
       </v-container>
     </v-main>
 
-    <ClientSnackbar />
+    <ClientOnly>
+      <ClientSnackbar />
+    </ClientOnly>
   </v-app>
 </template>
 
