@@ -1,7 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-
 export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
@@ -103,6 +102,8 @@ export const useFilterStore = defineStore({
       if (toUpdate === "tags" && Array.isArray(value)) {
         this.currentTags = value;
       }
+
+      this.loadCareFacilities();
     },
 
     async loadCareFacilities(endpoint: string = "care_facilities?kind=facility") {
@@ -142,17 +143,22 @@ export const useFilterStore = defineStore({
       const allFacilities = careFaclitiesApi.items.value;
 
       const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
-        const { data } = await axios.get(
-          `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`
-        );
-
-        if (!data.length) {
-          return null;
+        try {
+          const { data } = await axios.get(
+            `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`
+          );
+  
+          if (!data.length) {
+            return null;
+          }
+  
+          const bestResult = data[0];
+  
+          return [bestResult.lat, bestResult.lon];
+        } catch (err) {
+          console.error(err);
+          return null
         }
-
-        const bestResult = data[0];
-
-        return [bestResult.lat, bestResult.lon];
       };
 
       for (const facility of allFacilities) {

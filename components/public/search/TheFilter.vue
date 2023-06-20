@@ -23,7 +23,7 @@
 
   <div class="mb-4">
     <PublicFilterSelect
-      :disabled="!filterStore.currentSubCategoryId || !filterStore.currentCategoryId"
+      :disabled="!filterStore.currentCategoryId || !filterStore.currentSubCategoryId"
       :key="filterStore.currentSubCategoryId"
       color="is-primary"
       filter-name="subSubCategory"

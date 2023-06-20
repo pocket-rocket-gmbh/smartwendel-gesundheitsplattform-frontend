@@ -52,9 +52,6 @@
         >
           Felder löschen
         </v-btn>
-        <v-btn variant="flat" color="white" rounded="pill" size="large" @click="emitSearch()">
-          <span class="text-black"> Suche starten </span>
-        </v-btn>
       </v-col>
     </v-row>
   </div>
@@ -125,10 +122,6 @@ const updateLocations = () => {
 
 const mapToogle = () => {
   showingMap.value = !showingMap.value;
-};
-
-const emitSearch = () => {
-  filterStore.loadCareFacilities();
 };
 </script>
 
