@@ -8,14 +8,14 @@
     <v-row>
       <v-col>
         <div class="field">
-          <label class="label">Einrichtung, Arzt, Name etc.</label>
+          <label class="label is-white">Einrichtung, Arzt, Name etc.</label>
           <input type="text" class="input" v-model="filterStore.currentSearchQuery" />
         </div>
       </v-col>
       <v-col>
         <PublicFilterSelect
           :key="filterStore.currentCategoryId"
-          color="dark-grey"
+          color="is-white"
           filter-name="category"
           label="Bereich"
           endpoint="categories"

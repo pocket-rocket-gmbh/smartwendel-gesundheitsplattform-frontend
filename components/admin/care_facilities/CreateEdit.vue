@@ -201,6 +201,13 @@
               />
             </div>
             <div class="field">
+              <v-text-field
+                v-model="slotProps.item.additional_address_info"
+                hide-details="auto"
+                label="Adresszusatz"
+              />
+            </div>
+            <div class="field">
               <v-select
                 hide-details="auto"
                 v-model="slotProps.item.community_id"
