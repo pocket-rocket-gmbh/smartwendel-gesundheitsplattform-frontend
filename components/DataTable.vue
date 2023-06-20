@@ -169,7 +169,7 @@ export default defineComponent({
 
     const getItems = async () => {
       loading.value = true
-      const options = { page: 1, per_page: 25, sort_by: props.defaultSortBy, sort_order: props.defaultSortOrder, searchQuery: null, concat: false, filters: [] }
+      const options = { page: 1, per_page: 999, sort_by: props.defaultSortBy, sort_order: props.defaultSortOrder, searchQuery: null, concat: false, filters: [] }
       await api.retrieveCollection(options)
       loading.value = false
     }
