@@ -21,9 +21,9 @@ export function usePrivateApi() {
       const result = await serverInterface.call(method, url, JSON.stringify(data))
   
       // Unauthorized because token is probably expired -> delete it.
-      if (result.httpCode === 401 && process.server) {
+      if (result.httpCode === 401) {
         if (process.client) {
-          token = localStorage.removetItem('auth._token.jwt')
+          token = localStorage.removeItem('auth._token.jwt')
         }
       }
   
