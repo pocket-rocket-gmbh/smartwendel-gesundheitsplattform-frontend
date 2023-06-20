@@ -62,6 +62,10 @@ onMounted(async () => {
   if (props.filterName === "subCategory" && useFilterStore().currentSubCategoryId) {
     selected.value = useFilterStore().currentSubCategoryId;
   }
+
+  if (props.filterName === "subSubCategory" && useFilterStore().currentSubSubCategoryId) {
+    selected.value = useFilterStore().currentSubSubCategoryId;
+  }
 });
 </script>
 
