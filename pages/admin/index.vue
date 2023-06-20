@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Admin-Bereich</h2>
+    <h2>Dashboard</h2>
   </div>
 </template>
 

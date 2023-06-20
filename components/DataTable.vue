@@ -57,10 +57,11 @@
             :enum-name="field.enum_name"
             :endpoint="field.endpoint"
             :fieldName="field.value"
+            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
           />
           <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
-            <span>
-              <v-chip v-if="field.enum_name === 'facilitiesStatus'" class="is-clickable" @click.stop="showDropdown(item.id)" :color="useEnums().getClassName(field.enum_name, item[field.value])">{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip>
+              <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
+              {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
           <span v-else-if="field.type === 'array'">{{ item[field.value].join(', ') }}</span>

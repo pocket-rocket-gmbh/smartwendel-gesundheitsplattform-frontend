@@ -3,7 +3,8 @@
     <div class=" d-inline align-center justify-center">
       <div class="title-bar is-uppercase has-font-size-big d-flex align-center justify-center">
         <div>
-          <h2 class="is-white">{{ category.name }}</h2>
+          <h2 class="is-white" v-if="category">{{ category.name }}</h2>
+          <h2 class="is-white" v-else>{{ title }}</h2>
         </div>
       </div>
     </div>
@@ -15,6 +16,9 @@ const props = defineProps({
     type: Object,
     required: true
   },
+  title: {
+    type: String,
+  }
 })
 
 const category = ref(props.category)

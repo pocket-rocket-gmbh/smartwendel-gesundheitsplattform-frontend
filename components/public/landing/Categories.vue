@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-15">
+  <div class="mx-15 my-15">
       <v-row justify="space-between">
         <v-col md="4" class="justify-center align-center is-dark-grey">
           <h2 class="is-primary is-uppercase mb-5">Pflege, Ärtze, <br/> Krankenhäuser und co.</h2>
@@ -28,10 +28,10 @@
             <v-col xl="6" class="d-flex" v-for="(item, index) in items" :key="index">
               <div class="ml-15 pa-2 d-flex ml-5 align-end">
                 <div class="d-flex align-center is-clickable">
-                  <img :src="item.content.icon" />
+                  <img class="icons" :src="item.content.icon" />
                   <div class="d-flex align-center">
                     <v-card-title class="has-font-size-medium font-weight-bold d-flex align-center is-clickable">
-                      <span v-html="item.content.heading"></span>
+                      <span class="is-dark-grey" v-html="item.content.heading"></span>
                     </v-card-title>
                   </div>
                 </div>
@@ -43,12 +43,12 @@
   </div>
 </template>
 <script lang="ts">
-import icon1 from '@/assets/images/categories/icon_advice_center.png'
-import icon2 from '@/assets/images/categories/icon_associations.png'
-import icon3 from '@/assets/images/categories/icon_care_facilities.png'
-import icon4 from '@/assets/images/categories/icon_doctor.png'
-import icon5 from '@/assets/images/categories/icon_fitness.png'
-import icon6 from '@/assets/images/categories/icon_hospitals.png'
+import icon1 from '@/assets/images/categories/icon_doctor.svg'
+import icon2 from '@/assets/images/categories/icon_fitness.svg'
+import icon3 from '@/assets/images/categories/icon_clubs.svg'
+import icon4 from '@/assets/images/categories/icon_pharmacies.svg'
+import icon5 from '@/assets/images/categories/icon_caring.svg'
+import icon6 from '@/assets/images/categories/icon_house.svg'
 
 export default defineComponent({
   setup() {
@@ -61,37 +61,37 @@ export default defineComponent({
     const items = [
         {
         'content': {
-          heading: 'Ämter',
+          heading: 'Ärztinnen & Ärzte',
           icon: icon1
           }
         },
         {
         'content': {
-          heading: 'Ärztinnen und Ärzte',
+          heading: 'Fitnesseinrichtungen',
           icon: icon2
           }
         },
         {
         'content': {
-          heading: 'Fitnesszentren',
+          heading: 'Vereine',
           icon: icon3
           }
         },
         {
         'content': {
-          heading: 'Pflegeeinrichtungen',
+          heading: 'Apotheken',
           icon: icon4
           }
         },
         {
         'content': {
-          heading: 'Seniorenheime',
+          heading: 'Pflegeeinrichtungen',
           icon: icon5
           }
         },
         {
         'content': {
-          heading: 'Apotheken',
+          heading: 'Wohnheime',
           icon: icon6
           }
         }
@@ -106,9 +106,10 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.card-icons
+.icons
   border-radius: 50%
-
+  background: #F5F5F5
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
 
 
 </style>

@@ -4,14 +4,11 @@
       <v-col>
         <h2 class="is-uppercase text-white">Wählen Sie hier Ihre Suchkriterien aus</h2>
       </v-col>
-      <v-col class="is-white d-flex align-center justify-end">
-        <p>Hilfe ?</p>
-      </v-col>
     </v-row>
     <v-row>
       <v-col>
         <div class="field">
-          <label class="label">Einrichtung, Arzt, Name etc.</label>
+          <label class="label is-white">Einrichtung, Arzt, Name etc.</label>
           <input type="text" class="input" v-model="filterStore.currentSearchQuery" />
         </div>
       </v-col>

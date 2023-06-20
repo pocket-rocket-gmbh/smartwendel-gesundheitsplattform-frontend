@@ -23,7 +23,7 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()">
-          Admin-Bereich
+          Dashboard
         </v-list-item>
         <v-list-item link to="/admin/tags" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
           Tags

@@ -1,6 +1,6 @@
 <template>
   <div :class="['field select', color]">
-    <label class="label" v-if="label">{{ label }}</label>
+    <label class="label" :class="color" v-if="label">{{ label }}</label>
     <select @change="setSelectValue" v-model="selected" :disabled="disabled">
       <option value="">Bitte wählen</option>
       <option v-for="item in items" :key="item.id" :value="item.id">{{ item.name }}</option>
@@ -16,7 +16,7 @@ const props = defineProps<{
   endpoint: string;
   filterName: CategoriesFilter;
   preSelectedValue?: string;
-  color?: string;
+  color: string;
   disabled?: boolean;
 }>();
 

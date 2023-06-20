@@ -1,52 +1,28 @@
 <template>
-  <div class="mx-15">
-    <div class="my-5">
-      <v-row justify="space-between">
-        <v-col class="d-flex justify-start align-center is-uppercase">
-          <h2 class="is-green">Neuigkeiten</h2>
-        </v-col>
-      </v-row>
-    </div>
+  <v-row>
+    <v-col class="flex-column align-start justify-start">
+      <PublicCategoriesHeader :category="null" title="News und Beiträge"/>
+    </v-col>
+  </v-row>
+  <div class="mx-15 my-10">    
+    <PublicNewsTheFilter />
     <v-row>
       <PublicContentBox
-      v-for="news in newsArticles" :key="news.id"
-      :item="news"
-      :item-type="'news'"
-    />
-
+        v-for="news in newsArticles" :key="news.id"
+        :item="news"
+        :item-type="'news'"
+      />
     </v-row>
-    <div>
-      <v-row>
-      <v-col cols="12" md="6" offset="5" class="mt-10">
-        <v-btn 
-          variant="outlined"
-          size="large"
-          rounded="pill"
-          color="primary"
-          @click="goToNews()"
-          >
-          Mehr anzeigen
-        </v-btn>
-      </v-col>
-    </v-row>
-    </div>
   </div>
-
 </template>
 <script lang="ts">
 export default defineComponent({
   setup() {
   const loading = ref(false)
   const newsArticles = ref(null)
-  const router = useRouter()
 
   const listApi = useCollectionApi()
   listApi.setBaseApi(usePublicApi())
-
-  const goToNews = () => {
-    router.push({ path: '/public/posts/news'})
-  }
-
 
   const getNewsArticles = async () => {
     listApi.setEndpoint(`care_facilities?kind=news`)
@@ -62,7 +38,6 @@ export default defineComponent({
   })
       return {
       newsArticles,
-      goToNews
     }
   },
 })

@@ -1,6 +1,7 @@
 <template>
  <v-select
     class="table-dropdown"
+    :class="fieldClass"
     variant="underlined"
     hide-details="auto"
     v-model="model"
@@ -19,14 +20,14 @@ const props = defineProps({
   item: Object,
   endpoint: String,
   fieldName: String,
-  enumName: String
+  enumName: String,
+  fieldClass: String
 })
 
 const enums = useEnums();
-const selectedEnum = enums[props.enumName];
+const selectedEnum = enums[props.enumName]
 
 const model = ref(null)
-const value = ref(props.item[props.fieldName])
 const updateApi = useCollectionApi()
 updateApi.setBaseApi(usePrivateApi())
 
