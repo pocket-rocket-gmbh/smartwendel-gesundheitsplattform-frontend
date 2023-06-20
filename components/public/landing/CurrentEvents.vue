@@ -46,7 +46,7 @@ export default defineComponent({
   listApi.setBaseApi(usePublicApi())
 
   const getCoursesArticles = async () => {
-      listApi.setEndpoint(`care_facilities?kind=event`)
+      listApi.setEndpoint(`care_facilities?kind=event,course`)
       const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
       loading.value = true
       await listApi.retrieveCollection(options)
