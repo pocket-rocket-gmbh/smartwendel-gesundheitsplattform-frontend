@@ -7,23 +7,57 @@
       :key="item.id"
       @click.stop="setExpandCategory(item.id)"
     >
-      <div class="title">
-        <div>{{ item.title }}</div>
+      <div class="title-bar">
+        <div class="title" v-auto-animate>
+          <template v-if="openEdit !== item.id">
+            {{ item.title }}
+          </template>
+          <template v-else>
+            <v-text-field @click.stop v-model="tempTitle" hide-details="auto" label="Titel" />
+          </template>
+        </div>
         <div class="additional" v-if="item.additionalData">
-            <div v-if="item.additionalData.type === 'api'">
-                {{ getAdditionalData(item) }}
-            </div>
+          <CollapsibleListAdditionalData v-if="openEdit !== item.id" :data="item.additionalData" />
+          <div v-else>EDIT ADDITIONAL DATA</div>
+          <!-- TODO: ADDITIONAL DATA EDITABLE -->
+        </div>
+        <div class="actions" v-auto-animate>
+          <v-icon class="clickable" v-if="openEdit !== item.id" @click.stop="editClick(item)">mdi-pencil</v-icon>
+          <v-icon class="clickable" v-else @click.stop="editSaveClick(item)">mdi-content-save-outline</v-icon>
+          <v-icon class="clickable" v-if="openEdit !== item.id" @click.stop="deleteClick(item)">mdi-delete</v-icon>
+          <v-icon class="clickable" v-else @click.stop="discard">mdi-file-undo</v-icon>
         </div>
       </div>
-      <div class="content" v-if="item.id === expandCategory && item.next">
+      <div class="content" v-if="item.id === expandCategory && item.next" v-auto-animate>
         <CollapsibleListRec
           :items="item.next"
           :layer="layer + 1"
-          @add-entry-click="(prevItems, originalStep) => handleEmit([...prevItems, item.id], originalStep)"
+          @entry-click="
+            (action, prevItems, originalStep, title, additional) =>
+              handleEmit(action, [...prevItems, item.id], originalStep, title, additional)
+          "
         />
-        <div class="content" @click.stop="handleClick(item.id)">
-          <div class="title">
-            <button>Neuer Eintrag hinzufügen</button>
+        <div v-if="!openAddNew" @click.stop="handleClick(item.id)">
+          <button>Neuer Eintrag hinzufügen</button>
+        </div>
+        <div v-if="openAddNew === item.id" class="tmp-item" @click.stop>
+          <div class="title-bar">
+            <div class="title">
+              <v-text-field v-model="tempTitle" hide-details="auto" label="Neuer Eintragstitel" />
+            </div>
+            <div v-if="!item.canAddAdditionalData" class="additional">
+              <v-textarea
+                v-model="tempAdditionalData"
+                hide-details="auto"
+                label="Beschreibung"
+                :rules="[(v) => (v || '').length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
+              />
+            </div>
+
+            <div class="actions">
+              <v-icon class="clickable" @click.stop="save(item.id)">mdi-content-save-outline</v-icon>
+              <v-icon class="clickable" @click.stop="discard">mdi-file-undo</v-icon>
+            </div>
           </div>
         </div>
       </div>
@@ -32,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { CollapsibleListItem } from "~/types/collapsibleList";
+import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 
 const props = defineProps<{
   items: CollapsibleListItem[];
@@ -40,12 +74,29 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (event: "addEntryClick", itemIds: string[], layer: number): void;
+  (
+    event: "entryClick",
+    action: EmitAction,
+    itemIds: string[],
+    layer: number,
+    title?: string,
+    additionalData?: string
+  ): void;
 }>();
 
 const expandCategory = ref(null);
 
+const openEdit = ref<string>(null);
+const openAddNew = ref<string>(null);
+const tempTitle = ref("");
+const tempAdditionalData = ref("");
+
 const setExpandCategory = (categoryId: string) => {
+  openEdit.value = null;
+  openAddNew.value = null;
+  tempTitle.value = "";
+  tempAdditionalData.value = "";
+
   if (categoryId === expandCategory.value) {
     expandCategory.value = null;
     return;
@@ -54,21 +105,47 @@ const setExpandCategory = (categoryId: string) => {
   expandCategory.value = categoryId;
 };
 
-const log = console.log;
-
 const handleClick = (itemId: string) => {
-  handleEmit([itemId], props.layer);
+  openAddNew.value = itemId;
 };
 
-const handleEmit = (itemIds: string[], layer: number) => {
-  emit("addEntryClick", itemIds, layer);
+const handleEmit = (action: EmitAction, itemIds: string[], layer: number, title?: string, additionalData?: string) => {
+  emit("entryClick", action, itemIds, layer, title, additionalData);
 };
 
-const getAdditionalData = (item: CollapsibleListItem) => {
-    if (!item.additionalData || item.additionalData.type !== "api") return;
+const editClick = (item: CollapsibleListItem) => {
+  openEdit.value = item.id;
+  tempTitle.value = item.title;
+};
 
-    // item.additionalData.
-}
+const deleteClick = (item: CollapsibleListItem) => {
+  discard();
+
+  handleEmit("DELETE", [item.id], props.layer);
+};
+
+const editSaveClick = (item: CollapsibleListItem) => {
+  handleEmit("EDIT", [item.id], props.layer, tempTitle.value, tempAdditionalData.value);
+
+  openEdit.value = null;
+  tempTitle.value = "";
+  tempAdditionalData.value = "";
+};
+
+const save = (itemId: string) => {
+  handleEmit("CREATE", [itemId], props.layer, tempTitle.value, tempAdditionalData.value);
+
+  openAddNew.value = null;
+  tempTitle.value = "";
+  tempAdditionalData.value = "";
+};
+
+const discard = () => {
+  openAddNew.value = null;
+  openEdit.value = null;
+  tempTitle.value = "";
+  tempAdditionalData.value = "";
+};
 </script>
 
 <style lang="scss" scoped>
@@ -97,7 +174,26 @@ const getAdditionalData = (item: CollapsibleListItem) => {
     &:not(:first-child) {
       border-top: 1px solid black;
     }
-    padding: 1rem;
+
+    .title-bar {
+      display: flex;
+      gap: 2rem;
+
+      .actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .title {
+        flex: 1;
+      }
+
+      .additional {
+        flex: 2;
+      }
+    }
 
     .content {
       margin-left: 2rem;
