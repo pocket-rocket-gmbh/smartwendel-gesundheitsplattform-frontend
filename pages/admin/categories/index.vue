@@ -46,7 +46,7 @@
     <AdminCategoriesCreateEdit
       :item-id="itemId"
       v-if="createEditDialogOpen"
-      @close="createEditDialogOpen = false"
+      @close="handleNewAreaAdded"
       :item-placeholder="itemPlaceholder"
       endpoint="categories"
       concept-name="Bereich"
@@ -54,10 +54,7 @@
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
-      @close="
-        itemId = null;
-        confirmDeleteDialogOpen = false;
-      "
+      @close="deleteItemComplete"
       :item-id="itemId"
       endpoint="categories"
       term="diesen Bereich"
@@ -224,7 +221,22 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, desc
   }
 };
 
-const handleDelete = async (itemIds: string[], layer: number) => {};
+const handleDelete = async (itemIds: string[], layer: number) => {
+  openDeleteDialog(itemIds[0]);
+};
+
+const deleteItemComplete = () => {
+  itemId.value = null;
+  confirmDeleteDialogOpen.value = false;
+
+  getItems();
+};
+
+const handleNewAreaAdded = () => {
+  createEditDialogOpen.value = false;
+
+  getItems();
+};
 
 onMounted(() => {
   getItems();
