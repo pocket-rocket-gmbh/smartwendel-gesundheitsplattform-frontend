@@ -49,7 +49,7 @@
         <v-list-item link to="/admin/users" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')">
           Benutzer
         </v-list-item>
-        <v-list-item @click="useUser().logout()">
+        <v-list-item @click="handleLogout">
           <v-icon>mdi-logout</v-icon> Logout
         </v-list-item>
       </v-list>
@@ -69,4 +69,11 @@
 <script lang="ts" setup>
 import { useAccessPrivileges } from '~/composables';
 import { useUser } from '~/composables';
+
+const user = useUser();
+
+const handleLogout = () => {
+  console.log("Handle logout")
+  user.logout()
+}
 </script>

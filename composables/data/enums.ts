@@ -46,11 +46,20 @@ export function useEnums() {
     return null
   } 
 
+  const getEnum = (enumName: keyof Enums) => {
+    const found = enums[enumName]
+    if (found) {
+      return found
+    }
+    return null
+  }
+
   // return enums
   return {
     facilitiesStatus,
     facilitiesKind,
     getName,
-    getClassName
+    getClassName,
+    getEnum
   }
 }

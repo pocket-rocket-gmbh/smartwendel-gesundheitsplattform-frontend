@@ -15,7 +15,7 @@
               Hier können Sie eigene Kurse anlegen. Bitte füllen Sie alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.
             </div>
           </div>
-          <div class="field" v-if="useUser().isAdmin()">
+          <div class="field" v-if="user.isAdmin()">
             <div class="mt-1 mb-15">
               <b>Status</b>
               <v-select
@@ -280,103 +280,86 @@
     </v-card-text>
   </CreateEdit>
 </template>
-<script lang="ts">
+
+<script setup lang="ts">
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { rules } from '../../../data/validationRules'
 
-export default defineComponent({
-  components: { Datepicker },
-  setup() {
-    const textOptions = ref({
-      debug: false,
-      placeholder: 'Einrichtung Beschreibung',
-      theme: 'snow',
-      contentType: "html",
-      toolbar: "essential"
-    })
+const user = useUser();
 
-    const setCategoryIds = (categoryIds:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'category_ids', value: categoryIds })
-    }
+const textOptions = ref({
+  debug: false,
+  placeholder: 'Einrichtung Beschreibung',
+  theme: 'snow',
+  contentType: "html",
+  toolbar: "essential"
+})
 
-    const setSubCategoryIds = (subCategoryIds:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'sub_category_ids', value: subCategoryIds })
-    }
+const setCategoryIds = (categoryIds:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'category_ids', value: categoryIds })
+}
 
-    const setSubSubCategoryIds = (subSubCategoryIds:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'sub_sub_category_ids', value: subSubCategoryIds })
-    }
+const setSubCategoryIds = (subCategoryIds:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'sub_category_ids', value: subCategoryIds })
+}
 
-    const setTags = (tags:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tags', value: tags })
-    }
+const setSubSubCategoryIds = (subSubCategoryIds:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'sub_sub_category_ids', value: subSubCategoryIds })
+}
 
-    const setCareFacilityTags = (tagIds:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tag_ids', value: tagIds })
-    }
+const setTags = (tags:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tags', value: tags })
+}
 
-    const setLogo = (image:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'logo', value: image })
-    }
+const setCareFacilityTags = (tagIds:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'tag_ids', value: tagIds })
+}
 
-    const setCoverBild = (image:any) => {
-      useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'file', value: image })
-    }
+const setLogo = (image:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'logo', value: image })
+}
 
-    const status = ref([
-      { name: 'In Prüfung', id: 'is_checked'},
-      { name: 'Freigegeben', id: 'confirmed'},
-      { name: 'Abgelehnt', id: 'rejected'}
-    ])
+const setCoverBild = (image:any) => {
+  useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'file', value: image })
+}
 
-    const eventTyp = ref([
-      { name: 'Kurs', id: ''},
-      { name: 'Veranstaltung', id: ''}
-    ])
+const status = ref([
+  { name: 'In Prüfung', id: 'is_checked'},
+  { name: 'Freigegeben', id: 'confirmed'},
+  { name: 'Abgelehnt', id: 'rejected'}
+])
 
-    const communitiesApi = useCollectionApi()
-    communitiesApi.setBaseApi(usePrivateApi())
-    communitiesApi.setEndpoint(`communities`)
-    const communities = communitiesApi.items
+const eventTyp = ref([
+  { name: 'Kurs', id: ''},
+  { name: 'Veranstaltung', id: ''}
+])
 
-    const getCommunities = async () => {
-      await communitiesApi.retrieveCollection()
-    }
+const communitiesApi = useCollectionApi()
+communitiesApi.setBaseApi(usePrivateApi())
+communitiesApi.setEndpoint(`communities`)
+const communities = communitiesApi.items
 
-    const getTownsByCommunityId = (communityId:string) => {
-      const found = communities.value.find((community:any) => community.id === communityId)
+const getCommunities = async () => {
+  await communitiesApi.retrieveCollection()
+}
 
-      if (found) {
-        useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'zip', value: found.zip })
-        return found.towns
-      } else {
-        []
-      }
-    }
+const getTownsByCommunityId = (communityId:string) => {
+  const found = communities.value.find((community:any) => community.id === communityId)
 
-    onMounted(() => {
-      getCommunities()
-    })
-
-    return {
-      textOptions,
-      setCategoryIds,
-      setSubCategoryIds,
-      setSubSubCategoryIds,
-      setTags,
-      setLogo,
-      setCoverBild,
-      setCareFacilityTags,
-      communities,
-      status,
-      eventTyp,
-      getTownsByCommunityId,
-      rules
-    }
+  if (found) {
+    useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'zip', value: found.zip })
+    return found.towns
+  } else {
+    []
   }
+}
+
+onMounted(() => {
+  getCommunities()
 })
 </script>
+
 <style lang="sass" scoped>
 .cropper-wrap
   max-width: 450px
