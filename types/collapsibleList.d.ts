@@ -6,6 +6,8 @@ export type CollapsibleFieldItem = {
   tooltip?: string;
 };
 
+type EmitAction = "CREATE" | "EDIT" | "DELETE";
+
 export type AdditionalRaw = {
   type: "raw";
   value: any;
@@ -14,7 +16,7 @@ export type AdditionalRaw = {
 export type AdditionalApi = {
   type: "api";
   endpoint: string;
-  paths: string[];
+  path: string;
 };
 
 export type CollapsibleListItemAdditionalData = AdditionalRaw | AdditionalApi;
@@ -23,5 +25,6 @@ export type CollapsibleListItem = {
   id: string;
   title: string;
   additionalData?: CollapsibleListItemAdditionalData;
+  canAddAdditionalData?: boolean;
   next?: CollapsibleListItem[];
 };

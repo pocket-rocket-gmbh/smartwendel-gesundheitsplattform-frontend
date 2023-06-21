@@ -12,7 +12,7 @@
       >Neuer Bereich</v-btn
     >
 
-    <CollapsibleListRec :items="itemsForList" :layer="0" @add-entry-click="handleEmit" />
+    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" />
 
     <!-- <CollapsibleList
       :fields="fields"
@@ -25,7 +25,7 @@
       ref="dataTable"
     />  -->
 
-    <DataTable
+    <!-- <DataTable
       :fields="fields"
       endpoint="categories"
       default-sort-order="asc"
@@ -34,7 +34,7 @@
       @openDeleteDialog="openDeleteDialog"
       @openAddSubCategoriesDialog="openAddSubCategoriesDialog"
       ref="dataTable"
-    />
+    /> -->
 
     <AdminCategoriesAddSubCategories
       v-if="addSubCategoriesDialogOpen"
@@ -66,7 +66,8 @@
 </template>
 
 <script setup lang="ts">
-import { CollapsibleFieldItem, CollapsibleListItem } from "~/types/collapsibleList";
+import { CollapsibleFieldItem, CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
+import { ResultStatus } from "~/types/serverCallResult";
 
 definePageMeta({
   layout: "admin",
@@ -126,7 +127,9 @@ const handleDialogClosed = () => {
   addSubCategoriesDialogOpen.value = false;
 };
 
-const getItems = async () => {
+const getItems = async (endpoint = "categories") => {
+  api.setEndpoint(endpoint);
+
   loading.value = true;
   const options = {
     page: 1,
@@ -151,22 +154,77 @@ const getItems = async () => {
           additionalData: {
             type: "api",
             endpoint: `categories/${subCategory.id}`,
-            paths: ["resource.description"],
+            path: "resource.description",
           },
+          canAddAdditionalData: true,
           next: subCategory.sub_sub_categories.map((subSubCategory: any) => {
-            return { id: subSubCategory.id, title: subSubCategory.name };
+            return {
+              id: subSubCategory.id,
+              title: subSubCategory.name,
+              canAddAdditionalData: false,
+            };
           }),
         };
       }),
     };
   });
-
-  console.log(items.value);
 };
 
-const handleEmit = (itemIds: string[], layer: number) => {
-  console.log(itemIds, layer);
+const handleClick = async (
+  action: EmitAction,
+  itemIds: string[],
+  layer: number,
+  name: string,
+  description?: string
+) => {
+  switch (action) {
+    case "CREATE":
+      return handleCreate(itemIds, layer, name, description);
+    case "DELETE":
+      return handleDelete(itemIds, layer);
+    case "EDIT":
+      return handleEdit(itemIds, layer, name, description);
+  }
 };
+
+const handleEdit = async (itemIds: string[], layer: number, name: string, description?: string) => {
+  api.setEndpoint(`categories/${itemIds[0]}`);
+
+  const result = await api.updateItem(
+    { name, description, scope: "care_facility", tags: [] },
+    "Erfolgreich aktualisiert"
+  );
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    getItems();
+  } else {
+    console.error("error");
+  }
+};
+
+const handleCreate = async (itemIds: string[], layer: number, name: string, description?: string) => {
+  if (layer === 0) {
+    api.setEndpoint(`categories/${itemIds[0]}`);
+  } else if (layer === 1) {
+    api.setEndpoint(`categories/${itemIds[1]}/sub_categories/${itemIds[0]}`);
+  } else {
+    console.error("invalid layer");
+    return;
+  }
+
+  const result = await api.createItem({ name, description, scope: "care_facility", tags: [] }, `Erfolgreich erstellt`);
+  console.log(result);
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    getItems();
+  } else {
+    console.error("ERROR");
+  }
+};
+
+const handleDelete = async (itemIds: string[], layer: number) => {};
 
 onMounted(() => {
   getItems();
