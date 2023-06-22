@@ -26,5 +26,6 @@ export type CollapsibleListItem = {
   title: string;
   additionalData?: CollapsibleListItemAdditionalData;
   canAddAdditionalData?: boolean;
+  addEntryButtonText?: string;
   next?: CollapsibleListItem[];
 };
