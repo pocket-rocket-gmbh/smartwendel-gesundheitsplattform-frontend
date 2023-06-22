@@ -17,7 +17,7 @@
                 {{ item.name }}
               </v-card-title>
               <div class="px-5 pb-5">
-                <p class="" v-html="item.description"></p>
+                <p class="break-text" v-html="item.description"></p>
               </div>
               <v-spacer></v-spacer>
               <v-card-actions>
@@ -87,7 +87,5 @@ defineProps({
 .content-footer
   position: absolute
   bottom: 30px
-
-
 
 </style>

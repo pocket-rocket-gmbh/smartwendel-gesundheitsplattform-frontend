@@ -2,15 +2,15 @@
   <div class="box flex-column text-dark-grey font-weight-bold pa-5">
     <h2 class="is-primary is-uppercase mb-6">Kontakt und Infos</h2>
     <div v-if="careFacility.phone" class="py-3">
-      <span class="py-1">
-        <v-icon color="primary">mdi-phone-outline</v-icon>
-        {{ careFacility.phone }}
+      <span>
+        <v-icon class="mr-2" color="primary">mdi-phone-outline</v-icon>
+        <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
       </span>
     </div>
       <div v-if="careFacility.email" class="py-1">
         <span>
-        <v-icon color="primary">mdi-email-outline</v-icon>
-        {{ careFacility.email }}
+        <v-icon class="mr-2" color="primary">mdi-email-outline</v-icon>
+        <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
       </span>
     </div>
     <div v-if="careFacility.street || careFacility.zip || careFacility.town" class="py-1">
@@ -44,17 +44,12 @@
         rounded="pill"
         color="primary"
         width="100%"
-        @click="facilityContactFormModalOpen = true"
+        :href="`mailto:${careFacility.email}`"
         >
           Kontakt aufnehmen
       </v-btn>
     </div>
   </div>
-  <PublicCareFacilitiesContactForm
-      v-if="facilityContactFormModalOpen"
-      :careFacility-id="careFacility.id"
-      @close="facilityContactFormModalOpen = false"
-    />
 </template>
 
 <script lang="ts" setup>
@@ -64,8 +59,6 @@
       required: true
     }
   })
-    const facilityContactFormModalOpen = ref(false)
-
 
 </script>
 

@@ -39,10 +39,8 @@ const fields = ref([
   { text: 'Titel', value: 'name', type: 'string' },
   { text: 'Kind', endpoint: 'care_facilities', value: 'kind', type: 'enum', enum_name: 'facilitiesKind', },
   { text: 'Bereich', value: 'categories', type: 'associations_name' },
-  { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Beginn', value: 'course_start', type: 'datetime' },
   { text: 'Ende', value: 'course_end', type: 'datetime' },
-  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus' },
 ])
 
 const createEditDialogOpen = ref(false)

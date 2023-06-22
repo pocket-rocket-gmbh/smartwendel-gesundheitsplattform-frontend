@@ -40,9 +40,6 @@
         <v-list-item link to="/admin/news_articles" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('news_articles', 'list')">
           Beiträge
         </v-list-item>
-        <v-list-item link to="/admin/messages" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('messages', 'list')">
-          Nachrichten
-        </v-list-item>
         <v-list-item link to="/admin/tooltips" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')">
           Tooltips
         </v-list-item>

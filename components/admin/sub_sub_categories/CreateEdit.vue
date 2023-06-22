@@ -14,7 +14,7 @@
           v-model="slotProps.item.description"
           hide-details="auto"
           label="Beschreibung"
-          :rules="[v => (v || '' ).length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
+          :rules="rules.length"
           :error-messages="useErrors().checkAndMapErrors('Beschreibung', slotProps.errors)"
           />
       </div>
@@ -77,6 +77,7 @@
   </CreateEdit>
 </template>
 <script lang="ts" setup>
+  import { rules } from '../../../data/validationRules'
   const status = ref([
     { name: 'external', id: 'external'},
     { name: 'internal', id: 'internal'}
