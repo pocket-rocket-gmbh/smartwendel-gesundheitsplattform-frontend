@@ -1,7 +1,9 @@
 <template>
   <div v-if="finishedLoading">
-    <div class="header">
-      <PublicCategoriesHeader :category="category" />
+    <div class="">
+      <PublicLayoutsHeader :category="category" :sub-categories="subCategories" />
+    </div>
+    <div>
       <PublicCategoriesFilter :sub-categories="subCategories"/>
     </div>
     <div class="content">
@@ -26,7 +28,7 @@ const subCategoryId = computed(() => {
 })
 
 const finishedLoading = computed (() => {
-  return category.value !== null && subSubCategories.value !== null && subCategory.value !== null
+  return category.value !== null
 })
 
 const category = ref(null)
@@ -88,17 +90,5 @@ onMounted(() => {
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
-
-.title-bar
-  background: linear-gradient(90deg, #91A80D 46.67%, #BAC323 84.36%, #9EA100 97.5%)
-  height: 200px
-
-.is-selected
-  background: red
-
-.header
-  position: sticky
-  top: 30px
-  z-index: 1
 
 </style>

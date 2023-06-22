@@ -1,53 +1,70 @@
 <template>
-  <div>
-    <v-app-bar class="hero-menu pa-3">
-      <v-toolbar-title scroll-threshold="1" scroll-off-screen="true">
+  <div class="main">
+    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3">
+      <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" height="70" />
-        </div>
-      </v-toolbar-title>
-      <div class="align-center d-none d-sm-flex">
-        <div class="is-clickable d-flex"  v-for="(category, index) in categories" :key="index">
-          <v-menu
-            transition="scale-transition"
-          >
-            <template v-slot:activator="{ props }">
-              <v-list-item-title  color="primary" v-bind="props">
-                <div>
-                  <span class="is-clickable mx-1" @click="setItemsAndGo(category, null)">
-                  {{ category.name }}
-                  </span>
-                  <span>
-                    <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-menu-down-outline</v-icon>
-                  </span>
-                </div> 
-              </v-list-item-title>
-            </template>
-            <v-list v-if="category.sub_categories.length > 0">
-              <v-list-item>
-                <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">
-                  <v-list v-if="sub_category && sub_category.sub_sub_categories.length > 0">
-                    <v-list-item>
-                      <span class="is-clickable" >
-                        {{ sub_category.name }}
+          <div class="align-center d-none d-sm-flex mx-15">
+            <div class="is-clickable d-flex" v-for="(category, index) in categories" :key="index">
+              <v-menu
+              open-on-hover
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ props }">
+                  <v-list-item-title  color="primary"  v-bind="props">
+                    <div class="mx-5">
+                      <span class="is-clickable main" @click="setItemsAndGo(category, null)">
+                      {{ category.name }}
                       </span>
-                    </v-list-item>
-                  </v-list>
-                </div>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+                      <span>
+                        <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-chevron-down</v-icon>
+                      </span>
+                    </div> 
+                  </v-list-item-title>
+                </template>
+                <v-list v-if="category.sub_categories.length > 0">
+                  <v-list-item>
+                    <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">
+                      <v-list v-if="sub_category && sub_category.sub_sub_categories.length > 0">
+                        <v-list-item>
+                          <span class="is-clickable" >
+                            {{ sub_category.name }}
+                          </span>
+                        </v-list-item>
+                      </v-list>
+                    </div>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
+            <div>
         </div>
-        <router-link class="mr-6 menu-list" to="/public/search">Anbietersuche</router-link>
-        <v-divider v-if="!currentUser" class="divider mr-3" :thickness="3" vertical color="blue" opacity="1"></v-divider>
-        <router-link class="mr-6 menu-list" to="/login" v-if="!useUser().loggedIn()">Login / Registrieren</router-link>
-        <v-divider v-if="currentUser" class="divider ml-3" :thickness="3" vertical color="blue" opacity="1"></v-divider>
+        <a href="/public/search" class="is-clickable">
+            Anbietersuche
+          </a>
+          </div>
+        </div>
+      </v-app-bar-title>
+      <div class="align-center d-none d-sm-flex">
+        <div class="offer" v-if="!useUser().loggedIn()">
+          <v-btn
+            variant="outlined"
+            size="small"
+            rounded="pill"
+            color="primary"
+            href="/login"
+            class="mr-5" 
+          >
+            Jetzt registrieren
+          </v-btn>
+        </div>
+
         <router-link
           class="mx-3 menu-list"
           to="/admin"
           v-if="useUser().isAdmin()"
         >
-          Dashboard
+          Admin-Bereich
         </router-link>
         <router-link
           class="mx-3 menu-list"
@@ -102,10 +119,6 @@
             :close-on-content-click="false"
           >
           </v-menu>
-          </div>
-          <div v-if="!useUser().loggedIn()" class="mb-5">
-            <v-icon class="mr-2">mdi-login</v-icon>
-            <router-link class="mr-6" to="/login">Login / Registrieren</router-link>
           </div>
           <div v-if="!useUser().loggedIn()" class="mb-5">
             <v-icon class="mr-2">mdi-note-check-outline</v-icon>
@@ -177,13 +190,13 @@ export default defineComponent({
     }
 
     const setItemsAndGo = (category:any, sub_category:any) => {
-      if (category.sub_categories.length > 0) {
+      if (sub_category ) {
         router.push({path: `/public/categories/${category.id}`, query: { sub_category_id: sub_category.id }})
         if(sub_category.id) {
           sub_categoryId.value = sub_category.id
         }
       } else {
-        router.push({path: `/public/categories/${category.id}`, query: null})
+       return router.push({path: `/public/categories/${category.id}`, query: null})
       }
       useNuxtApp().$bus.$emit('setSubCategory', sub_category.id)
     }
@@ -225,6 +238,10 @@ export default defineComponent({
 </script>
 
 <style lang="sass">
+
+.v-toolbar__title
+  font-size: 1.5rem !important
+
 .v-toolbar
   background: white
 
@@ -237,7 +254,6 @@ export default defineComponent({
 
 .my-account
   background-color: #F5F5F5
-
 
 .account-button
   display: flex
@@ -258,5 +274,8 @@ export default defineComponent({
 
 .desktop-logo-height
   max-height: 50px
+
+.main
+  font-size: 1.2rem!important
 
 </style>

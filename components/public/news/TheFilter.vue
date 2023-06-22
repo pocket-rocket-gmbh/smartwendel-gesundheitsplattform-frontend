@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row class="mt-10">
     <v-col>
       <h2 class="is-uppercase">Wählen Sie hier Ihre Suchkriterien aus</h2>
     </v-col>

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col class="flex-column align-start justify-start">
-      <PublicCategoriesHeader :category="null" title="News und Beiträge"/>
+      <PublicLayoutsHeader :category="null" title="News und Beiträge"/>
     </v-col>
   </v-row>
   <div class="mx-15 my-10">    

@@ -1,9 +1,9 @@
 <template>
   <div class="mx-15">
-    <div class="my-5">
+    <div class="my-10">
       <v-row justify="space-between">
         <v-col class="d-flex justify-start align-center is-uppercase">
-          <h2 class="is-green">Neuigkeiten</h2>
+          <div class="is-primary text-h4 font-weight-bold text-uppercase">Beiträge</div>
         </v-col>
       </v-row>
     </div>
@@ -17,7 +17,7 @@
     </v-row>
     <div>
       <v-row>
-      <v-col cols="12" md="6" offset="5" class="mt-10">
+      <v-col md="12" class="d-flex justify-center mt-10">
         <v-btn 
           variant="outlined"
           size="large"
@@ -50,7 +50,7 @@ export default defineComponent({
 
   const getNewsArticles = async () => {
     listApi.setEndpoint(`care_facilities?kind=news`)
-    const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
+    const options = { page: 1, per_page: 2, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
     loading.value = true
     await listApi.retrieveCollection(options)
     loading.value = false

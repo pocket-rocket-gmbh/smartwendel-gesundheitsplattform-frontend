@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="is-dark-grey">{{ careFacility.name }}</h1>
-   <div class="mt-4" v-html="careFacility.description"></div>
+   <div class="mt-4 facility-description" v-html="careFacility.description"></div>
   </div>
 </template>
 
@@ -15,4 +15,6 @@
 </script>
 
 <style lang="sass" scoped>
+  @import "@/assets/sass/main.sass"
+
 </style>
