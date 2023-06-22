@@ -1,6 +1,11 @@
 <template>
-  <v-dialog v-model="dialog" width="500" transition="dialog-bottom-transition" @click:outside="emitClose()">
-    <v-card>
+  <v-dialog
+    v-model="dialog"
+    width="500"
+    transition="dialog-bottom-transition"
+    @click:outside="emitClose()"
+  >
+    <v-card class="dialog">
       <v-card-title class="text-h5"> Löschens </v-card-title>
       <v-card-text> Möchten Sie {{ term }} wirklich löschen? </v-card-text>
       <v-divider></v-divider>
@@ -52,4 +57,7 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style lang="sass">
+.dialog
+  overflow: hidden !important
+</style>
