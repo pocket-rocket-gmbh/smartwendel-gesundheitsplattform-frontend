@@ -41,6 +41,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isEdit: {
+    required: false,
+    type: Boolean,
+  },
   locations: {
     type: Array as PropType<MapLocation[]>,
     default(): MapLocation[] {
@@ -174,7 +178,7 @@ const refreshView = async () => {
 
   props.locations.forEach((location: MapLocation) => {
     const mapMarkerIcon = L.icon({
-      iconUrl: location.kind === "facility" ? "/map-marker-green.svg" : "/map-marker-orange.svg",
+      iconUrl: "/map-marker-green.svg",
       shadowUrl: null,
       iconSize: [60, 60], // size of the icon
       shadowSize: [0, 0], // size of the shadow
@@ -187,28 +191,29 @@ const refreshView = async () => {
       draggable: location.draggable,
     });
 
-    marker.bindTooltip(location.name);
-
     const popup = L.popup().setContent(
       `
-<div class="popup">
+      <div class="popup">
   ${location.imageUrl ? '<img class="background" src="' + location.imageUrl + '" />' : ""}
   <h2 class="name">
     <div style="text-align: center">
       <span>${location.name}</span>
-    </div>
-    </h2>
-  <div class="action">
-    <a class="link" style="text-align: center" href="${location.url}" target="_blank">Mehr Details</a>
-  </div>
-</div>
-`
+      </div>
+      </h2>
+      <div class="action">
+        <a class="link" style="text-align: center" href="${location.url}" target="_blank">Mehr Details</a>
+        </div>
+        </div>
+        `
     );
 
-    marker.bindPopup(location.name);
-    marker.bindPopup(popup);
+    if (!props.isEdit) {
+      marker.bindTooltip(location.name);
+      marker.bindPopup(location.name);
+      marker.bindPopup(popup);
+    }
     // @ts-expect-error no id on type marker
-    marker.id = location.id
+    marker.id = location.id;
 
     locationMarkers.push(marker);
 
