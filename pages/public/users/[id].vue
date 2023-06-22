@@ -97,7 +97,7 @@ export default defineComponent({
     })
 
     const getUser = async () => {
-      api.setEndpoint(`users/${route.params.id}`)
+      api.setEndpoint(`users/me`)
 
       loadingItem.value = true
       await api.getItem()

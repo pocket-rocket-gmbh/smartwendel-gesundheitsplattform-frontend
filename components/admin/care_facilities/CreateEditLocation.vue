@@ -17,6 +17,7 @@
           ref="map"
           :locations="locations"
           :auto-fit=true
+          :isEdit="true"
         />
       </v-container>
       <v-divider></v-divider>

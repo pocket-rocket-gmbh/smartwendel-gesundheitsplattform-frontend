@@ -1,11 +1,3 @@
-export type CollapsibleFieldItem = {
-  text: string;
-  value: string;
-  type: "icon" | "string";
-  emit?: string;
-  tooltip?: string;
-};
-
 type EmitAction = "CREATE" | "EDIT" | "DELETE";
 
 export type AdditionalRaw = {
@@ -27,5 +19,6 @@ export type CollapsibleListItem = {
   additionalData?: CollapsibleListItemAdditionalData;
   canAddAdditionalData?: boolean;
   addEntryButtonText?: string;
+  specialActionOnEditClick?: string;
   next?: CollapsibleListItem[];
 };

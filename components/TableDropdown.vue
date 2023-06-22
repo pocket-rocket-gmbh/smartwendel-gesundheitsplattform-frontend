@@ -1,7 +1,7 @@
 <template>
- <v-select
+  <v-select
     class="table-dropdown"
-    :class="fieldClass"
+    :class="selectedFieldClass"
     variant="underlined"
     hide-details="auto"
     v-model="model"
@@ -14,34 +14,39 @@
   />
 </template>
 <script lang="ts" setup>
-import { useEnums } from '@/composables/data/enums'
+import { useEnums } from "@/composables/data/enums";
 
-const props = defineProps({ 
-  item: Object,
-  endpoint: String,
-  fieldName: String,
-  enumName: String,
-  fieldClass: String
-})
+const props = defineProps<{
+  item: object;
+  endpoint: string;
+  fieldName: string;
+  enumName: string;
+  fieldClass: string;
+}>();
 
 const enums = useEnums();
-const selectedEnum = enums[props.enumName]
+const selectedEnum = enums[props.enumName];
+const selectedFieldClass = ref("");
 
-const model = ref(null)
-const updateApi = useCollectionApi()
-updateApi.setBaseApi(usePrivateApi())
+const model = ref(null);
+const updateApi = useCollectionApi();
+updateApi.setBaseApi(usePrivateApi());
 
 onMounted(() => {
-  model.value = props.item[props.fieldName]
-})
+  model.value = props.item[props.fieldName];
+
+  selectedFieldClass.value = props.fieldClass;
+});
 
 const save = async () => {
-  updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`)
-  let data = {}
-  data[props.fieldName] = model.value
+  updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`);
+  let data = {};
+  data[props.fieldName] = model.value;
 
-  await updateApi.updateItem(data, null)
-}
+  await updateApi.updateItem(data, null);
+
+  selectedFieldClass.value = useEnums().getClassName(props.enumName, model.value);
+};
 </script>
 
 <style lang="sass" scoped>
