@@ -25,10 +25,32 @@
           />
         </div>
         <div class="actions" v-auto-animate>
-          <v-icon class="clickable" v-if="openEdit !== item.id" @click.stop="editClick(item)">mdi-pencil</v-icon>
-          <v-icon class="clickable" v-else @click.stop="editSaveClick(item)">mdi-content-save-outline</v-icon>
-          <v-icon class="clickable" v-if="openEdit !== item.id" @click.stop="deleteClick(item)">mdi-delete</v-icon>
-          <v-icon class="clickable" v-else @click.stop="discard">mdi-file-undo</v-icon>
+          <v-tooltip top v-if="openEdit !== item.id">
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="editClick(item)">mdi-pencil</v-icon>
+            </template>
+            <span>Bearbeiten</span>
+          </v-tooltip>
+          <v-tooltip top v-else>
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="editSaveClick(item)"
+                >mdi-content-save-outline</v-icon
+              >
+            </template>
+            <span>Speichern</span>
+          </v-tooltip>
+          <v-tooltip top v-if="openEdit !== item.id">
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="deleteClick(item)">mdi-delete</v-icon>
+            </template>
+            <span>Löschen</span>
+          </v-tooltip>
+          <v-tooltip top v-else>
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="discard">mdi-file-undo</v-icon>
+            </template>
+            <span>Verwerfen</span>
+          </v-tooltip>
         </div>
       </div>
       <div class="content" v-if="item.id === expandCategory && item.next" v-auto-animate>
@@ -58,8 +80,18 @@
             </div>
 
             <div class="actions">
-              <v-icon class="clickable" @click.stop="save(item.id)">mdi-content-save-outline</v-icon>
-              <v-icon class="clickable" @click.stop="discard">mdi-file-undo</v-icon>
+              <v-tooltip top>
+                <template v-slot:activator="{ props }">
+                  <v-icon class="clickable" v-bind="props" @click.stop="save(item.id)">mdi-content-save-outline</v-icon>
+                </template>
+                <span>Speichern</span>
+              </v-tooltip>
+              <v-tooltip top>
+                <template v-slot:activator="{ props }">
+                  <v-icon class="clickable" v-bind="props" @click.stop="discard">mdi-file-undo</v-icon>
+                </template>
+                <span>Verwerfen</span>
+              </v-tooltip>
             </div>
           </div>
         </div>
