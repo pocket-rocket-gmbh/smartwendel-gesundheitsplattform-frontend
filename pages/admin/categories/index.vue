@@ -46,7 +46,7 @@
       @close="deleteItemComplete"
       :item-id="itemId"
       endpoint="categories"
-      term="diesen Bereich"
+      term="diesenn Bereich"
     />
   </div>
 </template>
