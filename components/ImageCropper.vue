@@ -69,5 +69,8 @@ export default defineComponent({
 .cropper
   width: 100%
   max-height: 500px
-  background: #DDD
+
+.vue-advanced-cropper__background, .vue-advanced-cropper__foreground
+  background-color: #ddd
+
 </style>

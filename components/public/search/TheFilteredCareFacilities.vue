@@ -7,7 +7,9 @@
     <div class="item mb-6" v-for="careFacility in filterStore.careFaclities" :key="careFacility.id">
       <v-row>
         <v-col md="8">
-          <h2 class="is-dark-grey is-uppercase">{{ careFacility.name }}</h2>
+          <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
+            <a :href="`/public/care_facilities/${careFacility.id}`">{{ careFacility.name }}</a>
+          </div>
           <v-row>
             <v-col>
               <div class="text-dark-grey mt-4">
@@ -19,10 +21,12 @@
             <v-col>
               <div class="text-dark-grey mt-4">
                 <div v-if="careFacility.phone">
-                  <v-icon color="primary" class="mr-2">mdi-phone-outline</v-icon>{{ careFacility.phone }}
+                  <v-icon color="primary" class="mr-2">mdi-phone-outline</v-icon>
+                  <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
                 </div>
                 <div v-if="careFacility.email">
-                  <v-icon color="primary" class="mr-2">mdi-email-outline</v-icon>{{ careFacility.email }}
+                  <v-icon color="primary" class="mr-2">mdi-email-outline</v-icon>
+                  <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
                 </div>
               </div>
             </v-col>

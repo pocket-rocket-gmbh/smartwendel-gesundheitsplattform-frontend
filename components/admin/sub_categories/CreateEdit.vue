@@ -14,13 +14,17 @@
           v-model="slotProps.item.description"
           hide-details="auto"
           label="Beschreibung"
-          :rules="[v => (v || '' ).length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
+          :rules="rules.length"
           :error-messages="useErrors().checkAndMapErrors('Beschreibung', slotProps.errors)"
           />
       </div>
     </v-card-text>
   </CreateEdit>
 </template>
+<script lang="ts" setup>
+  import { rules } from '../../../data/validationRules'
+
+</script>
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 

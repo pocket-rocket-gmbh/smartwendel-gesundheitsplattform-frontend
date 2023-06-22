@@ -53,7 +53,7 @@
                 v-model="tempAdditionalData"
                 hide-details="auto"
                 label="Beschreibung"
-                :rules="[(v) => (v || '').length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
+                :rules="rules.length"
               />
             </div>
 
@@ -70,6 +70,7 @@
 
 <script setup lang="ts">
 import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
+import { rules } from '~/data/validationRules'
 
 const props = defineProps<{
   items: CollapsibleListItem[];
