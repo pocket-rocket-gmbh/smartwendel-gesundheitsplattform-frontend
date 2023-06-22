@@ -25,11 +25,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-16',
-      viewport: 'width=500, initial-scale=1',
-      title: 'SMART WENDELER LAND',
+      title: 'gesundesWND',
       meta: [
         { property: 'og:type', content: 'website' },
-        { property: 'og:title', content: 'SMART WENDELER LAND' },
+        { property: 'og:title', content: 'gesundesWND' },
         { property: 'og:description', content: 'Gesundheitsplattform' }
       ],
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-15 bg-gradient">
+  <div class="py-15 bg-gradient">
     <div class="d-flex align-center justify-center is-uppercase">
       <h2 class="text-white">Wir zeigen Ihnen, was Sie für ihren Gesundheitszustand und Wohlbefinden tuen können!</h2>
     </div>

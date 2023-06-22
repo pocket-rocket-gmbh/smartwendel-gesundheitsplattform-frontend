@@ -1,5 +1,5 @@
 <template>
-  <v-col md="6" class="d-flex flex-column mt-10">
+  <v-col md="6" class="d-flex flex-column">
     <v-card class="rounded-xl mx-auto has-bg-light-grey content elevation-1 fill-height d-flex flex-column" width="100%">
       <v-row>
         <v-col md="5" class="d-flex">
@@ -81,7 +81,7 @@ defineProps({
   font-size: 18px
 
 .content
-  max-height: auto
+  min-height: 250px
   z-index: 0
 
 .content-footer

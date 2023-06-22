@@ -1,10 +1,20 @@
 <template>
   <div>
-   <h2>Bereiche</h2>
+    <h2>Bereiche</h2>
 
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neuer Bereich</v-btn>
+    <v-btn
+      elevation="0"
+      variant="outlined"
+      @click="
+        itemId = null;
+        createEditDialogOpen = true;
+      "
+      >Neuer Bereich</v-btn
+    >
 
-    <DataTable
+    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" />
+
+    <!-- <DataTable
       :fields="fields"
       endpoint="categories"
       default-sort-order="asc"
@@ -13,7 +23,7 @@
       @openDeleteDialog="openDeleteDialog"
       @openAddSubCategoriesDialog="openAddSubCategoriesDialog"
       ref="dataTable"
-    />
+    /> -->
 
     <AdminCategoriesAddSubCategories
       v-if="addSubCategoriesDialogOpen"
@@ -25,7 +35,7 @@
     <AdminCategoriesCreateEdit
       :item-id="itemId"
       v-if="createEditDialogOpen"
-      @close="createEditDialogOpen = false"
+      @close="handleNewAreaAdded"
       :item-placeholder="itemPlaceholder"
       endpoint="categories"
       concept-name="Bereich"
@@ -33,7 +43,7 @@
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
-      @close="itemId = null; confirmDeleteDialogOpen = false"
+      @close="deleteItemComplete"
       :item-id="itemId"
       endpoint="categories"
       term="diesen Bereich"
@@ -41,65 +51,184 @@
   </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  name: 'AdminCareFacilitiesIndex',
-  setup() {
-    definePageMeta({
-      layout: "admin",
-    })
+<script setup lang="ts">
+import { CollapsibleFieldItem, CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
+import { ResultStatus } from "~/types/serverCallResult";
 
-    const fields = ref([
-      { text: 'Bereichsbezeichnung', value: 'name', type: 'string' },
-      { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubCategoriesDialog', tooltip: 'Kategorien hinzufügen' },
-    ])
-    const dataTable = ref(null)
-    const createEditDialogOpen = ref(false)
-    const confirmDeleteDialogOpen = ref(false)
-    const addSubCategoriesDialogOpen = ref(false)
-    const itemId = ref(null)
+definePageMeta({
+  layout: "admin",
+});
 
-    const itemPlaceholder = ref({
-      name: '',
-      scope: 'care_facility'
-    })
+const itemsForList = ref<CollapsibleListItem[]>([]);
 
-    const openCreateEditDialog = (id:string) => {
-      itemId.value = id
-      createEditDialogOpen.value = true
-    }
+const fields = ref<CollapsibleFieldItem[]>([
+  { text: "Bereichsbezeichnung", value: "name", type: "string" },
+  {
+    text: "",
+    value: "mdi-plus-circle-outline",
+    type: "icon",
+    emit: "openAddSubCategoriesDialog",
+    tooltip: "Kategorien hinzufügen",
+  },
+]);
 
-    const openDeleteDialog = (id:string) => {
-      itemId.value = id
-      confirmDeleteDialogOpen.value = true
-    }
+const dataTable = ref(null);
+const createEditDialogOpen = ref(false);
+const confirmDeleteDialogOpen = ref(false);
+const addSubCategoriesDialogOpen = ref(false);
+const itemId = ref(null);
 
-    const openAddSubCategoriesDialog = (id:string) => {
-      itemId.value = id
-      addSubCategoriesDialogOpen.value = true
-    }
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
+api.setEndpoint("categories");
+const items = api.items;
 
-    const handleDialogClosed = () => {
-      dataTable.value.resetActiveItems()
-      itemId.value = null
-      createEditDialogOpen.value = false
-      confirmDeleteDialogOpen.value = false
-      addSubCategoriesDialogOpen.value = false
-    }
+const loading = ref(false);
 
+const itemPlaceholder = ref({
+  name: "",
+  scope: "care_facility",
+});
+
+const openCreateEditDialog = (id: string) => {
+  itemId.value = id;
+  createEditDialogOpen.value = true;
+};
+
+const openDeleteDialog = (id: string) => {
+  itemId.value = id;
+  confirmDeleteDialogOpen.value = true;
+};
+
+const openAddSubCategoriesDialog = (id: string) => {
+  itemId.value = id;
+  addSubCategoriesDialogOpen.value = true;
+};
+
+const handleDialogClosed = () => {
+  dataTable.value.resetActiveItems();
+  itemId.value = null;
+  createEditDialogOpen.value = false;
+  confirmDeleteDialogOpen.value = false;
+  addSubCategoriesDialogOpen.value = false;
+};
+
+const getItems = async (endpoint = "categories") => {
+  api.setEndpoint(endpoint);
+
+  loading.value = true;
+  const options = {
+    page: 1,
+    per_page: 999,
+    sort_by: "menu_order",
+    sort_order: "asc",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+  await api.retrieveCollection(options);
+  loading.value = false;
+
+  itemsForList.value = items.value.map((item) => {
     return {
-      fields,
-      createEditDialogOpen,
-      confirmDeleteDialogOpen,
-      addSubCategoriesDialogOpen,
-      itemId,
-      openCreateEditDialog,
-      openDeleteDialog,
-      openAddSubCategoriesDialog,
-      itemPlaceholder,
-      handleDialogClosed,
-      dataTable
-    }
+      id: item.id,
+      title: item.name,
+      addEntryButtonText: "Neue Kategorie hinzufügen",
+      next: item.sub_categories.map((subCategory: any) => {
+        return {
+          id: subCategory.id,
+          title: subCategory.name,
+          addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
+          additionalData: {
+            type: "api",
+            endpoint: `categories/${subCategory.id}`,
+            path: "resource.description",
+          },
+          canAddAdditionalData: true,
+          next: subCategory.sub_sub_categories.map((subSubCategory: any) => {
+            return {
+              id: subSubCategory.id,
+              title: subSubCategory.name,
+            };
+          }),
+        };
+      }),
+    };
+  });
+};
+
+const handleClick = async (
+  action: EmitAction,
+  itemIds: string[],
+  layer: number,
+  name: string,
+  description?: string
+) => {
+  switch (action) {
+    case "CREATE":
+      return handleCreate(itemIds, layer, name, description);
+    case "DELETE":
+      return handleDelete(itemIds, layer);
+    case "EDIT":
+      return handleEdit(itemIds, layer, name, description);
   }
-})
+};
+
+const handleEdit = async (itemIds: string[], layer: number, name: string, description?: string) => {
+  api.setEndpoint(`categories/${itemIds[0]}`);
+
+  const result = await api.updateItem(
+    { name, description, scope: "care_facility", tags: [] },
+    "Erfolgreich aktualisiert"
+  );
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    getItems();
+  } else {
+    console.error("error");
+  }
+};
+
+const handleCreate = async (itemIds: string[], layer: number, name: string, description?: string) => {
+  if (layer === 0) {
+    api.setEndpoint(`categories/${itemIds[0]}`);
+  } else if (layer === 1) {
+    api.setEndpoint(`categories/${itemIds[1]}/sub_categories/${itemIds[0]}`);
+  } else {
+    console.error("invalid layer");
+    return;
+  }
+
+  const result = await api.createItem({ name, description, scope: "care_facility", tags: [] }, `Erfolgreich erstellt`);
+  console.log(result);
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    getItems();
+  } else {
+    console.error("ERROR");
+  }
+};
+
+const handleDelete = async (itemIds: string[], layer: number) => {
+  openDeleteDialog(itemIds[0]);
+};
+
+const deleteItemComplete = () => {
+  itemId.value = null;
+  confirmDeleteDialogOpen.value = false;
+
+  getItems();
+};
+
+const handleNewAreaAdded = () => {
+  createEditDialogOpen.value = false;
+
+  getItems();
+};
+
+onMounted(() => {
+  getItems();
+});
 </script>

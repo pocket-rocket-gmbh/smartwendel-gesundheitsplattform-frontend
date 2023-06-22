@@ -1,5 +1,5 @@
 <template>
-  <div class="my-5">
+  <div class="">
     <ClientOnly>
       <QuillEditor
         :value="modelValue"
@@ -9,7 +9,7 @@
         @input="emitSetInput"
         :placeholder="textOptions.placeholder"
         contentType="html"
-        toolbar="full"
+        toolbar="minimal"
       />
     </ClientOnly>
   </div>

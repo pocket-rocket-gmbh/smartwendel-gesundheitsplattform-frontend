@@ -21,6 +21,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
 .medium
   width: 42px
   height: 42px

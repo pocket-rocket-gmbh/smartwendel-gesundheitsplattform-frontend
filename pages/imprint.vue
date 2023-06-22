@@ -46,7 +46,6 @@
       <p>info(at)pocket-rocket.io</p>
       <p>www.pocket-rocket.io</p>
     </v-container>
-    <PublicFooter />
   </div>
 </template>
 

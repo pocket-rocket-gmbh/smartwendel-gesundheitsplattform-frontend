@@ -49,11 +49,6 @@
     </div>
   </v-col>
  </v-row>
-    
-     
-   
-
-  <PublicFooter />
 </template>
 
 <script lang="ts" setup>

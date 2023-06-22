@@ -100,7 +100,7 @@
                 :options="textOptions"
                 v-model:content="slotProps.item.description"
                 contentType="html"
-                toolbar="full"
+                toolbar="minimal"
               />
             </ClientOnly>
           </div>

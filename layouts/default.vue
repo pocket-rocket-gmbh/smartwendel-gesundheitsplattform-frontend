@@ -3,14 +3,12 @@
     <ClientOnly>
       <ClientSnackbar />
     </ClientOnly>
-
     <div>
       <PublicLayoutsTopBar />
       <v-main>
         <slot />
       </v-main>
       <PublicLayoutsFooter />
-      <PublicLayoutsSubFooter />
     </div>
   </v-app>
 </template>
