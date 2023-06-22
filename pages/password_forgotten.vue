@@ -13,6 +13,7 @@
               class="pt-6"
               label="E-Mail Adresse"
               hide-details="auto"
+              @keyup.enter="auth"
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>

@@ -38,7 +38,6 @@ const fields = ref([
   { text: 'Bereich', value: 'categories', type: 'associations_name' },
   { text: 'Erstellt am', value: 'created_at', type: 'datetime' },
   { text: 'Autor', value: '', type: 'string' },
-  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus' },
 ])
 
 const createEditDialogOpen = ref(false)

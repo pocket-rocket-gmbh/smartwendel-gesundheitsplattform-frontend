@@ -104,14 +104,8 @@
               />
             </ClientOnly>
           </div>
-          <div class="field">
-            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'facility'">
-              <b>Tags zuordnen*</b> (Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten.)
-            </div>
-            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'news'">
-              <b>Tags zuordnen*</b> (Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten.)
-            </div>
-            <div class="mt-15 mb-5" v-if="slotProps.item.kind === 'event'">
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
+            <div class="mt-15 mb-5">
               <b>Tags zuordnen*</b> (Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten.)
             </div>
             <AdminCareFacilitiesChooseTags
@@ -119,7 +113,7 @@
               @setCareFacilityTags="setCareFacilityTags"
             />
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility'">
             <div class="mt-15 mb-5">
               <b>Filter zuordnen*</b> (Ordnen Sie Ihre Einrichtung zielgruppenorientiert in die verschiedenen Bereiche der Platform zu. Mithilfe der Pfeile können Sie sich durch die einzelnen Bereiche und deren Kategorien bewegen.)
             </div>
@@ -196,7 +190,7 @@
                 v-model="slotProps.item.street"
                 hide-details="auto"
                 label="Straße und Nummer"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.counterStreet]"
                 :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
               />
             </div>
