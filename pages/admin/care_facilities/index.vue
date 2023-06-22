@@ -49,12 +49,26 @@ definePageMeta({
   layout: "admin",
 })
 
-const fields = ref([
-  { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
+const user = useUser();
+
+const availableFields = [
+  { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active', condition: "admin" },
   { text: 'Name', value: 'name', type: 'string' },
+  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus', condition: "admin" },
+  { text: 'Status', endpoint: 'care_facilities', type: 'string', value: 'status', condition: "facility_owner" },
   { text: '', value: 'mdi-image-plus-outline', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
   { text: '', value: 'mdi-file-document-plus-outline', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Datei hinzufügen' },
-])
+]
+
+const fields = ref([])
+
+onMounted(()=> {
+  const currentUserRole = user.currentUser.role
+  availableFields.forEach(field => {
+    if (!field.condition) fields.value.push(field);
+    if (currentUserRole === field.condition) fields.value.push(field);
+  })
+})
 
 const itemPlaceholder = ref({
   name: '',

@@ -10,14 +10,14 @@
         <v-table>
           <thead>
             <tr>
-              <th>Lat / Long </th>
+              <th>Addresse </th>
               <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(location) in careFacility?.locations" :key="location.id">
-              <td>{{ location.latitude }} / {{ location.longitude }}</td>
+              <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" /></td>
               <td>
                 <v-icon class="is-clickable" @click="openLocationDialog({
                   id: location.id,
@@ -26,7 +26,8 @@
                   draggable: true,
                   name: careFacility.name,
                   url: careFacility.website,
-                  imageUrl: careFacility.logo_url
+                  imageUrl: careFacility.logo_url,
+                  kind: 'facility'
                   })">mdi-pencil</v-icon>
               </td>
               <td><v-icon class="is-clickable" @click="deleteLocation(location.id)">mdi-delete</v-icon></td>
@@ -98,7 +99,7 @@ export default defineComponent({
       loadingItem.value = true
 
       if (location.value) {
-        api.setEndpoint(`/locations/care_facility/${props.itemId}/${locationId}`)
+        api.setEndpoint(`/locations/${locationId}`)
         await api.updateItem({
           longitude: longitude,
           latitude: latitude
@@ -114,7 +115,8 @@ export default defineComponent({
       }
 
       await getCareFacility()
-      loadingItem.value = false      
+      loadingItem.value = false
+      location.value = null
     }
 
     const deleteLocation = async (locationId: string) => {

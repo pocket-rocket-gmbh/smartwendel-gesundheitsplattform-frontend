@@ -11,7 +11,7 @@
       <div class="title-bar">
         <div class="title" v-auto-animate>
           <template v-if="openEdit !== item.id">
-            {{ item.title }}
+            <span :class="item.id === expandCategory ? 'font-weight-bold' : ''">{{ item.title }}</span>
           </template>
           <template v-else>
             <v-text-field @click.stop v-model="tempTitle" hide-details="auto" label="Titel" />
@@ -25,10 +25,32 @@
           />
         </div>
         <div class="actions" v-auto-animate>
-          <v-icon class="clickable" v-if="openEdit !== item.id" @click.stop="editClick(item)">mdi-pencil</v-icon>
-          <v-icon class="clickable" v-else @click.stop="editSaveClick(item)">mdi-content-save-outline</v-icon>
-          <v-icon class="clickable" v-if="openEdit !== item.id" @click.stop="deleteClick(item)">mdi-delete</v-icon>
-          <v-icon class="clickable" v-else @click.stop="discard">mdi-file-undo</v-icon>
+          <v-tooltip top v-if="openEdit !== item.id">
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="editClick(item)">mdi-pencil</v-icon>
+            </template>
+            <span>Bearbeiten</span>
+          </v-tooltip>
+          <v-tooltip top v-else>
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="editSaveClick(item)"
+                >mdi-content-save-outline</v-icon
+              >
+            </template>
+            <span>Speichern</span>
+          </v-tooltip>
+          <v-tooltip top v-if="openEdit !== item.id">
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="deleteClick(item)">mdi-delete</v-icon>
+            </template>
+            <span>Löschen</span>
+          </v-tooltip>
+          <v-tooltip top v-else>
+            <template v-slot:activator="{ props }">
+              <v-icon class="clickable" v-bind="props" @click.stop="discard">mdi-file-undo</v-icon>
+            </template>
+            <span>Verwerfen</span>
+          </v-tooltip>
         </div>
       </div>
       <div class="content" v-if="item.id === expandCategory && item.next" v-auto-animate>
@@ -38,6 +60,9 @@
           @entry-click="
             (action, prevItems, originalStep, title, additional) =>
               handleEmit(action, [...prevItems, item.id], originalStep, title, additional)
+          "
+          @edit-click="
+            (action, prevItems, originalStep) => handleEditEmit(action, [...prevItems, item.id], originalStep)
           "
         />
         <div v-if="!openAddNew" @click.stop="handleClick(item.id)">
@@ -58,8 +83,18 @@
             </div>
 
             <div class="actions">
-              <v-icon class="clickable" @click.stop="save(item.id)">mdi-content-save-outline</v-icon>
-              <v-icon class="clickable" @click.stop="discard">mdi-file-undo</v-icon>
+              <v-tooltip top>
+                <template v-slot:activator="{ props }">
+                  <v-icon class="clickable" v-bind="props" @click.stop="save(item.id)">mdi-content-save-outline</v-icon>
+                </template>
+                <span>Speichern</span>
+              </v-tooltip>
+              <v-tooltip top>
+                <template v-slot:activator="{ props }">
+                  <v-icon class="clickable" v-bind="props" @click.stop="discard">mdi-file-undo</v-icon>
+                </template>
+                <span>Verwerfen</span>
+              </v-tooltip>
             </div>
           </div>
         </div>
@@ -86,6 +121,7 @@ const emit = defineEmits<{
     title?: string,
     additionalData?: string
   ): void;
+  (event: "editClick", action: string, itemIds: string[], layer: number): void;
 }>();
 
 const expandCategory = ref(null);
@@ -117,7 +153,16 @@ const handleEmit = (action: EmitAction, itemIds: string[], layer: number, title?
   emit("entryClick", action, itemIds, layer, title, additionalData);
 };
 
+const handleEditEmit = (action: string, itemIds: string[], layer: number) => {
+  emit("editClick", action, itemIds, layer);
+};
+
 const editClick = (item: CollapsibleListItem) => {
+  if (item.specialActionOnEditClick) {
+    handleEditEmit(item.specialActionOnEditClick, [item.id], props.layer);
+    return;
+  }
+
   openEdit.value = item.id;
   tempTitle.value = item.title;
 };
@@ -153,6 +198,8 @@ const discard = () => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
+
 .collapsible-list {
   margin-top: 2rem;
 
@@ -177,7 +224,7 @@ const discard = () => {
 
   .list-item {
     border-top: 1px solid lightgray;
-    padding: 1rem;
+    padding: 1rem 0 1rem 1rem;
 
     &:not(:first-child) {
       border-top: 1px solid black;
@@ -204,7 +251,7 @@ const discard = () => {
     }
 
     .content {
-      margin-left: 2rem;
+      margin-left: 5rem;
     }
   }
 }

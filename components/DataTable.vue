@@ -2,7 +2,15 @@
   <v-table>
     <thead>
       <tr>
-        <th v-for="field in fields" :key="field.text" :width="[ field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch' ? '15px' : field.width]">
+        <th
+          v-for="field in fields"
+          :key="field.text"
+          :width="[
+            field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch'
+              ? '15px'
+              : field.width,
+          ]"
+        >
           {{ field.text }}
         </th>
         <th width="15px" v-if="!disableEdit"></th>
@@ -10,11 +18,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, indexMain) in items" :key="item.id" :class="[(item === activeItems ? 'activeItems' : '')]">
-        <td v-for="(field, index) in fields" :key="index" class="is-clickable" @click="handleEmitParent(item, field, indexMain)" :width="field.width">
+      <tr v-for="(item, indexMain) in items" :key="item.id" :class="[item === activeItems ? 'activeItems' : '']">
+        <td
+          v-for="(field, index) in fields"
+          :key="index"
+          class="is-clickable"
+          @click="handleEmitParent(item, field, indexMain)"
+          :width="field.width"
+        >
           <span v-if="field.type === 'projectTimeRange'">{{ useDatetime().getProjectTimeRangeString(item) }}</span>
-          <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
-          <span v-else-if="field.type === 'currency' && item[field.value]">{{ useCurrency().getCurrencyFromNumber(item[field.value]) }}</span>
+          <span v-if="field.type === 'datetime' && item[field.value]">{{
+            useDatetime().parseDatetime(item[field.value])
+          }}</span>
+          <span v-else-if="field.type === 'currency' && item[field.value]">{{
+            useCurrency().getCurrencyFromNumber(item[field.value])
+          }}</span>
           <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
@@ -36,7 +54,7 @@
           <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{ field.value }}</v-icon>
           <span v-else-if="item[field.value] && field.type === 'association_name'">{{ item[field.value].name }}</span>
           <span v-else-if="item[field.value] && field.type === 'associations_name'">
-            <div v-for="(item, index) in item[field.value]" :key="index" class="small">{{ item.name }}</div>
+            <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">{{ subItem.name }}</div>
           </span>
           <TableSwitch
             v-else-if="field.type === 'switch'"
@@ -60,11 +78,11 @@
             :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
           />
           <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
-              <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
+            <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
-          <span v-else-if="field.type === 'array'">{{ item[field.value].join(', ') }}</span>
+          <span v-else-if="field.type === 'array'">{{ item[field.value].join(", ") }}</span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item.id, null)">mdi-pencil</v-icon></td>
@@ -74,128 +92,112 @@
   </v-table>
 </template>
 
-<script>
-import { useEnums } from '@/composables/data/enums'
-export default defineComponent({
-  emits: ['close', 'openCreateEditDialog', 'openDeleteDialog'],
-  props: {
-    fields: {
-      type: Array
-    },
-    disableEdit: {
-      type: Boolean
-    },
-    endpoint: {
-      type: String
-    },
-    overwriteMoveEndpoint: {
-      type: String
-    },
-    defaultSortBy: {
-      type: String,
-      default: 'created_at'
-    },
-    defaultSortOrder: {
-      type: String,
-      default: 'desc'
-    }
-  },
-  setup (props, { emit, expose }) {
-    const loading = ref(false)
-    const showingDropdown = ref(null)
+<script setup lang="ts">
+import { useEnums } from "@/composables/data/enums";
 
-    const showDropdown = (id) => {
-      const itemId = id
-      showingDropdown.value = itemId
-    }
-    
-    const setStatus = (id) => {
-      showingDropdown.value = null
-     console.log(id)
-    }
-
-    const ItemStatus = ref([
-      { name: 'In Prüfung', id: 'is_checked'},
-      { name: 'Freigegeben', id: 'confirmed'},
-      { name: 'Abgelehnt', id: 'rejected'}
-    ])
-
-    const resetActiveItems = () => {
-      activeItems.value = null
-    }
-
-    expose({ resetActiveItems })
-
-    const emitopenDeleteDialog = (itemId) => {
-      emit('openDeleteDialog', itemId)
-    }
-    const activeItems = ref(null)
-    const handleEmitParent = (item, field, menu_order) => {
-      activeItems.value = item
-      if (field.type === 'move_up') {
-        move(item, items.value[menu_order -= 1])
-      } else if (field.type === 'move_down') {
-        move(item, items.value[menu_order += 1])
-      } else if (field.type !== 'switch' && field.type !== 'enumDropdown') {
-        emitParent(item.id, field.emit)
-      }
-    }
-
-    const emitParent = (itemId, fieldEmit) => {
-      if (!fieldEmit) {
-        emit('openCreateEditDialog', itemId)
-      } else {
-        emit(fieldEmit, itemId)
-      }
-    }
-
-    const move = async (entry, nextEntry) => {
-
-      let endpoint = props.overwriteMoveEndpoint
-      if (!props.overwriteMoveEndpoint) {
-        endpoint = props.endpoint
-      }
-
-      const result = await useTableMove().move(entry, nextEntry, endpoint)
-      if (result) {
-        getItems()
-      }
-    }
-
-    const api = useCollectionApi()
-    api.setBaseApi(usePrivateApi())
-    api.setEndpoint(props.endpoint)
-    const items = api.items
-
-    const getItems = async () => {
-      loading.value = true
-      const options = { page: 1, per_page: 999, sort_by: props.defaultSortBy, sort_order: props.defaultSortOrder, searchQuery: null, concat: false, filters: [] }
-      await api.retrieveCollection(options)
-      loading.value = false
-    }
-
-    onMounted(() => {
-      useNuxtApp().$bus.$on("triggerGetItems", () => {
-        getItems()
-      })
-      getItems()
-    })
-
-    return {
-      emitopenDeleteDialog,
-      emitParent,
-      handleEmitParent,
-      move,
-      items,
-      useEnums,
-      showDropdown,
-      showingDropdown,
-      ItemStatus,
-      setStatus,
-      activeItems
-    }
+const props = withDefaults(
+  defineProps<{
+    fields: any[];
+    disableEdit: boolean;
+    endpoint: string;
+    overwriteMoveEndpoint: string;
+    defaultSortBy: string;
+    defaultSortOrder: string;
+  }>(),
+  {
+    defaultSortBy: "created_at",
+    defaultSortOrder: "desc",
   }
-})
+);
+
+const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog"]);
+
+const loading = ref(false);
+const showingDropdown = ref(null);
+
+const showDropdown = (id) => {
+  const itemId = id;
+  showingDropdown.value = itemId;
+};
+
+const setStatus = (id) => {
+  showingDropdown.value = null;
+  console.log(id);
+};
+
+const ItemStatus = ref([
+  { name: "In Prüfung", id: "is_checked" },
+  { name: "Freigegeben", id: "confirmed" },
+  { name: "Abgelehnt", id: "rejected" },
+]);
+
+const resetActiveItems = () => {
+  activeItems.value = null;
+};
+
+const emitopenDeleteDialog = (itemId) => {
+  emit("openDeleteDialog", itemId);
+};
+const activeItems = ref(null);
+const handleEmitParent = (item, field, menu_order) => {
+  activeItems.value = item;
+  if (field.type === "move_up") {
+    move(item, items.value[(menu_order -= 1)]);
+  } else if (field.type === "move_down") {
+    move(item, items.value[(menu_order += 1)]);
+  } else if (field.type !== "switch" && field.type !== "enumDropdown") {
+    emitParent(item.id, field.emit);
+  }
+};
+
+const emitParent = (itemId, fieldEmit) => {
+  if (!fieldEmit) {
+    emit("openCreateEditDialog", itemId);
+  } else {
+    emit(fieldEmit, itemId);
+  }
+};
+
+const move = async (entry, nextEntry) => {
+  let endpoint = props.overwriteMoveEndpoint;
+  if (!props.overwriteMoveEndpoint) {
+    endpoint = props.endpoint;
+  }
+
+  const result = await useTableMove().move(entry, nextEntry, endpoint);
+  if (result) {
+    getItems();
+  }
+};
+
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
+api.setEndpoint(props.endpoint);
+const items = api.items;
+
+const getItems = async () => {
+  loading.value = true;
+  const options = {
+    page: 1,
+    per_page: 999,
+    sort_by: props.defaultSortBy,
+    sort_order: props.defaultSortOrder,
+    searchQuery: null,
+    concat: false,
+    filters: [],
+  };
+  await api.retrieveCollection(options);
+  loading.value = false;
+};
+
+onMounted(() => {
+  useNuxtApp().$bus.$on("triggerGetItems", () => {
+    getItems();
+  });
+  getItems();
+});
+
+defineExpose({ resetActiveItems });
 </script>
 
 <style lang="sass">
