@@ -207,6 +207,8 @@ const refreshView = async () => {
 
     marker.bindPopup(location.name);
     marker.bindPopup(popup);
+    // @ts-expect-error no id on type marker
+    marker.id = location.id
 
     locationMarkers.push(marker);
 
@@ -255,7 +257,8 @@ const getLocations = (): Array<Location> => {
 
   locationMarkers.forEach((element) => {
     result.push({
-      id: element.getElement().id,
+      // @ts-expect-error no id on type marker
+      id: element?.id,
       longitude: element.getLatLng().lng,
       latitude: element.getLatLng().lat,
     });
