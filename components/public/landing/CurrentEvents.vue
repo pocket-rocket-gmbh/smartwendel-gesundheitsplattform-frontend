@@ -4,10 +4,7 @@
       <v-row no-gutters>
         <v-col class="d-flex align-center">
           <div>
-            <img src="~/assets/images/logo.png" width="190"/>
-          </div>
-          <div class="mx-15">
-            <h2 class="is-primary">Kurse und Veranstaltungen</h2>
+            <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">Kurse und Veranstaltungen</h2>
           </div>
         </v-col>
       </v-row>
@@ -21,7 +18,7 @@
     </v-row>
   <div>
     <v-row>
-      <v-col cols="12" md="6" offset="5" class="mt-10">
+      <v-col md="12" class="d-flex justify-center mt-10">
         <v-btn
           variant="outlined"
           size="large"
@@ -47,7 +44,7 @@ export default defineComponent({
 
   const getCoursesArticles = async () => {
       listApi.setEndpoint(`care_facilities?kind=event,course`)
-      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
+      const options = { page: 1, per_page: 2, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null as any, concat: false, filters: [] as any }
       loading.value = true
       await listApi.retrieveCollection(options)
       loading.value = false

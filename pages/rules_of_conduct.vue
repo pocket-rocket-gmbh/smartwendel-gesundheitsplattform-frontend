@@ -37,7 +37,6 @@
           Die Moderation der Plattform erfolgt stets neutral. Von uns werden keine eigenen inhaltlichen Positionen vertreten. Wir, das Moderationsteam, dienen alleinig dazu, eine angenehme Atmosphäre für Diskussionen und Gespräche auf Augenhöhe sicherzustellen. Auch wir sind nur Menschen, die nicht ohne Fehler sind. Sollte es also zu Missverständnissen kommen, bitten wir um Verständnis. In solchen Fällen zögere bitte nicht, uns über unser Kontaktformular darüber in Kenntnis zu setzen.
         </p>
     </v-container>
-    <PublicFooter />
   </div>
 </template>
 

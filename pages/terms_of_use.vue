@@ -106,7 +106,6 @@
       </p>
     </v-container>
   </div>
-  <PublicFooter />
 </template>
 
 <script lang="ts" setup>

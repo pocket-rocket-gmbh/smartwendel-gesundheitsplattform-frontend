@@ -2,7 +2,7 @@
   <div class="mx-15 my-15">
       <v-row justify="space-between">
         <v-col md="4" class="justify-center align-center is-dark-grey">
-          <h2 class="is-primary is-uppercase mb-5">Pflege, Ärtze, <br/> Krankenhäuser und co.</h2>
+          <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">Pflege, Ärtze, <br/> Krankenhäuser und co.</h2>
           <p class="text-justify">
             Über diese Suchfunktion finden Sie sicher schnell die passenende Einrichtung und den richtigen Ansprechpartner.
           </p>
@@ -108,8 +108,8 @@ export default defineComponent({
 <style lang="sass" scoped>
 .icons
   border-radius: 50%
-  background: #F5F5F5
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
+  border: 1px solid black
+  background-color: white
 
 
 </style>

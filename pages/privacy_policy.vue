@@ -145,7 +145,6 @@
         <h3>Sonstige Anliegen:</h3>
         <p>Für weitergehende Datenschutzfragen und -anliegen steht Ihnen unser Datenschutzbeauftragter zur Verfügung. Entsprechende Anfragen sowie die Ausübung Ihrer vorstehenden Rechte sollten nach Möglichkeit schriftlich an unsere oben angegebene Anschrift oder per E-Mail an datenschutz(at)lkwnd.de geschickt werden.</p>
     </v-container>
-    <PublicFooter />
   </div>
 </template>
 

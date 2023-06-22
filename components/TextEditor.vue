@@ -9,7 +9,7 @@
         @input="emitSetInput"
         :placeholder="textOptions.placeholder"
         contentType="html"
-        toolbar="full"
+        toolbar="minimal"
       />
     </ClientOnly>
   </div>
