@@ -11,7 +11,7 @@
       <div class="title-bar">
         <div class="title" v-auto-animate>
           <template v-if="openEdit !== item.id">
-            {{ item.title }}
+            <span :class="item.id === expandCategory ? 'font-weight-bold' : ''">{{ item.title }}</span>
           </template>
           <template v-else>
             <v-text-field @click.stop v-model="tempTitle" hide-details="auto" label="Titel" />
@@ -60,6 +60,9 @@
           @entry-click="
             (action, prevItems, originalStep, title, additional) =>
               handleEmit(action, [...prevItems, item.id], originalStep, title, additional)
+          "
+          @edit-click="
+            (action, prevItems, originalStep) => handleEditEmit(action, [...prevItems, item.id], originalStep)
           "
         />
         <div v-if="!openAddNew" @click.stop="handleClick(item.id)">
@@ -117,6 +120,7 @@ const emit = defineEmits<{
     title?: string,
     additionalData?: string
   ): void;
+  (event: "editClick", action: string, itemIds: string[], layer: number): void;
 }>();
 
 const expandCategory = ref(null);
@@ -148,7 +152,16 @@ const handleEmit = (action: EmitAction, itemIds: string[], layer: number, title?
   emit("entryClick", action, itemIds, layer, title, additionalData);
 };
 
+const handleEditEmit = (action: string, itemIds: string[], layer: number) => {
+  emit("editClick", action, itemIds, layer);
+};
+
 const editClick = (item: CollapsibleListItem) => {
+  if (item.specialActionOnEditClick) {
+    handleEditEmit(item.specialActionOnEditClick, [item.id], props.layer);
+    return;
+  }
+
   openEdit.value = item.id;
   tempTitle.value = item.title;
 };
@@ -184,6 +197,8 @@ const discard = () => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
+
 .collapsible-list {
   margin-top: 2rem;
 
@@ -208,7 +223,7 @@ const discard = () => {
 
   .list-item {
     border-top: 1px solid lightgray;
-    padding: 1rem;
+    padding: 1rem 0 1rem 1rem;
 
     &:not(:first-child) {
       border-top: 1px solid black;
@@ -235,7 +250,7 @@ const discard = () => {
     }
 
     .content {
-      margin-left: 2rem;
+      margin-left: 5rem;
     }
   }
 }

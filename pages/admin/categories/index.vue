@@ -12,9 +12,9 @@
       >Neuer Bereich</v-btn
     >
 
-    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" />
+    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" @edit-click="handleEditClick" />
 
-    <DataTable
+    <!-- <DataTable
       :fields="fields"
       endpoint="categories"
       default-sort-order="asc"
@@ -23,7 +23,7 @@
       @openDeleteDialog="openDeleteDialog"
       @openAddSubCategoriesDialog="openAddSubCategoriesDialog"
       ref="dataTable"
-    />
+    /> -->
 
     <AdminCategoriesAddSubCategories
       v-if="addSubCategoriesDialogOpen"
@@ -41,6 +41,17 @@
       concept-name="Bereich"
     />
 
+    <AdminSubSubCategoriesCreateEdit
+      :item-id="itemId"
+      v-if="createEditSubDialogOpen"
+      :item-placeholder="itemPlaceholder"
+      @close="handleSubCategoryClose"
+      :endpoint="`categories/${itemId}/sub_categories/${subCategoryId}`"
+      :overwrite-get-item-endpoint="`categories/${subSubCategoryId}`"
+      :overwrite-update-item-endpoint="`categories/${subSubCategoryId}`"
+      concept-name="Unter-Kategorien"
+    />
+
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
       @close="deleteItemComplete"
@@ -52,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { CollapsibleFieldItem, CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
+import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { ResultStatus } from "~/types/serverCallResult";
 
 definePageMeta({
@@ -61,7 +72,7 @@ definePageMeta({
 
 const itemsForList = ref<CollapsibleListItem[]>([]);
 
-const fields = ref<CollapsibleFieldItem[]>([
+const fields = ref([
   { text: "Bereichsbezeichnung", value: "name", type: "string" },
   {
     text: "",
@@ -74,9 +85,12 @@ const fields = ref<CollapsibleFieldItem[]>([
 
 const dataTable = ref(null);
 const createEditDialogOpen = ref(false);
+const createEditSubDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const addSubCategoriesDialogOpen = ref(false);
 const itemId = ref(null);
+const subCategoryId = ref(null);
+const subSubCategoryId = ref(null);
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
@@ -139,24 +153,8 @@ const getItems = async (endpoint = "categories") => {
     return;
   }
 
-  itemsForList.value = [];
-  /**
-   * TODO
-   * 1. Bilder-Button für ganz unten
-   * 2. Move per DragNDrop
-   * const move = async (entry, nextEntry) => {
-  let endpoint = props.overwriteMoveEndpoint;
-  if (!props.overwriteMoveEndpoint) {
-    endpoint = props.endpoint;
-  }
+  const tmpItemsForList: CollapsibleListItem[] = [];
 
-  const result = await useTableMove().move(entry, nextEntry, endpoint);
-  if (result) {
-    getItems();
-  }
-};
-  3. Loading indicator/Skeleton for entries/categories
-   */
 
   for (const category of categories) {
     api.setEndpoint(`categories/${category.id}/sub_categories`);
@@ -168,7 +166,7 @@ const getItems = async (endpoint = "categories") => {
       next: [],
     };
 
-    itemsForList.value.push(categoryItem);
+    tmpItemsForList.push(categoryItem);
 
     const res = await api.retrieveCollection(options);
     if (res.status === ResultStatus.FAILED) {
@@ -214,39 +212,24 @@ const getItems = async (endpoint = "categories") => {
         categoryItem.next[index].next.push({
           id: subSubCategory.id,
           title: subSubCategory.name,
-          // TODO: Add images button
+          specialActionOnEditClick: "openSubCategoriesModal",
         });
       }
     }
   }
 
-  // itemsForList.value = items.map((item) => {
-  //   console.log(item);
-  //   return {
-  //     id: item.id,
-  //     title: item.name,
-  //     addEntryButtonText: "Neue Kategorie hinzufügen",
-  //     next: item.sub_categories.map((subCategory: any) => {
-  //       return {
-  //         id: subCategory.id,
-  //         title: subCategory.name,
-  //         addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
-  //         additionalData: {
-  //           type: "api",
-  //           endpoint: `categories/${subCategory.id}`,
-  //           path: "resource.description",
-  //         },
-  //         canAddAdditionalData: true,
-  //         next: subCategory.sub_sub_categories.map((subSubCategory: any) => {
-  //           return {
-  //             id: subSubCategory.id,
-  //             title: subSubCategory.name,
-  //           };
-  //         }),
-  //       };
-  //     }),
-  //   };
-  // });
+  itemsForList.value = tmpItemsForList;
+};
+
+const handleEditClick = (action: string, itemIds: string[], layer: number) => {
+  console.log(action, itemIds, layer);
+
+  if (action === "openSubCategoriesModal") {
+    itemId.value = itemIds[2];
+    subCategoryId.value = itemIds[1];
+    subSubCategoryId.value = itemIds[0];
+    createEditSubDialogOpen.value = true;
+  }
 };
 
 const handleClick = async (
@@ -316,6 +299,15 @@ const deleteItemComplete = () => {
 
 const handleNewAreaAdded = () => {
   createEditDialogOpen.value = false;
+
+  getItems();
+};
+
+const handleSubCategoryClose = () => {
+  itemId.value = null;
+  subCategoryId.value = null;
+  subSubCategoryId.value = null;
+  createEditSubDialogOpen.value = false;
 
   getItems();
 };
