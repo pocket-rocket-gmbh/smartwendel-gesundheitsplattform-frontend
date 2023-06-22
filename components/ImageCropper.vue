@@ -70,7 +70,11 @@ export default defineComponent({
   width: 100%
   max-height: 500px
 
-.vue-advanced-cropper__background, .vue-advanced-cropper__foreground
-  background-color: #ddd
+.vue-advanced-cropper__background
+  background-color: #eee
+  background-image: linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black), linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black)
+  background-size: 60px 60px
+  background-position: 0 0, 30px 30px
+  opacity: .1
 
 </style>
