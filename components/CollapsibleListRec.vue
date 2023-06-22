@@ -1,10 +1,11 @@
 <template>
   <div class="collapsible-list">
     <div
-      class="list-item clickable"
+      class="list-item"
       v-for="item in items"
       v-auto-animate
       :key="item.id"
+      :class="[item.next ? 'clickable' : 'not-clickable']"
       @click.stop="setExpandCategory(item.id)"
     >
       <div class="title-bar">
@@ -17,9 +18,11 @@
           </template>
         </div>
         <div class="additional" v-if="item.additionalData">
-          <CollapsibleListAdditionalData v-if="openEdit !== item.id" :data="item.additionalData" />
-          <div v-else>EDIT ADDITIONAL DATA</div>
-          <!-- TODO: ADDITIONAL DATA EDITABLE -->
+          <CollapsibleListAdditionalData
+            :data="item.additionalData"
+            :edit="openEdit === item.id"
+            v-model="tempAdditionalData"
+          />
         </div>
         <div class="actions" v-auto-animate>
           <v-icon class="clickable" v-if="openEdit !== item.id" @click.stop="editClick(item)">mdi-pencil</v-icon>
@@ -38,7 +41,7 @@
           "
         />
         <div v-if="!openAddNew" @click.stop="handleClick(item.id)">
-          <button>Neuer Eintrag hinzufügen</button>
+          <button>{{ item.addEntryButtonText || "Neuer Eintrag hinzufügen" }}</button>
         </div>
         <div v-if="openAddNew === item.id" class="tmp-item" @click.stop>
           <div class="title-bar">
@@ -154,6 +157,10 @@ const discard = () => {
 
   .clickable {
     cursor: pointer;
+  }
+
+  .not-clickable {
+    cursor: default;
   }
 
   button {

@@ -1,5 +1,14 @@
 <template>
-  <div v-html="refinedData"></div>
+  <div v-if="!edit" v-html="refinedData"></div>
+  <v-textarea
+    v-else
+    v-model="refinedData"
+    hide-details="auto"
+    label="Beschreibung"
+    :rules="[(v) => (v || '').length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
+    @update:model-value="handleModelChange"
+    @click.stop
+  />
 </template>
 
 <script setup lang="ts">
@@ -7,9 +16,19 @@ import { CollapsibleListItemAdditionalData } from "~/types/collapsibleList";
 
 const props = defineProps<{
   data: CollapsibleListItemAdditionalData;
+  edit?: boolean;
+  modelValue?: string;
+}>();
+
+const emit = defineEmits<{
+  (event: "update:modelValue", value: string): void;
 }>();
 
 const refinedData = ref();
+
+const handleModelChange = () => {
+  emit("update:modelValue", refinedData.value);
+};
 
 const getAdditionalData = async () => {
   if (!props.data || props.data.type !== "api") return "nothing";

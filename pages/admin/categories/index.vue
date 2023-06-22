@@ -14,17 +14,6 @@
 
     <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" />
 
-    <!-- <CollapsibleList
-      :fields="fields"
-      endpoint="categories"
-      default-sort-order="asc"
-      default-sort-by="menu_order"
-      @openCreateEditDialog="openCreateEditDialog"
-      @openDeleteDialog="openDeleteDialog"
-      @openAddSubCategoriesDialog="openAddSubCategoriesDialog"
-      ref="dataTable"
-    />  -->
-
     <!-- <DataTable
       :fields="fields"
       endpoint="categories"
@@ -144,10 +133,12 @@ const getItems = async (endpoint = "categories") => {
     return {
       id: item.id,
       title: item.name,
+      addEntryButtonText: "Neue Kategorie hinzufügen",
       next: item.sub_categories.map((subCategory: any) => {
         return {
           id: subCategory.id,
           title: subCategory.name,
+          addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
           additionalData: {
             type: "api",
             endpoint: `categories/${subCategory.id}`,
@@ -158,7 +149,6 @@ const getItems = async (endpoint = "categories") => {
             return {
               id: subSubCategory.id,
               title: subSubCategory.name,
-              canAddAdditionalData: false,
             };
           }),
         };
