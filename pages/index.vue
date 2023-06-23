@@ -28,7 +28,7 @@ header
   height: 100vh
   
 .background
-  background: url('@/assets/images/home.jpg') no-repeat center center fixed
+  background: url('@/assets/images/home.svg') no-repeat center center fixed
   height: 100vh
   -webkit-background-size: cover
   -moz-background-size: cover

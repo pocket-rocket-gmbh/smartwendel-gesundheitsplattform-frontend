@@ -16,9 +16,7 @@
                       <span class="is-clickable main" @click="setItemsAndGo(category, null)">
                       {{ category.name }}
                       </span>
-                      <span>
-                        <v-icon v-if="category.sub_categories.length > 0" class="mr-3">mdi-chevron-down</v-icon>
-                      </span>
+
                     </div> 
                   </v-list-item-title>
                 </template>
@@ -39,15 +37,12 @@
             </div>
             <div>
         </div>
-        <a href="/public/search" class="is-clickable mx-5">
-            Anbieter
-        </a>
-        <a href="/public/search" class="is-clickable mx-5">
-            Kurse
-        </a>
-        <a href="/public/search" class="is-clickable mx-5">
-            Beiträge
-        </a>
+          <a href="/public/search" class="is-clickable mx-5">
+              Anbieter
+          </a>
+          <a href="/public/search" class="is-clickable mx-5">
+              Kurse und Veranstaltungen
+          </a>
         </div>
         </div>
       </v-app-bar-title>

@@ -7,7 +7,7 @@
             <div>Ihr Angebot fehlt?</div>
             <div>Hier können Sie Ihre Einrichtung registrieren!</div>
           </v-col>
-          <v-col>
+          <v-col class="d-flex ml-15">
             <v-btn variant="flat" 
               color="grey" 
               rounded="pill"
@@ -46,7 +46,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col class="d-flex justify-end">
+        <v-col class="d-flex justify-center">
           <div class="flex-column justify-center">
             <h2 class="mb-5">Landkreis Sankt Wendel</h2>
             <p class="has-text-white is-clickable"><router-link to="/contact">Kontakt</router-link></p>
@@ -112,6 +112,7 @@ const display = ref(useDisplay())
 
 .social-buttons
   border: 3px solid
+  color: $dark-grey
 
 .divider
   border: 1px $dark-grey solid
