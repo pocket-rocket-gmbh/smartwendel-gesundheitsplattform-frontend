@@ -18,7 +18,7 @@
         dense
         nav
       >
-        <v-list-item link to="/" nuxt>
+        <v-list-item link :to="appStore.dashboardBackLink || '/'" nuxt>
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
@@ -66,8 +66,10 @@
 <script lang="ts" setup>
 import { useAccessPrivileges } from '~/composables';
 import { useUser } from '~/composables';
+import { useAppStore } from '~/store/app';
 
 const user = useUser();
+const appStore = useAppStore();
 
 const handleLogout = () => {
   console.log("Handle logout")
