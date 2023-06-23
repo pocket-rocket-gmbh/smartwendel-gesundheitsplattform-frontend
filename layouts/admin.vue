@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer permanent>
       <router-link to="/admin">
-        <img class="mt-3 ml-3" src="~/assets/images/logo.png" height="60" />
+        <img class="mt-3 ml-3" src="~/assets/images/logo.png" height="30" />
       </router-link>
       <v-list-item>
         <v-list-item-title class="text-h6 my-3">

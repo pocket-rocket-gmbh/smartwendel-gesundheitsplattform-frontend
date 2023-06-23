@@ -9,6 +9,8 @@
         <slot />
       </v-main>
       <PublicLayoutsFooter />
+      <PublicAccessibilityPanel />
+      <PublicLoginPanel />
     </div>
   </v-app>
 </template>

@@ -1,11 +1,7 @@
 <template>
   <div class="accessibility-panel">
-    <div class="increase-size is-clickable">
-      <p>A+</p>
-    </div>
-    <div class="divider"></div>
     <div class="decrease-size is-clickable py-1">
-      <p>A -</p>
+      <v-icon size="x-large">mdi-account-circle-outline</v-icon>
     </div>
   </div>
 </template>
@@ -17,9 +13,9 @@
   border-radius: 5px 0px 0px 5px
   color: #ffffff
   width: 50px
-  height: 100px
+  height: 50px
   position: fixed
-  top: 30%
+  top: 45%
   right: 0
   text-align: center
   display: grid
@@ -36,6 +32,6 @@
   font-size: 25px
 
 .decrease-size
-  font-size: 25px
+  font-size: 18px
 
 </style>
