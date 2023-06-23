@@ -20,7 +20,7 @@
   height: 50px
   position: fixed
   top: 45%
-  right: 0
+  right: 20px
   text-align: center
   display: grid
   place-items: center
