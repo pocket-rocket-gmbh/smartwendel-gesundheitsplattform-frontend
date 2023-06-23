@@ -3,8 +3,8 @@
     <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3">
       <v-app-bar-title>
         <div class="d-flex align-center">
-          <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" height="70" />
-          <div class="align-center d-none d-sm-flex mx-15">
+          <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" height="50" />
+          <div class="align-center d-none d-sm-flex mx-2">
             <div class="is-clickable d-flex" v-for="(category, index) in categories" :key="index">
               <v-menu
               open-on-hover
@@ -39,26 +39,30 @@
             </div>
             <div>
         </div>
-        <a href="/public/search" class="is-clickable">
-            Anbietersuche
-          </a>
-          </div>
+        <a href="/public/search" class="is-clickable mx-5">
+            Anbieter
+        </a>
+        <a href="/public/search" class="is-clickable mx-5">
+            Kurse
+        </a>
+        <a href="/public/search" class="is-clickable mx-5">
+            Beiträge
+        </a>
+        </div>
         </div>
       </v-app-bar-title>
       <div class="align-center d-none d-sm-flex">
-        <div class="offer" v-if="!useUser().loggedIn()">
-          <v-btn
-            variant="outlined"
-            size="small"
-            rounded="pill"
-            color="primary"
-            href="/login"
-            class="mr-5" 
-          >
-            Jetzt registrieren
-          </v-btn>
+        <div class="has-bg-primary mr-5 text-white offer py-1 " v-if="!useUser().loggedIn()">
+        <v-row class="mx-5 text-center">
+          <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
+            <div class="font-weight-bold">Ihr Angebot fehlt?</div>
+            <div class="font-weight-light">Registrieren Sie sich!</div>
+          </v-col>
+        </v-row>
         </div>
-
+          <div>
+            <v-icon size="x-large" color="primary">mdi-account-circle-outline</v-icon>
+          </div>
         <router-link
           class="mx-3 menu-list"
           to="/admin"
@@ -189,6 +193,10 @@ export default defineComponent({
       }
     }
 
+    const goToRegister = () => {
+      router.push({ path: '/register' })
+    }
+
     const setItemsAndGo = (category:any, sub_category:any) => {
       if (sub_category ) {
         router.push({path: `/public/categories/${category.id}`, query: { sub_category_id: sub_category.id }})
@@ -231,7 +239,8 @@ export default defineComponent({
       userIsAdmin,
       reload,
       setItemsAndGo,
-      sub_categoryId
+      sub_categoryId,
+      goToRegister
     }
   }
 })
@@ -277,5 +286,9 @@ export default defineComponent({
 
 .main
   font-size: 1.2rem!important
+
+.offer
+  border-radius: 20px
+  line-height: 1.5rem
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="mt-15 my-15 pl-3">
-    <h1 class="title">Ihre Gesundheits- und Pflegeplattform im Landkreis Sankt Wendel</h1>
-    <p class="has-font-size-medium sub-title">Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unsere umfangreiche Pflegeangebote aus der Region Sankt Wendel</p>
+    <h1 class="title">Ihre Gesundheits-plattform im Landkreis Sankt Wendel</h1>
+    <p class="has-font-size-medium sub-title">Finden Sie Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote.</p>
   </div>
 </template>
 
