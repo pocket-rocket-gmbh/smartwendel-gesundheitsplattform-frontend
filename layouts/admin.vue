@@ -20,7 +20,7 @@
         dense
         nav
       >
-        <v-list-item @click="routeBack">
+        <v-list-item :to="appStore.dashboardBackLink || '/'" @click.prevent="routeBack">
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>

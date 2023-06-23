@@ -70,20 +70,22 @@
                 <v-icon size="x-large">mdi-account-circle-outline</v-icon>
             </v-btn>
           </div>
-        <div
+        <a
           class="mx-3 menu-list pointer"
           v-if="useUser().isAdmin()"
-          @click="saveCurrentUrlAndRoute('/admin')"
+          href="/admin"
+          @click.prevent="saveCurrentUrlAndRoute('/admin')"
         >
           Admin-Bereich
-        </div>
-        <div
+        </a>
+        <a
           class="mx-3 menu-list pointer"
           v-else-if="useUser().isFacilityOwner()"
-          @click="saveCurrentUrlAndRoute('/admin/care_facilities')"
+          href="/admin/care_facilities"
+          @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
         >
           Meine Einrichtungen
-        </div>
+        </a>
         <PublicLayoutsMiniMenu
           :current-user="currentUser"
           :user-is-admin="userIsAdmin"
