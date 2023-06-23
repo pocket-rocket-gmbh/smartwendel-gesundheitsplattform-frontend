@@ -1,7 +1,11 @@
 <template>
   <div>
     <h1 class="is-dark-grey">{{ careFacility.name }}</h1>
-   <div class="mt-4 facility-description" v-html="careFacility.description"></div>
+    <ClientOnly>
+      <PublicTextTooltipWrap
+        :text="careFacility.description"
+      />
+    </ClientOnly>
   </div>
 </template>
 

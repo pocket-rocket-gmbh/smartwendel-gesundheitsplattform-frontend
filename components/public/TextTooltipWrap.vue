@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useTooltipsStore } from '~~/store/tooltips'
+import { useTooltipsStore } from '~/store/tooltips'
 export default defineComponent({
   props: {
     text: {
@@ -33,7 +33,7 @@ export default defineComponent({
             .tooltip-${filtered.id} {
               position: relative;
               display: inline-block!important;
-              color: #0176B8;
+              color: #88B624;
               font-weight: 500;
               cursor: pointer;
             }
@@ -41,7 +41,7 @@ export default defineComponent({
               visibility: hidden;
               width: auto;
               padding: 15px 15px;
-              background-color: #015281;
+              background-color: #88B624;
               color: #fff;
               overflow-wrap: break-word;
               border-radius: 6px;
@@ -57,7 +57,7 @@ export default defineComponent({
               width: 300px;
             }
             .icon {
-              color: #0176B8;
+              color: #88B624;
               font-size: 15px;
               padding: 1px;
               margin-bttom: 50px;
@@ -97,5 +97,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-  
+  .text-wrap
+    text-align: justify
+    display: inline-block
 </style>
