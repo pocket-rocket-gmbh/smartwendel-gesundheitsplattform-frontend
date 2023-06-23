@@ -42,7 +42,7 @@
       :location="location"
       v-if="createEditLocationOpen"
       @close="closeLocationDialog()"
-      @save="saveLocation()"
+      @save="saveLocation"
     />
 
 </template>
@@ -90,27 +90,23 @@ export default defineComponent({
       createEditLocationOpen.value = false
     }
 
-    const saveLocation = async () => {
-      const locationId = createEditDialog.value.getLocationCoordinates().id 
-      const longitude = createEditDialog.value.getLocationCoordinates().longitude
-      const latitude = createEditDialog.value.getLocationCoordinates().latitude
-
+    const saveLocation = async (lat: number, long: number) => {
       createEditLocationOpen.value = false
       loadingItem.value = true
 
       if (location.value) {
-        api.setEndpoint(`/locations/${locationId}`)
+        api.setEndpoint(`/locations/${location.value.id}`)
         await api.updateItem({
-          longitude: longitude,
-          latitude: latitude
+          longitude: long,
+          latitude: lat
         })
       }
       else {
         api.setEndpoint(`locations/care_facility/${props.itemId}`)
         await api.createItem({
           careFacility_id: props.itemId,
-          longitude: longitude,
-          latitude: latitude
+          longitude: long,
+          latitude: lat
         })
       }
 

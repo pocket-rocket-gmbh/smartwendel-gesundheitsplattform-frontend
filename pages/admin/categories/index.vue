@@ -12,7 +12,13 @@
       >Neuer Bereich</v-btn
     >
 
-    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" @edit-click="handleEditClick" />
+    <CollapsibleListRec
+      :items="itemsForList"
+      :layer="0"
+      @entry-click="handleClick"
+      @edit-click="handleEditClick"
+      @entry-moved="handleMove"
+    />
 
     <!-- <DataTable
       :fields="fields"
@@ -96,6 +102,10 @@ const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 api.setEndpoint("categories");
 
+const currentCategories = ref<any[]>([]);
+const currentSubCategories = ref<any[]>([]);
+const currentSubSubCategories = ref<any[]>([]);
+
 const loading = ref(false);
 
 const itemPlaceholder = ref({
@@ -152,9 +162,9 @@ const getItems = async (endpoint = "categories") => {
     console.error("No categories!");
     return;
   }
+  currentCategories.value = [...categories];
 
   const tmpItemsForList: CollapsibleListItem[] = [];
-
 
   for (const category of categories) {
     api.setEndpoint(`categories/${category.id}/sub_categories`);
@@ -162,6 +172,7 @@ const getItems = async (endpoint = "categories") => {
     const categoryItem: CollapsibleListItem = {
       id: category.id,
       title: category.name,
+      menuOrder: category.menu_order,
       addEntryButtonText: "Neue Kategorie hinzufügen",
       next: [],
     };
@@ -179,6 +190,7 @@ const getItems = async (endpoint = "categories") => {
       console.error("No subCategories!");
       continue;
     }
+    currentSubCategories.value = [...currentSubCategories.value, ...subCategories];
 
     for (const [index, subCategory] of subCategories.entries()) {
       api.setEndpoint(`categories/${category.id}/sub_categories/${subCategory.id}`);
@@ -186,6 +198,7 @@ const getItems = async (endpoint = "categories") => {
       categoryItem.next.push({
         id: subCategory.id,
         title: subCategory.name,
+        menuOrder: subCategory.menu_order,
         addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
         additionalData: {
           type: "api",
@@ -207,11 +220,13 @@ const getItems = async (endpoint = "categories") => {
         console.error("No subSubCategories!");
         continue;
       }
+      currentSubSubCategories.value = [...currentSubSubCategories.value, ...subSubCategories];
 
       for (const subSubCategory of subSubCategories) {
         categoryItem.next[index].next.push({
           id: subSubCategory.id,
           title: subSubCategory.name,
+          menuOrder: subSubCategory.menu_order,
           specialActionOnEditClick: "openSubCategoriesModal",
         });
       }
@@ -222,8 +237,6 @@ const getItems = async (endpoint = "categories") => {
 };
 
 const handleEditClick = (action: string, itemIds: string[], layer: number) => {
-  console.log(action, itemIds, layer);
-
   if (action === "openSubCategoriesModal") {
     itemId.value = itemIds[2];
     subCategoryId.value = itemIds[1];
@@ -276,7 +289,6 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, desc
   }
 
   const result = await api.createItem({ name, description, scope: "care_facility", tags: [] }, `Erfolgreich erstellt`);
-  console.log(result);
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     console.log("SUCCESS");
@@ -310,6 +322,50 @@ const handleSubCategoryClose = () => {
   createEditSubDialogOpen.value = false;
 
   getItems();
+};
+
+const handleMove = async (
+  itemsInCategory: CollapsibleListItem[],
+  layer: number,
+  startIndex: number,
+  endIndex: number
+) => {
+  if (startIndex === endIndex) return;
+
+  const itemsToUpdate: any[] = [];
+
+  if (layer === 0) {
+    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+      const category = currentCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
+      if (!category) throw "Category not found";
+      itemsToUpdate.push(category);
+    }
+  } else if (layer === 1) {
+    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+      const subCategory = currentSubCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
+      if (!subCategory) throw "SubCategory not found";
+      itemsToUpdate.push(subCategory);
+    }
+  } else if (layer === 2) {
+    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+      const subSubCategory = currentSubSubCategories.value.find(
+        (category) => category.id === itemsInCategory[newIndex].id
+      );
+      if (!subSubCategory) throw "SubSubCategory not found";
+      itemsToUpdate.push(subSubCategory);
+    }
+  }
+
+  for (let i = 0; i < itemsToUpdate.length; i++) {
+    const currentItem = itemsToUpdate[i];
+
+    api.setEndpoint(`categories/${currentItem.id}`);
+    const result = await api.updateItem({ menu_order: startIndex + i }, null);
+
+    if (result.status !== ResultStatus.SUCCESSFUL) {
+      throw "Something went wrong while moving the items!";
+    }
+  }
 };
 
 onMounted(() => {

@@ -14,7 +14,7 @@
           v-model="slotProps.item.description"
           hide-details="auto"
           label="Beschreibung"
-          :rules="rules.length"
+          :rules="[rules.length]"
           :error-messages="useErrors().checkAndMapErrors('Beschreibung', slotProps.errors)"
           />
       </div>
