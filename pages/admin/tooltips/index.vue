@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Tooltips</h2>
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neuer Tooltip</v-btn>
+    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Tooltip erstellen</v-btn>
     <DataTable
       :fields="fields"
       endpoint="tooltips"
@@ -12,8 +12,9 @@
     <AdminTooltipsCreateEdit
       :item-id="itemId"
       v-if="createEditDialogOpen"
+      :item-placeholder="itemPlaceholder"
+      endpoint="tooltips"
       @close="itemId = null; createEditDialogOpen = false"
-      @refreshCollection="getItems()"
     />
 
     <DeleteItem
@@ -21,14 +22,14 @@
       @close="itemId = null; confirmDeleteDialogOpen = false"
       :item-id="itemId"
       endpoint="tooltips"
-      term="dieser Tooltip"
+      term="diesen tooltip"
+      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
-    
   </div>
 </template>
 <script lang="ts">
 export default defineComponent({
-  name: 'AdminTooltipsIndex',
+  name: 'AdminFilterIndex',
   setup() {
     definePageMeta({
       layout: "admin",
@@ -39,28 +40,17 @@ export default defineComponent({
       { text: 'Url', value: 'url', type: 'string' },
     ])
 
+    const itemPlaceholder = ref({
+      name: '',
+      scope: 'tooltips'
+    })
+
     const dialog = ref(false)
     const item = ref({ name: '' })
     const loading = ref(false)
+    const createEditDialogOpen = ref(false)
     const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
-    const createEditDialogOpen = ref(false)
-
-    const api = useCollectionApi()
-    api.setBaseApi(usePrivateApi())
-    api.setEndpoint('tooltips')
-    const tooltips = api.items
-
-    const getItems = async () => {
-      loading.value = true
-      const options = { page: 1, per_page: 1000, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
-      await api.retrieveCollection(options)
-      loading.value = false
-    }
-
-   onMounted(() => {
-      getItems()
-    })
 
     const openCreateEditDialog = (id:string) => {
       itemId.value = id
@@ -76,15 +66,13 @@ export default defineComponent({
       fields,
       loading,
       dialog,
-      tooltips,
       item,
       createEditDialogOpen,
+      itemPlaceholder,
       confirmDeleteDialogOpen,
       itemId,
       openCreateEditDialog,
-      openDeleteDialog,
-      openCreateEditDialog,
-      getItems
+      openDeleteDialog
     }
   }
 })
