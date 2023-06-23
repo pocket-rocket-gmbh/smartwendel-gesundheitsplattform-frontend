@@ -1,9 +1,11 @@
 <template>
   <v-app>
     <v-navigation-drawer permanent>
-      <router-link to="/admin">
-        <img class="mt-3 ml-3" src="~/assets/images/logo.png" height="30" />
-      </router-link>
+      <div class="d-flex justify-center">
+        <router-link to="/admin">
+          <img class="mt-3 ml-3" src="~/assets/images/logo.png" width="200" />
+        </router-link>
+      </div>
       <v-list-item>
         <v-list-item-title class="text-h6 my-3">
           Gesundheits- und <br> Pflegeplattform

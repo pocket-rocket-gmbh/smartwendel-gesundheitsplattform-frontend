@@ -9,8 +9,7 @@
         <slot />
       </v-main>
       <PublicLayoutsFooter />
-      <PublicAccessibilityPanel />
-      <PublicLoginPanel />
+      <PublicLoginPanel  v-if="!useUser().loggedIn()"/>
     </div>
   </v-app>
 </template>

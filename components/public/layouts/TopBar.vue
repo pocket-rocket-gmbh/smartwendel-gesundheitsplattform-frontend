@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3">
+    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10">
       <v-app-bar-title>
         <div class="d-flex align-center">
-          <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" height="50" />
+          <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" width="200" />
           <div class="align-center d-none d-sm-flex mx-2">
             <div class="is-clickable d-flex" v-for="(category, index) in categories" :key="index">
               <v-menu
@@ -52,7 +52,7 @@
         </div>
       </v-app-bar-title>
       <div class="align-center d-none d-sm-flex">
-        <div class="has-bg-primary mr-5 text-white offer py-1 " v-if="!useUser().loggedIn()">
+        <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn()">
         <v-row class="mx-5 text-center">
           <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
             <div class="font-weight-bold">Ihr Angebot fehlt?</div>
@@ -61,7 +61,14 @@
         </v-row>
         </div>
           <div>
-            <v-icon size="x-large" color="primary">mdi-account-circle-outline</v-icon>
+            <v-btn
+              v-if="!useUser().loggedIn()"
+              href="/login"
+              color="primary"
+              icon
+                >
+                <v-icon size="x-large">mdi-account-circle-outline</v-icon>
+            </v-btn>
           </div>
         <router-link
           class="mx-3 menu-list"

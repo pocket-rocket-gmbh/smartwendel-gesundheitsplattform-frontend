@@ -1,7 +1,8 @@
 <template>
   <div class="mt-15 my-15 pl-3">
     <h1 class="title">Ihre Gesundheits-plattform im Landkreis Sankt Wendel</h1>
-    <p class="has-font-size-medium sub-title">Finden Sie Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote.</p>
+    <PublicLandingChooseCategory class="my-15"/>
+    <p class="has-font-size-medium sub-title my-15">Finden Sie Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote.</p>
   </div>
 </template>
 
@@ -24,6 +25,7 @@ export default defineComponent({
   font-style: normal
   font-weight: 400
   line-height: 160%
+  width: 75%
 
 .header
   margin-top: 20%
