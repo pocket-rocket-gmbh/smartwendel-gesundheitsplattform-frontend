@@ -70,20 +70,22 @@
                 <v-icon size="x-large">mdi-account-circle-outline</v-icon>
             </v-btn>
           </div>
-        <router-link
-          class="mx-3 menu-list"
-          to="/admin"
+        <a
+          class="mx-3 menu-list pointer"
           v-if="useUser().isAdmin()"
+          href="/admin"
+          @click.prevent="saveCurrentUrlAndRoute('/admin')"
         >
           Admin-Bereich
-        </router-link>
-        <div
+        </a>
+        <a
           class="mx-3 menu-list pointer"
           v-else-if="useUser().isFacilityOwner()"
-          @click="saveCurrentUrlAndRoute('/admin/care_facilities')"
+          href="/admin/care_facilities"
+          @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
         >
           Meine Einrichtungen
-        </div>
+        </a>
         <PublicLayoutsMiniMenu
           :current-user="currentUser"
           :user-is-admin="userIsAdmin"
@@ -242,7 +244,7 @@ export default defineComponent({
     })
 
     const saveCurrentUrlAndRoute = (routeTo: string) => {
-      appStore.dashboardBackLink = `${window.location.pathname}/${window.location.search || ''}`;
+      appStore.dashboardBackLink = window.location.pathname;
 
       router.push({ path: routeTo });
     }
