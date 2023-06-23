@@ -77,13 +77,13 @@
         >
           Admin-Bereich
         </router-link>
-        <router-link
-          class="mx-3 menu-list"
-          to="/admin/care_facilities"
+        <div
+          class="mx-3 menu-list pointer"
           v-else-if="useUser().isFacilityOwner()"
+          @click="saveCurrentUrlAndRoute('/admin/care_facilities')"
         >
           Meine Einrichtungen
-        </router-link>
+        </div>
         <PublicLayoutsMiniMenu
           :current-user="currentUser"
           :user-is-admin="userIsAdmin"
@@ -173,6 +173,8 @@
 
 <script lang="ts">
 import { useUserStore } from "@/store/user"
+import { useAppStore } from "@/store/app"
+
 export default defineComponent({
   setup() {
     const currentUser = ref(null)
@@ -181,6 +183,7 @@ export default defineComponent({
     const sub_categoryId = ref ({})
     const drawer = ref(false)
     const menu = ref(false)
+    const appStore = useAppStore();
 
     const categoriesApi = useCollectionApi()
     categoriesApi.setBaseApi(usePublicApi())
@@ -237,6 +240,13 @@ export default defineComponent({
     useUserStore().$subscribe((mutation, state) => {
       currentUser.value = state.currentUser
     })
+
+    const saveCurrentUrlAndRoute = (routeTo: string) => {
+      appStore.dashboardBackLink = `${window.location.pathname}/${window.location.search || ''}`;
+
+      router.push({ path: routeTo });
+    }
+
     return {
       handleResetLink,
       menu,
@@ -247,13 +257,17 @@ export default defineComponent({
       reload,
       setItemsAndGo,
       sub_categoryId,
-      goToRegister
+      goToRegister,
+      saveCurrentUrlAndRoute
     }
   }
 })
 </script>
 
 <style lang="sass">
+
+.pointer
+  cursor: pointer
 
 .v-toolbar__title
   font-size: 1.5rem !important
