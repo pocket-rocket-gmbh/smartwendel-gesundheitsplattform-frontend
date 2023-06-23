@@ -1,95 +1,54 @@
 <template>
   <div class="collapsible-list">
-    <div
-      class="list-item"
-      v-for="item in items"
-      v-auto-animate
-      :key="item.id"
-      :class="[item.next ? 'clickable' : 'not-clickable']"
-      @click.stop="setExpandCategory(item.id)"
+    <draggable
+      class="dragArea"
+      tag="div"
+      :list="items"
+      :group="{ name: `layer-${layer}` }"
+      item-key="name"
+      :animation="150"
+      @end="handleMove"
     >
-      <div class="title-bar">
-        <div class="title" v-auto-animate>
-          <template v-if="openEdit !== item.id">
-            <span :class="item.id === expandCategory ? 'font-weight-bold' : ''">{{ item.title }}</span>
-          </template>
-          <template v-else>
-            <v-text-field @click.stop v-model="tempTitle" hide-details="auto" label="Titel" />
-          </template>
-        </div>
-        <div class="additional" v-if="item.additionalData">
-          <CollapsibleListAdditionalData
-            :data="item.additionalData"
-            :edit="openEdit === item.id"
-            v-model="tempAdditionalData"
-          />
-        </div>
-        <div class="actions" v-auto-animate>
-          <v-tooltip top v-if="openEdit !== item.id">
-            <template v-slot:activator="{ props }">
-              <v-icon class="clickable" v-bind="props" @click.stop="editClick(item)">mdi-pencil</v-icon>
-            </template>
-            <span>Bearbeiten</span>
-          </v-tooltip>
-          <v-tooltip top v-else>
-            <template v-slot:activator="{ props }">
-              <v-icon class="clickable" v-bind="props" @click.stop="editSaveClick(item)"
-                >mdi-content-save-outline</v-icon
-              >
-            </template>
-            <span>Speichern</span>
-          </v-tooltip>
-          <v-tooltip top v-if="openEdit !== item.id">
-            <template v-slot:activator="{ props }">
-              <v-icon class="clickable" v-bind="props" @click.stop="deleteClick(item)">mdi-delete</v-icon>
-            </template>
-            <span>Löschen</span>
-          </v-tooltip>
-          <v-tooltip top v-else>
-            <template v-slot:activator="{ props }">
-              <v-icon class="clickable" v-bind="props" @click.stop="discard">mdi-file-undo</v-icon>
-            </template>
-            <span>Verwerfen</span>
-          </v-tooltip>
-        </div>
-      </div>
-      <div class="content" v-if="item.id === expandCategory && item.next" v-auto-animate>
-        <CollapsibleListRec
-          :items="item.next"
-          :layer="layer + 1"
-          @entry-click="
-            (action, prevItems, originalStep, title, additional) =>
-              handleEmit(action, [...prevItems, item.id], originalStep, title, additional)
-          "
-          @edit-click="
-            (action, prevItems, originalStep) => handleEditEmit(action, [...prevItems, item.id], originalStep)
-          "
-        />
-        <div v-if="!openAddNew" @click.stop="handleClick(item.id)">
-          <button>{{ item.addEntryButtonText || "Neuer Eintrag hinzufügen" }}</button>
-        </div>
-        <div v-if="openAddNew === item.id" class="tmp-item" @click.stop>
-          <div class="title-bar">
-            <div class="title">
-              <v-text-field v-model="tempTitle" hide-details="auto" label="Neuer Eintragstitel" />
+      <template #item="{ element }">
+        <div class="list-item" :id="element.id">
+          <div class="title-bar" @click.stop="setExpandCategory(element.id)">
+            <div class="title" v-auto-animate>
+              <template v-if="openEdit !== element.id">
+                <span :class="element.id === expandCategory ? 'font-weight-bold' : ''">{{ element.title }}</span>
+              </template>
+              <template v-else>
+                <v-text-field @click.stop v-model="tempTitle" hide-details="auto" label="Titel" />
+              </template>
             </div>
-            <div v-if="!item.canAddAdditionalData" class="additional">
-              <v-textarea
+            <div class="additional" v-if="element.additionalData">
+              <CollapsibleListAdditionalData
+                :data="element.additionalData"
+                :edit="openEdit === element.id"
                 v-model="tempAdditionalData"
-                hide-details="auto"
-                label="Beschreibung"
-                :rules="rules.length"
               />
             </div>
-
-            <div class="actions">
-              <v-tooltip top>
+            <div class="actions" v-auto-animate>
+              <v-tooltip top v-if="openEdit !== element.id">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="clickable" v-bind="props" @click.stop="save(item.id)">mdi-content-save-outline</v-icon>
+                  <v-icon class="clickable" v-bind="props" @click.stop="editClick(element)">mdi-pencil</v-icon>
+                </template>
+                <span>Bearbeiten</span>
+              </v-tooltip>
+              <v-tooltip top v-else>
+                <template v-slot:activator="{ props }">
+                  <v-icon class="clickable" v-bind="props" @click.stop="editSaveClick(element)"
+                    >mdi-content-save-outline</v-icon
+                  >
                 </template>
                 <span>Speichern</span>
               </v-tooltip>
-              <v-tooltip top>
+              <v-tooltip top v-if="openEdit !== element.id">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="clickable" v-bind="props" @click.stop="deleteClick(element)">mdi-delete</v-icon>
+                </template>
+                <span>Löschen</span>
+              </v-tooltip>
+              <v-tooltip top v-else>
                 <template v-slot:activator="{ props }">
                   <v-icon class="clickable" v-bind="props" @click.stop="discard">mdi-file-undo</v-icon>
                 </template>
@@ -97,15 +56,68 @@
               </v-tooltip>
             </div>
           </div>
+          <div class="content" v-if="element.id === expandCategory && element.next" v-auto-animate>
+            <CollapsibleListRec
+              :items="element.next"
+              :layer="layer + 1"
+              @entry-click="
+                (action, prevItems, originalStep, title, additional) =>
+                  handleEmit(action, [...prevItems, element.id], originalStep, title, additional)
+              "
+              @edit-click="
+                (action, prevItems, originalStep) => handleEditEmit(action, [...prevItems, element.id], originalStep)
+              "
+              @entry-moved="
+                (relevantItems, originalStep, startIndex, endIndex) =>
+                  handleMoveEmit(relevantItems, originalStep, startIndex, endIndex)
+              "
+            />
+            <div v-if="!openAddNew" @click.stop="handleClick(element.id)">
+              <button>{{ element.addEntryButtonText || "Neuer Eintrag hinzufügen" }}</button>
+            </div>
+            <div v-if="openAddNew === element.id" class="tmp-item" @click.stop>
+              <div class="title-bar">
+                <div class="title">
+                  <v-text-field v-model="tempTitle" hide-details="auto" label="Neuer Eintragstitel" />
+                </div>
+                <div v-if="!element.canAddAdditionalData" class="additional">
+                  <v-textarea
+                    v-model="tempAdditionalData"
+                    hide-details="auto"
+                    label="Beschreibung"
+                    :rules="[rules.length]"
+                  />
+                </div>
+
+                <div class="actions">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                      <v-icon class="clickable" v-bind="props" @click.stop="save(element.id)"
+                        >mdi-content-save-outline</v-icon
+                      >
+                    </template>
+                    <span>Speichern</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                      <v-icon class="clickable" v-bind="props" @click.stop="discard">mdi-file-undo</v-icon>
+                    </template>
+                    <span>Verwerfen</span>
+                  </v-tooltip>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </template>
+    </draggable>
   </div>
 </template>
 
 <script setup lang="ts">
 import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
-import { rules } from '~/data/validationRules'
+import { rules } from "~/data/validationRules";
+import draggable from "vuedraggable";
 
 const props = defineProps<{
   items: CollapsibleListItem[];
@@ -122,6 +134,13 @@ const emit = defineEmits<{
     additionalData?: string
   ): void;
   (event: "editClick", action: string, itemIds: string[], layer: number): void;
+  (
+    event: "entryMoved",
+    itemsInCategory: CollapsibleListItem[],
+    layer: number,
+    startIndex: number,
+    endIndex: number
+  ): void;
 }>();
 
 const expandCategory = ref(null);
@@ -194,6 +213,19 @@ const discard = () => {
   openEdit.value = null;
   tempTitle.value = "";
   tempAdditionalData.value = "";
+};
+
+const handleMoveEmit = (
+  itemsInCategory: CollapsibleListItem[],
+  layer: number,
+  startIndex: number,
+  endIndex: number
+) => {
+  emit("entryMoved", itemsInCategory, layer, startIndex, endIndex);
+};
+
+const handleMove = (e: { newIndex: number; oldIndex: number; item: HTMLDivElement; clone: HTMLDivElement }) => {
+  handleMoveEmit(props.items, props.layer, e.oldIndex, e.newIndex);
 };
 </script>
 

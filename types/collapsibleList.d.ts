@@ -16,6 +16,7 @@ export type CollapsibleListItemAdditionalData = AdditionalRaw | AdditionalApi;
 export type CollapsibleListItem = {
   id: string;
   title: string;
+  menuOrder: number,
   additionalData?: CollapsibleListItemAdditionalData;
   canAddAdditionalData?: boolean;
   addEntryButtonText?: string;
