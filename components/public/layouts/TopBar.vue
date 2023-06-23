@@ -70,13 +70,13 @@
                 <v-icon size="x-large">mdi-account-circle-outline</v-icon>
             </v-btn>
           </div>
-        <router-link
-          class="mx-3 menu-list"
-          to="/admin"
+        <div
+          class="mx-3 menu-list pointer"
           v-if="useUser().isAdmin()"
+          @click="saveCurrentUrlAndRoute('/admin/')"
         >
           Admin-Bereich
-        </router-link>
+        </div>
         <div
           class="mx-3 menu-list pointer"
           v-else-if="useUser().isFacilityOwner()"
