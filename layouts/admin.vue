@@ -20,7 +20,7 @@
         dense
         nav
       >
-        <v-list-item link :to="appStore.dashboardBackLink || '/'" nuxt>
+        <v-list-item @click="routeBack">
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
@@ -72,9 +72,16 @@ import { useAppStore } from '~/store/app';
 
 const user = useUser();
 const appStore = useAppStore();
+const router = useRouter();
 
 const handleLogout = () => {
   console.log("Handle logout")
   user.logout()
+}
+
+const routeBack = () => {
+  router.push({path: appStore.dashboardBackLink || '/'})
+
+  appStore.dashboardBackLink = "";
 }
 </script>

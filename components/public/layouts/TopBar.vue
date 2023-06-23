@@ -73,7 +73,7 @@
         <div
           class="mx-3 menu-list pointer"
           v-if="useUser().isAdmin()"
-          @click="saveCurrentUrlAndRoute('/admin/')"
+          @click="saveCurrentUrlAndRoute('/admin')"
         >
           Admin-Bereich
         </div>
@@ -242,7 +242,7 @@ export default defineComponent({
     })
 
     const saveCurrentUrlAndRoute = (routeTo: string) => {
-      appStore.dashboardBackLink = `${window.location.pathname}/${window.location.search || ''}`;
+      appStore.dashboardBackLink = window.location.pathname;
 
       router.push({ path: routeTo });
     }
