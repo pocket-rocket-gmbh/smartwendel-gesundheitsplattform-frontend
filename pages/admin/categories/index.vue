@@ -97,6 +97,7 @@ const addSubCategoriesDialogOpen = ref(false);
 const itemId = ref(null);
 const subCategoryId = ref(null);
 const subSubCategoryId = ref(null);
+const snackbar = useSnackbar();
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
@@ -332,22 +333,25 @@ const handleMove = async (
 ) => {
   if (startIndex === endIndex) return;
 
+  const actualStartIndex = Math.min(startIndex, endIndex);
+  const actualEndIndex = Math.max(startIndex, endIndex);
+
   const itemsToUpdate: any[] = [];
 
   if (layer === 0) {
-    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const category = currentCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
       if (!category) throw "Category not found";
       itemsToUpdate.push(category);
     }
   } else if (layer === 1) {
-    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const subCategory = currentSubCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
       if (!subCategory) throw "SubCategory not found";
       itemsToUpdate.push(subCategory);
     }
   } else if (layer === 2) {
-    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const subSubCategory = currentSubSubCategories.value.find(
         (category) => category.id === itemsInCategory[newIndex].id
       );
@@ -360,12 +364,14 @@ const handleMove = async (
     const currentItem = itemsToUpdate[i];
 
     api.setEndpoint(`categories/${currentItem.id}`);
-    const result = await api.updateItem({ menu_order: startIndex + i }, null);
+    const result = await api.updateItem({ menu_order: actualStartIndex + i }, null);
 
     if (result.status !== ResultStatus.SUCCESSFUL) {
       throw "Something went wrong while moving the items!";
     }
   }
+
+  snackbar.showSuccess("Inhalt wurde erfolgreich verschoben");
 };
 
 onMounted(() => {

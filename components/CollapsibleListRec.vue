@@ -14,7 +14,9 @@
           <div class="title-bar" @click.stop="setExpandCategory(element.id)">
             <div class="title" v-auto-animate>
               <template v-if="openEdit !== element.id">
-                <span class="item-title" :class="element.id === expandCategory ? 'font-weight-bold text-primary' : ''">{{ element.title }} <v-icon v-if="element.id === expandCategory">mdi-arrow-down-right</v-icon></span>
+                <span class="item-title" :class="(element.id === expandCategory && element.next) ? 'font-weight-bold text-primary' : ''"
+                  >{{ element.title }} <v-icon v-if="(element.id === expandCategory && element.next)">mdi-arrow-down-right</v-icon></span
+                >
               </template>
               <template v-else>
                 <v-text-field @click.stop v-model="tempTitle" hide-details="auto" label="Titel" />
@@ -119,8 +121,6 @@ import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { rules } from "~/data/validationRules";
 import draggable from "vuedraggable";
 
-const snackbar = useSnackbar();
-
 const props = defineProps<{
   items: CollapsibleListItem[];
   layer: number;
@@ -224,7 +224,6 @@ const handleMoveEmit = (
   endIndex: number
 ) => {
   emit("entryMoved", itemsInCategory, layer, startIndex, endIndex);
-  snackbar.showSuccess("Inhalt wurde erfolgreich verschoben");
 };
 
 const handleMove = (e: { newIndex: number; oldIndex: number; item: HTMLDivElement; clone: HTMLDivElement }) => {

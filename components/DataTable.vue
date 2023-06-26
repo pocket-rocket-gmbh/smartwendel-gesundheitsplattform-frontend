@@ -98,11 +98,11 @@ import { useEnums } from "@/composables/data/enums";
 const props = withDefaults(
   defineProps<{
     fields: any[];
-    disableEdit: boolean;
     endpoint: string;
-    overwriteMoveEndpoint: string;
-    defaultSortBy: string;
-    defaultSortOrder: string;
+    disableEdit?: boolean;
+    overwriteMoveEndpoint?: string;
+    defaultSortBy?: string;
+    defaultSortOrder?: string;
   }>(),
   {
     defaultSortBy: "created_at",
@@ -182,9 +182,9 @@ const getItems = async () => {
     per_page: 999,
     sort_by: props.defaultSortBy,
     sort_order: props.defaultSortOrder,
-    searchQuery: null,
+    searchQuery: null as string,
     concat: false,
-    filters: [],
+    filters: [] as any[],
   };
   await api.retrieveCollection(options);
   loading.value = false;
