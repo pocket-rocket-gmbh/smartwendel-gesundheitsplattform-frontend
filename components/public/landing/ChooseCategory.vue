@@ -1,16 +1,18 @@
 <template>
   <div class="choose-category" v-if="categories.length > 0">
     <div class="category-input is-dark-grey py-2">
-      <div class="input-wrapper">
-        <input
-          type="text"
-          v-model="searchTerm"
-          class="input"
-          @input="getFilteredData()"
-          placeholder="Suchebegriff eingeben"
-        />
-        <v-icon>mdi-magnify</v-icon>
-      </div>
+      <form @submit.prevent="routeToResults">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            v-model="searchTerm"
+            class="input"
+            placeholder="Suchebegriff eingeben"
+            v-debounce:500ms="getFilteredData"
+          />
+          <v-icon @click="routeToResults">mdi-magnify</v-icon>
+        </div>
+      </form>
 
       <ul v-if="searchTerm.length" class="list">
         <li
@@ -38,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFilterStore } from "~/store/facilitySearchFilter";
+import { useFilterStore } from "~/store/searchFilter";
 
 const filterStore = useFilterStore();
 
@@ -48,6 +50,8 @@ categoriesApi.setEndpoint(`categories`);
 const categories = categoriesApi.items;
 const router = useRouter();
 const searchTerm = ref("");
+
+const filteredCategories = ref([]);
 
 const getCategories = async () => {
   const options = {
@@ -70,10 +74,12 @@ const setFilterAndMove = (categoryId: string, subCategoryId: string) => {
     filterStore.updateCategoriesFilter("subCategory", subCategoryId);
   }
 
-  router.push({ path: "/public/search" });
+  router.push({ path: "/public/search/facilities" });
 };
 
-const filteredCategories = computed(() => {
+const getFilteredData = async () => {
+  await categoriesApi.retrieveCollection();
+
   const filtered = categories.value.filter((category) => {
     const categoryName = (category.name as string).toUpperCase();
 
@@ -87,11 +93,12 @@ const filteredCategories = computed(() => {
     return nameMatch || subCategoryMatch;
   });
 
-  return filtered;
-});
+  filteredCategories.value = [...filtered];
+};
 
-const getFilteredData = async () => {
-  await categoriesApi.retrieveCollection();
+const routeToResults = () => {
+  filterStore.currentSearchQuery = searchTerm.value;
+  router.push({ path: "/public/search" });
 };
 
 onMounted(() => {
@@ -116,19 +123,22 @@ onMounted(() => {
     display: flex
     align-items: center
 
-    .input-wrapper
-      display: flex
-      padding: 0 1rem
-      align-items: center
+    form
       flex: 1
 
-      .input
+      .input-wrapper
+        display: flex
+        padding: 0 1rem
+        align-items: center
         flex: 1
-        outline: none
-        border: none
 
-        &::placeholder
-          opacity: 0.5
+        .input
+          flex: 1
+          outline: none
+          border: none
+
+          &::placeholder
+            opacity: 0.5
 
   .list
    list-style: none
@@ -156,3 +166,4 @@ onMounted(() => {
 .v-input__icon.v-input__icon--append-outer i
   font-size: 48px
 </style>
+~/store/SearchFilter

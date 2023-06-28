@@ -1,134 +1,140 @@
 <template>
-  <div class="basic-search-box pa-8 mt-10">
-    <v-row>
-      <v-col>
-        <h2 class="is-uppercase text-white">Wählen Sie hier Ihre Suchkriterien aus</h2>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <div class="field">
-          <label class="label is-white">Einrichtung, Arzt, Name etc.</label>
-          <input type="text" class="input" v-model="filterStore.currentSearchQuery" />
-        </div>
-      </v-col>
-      <v-col>
-        <PublicFilterSelect
-          :key="filterStore.currentCategoryId"
-          color="is-white"
-          filter-name="category"
-          label="Bereich"
-          endpoint="categories"
-        />
-      </v-col>
-      <v-col>
-        <PublicFilterSelect
-          :key="filterStore.currentSubCategoryId"
-          color="is-white"
-          filter-name="category"
-          label="Ort, Adresse oder PLZ"
-          endpoint=""
-        />
-      </v-col>
-    </v-row>
-    <v-row class="mt-3">
-      <v-col>
-        <v-btn class="mx-3" variant="outlined" size="large" rounded="pill" color="white" @click="mapToogle()">
-          <span v-if="showingMap"> Karte ausblenden </span>
-          <span v-if="!showingMap"> Karte einblenden </span>
-        </v-btn>
-      </v-col>
-      <v-col class="d-flex justify-end">
-        <v-btn
-          class="mx-3"
-          variant="outlined"
-          size="large"
-          rounded="pill"
-          color="white"
-          @click="filterStore.clearSearch()"
-        >
-          Felder löschen
-        </v-btn>
-      </v-col>
-    </v-row>
-  </div>
-  <div class="map-widget">
-    <ClientMap
-      :locations="locations"
-      v-if="showingMap"
-      ref="map"
-      :auto-fit="false"
-      :center-point="{
-        lng: 7.131735,
-        lat: 49.523656,
-      }"
-      :min-zoom="11"
-    />
+  <div class="basic-search-box mt-6">
+    <div class="content">
+      <v-row>
+        <v-col>
+          <div class="title">{{ title }}</div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="align-end">
+          <div class="field">
+            <label class="label is-white">Suchbegriff</label>
+            <FacilityFilterSelection v-model="filterStore.currentTags" />
+          </div>
+        </v-col>
+        <v-col class="align-end">
+          <div class="field">
+            <label class="label is-white">Gemeinde</label>
+            <select class="input select" v-model="filterStore.currentZip">
+              <option :value="null">Keine Auswahl</option>
+              <option v-for="community in communities" :value="community.zip">{{ community.name }}</option>
+            </select>
+          </div>
+        </v-col>
+        <v-col class="align-end field">
+          <v-btn
+            class="mx-3"
+            variant="outlined"
+            size="large"
+            rounded="pill"
+            color="white"
+            @click="filterStore.clearSearch()"
+          >
+            Auswahl zurücksetzen
+          </v-btn>
+          <v-btn class="mx-3" variant="flat" size="large" rounded="pill" color="white" @click="startSearch">
+            Suche starten
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row class="bottom-actions">
+        <v-col class="center">
+          <v-btn
+            v-if="mapControls"
+            variant="outlined"
+            size="large"
+            rounded="pill"
+            color="white"
+            @click="emit('toggleMap')"
+          >
+            <span v-if="showMap"> Karte ausblenden </span>
+            <span v-if="!showMap"> Karte einblenden </span>
+          </v-btn>
+        </v-col>
+        <v-col v-if="!filterStore.filterResults.length && !filterStore.loading">
+          <div class="no-entries">Keine Ergebnisse gefunden. Bitten passen Sie Ihre Suche an.</div>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import { MapLocation } from "@/types/MapLocation";
-import { useFilterStore } from "~/store/facilitySearchFilter";
+import { useFilterStore } from "~/store/searchFilter";
+
+const props = defineProps<{
+  title: string;
+  subTitle: string;
+  mapControls?: boolean;
+  showMap?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: "toggleMap"): void;
+}>();
 
 const filterStore = useFilterStore();
 
-const showingMap = ref(true);
-const map = ref(null);
-const locations = ref<MapLocation[]>([]);
-
-watch(
-  () => filterStore.careFaclities,
-  () => updateLocations()
-);
-
-const getLocationsFromFacilies = async (facilities: any[]) => {
-  locations.value = [];
-
-  for (const facility of facilities) {
-    if (facility.latitude && facility.longitude) {
-      locations.value.push({
-        id: facility.id,
-        longitude: parseFloat(facility.longitude),
-        latitude: parseFloat(facility.latitude),
-        draggable: false,
-        name: facility.name,
-        url: `care_facilities/${facility.id}`,
-        imageUrl: facility.logo_url,
-        kind: facility.kind,
-      });
-    }
-
-    facility.locations.forEach((location: any) => {
-      locations.value.push({
-        id: facility.id,
-        longitude: parseFloat(location.longitude),
-        latitude: parseFloat(location.latitude),
-        draggable: false,
-        name: facility.name,
-        url: `care_facilities/${facility.id}`,
-        imageUrl: facility.logo_url,
-        kind: facility.kind,
-      });
-    });
-  }
+const startSearch = () => {
+  filterStore.loadCareFacilities();
 };
 
-const updateLocations = () => {
-  getLocationsFromFacilies(filterStore.careFaclities);
+const communitiesApi = useCollectionApi();
+communitiesApi.setBaseApi(usePublicApi());
+communitiesApi.setEndpoint(`communities`);
+const communities = communitiesApi.items;
+
+const getCommunities = async () => {
+  await communitiesApi.retrieveCollection();
 };
 
-const mapToogle = () => {
-  showingMap.value = !showingMap.value;
-};
+onMounted(() => {
+  getCommunities();
+});
 </script>
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .basic-search-box
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
-  border-radius: 20px
+  padding: 2rem 4rem 2rem 4rem
 
-.map-widget
-  margin-top: -10px
+.content
+  max-width: 1500px
+  margin: 0 auto
+
+.align-end
+  display: flex
+  align-items: flex-end
+  justify-content: flex-end
+
+.title
+  text-transform: uppercase
+  font-size: 3rem
+  text-align: center
+  color: white
+
+.no-entries
+  background-color: #636362
+  color: white
+  padding: 1rem 1.5rem
+  border-radius: 2rem
+  width: fit-content
+  margin-left: auto
+
+.center
+  display: flex
+  align-items: center
+
+.bottom-actions
+  min-height: 80px
+
+.select
+  cursor: pointer
 </style>
+~/store/SearchFilter

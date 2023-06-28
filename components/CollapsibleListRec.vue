@@ -10,12 +10,15 @@
       @end="handleMove"
     >
       <template #item="{ element }">
-        <div class="list-item" :id="element.id">
+        <div class="list-item" :id="element.id" v-auto-animate>
           <div class="title-bar" @click.stop="setExpandCategory(element.id)">
             <div class="title" v-auto-animate>
               <template v-if="openEdit !== element.id">
-                <span class="item-title" :class="(element.id === expandCategory && element.next) ? 'font-weight-bold text-primary' : ''"
-                  >{{ element.title }} <v-icon v-if="(element.id === expandCategory && element.next)">mdi-arrow-down-right</v-icon></span
+                <span
+                  class="item-title"
+                  :class="element.id === expandCategory && element.next ? 'font-weight-bold text-primary' : ''"
+                  >{{ element.title }}
+                  <v-icon v-if="element.id === expandCategory && element.next">mdi-arrow-down-right</v-icon></span
                 >
               </template>
               <template v-else>
@@ -58,7 +61,7 @@
               </v-tooltip>
             </div>
           </div>
-          <div class="content" v-if="element.id === expandCategory && element.next" v-auto-animate>
+          <div class="content" v-if="element.id === expandCategory && element.next">
             <CollapsibleListRec
               :items="element.next"
               :layer="layer + 1"

@@ -48,7 +48,7 @@ export default defineComponent({
       loading.value = true
       await listApi.retrieveCollection(options)
       loading.value = false
-      console.log(listApi.items.value)
+      // console.log(listApi.items.value)
       eventArticles.value = listApi.items.value as any
     }
 

@@ -1,32 +1,32 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import { getMainFilters } from "../utils/filter.utils";
 
 export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
+export type FilterKind = "facility" | "news" | "event" | "course";
 
-type Filter = {
+export type Filter = {
   currentSearchQuery: string;
-  currentCategoryId: string;
-  currentSubCategoryId: string;
-  currentSubSubCategoryId: string;
   currentTags: string[];
+  currentZip: string;
   filterSort: (typeof filterSortingDirections)[number];
-  careFaclities: any[];
+  filterResults: any[];
   loading: boolean;
   mapFilter: string;
+  currentKinds: FilterKind[];
 };
 
 const initialFilterState: Filter = {
   currentSearchQuery: "",
-  currentCategoryId: null,
-  currentSubCategoryId: null,
-  currentSubSubCategoryId: null,
   currentTags: [],
+  currentZip: null,
   filterSort: "Aufsteigend",
-  careFaclities: [],
+  filterResults: [],
   loading: false,
   mapFilter: null,
+  currentKinds: [],
 };
 
 export const useFilterStore = defineStore({
@@ -36,22 +36,20 @@ export const useFilterStore = defineStore({
     filterInfo: (state) => {
       return {
         currentSearchQuery: state.currentSearchQuery,
-        currentCategoryId: state.currentCategoryId,
-        currentSubCategoryId: state.currentSubCategoryId,
-        currentSubSubCategoryId: state.currentSubSubCategoryId,
+        currentZip: state.currentZip,
         currentTags: state.currentTags,
         filterSort: state.filterSort,
+        currentKinds: state.currentKinds,
       };
     },
   },
   actions: {
     setFilterInfo(newFilterInfo: typeof this.filterInfo) {
       this.currentSearchQuery = newFilterInfo.currentSearchQuery;
-      this.currentCategoryId = newFilterInfo.currentCategoryId;
-      this.currentSubCategoryId = newFilterInfo.currentSubCategoryId;
-      this.currentSubSubCategoryId = newFilterInfo.currentSubSubCategoryId;
+      this.currentZip = newFilterInfo.currentZip;
       this.currentTags = newFilterInfo.currentTags;
       this.filterSort = newFilterInfo.filterSort;
+      this.currentKinds = newFilterInfo.currentKinds;
     },
     updateUrlQuery() {
       const filterUrl = `?filter=${JSON.stringify(this.filterInfo)}`;
@@ -76,52 +74,28 @@ export const useFilterStore = defineStore({
     },
     clearSearch() {
       this.currentSearchQuery = "";
-      this.currentCategoryId = null;
-      this.currentSubCategoryId = null;
-      this.currentSubSubCategoryId = null;
+      this.currentZip = null;
       this.currentTags = [];
       this.mapFilter = null;
 
       this.loadCareFacilities();
     },
-    updateCategoriesFilter(toUpdate: CategoriesFilter, value: string | string[]) {
-      this.mapFilter = null;
-
-      if (toUpdate === "category" && typeof value === "string") {
-        this.currentCategoryId = value;
-        this.currentSubCategoryId = null;
-        this.currentSubSubCategoryId = null;
-      }
-      if (toUpdate === "subCategory" && typeof value === "string") {
-        this.currentSubCategoryId = value;
-        this.currentSubSubCategoryId = null;
-      }
-      if (toUpdate === "subSubCategory" && typeof value === "string") {
-        this.currentSubSubCategoryId = value;
-      }
-      if (toUpdate === "tags" && Array.isArray(value)) {
-        this.currentTags = value;
-      }
-
-      this.loadCareFacilities();
+    enableAllTags(tags: string[]) {
+      this.currentTags = [...new Set([...this.currentTags, ...tags])];
     },
-
-    async loadCareFacilities(endpoint: string = "care_facilities?kind=facility") {
+    disableAllTags(tags: string[]) {
+      tags.forEach((tag) => {
+        const index = this.currentTags.findIndex((item) => item === tag);
+        if (index !== -1) this.currentTags.splice(index, 1);
+      });
+    },
+    async loadCareFacilities(endpoint: string = "care_facilities") {
       this.loading = true;
 
       const filters = [];
 
-      if (this.currentCategoryId) {
-        filters.push({ field: "care_facility_category", value: this.currentCategoryId });
-      }
-      if (this.currentSubCategoryId) {
-        filters.push({ field: "care_facility_sub_category", value: this.currentSubCategoryId });
-      }
-      if (this.currentSubSubCategoryId) {
-        filters.push({ field: "care_facility_sub_sub_category", value: this.currentSubSubCategoryId });
-      }
       if (this.currentTags) {
-        filters.push({ field: "care_facility_tags", value: this.currentTags });
+        filters.push({ field: "care_facility_tag_categories", value: this.currentTags });
       }
 
       const options = {
@@ -136,7 +110,7 @@ export const useFilterStore = defineStore({
 
       const careFaclitiesApi = useCollectionApi();
       careFaclitiesApi.setBaseApi(usePublicApi());
-      careFaclitiesApi.setEndpoint(endpoint);
+      careFaclitiesApi.setEndpoint(`${endpoint}?kind=${this.currentKinds.join(",")}`);
 
       await careFaclitiesApi.retrieveCollection(options as any);
 
@@ -147,17 +121,17 @@ export const useFilterStore = defineStore({
           const { data } = await axios.get(
             `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`
           );
-  
+
           if (!data.length) {
             return null;
           }
-  
+
           const bestResult = data[0];
-  
+
           return [bestResult.lat, bestResult.lon];
         } catch (err) {
           console.error(err);
-          return null
+          return null;
         }
       };
 
@@ -174,14 +148,14 @@ export const useFilterStore = defineStore({
         }
       }
 
-      this.careFaclities = allFacilities;
+      this.filterResults = allFacilities;
       this.loading = false;
 
       if (this.mapFilter) {
-        this.careFaclities = this.careFaclities.filter((facility) => facility.id === this.mapFilter);
+        this.filterResults = this.filterResults.filter((facility) => facility.id === this.mapFilter);
       }
 
-      this.updateUrlQuery();
+      // this.updateUrlQuery();
     },
   },
 });

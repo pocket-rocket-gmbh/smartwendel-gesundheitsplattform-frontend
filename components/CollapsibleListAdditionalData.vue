@@ -1,14 +1,17 @@
 <template>
   <div v-if="!edit" v-html="refinedData"></div>
-  <v-textarea
-    v-else
-    v-model="refinedData"
-    hide-details="auto"
-    label="Beschreibung"
-    :rules="[(v) => (v || '').length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
-    @update:model-value="handleModelChange"
-    @click.stop
-  />
+  <template v-else>
+    <v-text-field @click.stop v-if="data.type === 'raw'" v-model="refinedData" hide-details="auto" label="Zusatzangaben"/>
+    <v-textarea
+      v-else
+      v-model="refinedData"
+      hide-details="auto"
+      label="Beschreibung"
+      :rules="[(v) => (v || '').length <= 160 || 'Die Beschreibung darf höchstens 160 Zeichen lang sein.']"
+      @update:model-value="handleModelChange"
+      @click.stop
+    />
+  </template>
 </template>
 
 <script setup lang="ts">

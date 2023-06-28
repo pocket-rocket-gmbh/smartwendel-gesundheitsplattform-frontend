@@ -23,6 +23,7 @@
     "@types/leaflet": "^1.9.3",
     "@vuepic/vue-datepicker": "^5.2.0",
     "@vueup/vue-quill": "^1.2.0",
+    "@vueuse/core": "^10.2.0",
     "axios": "^1.4.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
@@ -33,6 +34,7 @@
     "sass": "^1.62.1",
     "vue": "^3.3.4",
     "vue-advanced-cropper": "^2.8.8",
+    "vue-debounce": "^4.0.0",
     "vue-matomo": "^4.2.0",
     "vuedraggable": "^4.1.0",
     "vuetify": "^3.3.2"

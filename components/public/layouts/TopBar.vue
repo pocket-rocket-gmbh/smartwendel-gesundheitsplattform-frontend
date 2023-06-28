@@ -37,10 +37,10 @@
             </div>
             <div>
         </div>
-          <a href="/public/search" class="is-clickable mx-5">
+          <a href="/public/search/facilities" class="is-clickable mx-5">
               Anbieter
           </a>
-          <a href="/public/search" class="is-clickable mx-5">
+          <a href="/public/search/events" class="is-clickable mx-5">
               Kurse und Veranstaltungen
           </a>
         </div>

@@ -30,16 +30,17 @@
       :item-id="itemId"
       v-if="createEditDialogOpen"
       :item-placeholder="itemPlaceholder"
-      endpoint="tags"
+      endpoint="tag_categories"
       @close="handleAddTagClose"
+      conceptName="Filter"
     />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
       @close="handleItemDeleted"
       :item-id="itemId"
-      endpoint="tags"
-      term="diesen Tag"
+      endpoint="tag_categories"
+      term="diesen Filter"
     />
   </div>
 </template>
@@ -73,13 +74,15 @@ const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const itemId = ref<string | null>(null);
 
+const currentFilters = ref<any[]>([]);
+const currentSubFilters = ref<any[]>([]);
+const currentSubSubFilters = ref<any[]>([]);
+
 const snackbar = useSnackbar();
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
-api.setEndpoint("tags");
-
-const currentFilters = ref<any[]>([]);
+api.setEndpoint("tag_categories");
 
 const openCreateEditDialog = (id: string) => {
   itemId.value = id;
@@ -91,8 +94,59 @@ const openDeleteDialog = (id: string) => {
   confirmDeleteDialogOpen.value = true;
 };
 
-const getItems = async (endpoint = "tags") => {
-  api.setEndpoint(endpoint);
+type FilterResponse = {
+  id: string;
+  name: string;
+  menu_order: number;
+};
+
+const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number) => {
+  api.setEndpoint(`tag_categories?parent_id=${filter.id}`);
+  const options = {
+    page: 1,
+    per_page: 999,
+    sort_by: "menu_order",
+    sort_order: "asc",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+
+  const filterItem: CollapsibleListItem = {
+    id: filter.id,
+    title: filter.name,
+    menuOrder: filter.menu_order,
+    layer,
+    additionalData: layer === 0 && {
+      type: "api",
+      endpoint: `tag_categories/${filter.id}`,
+      path: "resource.kind",
+    },
+    canAddAdditionalData: layer === 0,
+    next: [],
+  };
+
+  arrayToAdd.push(filterItem);
+
+  const response = await api.retrieveCollection(options);
+  if (response.status === ResultStatus.FAILED) {
+    console.error(response);
+    throw "Api failure";
+  }
+  const filterItems: FilterResponse[] = response?.data?.resources;
+  if (!filterItems) {
+    console.error("No filterItems!");
+    return false;
+  }
+
+  const nextLayerWave: any[] = filterItems.map((filterItemFromResponse) =>
+    getItemsAndNext(filterItemFromResponse, filterItem.next, layer + 1)
+  );
+  return Promise.all(nextLayerWave);
+};
+
+const getItems = async () => {
+  api.setEndpoint(`tag_categories`);
 
   loading.value = true;
   const options = {
@@ -121,35 +175,27 @@ const getItems = async (endpoint = "tags") => {
 
   const tmpItemsForList: CollapsibleListItem[] = [];
 
-  currentFilters.value.forEach((filter) => {
-    tmpItemsForList.push({
-      id: filter.id,
-      menuOrder: filter.menu_order,
-      title: filter.name,
-    });
-  });
+  const nextLayerWave = filters.map((filter) => getItemsAndNext(filter, tmpItemsForList, 0));
+  await Promise.all(nextLayerWave);
 
   itemsForList.value = tmpItemsForList;
 };
 
-const handleClick = async (action: EmitAction, itemIds: string[], layer: number, name: string) => {
+const handleClick = async (action: EmitAction, itemIds: string[], layer: number, name: string, kind: string) => {
   switch (action) {
     case "CREATE":
       return handleCreate(itemIds, layer, name);
     case "DELETE":
       return handleDelete(itemIds, layer);
     case "EDIT":
-      return handleEdit(itemIds, layer, name);
+      return handleEdit(itemIds, layer, name, kind);
   }
 };
 
-const handleEdit = async (itemIds: string[], layer: number, name: string, description?: string) => {
-  api.setEndpoint(`tags/${itemIds[0]}`);
+const handleEdit = async (itemIds: string[], layer: number, name: string, kind: string) => {
+  api.setEndpoint(`tag_categories/${itemIds[0]}`);
 
-  const result = await api.updateItem(
-    { name, description, scope: "care_facility", tags: [] },
-    "Erfolgreich aktualisiert"
-  );
+  const result = await api.updateItem({ name, kind }, "Erfolgreich aktualisiert");
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     console.log("SUCCESS");
@@ -160,9 +206,9 @@ const handleEdit = async (itemIds: string[], layer: number, name: string, descri
 };
 
 const handleCreate = async (itemIds: string[], layer: number, name: string) => {
-  api.setEndpoint(`tags/${itemIds[0]}`);
+  api.setEndpoint(`tag_categories`);
 
-  const result = await api.createItem({ name, scope: "care_facility" }, `Erfolgreich erstellt`);
+  const result = await api.createItem({ name, parent_id: itemIds[0] }, `Erfolgreich erstellt`);
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     console.log("SUCCESS");
@@ -182,22 +228,41 @@ const handleMove = async (
   startIndex: number,
   endIndex: number
 ) => {
+  /**
+   * TODO: Move fix again
+   */
+
   if (startIndex === endIndex) return;
 
-  const itemsToUpdate: any[] = [];
   const actualStartIndex = Math.min(startIndex, endIndex);
   const actualEndIndex = Math.max(startIndex, endIndex);
 
-  for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-    const filter = currentFilters.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
-    if (!filter) throw "filter not found";
-    itemsToUpdate.push(filter);
+  const itemsToUpdate: any[] = [];
+
+  if (layer === 0) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
+      const filter = currentFilters.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      if (!filter) throw "Filter not found";
+      itemsToUpdate.push(filter);
+    }
+  } else if (layer === 1) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
+      const subFilter = currentSubFilters.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      if (!subFilter) throw "SubFilter not found";
+      itemsToUpdate.push(subFilter);
+    }
+  } else if (layer === 2) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
+      const subSubFilter = currentSubSubFilters.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      if (!subSubFilter) throw "SubSubFilter not found";
+      itemsToUpdate.push(subSubFilter);
+    }
   }
 
   for (let i = 0; i < itemsToUpdate.length; i++) {
     const currentItem = itemsToUpdate[i];
 
-    api.setEndpoint(`tags/${currentItem.id}`);
+    api.setEndpoint(`tag_categories/${currentItem.id}`);
     const result = await api.updateItem({ menu_order: actualStartIndex + i }, null);
 
     if (result.status !== ResultStatus.SUCCESSFUL) {

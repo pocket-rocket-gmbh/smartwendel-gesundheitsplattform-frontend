@@ -173,6 +173,7 @@ const getItems = async (endpoint = "categories") => {
     const categoryItem: CollapsibleListItem = {
       id: category.id,
       title: category.name,
+      layer: 0,
       menuOrder: category.menu_order,
       addEntryButtonText: "Neue Kategorie hinzufügen",
       next: [],
@@ -200,6 +201,7 @@ const getItems = async (endpoint = "categories") => {
         id: subCategory.id,
         title: subCategory.name,
         menuOrder: subCategory.menu_order,
+        layer: 1,
         addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
         additionalData: {
           type: "api",
@@ -227,6 +229,7 @@ const getItems = async (endpoint = "categories") => {
         categoryItem.next[index].next.push({
           id: subSubCategory.id,
           title: subSubCategory.name,
+          layer: 2,
           menuOrder: subSubCategory.menu_order,
           specialActionOnEditClick: "openSubCategoriesModal",
         });
