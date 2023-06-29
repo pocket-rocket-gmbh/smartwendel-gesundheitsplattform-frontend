@@ -24,14 +24,14 @@ const filterStore = useFilterStore();
 watch(
   () => filterStore.filterSort,
   () => {
-    filterStore.loadFilteredEntries();
+    filterStore.loadAllResults();
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
   filterStore.currentKinds = ["news"];
   filterStore.updateFromUrlQuery();
-  filterStore.loadFilteredEntries();
+  filterStore.loadAllResults();
 });
 </script>
 

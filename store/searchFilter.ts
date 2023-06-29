@@ -1,31 +1,52 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import { ResultStatus } from "~/types/serverCallResult";
 
 export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
 
+export type Facility = {
+  id: string;
+  name: string;
+  description?: string;
+  kind: FilterKind;
+  zip?: string;
+  street?: string;
+  latitude?: string;
+  longitude?: string;
+  town?: string;
+  phone?: string;
+  email?: string;
+};
+
 export type Filter = {
-  currentSearchQuery: string;
+  currentSearchTerm: string;
   currentTags: string[];
   currentZip: string;
   filterSort: (typeof filterSortingDirections)[number];
-  filterResults: any[];
   loading: boolean;
   mapFilter: string;
   currentKinds: FilterKind[];
+
+  //
+  allResults: Facility[];
+  filteredResults: Facility[];
 };
 
 const initialFilterState: Filter = {
-  currentSearchQuery: "",
+  currentSearchTerm: "",
   currentTags: [],
   currentZip: null,
   filterSort: "Aufsteigend",
-  filterResults: [],
   loading: false,
   mapFilter: null,
   currentKinds: [],
+
+  //
+  allResults: [],
+  filteredResults: [],
 };
 
 export const useFilterStore = defineStore({
@@ -34,7 +55,7 @@ export const useFilterStore = defineStore({
   getters: {
     filterInfo: (state) => {
       return {
-        currentSearchQuery: state.currentSearchQuery,
+        currentSearchTerm: state.currentSearchTerm,
         currentZip: state.currentZip,
         currentTags: state.currentTags,
         filterSort: state.filterSort,
@@ -44,7 +65,7 @@ export const useFilterStore = defineStore({
   },
   actions: {
     setFilterInfo(newFilterInfo: typeof this.filterInfo) {
-      this.currentSearchQuery = newFilterInfo.currentSearchQuery;
+      this.currentSearchTerm = newFilterInfo.currentSearchTerm;
       this.currentZip = newFilterInfo.currentZip;
       this.currentTags = newFilterInfo.currentTags;
       this.filterSort = newFilterInfo.filterSort;
@@ -71,13 +92,14 @@ export const useFilterStore = defineStore({
 
       this.setFilterInfo(JSON.parse(filter));
     },
-    clearSearch() {
-      this.currentSearchQuery = "";
+    async clearSearch() {
+      this.currentSearchTerm = "";
       this.currentZip = null;
       this.currentTags = [];
       this.mapFilter = null;
 
-      this.loadFilteredEntries();
+      await this.loadAllResults();
+      this.loadFilteredResults();
     },
     enableAllTags(tags: string[]) {
       this.currentTags = [...new Set([...this.currentTags, ...tags])];
@@ -88,7 +110,7 @@ export const useFilterStore = defineStore({
         if (index !== -1) this.currentTags.splice(index, 1);
       });
     },
-    async loadFilteredEntries(endpoint: string = "care_facilities") {
+    async loadAllResults() {
       this.loading = true;
 
       const filters = [];
@@ -102,18 +124,34 @@ export const useFilterStore = defineStore({
         per_page: 25,
         sort_by: "name",
         sort_order: this.filterSort == "Aufsteigend" ? "ASC" : "DESC",
-        searchQuery: this.currentSearchQuery,
+        searchQuery: null as any,
         concat: false,
         filters,
       };
 
-      const careFaclitiesApi = useCollectionApi();
-      careFaclitiesApi.setBaseApi(usePublicApi());
-      careFaclitiesApi.setEndpoint(`${endpoint}?kind=${this.currentKinds.join(",")}`);
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`care_facilities`);
+      if (this.currentKinds && this.currentKinds.length) {
+        api.setEndpoint(`care_facilities?kind=${this.currentKinds.join(",")}`);
+      }
 
-      await careFaclitiesApi.retrieveCollection(options as any);
+      await api.retrieveCollection(options as any);
 
-      const allFacilities = careFaclitiesApi.items.value;
+      const allFacilities: Facility[] = api.items.value;
+
+      const enrichedPossibleResultsPromised = allFacilities.map((result) => {
+        api.setEndpoint(`care_facilities/${result.id}`);
+        return api.retrieveCollection();
+      });
+
+      this.allResults = await Promise.all(enrichedPossibleResultsPromised).then((responses) => {
+        return responses
+          .map((response) =>
+            response.status !== ResultStatus.SUCCESSFUL ? null : (response.data.resource as Facility)
+          )
+          .filter(Boolean);
+      });
 
       const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
         try {
@@ -134,27 +172,43 @@ export const useFilterStore = defineStore({
         }
       };
 
-      for (const facility of allFacilities) {
-        if (facility.zip && facility.street) {
-          const response = await getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
+      if (this.currentKinds.includes("facility")) {
+        for (const facility of this.allResults) {
+          if (facility.zip && facility.street) {
+            const response = await getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
 
-          if (response) {
-            const [lat, lon] = response;
+            if (response) {
+              const [lat, lon] = response;
 
-            facility.latitude = lat;
-            facility.longitude = lon;
+              facility.latitude = lat;
+              facility.longitude = lon;
+            }
           }
         }
       }
 
-      this.filterResults = allFacilities;
       this.loading = false;
 
+      this.loadFilteredResults();
+
+      // this.updateUrlQuery();
+    },
+    loadFilteredResults() {
+      if (this.loading || !this.allResults) return;
+
+      const filteredResults: Facility[] = this.allResults.filter((result) => {
+        return (
+          result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
+          result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase())
+        );
+      });
+
       if (this.mapFilter) {
-        this.filterResults = this.filterResults.filter((facility) => facility.id === this.mapFilter);
+        this.filteredResults = filteredResults.filter((facility) => facility.id === this.mapFilter);
+        return;
       }
 
-      this.updateUrlQuery();
+      this.filteredResults = filteredResults;
     },
   },
 });

@@ -54,6 +54,15 @@ const emit = defineEmits<{
   (event: "update:modelValue", values: string[]): void;
 }>();
 
+watch(
+  () => props.modelValue,
+  () => {
+    if (!props.modelValue.length) {
+      selectedFilter.value = null;
+    }
+  }
+);
+
 type Filter = { id: string; name: string };
 
 type FilterOption = {

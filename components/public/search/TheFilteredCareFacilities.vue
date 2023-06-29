@@ -1,8 +1,8 @@
 <template>
   <Loading v-if="filterStore.loading" />
-  <div class="entries" v-else-if="filterStore.filterResults.length > 0">
+  <div class="entries" v-else-if="filterStore.filteredResults.length > 0">
     <div class="ml-2 my-2 d-flex actions">
-      <span class="hits">{{ filterStore.filterResults.length }} Treffer</span>
+      <span class="hits">{{ filterStore.filteredResults.length }} Treffer</span>
       <div class="sort-order">
         <v-select variant="underlined" v-model="filterStore.filterSort" :items="filterSortingDirections" />
       </div>
@@ -10,14 +10,13 @@
     <div v-if="!filterStore.currentKinds.includes('facility')" class="items">
       <PublicContentBox
         class="content-box"
-        v-for="category in filterStore.filterResults"
+        v-for="category in filterStore.filteredResults"
         :key="category.id"
         :item="category"
       />
     </div>
-
     <template v-else>
-      <div class="item mb-6" v-for="careFacility in filterStore.filterResults" :key="careFacility.id">
+      <div class="item mb-6" v-for="careFacility in filterStore.filteredResults" :key="careFacility.id">
         <v-row>
           <v-col md="8">
             <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
@@ -86,7 +85,7 @@ const filterStore = useFilterStore();
 
 const showCareFacilityInMap = async (careFacilityId: string) => {
   filterStore.mapFilter = careFacilityId;
-  await filterStore.loadFilteredEntries();
+  filterStore.loadFilteredResults();
   filterStore.mapFilter = null;
   window.scrollTo({
     behavior: "smooth",

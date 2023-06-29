@@ -46,12 +46,12 @@ const showMap = ref(true);
 watch(
   () => filterStore.filterSort,
   () => {
-    filterStore.loadFilteredEntries();
+    filterStore.loadAllResults();
   }
 );
 
 watch(
-  () => filterStore.filterResults,
+  () => filterStore.filteredResults,
   () => updateLocations()
 );
 
@@ -89,17 +89,17 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
 };
 
 const updateLocations = () => {
-  getLocationsFromFacilies(filterStore.filterResults);
+  getLocationsFromFacilies(filterStore.filteredResults);
 };
 
 const mapToogle = () => {
   showMap.value = !showMap.value;
 };
 
-onMounted(() => {
+onMounted(async () => {
   filterStore.currentKinds = ["facility"];
   filterStore.updateFromUrlQuery();
-  filterStore.loadFilteredEntries();
+  filterStore.loadAllResults();
 });
 </script>
 

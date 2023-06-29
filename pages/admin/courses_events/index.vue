@@ -34,14 +34,20 @@ definePageMeta({
   layout: "admin",
 })
 
-const fields = ref([
+const user = useUser();
+
+const availableFields = [  
   { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: 'Titel', value: 'name', type: 'string' },
+  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus', condition: "admin" },
+  { text: 'Status', endpoint: 'care_facilities', type: 'string', value: 'status', condition: "facility_owner" },
   { text: 'Kind', endpoint: 'care_facilities', value: 'kind', type: 'enum', enum_name: 'facilitiesKind', },
   { text: 'Bereich', value: 'categories', type: 'associations_name' },
   { text: 'Beginn', value: 'course_start', type: 'datetime' },
   { text: 'Ende', value: 'course_end', type: 'datetime' },
-])
+]
+
+const fields = ref([])
 
 const createEditDialogOpen = ref(false)
 const confirmDeleteDialogOpen = ref(false)
@@ -65,6 +71,14 @@ const openDeleteDialog = (id:string) => {
   itemId.value = id
   confirmDeleteDialogOpen.value = true
 }
+
+onMounted(()=> {
+  const currentUserRole = user.currentUser.role
+  availableFields.forEach(field => {
+    if (!field.condition) fields.value.push(field);
+    if (currentUserRole === field.condition) fields.value.push(field);
+  })
+})
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"

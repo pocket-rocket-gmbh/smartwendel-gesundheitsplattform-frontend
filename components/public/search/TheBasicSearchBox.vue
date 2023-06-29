@@ -14,7 +14,14 @@
       <v-row>
         <v-col class="align-end">
           <div class="field">
-            <label class="label is-white">Suchbegriff</label>
+            <label class="label is-white">
+              <div class="search-term">
+                Suchbegriff
+                <v-chip v-if="filterStore.currentSearchTerm" closable @click:close="resetSearchTerm">
+                  {{ filterStore.currentSearchTerm }}
+                </v-chip>
+              </div>
+            </label>
             <FacilityFilterSelection v-model="filterStore.currentTags" />
           </div>
         </v-col>
@@ -57,7 +64,7 @@
             <span v-if="!showMap"> Karte einblenden </span>
           </v-btn>
         </v-col>
-        <v-col v-if="!filterStore.filterResults.length && !filterStore.loading">
+        <v-col v-if="!filterStore.filteredResults.length && !filterStore.loading">
           <div class="no-entries">Keine Ergebnisse gefunden. Bitten passen Sie Ihre Suche an.</div>
         </v-col>
       </v-row>
@@ -81,13 +88,18 @@ const emit = defineEmits<{
 const filterStore = useFilterStore();
 
 const startSearch = () => {
-  filterStore.loadFilteredEntries();
+  filterStore.loadAllResults();
 };
 
 const communitiesApi = useCollectionApi();
 communitiesApi.setBaseApi(usePublicApi());
 communitiesApi.setEndpoint(`communities`);
 const communities = communitiesApi.items;
+
+const resetSearchTerm = () => {
+  filterStore.currentSearchTerm = "";
+  filterStore.loadFilteredResults();
+};
 
 const getCommunities = async () => {
   await communitiesApi.retrieveCollection();
@@ -136,5 +148,9 @@ onMounted(() => {
 
 .select
   cursor: pointer
+
+.search-term
+  display: flex
+  align-items: center
+  gap: 1rem
 </style>
-~/store/SearchFilter
