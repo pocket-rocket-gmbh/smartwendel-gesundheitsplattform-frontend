@@ -71,10 +71,11 @@ export const useFilterStore = defineStore({
       this.filterSort = newFilterInfo.filterSort;
       this.currentKinds = newFilterInfo.currentKinds;
     },
-    updateUrlQuery() {
+    getUrlQuery() {
       const filterUrl = `?filter=${JSON.stringify(this.filterInfo)}`;
       const url = `${window.location.origin}${window.location.pathname}${filterUrl}`;
-      window.history.pushState({ path: url }, "", url);
+      // window.history.pushState({ path: url }, "", url);
+      return url;
     },
     updateFromUrlQuery() {
       const getCurrentQueryParams = (): { [key: string]: string } => {
@@ -91,6 +92,8 @@ export const useFilterStore = defineStore({
       if (!filter) return;
 
       this.setFilterInfo(JSON.parse(filter));
+      const url = `${window.location.origin}${window.location.pathname}`;
+      window.history.pushState({ path: url }, "", url);
     },
     async clearSearch() {
       this.currentSearchTerm = "";
@@ -190,8 +193,6 @@ export const useFilterStore = defineStore({
       this.loading = false;
 
       this.loadFilteredResults();
-
-      // this.updateUrlQuery();
     },
     loadFilteredResults() {
       if (this.loading || !this.allResults) return;

@@ -66,7 +66,8 @@ const emitResetFilter = () => {
 
 const copySearchFilterUrl = () => {
   snackbar.showSuccess("Filter in Zwischenablage gespeichert!");
-  navigator.clipboard.writeText(window.location.href);
+  const url = filterStore.getUrlQuery();
+  navigator.clipboard.writeText(url);
 };
 
 const applyFilters = () => {

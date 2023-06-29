@@ -105,21 +105,22 @@ onMounted(async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("facility");
 
-  for (const mainFilter of mainFilters.value) {
-    const options = await getFilters(mainFilter.id);
+  const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
+  const allOptions = await Promise.all(allOptionsPromises);
 
+  allOptions.forEach((options, index) => {
     filterOptions.value.push({
-      parentId: mainFilter.id,
+      parentId: mainFilters.value[index].id,
       options,
     });
-  }
+  });
   loadingFilters.value = false;
 
-  const allOptions = filterOptions.value.reduce((prev, curr) => {
+  const allAvailableOptions = filterOptions.value.reduce((prev, curr) => {
     return [...prev, ...curr.options];
   }, [] as Filter[]);
 
-  const foundFilter = allOptions.find((option) => {
+  const foundFilter = allAvailableOptions.find((option) => {
     const doesInclide = props.modelValue.find((item: string) => item === option.id);
     return doesInclide;
   });
