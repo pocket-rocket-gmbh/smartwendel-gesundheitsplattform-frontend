@@ -63,9 +63,11 @@ const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
 };
 
 onMounted(async () => {
+  filterStore.onlySearchInTitle = false;
   if (!filterStore.allResults || !filterStore.allResults.length) {
-    filterStore.loadAllResults();
+    await filterStore.loadAllResults();
   }
+  filterStore.loadFilteredResults();
 });
 </script>
 

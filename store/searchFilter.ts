@@ -33,6 +33,7 @@ export type Filter = {
   //
   allResults: Facility[];
   filteredResults: Facility[];
+  onlySearchInTitle: boolean;
 };
 
 const initialFilterState: Filter = {
@@ -47,6 +48,7 @@ const initialFilterState: Filter = {
   //
   allResults: [],
   filteredResults: [],
+  onlySearchInTitle: false,
 };
 
 export const useFilterStore = defineStore({
@@ -200,7 +202,7 @@ export const useFilterStore = defineStore({
       const filteredResults: Facility[] = this.allResults.filter((result) => {
         return (
           result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
-          result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase())
+          (!this.onlySearchInTitle && result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))
         );
       });
 

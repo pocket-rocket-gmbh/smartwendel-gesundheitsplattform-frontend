@@ -2,7 +2,16 @@
   <div class="loading"><slot /><span class="spinner"></span></div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    style: "inline" | "full-screen";
+  }>(),
+  {
+    style: "inline",
+  }
+);
+</script>
 
 <style lang="scss" scoped>
 @keyframes spinner {
