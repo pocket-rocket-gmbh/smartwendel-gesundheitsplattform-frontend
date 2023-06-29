@@ -39,7 +39,7 @@
         <v-list-item link to="/admin/courses_events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           Kurse und Veranstaltungen
         </v-list-item>
-        <v-list-item link to="/admin/news_articles" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('news_articles', 'list')">
+        <v-list-item link to="/admin/news_articles" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           Beiträge
         </v-list-item>
         <v-list-item link to="/admin/tooltips" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')">

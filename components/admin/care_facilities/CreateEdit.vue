@@ -1,6 +1,7 @@
 <template>
   <CreateEdit v-slot="slotProps" size="100wh">
     <v-card-text>
+      <v-row><pre>{{ slotProps.item }}</pre></v-row>
       <v-row>
         <v-col cols="12" md="8" offset="2">
           <!-- facility / news / event -->

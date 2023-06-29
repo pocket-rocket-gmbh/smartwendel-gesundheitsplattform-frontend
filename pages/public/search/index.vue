@@ -40,14 +40,20 @@ const filterStore = useFilterStore();
 const router = useRouter();
 
 const filteredKinds = computed(() => {
-  return [...new Set(filterStore.filteredResults.map((result) => result.kind))];
+  const uniqueKinds = [...new Set(filterStore.filteredResults.map((result) => result.kind))];
+  const courseIndex = uniqueKinds.findIndex((kind) => kind === "course");
+  const eventIndex = uniqueKinds.findIndex((kind) => kind === "event");
+
+  if (courseIndex !== -1 && eventIndex !== -1) {
+    uniqueKinds.splice(courseIndex, 1);
+  }
+  return uniqueKinds;
 });
 
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
   if (kind === "facility") return "Zu den Einrichtungen";
   if (kind === "news") return "Zu den Beiträgen";
-  if (kind === "course") return "Zu den Kursen";
-  if (kind === "event") return "Zu den Veranstaltungen";
+  if (kind === "event" || kind === "course") return "Zu den Kursen und Veranstaltungen";
 };
 
 const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {

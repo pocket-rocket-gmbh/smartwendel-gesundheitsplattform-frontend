@@ -24,7 +24,7 @@
         :item-id="itemId"
         v-if="createEditDialogOpen"
         :item-placeholder="itemPlaceholder"
-        @close="createEditDialogOpen = false"
+        @close="createEditDialogOpen = false; itemId = null;"
         :endpoint="`categories/${categoryId}/sub_categories/${subCategoryId}`"
         :overwrite-get-item-endpoint="`categories/${itemId}`"
         :overwrite-update-item-endpoint="`categories/${itemId}`"

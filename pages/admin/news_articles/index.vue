@@ -13,7 +13,7 @@
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
-      @close="createEditDialogOpen = false"
+      @close="createEditDialogOpen = false; itemId = null;"
       endpoint="care_facilities"
       concept-name="Beiträge"
     />
@@ -56,7 +56,8 @@ const itemPlaceholder = ref({
   status: 'is_checked',
   is_active: false,
   description: '',
-  category_ids: []
+  category_ids: [],
+  tag_category_ids: [],
 })
 
 const openCreateEditDialog = (id:string) => {

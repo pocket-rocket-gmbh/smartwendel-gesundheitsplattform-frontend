@@ -187,6 +187,7 @@ const getItems = async () => {
     filters: [] as any[],
   };
   await api.retrieveCollection(options);
+  console.log(items.value)
   loading.value = false;
 };
 

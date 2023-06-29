@@ -14,7 +14,7 @@
       v-if="createEditDialogOpen"
       :item-placeholder="itemPlaceholder"
       endpoint="tooltips"
-      @close="itemId = null; createEditDialogOpen = false"
+      @close="itemId = null; createEditDialogOpen = false; itemId = null;"
     />
 
     <DeleteItem

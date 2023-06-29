@@ -13,7 +13,7 @@
     <AdminUsersCreateEdit
       :item-id="itemId"
       v-if="createEditDialogOpen"
-      @close="itemId = null; createEditDialogOpen = false"
+      @close="itemId = null; createEditDialogOpen = false; itemId = null;"
       @refreshCollection="getUsers()"
     />
 

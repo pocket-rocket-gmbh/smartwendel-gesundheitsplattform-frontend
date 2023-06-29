@@ -143,9 +143,9 @@ export const useFilterStore = defineStore({
 
       await api.retrieveCollection(options as any);
 
-      const allFacilities: Facility[] = api.items.value;
+      const allResultsFromApi: Facility[] = api.items.value;
 
-      const enrichedPossibleResultsPromised = allFacilities.map((result) => {
+      const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
         api.setEndpoint(`care_facilities/${result.id}`);
         return api.retrieveCollection();
       });
@@ -199,14 +199,17 @@ export const useFilterStore = defineStore({
     loadFilteredResults() {
       if (this.loading || !this.allResults) return;
 
-      // TODO: Zip filterbar
-
-      const filteredResults: Facility[] = this.allResults.filter((result) => {
-        return (
-          result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
-          (!this.onlySearchInTitle && result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))
-        );
-      });
+      const filteredResults: Facility[] = this.allResults
+        .filter((result) => {
+          return result.zip && this.currentZip ? result.zip === this.currentZip : true;
+        })
+        .filter((result) => {
+          return (
+            result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
+            (!this.onlySearchInTitle &&
+              result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))
+          );
+        });
 
       if (this.mapFilter) {
         this.filteredResults = filteredResults.filter((facility) => facility.id === this.mapFilter);

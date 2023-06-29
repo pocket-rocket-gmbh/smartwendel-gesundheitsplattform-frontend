@@ -158,7 +158,7 @@ const handleClick = (parent: Filter, current: Filter) => {
 };
 
 const isChecked = (option: Filter) => {
-  return props.preSetTags.includes(option.id);
+  return props.preSetTags?.includes(option.id);
 };
 
 onMounted(async () => {
