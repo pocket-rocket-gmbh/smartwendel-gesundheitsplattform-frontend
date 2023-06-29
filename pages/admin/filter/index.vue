@@ -15,16 +15,7 @@
       wie z.B. nach Alter oder Geschlecht sein.</v-alert
     >
 
-    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" @entry-moved="handleMove" />
-
-    <!-- <DataTable
-      :fields="fields"
-      endpoint="tags"
-      default-sort-order="asc"
-      default-sort-by="menu_order"
-      @openCreateEditDialog="openCreateEditDialog"
-      @openDeleteDialog="openDeleteDialog"
-    /> -->
+    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" @entry-moved="handleMove" :disable-draggable="true"/>
 
     <AdminTagsCreateEdit
       :item-id="itemId"
@@ -47,6 +38,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useAdminStore } from "~/store/admin";
 import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { ResultStatus } from "~/types/serverCallResult";
 
@@ -55,6 +47,7 @@ definePageMeta({
 });
 
 const itemsForList = ref<CollapsibleListItem[]>([]);
+const adminStore = useAdminStore();
 
 const fields = ref([
   { text: "", type: "move_down" },
@@ -69,7 +62,6 @@ const itemPlaceholder = ref({
 
 const dialog = ref(false);
 const item = ref({ name: "" });
-const loading = ref(false);
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const itemId = ref<string | null>(null);
@@ -117,12 +109,12 @@ const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleLi
     title: filter.name,
     menuOrder: filter.menu_order,
     layer,
-    additionalData: layer === 0 && {
-      type: "api",
-      endpoint: `tag_categories/${filter.id}`,
-      path: "resource.kind",
-    },
-    canAddAdditionalData: layer === 0,
+    // additionalData: layer === 0 && {
+    //   type: "api",
+    //   endpoint: `tag_categories/${filter.id}`,
+    //   path: "resource.kind",
+    // },
+    // canAddAdditionalData: layer === 0,
     next: [],
   };
 
@@ -148,7 +140,6 @@ const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleLi
 const getItems = async () => {
   api.setEndpoint(`tag_categories`);
 
-  loading.value = true;
   const options = {
     page: 1,
     per_page: 999,
@@ -158,8 +149,8 @@ const getItems = async () => {
     concat: false,
     filters: [] as any,
   };
+  adminStore.loading = true;
   const result = await api.retrieveCollection(options);
-  loading.value = false;
 
   if (result.status === ResultStatus.FAILED) {
     console.error(result);
@@ -178,6 +169,7 @@ const getItems = async () => {
   const nextLayerWave = filters.map((filter) => getItemsAndNext(filter, tmpItemsForList, 0));
   await Promise.all(nextLayerWave);
 
+  adminStore.loading = false;
   itemsForList.value = tmpItemsForList;
 };
 

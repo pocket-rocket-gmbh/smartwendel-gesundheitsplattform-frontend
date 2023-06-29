@@ -8,6 +8,7 @@
       item-key="name"
       :animation="150"
       @end="handleMove"
+      :disabled="disableDraggable"
     >
       <template #item="{ element }">
         <div class="list-item" :id="element.id" v-auto-animate>
@@ -16,7 +17,10 @@
               <template v-if="openEdit !== element.id">
                 <span
                   class="item-title"
-                  :class="element.id === expandCategory && element.next ? 'font-weight-bold text-primary' : ''"
+                  :class="[
+                    element.id === expandCategory && element.next ? 'font-weight-bold text-primary' : '',
+                    disableDraggable && 'no-drag',
+                  ]"
                   >{{ element.title }}
                   <v-icon v-if="element.id === expandCategory && element.next">mdi-arrow-down-right</v-icon></span
                 >
@@ -76,6 +80,7 @@
                 (relevantItems, originalStep, startIndex, endIndex) =>
                   handleMoveEmit(relevantItems, originalStep, startIndex, endIndex)
               "
+              :disable-draggable="disableDraggable"
             />
             <div v-if="!openAddNew" @click.stop="handleClick(element.id)">
               <button>{{ element.addEntryButtonText || "Neuer Eintrag hinzufügen" }}</button>
@@ -127,6 +132,7 @@ import draggable from "vuedraggable";
 const props = defineProps<{
   items: CollapsibleListItem[];
   layer: number;
+  disableDraggable?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -242,7 +248,10 @@ const handleMove = (e: { newIndex: number; oldIndex: number; item: HTMLDivElemen
 }
 
 .item-title {
-  cursor: move;
+  user-select: none;
+  &:not(.no-drag) {
+    cursor: move;
+  }
 }
 
 .collapsible-list {

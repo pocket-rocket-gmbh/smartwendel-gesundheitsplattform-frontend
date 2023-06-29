@@ -94,6 +94,7 @@
 
 <script setup lang="ts">
 import { useEnums } from "@/composables/data/enums";
+import { useAdminStore } from "~/store/admin";
 
 const props = withDefaults(
   defineProps<{
@@ -169,6 +170,7 @@ const move = async (entry, nextEntry) => {
     getItems();
   }
 };
+const adminStore = useAdminStore();
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
@@ -186,7 +188,9 @@ const getItems = async () => {
     concat: false,
     filters: [] as any[],
   };
+  adminStore.loading = true;
   await api.retrieveCollection(options);
+  adminStore.loading = false;
   console.log(items.value)
   loading.value = false;
 };

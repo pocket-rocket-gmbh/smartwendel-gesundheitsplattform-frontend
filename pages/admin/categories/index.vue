@@ -69,6 +69,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAdminStore } from "~/store/admin";
 import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { ResultStatus } from "~/types/serverCallResult";
 
@@ -107,7 +108,7 @@ const currentCategories = ref<any[]>([]);
 const currentSubCategories = ref<any[]>([]);
 const currentSubSubCategories = ref<any[]>([]);
 
-const loading = ref(false);
+const adminStore = useAdminStore();
 
 const itemPlaceholder = ref({
   name: "",
@@ -140,7 +141,7 @@ const handleDialogClosed = () => {
 const getItems = async (endpoint = "categories") => {
   api.setEndpoint(endpoint);
 
-  loading.value = true;
+  adminStore.loading = true;
   const options = {
     page: 1,
     per_page: 999,
@@ -151,7 +152,6 @@ const getItems = async (endpoint = "categories") => {
     filters: [] as any,
   };
   const result = await api.retrieveCollection(options);
-  loading.value = false;
 
   if (result.status === ResultStatus.FAILED) {
     console.error(result);
@@ -236,7 +236,7 @@ const getItems = async (endpoint = "categories") => {
       }
     }
   }
-
+  adminStore.loading = false;
   itemsForList.value = tmpItemsForList;
 };
 
