@@ -199,6 +199,8 @@ export const useFilterStore = defineStore({
     loadFilteredResults() {
       if (this.loading || !this.allResults) return;
 
+      // TODO: Zip filterbar
+
       const filteredResults: Facility[] = this.allResults.filter((result) => {
         return (
           result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||

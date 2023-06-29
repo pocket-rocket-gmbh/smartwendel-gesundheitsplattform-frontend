@@ -1,6 +1,6 @@
 <template>
   <div class="basic-search-box mt-6">
-    <div class="content">
+    <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
       <v-row>
         <v-col>
           <div class="title">{{ title }}</div>
@@ -22,7 +22,7 @@
                 </v-chip>
               </div>
             </label>
-            <FacilityFilterSelection v-model="filterStore.currentTags" />
+            <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" />
           </div>
         </v-col>
         <v-col class="align-end">
@@ -45,7 +45,7 @@
           >
             Auswahl zurücksetzen
           </v-btn>
-          <v-btn class="mx-3" variant="flat" size="large" rounded="pill" color="white" @click="startSearch">
+          <v-btn class="ml-3" variant="flat" size="large" rounded="pill" color="white" @click="startSearch">
             Suche starten
           </v-btn>
         </v-col>
@@ -87,6 +87,13 @@ const emit = defineEmits<{
 
 const filterStore = useFilterStore();
 
+const contentWrapperRef = ref<HTMLDivElement>();
+const popoverWidth = ref(0);
+
+const updatePopoverWidth = () => {
+  popoverWidth.value = contentWrapperRef.value.getBoundingClientRect().width;
+};
+
 const startSearch = () => {
   filterStore.loadAllResults();
 };
@@ -107,6 +114,7 @@ const getCommunities = async () => {
 
 onMounted(() => {
   getCommunities();
+  updatePopoverWidth();
 });
 </script>
 

@@ -8,7 +8,12 @@
       </div>
     </div>
 
-    <div class="popover-content" v-if="showPopover" v-auto-animate>
+    <div
+      class="popover-content"
+      :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }"
+      v-if="showPopover"
+      v-auto-animate
+    >
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id">
           <div class="filter-name">
@@ -20,10 +25,7 @@
               v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options"
               @click="handleOptionSelect(option)"
             >
-              <label class="option-label">
-                <input type="radio" :checked="selectedFilter?.id === option.id" />
-                {{ option.name }}
-              </label>
+              <v-radio :value="selectedFilter?.id === option.id" hide-details density="compact" :label="option.name" color="#8AB61D" />
             </div>
           </div>
         </div>
@@ -48,6 +50,7 @@ import { onClickOutside } from "@vueuse/core";
 
 const props = defineProps<{
   modelValue: string[];
+  popoverWidth?: number;
 }>();
 
 const emit = defineEmits<{
@@ -179,6 +182,12 @@ onMounted(async () => {
     .filters {
       display: flex;
       gap: 1.5rem;
+      justify-content: space-between;
+
+      .filter-name {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+      }
     }
 
     .option-label {
