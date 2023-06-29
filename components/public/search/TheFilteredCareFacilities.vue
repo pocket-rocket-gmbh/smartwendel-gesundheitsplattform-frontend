@@ -84,13 +84,9 @@ import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
 
 const filterStore = useFilterStore();
 
-onMounted(() => {
-  filterStore.loadCareFacilities();
-});
-
 const showCareFacilityInMap = async (careFacilityId: string) => {
   filterStore.mapFilter = careFacilityId;
-  await filterStore.loadCareFacilities();
+  await filterStore.loadFilteredEntries();
   filterStore.mapFilter = null;
   window.scrollTo({
     behavior: "smooth",

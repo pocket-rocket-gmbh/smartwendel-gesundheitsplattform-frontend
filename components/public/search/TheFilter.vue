@@ -70,7 +70,7 @@ const copySearchFilterUrl = () => {
 };
 
 const applyFilters = () => {
-  filterStore.loadCareFacilities();
+  filterStore.loadFilteredEntries();
 };
 
 const toggleFilter = (filter: any) => {

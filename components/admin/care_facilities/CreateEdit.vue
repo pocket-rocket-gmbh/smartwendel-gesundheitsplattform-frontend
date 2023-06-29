@@ -109,31 +109,7 @@
               />
             </ClientOnly>
           </div>
-          <!-- <div class="field" v-if="slotProps.item.kind === 'facility'">
-            <div class="mt-15 mb-5">
-              <b>Tags zuordnen*</b> (Tags erleichtern den Besuchern die Auffindbarkeit von Inhalten.)
-            </div>
-            <AdminCareFacilitiesChooseTags
-              :pre-set-tag-ids="slotProps.item.tag_ids"
-              @setCareFacilityTags="setCareFacilityTags"
-            />
-          </div>
-          <div class="field" v-if="slotProps.item.kind === 'facility'">
-            <div class="mt-15 mb-5">
-              <b>Filter zuordnen*</b> (Ordnen Sie Ihre Einrichtung zielgruppenorientiert in die verschiedenen Bereiche der Platform zu. Mithilfe der Pfeile können Sie sich durch die einzelnen Bereiche und deren Kategorien bewegen.)
-            </div>
-            <AdminCareFacilitiesChooseCategories
-              :pre-set-category-ids="slotProps.item.category_ids"
-              :pre-set-sub-category-ids="slotProps.item.sub_category_ids"
-              :pre-set-sub-sub-category-ids="slotProps.item.sub_sub_category_ids"
-              :pre-set-tags="slotProps.item.tags"
-              @setCategoryIds="setCategoryIds"
-              @setSubCategoryIds="setSubCategoryIds"
-              @setSubSubCategoryIds="setSubSubCategoryIds"
-              @setTags="setTags"
-            />
-          </div> -->
-          <div class="field" v-if="slotProps.item.kind === 'facility'">
+          <div class="field">
             <div class="mt-15 mb-5">
               <b>Einrichtungsfilter*</b> (Weisen Sie Ihre Einrichtung gezielt einem Berufszweig / einer Sparte
               themenspezifisch zu)
@@ -144,7 +120,7 @@
               @setTags="setTagCategoryIds"
             />
           </div>
-          <div class="field" v-if="slotProps.item.kind === 'facility'">
+          <div class="field">
             <div class="mt-15 mb-5">
               <b>Leistungsfilter*</b> (Ordnen Sie Ihrer Einrichtung passende Leistungsfilter zu *)
             </div>
@@ -313,28 +289,8 @@ const textOptions = ref({
   toolbar: "essential",
 });
 
-const setCategoryIds = (categoryIds: any) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", { name: "category_ids", value: categoryIds });
-};
-
-const setSubCategoryIds = (subCategoryIds: any) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", { name: "sub_category_ids", value: subCategoryIds });
-};
-
-const setSubSubCategoryIds = (subSubCategoryIds: any) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", { name: "sub_sub_category_ids", value: subSubCategoryIds });
-};
-
-const setTags = (tags: any) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", { name: "tags", value: tags });
-};
-
 const setTagCategoryIds = (tags: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", { name: "tag_category_ids", value: tags });
-};
-
-const setCareFacilityTags = (tagIds: any) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", { name: "tag_ids", value: tagIds });
 };
 
 const setLogo = (image: any) => {

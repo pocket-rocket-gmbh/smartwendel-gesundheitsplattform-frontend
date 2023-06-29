@@ -46,7 +46,7 @@ const showMap = ref(true);
 watch(
   () => filterStore.filterSort,
   () => {
-    filterStore.loadCareFacilities();
+    filterStore.loadFilteredEntries();
   }
 );
 
@@ -99,7 +99,7 @@ const mapToogle = () => {
 onMounted(() => {
   filterStore.currentKinds = ["facility"];
   filterStore.updateFromUrlQuery();
-  filterStore.loadCareFacilities();
+  filterStore.loadFilteredEntries();
 });
 </script>
 

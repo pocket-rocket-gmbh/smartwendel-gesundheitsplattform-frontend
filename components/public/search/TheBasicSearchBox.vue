@@ -81,7 +81,7 @@ const emit = defineEmits<{
 const filterStore = useFilterStore();
 
 const startSearch = () => {
-  filterStore.loadCareFacilities();
+  filterStore.loadFilteredEntries();
 };
 
 const communitiesApi = useCollectionApi();

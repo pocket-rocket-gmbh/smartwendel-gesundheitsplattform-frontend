@@ -1,6 +1,5 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { getMainFilters } from "../utils/filter.utils";
 
 export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
@@ -78,7 +77,7 @@ export const useFilterStore = defineStore({
       this.currentTags = [];
       this.mapFilter = null;
 
-      this.loadCareFacilities();
+      this.loadFilteredEntries();
     },
     enableAllTags(tags: string[]) {
       this.currentTags = [...new Set([...this.currentTags, ...tags])];
@@ -89,7 +88,7 @@ export const useFilterStore = defineStore({
         if (index !== -1) this.currentTags.splice(index, 1);
       });
     },
-    async loadCareFacilities(endpoint: string = "care_facilities") {
+    async loadFilteredEntries(endpoint: string = "care_facilities") {
       this.loading = true;
 
       const filters = [];
@@ -155,7 +154,7 @@ export const useFilterStore = defineStore({
         this.filterResults = this.filterResults.filter((facility) => facility.id === this.mapFilter);
       }
 
-      // this.updateUrlQuery();
+      this.updateUrlQuery();
     },
   },
 });
