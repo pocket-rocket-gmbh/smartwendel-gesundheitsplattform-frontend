@@ -28,6 +28,8 @@
 
 <script>
 import { ResultStatus } from '@/types/serverCallResult'
+import { useAdminStore } from '~/store/admin'
+
 export default defineComponent({
   emits: ['close'],
   props: {
@@ -66,6 +68,7 @@ export default defineComponent({
     const form = ref()
 
     const snackbar = useSnackbar();
+    const adminStore = useAdminStore();
 
     const showApi = useCollectionApi()
     showApi.setBaseApi(usePrivateApi())
@@ -110,7 +113,9 @@ export default defineComponent({
     const create = async () => {
       createUpdateApi.setEndpoint(`${props.endpoint}`)
       loadingItem.value = true
+      adminStore.loading = true;
       const result = await createUpdateApi.createItem(item.value, `Erfolgreich erstellt`)
+      adminStore.loading = false;
       loadingItem.value = false
       if (result.status === ResultStatus.SUCCESSFUL) {
         useNuxtApp().$bus.$emit('triggerGetItems', null)
@@ -128,7 +133,9 @@ export default defineComponent({
 
       createUpdateApi.setEndpoint(endpoint)
       loadingItem.value = true
+      adminStore.loading = true;
       const result = await createUpdateApi.updateItem(item.value, 'Erfolgreich aktualisiert')
+      adminStore.loading = false;
       loadingItem.value = false
       if (result.status === ResultStatus.SUCCESSFUL) {
         useNuxtApp().$bus.$emit('triggerGetItems', null)

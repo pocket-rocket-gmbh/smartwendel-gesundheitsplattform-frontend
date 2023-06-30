@@ -11,6 +11,7 @@
     @close="sendNotificationDialogOpen = false"
   />
   <v-switch
+    @click.stop
     v-model="switchValue"
     color="success"
     hide-details

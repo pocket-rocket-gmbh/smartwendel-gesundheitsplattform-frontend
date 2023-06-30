@@ -1,158 +1,224 @@
 <template>
-  <div class="choose-category" v-if="categories.length > 0">
+  <div class="choose-category">
     <div class="category-input is-dark-grey py-2">
-      <div class="input-wrapper">
-        <input
-          type="text"
-          v-model="searchTerm"
-          class="input"
-          @input="getFilteredData()"
-          placeholder="Suchebegriff eingeben"
-        />
-        <v-icon>mdi-magnify</v-icon>
-      </div>
+      <form @submit.prevent="routeToResults()">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            v-model="filterStore.currentSearchTerm"
+            class="input"
+            placeholder="Suchebegriff eingeben"
+            @input="handleInput"
+            @click="showPopover = true"
+          />
+          <img class="icon" :src="searchIcon" @click="routeToResults()" />
+        </div>
+      </form>
 
-      <ul v-if="searchTerm.length" class="list">
-        <li
-          v-for="category in filteredCategories"
-          :key="category.id"
-          @click.stop="setFilterAndMove(category?.id, category.sub_category?.id)"
-        >
-          <div class="choose-box py-2 px-4">
-            <p class="category-headline">
-              <span v-if="category.name">{{ category.name }}</span>
-            </p>
-            <div
-              class="results-content-wrap"
-              v-for="sub_category in category.sub_categories"
-              :key="sub_category?.id"
-              @click.stop="setFilterAndMove(category.id, sub_category.id)"
-            >
-              <p class="is-clickable pa-2 selectable" v-if="sub_category.name">{{ sub_category.name }}</p>
-            </div>
+      <div v-show="filterStore.currentSearchTerm && showPopover" class="search-results-popover" ref="popoverParentRef">
+        <div class="wrapper">
+          <div v-if="filterStore.loading" class="result">
+            <LoadingSpinner>Suchergebnisse werden geladen...</LoadingSpinner>
           </div>
-        </li>
-      </ul>
+          <template v-else>
+            <div class="result" @click.stop="routeToResults()">
+              <div class="icon">
+                <img :src="getIconSourceFor()" />
+              </div>
+              <div class="name">{{ filterStore.currentSearchTerm }}</div>
+            </div>
+            <div
+              class="result"
+              v-for="result in filterStore.filteredResults"
+              :key="result.id"
+              @click.stop="routeToResults(result)"
+            >
+              <div class="icon">
+                <img :src="getIconSourceFor(result.kind)" />
+              </div>
+              <div class="name">{{ result.name }}</div>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useFilterStore } from "~/store/facilitySearchFilter";
+import { onClickOutside } from "@vueuse/core";
+import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
+
+import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
+import newsIcon from "~/assets/icons/facilityTypes/news.svg";
+import eventsIcon from "~/assets/icons/facilityTypes/events.svg";
+import searchIcon from "~/assets/icons/facilityTypes/search.svg";
 
 const filterStore = useFilterStore();
 
-const categoriesApi = useCollectionApi();
-categoriesApi.setBaseApi(usePublicApi());
-categoriesApi.setEndpoint(`categories`);
-const categories = categoriesApi.items;
+const api = useCollectionApi();
+api.setBaseApi(usePublicApi());
+
 const router = useRouter();
-const searchTerm = ref("");
 
-const getCategories = async () => {
-  const options = {
-    page: 1,
-    per_page: 25,
-    sort_by: "menu_order",
-    sort_order: "ASC",
-    searchQuery: null as any,
-    concat: false,
-    filters: [] as any,
-  };
-  await categoriesApi.retrieveCollection(options);
-};
+const popoverParentRef = ref();
+const showPopover = ref(false);
 
-const setFilterAndMove = (categoryId: string, subCategoryId: string) => {
-  if (!subCategoryId) {
-    filterStore.updateCategoriesFilter("category", categoryId);
-  } else {
-    filterStore.currentCategoryId = categoryId;
-    filterStore.updateCategoriesFilter("subCategory", subCategoryId);
+const routeToResults = (result?: Facility) => {
+  if (!result) {
+    filterStore.currentSearchTerm = filterStore.currentSearchTerm;
+    router.push({ path: "/public/search" });
+    return;
+  }
+
+  if (result.kind === "facility") {
+    return router.push({ path: `/public/care_facilities/${result.id}` });
+  }
+  if (result.kind === "course" || result.kind === "event") {
+    return router.push({ path: `/public/care_facilities/${result.id}` });
+  }
+  if (result.kind === "news") {
+    return router.push({ path: `/public/news/${result.id}` });
   }
 
   router.push({ path: "/public/search" });
 };
 
-const filteredCategories = computed(() => {
-  const filtered = categories.value.filter((category) => {
-    const categoryName = (category.name as string).toUpperCase();
+onClickOutside(popoverParentRef, () => (showPopover.value = false));
 
-    const nameMatch = categoryName.includes(searchTerm.value.toUpperCase());
-
-    const subCategoryMatch = (category.sub_categories as any[]).some((subCategory) => {
-      const subCategoryName = (subCategory.name as string).toUpperCase();
-      return subCategoryName.includes(searchTerm.value.toUpperCase());
-    });
-
-    return nameMatch || subCategoryMatch;
-  });
-
-  return filtered;
-});
-
-const getFilteredData = async () => {
-  await categoriesApi.retrieveCollection();
+const getIconSourceFor = (kind?: FilterKind) => {
+  if (kind === "facility") return facilityIcon;
+  if (kind === "course" || kind === "event") return eventsIcon;
+  if (kind === "news") return newsIcon;
+  return searchIcon;
 };
 
-onMounted(() => {
-  getCategories();
+const handleInput = () => {
+  filterStore.onlySearchInTitle = true;
+  filterStore.loadFilteredResults();
+};
+
+onMounted(async () => {
+  filterStore.currentKinds = [];
+  filterStore.currentTags = [];
+  filterStore.currentZip = null;
+  filterStore.onlySearchInTitle = true;
+  await filterStore.loadAllResults();
 });
 </script>
 
-<style lang="sass" scoped>
-.choose-category
-  position: relative
-  flex-direction: row
+<style lang="scss" scoped>
+.choose-category {
+  position: relative;
+  flex-direction: row;
 
-  .category-input
-    border: 2px solid white
-    background: white
-    height: 50px
-    border-radius: 50px
-    cursor: pointer
-    color: grey
-    width: 70%
-    font-weight: 700
-    display: flex
-    align-items: center
+  .category-input {
+    border: 2px solid white;
+    background: white;
+    height: 50px;
+    border-radius: 50px;
+    cursor: pointer;
+    color: grey;
+    width: 70%;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
 
-    .input-wrapper
-      display: flex
-      padding: 0 1rem
-      align-items: center
-      flex: 1
+    form {
+      flex: 1;
 
-      .input
-        flex: 1
-        outline: none
-        border: none
+      .input-wrapper {
+        display: flex;
+        padding: 0 1rem;
+        align-items: center;
+        flex: 1;
 
-        &::placeholder
-          opacity: 0.5
+        .icon {
+          width: 1.25rem;
+        }
 
-  .list
-   list-style: none
-   position: absolute
-   top: 50px
-   width: 60%
+        .input {
+          flex: 1;
+          outline: none;
+          border: none;
 
-   .choose-box
-    border-radius: 20px
-    background: white
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
-    color: #015281
-    font-size: 18px
+          &::placeholder {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+  }
 
-    .selectable
-      cursor: pointer
+  .search-results-popover {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+    width: 70%;
 
-      &:hover
-        background: lightgrey
+    .wrapper {
+      max-height: 300px;
+      overflow-y: scroll;
+      padding-right: 0.25rem;
 
-    .category-headline
-      text-transform: uppercase
-      font-weight: 700
+      /* width */
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
 
-.v-input__icon.v-input__icon--append-outer i
-  font-size: 48px
+      /* Track */
+      &::-webkit-scrollbar-track {
+        background: white;
+        border-radius: 10px;
+        margin: 1rem;
+      }
+
+      /* Handle */
+      &::-webkit-scrollbar-thumb {
+        background: #d3d3d3;
+        border-radius: 10px;
+      }
+
+      /* Handle on hover */
+      &::-webkit-scrollbar-thumb:hover {
+        background: hsl(0, 0%, 73%);
+      }
+
+      .result {
+        padding: 0.75rem;
+        border-bottom: 1px solid #8ab61d;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 1.25rem;
+          }
+        }
+      }
+    }
+  }
+}
+.v-input__icon.v-input__icon--append-outer i {
+  font-size: 48px;
+}
 </style>

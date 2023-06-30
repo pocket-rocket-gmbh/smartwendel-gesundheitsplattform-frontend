@@ -8,12 +8,14 @@
         </div>
       </v-col>
     </v-row>
-    <v-row>
+    <div class="articles">
       <PublicContentBox
+        class="limited-width"
         v-for="subSubCategory in subSubCategories" :key="subSubCategory.id"
         :item="subSubCategory"
+        :item-type="subSubCategory.kind"
       />
-    </v-row>
+    </div>
   </div>
 </template>
 
@@ -72,5 +74,11 @@ const getSubSubCategories = async () => {
 @import "@/assets/sass/main.sass"
 .sub-category
   scroll-margin: -200px
-  
+
+.articles
+  display: flex
+  flex-wrap: wrap
+
+  .limited-width
+      width: 48%
 </style>

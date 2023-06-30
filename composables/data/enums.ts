@@ -1,3 +1,16 @@
+// insert enums in Interface
+export interface Enums {
+  facilitiesStatus: EnumValue[],
+  facilitiesKind: EnumValue[]
+}
+
+
+export type EnumValue = {
+  value: string;
+  name: string;
+  class: string;
+}
+
 export function useEnums() {
 
   // Define enums here
