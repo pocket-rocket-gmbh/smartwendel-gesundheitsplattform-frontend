@@ -33,7 +33,7 @@ definePageMeta({
 })
 
 const fields = ref([
-  { text: 'Aktiv', endpoint: 'users', type: 'switch', fieldToSwitch: 'is_active' },
+  { text: 'Aktiv', endpoint: 'users', type: 'switch', fieldToSwitch: 'is_active_on_health_scope' },
   { text: 'Vorname', value: 'firstname', type: 'string' },
   { text: 'Nachname', value: 'lastname', type: 'string' },
   { text: 'E-Mail', value: 'email', type: 'string' },

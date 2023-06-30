@@ -57,13 +57,6 @@ const adminStore = useAdminStore();
 const availableFields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
-  {
-    text: "Status",
-    endpoint: "care_facilities",
-    type: "enumDropdown",
-    value: "status",
-    enum_name: "facilitiesStatus",
-  },
   { text: "Bereich", value: "categories", type: "associations_name" },
   { text: "Erstellt am", value: "created_at", type: "datetime" },
   { text: "Autor", value: "", type: "string" },
