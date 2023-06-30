@@ -8,13 +8,22 @@
       item-key="name"
       :animation="150"
       @end="handleMove"
+      :disabled="disableDraggable"
     >
       <template #item="{ element }">
-        <div class="list-item" :id="element.id">
+        <div class="list-item" :id="element.id" v-auto-animate>
           <div class="title-bar" @click.stop="setExpandCategory(element.id)">
             <div class="title" v-auto-animate>
               <template v-if="openEdit !== element.id">
-                <span class="item-title" :class="element.id === expandCategory ? 'font-weight-bold text-primary' : ''">{{ element.title }} <v-icon v-if="element.id === expandCategory">mdi-arrow-down-right</v-icon></span>
+                <span
+                  class="item-title"
+                  :class="[
+                    element.id === expandCategory && element.next ? 'font-weight-bold text-primary' : '',
+                    disableDraggable && 'no-drag',
+                  ]"
+                  >{{ element.title }}
+                  <v-icon v-if="element.id === expandCategory && element.next">mdi-arrow-down-right</v-icon></span
+                >
               </template>
               <template v-else>
                 <v-text-field @click.stop v-model="tempTitle" hide-details="auto" label="Titel" />
@@ -56,7 +65,7 @@
               </v-tooltip>
             </div>
           </div>
-          <div class="content" v-if="element.id === expandCategory && element.next" v-auto-animate>
+          <div class="content" v-if="element.id === expandCategory && element.next">
             <CollapsibleListRec
               :items="element.next"
               :layer="layer + 1"
@@ -71,6 +80,7 @@
                 (relevantItems, originalStep, startIndex, endIndex) =>
                   handleMoveEmit(relevantItems, originalStep, startIndex, endIndex)
               "
+              :disable-draggable="disableDraggable"
             />
             <div v-if="!openAddNew" @click.stop="handleClick(element.id)">
               <button>{{ element.addEntryButtonText || "Neuer Eintrag hinzufügen" }}</button>
@@ -119,11 +129,10 @@ import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { rules } from "~/data/validationRules";
 import draggable from "vuedraggable";
 
-const snackbar = useSnackbar();
-
 const props = defineProps<{
   items: CollapsibleListItem[];
   layer: number;
+  disableDraggable?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -224,7 +233,6 @@ const handleMoveEmit = (
   endIndex: number
 ) => {
   emit("entryMoved", itemsInCategory, layer, startIndex, endIndex);
-  snackbar.showSuccess("Inhalt wurde erfolgreich verschoben");
 };
 
 const handleMove = (e: { newIndex: number; oldIndex: number; item: HTMLDivElement; clone: HTMLDivElement }) => {
@@ -240,7 +248,10 @@ const handleMove = (e: { newIndex: number; oldIndex: number; item: HTMLDivElemen
 }
 
 .item-title {
-  cursor: move;
+  user-select: none;
+  &:not(.no-drag) {
+    cursor: move;
+  }
 }
 
 .collapsible-list {

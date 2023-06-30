@@ -20,17 +20,6 @@
       @entry-moved="handleMove"
     />
 
-    <!-- <DataTable
-      :fields="fields"
-      endpoint="categories"
-      default-sort-order="asc"
-      default-sort-by="menu_order"
-      @openCreateEditDialog="openCreateEditDialog"
-      @openDeleteDialog="openDeleteDialog"
-      @openAddSubCategoriesDialog="openAddSubCategoriesDialog"
-      ref="dataTable"
-    /> -->
-
     <AdminCategoriesAddSubCategories
       v-if="addSubCategoriesDialogOpen"
       :category-id="itemId"
@@ -69,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAdminStore } from "~/store/admin";
 import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { ResultStatus } from "~/types/serverCallResult";
 
@@ -97,6 +87,7 @@ const addSubCategoriesDialogOpen = ref(false);
 const itemId = ref(null);
 const subCategoryId = ref(null);
 const subSubCategoryId = ref(null);
+const snackbar = useSnackbar();
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
@@ -106,7 +97,7 @@ const currentCategories = ref<any[]>([]);
 const currentSubCategories = ref<any[]>([]);
 const currentSubSubCategories = ref<any[]>([]);
 
-const loading = ref(false);
+const adminStore = useAdminStore();
 
 const itemPlaceholder = ref({
   name: "",
@@ -139,7 +130,7 @@ const handleDialogClosed = () => {
 const getItems = async (endpoint = "categories") => {
   api.setEndpoint(endpoint);
 
-  loading.value = true;
+  adminStore.loading = true;
   const options = {
     page: 1,
     per_page: 999,
@@ -150,7 +141,6 @@ const getItems = async (endpoint = "categories") => {
     filters: [] as any,
   };
   const result = await api.retrieveCollection(options);
-  loading.value = false;
 
   if (result.status === ResultStatus.FAILED) {
     console.error(result);
@@ -172,6 +162,7 @@ const getItems = async (endpoint = "categories") => {
     const categoryItem: CollapsibleListItem = {
       id: category.id,
       title: category.name,
+      layer: 0,
       menuOrder: category.menu_order,
       addEntryButtonText: "Neue Kategorie hinzufügen",
       next: [],
@@ -199,6 +190,7 @@ const getItems = async (endpoint = "categories") => {
         id: subCategory.id,
         title: subCategory.name,
         menuOrder: subCategory.menu_order,
+        layer: 1,
         addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
         additionalData: {
           type: "api",
@@ -226,13 +218,14 @@ const getItems = async (endpoint = "categories") => {
         categoryItem.next[index].next.push({
           id: subSubCategory.id,
           title: subSubCategory.name,
+          layer: 2,
           menuOrder: subSubCategory.menu_order,
           specialActionOnEditClick: "openSubCategoriesModal",
         });
       }
     }
   }
-
+  adminStore.loading = false;
   itemsForList.value = tmpItemsForList;
 };
 
@@ -332,22 +325,25 @@ const handleMove = async (
 ) => {
   if (startIndex === endIndex) return;
 
+  const actualStartIndex = Math.min(startIndex, endIndex);
+  const actualEndIndex = Math.max(startIndex, endIndex);
+
   const itemsToUpdate: any[] = [];
 
   if (layer === 0) {
-    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const category = currentCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
       if (!category) throw "Category not found";
       itemsToUpdate.push(category);
     }
   } else if (layer === 1) {
-    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const subCategory = currentSubCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
       if (!subCategory) throw "SubCategory not found";
       itemsToUpdate.push(subCategory);
     }
   } else if (layer === 2) {
-    for (let newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const subSubCategory = currentSubSubCategories.value.find(
         (category) => category.id === itemsInCategory[newIndex].id
       );
@@ -360,12 +356,14 @@ const handleMove = async (
     const currentItem = itemsToUpdate[i];
 
     api.setEndpoint(`categories/${currentItem.id}`);
-    const result = await api.updateItem({ menu_order: startIndex + i }, null);
+    const result = await api.updateItem({ menu_order: actualStartIndex + i }, null);
 
     if (result.status !== ResultStatus.SUCCESSFUL) {
       throw "Something went wrong while moving the items!";
     }
   }
+
+  snackbar.showSuccess("Inhalt wurde erfolgreich verschoben");
 };
 
 onMounted(() => {

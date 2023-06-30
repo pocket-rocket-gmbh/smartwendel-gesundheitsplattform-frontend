@@ -8,54 +8,75 @@
       </div>
       <v-list-item>
         <v-list-item-title class="text-h6 my-3">
-          Gesundheits- und <br> Pflegeplattform
+          Gesundheits- und <br />
+          Pflegeplattform
         </v-list-item-title>
-        <v-list-item-subtitle>
-          Smart Wendeler Land
-        </v-list-item-subtitle>
+        <v-list-item-subtitle> Smart Wendeler Land </v-list-item-subtitle>
       </v-list-item>
       <v-divider></v-divider>
 
-      <v-list
-        dense
-        nav
-      >
+      <v-list dense nav>
         <v-list-item :to="appStore.dashboardBackLink || '/'" @click.prevent="routeBack">
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()">
-          Dashboard
+        <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()"> Dashboard </v-list-item>
+        <v-list-item link to="/admin/filter" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
+          Filter
         </v-list-item>
-        <v-list-item link to="/admin/tags" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
-          Tags
-        </v-list-item>
-        <v-list-item link to="/admin/categories" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('categories', 'list')">
+        <v-list-item
+          link
+          to="/admin/categories"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('categories', 'list')"
+        >
           Bereiche und Kategorien
         </v-list-item>
-        <v-list-item link to="/admin/care_facilities" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
+        <v-list-item
+          link
+          to="/admin/care_facilities"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
+        >
           Einrichtungen
         </v-list-item>
-        <v-list-item link to="/admin/courses_events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
+        <v-list-item
+          link
+          to="/admin/courses_events"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
+        >
           Kurse und Veranstaltungen
         </v-list-item>
-        <v-list-item link to="/admin/news_articles" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('news_articles', 'list')">
+        <v-list-item
+          link
+          to="/admin/news_articles"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
+        >
           Beiträge
         </v-list-item>
-        <v-list-item link to="/admin/tooltips" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')">
+        <v-list-item
+          link
+          to="/admin/tooltips"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')"
+        >
           Tooltips
         </v-list-item>
         <v-list-item link to="/admin/users" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')">
           Benutzer
         </v-list-item>
-        <v-list-item @click="handleLogout">
-          <v-icon>mdi-logout</v-icon> Logout
-        </v-list-item>
+        <v-list-item @click="handleLogout"> <v-icon>mdi-logout</v-icon> Logout </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-container :fluid="true">
+      <v-container :fluid="true" class="container">
         <slot />
+        <div v-if="adminStore.loading" class="loading">
+          <div class="spinner"></div>
+          Daten werden geladen...
+        </div>
       </v-container>
     </v-main>
 
@@ -66,22 +87,61 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccessPrivileges } from '~/composables';
-import { useUser } from '~/composables';
-import { useAppStore } from '~/store/app';
+import { useAccessPrivileges } from "~/composables";
+import { useUser } from "~/composables";
+import { useAdminStore } from "~/store/admin";
+import { useAppStore } from "~/store/app";
 
 const user = useUser();
 const appStore = useAppStore();
 const router = useRouter();
 
+const adminStore = useAdminStore();
+
 const handleLogout = () => {
-  console.log("Handle logout")
-  user.logout()
-}
+  console.log("Handle logout");
+  user.logout();
+};
 
 const routeBack = () => {
-  router.push({path: appStore.dashboardBackLink || '/'})
+  router.push({ path: appStore.dashboardBackLink || "/" });
 
   appStore.dashboardBackLink = "";
-}
+};
 </script>
+
+<style lang="scss" scoped>
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.container {
+  position: relative;
+
+  .loading {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(1px) brightness(95%);
+    cursor: wait;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      border-top-color: #000;
+      animation: spinner 0.6s linear infinite;
+    }
+  }
+}
+</style>

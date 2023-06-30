@@ -22,7 +22,7 @@
                 </template>
                 <v-list v-if="category.sub_categories.length > 0">
                   <v-list-item>
-                    <div v-for="(sub_category, index) in category.sub_categories" :key="index" @click="setItemsAndGo(category, sub_category)">
+                    <div v-for="(sub_category, index) in subCategories[category.id]" :key="index" @click="setItemsAndGo(category, sub_category)">
                       <v-list v-if="sub_category && sub_category.sub_sub_categories.length > 0">
                         <v-list-item>
                           <span class="is-clickable" >
@@ -37,11 +37,14 @@
             </div>
             <div>
         </div>
-          <a href="/public/search" class="is-clickable mx-5">
+          <a href="/public/search/facilities" class="is-clickable mx-5">
               Anbieter
           </a>
-          <a href="/public/search" class="is-clickable mx-5">
+          <a href="/public/search/events" class="is-clickable mx-5">
               Kurse und Veranstaltungen
+          </a>
+          <a href="/public/search/news" class="is-clickable mx-5">
+              Beiträge
           </a>
         </div>
         </div>
@@ -177,6 +180,7 @@ export default defineComponent({
     const currentUser = ref(null)
     const router = useRouter()
     const categories = ref([])
+    const subCategories = ref({})
     const sub_categoryId = ref ({})
     const drawer = ref(false)
     const menu = ref(false)
@@ -184,12 +188,18 @@ export default defineComponent({
 
     const categoriesApi = useCollectionApi()
     categoriesApi.setBaseApi(usePublicApi())
-    categoriesApi.setEndpoint(`categories`)
 
     const getCategories = async () => {
+      categoriesApi.setEndpoint(`categories`)
       const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
       await categoriesApi.retrieveCollection(options)
       categories.value = categoriesApi.items.value
+    }
+    const getSubCategories = async (categoryId: string) => {
+      categoriesApi.setEndpoint(`categories/${categoryId}/sub_categories`)
+      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
+      await categoriesApi.retrieveCollection(options)
+      return categoriesApi.items.value
     }
 
     const handleResetLink = () => {
@@ -227,11 +237,16 @@ export default defineComponent({
       router.push({ path: '/' })
     }
 
-    onMounted(() => {
+    onMounted(async () => {
       if (useUserStore().currentUser) {
         currentUser.value = useUserStore().currentUser
       }
-      getCategories()
+      await getCategories()
+      for (const category of categories.value) {
+        // @ts-expect-error no type
+        subCategories.value[category.id] = await getSubCategories(category.id)
+        
+      }
     })
     // watch store changes
     useUserStore().$subscribe((mutation, state) => {
@@ -255,7 +270,8 @@ export default defineComponent({
       setItemsAndGo,
       sub_categoryId,
       goToRegister,
-      saveCurrentUrlAndRoute
+      saveCurrentUrlAndRoute,
+      subCategories
     }
   }
 })
