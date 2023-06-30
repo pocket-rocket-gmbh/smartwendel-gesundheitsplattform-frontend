@@ -55,7 +55,7 @@ export default defineComponent({
     const router = useRouter()
 
     const goToSearch = () => {
-      router.push({ path: '/public/search'})
+      router.push({ path: '/public/search/facilities'})
     }
 
     const items = [

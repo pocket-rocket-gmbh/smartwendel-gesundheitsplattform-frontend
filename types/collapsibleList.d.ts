@@ -17,6 +17,7 @@ export type CollapsibleListItem = {
   id: string;
   title: string;
   menuOrder: number,
+  layer: number,
   additionalData?: CollapsibleListItemAdditionalData;
   canAddAdditionalData?: boolean;
   addEntryButtonText?: string;

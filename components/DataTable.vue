@@ -76,6 +76,7 @@
             :endpoint="field.endpoint"
             :fieldName="field.value"
             :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
+            :disable-edit="!useUser().isAdmin()"
           />
           <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
             <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
@@ -94,15 +95,16 @@
 
 <script setup lang="ts">
 import { useEnums } from "@/composables/data/enums";
+import { useAdminStore } from "~/store/admin";
 
 const props = withDefaults(
   defineProps<{
     fields: any[];
-    disableEdit: boolean;
     endpoint: string;
-    overwriteMoveEndpoint: string;
-    defaultSortBy: string;
-    defaultSortOrder: string;
+    disableEdit?: boolean;
+    overwriteMoveEndpoint?: string;
+    defaultSortBy?: string;
+    defaultSortOrder?: string;
   }>(),
   {
     defaultSortBy: "created_at",
@@ -110,7 +112,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog"]);
+const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded"]);
 
 const loading = ref(false);
 const showingDropdown = ref(null);
@@ -169,6 +171,7 @@ const move = async (entry, nextEntry) => {
     getItems();
   }
 };
+const adminStore = useAdminStore();
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
@@ -182,11 +185,14 @@ const getItems = async () => {
     per_page: 999,
     sort_by: props.defaultSortBy,
     sort_order: props.defaultSortOrder,
-    searchQuery: null,
+    searchQuery: null as string,
     concat: false,
-    filters: [],
+    filters: [] as any[],
   };
+  adminStore.loading = true;
   await api.retrieveCollection(options);
+  adminStore.loading = false;
+  emit("itemsLoaded", items.value)
   loading.value = false;
 };
 

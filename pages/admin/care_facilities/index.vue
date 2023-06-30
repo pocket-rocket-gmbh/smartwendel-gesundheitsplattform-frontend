@@ -2,29 +2,31 @@
   <div>
    <h2>Einrichtungen</h2>
 
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neue Einrichtung</v-btn>
+    <v-btn v-if="user.isAdmin() || !itemsExist" elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neue Einrichtung</v-btn>
 
     <DataTable
+      ref="dataTableRef"
       :fields="fields"
       endpoint="care_facilities?kind=facility"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @openAddImagesDialog="openAddImagesDialog"
       @openAddFilesDialog="openAddFilesDialog"
+      @items-loaded="handleItemsLoaded"
     />
 
     <AdminCareFacilitiesCreateEdit
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
-      @close="createEditDialogOpen = false"
+      @close="createEditDialogOpen = false; itemId = null; dataTableRef?.resetActiveItems()"
       endpoint="care_facilities"
       concept-name="Einrichtung"
     />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
-      @close="itemId = null; confirmDeleteDialogOpen = false"
+      @close="itemId = null; confirmDeleteDialogOpen = false; dataTableRef?.resetActiveItems()"
       :item-id="itemId"
       endpoint="care_facilities"
       term="diese Einrichtung"
@@ -33,13 +35,13 @@
     <AdminCareFacilitiesAddImages
       :item-id="itemId"
       v-if="addImagesDialogOpen"
-      @close="itemId = null; addImagesDialogOpen = false"
+      @close="itemId = null; addImagesDialogOpen = false; dataTableRef?.resetActiveItems()"
     />
 
     <AdminCareFacilitiesAddFiles
       :item-id="itemId"
       v-if="addFilesDialogOpen"
-      @close="itemId = null; addFilesDialogOpen = false"
+      @close="itemId = null; addFilesDialogOpen = false; dataTableRef?.resetActiveItems()"
     />
   </div>
 </template>
@@ -52,15 +54,19 @@ definePageMeta({
 const user = useUser();
 
 const availableFields = [
-  { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active', condition: "admin" },
   { text: 'Name', value: 'name', type: 'string' },
-  { text: 'Status', endpoint: 'care_facilities', type: 'enumDropdown', value: 'status', enum_name: 'facilitiesStatus', condition: "admin" },
-  { text: 'Status', endpoint: 'care_facilities', type: 'string', value: 'status', condition: "facility_owner" },
   { text: '', value: 'mdi-image-plus-outline', type: 'icon', emit: 'openAddImagesDialog', tooltip: 'Bilder hinzufügen' },
   { text: '', value: 'mdi-file-document-plus-outline', type: 'icon', emit: 'openAddFilesDialog', tooltip: 'Datei hinzufügen' },
 ]
-
 const fields = ref([])
+const dataTableRef = ref();
+
+const itemsExist = ref(false)
+
+const handleItemsLoaded = (items: any[]) => {
+  itemsExist.value = !!items.length
+}
+
 
 onMounted(()=> {
   const currentUserRole = user.currentUser.role
@@ -76,7 +82,8 @@ const itemPlaceholder = ref({
   is_active: false,
   status: 'is_checked',
   description: '',
-  category_ids: []
+  category_ids: [],
+  tag_category_ids: [],
 })
 
 const createEditDialogOpen = ref(false)

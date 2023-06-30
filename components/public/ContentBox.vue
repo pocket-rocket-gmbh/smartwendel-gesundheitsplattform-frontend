@@ -1,91 +1,99 @@
 <template>
-  <v-col md="6" class="d-flex flex-column">
-    <v-card class="rounded-xl mx-auto has-bg-light-grey content elevation-1 fill-height d-flex flex-column" width="100%">
-      <v-row>
-        <v-col md="5" class="d-flex">
-          <v-img
-          class="align-center"
-          cover
-          max-height="300px"
-          :src="item.image_url"
-        />
-        </v-col>
-        <v-col class="d-flex mt-1">
-          <div class="notes-card">
-            <div class="flex-grow-1">
-              <v-card-title class="note-title is-primary">
-                {{ item.name }}
-              </v-card-title>
-              <div class="px-5 pb-5">
-                <p class="break-text" v-html="item.description"></p>
-              </div>
-              <v-spacer></v-spacer>
-              <v-card-actions>
-                <div class="content-footer">
-                  <v-btn
-                    v-if="itemType === 'events'"
-                    color="secondary"
-                    class="note-text-link"
-                    size="small"
-                    :href="`/public/care_facilities/${item?.id}`"
-                    >
-                    Mehr erfahren >
-                  </v-btn>
-                  <v-btn
-                    v-if="itemType === 'news'"
-                    color="secondary"
-                    class="note-text-link"
-                    size="small"
-                    :href="`/public/news/${item?.id}`"
-                    >
-                    Mehr erfahren >
-                  </v-btn>
-                  <v-btn
-                    v-if="item.url"
-                    color="secondary"
-                    class="note-text-link"
-                    size="small"
-                    :href="'https://' + item.url"
-                    target="_blank"
-                    >
-                    Mehr erfahren >
-                  </v-btn>
-                </div>
-              </v-card-actions>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-col>
+  <div class="content-box">
+    <div class="image">
+      <img v-if="item.image_url" :src="item.image_url" />
+      <div v-else class="placeholder"></div>
+    </div>
+    <div class="content">
+      <div class="title">
+        {{ item.name }}
+      </div>
+      <div class="description break-text" v-html="item.description"></div>
+      <div class="action">
+        <a :href="buttonHref" :target="item.url ? '_blank' : ''">Weiterlesen &gt;</a>
+      </div>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
-defineProps({
-  item: {
-    type: Object,
-    required: true
-  },
-  itemType: {
-    type: String,
-  }
-})
+import { Facility } from "~/store/searchFilter";
 
+const props = defineProps<{
+  item: Facility;
+}>();
+
+const buttonHref = computed(() => {
+  if (!props.item) return null;
+
+  if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
+  if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
+  if (props.item.kind === "news") return `/public/news/${props.item.id}`;
+  if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
+  if (props.item.url) return "https://" + props.item.url;
+
+  return null;
+});
 </script>
-<style lang="sass" scoped>
-@import "@/assets/sass/main.sass"
-.note-title
-  font-weight: 600
-  font-size: 22px
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
 
-.note-text-link
-  font-size: 18px
+$max-height: 240px;
 
-.content
-  min-height: 250px
-  z-index: 0
+.content-box {
+  display: flex;
+  width: 100%;
+  min-height: $max-height;
+  max-height: $max-height;
+  background-color: #f5f5f5;
+  display: flex;
+  margin: 1rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
 
-.content-footer
-  position: absolute
-  bottom: 30px
+  .image {
+    width: $max-height;
+    height: $max-height;
+    max-width: $max-height;
+    max-height: $max-height;
+    min-width: $max-height;
+    min-height: $max-height;
 
+    img {
+      width: $max-height;
+      height: $max-height;
+      max-width: $max-height;
+      max-height: $max-height;
+      min-width: $max-height;
+      min-height: $max-height;
+      object-fit: cover;
+    }
+  }
+
+  .content {
+    padding: 1.75rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      color: #8ab61d;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .description {
+      flex: 1;
+    }
+
+    .action {
+      a {
+        cursor: pointer;
+        font-size: 1.25rem;
+        color: #636362;
+        font-weight: bold;
+      }
+    }
+  }
+}
 </style>
