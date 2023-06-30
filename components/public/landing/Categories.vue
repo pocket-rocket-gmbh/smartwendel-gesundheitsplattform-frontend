@@ -4,7 +4,7 @@
         <v-col md="4" class="justify-center align-center is-dark-grey">
           <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">Pflege, Ärtze, <br/> Krankenhäuser und co.</h2>
           <p class="text-justify">
-            Über diese Suchfunktion finden Sie sicher schnell die passenende Einrichtung und den richtigen Ansprechpartner.
+            Über diese Suchfunktion finden Sie sicher schnell die passende Einrichtung und den richtigen Ansprechpartner.
           </p>
           <p class="text-justify mt-5">
              Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher finden Sie unter mehr als 1.000 gelisteten Anbieten die Leistung, nach der Sie suchen. Informieren Sie sich über die Angebote oder nehmen Sie direkt Kontakt auf und vereinbaren Sie ihr persönliches Beratungsgespräch.
