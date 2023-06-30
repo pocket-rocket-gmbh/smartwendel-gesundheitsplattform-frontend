@@ -9,9 +9,9 @@
         </v-col>
       </v-row>
     </div>
-    <v-row>
-      <PublicContentBox v-for="courses in eventArticles" :key="courses.id" :item="courses" :item-type="'events'" />
-    </v-row>
+    <div class="articles">
+      <PublicContentBox class="limited-width" v-for="courses in eventArticles" :key="courses.id" :item="courses" :item-type="'event'" />
+    </div>
     <div>
       <v-row>
         <v-col md="12" class="d-flex justify-center mt-10">
@@ -74,4 +74,10 @@ export default defineComponent({
 
 .note-text-link
   font-size: 18px
+
+.articles
+  display: flex
+
+  .limited-width
+      width: 50%
 </style>

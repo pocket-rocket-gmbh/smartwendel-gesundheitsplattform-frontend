@@ -7,9 +7,9 @@
         </v-col>
       </v-row>
     </div>
-    <v-row>
-      <PublicContentBox v-for="news in newsArticles" :key="news.id" :item="news" :item-type="'news'" />
-    </v-row>
+    <div class="articles">
+      <PublicContentBox class="limited-width" v-for="news in newsArticles" :key="news.id" :item="news" :item-type="'news'" />
+    </div>
     <div>
       <v-row>
         <v-col md="12" class="d-flex justify-center mt-10">
@@ -74,4 +74,10 @@ export default defineComponent({
 
 .default-button
   color: red
+
+.articles
+  display: flex
+
+  .limited-width
+      width: 50%
 </style>

@@ -19,6 +19,8 @@ export type Facility = {
   town?: string;
   phone?: string;
   email?: string;
+  url?: string,
+  image_url?: string,
 };
 
 export type Filter = {

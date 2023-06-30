@@ -31,6 +31,7 @@
         Alle Filter löschen
       </v-btn>
       <v-btn
+        v-if="useUser().loggedIn()"
         prepend-icon="mdi-content-copy"
         size="small"
         class="mt-4"

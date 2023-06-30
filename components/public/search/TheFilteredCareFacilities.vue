@@ -102,7 +102,7 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
   padding: 20px
 
 .entries
-  max-width: 650px
+  width: 100%
 
 .sort-order
   width: 200px
