@@ -39,15 +39,6 @@
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
-          <div class="field">
-            <v-text-field
-              v-model="commercialRegisterNumber"
-              type="text"
-              label="Handelsregisternummer *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-              hide-details="auto"
-            />
-          </div>
           <v-checkbox v-model="privacyAccepted">
             <template v-slot:label>
               <div>
@@ -99,7 +90,6 @@ import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
 import axios from 'axios'
 
 const careFacilityName = ref('')
-const commercialRegisterNumber = ref('')
 const email = ref('')
 const firstname = ref('')
 const lastname = ref('')
@@ -115,7 +105,7 @@ const isValidEmail = (email:string) => {
 }
 
 const formValidated = computed(() => {
-  return careFacilityName.value.length > 0 && commercialRegisterNumber.value.length > 0 && firstname.value.length > 0 && lastname.value.length > 0 && isValidEmail(email.value) && privacyAccepted.value
+  return careFacilityName.value.length > 0 && firstname.value.length > 0 && lastname.value.length > 0 && isValidEmail(email.value) && privacyAccepted.value
 })
 
 const register = async () => {
@@ -126,7 +116,7 @@ const register = async () => {
     firstname: firstname.value,
     lastname: lastname.value,
     care_facility_name: careFacilityName.value,
-    commercial_register_number: commercialRegisterNumber.value
+    commercial_register_number: " "
   }
 
   const {data: result} = await axios.post<ServerCallResult>("/api/register_with_facility", {data});
