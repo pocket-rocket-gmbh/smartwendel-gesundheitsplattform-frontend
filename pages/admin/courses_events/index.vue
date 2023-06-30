@@ -1,27 +1,34 @@
 <template>
   <div>
     <h2>Kurse und Veranstaltungen</h2>
-    <v-btn
-      elevation="0"
-      variant="outlined"
-      class="mr-5"
-      @click="
-        itemPlaceholder.kind = 'course';
-        itemId = null;
-        createEditDialogOpen = true;
-      "
-      >Kurs anlegen</v-btn
-    >
-    <v-btn
-      elevation="0"
-      variant="outlined"
-      @click="
-        itemPlaceholder.kind = 'event';
-        itemId = null;
-        createEditDialogOpen = true;
-      "
-      >Veranstaltung anlegen</v-btn
-    >
+
+    <template v-if="setupFinished">
+      <v-btn
+        elevation="0"
+        variant="outlined"
+        class="mr-5"
+        @click="
+          itemPlaceholder.kind = 'course';
+          itemId = null;
+          createEditDialogOpen = true;
+        "
+        >Kurs anlegen</v-btn
+      >
+      <v-btn
+        elevation="0"
+        variant="outlined"
+        @click="
+          itemPlaceholder.kind = 'event';
+          itemId = null;
+          createEditDialogOpen = true;
+        "
+        >Veranstaltung anlegen</v-btn
+      >
+    </template>
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
+      Vervollständige die Daten deiner Einrichtung um Kurse, Ereignisse und Beiträge zu erstellen
+    </v-alert>
+
     <DataTable
       ref="dataTableRef"
       :fields="fields"
@@ -38,7 +45,7 @@
       @close="
         createEditDialogOpen = false;
         itemId = null;
-        dataTableRef?.resetActiveItems()
+        dataTableRef?.resetActiveItems();
       "
       endpoint="care_facilities"
       :concept-name="itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'"
@@ -49,7 +56,7 @@
       @close="
         itemId = null;
         confirmDeleteDialogOpen = false;
-        dataTableRef?.resetActiveItems()
+        dataTableRef?.resetActiveItems();
       "
       :item-id="itemId"
       endpoint="care_facilities"
@@ -58,7 +65,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { useAdminStore } from "~/store/admin";
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
 
 definePageMeta({
@@ -66,23 +72,28 @@ definePageMeta({
 });
 
 const user = useUser();
-const adminStore = useAdminStore();
+const loading = ref(false);
 
-const availableFields = [
+const fields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
-  { text: "Art (Kurs oder Veranstaltung)", endpoint: "care_facilities", value: "kind", type: "enum", enum_name: "facilitiesKind" },
-  { text: "Bereich", value: "categories", type: "associations_name" },
+  {
+    text: "Art (Kurs oder Veranstaltung)",
+    endpoint: "care_facilities",
+    value: "kind",
+    type: "enum",
+    enum_name: "facilitiesKind",
+  },
   { text: "Beginn", value: "course_start", type: "datetime" },
   { text: "Ende", value: "course_end", type: "datetime" },
 ];
 
-const fields = ref([]);
 const dataTableRef = ref();
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const itemId = ref(null);
+const setupFinished = ref(false);
 
 const itemPlaceholder = ref<any>({
   name: "",
@@ -105,8 +116,8 @@ const openDeleteDialog = (id: string) => {
 };
 
 onMounted(async () => {
+  loading.value = true;
   if (!user.isAdmin()) {
-    adminStore.loading = true;
     const currentUserFacility = await getCurrentUserFacilities();
 
     itemPlaceholder.value.email = currentUserFacility?.email;
@@ -117,15 +128,10 @@ onMounted(async () => {
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
     itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
-
-    adminStore.loading = false;
   }
 
-  const currentUserRole = user.currentUser.role;
-  availableFields.forEach((field) => {
-    if (!field.condition) fields.value.push(field);
-    if (currentUserRole === field.condition) fields.value.push(field);
-  });
+  setupFinished.value = await useUser().setupFinished();
+  loading.value = false;
 });
 </script>
 <style lang="sass">

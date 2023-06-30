@@ -20,18 +20,11 @@
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link to="/admin" nuxt v-if="useUser().isAdmin()"> Dashboard </v-list-item>
-        <v-list-item link to="/admin/filter" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tags', 'list')">
-          Filter
-        </v-list-item>
-        <v-list-item
-          link
-          to="/admin/categories"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('categories', 'list')"
-        >
-          Bereiche und Kategorien
-        </v-list-item>
+        <template v-if="useUser().isAdmin()">
+          <v-list-item link to="/admin" nuxt> Dashboard </v-list-item>
+          <v-list-item link to="/admin/filter" nuxt> Filter </v-list-item>
+          <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
+        </template>
         <v-list-item
           link
           to="/admin/care_facilities"
@@ -97,6 +90,7 @@ const appStore = useAppStore();
 const router = useRouter();
 
 const adminStore = useAdminStore();
+const setupFinished = ref(false);
 
 const handleLogout = () => {
   console.log("Handle logout");
@@ -108,6 +102,12 @@ const routeBack = () => {
 
   appStore.dashboardBackLink = "";
 };
+
+onMounted(async () => {
+  adminStore.loading = true;
+  setupFinished.value = await user.setupFinished();
+  adminStore.loading = false;
+});
 </script>
 
 <style lang="scss" scoped>

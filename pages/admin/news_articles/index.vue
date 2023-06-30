@@ -2,6 +2,7 @@
   <div>
     <h2>Beiträge</h2>
     <v-btn
+      v-if="setupFinished"
       elevation="0"
       variant="outlined"
       @click="
@@ -10,6 +11,10 @@
       "
       >Newsartikel anlegen</v-btn
     >
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
+      Vervollständige die Daten deiner Einrichtung um Kurse, Ereignisse und Beiträge zu erstellen
+    </v-alert>
+
     <DataTable
       :fields="fields"
       endpoint="care_facilities?kind=news"
@@ -25,7 +30,7 @@
       @close="
         createEditDialogOpen = false;
         itemId = null;
-        dataTableRef?.resetActiveItems()
+        dataTableRef?.resetActiveItems();
       "
       endpoint="care_facilities"
       concept-name="Beiträge"
@@ -36,7 +41,7 @@
       @close="
         itemId = null;
         confirmDeleteDialogOpen = false;
-        dataTableRef?.resetActiveItems()
+        dataTableRef?.resetActiveItems();
       "
       :item-id="itemId"
       endpoint="care_facilities"
@@ -45,21 +50,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { useAdminStore } from "~/store/admin";
-
 definePageMeta({
   layout: "admin",
 });
 
 const user = useUser();
-const adminStore = useAdminStore();
+const loading = ref(false);
 
 const availableFields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
-  { text: "Bereich", value: "categories", type: "associations_name" },
   { text: "Erstellt am", value: "created_at", type: "datetime" },
-  { text: "Autor", value: "", type: "string" },
+  { text: "Autor", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
 
 const fields = ref([]);
@@ -68,6 +70,7 @@ const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const itemId = ref(null);
 const dataTableRef = ref();
+const setupFinished = ref(false);
 
 const itemPlaceholder = ref<any>({
   name: "",
@@ -90,9 +93,10 @@ const openDeleteDialog = (id: string) => {
 };
 
 onMounted(async () => {
+  loading.value = true;
   if (!user.isAdmin()) {
-    adminStore.loading = true;
     const currentUserFacility = await getCurrentUserFacilities();
+    loading.value = true;
 
     itemPlaceholder.value.email = currentUserFacility?.email;
     itemPlaceholder.value.zip = currentUserFacility?.zip;
@@ -102,9 +106,10 @@ onMounted(async () => {
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
     itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
-
-    adminStore.loading = false;
   }
+
+  setupFinished.value = await useUser().setupFinished();
+  loading.value = false;
 
   const currentUserRole = user.currentUser.role;
   availableFields.forEach((field) => {
