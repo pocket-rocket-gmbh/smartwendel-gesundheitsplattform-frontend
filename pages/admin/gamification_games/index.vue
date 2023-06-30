@@ -7,11 +7,12 @@
       endpoint=""
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      ref="dataTableRef"
     />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
-      @close="itemId = null; confirmDeleteDialogOpen = false"
+      @close="itemId = null; confirmDeleteDialogOpen = false; dataTableRef?.resetActiveItems()"
       :item-id="itemId"
       endpoint=""
       term="diese ?"
@@ -37,6 +38,7 @@ export default defineComponent({
     const createEditDialogOpen = ref(false)
     const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
+    const dataTable = ref();
 
     const openCreateEditDialog = (id:string) => {
       itemId.value = id
@@ -57,7 +59,8 @@ export default defineComponent({
       confirmDeleteDialogOpen,
       itemId,
       openCreateEditDialog,
-      openDeleteDialog
+      openDeleteDialog,
+      dataTableRef
     }
   }
 })

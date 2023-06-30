@@ -76,6 +76,7 @@
             :endpoint="field.endpoint"
             :fieldName="field.value"
             :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
+            :disable-edit="!useUser().isAdmin()"
           />
           <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
             <span :class="useEnums().getClassName(field.enum_name, item[field.value])">

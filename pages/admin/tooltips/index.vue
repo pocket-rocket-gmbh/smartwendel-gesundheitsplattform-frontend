@@ -7,6 +7,7 @@
       endpoint="tooltips"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      ref="dataTableRef"
     />
 
     <AdminTooltipsCreateEdit
@@ -14,12 +15,12 @@
       v-if="createEditDialogOpen"
       :item-placeholder="itemPlaceholder"
       endpoint="tooltips"
-      @close="itemId = null; createEditDialogOpen = false; itemId = null;"
+      @close="itemId = null; createEditDialogOpen = false; itemId = null; dataTableRef?.resetActiveItems()"
     />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
-      @close="itemId = null; confirmDeleteDialogOpen = false"
+      @close="itemId = null; confirmDeleteDialogOpen = false; dataTableRef?.resetActiveItems()"
       :item-id="itemId"
       endpoint="tooltips"
       term="diesen tooltip"
@@ -51,6 +52,7 @@ export default defineComponent({
     const createEditDialogOpen = ref(false)
     const confirmDeleteDialogOpen = ref(false)
     const itemId = ref(null)
+    const dataTableRef = ref();
 
     const openCreateEditDialog = (id:string) => {
       itemId.value = id
@@ -72,7 +74,8 @@ export default defineComponent({
       confirmDeleteDialogOpen,
       itemId,
       openCreateEditDialog,
-      openDeleteDialog
+      openDeleteDialog,
+      dataTableRef
     }
   }
 })

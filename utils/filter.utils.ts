@@ -42,3 +42,17 @@ export const getMainFilters = async (filterType: FilterType) => {
 
   return await getFilters(relevantFilter.id);
 };
+
+export const getCurrentUserFacilities = async () => {
+  const api = useCollectionApi();
+  api.setBaseApi(usePrivateApi());
+  api.setEndpoint("care_facilities?kind=facility");
+  const res = await api.retrieveCollection();
+  if (res.status !== ResultStatus.SUCCESSFUL) return [];
+
+  const userFacility = res?.data?.resources[0];
+
+  if (!userFacility) return [];
+
+  return userFacility;
+};

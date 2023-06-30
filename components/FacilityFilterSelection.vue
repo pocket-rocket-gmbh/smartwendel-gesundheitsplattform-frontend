@@ -25,7 +25,13 @@
               v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options"
               @click="handleOptionSelect(option)"
             >
-              <v-radio :value="selectedFilter?.id === option.id" hide-details density="compact" :label="option.name" color="#8AB61D" />
+              <v-radio
+                :model-value="selectedFilter?.id === option.id"
+                hide-details
+                density="compact"
+                :label="option.name"
+                color="#8AB61D"
+              />
             </div>
           </div>
         </div>
@@ -60,6 +66,7 @@ const emit = defineEmits<{
 watch(
   () => props.modelValue,
   () => {
+    console.log(props.modelValue);
     if (!props.modelValue.length) {
       selectedFilter.value = null;
     }
@@ -76,15 +83,12 @@ type FilterOption = {
 const showPopover = ref(false);
 const popoverParentRef = ref<HTMLDivElement>();
 const selectedFilter = ref<Filter>();
+const selected = ref();
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));
 
 const mainFilters = ref([]);
 const filterOptions = ref<FilterOption[]>([]);
-
-const api = useCollectionApi();
-api.setBaseApi(usePublicApi());
-api.setEndpoint("tag_categories");
 
 const loadingFilters = ref(false);
 
@@ -124,8 +128,8 @@ onMounted(async () => {
   }, [] as Filter[]);
 
   const foundFilter = allAvailableOptions.find((option) => {
-    const doesInclide = props.modelValue.find((item: string) => item === option.id);
-    return doesInclide;
+    const doesInclude = props.modelValue.find((item: string) => item === option.id);
+    return doesInclude;
   });
 
   selectedFilter.value = foundFilter;

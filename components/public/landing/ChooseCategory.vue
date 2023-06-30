@@ -100,6 +100,7 @@ const handleInput = () => {
 
 onMounted(async () => {
   filterStore.currentKinds = [];
+  filterStore.currentTags = [];
   filterStore.currentZip = null;
   filterStore.onlySearchInTitle = true;
   await filterStore.loadAllResults();

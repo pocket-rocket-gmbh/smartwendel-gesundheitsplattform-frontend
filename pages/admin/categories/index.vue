@@ -20,17 +20,6 @@
       @entry-moved="handleMove"
     />
 
-    <!-- <DataTable
-      :fields="fields"
-      endpoint="categories"
-      default-sort-order="asc"
-      default-sort-by="menu_order"
-      @openCreateEditDialog="openCreateEditDialog"
-      @openDeleteDialog="openDeleteDialog"
-      @openAddSubCategoriesDialog="openAddSubCategoriesDialog"
-      ref="dataTable"
-    /> -->
-
     <AdminCategoriesAddSubCategories
       v-if="addSubCategoriesDialogOpen"
       :category-id="itemId"

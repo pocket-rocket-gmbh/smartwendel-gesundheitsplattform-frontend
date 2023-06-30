@@ -1,5 +1,6 @@
 <template>
   <v-select
+    v-if="!disableEdit"
     class="table-dropdown"
     :class="selectedFieldClass"
     variant="underlined"
@@ -12,20 +13,24 @@
     single-line
     @update:model-value="save"
   />
+  <div v-else :class="selectedFieldClass">
+    {{ selectedEnum.find((item) => item.value === model)?.name || model }}
+  </div>
 </template>
 <script lang="ts" setup>
-import { useEnums } from "@/composables/data/enums";
+import { Enums, useEnums } from "@/composables/data/enums";
 
 const props = defineProps<{
-  item: object;
+  item: any;
   endpoint: string;
   fieldName: string;
-  enumName: string;
+  enumName: keyof Enums;
   fieldClass: string;
+  disableEdit?: boolean;
 }>();
 
 const enums = useEnums();
-const selectedEnum = enums[props.enumName];
+const selectedEnum = enums.getEnum(props.enumName);
 const selectedFieldClass = ref("");
 
 const model = ref(null);
@@ -40,7 +45,7 @@ onMounted(() => {
 
 const save = async () => {
   updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`);
-  let data = {};
+  let data: any = {};
   data[props.fieldName] = model.value;
 
   await updateApi.updateItem(data, null);

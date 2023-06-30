@@ -109,7 +109,7 @@
               />
             </ClientOnly>
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility' || user.isAdmin()">
             <div class="mt-15 mb-5">
               <b>Einrichtungsfilter*</b> (Weisen Sie Ihre Einrichtung gezielt einem Berufszweig / einer Sparte
               themenspezifisch zu)
@@ -120,7 +120,7 @@
               @setTags="setTagCategoryIds"
             />
           </div>
-          <div class="field">
+          <div class="field" v-if="slotProps.item.kind === 'facility' || user.isAdmin()">
             <div class="mt-15 mb-5">
               <b>Leistungsfilter*</b> (Ordnen Sie Ihrer Einrichtung passende Leistungsfilter zu *)
             </div>
@@ -162,7 +162,7 @@
               </v-row>
             </div>
           </div>
-          <div class="mb-15" v-if="slotProps.item.kind !== 'news'">
+          <div class="mb-15" v-if="slotProps.item.kind === 'facility' || user.isAdmin()">
             <div class="mt-15 mb-5">
               <div v-if="slotProps.item.kind === 'facility'">
                 <b>Kontakt und Infos* </b>(Hinterlegen Sie hier alle Infos zu ihrem Hauptstandort.)

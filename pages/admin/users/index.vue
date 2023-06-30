@@ -8,18 +8,19 @@
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @mailUser="mailUser"
+      ref="dataTableRef"
     />
 
     <AdminUsersCreateEdit
       :item-id="itemId"
       v-if="createEditDialogOpen"
-      @close="itemId = null; createEditDialogOpen = false; itemId = null;"
+      @close="itemId = null; createEditDialogOpen = false; itemId = null; dataTableRef?.resetActiveItems()"
       @refreshCollection="getUsers()"
     />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
-      @close="itemId = null; confirmDeleteDialogOpen = false"
+      @close="itemId = null; confirmDeleteDialogOpen = false; dataTableRef?.resetActiveItems()"
       :item-id="itemId"
       endpoint="users"
       term="diesen Benutzer"
@@ -46,6 +47,7 @@ const createEditDialogOpen = ref(false)
 const confirmDeleteDialogOpen = ref(false)
 const itemId = ref(null)
 const filter = ref({ page: 1, per_page: 1000, sort_by: 'created_at', sort_order: 'DESC', searchQuery: null, concat: false, filters: [] })
+const dataTableRef = ref();
 
 const openCreateEditDialog = (id:string) => {
   itemId.value = id

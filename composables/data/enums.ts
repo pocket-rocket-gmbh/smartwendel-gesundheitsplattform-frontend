@@ -1,3 +1,16 @@
+// insert enums in Interface
+export interface Enums {
+  facilitiesStatus: EnumValue[],
+  facilitiesKind: EnumValue[]
+}
+
+
+export type EnumValue = {
+  value: string;
+  name: string;
+  class: string;
+}
+
 export function useEnums() {
 
   // Define enums here
@@ -11,19 +24,7 @@ export function useEnums() {
     { value: 'event', name: 'Veranstaltung', class: '' },
     { value: 'course', name: 'Kurs', class: '' },
   ]
-
-  type EnumValue = {
-    value: string;
-    name: string;
-    class: string;
-  }
-  
-  // insert enums in Interface
-  interface Enums {
-    facilitiesStatus: EnumValue[],
-    facilitiesKind: EnumValue[]
-  }
-  
+ 
   // insert enums in JSON
   const enums: Record<keyof Enums, EnumValue[]> = {
     facilitiesStatus,
