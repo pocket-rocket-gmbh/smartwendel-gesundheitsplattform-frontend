@@ -16,6 +16,8 @@
 <script lang="ts" setup>
 import { useEnums } from "@/composables/data/enums";
 
+const snackbar = useSnackbar();
+
 const props = defineProps<{
   item: object;
   endpoint: string;
@@ -34,7 +36,6 @@ updateApi.setBaseApi(usePrivateApi());
 
 onMounted(() => {
   model.value = props.item[props.fieldName];
-
   selectedFieldClass.value = props.fieldClass;
 });
 
@@ -42,7 +43,7 @@ const save = async () => {
   updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`);
   let data = {};
   data[props.fieldName] = model.value;
-
+  snackbar.showSuccess("Nutzer wurde aktualisiert.");
   await updateApi.updateItem(data, null);
 
   selectedFieldClass.value = useEnums().getClassName(props.enumName, model.value);

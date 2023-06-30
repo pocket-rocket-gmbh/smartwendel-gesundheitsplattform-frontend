@@ -12,6 +12,12 @@ export function useEnums() {
     { value: 'course', name: 'Kurs', class: '' },
   ]
 
+  const userRole = [
+    { value: 'facility_owner', name: 'Einrichtung', class: '' },
+    { value: 'admin', name: 'Adminitrsator', class: '' },
+    { value: 'user', name: 'Benutzer', class: '' },
+  ]
+
   type EnumValue = {
     value: string;
     name: string;
@@ -21,13 +27,15 @@ export function useEnums() {
   // insert enums in Interface
   interface Enums {
     facilitiesStatus: EnumValue[],
-    facilitiesKind: EnumValue[]
+    facilitiesKind: EnumValue[],
+    userRole: EnumValue[]
   }
   
   // insert enums in JSON
   const enums: Record<keyof Enums, EnumValue[]> = {
     facilitiesStatus,
-    facilitiesKind
+    facilitiesKind,
+    userRole
   }
 
   const getName = (enumName: keyof Enums, value:string) => {
@@ -58,6 +66,7 @@ export function useEnums() {
   return {
     facilitiesStatus,
     facilitiesKind,
+    userRole,
     getName,
     getClassName,
     getEnum
