@@ -111,7 +111,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog"]);
+const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded"]);
 
 const loading = ref(false);
 const showingDropdown = ref(null);
@@ -191,7 +191,7 @@ const getItems = async () => {
   adminStore.loading = true;
   await api.retrieveCollection(options);
   adminStore.loading = false;
-  console.log(items.value)
+  emit("itemsLoaded", items.value)
   loading.value = false;
 };
 

@@ -2,7 +2,7 @@
   <div>
    <h2>Einrichtungen</h2>
 
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neue Einrichtung</v-btn>
+    <v-btn v-if="user.isAdmin() || !itemsExist" elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neue Einrichtung</v-btn>
 
     <DataTable
       :fields="fields"
@@ -11,6 +11,7 @@
       @openDeleteDialog="openDeleteDialog"
       @openAddImagesDialog="openAddImagesDialog"
       @openAddFilesDialog="openAddFilesDialog"
+      @items-loaded="handleItemsLoaded"
     />
 
     <AdminCareFacilitiesCreateEdit
@@ -61,6 +62,12 @@ const availableFields = [
 ]
 
 const fields = ref([])
+const itemsExist = ref(false)
+
+const handleItemsLoaded = (items: any[]) => {
+  itemsExist.value = !!items.length
+}
+
 
 onMounted(()=> {
   const currentUserRole = user.currentUser.role
