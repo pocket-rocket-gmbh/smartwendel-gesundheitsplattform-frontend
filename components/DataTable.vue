@@ -84,6 +84,7 @@
             </span>
           </div>
           <span v-else-if="field.type === 'array'">{{ item[field.value].join(", ") }}</span>
+          <span v-else-if="field.type === 'pathIntoObject'">{{ pathInto(item, field.value) }}</span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item.id, null)">mdi-pencil</v-icon></td>
