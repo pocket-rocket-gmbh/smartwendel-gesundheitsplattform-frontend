@@ -7,28 +7,31 @@
         </v-col>
       </v-row>
 
-      <v-row v-if="filteredKinds.length" class="mt-4">
-        <v-col class="kinds">
-          <v-btn
-            v-for="kind in filteredKinds"
-            :key="kind"
-            variant="outlined"
-            size="large"
-            rounded="lg"
-            color="primary"
-            @click="routeToFilterPage(kind)"
-          >
-            {{ getMappedKindName(kind) }}
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-row v-else>
-        <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
-      </v-row>
+      <LoadingSpinner v-if="filterStore.loading">Ergebnisse werden geladen...</LoadingSpinner>
+      <template v-else>
+        <v-row v-if="filteredKinds.length" class="mt-4">
+          <v-col class="kinds">
+            <v-btn
+              v-for="kind in filteredKinds"
+              :key="kind"
+              variant="outlined"
+              size="large"
+              rounded="lg"
+              color="primary"
+              @click="routeToFilterPage(kind)"
+            >
+              {{ getMappedKindName(kind) }}
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
+        </v-row>
 
-      <v-row class="mt-4">
-        <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
-      </v-row>
+        <v-row class="mt-4">
+          <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+        </v-row>
+      </template>
     </v-container>
   </ClientOnly>
 </template>
@@ -69,10 +72,9 @@ const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
 };
 
 onMounted(async () => {
+  filterStore.currentKinds = [];
   filterStore.onlySearchInTitle = false;
-  if (!filterStore.allResults || !filterStore.allResults.length) {
-    await filterStore.loadAllResults();
-  }
+  await filterStore.loadAllResults();
   filterStore.loadFilteredResults();
 });
 </script>
