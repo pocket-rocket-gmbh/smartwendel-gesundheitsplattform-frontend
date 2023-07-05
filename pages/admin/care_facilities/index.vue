@@ -48,25 +48,6 @@
       term="diese Einrichtung"
     />
 
-    <AdminCareFacilitiesAddImages
-      :item-id="itemId"
-      v-if="addImagesDialogOpen"
-      @close="
-        itemId = null;
-        addImagesDialogOpen = false;
-        dataTableRef?.resetActiveItems();
-      "
-    />
-
-    <AdminCareFacilitiesAddFiles
-      :item-id="itemId"
-      v-if="addFilesDialogOpen"
-      @close="
-        itemId = null;
-        addFilesDialogOpen = false;
-        dataTableRef?.resetActiveItems();
-      "
-    />
   </div>
 </template>
 
@@ -78,23 +59,7 @@ definePageMeta({
 const user = useUser();
 const loading = ref(false);
 
-const fields = [
-  { text: "Name", value: "name", type: "string" },
-  {
-    text: "",
-    value: "mdi-image-plus-outline",
-    type: "icon",
-    emit: "openAddImagesDialog",
-    tooltip: "Bilder hinzufügen",
-  },
-  {
-    text: "",
-    value: "mdi-file-document-plus-outline",
-    type: "icon",
-    emit: "openAddFilesDialog",
-    tooltip: "Datei hinzufügen",
-  },
-];
+const fields = [{ text: "Name", value: "name", type: "string" }];
 const dataTableRef = ref();
 const itemsExist = ref(false);
 const setupFinished = ref(false);
@@ -107,6 +72,7 @@ const itemPlaceholder = ref({
   description: "",
   category_ids: [],
   tag_category_ids: [],
+  offlineImage: null
 });
 
 const createEditDialogOpen = ref(false);

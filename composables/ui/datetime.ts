@@ -38,10 +38,12 @@ export function useDatetime() {
     return datetime.toFormat('dd.MM.yyyy')
   }
 
-  const parseDate = (item:any) => {
-    const datetime = DateTime.fromISO(item, { locale: 'de-DE' })
-    return datetime.toFormat('dd.MM.yyyy')
-  }
+  const parseDateAndTime = (item:any) => {
+    console.log(item)
+    const datetime = DateTime.fromISO(item, { locale: 'de-DE' });
+    return datetime.toFormat('dd.MM.yyyy HH:mm');
+  };
+
 
   const isInPast = (item:any) => {
     const today = DateTime.now()
@@ -65,7 +67,7 @@ export function useDatetime() {
   return {
     getProjectTimeRangeString,
     parseDatetime,
-    parseDate,
+    parseDateAndTime,
     isInPast,
     timeTillEnd,
     getProjectTimeEndString,

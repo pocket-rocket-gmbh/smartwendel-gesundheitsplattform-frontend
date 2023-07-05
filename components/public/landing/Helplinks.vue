@@ -9,7 +9,7 @@
         <h3 class="is-dark-grey my-5 font-weight-bold" >
           {{ item.content.heading }}
         </h3>
-        <div class=" my-5 is-dark-grey ">
+        <div class=" my-5 is-dark-grey">
           {{ item.content.description }}
         </div>
         <div>
@@ -24,37 +24,37 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import image1 from '@/assets/images/help-links/icon_ambulance.svg'
-import image2 from '@/assets/images/help-links/icon_suitcase.svg'
-import image3 from '@/assets/images/help-links/icon_pinmap.svg'
+import image1 from '@/assets/images/help-links/icon_firstaid.svg'
+import image2 from '@/assets/images/help-links/icon_pharmacy.svg'
+import image3 from '@/assets/images/help-links/icon_rescue.svg'
 export default defineComponent({
   setup() {
     const items = [
         {
         'content': {
-          heading: 'Sport & Bewegung',
+          heading: 'Erste Hilfe',
           image: image1,
-          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+          description: 'Du warst sicherlich schon mal in einer Situation, in der Du die Hilfe eines Mitmenschen benötigt hast. Hilf auch Du in Notfallsituationen. Weitere Informationen:',
           linkText:'Anleitung',
           link: 'https://www.drk.de/hilfe-in-deutschland/erste-hilfe/'
           }
         },
         {
         'content': {
-          heading: 'Ernährung',
+          heading: 'Rettungsdienste',
           image: image2,
-          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+          description: 'Rufe den Rettungsdienst, wenn Du akut medizinische Hilfe benötigst. Egal ob es sich um die Folgen eines Unfalls handelt oder plötzliche starke gesundheitliche Beschwerden auftreten.',
           linkText: 'Notruf 112',
-          link: ''
+          link: 'https://www.drk.de/hilfe-in-deutschland/erste-hilfe/notruf-112/'
           }
         },
         {
         'content': {
-          heading: 'Mentale Gesundheit',
+          heading: 'Apothekennotdienst',
           image: image3,
-          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+          description: 'Es ist Wochenende und Du benötigst dringend Medikamente? Rufe sofort den Apothekennotdienst an und erfahre, welche Apotheke im Landkreis Sankt Wendel für Dich da ist.',
           linkText: 'Notruf 22833',
-          link: '',
+          link: 'https://www.google.com/search?q=Apothekennotdienst+LK+WND&oq=Apothekennotdienst+LK+WND&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQIRgKGKAB0gEHNjA1ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8',
           }
         }
       ]

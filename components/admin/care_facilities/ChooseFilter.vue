@@ -2,34 +2,42 @@
   <div class="choose-facility-type" v-if="!loadingFilters">
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
-      :title="mainFilter.name"
       :id="mainFilter.id"
       :expand="expandId === mainFilter.id"
       @expand-toggled="expandId = mainFilter.id"
     >
-      <div class="filter-options">
-        <div class="option" v-for="option in mainFilter.next">
-          <label class="option-label">
-            <input
-              :type="enableMultiSelect ? 'checkbox' : 'radio'"
-              :checked="isChecked(option)"
-              @click.stop="handleSubFilterParentClick(mainFilter, option)"
-            />
-            {{ option.name }}
-
-            <div class="option" v-for="subOption in option.next">
-              <label class="option-label">
-                <input
-                  :type="enableMultiSelect ? 'checkbox' : 'radio'"
-                  :checked="isChecked(subOption)"
-                  @click.stop="handleSubFilterClick(option, subOption)"
-                />
-                {{ subOption.name }}
-              </label>
-            </div>
-          </label>
+    <template #title>
+      {{ mainFilter.name }}
+      <template v-for="tag in preSetTags">
+        <v-chip class="mx-2" v-if="getTagName(mainFilter, tag)">
+          {{ getTagName(mainFilter, tag) }}
+        </v-chip>
+      </template>
+    </template>
+      <template #content>
+        <div class="filter-options">
+          <div class="option" v-for="option in mainFilter.next">
+            <label class="option-label">
+              <input
+                :type="enableMultiSelect ? 'checkbox' : 'radio'"
+                :checked="isChecked(option)"
+                @click.stop="handleSubFilterParentClick(mainFilter, option)"
+              />
+              {{ option.name }}
+              <div class="option" v-for="subOption in option.next">
+                <label class="option-label">
+                  <input
+                    :type="enableMultiSelect ? 'checkbox' : 'radio'"
+                    :checked="isChecked(subOption)"
+                    @click.stop="handleSubFilterClick(option, subOption)"
+                  />
+                  {{ subOption.name }}
+                </label>
+              </div>
+            </label>
+          </div>
         </div>
-      </div>
+      </template>
     </CollapsibleItem>
   </div>
   <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
@@ -48,10 +56,13 @@ const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
 }>();
 
+
 type Filter = { id: string; name: string; next?: Filter[] };
 
 const selectedFilter = ref<Filter>();
 const availableFilters = ref<Filter[]>([]);
+
+const allFilters = ref<Filter[]>([])
 
 const mainFilters = ref([]);
 const expandId = ref("");
@@ -77,6 +88,23 @@ const getFilterOptions = async (id: string) => {
 
   return filters;
 };
+
+const getTagName = (mainFilter: Filter, filterId: string) => {
+  if (!mainFilter.next) return "";
+  const found = mainFilter.next.find((filter) => filter.id === filterId);
+
+  if (found) return found.name;
+
+  if (!mainFilter.next) return "";
+
+  for (const next of mainFilter.next) {
+    const foundNext = next?.next?.find((filter) => filter.id === filterId)
+
+    if (foundNext) return foundNext.name;
+  }
+
+  return "";
+}
 
 const enableAllTags = (filter: Filter) => {
   const updatedTags = [...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)])];
@@ -172,7 +200,7 @@ onMounted(async () => {
     availableFilters.value.push({ ...mainFilters.value[i], next: nextFilters });
   });
 
-  loadingFilters.value = false;
+   loadingFilters.value = false;
 });
 </script>
 

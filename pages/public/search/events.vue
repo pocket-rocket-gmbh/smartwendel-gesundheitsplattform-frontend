@@ -7,7 +7,7 @@
           <v-col md="4" lg="3" class="mt-4">
             <PublicSearchTheFilter />
           </v-col>
-          <v-col md="8" lg="9" class="filtered-items mb-10">
+          <v-col md="8" lg="9" class="filtered-items mb-10 d-flex justify-center align-center">
             <PublicSearchTheFilteredCareFacilities />
           </v-col>
         </v-row>

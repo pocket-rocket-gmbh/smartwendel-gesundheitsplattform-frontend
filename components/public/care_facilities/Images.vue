@@ -1,19 +1,20 @@
 <template>
   <div :class="['image-area mt-10', { 'has-logo' : careFacility.logo_url }]" v-if="careFacility.sanitized_images">
     <v-row>
-      <v-col md="8" class="d-flex flex-wrap align-content-bottom justify-center">
-        <img class="image left" v-if="careFacility.image_url" :src="careFacility.image_url" />
+      <v-col class="d-flex flex-wrap align-content-bottom justify-center">
+        <img class="image" :class="[careFacility.sanitized_images[0] ? 'left' : '']" v-if="careFacility.image_url" :src="careFacility.image_url" />
       </v-col>
-      <v-col md="4" class="d-flex flex-wrap align-content-center justify-end">
-        <v-row>
+    
+      <v-col v-if="careFacility.sanitized_images[0]" md="4" class="d-flex flex-wrap align-content-center justify-end">
+        <v-row >
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
-            <img class="image right-top" v-if="careFacility.sanitized_images[0]" :src="careFacility.sanitized_images[0].url" />
+            <img class="image right-top" :src="careFacility.sanitized_images[0].url" />
             </v-col>
           </v-row>
         <v-row>
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
             <img class="image right-bottom" v-if="careFacility.sanitized_images[1]" :src="careFacility.sanitized_images[1].url" />
-              <v-btn class="show-more" v-if="careFacility.sanitized_images.length > 0" @click="showGalery()" >alle Bilder zeigen</v-btn>
+              <v-btn class="show-more" v-if="careFacility.sanitized_images.length > 0" @click="showGalery()" > alle Bilder zeigen</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -55,8 +56,10 @@ export default defineComponent({
   margin: 30px
 .image
   max-width: 100%
+  max-height: 100%
+  border-radius: 20px
   &.left
-    border-top-left-radius: 20px
+    border-radius: 20px
     border-bottom-left-radius: 20px
   &.right-top
     border-top-right-radius: 20px

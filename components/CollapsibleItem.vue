@@ -1,14 +1,13 @@
 <template>
   <div class="collapsible-item" v-auto-animate>
     <div class="title-bar" @click.stop="toggleExpand">
-      <div class="title" :class="isExpand && 'bold'" v-auto-animate>
-        {{ title }}
+      <div class="title" :class="isExpand && 'bold'" >
+       <slot name="title" />
       </div>
       <div class="chevron" :class="[isExpand ? 'down' : 'up']"></div>
     </div>
-
     <div class="content" v-if="isExpand">
-      <slot />
+      <slot name="content"/>
     </div>
   </div>
 </template>
@@ -16,7 +15,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   id: string;
-  title: string;
   expand?: boolean;
 }>();
 
