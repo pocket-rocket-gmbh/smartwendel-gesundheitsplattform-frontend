@@ -16,14 +16,13 @@
                       <span class="is-clickable main" @click="setItemsAndGo(category, null)">
                       {{ category.name }}
                       </span>
-
                     </div> 
                   </v-list-item-title>
                 </template>
                 <v-list v-if="category.sub_categories.length > 0">
-                  <v-list-item>
+                  <v-list-item >
                     <div v-for="(sub_category, index) in subCategories[category.id]" :key="index" @click="setItemsAndGo(category, sub_category)">
-                      <v-list v-if="sub_category && sub_category.sub_sub_categories.length > 0">
+                      <v-list class="pa-0 main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
                         <v-list-item>
                           <span class="is-clickable" >
                             {{ sub_category.name }}
@@ -41,7 +40,7 @@
               Anbieter
           </a>
           <a href="/public/search/events" class="is-clickable mx-5">
-              Kurse und Veranstaltungen
+              Kurse
           </a>
           <a href="/public/search/news" class="is-clickable mx-5">
               Beiträge
@@ -51,7 +50,7 @@
       </v-app-bar-title>
       <div class="align-center d-none d-sm-flex">
         <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn()">
-        <v-row class="mx-5 text-center">
+        <v-row class="mx-1 text-center">
           <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
             <div class="font-weight-bold">Ihr Angebot fehlt?</div>
             <div class="font-weight-light">Registrieren Sie sich!</div>
@@ -324,5 +323,6 @@ export default defineComponent({
 .offer
   border-radius: 20px
   line-height: 1.5rem
+  font-size: 16px
 
 </style>

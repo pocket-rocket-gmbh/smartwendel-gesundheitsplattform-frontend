@@ -1,19 +1,26 @@
 <template>
-  <v-container class="limited offset">
+  <v-container class="limited offset my-15">
+    <v-btn
+    
+    prepend-icon="mdi-chevron-left"
+    @click="goBack()"
+    >
+      Zurück zur Suche
+    </v-btn>
     <PublicCareFacilitiesImages
       :care-facility="careFacility"
     />
     <v-row>
-      <v-col md="8">
+      <v-col>
         <PublicCareFacilitiesMain
           :care-facility="careFacility"
         />
       </v-col>
-      <v-col md="4">
+      <v-col md="4" v-if="careFacility?.kind !== 'news'">
         <PublicCareFacilitiesRight
           :care-facility="careFacility"
         />
-        <div class="mt-5">
+        <div class="mt-5" v-if="careFacility?.kind !== 'news'">
           <PublicCareFacilitiesDocuments
           :care-facility="careFacility"
         />
@@ -27,12 +34,17 @@
 export default defineComponent({
   setup() {
     const route = useRoute()
+    const router = useRouter()
     const careFacility = ref({})
     const loading = ref(false)
 
     const careFacilityId = computed(() => {
       return route.params.id
     })
+
+    const goBack = () => {
+      router.push({ path: '/public/search/facilities' })
+    }
 
     const showApi = useCollectionApi()
     showApi.setBaseApi(usePublicApi())
@@ -51,7 +63,8 @@ export default defineComponent({
     })
 console.log(careFacility)
     return {
-      careFacility
+      careFacility,
+      goBack
     }
   }
 })

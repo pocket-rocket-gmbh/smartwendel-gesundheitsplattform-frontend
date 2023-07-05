@@ -5,47 +5,55 @@
   <div class="choose-facility-type" v-else>
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
-      :title="mainFilter.name"
       :id="mainFilter.id"
       :expand="expandId === mainFilter.id"
       @expand-toggled="expandId = mainFilter.id"
     >
-      <div class="filter-options">
-        <div class="option" v-for="option in mainFilter.next">
-          <label class="option-label">
-            <input
-              :type="enableMultiSelect ? 'checkbox' : 'radio'"
-              :checked="isChecked(option)"
-              @click.stop="handleSubFilterParentClick(mainFilter, option)"
-            />
-            {{ option.name }}
-
-            <div class="option" v-for="subOption in option.next">
-              <label class="option-label">
-                <input
-                  :type="enableMultiSelect ? 'checkbox' : 'radio'"
-                  :checked="isChecked(subOption)"
-                  @click.stop="handleSubFilterClick(option, subOption)"
-                />
-                {{ subOption.name }}
-              </label>
-            </div>
-          </label>
+      <template #title>
+        {{ mainFilter.name }}
+        <template v-for="tag in preSetTags">
+          <v-chip class="mx-2" v-if="getTagName(mainFilter, tag)">
+            {{ getTagName(mainFilter, tag) }}
+          </v-chip>
+        </template>
+      </template>
+      <template #content>
+        <div class="filter-options">
+          <div class="option" v-for="option in mainFilter.next">
+            <label class="option-label">
+              <input
+                :type="enableMultiSelect ? 'checkbox' : 'radio'"
+                :checked="isChecked(option)"
+                @click.stop="handleSubFilterParentClick(mainFilter, option)"
+              />
+              {{ option.name }}
+              <div class="option" v-for="subOption in option.next">
+                <label class="option-label">
+                  <input
+                    :type="enableMultiSelect ? 'checkbox' : 'radio'"
+                    :checked="isChecked(subOption)"
+                    @click.stop="handleSubFilterClick(option, subOption)"
+                  />
+                  {{ subOption.name }}
+                </label>
+              </div>
+            </label>
+          </div>
         </div>
         <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
-      </div>
-      <div v-if="isCurrentMainFilterServices(mainFilter)" class="add-new">
-        <v-text-field
-          @click.stop
-          hide-details="auto"
-          v-model="newServiceName"
-          label="Neue Leistung"
-          density="compact"
-        />
-        <v-btn variant="outlined" elevation="0" @click="handleCreateNewService(mainFilter.id, newServiceName)"
-          >Neue Leistung hinzufügen</v-btn
-        >
-      </div>
+        <div v-if="isCurrentMainFilterServices(mainFilter)" class="add-new">
+          <v-text-field
+            @click.stop
+            hide-details="auto"
+            v-model="newServiceName"
+            label="Neue Leistung"
+            density="compact"
+          />
+          <v-btn variant="outlined" elevation="0" @click="handleCreateNewService(mainFilter.id, newServiceName)"
+            >Neue Leistung hinzufügen</v-btn
+          >
+        </div>
+      </template>
     </CollapsibleItem>
   </div>
 </template>
@@ -68,6 +76,8 @@ type Filter = { id: string; name: string; next?: Filter[] };
 
 const selectedFilter = ref<Filter>();
 const availableFilters = ref<Filter[]>([]);
+
+const allFilters = ref<Filter[]>([]);
 
 const mainFilters = ref([]);
 const expandId = ref("");
@@ -94,6 +104,23 @@ const getFilterOptions = async (id: string) => {
   });
 
   return filters;
+};
+
+const getTagName = (mainFilter: Filter, filterId: string) => {
+  if (!mainFilter.next) return "";
+  const found = mainFilter.next.find((filter) => filter.id === filterId);
+
+  if (found) return found.name;
+
+  if (!mainFilter.next) return "";
+
+  for (const next of mainFilter.next) {
+    const foundNext = next?.next?.find((filter) => filter.id === filterId);
+
+    if (foundNext) return foundNext.name;
+  }
+
+  return "";
 };
 
 const enableAllTags = (filter: Filter) => {
