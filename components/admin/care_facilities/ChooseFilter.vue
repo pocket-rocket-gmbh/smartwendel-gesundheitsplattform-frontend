@@ -30,12 +30,25 @@
           </label>
         </div>
       </div>
+      <div v-if="isCurrentMainFilterServices(mainFilter)" class="add-new">
+        <v-text-field
+          @click.stop
+          hide-details="auto"
+          v-model="newServiceName"
+          label="Neue Leistung"
+          density="compact"
+        />
+        <v-btn variant="outlined" elevation="0" @click="handleCreateNewService(mainFilter.id, newServiceName)"
+          >Neue Leistung hinzufügen</v-btn
+        >
+      </div>
     </CollapsibleItem>
   </div>
   <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
 </template>
 
 <script setup lang="ts">
+import { ResultStatus } from "~/types/serverCallResult";
 import { FilterType } from "~/utils/filter.utils";
 
 const props = defineProps<{
@@ -57,6 +70,8 @@ const mainFilters = ref([]);
 const expandId = ref("");
 
 const loadingFilters = ref(false);
+
+const newServiceName = ref("");
 
 /**
  * Currently limited to max 2 layers more
@@ -161,8 +176,32 @@ const isChecked = (option: Filter) => {
   return props.preSetTags?.includes(option.id);
 };
 
-onMounted(async () => {
+const isCurrentMainFilterServices = (mainFilter: Filter) => {
+  return mainFilter.name === "Leistungen";
+};
+
+const handleCreateNewService = async (parentId: string, name: string) => {
+  if (!name) return;
+
+  const api = useCollectionApi();
+  api.setBaseApi(usePrivateApi());
+  api.setEndpoint(`tag_categories`);
+
+  const result = await api.createItem({ name, parent_id: parentId }, `Erfolgreich erstellt`);
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    newServiceName.value = "";
+    await reloadFilters();
+    emit("setTags", [...props.preSetTags, result.data.resource.id]);
+  } else {
+    console.error("ERROR");
+  }
+};
+
+const reloadFilters = async () => {
   loadingFilters.value = true;
+  availableFilters.value = [];
   mainFilters.value = await getMainFilters(props.filterType);
 
   const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
@@ -173,6 +212,10 @@ onMounted(async () => {
   });
 
   loadingFilters.value = false;
+};
+
+onMounted(async () => {
+  reloadFilters();
 });
 </script>
 
@@ -185,5 +228,13 @@ onMounted(async () => {
 
 .option {
   margin-left: 1rem;
+}
+
+.add-new {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 </style>

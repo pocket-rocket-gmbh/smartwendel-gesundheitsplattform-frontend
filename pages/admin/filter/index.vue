@@ -66,10 +66,6 @@ const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const itemId = ref<string | null>(null);
 
-const currentFilters = ref<any[]>([]);
-const currentSubFilters = ref<any[]>([]);
-const currentSubSubFilters = ref<any[]>([]);
-
 const snackbar = useSnackbar();
 
 const api = useCollectionApi();
@@ -162,7 +158,6 @@ const getItems = async () => {
     console.error("No filters!");
     return;
   }
-  currentFilters.value = [...filters];
 
   const tmpItemsForList: CollapsibleListItem[] = [];
 
@@ -233,19 +228,28 @@ const handleMove = async (
 
   if (layer === 0) {
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const filter = currentFilters.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      const filter = itemsForList.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
       if (!filter) throw "Filter not found";
       itemsToUpdate.push(filter);
     }
   } else if (layer === 1) {
+    const subFilters = itemsForList.value.reduce((prev, curr) => {
+      return [...prev, ...curr.next];
+    }, [] as CollapsibleListItem[]);
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const subFilter = currentSubFilters.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      const subFilter = subFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
       if (!subFilter) throw "SubFilter not found";
       itemsToUpdate.push(subFilter);
     }
   } else if (layer === 2) {
+    const subFilters = itemsForList.value.reduce((prev, curr) => {
+      return [...prev, ...curr.next];
+    }, [] as CollapsibleListItem[]);
+    const subSubFilters = subFilters.reduce((prev, curr) => {
+      return [...prev, ...curr.next];
+    }, [] as CollapsibleListItem[]);
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const subSubFilter = currentSubSubFilters.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      const subSubFilter = subSubFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
       if (!subSubFilter) throw "SubSubFilter not found";
       itemsToUpdate.push(subSubFilter);
     }
