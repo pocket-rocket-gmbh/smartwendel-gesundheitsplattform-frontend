@@ -46,7 +46,7 @@ import { ResultStatus } from "@/types/serverCallResult";
 import { useAdminStore } from "~/store/admin";
 
 export default defineComponent({
-  emits: ["close"],
+  emits: ["close", "hasChanged"],
   props: {
     itemId: {
       type: String,
@@ -217,6 +217,40 @@ export default defineComponent({
         emit("close");
       }
     };
+
+
+    watch(
+    [
+      () => item.value.phone,
+      () => item.valueemail,
+      () => item.value.street,
+      () => item.value.additional_address_info,
+      () => item.value.community_id,
+      () => item.value.zip,
+      () => item.value.town
+    ],
+    ([newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown], [oldPhone, oldEmail, oldStreet, oldAdditionalAddressInfo, oldCommunityId, oldZip, oldTown]) => {
+      if (
+        (oldPhone && newPhone !== oldPhone) ||
+        (oldEmail && newEmail !== oldEmail) ||
+        (oldStreet && newStreet !== oldStreet) ||
+        (oldAdditionalAddressInfo && newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
+        (oldCommunityId && newCommunityId !== oldCommunityId) ||
+        (oldZip && newZip !== oldZip) ||
+        (oldTown && newTown !== oldTown)
+      ) {
+        emit('hasChanged');
+      }
+    }
+  );
+
+   /*  watch(() => item.value.phone, (newValue) => {
+     if(newValue) {
+      console.log(newValue)
+      emit('hasChanged');
+     }
+    }
+  ); */
 
     return {
       loadingItem,

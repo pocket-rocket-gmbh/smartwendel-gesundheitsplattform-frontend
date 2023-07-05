@@ -21,7 +21,7 @@
         </v-list-item>
         <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
-          <v-list-item link to="/admin" nuxt> Dashboard </v-list-item>
+          <v-list-item link to="/admin" nuxt> Dashboard (Change Log) </v-list-item>
           <v-list-item link to="/admin/filter" nuxt> Filter </v-list-item>
           <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
         </template>
@@ -31,7 +31,9 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          Einrichtungen
+        <span v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
+        <span v-else>Einrichtungen</span>
+          
         </v-list-item>
         <v-list-item
           link
@@ -39,7 +41,8 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          Kurse und Veranstaltungen
+        <span v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</span>
+        <span v-else>Kurse und Veranstaltungen</span>
         </v-list-item>
         <v-list-item
           link
@@ -47,7 +50,8 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          Beiträge
+        <span v-if="useUser().isFacilityOwner()">Meine Beiträge</span>
+        <span v-else>Beiträge</span>
         </v-list-item>
         <v-list-item
           link

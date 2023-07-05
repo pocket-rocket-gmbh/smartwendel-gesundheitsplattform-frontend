@@ -72,8 +72,10 @@ export default defineComponent({
             router.push({ path: lastRoute.value })
           } else if (result.data.user.role === 'user') {
             router.push({ path: '/' })
-          } else {
+          } else if (result.data.user.role === 'admin') {
             router.push({ path: '/admin' })
+          } else {
+            router.push({ path: '/admin/care_facilities' })
           }
         }
       } else {

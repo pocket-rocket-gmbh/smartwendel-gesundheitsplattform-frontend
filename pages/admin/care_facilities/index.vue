@@ -59,7 +59,10 @@ definePageMeta({
 const user = useUser();
 const loading = ref(false);
 
-const fields = [{ text: "Name", value: "name", type: "string" }];
+const fields = [
+  { text: "Name", value: "name", type: "string" }, 
+  { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+];
 const dataTableRef = ref();
 const itemsExist = ref(false);
 const setupFinished = ref(false);
