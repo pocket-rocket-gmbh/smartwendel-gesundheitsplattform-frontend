@@ -121,7 +121,7 @@ onMounted(async () => {
   position: relative;
 
   .loading {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100vh;
     top: 0;

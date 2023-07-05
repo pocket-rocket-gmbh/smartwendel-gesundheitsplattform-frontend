@@ -1,19 +1,22 @@
 <template>
-  <div class="choose-facility-type" v-if="!loadingFilters">
+  <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
+    Filter werden geladen ...
+  </LoadingSpinner>
+  <div class="choose-facility-type" v-else>
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
       :id="mainFilter.id"
       :expand="expandId === mainFilter.id"
       @expand-toggled="expandId = mainFilter.id"
     >
-    <template #title>
-      {{ mainFilter.name }}
-      <template v-for="tag in preSetTags">
-        <v-chip class="mx-2" v-if="getTagName(mainFilter, tag)">
-          {{ getTagName(mainFilter, tag) }}
-        </v-chip>
+      <template #title>
+        {{ mainFilter.name }}
+        <template v-for="tag in preSetTags">
+          <v-chip class="mx-2" v-if="getTagName(mainFilter, tag)">
+            {{ getTagName(mainFilter, tag) }}
+          </v-chip>
+        </template>
       </template>
-    </template>
       <template #content>
         <div class="filter-options">
           <div class="option" v-for="option in mainFilter.next">
@@ -37,13 +40,26 @@
             </label>
           </div>
         </div>
+        <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
+        <div v-if="isCurrentMainFilterServices(mainFilter)" class="add-new">
+          <v-text-field
+            @click.stop
+            hide-details="auto"
+            v-model="newServiceName"
+            label="Neue Leistung"
+            density="compact"
+          />
+          <v-btn variant="outlined" elevation="0" @click="handleCreateNewService(mainFilter.id, newServiceName)"
+            >Neue Leistung hinzufügen</v-btn
+          >
+        </div>
       </template>
     </CollapsibleItem>
   </div>
-  <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
 </template>
 
 <script setup lang="ts">
+import { ResultStatus } from "~/types/serverCallResult";
 import { FilterType } from "~/utils/filter.utils";
 
 const props = defineProps<{
@@ -56,18 +72,19 @@ const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
 }>();
 
-
 type Filter = { id: string; name: string; next?: Filter[] };
 
 const selectedFilter = ref<Filter>();
 const availableFilters = ref<Filter[]>([]);
 
-const allFilters = ref<Filter[]>([])
+const allFilters = ref<Filter[]>([]);
 
 const mainFilters = ref([]);
 const expandId = ref("");
 
 const loadingFilters = ref(false);
+
+const newServiceName = ref("");
 
 /**
  * Currently limited to max 2 layers more
@@ -98,13 +115,13 @@ const getTagName = (mainFilter: Filter, filterId: string) => {
   if (!mainFilter.next) return "";
 
   for (const next of mainFilter.next) {
-    const foundNext = next?.next?.find((filter) => filter.id === filterId)
+    const foundNext = next?.next?.find((filter) => filter.id === filterId);
 
     if (foundNext) return foundNext.name;
   }
 
   return "";
-}
+};
 
 const enableAllTags = (filter: Filter) => {
   const updatedTags = [...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)])];
@@ -189,18 +206,46 @@ const isChecked = (option: Filter) => {
   return props.preSetTags?.includes(option.id);
 };
 
-onMounted(async () => {
+const isCurrentMainFilterServices = (mainFilter: Filter) => {
+  return mainFilter.name === "Leistungen";
+};
+
+const handleCreateNewService = async (parentId: string, name: string) => {
+  if (!name) return;
+
+  const api = useCollectionApi();
+  api.setBaseApi(usePrivateApi());
+  api.setEndpoint(`tag_categories`);
+
+  const result = await api.createItem({ name, parent_id: parentId }, `Erfolgreich erstellt`);
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    newServiceName.value = "";
+    await reloadFilters();
+    emit("setTags", [...props.preSetTags, result.data.resource.id]);
+  } else {
+    console.error("ERROR");
+  }
+};
+
+const reloadFilters = async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters(props.filterType);
 
   const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
 
   const allNextFilters = await Promise.all(nextFiltersPromises);
+  availableFilters.value = [];
   allNextFilters.forEach((nextFilters, i) => {
     availableFilters.value.push({ ...mainFilters.value[i], next: nextFilters });
   });
 
-   loadingFilters.value = false;
+  loadingFilters.value = false;
+};
+
+onMounted(async () => {
+  reloadFilters();
 });
 </script>
 
@@ -213,5 +258,13 @@ onMounted(async () => {
 
 .option {
   margin-left: 1rem;
+}
+
+.add-new {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 </style>
