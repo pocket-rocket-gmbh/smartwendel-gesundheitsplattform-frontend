@@ -1,5 +1,5 @@
 <template>
-  <CreateEdit v-slot="slotProps" size="100wh">
+  <CreateEdit v-slot="slotProps" @hasChanged="changed = true" size="100wh">
     <!--     <div class="mt-10 mx-5 menu-boxes">
       <v-row>
         <v-col class="d-flex align-center justify-center select-box mx-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
@@ -155,7 +155,7 @@
             <ClientOnly>
               <QuillEditor
                 class="ql-blank"
-                placeholder="Nutze dieses Feld, um Deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc."
+                :placeholder="fields[slotProps.item.kind]['5'].placeholder"
                 :options="textOptions"
                 v-model:content="slotProps.item.description"
                 contentType="html"
@@ -166,7 +166,7 @@
 
           <v-divider class="my-10"></v-divider>
 
-          <div class="field" id="6" v-if="slotProps.item.kind === 'facility'">
+          <div class="field" id="6">
             <div class="my-3">
               <span
                 class="text-h5 font-weight-bold"
@@ -181,12 +181,9 @@
             />
           </div>
 
-          <v-divider
-            class="my-10"
-            v-if="slotProps.item.kind === 'facility'"
-          ></v-divider>
+          <v-divider class="my-10"></v-divider>
 
-          <div class="field" id="7" v-if="slotProps.item.kind === 'facility'">
+          <div class="field" id="7">
             <div class="my-2 d-flex align-center">
               <span
                 class="text-h5 font-weight-bold mr-3"
@@ -211,10 +208,7 @@
               @setTags="setTagCategoryIds"
             />
           </div>
-          <v-divider
-            class="my-10"
-            v-if="slotProps.item.kind === 'facility'"
-          ></v-divider>
+          <v-divider class="my-10"></v-divider>
 
           <div class="field" id="date" v-if="slotProps.item.kind === 'course'">
             <div class="my-2">
@@ -230,7 +224,6 @@
                   <Datepicker
                     inline
                     multi-dates
-                    autoApply
                     preview-format="dd.MM.yyyy HH:mm"
                     format="dd.MM.yyyy HH:mm"
                     model-type="dd.MM.yyyy HH:mm"
@@ -239,7 +232,14 @@
                     locale="de-DE"
                     v-model="slotProps.item.event_dates"
                     label="Start"
-                  />
+                    :highlight-week-days="[0, 6]"
+                    :min-date="new Date()"
+                    prevent-min-max-navigation
+                    cancelText="Abbrechen"
+                    selectText="Hinzufügen"
+                    input-class-name="dp-custom-input"
+                    :clearable="false"
+                    />
                 </v-col>
                 <v-list class="mt-5">
                   <v-list-item
@@ -286,7 +286,6 @@
                     v-model="slotProps.item.event_dates"
                     label="Start"
                   />
-                  slotProps.item.event_dates
                 </v-col>
                 <v-col cols="12" md="6">
                   <Datepicker
@@ -329,30 +328,22 @@
               </v-tooltip>
             </div>
             <div>
-              <v-radio
-                :model-value="!insurance"
-                hide-details
-                density="compact"
-                label="Nein"
-                @click="hasInsurance()"
-              />
-              <v-radio
-                :model-value="insurance"
+              <v-checkbox
+                :model-value="slotProps.item.billable_through_health_insurance"
                 hide-details
                 density="compact"
                 label="Ja"
-                @click="hasInsurance()"
+                @click="slotProps.item.billable_through_health_insurance = !slotProps.item.billable_through_health_insurance"
               />
             </div>
-            <div class="field my-5" v-if="insurance">
+            <div class="field my-5" v-if="slotProps.item.billable_through_health_insurance">
               <v-text-field
-                v-model="slotProps.item.additional_address_info"
+                v-model="slotProps.item.health_insurance_name"
                 hide-details="auto"
                 label="Falls ja, Name der gesetzlichen Krankenkasse"
               />
             </div>
           </div>
-
           <v-divider
             class="my-10"
             v-if="slotProps.item.kind === 'course'"
@@ -370,7 +361,10 @@
             </div>
           </div> -->
 
-          <div class="field" id="8" v-if="slotProps.item.kind === 'facility'">
+          <div class="field" id="8" v-if="slotProps.item.kind === 'facility'" :class="[changed || editInformations? 'has-bg-light-red pa-5' : '']">
+            <span v-if="changed">
+                <v-alert type="warning" density="compact" class="mt-2">Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben werden</v-alert>
+              </span>
             <div class="my-2 d-flex align-center">
               <span
                 class="text-h5 mr-2 font-weight-bold"
@@ -387,15 +381,24 @@
                   fields[slotProps.item.kind]["8"].tooltip
                 }}</span>
               </v-tooltip>
-              <span>
-                <v-btn size="small" @click=""> Zum Profil </v-btn>
+              <span v-if="editInformations">
+                <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
+              </span>
+              <span v-else>
+                <v-btn size="small" @click="confirmEditDialogOpen = true"> Kontaktdaten ändern </v-btn>
               </span>
             </div>
+
+              <EditItem
+                :open="confirmEditDialogOpen"
+                @accepted="editInformations = true; confirmEditDialogOpen = false"
+                @close="confirmEditDialogOpen = false; editInformations = false"
+              />
+
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.phone"
-                :disabled="!useUser().isAdmin()"
-                append-inner-icon="mdi-information-outline"
+                :disabled="!useUser().isAdmin() && !editInformations"
                 hide-details="auto"
                 label="Telefonnummer"
                 :rules="[rules.required]"
@@ -408,8 +411,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.email"
-                :disabled="!useUser().isAdmin()"
-                append-inner-icon="mdi-information-outline"
+                :disabled="!useUser().isAdmin() && !editInformations"
                 hide-details="auto"
                 label="E-Mail"
                 :rules="[rules.required, rules.email]"
@@ -421,8 +423,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.street"
-                :disabled="!useUser().isAdmin()"
-                append-inner-icon="mdi-information-outline"
+                :disabled="!useUser().isAdmin() && !editInformations"
                 hide-details="auto"
                 label="Straße und Nummer"
                 :rules="[rules.required, rules.counterStreet]"
@@ -434,8 +435,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.additional_address_info"
-                :disabled="!useUser().isAdmin()"
-                append-inner-icon="mdi-information-outline"
+                :disabled="!useUser().isAdmin() && !editInformations"
                 hide-details="auto"
                 label="Adresszusatz"
               />
@@ -444,8 +444,7 @@
               <v-select
                 hide-details="auto"
                 v-model="slotProps.item.community_id"
-                :disabled="!useUser().isAdmin()"
-                append-inner-icon="mdi-information-outline"
+                :disabled="!useUser().isAdmin() && !editInformations"
                 :items="communities"
                 item-title="name"
                 item-value="id"
@@ -456,8 +455,7 @@
             <div class="field split">
               <v-text-field
                 v-model="slotProps.item.zip"
-                :disabled="!useUser().isAdmin()"
-                append-inner-icon="mdi-information-outline"
+                :disabled="!useUser().isAdmin() && !editInformations"
                 hide-details="auto"
                 label="PLZ"
                 :type="'number'"
@@ -469,8 +467,7 @@
               <v-select
                 hide-details="auto"
                 v-model="slotProps.item.town"
-                :disabled="!useUser().isAdmin()"
-                append-inner-icon="mdi-information-outline"
+                :disabled="!useUser().isAdmin() && !editInformations"
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
@@ -593,7 +590,7 @@
 
           <v-divider
             class="my-10 mb-15"
-            v-if="slotProps.item.kind === 'facility'"
+           
           ></v-divider>
         </v-col>
       </v-row>
@@ -616,15 +613,22 @@ const textOptions = ref({
   toolbar: "essential",
 });
 
-const insurance = ref(false);
+const changed = ref(false)
 
-const hasInsurance = () => {
-  insurance.value = !insurance.value;
-};
 
 const deleteDate = (index:number, dates:string []) => {
-  dates.splice(index, 1);
+  const confirmed = confirm(
+    "Sicher dass du diesen Termin löschen möchtest?"
+  );
+  if (confirmed) {
+    dates.splice(index, 1);
+  }
 };
+
+const editInformations = ref(false);
+const confirmEditDialogOpen = ref(false);
+ 
+
 
 const fields = {
   facility: {
@@ -658,6 +662,7 @@ const fields = {
       tooltip: "uhu",
       description: "Beschreibung",
       index: 5,
+      placeholder: "Nutze dieses Feld, um Deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc."
     },
     "6": {
       label:
@@ -726,6 +731,21 @@ const fields = {
       tooltip: "uhu",
       description: "Beschreibung",
       index: 5,
+      placeholder: "Inhalt des Beitrages"
+    },
+    "6": {
+      label:
+        "6. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+      tooltip: "uhu",
+      description: "Berufszweig",
+      index: 6,
+    },
+    "7": {
+      label: "7. Ordne Deiner Einrichtung passende Filter zu *",
+      tooltip:
+        "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
+      description: "Leistung",
+      index: 7,
     },
   },
   course: {
@@ -752,6 +772,21 @@ const fields = {
       tooltip: "uhu",
       description: "Beschreibung",
       index: 5,
+      placeholder: "Beschreibung des Kurses"
+    },
+    "6": {
+      label:
+        "6. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+      tooltip: "uhu",
+      description: "Berufszweig",
+      index: 6,
+    },
+    "7": {
+      label: "7. Ordne Deiner Einrichtung passende Filter zu *",
+      tooltip:
+        "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
+      description: "Leistung",
+      index: 7,
     },
     date: {
       label: "5. Gib das Kursdatum, sowie die Uhrzeit an *",
@@ -804,6 +839,21 @@ const fields = {
       tooltip: "uhu",
       description: "Beschreibung",
       index: 5,
+      placeholder: "Beschreibung der Veranstaltung"
+    },
+    "6": {
+      label:
+        "6. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+      tooltip: "uhu",
+      description: "Berufszweig",
+      index: 6,
+    },
+    "7": {
+      label: "7. Ordne Deiner Einrichtung passende Filter zu *",
+      tooltip:
+        "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
+      description: "Leistung",
+      index: 7,
     },
     date: {
       label: "7. Gib das Veranstaltungsdatum, sowie die Uhrzeit an *",
@@ -869,6 +919,7 @@ const goToField = (n: Number) => {
   }
 };
 
+
 const communitiesApi = useCollectionApi();
 communitiesApi.setBaseApi(usePrivateApi());
 communitiesApi.setEndpoint(`communities`);
@@ -916,4 +967,43 @@ onMounted(() => {
   position: sticky
   z-index: 9999
   top: 20px
+
+</style>
+<style lang="css">
+.dp__selection_preview {
+  display: none;
+}
+
+.dp__action_buttons {
+  justify-content: center;
+  margin-right: auto;
+  padding: 10px;
+}
+
+.dp__action_button {
+  padding-left: 10px;
+  height: 30px;
+  padding-right: 10px;
+  background-color: #8ab61d;
+}
+
+.dp__action_button:hover {
+  background-color: #8ab61d;
+}
+
+ .dp__instance_calendar
+    .dp__button {
+      background-color: #8ab61d;
+      color: white;
+      height: 3rem;
+      font-weight: bold;
+    }
+      .dp__button::after {
+        content: "Uhrzeit auswählen";
+        margin-left: 0.25rem;
+      }
+      .dp__overlay_container .dp__button::after {
+        content: "Datum auswählen";
+        margin-left: 0.25rem;
+      }
 </style>

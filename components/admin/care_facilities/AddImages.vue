@@ -48,6 +48,7 @@
           <div
             @click="item.file = ''; item.sanitized_images = []"
             class="text-error ml-1 mt-1 is-clickable"
+            v-if="item.file"
           >
             Bild löschen
           </div>
