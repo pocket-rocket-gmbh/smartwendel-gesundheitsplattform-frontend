@@ -2,12 +2,12 @@
     <div>    
       <div>
         <v-btn
-          class="mt-n4 mb-1 ml-n2"
-          size="x-small" elevation="0" variant="outlined"
+          class="mt-4 mb-1 ml-n2"
+          size="large" elevation="0" variant="outlined"
           @click="openLocationDialog(null)">
           Ort hinzufügen
         </v-btn>
-        <v-table>
+        <v-table v-if="careFacility?.locations.length > 0">
           <thead>
             <tr>
               <th>Addresse </th>

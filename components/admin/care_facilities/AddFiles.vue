@@ -1,38 +1,62 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    width="900"
-    transition="dialog-bottom-transition"
-    @click:outside="emitClose()"
-  > 
+  <div>
     <Loading v-if="loadingItem" />
-    <v-card class="dialog-900" height="900">
-      <v-card-title class="text-h5">
-        Datei hinzufügen
-      </v-card-title>
-      <v-list>
-      <v-list-item
-        v-for="document in item.sanitized_documents"
-        :key="document.id"
-        :title="document.title"
-        item-props
-      >
-        <template v-slot:prepend>
-          <v-btn
-            class="mx-3"
-            size="large"
-            color="red"
-            :href="document.url"
-            target="_blank"
-            density="compact" icon="mdi-file-pdf-box"
-            >
-          </v-btn>
-        </template>
-          <p>{{ document.name }}</p>
-          <v-divider></v-divider>
+      <div class="field split">
+        <v-file-input
+          class="mt-5"
+          variant="underlined"
+          clearable label="Datei auswählen"
+          v-model="file"
+          @change="handleFile"
+        />
+        <v-text-field
+          variant="underlined"
+          hide-details="auto"
+          label="Bezeichnung*"
+          v-model="filename"
+        />
+      </div>
+      <div class="errors">
+        <div v-if="errorInvalidFileType">
+          <span class="warning">
+            <v-alert type="error" density="compact" closable class="mt-2">nur (.pdf) Dateien sind erlaubt</v-alert>
+          </span>
+        </div>
+        <div v-if="errorFileSizeTooLarge">
+          <v-alert type="warning" density="compact" closable class="mt-2">die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 5 MB erlaubt</v-alert>
+        </div>
+      </div>
+    <v-btn
+    class="mt-5"
+      @click="save"
+      v-if="!loadingItem"
+      :disabled="filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge && file"
+    >
+      Hinzufügen
+    </v-btn>
+    <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
+      <v-list class="mt-5">
+        <v-list-item
+          v-for="document in item.sanitized_documents"
+          :key="document.id"
+          :title="document.title"
+          item-props
+        >
+          <template v-slot:prepend>
+            <v-btn
+              class="mx-3"
+              size="large"
+              color="red"
+              :href="document.url"
+              target="_blank"
+              density="compact" icon="mdi-file-pdf-box"
+              >
+            </v-btn>
+          </template>
+        <p>{{ document.name }}</p>
+        <v-divider></v-divider>
         <template v-slot:append>
           <v-btn
-            color="red"
             icon="mdi-delete"
             variant="text"
             @click="deleteFile(document.signed_id)"
@@ -40,54 +64,11 @@
         </template>
       </v-list-item>
     </v-list>
-      <v-card-text>
-        <div class="field mb-15">
-          <b>Downloads</b> (Laden Sie hier Dokumente (Transparenz-Berichte, Jobangebote, Formulare, etc.) hoch und benennen Sie das entsprechende Dokument. Erlaubt sind lediglich Dateien im PDF-Format.)
-          <div class="field">
-            <v-text-field
-              hide-details="auto"
-              label="Bezeichnung*"
-              v-model="filename"
-            />
-          </div>
-          <div class="field">
-            <v-file-input clearable label="Datei auswählen" v-model="file" @change="handleFile"></v-file-input>
-          </div>
-          <div class="errors">
-            <div v-if="errorInvalidFileType">
-              <span class="warning">
-                <v-alert type="error" density="compact" closable class="mt-2">nur (.pdf) Dateien sind erlaubt</v-alert>
-              </span>
-            </div>
-            <div v-if="errorFileSizeTooLarge">
-              <v-alert type="warning" density="compact" closable class="mt-2">die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 5 MB erlaubt</v-alert>
-            </div>
-          </div>
-        </div>
-        <v-btn
-          @click="save"
-          v-if="!loadingItem"
-          :disabled="filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge && file"
-        >
-          Hochladen
-        </v-btn>
-        <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
-      </v-card-text>
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-btn
-          @click="emitClose()"
-        >
-          Schließen
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ResultStatus } from '@/types/serverCallResult'
-const emit = defineEmits(['close'])
 const props = defineProps({
   itemId: String
 })
@@ -97,17 +78,12 @@ const filename = ref('')
 const errorInvalidFileType = ref(false)
 const loadingItem = ref(false)
 const fileUrl = ref(null)
-const dialog = ref(true)
 const errors = ref([])
 
 const errorFileSizeTooLarge = ref(false)
 const item = ref({
   sanitized_documents: []
 })
-
-const emitClose = () => {
-  emit('close')
-}
 
 const handleFile = async () => {
   if (file.value && file.value[0] && file.value[0].size / 1000000 > 5) {
@@ -191,7 +167,13 @@ const deleteFile = async (signedId:string) => {
   }
 }
 
+watch(() => props.itemId, () => {
+  if(!props.itemId) return
+  getCareFacility()
+})
+
 onMounted(() => {
+  if(!props.itemId) return
   getCareFacility()
 })
 </script>

@@ -27,7 +27,7 @@ const buttonHref = computed(() => {
 
   if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
   if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
-  if (props.item.kind === "news") return `/public/news/${props.item.id}`;
+  if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
   if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
   if (props.item.url) return "https://" + props.item.url;
 
