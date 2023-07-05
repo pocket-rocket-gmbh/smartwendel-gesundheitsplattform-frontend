@@ -4,6 +4,15 @@
   </div>
   <div>
     <v-list>
+      <v-list-item title="Änderungen am: 05.07 17:30Uhr - Alex L.">
+        <v-container>
+          - "Erstellt von" hinzugefügt - Einrichtungen<br>
+        
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list>
       <v-list-item title="Änderungen am: 105.07 17:00Uhr - Alex L.">
         <v-container>
           - Bestätigung vor dem Ändern der Daten der Einrichtung<br>
