@@ -1,5 +1,8 @@
 <template>
-  <div class="choose-facility-type" v-if="!loadingFilters">
+  <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
+    Filter werden geladen ...
+  </LoadingSpinner>
+  <div class="choose-facility-type" v-else>
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
       :title="mainFilter.name"
@@ -29,6 +32,7 @@
             </div>
           </label>
         </div>
+        <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
       </div>
       <div v-if="isCurrentMainFilterServices(mainFilter)" class="add-new">
         <v-text-field
@@ -44,7 +48,6 @@
       </div>
     </CollapsibleItem>
   </div>
-  <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
 </template>
 
 <script setup lang="ts">
@@ -201,12 +204,12 @@ const handleCreateNewService = async (parentId: string, name: string) => {
 
 const reloadFilters = async () => {
   loadingFilters.value = true;
-  availableFilters.value = [];
   mainFilters.value = await getMainFilters(props.filterType);
 
   const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
 
   const allNextFilters = await Promise.all(nextFiltersPromises);
+  availableFilters.value = [];
   allNextFilters.forEach((nextFilters, i) => {
     availableFilters.value.push({ ...mainFilters.value[i], next: nextFilters });
   });
