@@ -33,6 +33,15 @@
       </v-list-item>
     </v-list>
     <v-divider></v-divider>
+    <v-list>
+      <v-list-item title="Änderungen am: 06.07 13:45Uhr - Norman">
+        <v-container>
+          - Es können jetzt bei der Einrichtungserstellung Dokumente hochgeladen werden<br>
+        
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
   </div>
 </template>
 
