@@ -60,7 +60,7 @@
       "
       :item-id="itemId"
       endpoint="care_facilities"
-      term="diesen Kurse/Veranstaltung"
+      term="diesen Kurs oder Veranstaltung"
     />
   </div>
 </template>

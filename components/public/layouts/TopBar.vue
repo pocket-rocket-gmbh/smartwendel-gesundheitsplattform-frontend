@@ -52,8 +52,8 @@
         <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn()">
         <v-row class="mx-1 text-center">
           <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
-            <div class="font-weight-bold">Ihr Angebot fehlt?</div>
-            <div class="font-weight-light">Registrieren Sie sich!</div>
+            <div class="font-weight-bold">Dein Angebot fehlt?</div>
+            <div class="font-weight-light">Registriere dich!</div>
           </v-col>
         </v-row>
         </div>
@@ -149,10 +149,6 @@
               <router-link class="mr-6" to="/admin">Dashboard</router-link>
             </v-list-item>
           <v-divider v-if="currentUser" class="my-5"></v-divider>
-            <v-list-item v-if="currentUser">
-              <v-icon class="mr-2">mdi-account</v-icon>
-              <router-link :to="`/public/users/${currentUser.id}`">Konto verwalten</router-link>
-            </v-list-item>
             <v-list-item v-if="currentUser && userIsAdmin">
               <v-icon class="mr-2">mdi-note-check-outline</v-icon>
               <router-link to="/terms_of_use">Nutzungsbedingungen</router-link>

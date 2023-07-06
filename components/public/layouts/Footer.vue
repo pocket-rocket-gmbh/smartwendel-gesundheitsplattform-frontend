@@ -4,8 +4,8 @@
       <div class="has-bg-grey py-5" v-if="!useUser().loggedIn()">
         <v-row class="align-center">
           <v-col md="8" class="flex-column justify-start text-h3 is-dark-grey font-weight-bold">
-            <div>Ihr Angebot fehlt?</div>
-            <div>Hier können Sie Ihre Einrichtung registrieren!</div>
+            <div>Deine Angebot fehlt?</div>
+            <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
           <v-col class="d-flex ml-15">
             <v-btn variant="flat" 

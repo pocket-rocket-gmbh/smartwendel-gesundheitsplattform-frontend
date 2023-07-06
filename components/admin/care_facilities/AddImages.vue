@@ -11,6 +11,7 @@
         prepend-icon="mdi-camera"
         @change="handleFile()"
       />
+      <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
       <div class="text-error" v-if="item?.sanitized_images.length >= 6">
         Es können maximal 6 Bilder hinzugefügt werden
       </div>

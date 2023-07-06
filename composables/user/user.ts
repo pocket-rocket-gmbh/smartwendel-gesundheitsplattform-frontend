@@ -42,7 +42,7 @@ export function useUser() {
     localStorage.removeItem("auth._token.jwt");
     userStore.currentUser = null;
     router.push({ path: "/" });
-    snackbar.showSuccess("Sie wurden erfolgreich abgemeldet");
+    snackbar.showSuccess("SDu wurdest erfolgreich abgemeldet");
   };
 
   return {

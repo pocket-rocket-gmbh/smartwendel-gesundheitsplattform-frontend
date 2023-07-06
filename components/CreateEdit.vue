@@ -10,12 +10,10 @@
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <v-form ref="form">
         <v-card-title class="text-h5 has-bg-primary py-5 text-white">
-          <span v-if="itemId">{{ conceptName }} bearbeiten</span>
-          <span v-else>{{ conceptName }} erstellen</span>
+            <span v-if="itemId">{{ conceptName }} bearbeiten</span>
+            <span v-else>{{ conceptName }} erstellen</span>        
         </v-card-title>
-
         <slot :item="item" :errors="errors" />
-
         <v-card-actions class="card-actions">
           <v-btn @click="emitClose()"> Schließen </v-btn>
           <v-btn
@@ -196,22 +194,11 @@ export default defineComponent({
       if (props.itemPlaceholder && !item.value.id) {
         item.value = props.itemPlaceholder;
       }
-
-      document.addEventListener("keyup", function (e) {
-        if (e.key === "Escape") {
-          const confirmed = confirm(
-            "Wenn Sie fortfahren, werden Ihre Änderungen verworfen."
-          );
-          if (confirmed) {
-            emit("close");
-          }
-        }
-      });
     });
 
     const emitClose = () => {
       const confirmed = confirm(
-        "Wenn Sie fortfahren, werden Ihre Änderungen verworfen."
+        "Wenn du fortfährst, werden deine Änderungen verworfen."
       );
       if (confirmed) {
         emit("close");

@@ -139,8 +139,8 @@ const emitSave = async () => {
     emit("save", lat, long);
   } else {
     console.error("Address not found");
-    snackbar.showError("Addresse konnte nicht befunden werden. Bitte überprüfen Sie ihre Eingaben!");
-    error.value = "Addresse konnte nicht befunden werden. Bitte überprüfen Sie ihre Eingaben!";
+    snackbar.showError("Addresse konnte nicht befunden werden. Bitte eine Eingaben überprüfen!");
+    error.value = "Addresse konnte nicht befunden werden. Bitte eine Eingaben überprüfen!";
   }
 };
 

@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox title="Beiträge" sub-title="Wählen sie ihren Wunschbeitrag" />
+      <PublicSearchTheBasicSearchBox title="Beiträge" sub-title="Deine Wunschbeitrag auswählen" />
       <v-container class="container limited padding">
         <v-row class="mt-1">
           <v-col md="4" lg="3" class="mt-4">

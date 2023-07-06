@@ -36,8 +36,10 @@
     >
       Hinzufügen
     </v-btn>
+    <div class="text-caption">* Maximal 5 MB, PDF erlaubt</div>
     <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
       <v-list class="mt-5" v-if="tagName === 'insurance'">
+        <v-alert v-if="item?.sanitized_documents.filter(doc => doc.tag === 'insurance').length >= 1" type="warning" density="compact" closable class="mb-12">Nur 1 Datei Erlaubt!</v-alert>
         <v-list-item
           v-for="document in item.sanitized_documents.filter(doc => doc.tag === 'insurance')"
           :key="document.id"

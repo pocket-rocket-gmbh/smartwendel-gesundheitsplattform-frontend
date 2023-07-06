@@ -65,7 +65,7 @@
           </v-btn>
         </v-col>
         <v-col v-if="!filterStore.filteredResults.length && !filterStore.loading">
-          <div class="no-entries">Keine Ergebnisse gefunden. Bitten passen Sie Ihre Suche an.</div>
+          <div class="no-entries">Keine Ergebnisse gefunden. Bitten Suche anpassen.</div>
         </v-col>
       </v-row>
     </div>
