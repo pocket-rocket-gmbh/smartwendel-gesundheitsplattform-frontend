@@ -80,6 +80,7 @@ const itemPlaceholder = ref<any>({
   description: "",
   category_ids: [],
   tag_category_ids: [],
+  offlineDocuments: [],
 });
 
 const openCreateEditDialog = (id: string) => {

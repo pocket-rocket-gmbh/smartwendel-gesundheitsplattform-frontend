@@ -150,14 +150,31 @@ const create = async () => {
     if (item.value.offlineLocations && item.value.offlineLocations.length) {
       createUpdateApi.setEndpoint(`locations/care_facility/${facilityId}`);
 
-      const facilityLocationCreationPromises = item.value.offlineLocations.map(location => createUpdateApi.createItem({
-        careFacility_id: facilityId,
-        longitude: location.longitude,
-        latitude: location.latitude,
-      }));
+      const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
+        createUpdateApi.createItem({
+          careFacility_id: facilityId,
+          longitude: location.longitude,
+          latitude: location.latitude,
+        })
+      );
 
-      await Promise.all(facilityLocationCreationPromises).then(res => console.log(res))
+      await Promise.all(facilityLocationCreationPromises);
     }
+
+    if (item.value.offlineDocuments && item.value.offlineDocuments.length) {
+      createUpdateApi.setEndpoint(`care_facilities/${facilityId}/documents`);
+
+      const documentsPromises = item.value.offlineDocuments.map((document) =>
+        createUpdateApi.createItem({
+          document: document.document,
+          documentname: document.documentname,
+          tag: document.tag,
+        })
+      );
+
+      await Promise.all(documentsPromises);
+    }
+
     loadingItem.value = false;
     emit("close");
   } else {
