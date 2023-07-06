@@ -32,6 +32,14 @@
             />
           </div>
           <div class="field">
+            <v-text-field v-model="phone"
+              type="number"
+              label="Telefonnummer *"
+              hide-details="auto"
+              :error-messages="useErrors().checkAndMapErrors('phone', errors)"
+            />
+          </div>
+          <div class="field">
             <v-text-field v-model="email"
               type="email"
               label="E-Mail Adresse *"
@@ -93,6 +101,7 @@ const careFacilityName = ref('')
 const email = ref('')
 const firstname = ref('')
 const lastname = ref('')
+const phone = ref('')
 const loading = ref(false)
 const animated = ref(false)
 const errors = ref({})
@@ -105,7 +114,7 @@ const isValidEmail = (email:string) => {
 }
 
 const formValidated = computed(() => {
-  return careFacilityName.value.length > 0 && firstname.value.length > 0 && lastname.value.length > 0 && isValidEmail(email.value) && privacyAccepted.value
+  return careFacilityName.value.length > 0 && firstname.value.length > 0 && lastname.value.length > 0 && phone.value.length > 0 && isValidEmail(email.value) && privacyAccepted.value
 })
 
 const register = async () => {
@@ -115,6 +124,7 @@ const register = async () => {
     email: email.value,
     firstname: firstname.value,
     lastname: lastname.value,
+    phone: lastname.value,
     care_facility_name: careFacilityName.value,
     commercial_register_number: " "
   }

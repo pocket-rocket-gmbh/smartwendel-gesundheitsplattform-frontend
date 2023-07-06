@@ -81,7 +81,6 @@ export default defineComponent({
     const password = ref('')
     const password_confirmation = ref('')
 
-    const activeTab = ref('')
     const route = useRoute()
 
     const api = useCollectionApi()
@@ -93,11 +92,10 @@ export default defineComponent({
 
     onMounted(() => {
       getUser()
-      activeTab.value = 'personal_data'
     })
 
     const getUser = async () => {
-      api.setEndpoint(`users/me`)
+      api.setEndpoint(`users/${userId.value}`)
 
       loadingItem.value = true
       await api.getItem()
@@ -109,14 +107,6 @@ export default defineComponent({
       item.value.file = image
     }
 
-    const personalData = () => {
-      activeTab.value = 'personal_data'
-    }
-
-    const notificationsData = () => {
-      activeTab.value = 'notifications_data'
-    }
-
     const saveUserData = async () => {
       api.setEndpoint(`users/${userId.value}`)
       loadingItem.value = true
@@ -126,16 +116,6 @@ export default defineComponent({
         file: item.value.file
       }
       await api.updateItem(data, 'Benutzer erfolgreich aktualisiert')
-      loadingItem.value = false
-    }
-
-    const saveEmailPreferences = async () => {
-      api.setEndpoint(`users/${userId.value}`)
-      loadingItem.value = true
-      const data = {
-        notification_preferences: item.value.notification_preferences,
-      }
-      await api.updateItem(data, 'E-Mail Benachrichtigungen erfolgreich aktualisiert')
       loadingItem.value = false
     }
 
@@ -155,12 +135,8 @@ export default defineComponent({
       password,
       password_confirmation,
       saveUserData,
-      saveEmailPreferences,
       updatePassword,
       setImage,
-      activeTab,
-      personalData,
-      notificationsData,
       currentUser
     }
   }
