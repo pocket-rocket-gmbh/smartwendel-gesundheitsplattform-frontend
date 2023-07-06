@@ -442,12 +442,11 @@
               </div>
             </div>
             <AdminCareFacilitiesAddLocations
-              v-if="slotProps.item.id"
               :item-id="slotProps.item.id"
+              :offline-name="slotProps.item.name"
+              :offline-locations="slotProps.item.offlineLocations"
+              @offline="handleLocationsAddOffline"
             />
-            <span v-if="!slotProps.item.id"
-              >Bitte erstellen Sie erst die Einrichtung</span
-            >
           </div>
 
           <v-divider
@@ -839,6 +838,13 @@ const setOfflineImage = (image: any) => {
     value: image,
   });
 };
+
+const handleLocationsAddOffline = (newOfflineLocations: {latitude: number, longitude:number}[]) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "offlineLocations",
+    value: newOfflineLocations,
+  });
+}
 
 const status = ref([
   { name: "In Prüfung", id: "is_checked" },
