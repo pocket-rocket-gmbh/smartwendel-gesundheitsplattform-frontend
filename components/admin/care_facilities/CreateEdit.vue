@@ -7,7 +7,7 @@
         </v-col>
       </v-row>
     </div> -->
-    <v-card-text class="mb-15">
+    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length">
       <v-row>
         <v-col cols="12" md="10" offset="1">
           <!-- facility / news / event -->
@@ -300,7 +300,7 @@
               />
             </div>
             <div class="field my-5" v-if="slotProps.item.billable_through_health_insurance">
-              <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="insurance"/>
+              <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="insurance" :offline-documents="slotProps.item.offlineDocuments" @offline="handleDocumentsOffline"/>
             </div>
           </div>
           <v-divider
@@ -430,12 +430,11 @@
               </div>
             </div>
             <AdminCareFacilitiesAddLocations
-              v-if="slotProps.item.id"
               :item-id="slotProps.item.id"
+              :offline-name="slotProps.item.name"
+              :offline-locations="slotProps.item.offlineLocations"
+              @offline="handleLocationsAddOffline"
             />
-            <span v-if="!slotProps.item.id"
-              >Bitte erstellen Sie erst die Einrichtung</span
-            >
           </div>
 
           <v-divider
@@ -512,7 +511,7 @@
                 }}</span>
               </v-tooltip>
             </div>
-            <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="documents"/>
+            <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="documents" :offline-documents="slotProps.item.offlineDocuments" @offline="handleDocumentsOffline"/>
           </div>
         </v-col>
       </v-row>
@@ -525,8 +524,11 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { rules } from "../../../data/validationRules";
 import { de } from 'date-fns/locale';
+import { CreateEditFacility } from "types/facilities";
 
 const user = useUser();
+
+const log = console.log
 
 const textOptions = ref({
   debug: false,
@@ -808,6 +810,20 @@ const setOfflineImage = (image: any) => {
     value: image,
   });
 };
+
+const handleLocationsAddOffline = (newOfflineLocations: {latitude: number, longitude:number}[]) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "offlineLocations",
+    value: newOfflineLocations,
+  });
+}
+
+const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offlineDocuments"]) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "offlineDocuments",
+    value: newOfflineDocuments,
+  });
+}
 
 const status = ref([
   { name: "In Prüfung", id: "is_checked" },

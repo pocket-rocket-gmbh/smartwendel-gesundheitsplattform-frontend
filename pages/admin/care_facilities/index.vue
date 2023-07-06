@@ -47,7 +47,6 @@
       endpoint="care_facilities"
       term="diese Einrichtung"
     />
-
   </div>
 </template>
 
@@ -60,7 +59,7 @@ const user = useUser();
 const loading = ref(false);
 
 const fields = [
-  { text: "Name", value: "name", type: "string" }, 
+  { text: "Name", value: "name", type: "string" },
   { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
 const dataTableRef = ref();
@@ -75,7 +74,9 @@ const itemPlaceholder = ref({
   description: "",
   category_ids: [],
   tag_category_ids: [],
-  offlineImage: null
+  offlineImage: null,
+  offlineLocations: [],
+  offlineDocuments: [],
 });
 
 const createEditDialogOpen = ref(false);
