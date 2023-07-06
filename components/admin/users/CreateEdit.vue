@@ -26,6 +26,14 @@
         </div>
         <div class="field">
           <v-text-field
+            v-model="item.phone"
+            label="Telefonnummer"
+            :error-messages="useErrors().checkAndMapErrors('phone', errors)"
+            hide-details="auto"
+          />
+        </div>
+        <div class="field">
+          <v-text-field
             v-model="item.email"
             label="E-Mail"
             :error-messages="useErrors().checkAndMapErrors('email', errors)"

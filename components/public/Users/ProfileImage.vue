@@ -22,7 +22,7 @@
       @close="imgUrl = null; image = {}"
       @crop="setImage"
     />
-    <div v-else-if="presetImage" >
+    <div v-else-if="presetImage">
       <img
         :src="presetImage"
         class="is-rounded profile-img"
@@ -30,11 +30,13 @@
         border
       />
       <div>
-        <v-btn 
-          class="button is-red is-rounded ma-3"
+        <v-btn
+          elevation="0"
+          color="red"
+          variant="outlined"
           @click="purgeImage()"
-          >
-          Bild löschen
+            >
+            Bild löschen
         </v-btn>
       </div>
     </div>

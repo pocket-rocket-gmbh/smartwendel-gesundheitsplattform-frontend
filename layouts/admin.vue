@@ -55,6 +55,14 @@
         </v-list-item>
         <v-list-item
           link
+          to="/admin/user_profile"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
+        >
+        <span>Mein Profil</span>
+        </v-list-item>
+        <v-list-item
+          link
           to="/admin/tooltips"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')"

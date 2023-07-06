@@ -83,9 +83,7 @@ const fields = [
     value: "kind",
     type: "enum",
     enum_name: "facilitiesKind",
-  },
-  { text: "Beginn", value: "course_start", type: "datetime" },
-  { text: "Ende", value: "course_end", type: "datetime" },
+  }
 ];
 
 const dataTableRef = ref();

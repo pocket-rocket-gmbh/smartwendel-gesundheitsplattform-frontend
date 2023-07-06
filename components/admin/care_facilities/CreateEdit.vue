@@ -209,8 +209,7 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="date" v-if="slotProps.item.kind === 'course'">
+          <div class="field" id="date" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
             <div class="my-2">
               <span
                 class="text-h5 mr-2 font-weight-bold"
@@ -267,40 +266,6 @@
               </v-row>
             </div>
           </div>
-
-          <div class="field" id="date" v-if="slotProps.item.kind === 'event'">
-            <div class="my-2">
-              <span
-                class="text-h5 mr-2 font-weight-bold"
-                v-if="fields[slotProps.item.kind]"
-                >{{ fields[slotProps.item.kind]["date"].label }}</span
-              >
-            </div>
-            <div class="mb-15 justify-center">
-              <v-row>
-                <v-col cols="12" md="6">
-                  {{ slotProps.item.event_dates }}
-                  <Datepicker
-                    inline
-                    locale="de"
-                    v-model="slotProps.item.event_dates"
-                    label="Start"
-                  />
-                </v-col>
-                <v-col cols="12" md="6">
-                  <Datepicker
-                    inline
-                    autoApply
-                    :enableTimePicker="false"
-                    locale="de"
-                    v-model="slotProps.item.course_end"
-                    label="End"
-                  />
-                </v-col>
-              </v-row>
-            </div>
-          </div>
-
           <v-divider
             class="my-10"
             v-if="
@@ -337,30 +302,14 @@
               />
             </div>
             <div class="field my-5" v-if="slotProps.item.billable_through_health_insurance">
-              <v-text-field
-                v-model="slotProps.item.health_insurance_name"
-                hide-details="auto"
-                label="Falls ja, Name der gesetzlichen Krankenkasse"
-              />
+              <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="insurance"/>
             </div>
           </div>
           <v-divider
             class="my-10"
             v-if="slotProps.item.kind === 'course'"
           ></v-divider>
-          <!-- 
-          <div class="field" id="7" v-if="slotProps.item.kind === 'course'">
-            <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{ fields[slotProps.item.kind]["certificate"].label }}</span>
-              <v-tooltip location="top">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
-                </template>
-                <span v-if="fields[slotProps.item.kind]">{{ fields[slotProps.item.kind]["certificate"].tooltip }}</span>
-              </v-tooltip>
-            </div>
-          </div> -->
-
+    
           <div class="field" id="8" v-if="slotProps.item.kind === 'facility'" :class="[changed || editInformations? 'has-bg-light-red pa-5' : '']">
             <span v-if="changed">
                 <v-alert type="warning" density="compact" class="mt-2">Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben werden</v-alert>
@@ -585,7 +534,7 @@
                 }}</span>
               </v-tooltip>
             </div>
-            <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" />
+            <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="documents"/>
           </div>
 
           <v-divider
@@ -776,40 +725,33 @@ const fields = {
     },
     "6": {
       label:
-        "6. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+        "5. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
       tooltip: "uhu",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "7. Ordne Deiner Einrichtung passende Filter zu *",
+      label: "6. Ordne Deiner Einrichtung passende Filter zu *",
       tooltip:
         "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
       description: "Leistung",
       index: 7,
     },
     date: {
-      label: "5. Gib das Kursdatum, sowie die Uhrzeit an *",
+      label: "7. Gib das Kursdatum, sowie die Uhrzeit an *",
       tooltip: "uhu",
       description: "Kontaktdaten",
       index: 8,
     },
     insurance: {
       label:
-        "6. Wichtig: Handelt es sich bei Deinem Kurs um einen von der gesetzlichen Krankenkasse geförderten Kurs?",
+        "8. Handelt es sich um einen von GKV geförderten Präventionskurs? Falls ja, lade bitte das Zertifikat der ZPP (Zentrale Prüfstelle Prävention) hoch",
       tooltip: "uhu",
       description: "Kontaktdaten",
       index: 8,
     },
-    certificate: {
-      label:
-        "7. Wichtig: Handelt es sich bei Deinem Kurs um einen qualitätsgeprüften, zertifizierten Kurs? Zur Prüfstelle -> zentrale-pruefstelle-praevention.de",
-      tooltip: "uhu",
-      description: "Standorte",
-      index: 9,
-    },
     "12": {
-      label: "7. Lade Dokumente hoch",
+      label: "9. Lade Dokumente hoch",
       tooltip: "uhu",
       description: "Öffnungszeiten",
       index: 10,
@@ -843,13 +785,13 @@ const fields = {
     },
     "6": {
       label:
-        "6. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+        "5. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
       tooltip: "uhu",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "7. Ordne Deiner Einrichtung passende Filter zu *",
+      label: "6. Ordne Deiner Einrichtung passende Filter zu *",
       tooltip:
         "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
       description: "Leistung",
