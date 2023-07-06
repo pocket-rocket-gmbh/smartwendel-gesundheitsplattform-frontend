@@ -7,7 +7,7 @@
         </v-col>
       </v-row>
     </div> -->
-    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length">
+    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col cols="12" md="10" offset="1">
           <!-- facility / news / event -->

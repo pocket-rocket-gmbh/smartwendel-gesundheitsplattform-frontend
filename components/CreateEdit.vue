@@ -211,7 +211,7 @@ onMounted(() => {
     getItem();
   }
   if (props.itemPlaceholder && !item.value.id) {
-    item.value = props.itemPlaceholder;
+    item.value = {...props.itemPlaceholder};
   }
 
   document.addEventListener("keyup", function (e) {
@@ -227,6 +227,8 @@ onMounted(() => {
 const emitClose = () => {
   const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
+    console.log(props.itemPlaceholder)
+    item.value = props.itemPlaceholder
     emit("close");
   }
 };
