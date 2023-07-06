@@ -3,7 +3,7 @@
     <div>
       <PublicSearchTheBasicSearchBox
         title="Anbietersuche"
-        sub-title="Wählen Sie ihre Wunscheinrichtung"
+        sub-title="Deine Wunscheinrichtung auswählen"
         :map-controls="true"
         :show-map="showMap"
         @toggle-map="mapToogle"

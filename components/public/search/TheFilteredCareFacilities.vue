@@ -74,7 +74,7 @@
     </template>
   </div>
   <div v-else-if="!filterStore.loading">
-    <div class="item">Leider keine Ergebnisse. Bitte passen Sie Ihre Suche an.</div>
+    <div class="item">Leider keine Ergebnisse. Bitte Suche anpassen.</div>
   </div>
 </template>
 

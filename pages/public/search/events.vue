@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox title="Kurse & Veranstaltungen" sub-title="Wählen sie ihren Wunschkurs" />
+      <PublicSearchTheBasicSearchBox title="Kurse & Veranstaltungen" sub-title="Deine Wunschkurs auswählen" />
       <v-container class="container limited padding">
         <v-row class="mt-1">
           <v-col md="4" lg="3" class="mt-4">

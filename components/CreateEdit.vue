@@ -10,8 +10,8 @@
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <v-form ref="form">
         <v-card-title class="text-h5 has-bg-primary py-5 text-white">
-          <span v-if="itemId">{{ conceptName }} bearbeiten</span>
-          <span v-else>{{ conceptName }} erstellen</span>
+            <span v-if="itemId">{{ conceptName }} bearbeiten</span>
+            <span v-else>{{ conceptName }} erstellen</span>        
         </v-card-title>
 
         <slot :item="item" :errors="errors"></slot>
@@ -160,7 +160,6 @@ const create = async () => {
 
       await Promise.all(facilityLocationCreationPromises);
     }
-
     if (item.value.offlineDocuments && item.value.offlineDocuments.length) {
       createUpdateApi.setEndpoint(`care_facilities/${facilityId}/documents`);
 
@@ -212,7 +211,7 @@ onMounted(() => {
     getItem();
   }
   if (props.itemPlaceholder && !item.value.id) {
-    item.value = props.itemPlaceholder;
+    item.value = {...props.itemPlaceholder};
   }
 
   document.addEventListener("keyup", function (e) {
@@ -228,6 +227,8 @@ onMounted(() => {
 const emitClose = () => {
   const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
+    console.log(props.itemPlaceholder)
+    item.value = props.itemPlaceholder
     emit("close");
   }
 };

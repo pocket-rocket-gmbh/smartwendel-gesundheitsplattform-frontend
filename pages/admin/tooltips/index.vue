@@ -23,7 +23,7 @@
       @close="itemId = null; confirmDeleteDialogOpen = false; dataTableRef?.resetActiveItems()"
       :item-id="itemId"
       endpoint="tooltips"
-      term="diesen tooltip"
+      term="diesen Tooltip"
       @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
     />
   </div>

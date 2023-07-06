@@ -4,7 +4,7 @@
     <div class="field split">
       <v-file-input
         :disabled="
-          tagName === 'insurance' && item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
+          tagName === 'insurance' && (itemId ? (item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1) :  offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         class="mt-5"
         variant="underlined"
@@ -15,7 +15,7 @@
       />
       <v-text-field
         :disabled="
-          tagName === 'insurance' && item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
+        tagName === 'insurance' && (itemId ? (item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1) :  offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         variant="underlined"
         hide-details="auto"
@@ -43,7 +43,9 @@
     >
       Hinzufügen
     </v-btn>
+    <div class="text-caption">* Maximal 5 MB, PDF erlaubt</div>
     <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
+
     <v-list class="mt-5" v-if="tagName === 'insurance'">
       <template v-if="itemId">
         <v-list-item
@@ -90,7 +92,6 @@
             >
             </v-btn>
           </template>
-          <p>{{ document.documentname }}</p>
           <v-divider></v-divider>
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteOfflineFile('insurance', index)"></v-btn>
@@ -144,7 +145,6 @@
             >
             </v-btn>
           </template>
-          <p>{{ document.documentname }}</p>
           <v-divider></v-divider>
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteOfflineFile('documents', index)"></v-btn>
@@ -256,7 +256,7 @@ const save = async () => {
   }
 
   emit("offline", [
-    ...props.offlineDocuments,
+    ...(props.offlineDocuments || []), 
     {
       document: fileUrl.value,
       documentname: filename.value,
@@ -318,8 +318,6 @@ const handleMount = () => {
     getCareFacility();
     return;
   }
-
-  console.log("We offline");
 };
 
 watch(

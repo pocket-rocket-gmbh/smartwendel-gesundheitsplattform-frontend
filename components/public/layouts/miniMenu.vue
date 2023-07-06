@@ -30,10 +30,6 @@
             <v-icon class="mr-2">mdi-cog</v-icon>
             Admin-Bereich
           </v-list-item>
-          <v-list-item class="is-clicable" v-if="currentUser" @click="closeMenuAndRouteTo(`/public/users/${currentUser.id}`)">
-            <v-icon class="mr-2">mdi-account</v-icon>
-            Konto verwalten
-          </v-list-item>
           <v-list-item class="is-clicable" @click="closeMenuAndRouteTo(`/terms_of_use`)">
             <v-icon class="mr-2">mdi-note-check-outline</v-icon>
             Nutzungsbedingungen

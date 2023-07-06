@@ -9,7 +9,7 @@
         itemId = null;
         createEditDialogOpen = true;
       "
-      >Newsartikel anlegen</v-btn
+      >Beitrag anlegen</v-btn
     >
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Vervollständige die Daten deiner Einrichtung um Kurse, Ereignisse und Beiträge zu erstellen

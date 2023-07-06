@@ -8,8 +8,7 @@
       </div>
       <v-list-item>
         <v-list-item-title class="text-h6 my-3">
-          Gesundheits- und <br />
-          Pflegeplattform
+          Gesundheitsplattform
         </v-list-item-title>
         <v-list-item-subtitle> Smart Wendeler Land </v-list-item-subtitle>
       </v-list-item>

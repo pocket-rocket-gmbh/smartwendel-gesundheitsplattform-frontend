@@ -7,23 +7,19 @@
         </v-col>
       </v-row>
     </div> -->
-    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length">
+    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col cols="12" md="10" offset="1">
           <!-- facility / news / event -->
           <div class="py-10">
             <div v-if="slotProps.item.kind === 'facility'">
               <span class="text-h6"
-                >Hier kannst du eine eigene Detailseite für Deine Einrichtung
-                anlegen. Bitte füllen dazu wenn möglich alle Felder sorgfältig
-                aus. Pflichtfelder sind mit einem Sternchen versehen.</span
+                >Hier kannst du eine eigene Detailseite für deine Einrichtung anlegen. Bitte fülle dazu, wenn möglich, alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.</span
               >
             </div>
             <div v-if="slotProps.item.kind === 'news'">
               <span class="text-h6"
-                >Hier können Sie News oder Beiträge anlegen. Bitte füllen Sie
-                alle Felder sorgfältig aus. Pflichtfelder sind mit einem
-                Sternchen versehen.</span
+                >Hier kannst du News oder Beiträge anlegen. Bitte fülle alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.</span
               >
             </div>
             <div v-if="slotProps.item.kind === 'course'">
@@ -41,7 +37,7 @@
               >
             </div>
           </div>
-          <div class="field" v-if="!user.isAdmin()">
+          <div class="field" v-if="user.isAdmin()">
             <div class="mt-1 mb-15">
               <b>Status</b>
               <v-select
@@ -111,16 +107,6 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["3"].label }}</span
               >
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span v-if="fields[slotProps.item.kind]">{{
-                  fields[slotProps.item.kind]["3"].tooltip
-                }}</span>
-              </v-tooltip>
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
@@ -190,7 +176,7 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["7"].label }}</span
               >
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top" width="300px" v-if="slotProps.item.kind === 'facility'">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
                     >mdi-information-outline</v-icon
@@ -217,9 +203,9 @@
                 >{{ fields[slotProps.item.kind]["date"].label }}</span
               >
             </div>
-            <div class="mb-15 justify-center">
+            <div class="mb-15">
               <v-row>
-                <v-col cols="12" md="6">
+                <v-col md="4" class="d-flex align-center justify-center">
                   <Datepicker
                     inline
                     multi-dates
@@ -240,29 +226,41 @@
                     :clearable="false"
                     />
                 </v-col>
-                <v-list class="mt-5">
-                  <v-list-item
-                    v-for="(date, index) in slotProps.item.event_dates"
-                    :key="index"
-                  >
-                    <template v-slot:prepend>
-                      <v-btn
-                        class="mx-3"
-                        size="large"
-                        color="primary"
-                        target="_blank"
-                        density="compact"
-                        icon="mdi-calendar-outline"
+                <v-col>
+                  <v-table density="compact" fixed-header height="400px">
+                    <thead>
+                      <tr>
+                        <th class="text-left">
+                          
+                        </th>
+                        <th class="text-left">
+                          Datum
+                        </th>
+                        <th class="text-left">
+                          Löschen
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                      v-for="(date, index) in slotProps.item.event_dates"
+                      :key="index"
                       >
-                      </v-btn>
-                    </template>
-                    <p>{{  date }}</p>
-                    <v-divider></v-divider>
-                    <template v-slot:append>
-                      <v-btn icon="mdi-delete" variant="text" @click="deleteDate(index, slotProps.item.event_dates)"></v-btn>
-                    </template>
-                  </v-list-item>
-                </v-list>
+                      <td> <v-btn
+                          class="mx-3"
+                          size="large"
+                          color="primary"
+                          target="_blank"
+                          density="compact"
+                          icon="mdi-calendar-outline"
+                        >
+                        </v-btn></td>
+                        <td>{{ date }}</td>
+                        <td><v-btn icon="mdi-delete" variant="text" @click="deleteDate(index, slotProps.item.event_dates)"></v-btn></td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
               </v-row>
             </div>
           </div>
@@ -320,21 +318,11 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["8"].label }}</span
               >
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span v-if="fields[slotProps.item.kind]">{{
-                  fields[slotProps.item.kind]["8"].tooltip
-                }}</span>
-              </v-tooltip>
               <span v-if="editInformations">
                 <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
               </span>
               <span v-else>
-                <v-btn size="small" @click="confirmEditDialogOpen = true"> Kontaktdaten ändern </v-btn>
+                <v-btn size="small" @click="confirmEditDialogOpen = true"> Adresse ändern </v-btn>
               </span>
             </div>
 
@@ -488,16 +476,6 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["11"].label }}</span
               >
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span v-if="fields[slotProps.item.kind]">{{
-                  fields[slotProps.item.kind]["11"].tooltip
-                }}</span>
-              </v-tooltip>
             </div>
             <v-text-field
               type="url"
@@ -535,11 +513,6 @@
             </div>
             <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="documents" :offline-documents="slotProps.item.offlineDocuments" @offline="handleDocumentsOffline"/>
           </div>
-
-          <v-divider
-            class="my-10 mb-15"
-           
-          ></v-divider>
         </v-col>
       </v-row>
     </v-card-text>
@@ -578,19 +551,18 @@ const deleteDate = (index:number, dates:string []) => {
 
 const editInformations = ref(false);
 const confirmEditDialogOpen = ref(false);
- 
 
 
 const fields = {
   facility: {
     "1": {
-      label: "1. Hinterlege den Namen Deiner Einrichtung *",
+      label: "1. Hinterlege den Namen deiner Einrichtung *",
       tooltip: "uhu",
       description: "Name",
       index: 1,
     },
     "2": {
-      label: "2. Lade Dein Logo hoch *",
+      label: "2. Lade dein Logo hoch *",
       tooltip: "uhu",
       description: "Logo",
       index: 2,
@@ -598,7 +570,7 @@ const fields = {
     "3": {
       label: "3. Lade ein Coverbild hoch *",
       tooltip:
-        "Das Coverbild ziert den Header-Bereich Ihrer Detail-Seite und gibt dem Besucher einen ersten Einblick auf Ihre Einrichtung. Mit den weiteren Einrichtungsbildern, die man im nächsten Schritt hochladen kann, erstellen Sie eine Galerie, die dem Besucher weitere Einblicke in Ihre Einrichtung geben. ",
+        "Das Coverbild ziert den Header-Bereich Ihrer Detail-Seite und gibt dem Besucher einen ersten Einblick auf deine Einrichtung. Mit den weiteren Einrichtungsbildern, die man im nächsten Schritt hochladen kann, erstellst du eine Galerie, die dem Besucher weitere Einblicke in Ihre Einrichtung geben. ",
       description: "Foto",
       index: 3,
     },
@@ -609,105 +581,104 @@ const fields = {
       index: 4,
     },
     "5": {
-      label: "5. Beschreiben ausführlich Deine Einrichtung *",
+      label: "5. Beschreiben ausführlich deine Einrichtung *",
       tooltip: "uhu",
       description: "Beschreibung",
       index: 5,
-      placeholder: "Nutze dieses Feld, um Deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc."
+      placeholder: "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc."
     },
     "6": {
       label:
-        "6. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+        "6. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte zu *",
       tooltip: "uhu",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "7. Ordne Deiner Einrichtung passende Filter zu *",
+      label: "7. Ordne deiner Einrichtung passende Filter zu *",
       tooltip:
-        "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
+        "Anhand der ausgewählten Filter beschreibst du deine Einrichtung genauer. Deine Leistungen und dein Alleinstellungsmerkmal hilft den Benutzern, dich und deine Einrichtung in der Anbietersuche schneller zu finden. Sollte deine Leistung nicht aufgeführt sein, darfst du Liste gerne erweitern.",
       description: "Leistung",
       index: 7,
     },
     "8": {
-      label: "8. Deine Kontaktdaten*",
+      label: "8. Deine Adresse *",
       tooltip: "Ihr Adresse wir auf der Karte in der Anbietersuche angezeigt",
       description: "Kontaktdaten",
       index: 8,
     },
     "9": {
       label:
-        "9. Falls Deine Einrichtung mehrere Standorte hat, füge diese hier hinzu",
+        "9. Falls deine Einrichtung mehrere Standorte hat, füge diese hier hinzu",
       tooltip: "uhu",
       description: "Standorte",
       index: 9,
     },
     "10": {
-      label: "10. Trage Deine Öffnungszeiten ein",
+      label: "10. Trage deine Öffnungszeiten ein",
       tooltip: "uhu",
       description: "Öffnungszeiten",
       index: 10,
     },
     "11": {
       label:
-        "11. Hinterlege den Link zu Deiner Webseite oder einer Social-Media Plattform",
+        "11. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
       tooltip:
-        "Falls Sie keine eigene Webseite besitzen, überspringen Sie diesen Schritt.",
+        "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
       description: "Webseite",
       index: 11,
     },
     "12": {
       label: "12. Lade Dokumente hoch",
       tooltip:
-        "Die gesammelten Dokumente (Berichte, Ratgeber, etc.) werden den Benutzern auf Ihrer Einrichtungs-Seite zum Download angeboten. Sie können lediglich PDF-Dokumente zur Verfügung stellen.",
+        "Die gesammelten Dokumente (Berichte, Ratgeber, etc.) werden den Benutzern auf deiner Einrichtungs-Seite zum Download angeboten. Es können lediglich PDF-Dokumente zur Verfügung gestellt werden.",
       description: "Dokumente",
       index: 12,
     },
   },
   news: {
     "1": {
-      label: "1. Geben Sie Ihrem Beitrag einen Titel *",
+      label: "1. Beitrags-Titel *",
       tooltip: "uhu",
       description: "Name",
       index: 1,
     },
     "3": {
-      label: "2.  Laden Sie ein Beitragsbild hoch *",
+      label: "2. Lade Bilder für eine Galerie hoch *",
       tooltip: "uhujhjhhjhuhuhuhuh",
       description: "Foto",
       index: 3,
     },
     "5": {
-      label: "3. Geben Sie hier den Inhalt Ihres Beitrages ein *",
+      label: "3. Gib hier den Inhalt deines Beitrags an *",
       tooltip: "uhu",
       description: "Beschreibung",
       index: 5,
-      placeholder: "Inhalt des Beitrages"
+      placeholder: "Inhalt des Beitrags"
     },
     "6": {
       label:
-        "6. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+        "4. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
       tooltip: "uhu",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "7. Ordne Deiner Einrichtung passende Filter zu *",
-      tooltip:
-        "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
+      label: "5. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
+      tooltip:"",
       description: "Leistung",
       index: 7,
     },
   },
   course: {
     "1": {
-      label: "1. Gib Deinem Kurs einen Namen *",
+      label: "1. Gib deinem Kurs einen Namen *",
       tooltip: "uhu",
       description: "Name",
       index: 1,
     },
     "3": {
-      label: "2.  Lade ein Titelbild hoch *",
+      label: "2. Lade ein Coverbild hoch *",
       tooltip: "uhujhjhhjhuhuhuhuh",
       description: "Foto",
       index: 3,
@@ -727,20 +698,19 @@ const fields = {
     },
     "6": {
       label:
-        "5. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+        "5. Weise deinen Kurs / Veranstaltung gezielt einem Berufszweig / einer Sparte zu ",
       tooltip: "uhu",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "6. Ordne Deiner Einrichtung passende Filter zu *",
-      tooltip:
-        "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
+      label: "6. Ordne deinem Kurs / Veranstaltung passende Filter zu, um die Leistungen gezielter zu beschreiben *",
+      tooltip: "",
       description: "Leistung",
       index: 7,
     },
     date: {
-      label: "7. Gib das Kursdatum, sowie die Uhrzeit an *",
+      label: "7. Gib das Kursdatum, sowie die Uhrzeit an. Findet dein Kurs öfter statt, kannst du mehrere Termine auswählen und diese auch wieder löschen *",
       tooltip: "uhu",
       description: "Kontaktdaten",
       index: 8,
@@ -753,7 +723,7 @@ const fields = {
       index: 8,
     },
     "12": {
-      label: "9. Lade Dokumente hoch",
+      label: "9. Hier hast du die Möglichkeit, weitere Dokumente (z.B. Kursplan) zu deinem Kurs/Veranstaltung hochzuladen",
       tooltip: "uhu",
       description: "Öffnungszeiten",
       index: 10,
@@ -794,8 +764,7 @@ const fields = {
     },
     "7": {
       label: "6. Ordne Deiner Einrichtung passende Filter zu *",
-      tooltip:
-        "Anhand der ausgewählten Punkte beschreiben Sie Ihre Einrichtung genauer. Ihre Leistungen und Ihr Alleinstellungsmerkmal hilft den Besuchern, Sie in den Suchen besser aufzufinden.",
+      tooltip: "",
       description: "Leistung",
       index: 7,
     },
