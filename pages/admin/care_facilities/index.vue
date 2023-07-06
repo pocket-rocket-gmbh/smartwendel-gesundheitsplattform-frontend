@@ -75,7 +75,8 @@ const itemPlaceholder = ref({
   description: "",
   category_ids: [],
   tag_category_ids: [],
-  offlineImage: null
+  offlineImage: null,
+  offlineLocations: []
 });
 
 const createEditDialogOpen = ref(false);
