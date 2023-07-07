@@ -13,7 +13,18 @@
         <v-list-item-subtitle> Smart Wendeler Land </v-list-item-subtitle>
       </v-list-item>
       <v-divider></v-divider>
-
+      <div v-if="!user.currentUser.is_active_on_health_scope" class="d-flex align-center">
+        <v-alert type="warning" density="compact">Du bist zur Zeit in Prüfung und nicht freigegeben.
+          <v-tooltip location="top" width="200">
+            <template v-slot:activator="{ props }">
+              <v-icon class="is-clickable" v-bind="props"
+                >mdi-information-outline</v-icon
+              >
+            </template>
+            <span> Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner Einrichtung. Nach erfolgreichem Abschluss wirst du freigeschaltet. Du kannst weiterhin deine Inhalte pflegen. </span>
+          </v-tooltip>
+        </v-alert>
+      </div>
       <v-list dense nav>
         <v-list-item :to="appStore.dashboardBackLink || '/'" @click.prevent="routeBack">
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website

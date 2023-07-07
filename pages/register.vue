@@ -1,7 +1,7 @@
 <template>
-  <v-row class="mt-6">
+  <v-row class="my-15">
     <v-col sm="3" md="4" offset-sm="4">
-      <v-card  :class="['pa-6', {'shake' : animated}]">
+      <v-card elevation="10" :class="['pa-6', {'shake' : animated}]">
         <img class="is-fullwidth" src="~/assets/images/logo.png" />
         <div v-if="!registerSuccessful" class="mt-3">
           <div class="field">
@@ -32,7 +32,8 @@
             />
           </div>
           <div class="field">
-            <v-text-field v-model="phone"
+            <v-text-field 
+              v-model="phone"
               type="number"
               label="Telefonnummer *"
               hide-details="auto"
@@ -40,13 +41,46 @@
             />
           </div>
           <div class="field">
-            <v-text-field v-model="email"
+            <v-text-field 
+              v-model="email"
               type="email"
               label="E-Mail Adresse *"
               hide-details="auto"
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
+            <div class="field">
+              <v-select
+                hide-details="auto"
+                v-model="careFacilityCommunityId"
+                :items="communities"
+                item-title="name"
+                item-value="id"
+                label="Gemeinde"
+                :rules="[rules.required]"
+              />
+            </div>
+            <div class="field split">
+              <v-text-field
+                v-model="careFacilityZip"
+                hide-details="auto"
+                label="PLZ"
+                :type="'number'"
+                :rules="[rules.required, rules.zip]"
+                :error-messages="
+                  useErrors().checkAndMapErrors('zip', errors)
+                "
+              />
+              <v-select
+                hide-details="auto"
+                v-model="careFacilityTown"
+                :items="getTownsByCommunityId(careFacilityCommunityId)"
+                item-title="name"
+                item-value="name"
+                label="Ort"
+                :rules="[rules.required]"
+              />
+            </div>
           <v-checkbox v-model="privacyAccepted">
             <template v-slot:label>
               <div>
@@ -95,10 +129,14 @@
 
 <script lang="ts" setup>
 import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
+import { rules } from "../data/validationRules";
 import axios from 'axios'
 
 const careFacilityName = ref('')
 const email = ref('')
+const careFacilityZip = ref('')
+const careFacilityTown = ref('')
+const careFacilityCommunityId = ref('')
 const firstname = ref('')
 const lastname = ref('')
 const phone = ref('')
@@ -123,10 +161,13 @@ const register = async () => {
   const data = {
     email: email.value,
     firstname: firstname.value,
-    lastname: lastname.value,
+    lastname: phone.value,
     phone: lastname.value,
+    commercial_register_number: " ",
     care_facility_name: careFacilityName.value,
-    commercial_register_number: " "
+    care_facility_zip: careFacilityZip.value,
+    care_facility_town: careFacilityTown.value,
+    care_facility_community_id: careFacilityCommunityId.value
   }
 
   const {data: result} = await axios.post<ServerCallResult>("/api/register_with_facility", {data});
@@ -146,7 +187,29 @@ const register = async () => {
   }
 }
 
+  const communitiesApi = useCollectionApi();
+  communitiesApi.setBaseApi(usePublicApi());
+  communitiesApi.setEndpoint(`communities`);
+  const communities = communitiesApi.items;
+
+  const getCommunities = async () => {
+    await communitiesApi.retrieveCollection();
+  };
+
+  const getTownsByCommunityId = (communityId: string) => {
+    const found = communities.value.find(
+      (community: any) => community.id === communityId
+    );
+     if (found) {
+      careFacilityZip.value = found.zip;
+    return found.towns;
+  } else {
+    [];
+  }
+};
+
 onMounted(() => {
+  getCommunities();
   const rememberedEmail = localStorage.getItem('health_platform._remembered_email')
   if (rememberedEmail) {
     setTimeout(() => {

@@ -28,7 +28,6 @@ export function useEnums() {
   const userRole = [
     { value: 'facility_owner', name: 'Einrichtung', class: '' },
     { value: 'admin', name: 'Adminitrsator', class: '' },
-    { value: 'user', name: 'Benutzer', class: '' },
   ]
 
   type EnumValue = {
