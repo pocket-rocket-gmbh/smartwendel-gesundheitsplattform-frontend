@@ -1,4 +1,5 @@
 import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
+import { useSnackbar } from "~/composables/ui/snackbar";
 
 export function useCollectionApi() {
 
