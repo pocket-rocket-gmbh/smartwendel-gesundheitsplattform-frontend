@@ -2,7 +2,7 @@
   <div>
     <h2>Mein Profil</h2>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Vervollständige die Daten deiner Einrichtung um Kurse, Ereignisse und Beiträge zu erstellen 
+      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
     </v-alert>
     <h2 class="mt-5">Bitte vervollständige deine Daten und ändere dein Passwort:</h2>
     <div class="box my-15">
@@ -14,9 +14,17 @@
               v-model="item.firstname"
               label="Vorname"
             />
+            <v-text-field
+              v-model="item.lastname"
+              label="Nachname"
+            />
             <v-text-field 
               v-model="item.phone"
               label="Telefonnummer*"
+            />
+            <v-text-field
+              v-model="item.email"
+              label="E-Mail *"
             />
             <h3 class="mb-4">Profilbild</h3>
             <PublicUsersProfileImage
@@ -34,15 +42,7 @@
               Persönliche Daten Speichern
             </v-btn>
           </v-col>
-          <v-col>
-            <v-text-field
-              v-model="item.lastname"
-              label="Nachname"
-            />
-            <v-text-field
-              v-model="item.email"
-              label="E-Mail *"
-            />
+          <v-col>    
           </v-col>
         </v-row>
         <v-divider class="my-5"></v-divider>
@@ -67,6 +67,21 @@
           </v-col>
         </v-row>
         <v-divider class="my-5"></v-divider>
+        <div class="d-flex">
+          <v-btn elevation="0" class="mr-5" variant="outlined" color="primary" @click="goToFacility('care_facilities')">
+            Zu meiner Einrichtung
+          </v-btn>
+          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
+            Zu meinen Kursen
+          </v-btn>
+          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
+            Zu meinen Veranstaltungen
+          </v-btn>
+          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('news_articles')">
+              Zu meinen Beiträgen
+          </v-btn>
+        </div>
+<!--         <v-divider class="my-5"></v-divider>
         <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
           <h3 class="mb-4">Deine Einrichtungen:</h3>
           <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'facility')" :key="facilities.id">
@@ -79,7 +94,7 @@
                   {{ facilities.name }}
                 </div>
               </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility(facilities.id)">
+              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('care_facilities')">
                 Zur Einrichtung
               </v-btn>
             </v-row>
@@ -98,7 +113,7 @@
                   {{ facilities.name }}
                 </div>
               </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility(facilities.id)">
+              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('courses_events')">
                 Zum Kurs
               </v-btn>
             </v-row>
@@ -117,7 +132,7 @@
                   {{ facilities.name }}
                 </div>
               </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility(facilities.id)">
+              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('courses_events')">
                 Zum Veranstaltung
               </v-btn>
             </v-row>
@@ -136,12 +151,12 @@
                   {{ facilities.name }}
                 </div>
               </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility(facilities.id)">
+              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('news_articles')">
                 Zum Beitrag
               </v-btn>
             </v-row>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -157,14 +172,15 @@ const loading = ref(false);
 const router = useRouter();
 const setupFinished = ref(false);
 
-const goToFacility = (id:string) => {
-  router.push({ path: `/public/care_facilities/${id}` })
+const goToFacility = (page:string) => {
+  router.push({ path: `/admin/${page}` })
 }
 
-const currentUser = ref(useUserStore().currentUser.id)
+const currentUser = useUserStore().currentUser
 const item = ref({
   firstname: '',
   lastname: '',
+  email:'',
   phone: '',
   file: '',
   image_url: null
@@ -188,11 +204,12 @@ const setImage = (image:any) => {
 }
 
 const saveUserData = async () => {
-  api.setEndpoint(`users/${currentUser.value}`)
+  api.setEndpoint(`users/${currentUser.id}`)
   const data = {
     firstname: item.value.firstname,
     lastname: item.value.lastname,
     phone: item.value.phone,
+    email: item.value.email,
     file: item.value.file,
     image_url: item.value.image_url
   }

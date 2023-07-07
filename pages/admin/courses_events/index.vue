@@ -26,7 +26,7 @@
       >
     </template>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Vervollständige die Daten deiner Einrichtung um Kurse, Ereignisse und Beiträge zu erstellen
+      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
     </v-alert>
 
     <DataTable
@@ -77,6 +77,7 @@ const loading = ref(false);
 const fields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
+  { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
   {
     text: "Art (Kurs oder Veranstaltung)",
     endpoint: "care_facilities",

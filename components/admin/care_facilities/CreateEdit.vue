@@ -1,15 +1,15 @@
 <template>
   <CreateEdit v-slot="slotProps" @hasChanged="changed = true" size="100wh">
-    <!--     <div class="mt-10 mx-5 menu-boxes">
-      <v-row>
-        <v-col class="d-flex align-center justify-center select-box mx-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
-          <div class="is-clickable" @click="goToField(item.index)">{{ item.description }}</div>
-        </v-col>
-      </v-row>
-    </div> -->
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
-        <v-col cols="12" md="10" offset="1">
+        <v-col md="2">
+          <div class="mt-10 mx-5 menu-boxes">
+            <div class="d-flex align-center my-3 justify-center select-box mx-1 pa-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
+              <div class="is-clickable" @click="goToField(item.index)">{{ item.description }}</div>
+            </div>
+          </div> 
+        </v-col>
+        <v-col md="10">
           <!-- facility / news / event -->
           <div class="py-10">
             <div v-if="slotProps.item.kind === 'facility'">
@@ -35,20 +35,6 @@
                 wenn möglich alle Felder sorgfältig aus. Pflichtfelder sind mit
                 einem Sternchen versehen.</span
               >
-            </div>
-          </div>
-          <div class="field" v-if="user.isAdmin()">
-            <div class="mt-1 mb-15">
-              <b>Status</b>
-              <v-select
-                hide-details="auto"
-                v-model="slotProps.item.status"
-                :items="status"
-                item-title="name"
-                item-value="id"
-                label="Status"
-                single-line
-              />
             </div>
           </div>
           <div class="field" id="1">
@@ -307,9 +293,8 @@
             class="my-10"
             v-if="slotProps.item.kind === 'course'"
           ></v-divider>
-    
-          <div class="field" id="8" v-if="slotProps.item.kind === 'facility'" :class="[changed || editInformations? 'has-bg-light-red pa-5' : '']">
-            <span v-if="changed">
+          <div class="field" id="8" v-if="slotProps.item.kind === 'facility'" :class="[changed && setupFinished || editInformations? 'has-bg-light-red pa-5' : '']">
+            <span v-if="changed && setupFinished">
                 <v-alert type="warning" density="compact" class="mt-2">Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben werden</v-alert>
               </span>
             <div class="my-2 d-flex align-center">
@@ -318,12 +303,14 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["8"].label }}</span
               >
-              <span v-if="editInformations">
+              <div v-if="setupFinished && !useUser().isAdmin()">
+                <span v-if="editInformations">
                 <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
               </span>
               <span v-else>
                 <v-btn size="small" @click="confirmEditDialogOpen = true"> Adresse ändern </v-btn>
               </span>
+              </div>
             </div>
 
               <EditItem
@@ -335,7 +322,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.phone"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Telefonnummer"
                 :rules="[rules.required]"
@@ -348,7 +335,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.email"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="E-Mail"
                 :rules="[rules.required, rules.email]"
@@ -360,7 +347,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.street"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Straße und Nummer"
                 :rules="[rules.required, rules.counterStreet]"
@@ -372,7 +359,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.additional_address_info"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Adresszusatz"
               />
@@ -381,7 +368,7 @@
               <v-select
                 hide-details="auto"
                 v-model="slotProps.item.community_id"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="communities"
                 item-title="name"
                 item-value="id"
@@ -392,7 +379,7 @@
             <div class="field split">
               <v-text-field
                 v-model="slotProps.item.zip"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="PLZ"
                 :type="'number'"
@@ -404,7 +391,7 @@
               <v-select
                 hide-details="auto"
                 v-model="slotProps.item.town"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
@@ -527,8 +514,6 @@ import { de } from 'date-fns/locale';
 import { CreateEditFacility } from "types/facilities";
 
 const user = useUser();
-
-const log = console.log
 
 const textOptions = ref({
   debug: false,
@@ -846,6 +831,7 @@ const goToField = (n: Number) => {
   }
 };
 
+const setupFinished = ref(false);
 
 const communitiesApi = useCollectionApi();
 communitiesApi.setBaseApi(usePrivateApi());
@@ -872,7 +858,8 @@ const getTownsByCommunityId = (communityId: string) => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  setupFinished.value = await useUser().setupFinished();
   getCommunities();
 });
 </script>
@@ -888,12 +875,13 @@ onMounted(() => {
 .select-box
   border: black solid 1px
   border-radius: 10px
-  background: $mid-grey
+  background: $light-grey
+  
 
 .menu-boxes
   position: sticky
   z-index: 9999
-  top: 20px
+  top: 30px
 
 </style>
 <style lang="css">
