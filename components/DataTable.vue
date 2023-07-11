@@ -85,6 +85,20 @@
           </div>
           <span v-else-if="field.type === 'array'">{{ item[field.value].join(", ") }}</span>
           <span v-else-if="field.type === 'pathIntoObject'">{{ pathInto(item, field.value) }}</span>
+          <span v-else-if="field.type === 'facilities'">
+            <div v-if="Array.isArray(item[field.value])">
+              <div v-for="facility in item[field.value]">
+                <v-row>
+                  <v-col>
+                    <v-chip class="mx-2 mt-2" color="grey" v-if="facility.kind === 'facility'">
+                      <v-icon v-if="facility.kind === 'facility'" class="mr-2">mdi-home-city-outline</v-icon>
+                        {{ facility.name }}
+                    </v-chip>
+                  </v-col>
+                </v-row>
+              </div>
+            </div>
+          </span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item.id, null)">mdi-pencil</v-icon></td>
@@ -125,7 +139,6 @@ const showDropdown = (id) => {
 
 const setStatus = (id) => {
   showingDropdown.value = null;
-  console.log(id);
 };
 
 const ItemStatus = ref([

@@ -220,7 +220,6 @@ const handleCreateNewService = async (parentId: string, name: string) => {
   const result = await api.createItem({ name, parent_id: parentId }, `Erfolgreich erstellt`);
 
   if (result.status === ResultStatus.SUCCESSFUL) {
-    console.log("SUCCESS");
     newServiceName.value = "";
     await reloadFilters();
     emit("setTags", [...props.preSetTags, result.data.resource.id]);

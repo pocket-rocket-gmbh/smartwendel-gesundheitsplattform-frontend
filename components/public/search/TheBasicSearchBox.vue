@@ -1,11 +1,7 @@
 <template>
   <div class="basic-search-box mt-6">
     <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
-      <v-row>
-        <v-col>
-          <div class="title">{{ title }}</div>
-        </v-col>
-      </v-row>
+      
       <v-row>
         <v-col>
           <h2 class="is-uppercase text-white">{{ subTitle }}</h2>

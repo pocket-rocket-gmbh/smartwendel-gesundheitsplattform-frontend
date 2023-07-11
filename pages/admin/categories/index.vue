@@ -264,7 +264,6 @@ const handleEdit = async (itemIds: string[], layer: number, name: string, descri
   );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
-    console.log("SUCCESS");
     getItems();
   } else {
     console.error("error");
@@ -283,13 +282,9 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, desc
 
   const result = await api.createItem({ name, description, scope: "care_facility", tags: [] }, `Erfolgreich erstellt`);
 
-  if (result.status === ResultStatus.SUCCESSFUL) {
-    console.log("SUCCESS");
+  if (result.status === ResultStatus.SUCCESSFUL) 
     getItems();
-  } else {
-    console.error("ERROR");
   }
-};
 
 const handleDelete = async (itemIds: string[], layer: number) => {
   openDeleteDialog(itemIds[0]);

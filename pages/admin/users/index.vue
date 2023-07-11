@@ -37,6 +37,7 @@ const fields = ref([
   { text: 'Vorname', value: 'firstname', type: 'string' },
   { text: 'Nachname', value: 'lastname', type: 'string' },
   { text: 'E-Mail', value: 'email', type: 'string' },
+  { text: 'Einrichtung',endpoint: 'users',  value: 'care_facilities', type: "facilities" },
   { text: 'Rolle', endpoint: 'users', type: 'enumDropdown', value: 'role', enum_name: 'userRole', condition: "admin" },
   { text: 'Zuletzt gesehen', value: 'last_seen', type: 'datetime' },
   { text: '', value: 'mdi-email-outline', type: 'icon', emit: 'mailUser', tooltip: 'E-Mail an Benutzer' },

@@ -12,6 +12,7 @@
       <v-card-text>
         <div class="field">
           <v-text-field
+            disabled
             v-model="item.firstname" 
             label="Vorname"
             hide-details="auto"
@@ -19,6 +20,7 @@
         </div>
         <div class="field">
           <v-text-field
+            disabled
             v-model="item.lastname"
             label="Nachname"
             hide-details="auto"
@@ -26,6 +28,7 @@
         </div>
         <div class="field">
           <v-text-field
+            disabled
             v-model="item.phone"
             label="Telefonnummer"
             :error-messages="useErrors().checkAndMapErrors('phone', errors)"
@@ -34,6 +37,7 @@
         </div>
         <div class="field">
           <v-text-field
+            disabled
             v-model="item.email"
             label="E-Mail"
             :error-messages="useErrors().checkAndMapErrors('email', errors)"

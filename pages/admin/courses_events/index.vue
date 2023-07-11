@@ -1,7 +1,10 @@
 <template>
   <div>
-    <h2>Kurse und Veranstaltungen</h2>
-
+    <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
+    <h2 v-else>Kurse und Veranstaltungen</h2>
+    <v-alert type="info" density="compact" closable class="my-2"
+      >Legen Sie hier Ihre Veranstaltung oder Ihren Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
+    >
     <template v-if="setupFinished">
       <v-btn
         elevation="0"
@@ -26,7 +29,7 @@
       >
     </template>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Vervollständige die Daten deiner Einrichtung um Kurse, Ereignisse und Beiträge zu erstellen
+      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
     </v-alert>
 
     <DataTable
@@ -77,6 +80,7 @@ const loading = ref(false);
 const fields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
+  { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
   {
     text: "Art (Kurs oder Veranstaltung)",
     endpoint: "care_facilities",

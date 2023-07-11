@@ -66,7 +66,6 @@ const emit = defineEmits<{
 watch(
   () => props.modelValue,
   () => {
-    console.log(props.modelValue);
     if (!props.modelValue.length) {
       selectedFilter.value = null;
     }

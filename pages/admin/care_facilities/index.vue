@@ -1,9 +1,10 @@
 <template>
   <div>
-    <h2>Einrichtungen</h2>
+    <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
+    <h2 v-else>Einrichtungen</h2>
 
     <v-btn
-      v-if="user.isAdmin() || (!itemsExist && setupFinished)"
+      v-if="user.isAdmin() || (!itemsExist || !setupFinished)"
       elevation="0"
       variant="outlined"
       @click="
@@ -13,7 +14,7 @@
       >Neue Einrichtung</v-btn
     >
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Vervollständige die Daten deiner Einrichtung um Kurse, Ereignisse und Beiträge zu erstellen
+      Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
 
     <DataTable
@@ -59,6 +60,7 @@ const user = useUser();
 const loading = ref(false);
 
 const fields = [
+  { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
   { text: "Name", value: "name", type: "string" },
   { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];

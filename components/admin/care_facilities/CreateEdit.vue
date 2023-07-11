@@ -1,15 +1,15 @@
 <template>
   <CreateEdit v-slot="slotProps" @hasChanged="changed = true" size="100wh">
-    <!--     <div class="mt-10 mx-5 menu-boxes">
-      <v-row>
-        <v-col class="d-flex align-center justify-center select-box mx-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
-          <div class="is-clickable" @click="goToField(item.index)">{{ item.description }}</div>
-        </v-col>
-      </v-row>
-    </div> -->
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
-        <v-col cols="12" md="10" offset="1">
+        <v-col md="2">
+          <div class="mt-10 mx-5 menu-boxes">
+            <div class="d-flex align-center my-3 justify-center select-box mx-1 pa-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
+              <div class="is-clickable" @click="goToField(item.index)">{{ item.description }}</div>
+            </div>
+          </div> 
+        </v-col>
+        <v-col md="10">
           <!-- facility / news / event -->
           <div class="py-10">
             <div v-if="slotProps.item.kind === 'facility'">
@@ -37,20 +37,6 @@
               >
             </div>
           </div>
-          <div class="field" v-if="user.isAdmin()">
-            <div class="mt-1 mb-15">
-              <b>Status</b>
-              <v-select
-                hide-details="auto"
-                v-model="slotProps.item.status"
-                :items="status"
-                item-title="name"
-                item-value="id"
-                label="Status"
-                single-line
-              />
-            </div>
-          </div>
           <div class="field" id="1">
             <div class="my-2">
               <span
@@ -64,6 +50,7 @@
               v-model="slotProps.item.name"
               hide-details="auto"
               label="Überschrift"
+              :rules="[rules.required]"
               :error-messages="
                 useErrors().checkAndMapErrors('name', slotProps.errors)
               "
@@ -195,7 +182,7 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="date" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
+          <div class="field" id="8" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
             <div class="my-2">
               <span
                 class="text-h5 mr-2 font-weight-bold"
@@ -207,6 +194,7 @@
               <v-row>
                 <v-col md="4" class="d-flex align-center justify-center">
                   <Datepicker
+                    v-if="slotProps.item.kind === 'course'"
                     inline
                     multi-dates
                     preview-format="dd.MM.yyyy HH:mm"
@@ -225,14 +213,31 @@
                     input-class-name="dp-custom-input"
                     :clearable="false"
                     />
+                  <Datepicker
+                    v-if="slotProps.item.kind === 'event'"
+                    inline
+                    preview-format="dd.MM.yyyy HH:mm"
+                    format="dd.MM.yyyy HH:mm"
+                    model-type="dd.MM.yyyy HH:mm"
+                    :format-locale="de"
+                    timezone="Europe/Brussels"
+                    locale="de-DE"
+                    v-model="slotProps.item.event_dates"
+                    label="Start"
+                    :highlight-week-days="[0, 6]"
+                    :min-date="new Date()"
+                    prevent-min-max-navigation
+                    cancelText="Abbrechen"
+                    selectText="Hinzufügen"
+                    input-class-name="dp-custom-input"
+                    :clearable="false"
+                  />
                 </v-col>
                 <v-col>
-                  <v-table density="compact" fixed-header height="400px">
+                  <v-table density="compact" fixed-header height="400px" v-if="slotProps.item.kind === 'course'">
                     <thead>
-                      <tr>
-                        <th class="text-left">
-                          
-                        </th>
+                      <tr >
+                        <th></th>
                         <th class="text-left">
                           Datum
                         </th>
@@ -260,6 +265,20 @@
                       </tr>
                     </tbody>
                   </v-table>
+                  <v-table density="compact" fixed-header height="400px" v-if="slotProps.item.kind === 'event'">
+                    <thead>
+                      <tr>
+                        <th class="text-left">
+                          Datum
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{ slotProps.item.event_dates }}</td>
+                      </tr>
+                    </tbody>
+                  </v-table>
                 </v-col>
               </v-row>
             </div>
@@ -272,7 +291,7 @@
             "
           ></v-divider>
 
-          <div class="field" id="7" v-if="slotProps.item.kind === 'course'">
+          <div class="field" id="9" v-if="slotProps.item.kind === 'course'">
             <div class="my-2 d-flex align-center">
               <span
                 class="text-h5 font-weight-bold mr-3"
@@ -307,9 +326,8 @@
             class="my-10"
             v-if="slotProps.item.kind === 'course'"
           ></v-divider>
-    
-          <div class="field" id="8" v-if="slotProps.item.kind === 'facility'" :class="[changed || editInformations? 'has-bg-light-red pa-5' : '']">
-            <span v-if="changed">
+          <div class="field" id="8" v-if="slotProps.item.kind === 'facility'" :class="[changed && setupFinished || editInformations? 'has-bg-light-red pa-5' : '']">
+            <span v-if="changed && setupFinished">
                 <v-alert type="warning" density="compact" class="mt-2">Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben werden</v-alert>
               </span>
             <div class="my-2 d-flex align-center">
@@ -318,12 +336,14 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["8"].label }}</span
               >
-              <span v-if="editInformations">
+              <div v-if="setupFinished && !useUser().isAdmin()">
+                <span v-if="editInformations">
                 <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
               </span>
               <span v-else>
                 <v-btn size="small" @click="confirmEditDialogOpen = true"> Adresse ändern </v-btn>
               </span>
+              </div>
             </div>
 
               <EditItem
@@ -335,7 +355,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.phone"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Telefonnummer"
                 :rules="[rules.required]"
@@ -348,7 +368,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.email"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="E-Mail"
                 :rules="[rules.required, rules.email]"
@@ -360,7 +380,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.street"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Straße und Nummer"
                 :rules="[rules.required, rules.counterStreet]"
@@ -372,7 +392,7 @@
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.additional_address_info"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Adresszusatz"
               />
@@ -381,7 +401,7 @@
               <v-select
                 hide-details="auto"
                 v-model="slotProps.item.community_id"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="communities"
                 item-title="name"
                 item-value="id"
@@ -392,7 +412,7 @@
             <div class="field split">
               <v-text-field
                 v-model="slotProps.item.zip"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="PLZ"
                 :type="'number'"
@@ -404,7 +424,7 @@
               <v-select
                 hide-details="auto"
                 v-model="slotProps.item.town"
-                :disabled="!useUser().isAdmin() && !editInformations"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
@@ -449,6 +469,24 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["10"].label }}</span
               >
+          <!-- <div v-for="day in daysOfWeek" class="d-flex align-center">
+                <v-row>
+                  <v-col class="d-flex align-center" md="2">
+                    <span class="pr-3">{{ day }}</span>
+                  </v-col>
+                  <v-col>   
+                    <div class="field">
+                      <v-text-field
+                        v-model="slotProps.item.opening_hours"
+                        :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                        hide-details="auto"
+                        type="time"
+                        label="uhu"
+                      />
+                    </div>
+                  </v-col>
+                </v-row>
+              </div> -->
               <v-textarea
                 rows="4"
                 hide-details="auto"
@@ -528,13 +566,12 @@ import { CreateEditFacility } from "types/facilities";
 
 const user = useUser();
 
-const log = console.log
-
 const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
   toolbar: "essential",
+  required: true,
 });
 
 const changed = ref(false)
@@ -551,19 +588,29 @@ const deleteDate = (index:number, dates:string []) => {
 
 const editInformations = ref(false);
 const confirmEditDialogOpen = ref(false);
-
-
+/* 
+const daysOfWeek = [
+  "Montag",
+  "Dienstag",
+  "Mittwoch",
+  "Donnerstag",
+  "Freitag",
+  "Samstag",
+  "Sonntag",
+];
+ */
 const fields = {
   facility: {
     "1": {
       label: "1. Hinterlege den Namen deiner Einrichtung *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Name",
       index: 1,
+      changed: false
     },
     "2": {
       label: "2. Lade dein Logo hoch *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Logo",
       index: 2,
     },
@@ -576,13 +623,13 @@ const fields = {
     },
     "4": {
       label: "4. Lade Bilder für eine Galerie hoch",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Galerie Fotos",
       index: 4,
     },
     "5": {
       label: "5. Beschreiben ausführlich deine Einrichtung *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Beschreibung",
       index: 5,
       placeholder: "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc."
@@ -590,7 +637,7 @@ const fields = {
     "6": {
       label:
         "6. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte zu *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Berufszweig",
       index: 6,
     },
@@ -610,13 +657,13 @@ const fields = {
     "9": {
       label:
         "9. Falls deine Einrichtung mehrere Standorte hat, füge diese hier hinzu",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Standorte",
       index: 9,
     },
     "10": {
       label: "10. Trage deine Öffnungszeiten ein",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Öffnungszeiten",
       index: 10,
     },
@@ -639,19 +686,19 @@ const fields = {
   news: {
     "1": {
       label: "1. Beitrags-Titel *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Name",
       index: 1,
     },
     "3": {
       label: "2. Lade Bilder für eine Galerie hoch *",
-      tooltip: "uhujhjhhjhuhuhuhuh",
+      tooltip: "",
       description: "Foto",
       index: 3,
     },
     "5": {
       label: "3. Gib hier den Inhalt deines Beitrags an *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Beschreibung",
       index: 5,
       placeholder: "Inhalt des Beitrags"
@@ -659,13 +706,13 @@ const fields = {
     "6": {
       label:
         "4. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
       label: "5. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
-      tooltip:"",
+      tooltip: "",
       description: "Leistung",
       index: 7,
     },
@@ -673,25 +720,25 @@ const fields = {
   course: {
     "1": {
       label: "1. Gib deinem Kurs einen Namen *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Name",
       index: 1,
     },
     "3": {
       label: "2. Lade ein Coverbild hoch *",
-      tooltip: "uhujhjhhjhuhuhuhuh",
+      tooltip: "",
       description: "Foto",
       index: 3,
     },
     "4": {
       label: "3. Lade weitere Bilder für eine Galerie hoch",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Galerie Fotos",
       index: 4,
     },
     "5": {
       label: "4. Gib hier eine Kursbeschreibung an *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Beschreibung",
       index: 5,
       placeholder: "Beschreibung des Kurses"
@@ -699,7 +746,7 @@ const fields = {
     "6": {
       label:
         "5. Weise deinen Kurs / Veranstaltung gezielt einem Berufszweig / einer Sparte zu ",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Berufszweig",
       index: 6,
     },
@@ -711,46 +758,46 @@ const fields = {
     },
     date: {
       label: "7. Gib das Kursdatum, sowie die Uhrzeit an. Findet dein Kurs öfter statt, kannst du mehrere Termine auswählen und diese auch wieder löschen *",
-      tooltip: "uhu",
-      description: "Kontaktdaten",
+      tooltip: "",
+      description: "Kursdatum",
       index: 8,
     },
     insurance: {
       label:
         "8. Handelt es sich um einen von GKV geförderten Präventionskurs? Falls ja, lade bitte das Zertifikat der ZPP (Zentrale Prüfstelle Prävention) hoch",
-      tooltip: "uhu",
-      description: "Kontaktdaten",
-      index: 8,
+      tooltip: "",
+      description: "Zertifikat",
+      index: 9,
     },
     "12": {
       label: "9. Hier hast du die Möglichkeit, weitere Dokumente (z.B. Kursplan) zu deinem Kurs/Veranstaltung hochzuladen",
-      tooltip: "uhu",
-      description: "Öffnungszeiten",
-      index: 10,
+      tooltip: "",
+      description: "Dokumente",
+      index: 12,
     },
   },
   event: {
     "1": {
       label: "1. Gib Deiner Veranstaltungen einen Namen *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Name",
       index: 1,
     },
     "3": {
       label: "2.  Lade ein Titelbild hoch *",
-      tooltip: "uhujhjhhjhuhuhuhuh",
+      tooltip: "",
       description: "Foto",
       index: 3,
     },
     "4": {
       label: "3. Lade weitere Bilder für eine Galerie hoch",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Galerie Fotos",
       index: 4,
     },
     "5": {
       label: "4. Gib hier eine Veranstaltungsbeschreibung an *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Beschreibung",
       index: 5,
       placeholder: "Beschreibung der Veranstaltung"
@@ -758,7 +805,7 @@ const fields = {
     "6": {
       label:
         "5. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
-      tooltip: "uhu",
+      tooltip: "",
       description: "Berufszweig",
       index: 6,
     },
@@ -770,15 +817,15 @@ const fields = {
     },
     date: {
       label: "7. Gib das Veranstaltungsdatum, sowie die Uhrzeit an *",
-      tooltip: "uhu",
-      description: "Kontaktdaten",
+      tooltip: "",
+      description: "Kursdatum",
       index: 8,
     },
     "12": {
       label: "8. Lade Dokumente hoch",
-      tooltip: "uhu",
-      description: "Öffnungszeiten",
-      index: 10,
+      tooltip: "",
+      description: "Dokumente",
+      index: 12,
     },
   },
 };
@@ -846,6 +893,7 @@ const goToField = (n: Number) => {
   }
 };
 
+const setupFinished = ref(false);
 
 const communitiesApi = useCollectionApi();
 communitiesApi.setBaseApi(usePrivateApi());
@@ -872,7 +920,8 @@ const getTownsByCommunityId = (communityId: string) => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  setupFinished.value = await useUser().setupFinished();
   getCommunities();
 });
 </script>
@@ -888,12 +937,13 @@ onMounted(() => {
 .select-box
   border: black solid 1px
   border-radius: 10px
-  background: $mid-grey
+  background: $light-grey
+  
 
 .menu-boxes
   position: sticky
   z-index: 9999
-  top: 20px
+  top: 30px
 
 </style>
 <style lang="css">

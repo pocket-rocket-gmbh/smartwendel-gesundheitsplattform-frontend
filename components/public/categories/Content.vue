@@ -1,7 +1,7 @@
 <template>
   <PublicCategoriesSubCategories
     v-for="subCategory in subCategories"
-    :key="subCategory.id"
+    :key="subCategory?.id"
     :sub-category="subCategory"
     :category-id="categoryId"
   />

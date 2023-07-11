@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <div class="has-bg-grey pa-15">
-      <div class="has-bg-grey py-5" v-if="!useUser().loggedIn()">
+      <div class="has-bg-grey py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
         <v-row class="align-center">
           <v-col md="8" class="flex-column justify-start text-h3 is-dark-grey font-weight-bold">
             <div>Deine Angebot fehlt?</div>
@@ -19,7 +19,7 @@
           </v-col>
         </v-row>      
       </div>
-    <v-divider v-if="!useUser().loggedIn()" class="py-5" thickness="2"></v-divider>
+    <v-divider v-if="!useUser().loggedIn() && currentRoute !== '/register'" class="py-5" thickness="2"></v-divider>
     <div class="">
       <v-row class="align-center">
         <v-col md="8">
@@ -101,8 +101,13 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-
+const route = useRoute()
 const display = ref(useDisplay())
+
+const currentRoute = computed(() => {
+  return route.path as string
+})
+
 
 </script>
 

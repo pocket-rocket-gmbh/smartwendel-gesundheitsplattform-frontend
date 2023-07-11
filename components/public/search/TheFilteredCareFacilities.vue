@@ -59,14 +59,16 @@
           </v-col>
           <v-col align="right">
             <v-btn
-              variant="outlined"
-              size="large"
-              rounded="pill"
+              variant="flat"
               color="primary"
+              rounded="pill"
+              size="large"
               :href="`/public/care_facilities/${careFacility.id}`"
               target="_blank"
-            >
-              Details ansehen
+              >
+              <span>
+                Details ansehen
+              </span>
             </v-btn>
           </v-col>
         </v-row>
