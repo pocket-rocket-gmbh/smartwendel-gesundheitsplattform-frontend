@@ -3,7 +3,7 @@
     <div class="curtain" />
     <div class="img-galery">
       <img class="close is-clickable" src="~/assets/icons/icon-times.svg" height="20"  @click="emitClose()" />
-      <v-carousel hide-delimiters progress="red" show-arrows="hover">
+      <v-carousel hide-delimiters progress="primary" show-arrows="hover">
         <v-carousel-item
           v-for="(image, index) in careFacility.sanitized_images"
           :key="index"
