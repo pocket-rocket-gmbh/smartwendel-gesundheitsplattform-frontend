@@ -48,7 +48,6 @@
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
-
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import newsIcon from "~/assets/icons/facilityTypes/news.svg";
 import eventsIcon from "~/assets/icons/facilityTypes/events.svg";
@@ -70,6 +69,7 @@ const routeToResults = (result?: Facility) => {
     router.push({ path: "/public/search" });
     return;
   }
+  console.log(result.id)
 
   if (result.kind === "facility") {
     return router.push({ path: `/public/care_facilities/${result.id}` });
@@ -78,7 +78,7 @@ const routeToResults = (result?: Facility) => {
     return router.push({ path: `/public/care_facilities/${result.id}` });
   }
   if (result.kind === "news") {
-    return router.push({ path: `/public/news/${result.id}` });
+    return router.push({ path: `/public/care_facilities/${result.id}` });
   }
 
   router.push({ path: "/public/search" });
