@@ -213,21 +213,11 @@ onMounted(() => {
   if (props.itemPlaceholder && !item.value.id) {
     item.value = {...props.itemPlaceholder};
   }
-
-  document.addEventListener("keyup", function (e) {
-    if (e.key === "Escape") {
-      const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
-      if (confirmed) {
-        emit("close");
-      }
-    }
-  });
 });
 
 const emitClose = () => {
   const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
-    console.log(props.itemPlaceholder)
     item.value = props.itemPlaceholder
     emit("close");
   }
@@ -260,12 +250,4 @@ watch(
     }
   }
 );
-
-/*  watch(() => item.value.phone, (newValue) => {
-     if(newValue) {
-      console.log(newValue)
-      emit('hasChanged');
-     }
-    }
-  ); */
 </script>

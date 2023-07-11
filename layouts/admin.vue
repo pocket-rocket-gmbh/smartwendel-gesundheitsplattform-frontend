@@ -115,7 +115,6 @@ const adminStore = useAdminStore();
 const setupFinished = ref(false);
 
 const handleLogout = () => {
-  console.log("Handle logout");
   user.logout();
 };
 

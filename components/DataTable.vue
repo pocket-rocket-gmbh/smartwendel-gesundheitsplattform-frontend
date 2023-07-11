@@ -139,7 +139,6 @@ const showDropdown = (id) => {
 
 const setStatus = (id) => {
   showingDropdown.value = null;
-  console.log(id);
 };
 
 const ItemStatus = ref([

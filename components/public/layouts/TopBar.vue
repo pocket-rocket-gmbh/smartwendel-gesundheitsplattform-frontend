@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10">
+    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10"> 
       <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" width="200" />
@@ -39,6 +39,7 @@
           <a href="/public/search/facilities" class="is-clickable mx-5">
               Anbieter
           </a>
+          
           <a href="/public/search/events" class="is-clickable mx-5">
               Kurse
           </a>
@@ -49,13 +50,13 @@
         </div>
       </v-app-bar-title>
       <div class="align-center d-none d-sm-flex">
-        <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn()">
-        <v-row class="mx-1 text-center">
-          <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
-            <div class="font-weight-bold">Dein Angebot fehlt?</div>
-            <div class="font-weight-light">Registriere dich!</div>
-          </v-col>
-        </v-row>
+        <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
+          <v-row class="mx-1 text-center">
+            <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
+              <div class="font-weight-bold">Dein Angebot fehlt?</div>
+              <div class="font-weight-light">Registriere dich!</div>
+            </v-col>
+          </v-row>
         </div>
           <div>
             <v-btn
@@ -180,6 +181,7 @@ export default defineComponent({
     const drawer = ref(false)
     const menu = ref(false)
     const appStore = useAppStore();
+    const route = useRoute()
 
     const categoriesApi = useCollectionApi()
     categoriesApi.setBaseApi(usePublicApi())
@@ -204,6 +206,10 @@ export default defineComponent({
         router.push({ path: '/' })
       }
     }
+
+    const currentRoute = computed(() => {
+      return route.path as string
+    })
 
     const goToRegister = () => {
       router.push({ path: '/register' })
@@ -266,7 +272,8 @@ export default defineComponent({
       sub_categoryId,
       goToRegister,
       saveCurrentUrlAndRoute,
-      subCategories
+      subCategories,
+      currentRoute
     }
   }
 })

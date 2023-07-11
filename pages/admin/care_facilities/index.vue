@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2>Einrichtungen</h2>
+    <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
+    <h2 v-else>Einrichtungen</h2>
 
     <v-btn
       v-if="user.isAdmin() || (!itemsExist || !setupFinished)"

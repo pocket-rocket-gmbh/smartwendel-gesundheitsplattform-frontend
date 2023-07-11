@@ -61,7 +61,6 @@ export default defineComponent({
     onMounted(() => {
       getCareFacility()
     })
-console.log(careFacility)
     return {
       careFacility,
       goBack

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2>Beiträge</h2>
+    <h2 v-if="useUser().isFacilityOwner()">Meine Beiträge</h2>
+    <h2 v-else>Beiträge</h2>
     <v-btn
       v-if="setupFinished"
       elevation="0"

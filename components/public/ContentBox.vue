@@ -9,7 +9,7 @@
         {{ item.name }}
       </div>
       <div class="description break-text" v-html="item.description"></div>
-      <div class="action">
+      <div class="action" v-if="buttonHref">
         <a :href="buttonHref" :target="item.url ? '_blank' : ''">Weiterlesen &gt;</a>
       </div>
     </div>
