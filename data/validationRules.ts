@@ -9,4 +9,5 @@ export const rules = {
     return pattern.test(value) || "Ungültige E-Mail-Adresse";
   },
   length: (value: string) => !value || value.length < 300 || "Die Beschreibung darf höchstens 300 Zeichen lang sein.",
+  fileRequired: (v: File) => (v && v.size > 0) || "File is required",
 };
