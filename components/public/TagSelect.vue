@@ -119,4 +119,3 @@ onMounted(() => {
   getTags();
 });
 </script>
-~/store/SearchFilter

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!filterSelected" class="error">Bitte mindestens ein Filter auswählen</div>
+    <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable>Bitte mindestens einen Filter auswählen</v-alert>
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
     Filter werden geladen ...
   </LoadingSpinner>

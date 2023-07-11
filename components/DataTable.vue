@@ -112,6 +112,8 @@
 import { useEnums } from "@/composables/data/enums";
 import { useAdminStore } from "~/store/admin";
 
+const router = useRouter();
+
 const props = withDefaults(
   defineProps<{
     fields: any[];
@@ -130,32 +132,16 @@ const props = withDefaults(
 const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded"]);
 
 const loading = ref(false);
-const showingDropdown = ref(null);
-
-const showDropdown = (id) => {
-  const itemId = id;
-  showingDropdown.value = itemId;
-};
-
-const setStatus = (id) => {
-  showingDropdown.value = null;
-};
-
-const ItemStatus = ref([
-  { name: "In Prüfung", id: "is_checked" },
-  { name: "Freigegeben", id: "confirmed" },
-  { name: "Abgelehnt", id: "rejected" },
-]);
 
 const resetActiveItems = () => {
   activeItems.value = null;
 };
 
-const emitopenDeleteDialog = (itemId) => {
+const emitopenDeleteDialog = (itemId:any) => {
   emit("openDeleteDialog", itemId);
 };
 const activeItems = ref(null);
-const handleEmitParent = (item, field, menu_order) => {
+const handleEmitParent = (item:any, field:any, menu_order:any) => {
   activeItems.value = item;
   if (field.type === "move_up") {
     move(item, items.value[(menu_order -= 1)]);
@@ -166,7 +152,7 @@ const handleEmitParent = (item, field, menu_order) => {
   }
 };
 
-const emitParent = (itemId, fieldEmit) => {
+const emitParent = (itemId:any, fieldEmit:any) => {
   if (!fieldEmit) {
     emit("openCreateEditDialog", itemId);
   } else {
@@ -174,7 +160,7 @@ const emitParent = (itemId, fieldEmit) => {
   }
 };
 
-const move = async (entry, nextEntry) => {
+const move = async (entry:any, nextEntry:any) => {
   let endpoint = props.overwriteMoveEndpoint;
   if (!props.overwriteMoveEndpoint) {
     endpoint = props.endpoint;
