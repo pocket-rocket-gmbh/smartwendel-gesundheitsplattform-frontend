@@ -67,7 +67,7 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
         latitude: parseFloat(facility.latitude),
         draggable: false,
         name: facility.name,
-        url: `care_facilities/${facility.id}`,
+        url: `${window.location.origin}/public/care_facilities/${facility.id}`,
         imageUrl: facility.logo_url,
         kind: facility.kind,
       });
@@ -80,7 +80,7 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
         latitude: parseFloat(location.latitude),
         draggable: false,
         name: facility.name,
-        url: `care_facilities/${facility.id}`,
+        url: `${window.location.origin}/public/care_facilities/${facility.id}`,
         imageUrl: facility.logo_url,
         kind: facility.kind,
       });
