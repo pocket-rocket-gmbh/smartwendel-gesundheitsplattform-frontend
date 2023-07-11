@@ -1,14 +1,15 @@
 <template>
-  <div class="mx-15 my-10" v-if="subSubCategories?.length > 0">
+  <div class="mx-15 my-10 mt-15" v-if="subSubCategories?.length > 0">
+    <v-divider class="my-5"></v-divider>
     <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')" >
       <v-col cols="12" md="8" class="d-flex is-dark-grey justify-center">
         <div>
-          <h2 class="is-uppercase my-5">{{ subCategory?.name }}</h2>
+          <h2 class="is-uppercase mt-15">{{ subCategory?.name }}</h2>
           <span class="my-5" v-html="subCategory?.description"></span>
         </div>
       </v-col>
     </v-row>
-    <div class="articles">
+    <div class="articles mt-15">
       <PublicContentBox
         class="limited-width"
         v-for="subSubCategory in subSubCategories" :key="subSubCategory.id"
@@ -78,7 +79,8 @@ const getSubSubCategories = async () => {
 .articles
   display: flex
   flex-wrap: wrap
+  columns: 2
 
   .limited-width
-      width: 48%
+    width: 47%
 </style>

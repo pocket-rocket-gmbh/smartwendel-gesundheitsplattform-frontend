@@ -39,7 +39,6 @@ export function useDatetime() {
   }
 
   const parseDateAndTime = (item:any) => {
-    console.log(item)
     const datetime = DateTime.fromISO(item, { locale: 'de-DE' });
     return datetime.toFormat('dd.MM.yyyy HH:mm');
   };
