@@ -90,7 +90,7 @@
       </div>
       <v-divider class="my-5"></v-divider>
       <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
-        <h3 class="mb-4 mx-5">Deine Veranstaltungen:</h3>
+        <h3 class="mb-4 mx-5">Veranstaltungen:</h3>
         <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'event')" :key="facilities.id" class="mx-10">
           <v-row class="d-flex align-center">
             <v-col class="d-flex my-5 has-bg-light-grey">
