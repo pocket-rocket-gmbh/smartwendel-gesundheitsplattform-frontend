@@ -1,4 +1,5 @@
 <template>
+  <div v-if="!filterSelected" class="error">Bitte mindestens ein Filter auswählen</div>
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
     Filter werden geladen ...
   </LoadingSpinner>
@@ -77,7 +78,20 @@ type Filter = { id: string; name: string; next?: Filter[] };
 const selectedFilter = ref<Filter>();
 const availableFilters = ref<Filter[]>([]);
 
-const allFilters = ref<Filter[]>([]);
+const flatFilterArray = (filterArray: Filter[]) => {
+  if (!filterArray) return [];
+  const flat: Filter[] = filterArray.reduce((prev, curr) => {
+    const next = curr.next ? flatFilterArray(curr.next) : [];
+    return [...prev, ...next] as Filter[];
+  }, [] as Filter[]);
+  return [...flat, ...filterArray];
+};
+
+const filterSelected = computed(() => {
+  const flat = flatFilterArray(availableFilters.value);
+  const filterOfCategoryIsSet = flat.some((item) => !!props.preSetTags.find((tag) => tag === item.id));
+  return filterOfCategoryIsSet;
+});
 
 const mainFilters = ref([]);
 const expandId = ref("");
@@ -178,6 +192,8 @@ const handleSubFilterClick = async (parent: Filter, current: Filter) => {
 };
 
 const handleClick = (parent: Filter, current: Filter) => {
+  console.log(availableFilters.value);
+
   selectedFilter.value = current;
 
   const removeIndex = props.preSetTags.findIndex((tagId) => tagId === current.id);

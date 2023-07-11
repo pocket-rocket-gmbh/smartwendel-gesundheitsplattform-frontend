@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios'
 import { ServerCallResult } from '@/types/serverCallResult'
+import { useSnackbar } from "~/composables/ui/snackbar";
 
 export function useServerInterface() {
   
