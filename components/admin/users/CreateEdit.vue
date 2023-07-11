@@ -2,10 +2,10 @@
   <v-dialog
     v-model="dialog"
     transition="dialog-top-transition"
-    width="500"
+    width="900"
     @click:outside="emitClose()"
   >
-    <v-card class="dialog-500">
+    <v-card class="dialog-900">
       <v-card-title class="text-h5">
         Benutzer
       </v-card-title>
@@ -56,10 +56,73 @@
           />
         </div>
       </v-card-text>
+      <v-divider class="my-5"></v-divider>
+      <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
+        <h3 class="mb-4 mx-5">Einrichtungen:</h3>
+        <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'facility')" :key="facilities.id" class="mx-10">
+          <v-row class="d-flex align-center">
+            <v-col class="d-flex my-5 has-bg-light-grey">
+              <div class="pr-5">
+                <v-icon>mdi-home-city-outline</v-icon>
+              </div>
+              <div>
+                {{ facilities.name }}
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+      <v-divider class="my-5"></v-divider>
+      <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
+        <h3 class="mb-4 mx-5">Kurse:</h3>
+        <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'course')" :key="facilities.id" class="mx-10">
+          <v-row class="d-flex align-center">
+            <v-col class="d-flex my-5 has-bg-light-grey">
+              <div class="pr-5">
+                <v-icon>mdi-school-outline</v-icon>
+              </div>
+              <div>
+                {{ facilities.name }}
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+      <v-divider class="my-5"></v-divider>
+      <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
+        <h3 class="mb-4 mx-5">Deine Veranstaltungen:</h3>
+        <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'event')" :key="facilities.id" class="mx-10">
+          <v-row class="d-flex align-center">
+            <v-col class="d-flex my-5 has-bg-light-grey">
+              <div class="pr-5">
+                <v-icon>mdi-calendar-star-four-points</v-icon>
+              </div>
+              <div>
+                {{ facilities.name }}
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+      <v-divider class="my-5"></v-divider>
+      <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
+        <h3 class="mb-4 mx-5">Beiträge:</h3>
+        <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'news')" :key="facilities.id" class="mx-10">
+          <v-row class="d-flex align-center">
+            <v-col class="d-flex my-5 has-bg-light-grey">
+              <div class="pr-5">
+                <v-icon>mdi-post-outline</v-icon>
+              </div>
+              <div>
+                {{ facilities.name }}
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn
-          text
           @click="emitClose()"
         >
           Schließen
@@ -68,7 +131,6 @@
           color="blue darken-1"
           variant="outlined"
           dark
-          text
           @click="handleCta()"
           :loading="loadingItem"
         >

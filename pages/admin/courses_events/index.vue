@@ -6,7 +6,8 @@
       >Legen Sie hier Ihre Veranstaltung oder Ihren Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
     >
     <template v-if="setupFinished">
-      <v-btn
+      <div class="my-5">
+        <v-btn
         elevation="0"
         variant="outlined"
         class="mr-5"
@@ -27,15 +28,32 @@
         "
         >Veranstaltung anlegen</v-btn
       >
+      </div>
+
     </template>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
     </v-alert>
 
+    <h2>Aktuelle Veranstaltungen</h2>
+
     <DataTable
       ref="dataTableRef"
       :fields="fields"
-      endpoint="care_facilities?kind=event,course"
+      endpoint="care_facilities?kind=event"
+      @openCreateEditDialog="openCreateEditDialog"
+      @openDeleteDialog="openDeleteDialog"
+      defaultSortBy="kind"
+    />
+
+    <v-divider class="my-15"></v-divider>
+
+    <h2>Aktuelle Kurse</h2>
+
+    <DataTable
+      ref="dataTableRef"
+      :fields="fields"
+      endpoint="care_facilities?kind=course"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
@@ -81,13 +99,7 @@ const fields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
   { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
-  {
-    text: "Art (Kurs oder Veranstaltung)",
-    endpoint: "care_facilities",
-    value: "kind",
-    type: "enum",
-    enum_name: "facilitiesKind",
-  }
+ 
 ];
 
 const dataTableRef = ref();
