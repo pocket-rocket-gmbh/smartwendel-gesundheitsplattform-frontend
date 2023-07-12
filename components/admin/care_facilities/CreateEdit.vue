@@ -1,11 +1,21 @@
 <template>
-  <CreateEdit v-slot="slotProps" @hasChanged="changed = true" size="100wh">
+  <CreateEdit v-slot="slotProps" size="100wh">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
-            <div class="d-flex align-center my-3 justify-center select-box mx-1 pa-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
-              <div class="is-clickable" @click="goToField(item.index)">{{ item.description }}</div>
+            <div class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
+              <div class="is-clickable d-flex" @click="goToField(item.index)">
+                <span>{{ item.description }}</span>
+               <!--  <div class="">
+                  <div v-if="isFilled(slotProps, item)">
+                    <v-icon color="success">mdi-check-circle-outline</v-icon>
+                  </div>
+                  <div v-else>
+                    <v-icon color="error">mdi-close-circle-outline</v-icon>
+                  </div>
+                </div> -->
+              </div>
             </div>
           </div> 
         </v-col>
@@ -136,7 +146,6 @@
               />
             </ClientOnly>
           </div>
-
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="6">
@@ -574,9 +583,6 @@ const textOptions = ref({
   required: true,
 });
 
-const changed = ref(false)
-
-
 const deleteDate = (index:number, dates:string []) => {
   const confirmed = confirm(
     "Sicher dass du diesen Termin löschen möchtest?"
@@ -606,13 +612,15 @@ const fields = {
       tooltip: "",
       description: "Name",
       index: 1,
-      changed: false
+      changed: false,
+      prop: 'name'
     },
     "2": {
       label: "2. Lade dein Logo hoch *",
       tooltip: "",
       description: "Logo",
       index: 2,
+      prop: 'logo'
     },
     "3": {
       label: "3. Lade ein Coverbild hoch *",
@@ -620,6 +628,7 @@ const fields = {
         "Das Coverbild ziert den Header-Bereich Ihrer Detail-Seite und gibt dem Besucher einen ersten Einblick auf deine Einrichtung. Mit den weiteren Einrichtungsbildern, die man im nächsten Schritt hochladen kann, erstellst du eine Galerie, die dem Besucher weitere Einblicke in Ihre Einrichtung geben. ",
       description: "Foto",
       index: 3,
+      prop: 'image_url'
     },
     "4": {
       label: "4. Lade Bilder für eine Galerie hoch",
@@ -632,7 +641,8 @@ const fields = {
       tooltip: "",
       description: "Beschreibung",
       index: 5,
-      placeholder: "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc."
+      placeholder: "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc.",
+      prop: 'description'
     },
     "6": {
       label:
@@ -640,6 +650,7 @@ const fields = {
       tooltip: "",
       description: "Berufszweig",
       index: 6,
+      prop: 'tag_category_ids'
     },
     "7": {
       label: "7. Ordne deiner Einrichtung passende Filter zu *",
@@ -647,6 +658,7 @@ const fields = {
         "Anhand der ausgewählten Filter beschreibst du deine Einrichtung genauer. Deine Leistungen und dein Alleinstellungsmerkmal hilft den Benutzern, dich und deine Einrichtung in der Anbietersuche schneller zu finden. Sollte deine Leistung nicht aufgeführt sein, darfst du Liste gerne erweitern.",
       description: "Leistung",
       index: 7,
+      prop: 'tag_category_ids'
     },
     "8": {
       label: "8. Deine Adresse *",
@@ -654,6 +666,7 @@ const fields = {
       description: "Kontaktdaten",
       index: 8,
     },
+
     "9": {
       label:
         "9. Falls deine Einrichtung mehrere Standorte hat, füge diese hier hinzu",
@@ -830,6 +843,15 @@ const fields = {
   },
 };
 
+const isFilled = (slotProps:any, item:any) => {
+  const prop = item.prop;
+  if (prop && slotProps.item[prop] && slotProps.item[prop].length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const setTagCategoryIds = (tags: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "tag_category_ids",
@@ -872,21 +894,11 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
   });
 }
 
-const status = ref([
-  { name: "In Prüfung", id: "is_checked" },
-  { name: "Freigegeben", id: "confirmed" },
-  { name: "Abgelehnt", id: "rejected" },
-]);
 
-const eventTyp = ref([
-  { name: "Kurs", id: "" },
-  { name: "Veranstaltung", id: "" },
-]);
-
-const goToField = (n: Number) => {
+const goToField = (n:string) => {
   const id = n;
   if (id) {
-    const el = document.getElementById(n);
+    const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -938,7 +950,7 @@ onMounted(async () => {
   border: black solid 1px
   border-radius: 10px
   background: $light-grey
-  
+  width: 100%
 
 .menu-boxes
   position: sticky
