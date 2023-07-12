@@ -44,6 +44,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
 
 .note-title
   font-weight: 600

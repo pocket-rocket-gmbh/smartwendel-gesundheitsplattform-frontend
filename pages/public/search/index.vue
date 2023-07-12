@@ -27,13 +27,10 @@
         <v-row v-else>
           <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
         </v-row>
-
-        <v-row class="mt-4">
-          <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
-        </v-row>
       </template>
     </v-container>
   </ClientOnly>
+  <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
 </template>
 
 <script setup lang="ts">
@@ -80,6 +77,7 @@ onMounted(async () => {
 </script>
 
 <style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
 h1
   color: black
 

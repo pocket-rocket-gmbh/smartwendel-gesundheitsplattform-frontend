@@ -13,7 +13,7 @@
     </div>
   </div>
 </template>
-<style style lang="sass" scoped>
+<style lang="sass" scoped>
 
 .login-panel
   width: 50px

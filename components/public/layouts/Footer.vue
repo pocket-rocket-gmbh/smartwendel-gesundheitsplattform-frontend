@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div class="has-bg-grey pa-15">
+    <div class="has-bg-grey pa-15 mt-15">
       <div class="has-bg-grey py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
         <v-row class="align-center">
           <v-col md="8" class="flex-column justify-start text-h3 is-dark-grey font-weight-bold">
@@ -49,11 +49,13 @@
         <v-col class="d-flex justify-center">
           <div class="flex-column justify-center">
             <h2 class="mb-5">Landkreis Sankt Wendel</h2>
-            <p class="has-text-white is-clickable"><router-link to="/contact">Kontakt</router-link></p>
-            <p class="has-text-white is-clickable"><router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link></p>
-            <p class="has-text-white is-clickable"><router-link to="/privacy_policy">Datenschutzerklärung</router-link></p>
-            <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
-              <div class="mt-5">
+            <div class="footer-links">
+              <p class="has-text-white is-clickable"><router-link to="/contact">Kontakt</router-link></p>
+              <p class="has-text-white is-clickable"><router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link></p>
+              <p class="has-text-white is-clickable"><router-link to="/privacy_policy">Datenschutzerklärung</router-link></p>
+              <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
+            </div>
+            <div class="mt-5">
               <v-btn
                 href="https://www.facebook.com/Landkreis.StWendel/" target="_blank"
                 variant="outlined"
@@ -145,5 +147,7 @@ const currentRoute = computed(() => {
 .mobile-bigger-width
   max-width: 150px
 
+.footer-links
+  line-height: 1.8rem
 
 </style>
