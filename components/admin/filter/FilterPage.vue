@@ -1,21 +1,19 @@
 <template>
   <div>
-    <h2>Filter</h2>
-    <v-btn
-      elevation="0"
-      variant="outlined"
-      @click="
-        itemId = null;
-        createEditDialogOpen = true;
-      "
-      >Filter erstellen</v-btn
-    >
+    <h2>{{ name }}</h2>
+    <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn>
     <v-alert type="info" density="compact" closable class="mt-2"
       >Filter erleichtern den Besuchern die Auffindbarkeit von Inhalten, Beispiele können zielgruppenspezifische Tags
       wie z.B. nach Alter oder Geschlecht sein.</v-alert
     >
 
-    <CollapsibleListRec :items="itemsForList" :layer="0" @entry-click="handleClick" @entry-moved="handleMove" :disable-draggable="true"/>
+    <CollapsibleListRec
+      :items="itemsForList"
+      :layer="0"
+      @entry-click="handleClick"
+      @entry-moved="handleMove"
+      :disable-draggable="true"
+    />
 
     <AdminTagsCreateEdit
       :item-id="itemId"
@@ -23,7 +21,8 @@
       :item-placeholder="itemPlaceholder"
       endpoint="tag_categories"
       @close="handleAddTagClose"
-      conceptName="Filter"
+      :conceptName="name"
+      :kind="filterKind"
     />
 
     <DeleteItem
@@ -37,27 +36,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useAdminStore } from "~/store/admin";
-import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
-import { ResultStatus } from "~/types/serverCallResult";
+import { ref, onMounted } from "vue";
+import { useAdminStore } from "../../../store/admin";
+import { useSnackbar } from "../../../composables/ui/snackbar";
+import { useCollectionApi } from "../../../composables/api/collectionApi";
+import { usePrivateApi } from "../../../composables/api/private";
+import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
+import { ResultStatus } from "../../../types/serverCallResult";
+import { FilterKind } from "../../../store/searchFilter";
 
-definePageMeta({
-  layout: "admin",
-});
+const props = defineProps<{
+  filterKind: FilterKind;
+  name: string;
+}>();
 
 const itemsForList = ref<CollapsibleListItem[]>([]);
 const adminStore = useAdminStore();
 
-const fields = ref([
-  { text: "", type: "move_down" },
-  { text: "", type: "move_up" },
-  { text: "Name", value: "name", type: "string" },
-]);
-
 const itemPlaceholder = ref({
   name: "",
   scope: "care_facility",
+  kind: props.filterKind,
 });
 
 const dialog = ref(false);
@@ -72,8 +71,8 @@ const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 api.setEndpoint("tag_categories");
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const openCreateDialog = (id: string) => {
+  itemId.value = null;
   createEditDialogOpen.value = true;
 };
 
@@ -128,7 +127,7 @@ const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleLi
   }
 
   const nextLayerWave: any[] = filterItems.map((filterItemFromResponse) =>
-    getItemsAndNext(filterItemFromResponse, filterItem.next, layer + 1)
+    getItemsAndNext(filterItemFromResponse, filterItem.next || [], layer + 1)
   );
   return Promise.all(nextLayerWave);
 };
@@ -153,7 +152,7 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources;
+  const filters: any[] = result?.data?.resources?.filter((item: any) => props.filterKind === item.kind);
   if (!filters) {
     console.error("No filters!");
     return;
@@ -234,7 +233,7 @@ const handleMove = async (
     }
   } else if (layer === 1) {
     const subFilters = itemsForList.value.reduce((prev, curr) => {
-      return [...prev, ...curr.next];
+      return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const subFilter = subFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
@@ -243,10 +242,10 @@ const handleMove = async (
     }
   } else if (layer === 2) {
     const subFilters = itemsForList.value.reduce((prev, curr) => {
-      return [...prev, ...curr.next];
+      return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
     const subSubFilters = subFilters.reduce((prev, curr) => {
-      return [...prev, ...curr.next];
+      return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
       const subSubFilter = subSubFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
@@ -259,7 +258,7 @@ const handleMove = async (
     const currentItem = itemsToUpdate[i];
 
     api.setEndpoint(`tag_categories/${currentItem.id}`);
-    const result = await api.updateItem({ menu_order: actualStartIndex + i }, null);
+    const result = await api.updateItem({ menu_order: actualStartIndex + i });
 
     if (result.status !== ResultStatus.SUCCESSFUL) {
       throw "Something went wrong while moving the items!";
