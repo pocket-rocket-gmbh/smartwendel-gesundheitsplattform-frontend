@@ -90,7 +90,7 @@
                 <div class="title">
                   <v-text-field v-model="tempTitle" hide-details="auto" label="Neuer Eintragstitel" />
                 </div>
-                <div v-if="!element.canAddAdditionalData" class="additional">
+                <div v-if="element.canAddAdditionalData" class="additional">
                   <v-textarea
                     v-model="tempAdditionalData"
                     hide-details="auto"

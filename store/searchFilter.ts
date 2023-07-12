@@ -6,12 +6,14 @@ export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
+export type FilterType = "filter_facility" | "filter_service";
 
 export type Facility = {
   id: string;
   name: string;
   description?: string;
   kind: FilterKind;
+  filterType: FilterType;
   zip?: string;
   street?: string;
   latitude?: string;
@@ -19,8 +21,8 @@ export type Facility = {
   town?: string;
   phone?: string;
   email?: string;
-  url?: string,
-  image_url?: string,
+  url?: string;
+  image_url?: string;
 };
 
 export type Filter = {

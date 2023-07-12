@@ -1,16 +1,32 @@
 <template>
   <div>
     <h2>{{ name }}</h2>
-    <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn>
+    <!-- <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn> -->
     <v-alert type="info" density="compact" closable class="mt-2"
       >Filter erleichtern den Besuchern die Auffindbarkeit von Inhalten, Beispiele können zielgruppenspezifische Tags
       wie z.B. nach Alter oder Geschlecht sein.</v-alert
     >
 
+    <!-- Einrichtungsfilter -->
     <CollapsibleListRec
-      :items="itemsForList"
+      :items="itemsForFacilityList"
       :layer="0"
-      @entry-click="handleClick"
+      @entry-click="
+        (action, itemIds, layer, title, additionalInformation) =>
+          handleClick(action, itemIds, layer, title, additionalInformation, 'filter_facility')
+      "
+      @entry-moved="handleMove"
+      :disable-draggable="true"
+    />
+
+    <!-- Leistungsfilter -->
+    <CollapsibleListRec
+      :items="itemsForServiceList"
+      :layer="0"
+      @entry-click="
+        (action, itemIds, layer, title, additionalInformation) =>
+          handleClick(action, itemIds, layer, title, additionalInformation, 'filter_service')
+      "
       @entry-moved="handleMove"
       :disable-draggable="true"
     />
@@ -43,14 +59,15 @@ import { useCollectionApi } from "../../../composables/api/collectionApi";
 import { usePrivateApi } from "../../../composables/api/private";
 import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
 import { ResultStatus } from "../../../types/serverCallResult";
-import { FilterKind } from "../../../store/searchFilter";
+import { Facility, FilterKind, FilterType } from "../../../store/searchFilter";
 
 const props = defineProps<{
   filterKind: FilterKind;
   name: string;
 }>();
 
-const itemsForList = ref<CollapsibleListItem[]>([]);
+const itemsForFacilityList = ref<CollapsibleListItem[]>([]);
+const itemsForServiceList = ref<CollapsibleListItem[]>([]);
 const adminStore = useAdminStore();
 
 const itemPlaceholder = ref({
@@ -59,8 +76,6 @@ const itemPlaceholder = ref({
   kind: props.filterKind,
 });
 
-const dialog = ref(false);
-const item = ref({ name: "" });
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const itemId = ref<string | null>(null);
@@ -152,25 +167,43 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: any) => props.filterKind === item.kind);
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind); // Filter items for current kind (event/facility/news/course)
   if (!filters) {
     console.error("No filters!");
     return;
   }
 
-  const tmpItemsForList: CollapsibleListItem[] = [];
+  const facilityFilters = filters.filter((filter) => filter.filter_type === "filter_facility");
+  const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
 
-  const nextLayerWave = filters.map((filter) => getItemsAndNext(filter, tmpItemsForList, 0));
-  await Promise.all(nextLayerWave);
+  const tmpItemsForFacilityList: CollapsibleListItem[] = [];
+  const tmpItemsForServiceList: CollapsibleListItem[] = [];
+
+  const nextLayerWavePromisesFacility = facilityFilters.map((filter) =>
+    getItemsAndNext(filter, tmpItemsForFacilityList, 0)
+  );
+  const nextLayerWavePromisesService = serviceFilters.map((filter) =>
+    getItemsAndNext(filter, tmpItemsForServiceList, 0)
+  );
+  await Promise.all([...nextLayerWavePromisesFacility, ...nextLayerWavePromisesService]);
 
   adminStore.loading = false;
-  itemsForList.value = tmpItemsForList;
+
+  itemsForFacilityList.value = [...tmpItemsForFacilityList];
+  itemsForServiceList.value = [...tmpItemsForServiceList];
 };
 
-const handleClick = async (action: EmitAction, itemIds: string[], layer: number, name: string, kind: string) => {
+const handleClick = async (
+  action: EmitAction,
+  itemIds: string[],
+  layer: number,
+  name: string,
+  kind: string,
+  filterType: FilterType
+) => {
   switch (action) {
     case "CREATE":
-      return handleCreate(itemIds, layer, name);
+      return handleCreate(itemIds, layer, name, filterType);
     case "DELETE":
       return handleDelete(itemIds, layer);
     case "EDIT":
@@ -191,10 +224,10 @@ const handleEdit = async (itemIds: string[], layer: number, name: string, kind: 
   }
 };
 
-const handleCreate = async (itemIds: string[], layer: number, name: string) => {
+const handleCreate = async (itemIds: string[], layer: number, name: string, filterType: FilterType) => {
   api.setEndpoint(`tag_categories`);
 
-  const result = await api.createItem({ name, parent_id: itemIds[0] }, `Erfolgreich erstellt`);
+  const result = await api.createItem({ name, parent_id: itemIds[0], filter_type: filterType }, `Erfolgreich erstellt`);
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     console.log("SUCCESS");
@@ -227,12 +260,12 @@ const handleMove = async (
 
   if (layer === 0) {
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const filter = itemsForList.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      const filter = itemsForFacilityList.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
       if (!filter) throw "Filter not found";
       itemsToUpdate.push(filter);
     }
   } else if (layer === 1) {
-    const subFilters = itemsForList.value.reduce((prev, curr) => {
+    const subFilters = itemsForFacilityList.value.reduce((prev, curr) => {
       return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
@@ -241,7 +274,7 @@ const handleMove = async (
       itemsToUpdate.push(subFilter);
     }
   } else if (layer === 2) {
-    const subFilters = itemsForList.value.reduce((prev, curr) => {
+    const subFilters = itemsForFacilityList.value.reduce((prev, curr) => {
       return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
     const subSubFilters = subFilters.reduce((prev, curr) => {

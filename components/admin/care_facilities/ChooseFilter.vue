@@ -61,11 +61,12 @@
 
 <script setup lang="ts">
 import { ResultStatus } from "~/types/serverCallResult";
-import { FilterType } from "~/utils/filter.utils";
+import { FilterKind, FilterType } from "~/store/searchFilter";
 
 const props = defineProps<{
   preSetTags: string[];
   filterType: FilterType;
+  filterKind: FilterKind;
   enableMultiSelect?: boolean;
 }>();
 
@@ -246,7 +247,8 @@ const handleCreateNewService = async (parentId: string, name: string) => {
 
 const reloadFilters = async () => {
   loadingFilters.value = true;
-  mainFilters.value = await getMainFilters(props.filterType);
+  mainFilters.value = await getMainFilters(props.filterType, props.filterKind);
+  console.log(mainFilters.value)
 
   const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
 

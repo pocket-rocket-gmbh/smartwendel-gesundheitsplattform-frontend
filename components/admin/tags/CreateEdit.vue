@@ -8,18 +8,18 @@
           label="Bezeichnung"
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         />
-        <!-- <v-text-field
-          v-model="slotProps.item.kind"
-          hide-details="auto"
-          label="Art"
-        /> -->
+        <v-text-field v-model="slotProps.item.filter_type" hide-details="auto" label="Art" />
       </div>
     </v-card-text>
+    {{ setKind(slotProps) }}
   </CreateEdit>
 </template>
 
 <script setup lang="ts">
 import { Facility, FilterKind } from "~/store/searchFilter";
+const setKind = (slotProps: any) => {
+  slotProps.item.filter_type = "filter_service";
+};
 
 const props = defineProps<{
   itemId: string;

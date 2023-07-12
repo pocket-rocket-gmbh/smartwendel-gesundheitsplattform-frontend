@@ -1,6 +1,5 @@
+import { FilterKind, FilterType } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
-
-export type FilterType = "facility" | "service";
 
 export const getFilters = async (parentId: string) => {
   const api = useCollectionApi();
@@ -23,7 +22,7 @@ export const getFilters = async (parentId: string) => {
   return filterItemOptions;
 };
 
-export const getMainFilters = async (filterType: FilterType) => {
+export const getMainFilters = async (filterType: FilterType, filterKind: FilterKind) => {
   const api = useCollectionApi();
   api.setBaseApi(usePublicApi());
   api.setEndpoint(`tag_categories`);
@@ -34,11 +33,15 @@ export const getMainFilters = async (filterType: FilterType) => {
   }
 
   const filters: any[] = response?.data?.resources || [];
-  const relevantFilter = filters.find((filter) =>
-    filterType === "facility" ? filter.kind === "facility" : filter.kind !== "facility"
+  const relevantFilter = filters.find(
+    (filter) =>
+      filter.filter_type === filterType &&
+      (filterKind === "course" || filterKind === "event"
+        ? filter.kind === "course" || filter.kind === "event"
+        : filter.kind === filterKind)
   );
 
-  if (!relevantFilter) throw "Filter not found";
+  if (!relevantFilter) return [];
 
   return await getFilters(relevantFilter.id);
 };

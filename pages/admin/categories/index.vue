@@ -165,6 +165,7 @@ const getItems = async (endpoint = "categories") => {
       layer: 0,
       menuOrder: category.menu_order,
       addEntryButtonText: "Neue Kategorie hinzufügen",
+      canAddAdditionalData: true,
       next: [],
     };
 
@@ -221,6 +222,7 @@ const getItems = async (endpoint = "categories") => {
           layer: 2,
           menuOrder: subSubCategory.menu_order,
           specialActionOnEditClick: "openSubCategoriesModal",
+          canAddAdditionalData: false
         });
       }
     }

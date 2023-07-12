@@ -80,7 +80,7 @@ const toggleFilter = (filter: any) => {
 };
 
 onMounted(async () => {
-  mainFilters.value = await getMainFilters("service");
+  mainFilters.value = await getMainFilters("filter_service", 'facility');
 });
 </script>
 
