@@ -1,5 +1,5 @@
 <template>
-  <LoadingSpinner v-if="loading">Tags werden geladen... </LoadingSpinner>
+  <LoadingSpinner class="d-flex justify-center mt-5" v-if="loading">laden... </LoadingSpinner>
   <div class="selection" v-else>
     <div v-for="(tag, index) in limitedTags" :key="tag.id">
       <v-checkbox
@@ -34,9 +34,10 @@
       </div>
     </div>
   </div>
-  <v-btn class="my-5" variant="text" rounded="pill" @click="showMoreTags()" v-if="showMoreButton">
-    <span> ... mehr laden </span>
+  <v-btn class="my-5" variant="text" rounded="pill" @click="showMoreTags()" v-if="showMoreButton && !loading">
+    <span v-auto-animate> ... mehr laden </span>
   </v-btn>
+  <v-spacer class="my-10"></v-spacer>
 </template>
 
 <script setup lang="ts">
@@ -57,7 +58,7 @@ const loading = ref(false);
 const filterStore = useFilterStore();
 
 const availableTags = ref<Tag[]>([]);
-const maxTagsToShow = ref(5);
+const maxTagsToShow = ref(1);
 const showMoreButton = ref(true);
 
 const limitedTags = computed(() => {

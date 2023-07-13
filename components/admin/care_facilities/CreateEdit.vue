@@ -630,7 +630,7 @@ const fields = {
       index: 4,
     },
     "5": {
-      label: "5. Beschreiben ausführlich deine Einrichtung *",
+      label: "5. Beschreibe ausführlich deine Einrichtung *",
       tooltip: "",
       description: "Beschreibung",
       index: 5,

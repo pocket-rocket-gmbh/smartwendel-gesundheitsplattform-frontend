@@ -7,7 +7,6 @@
       filled
       prepend-icon="mdi-camera"
       @change="handleFile()"
-      :rules="[rules.fileRequired]"
     />
     <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
     <div v-if="errorFileSizeTooLarge" class="text-caption text-error mt-3 mb-2">

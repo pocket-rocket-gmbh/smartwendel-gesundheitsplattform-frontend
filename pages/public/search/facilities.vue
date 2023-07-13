@@ -10,10 +10,10 @@
       />
       <v-container class="container limited padding">
         <v-row>
-          <v-col md="4" lg="3" class="mt-8">
-            <PublicSearchTheFilter />
+          <v-col md="5" lg="3" class="mt-8">
+            <PublicSearchTheFilter :filterKind="'facility'"/>
           </v-col>
-          <v-col md="8" lg="9" class="filtered-items mb-10">
+          <v-col md="7" lg="9" class="filtered-items mb-10">
             <div class="map-widget">
               <ClientMap
                 :locations="locations"
