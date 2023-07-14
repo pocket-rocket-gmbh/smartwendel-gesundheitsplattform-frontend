@@ -4,7 +4,7 @@
       <v-row>
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
-            <div class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
+            <div class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable" v-for="(item, index) in fields[slotProps.item.kind]" :key="index" @click="goToField(item.index)">
               <div class="is-clickable d-flex" @click="goToField(item.index)">
                 <span>{{ item.description }}</span>
                <!--  <div class="">
@@ -34,7 +34,7 @@
             </div>
             <div v-if="slotProps.item.kind === 'course'">
               <span class="text-h6"
-                >Hier kannst Du eigene Kurse anlegen. Bitte fülle dazu wenn
+                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn
                 möglich alle Felder sorgfältig aus. Pflichtfelder sind mit einem
                 Sternchen versehen.</span
               >
@@ -547,13 +547,13 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["12"].label }}</span
               >
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top" width="300px" v-if="slotProps.item.kind !== 'event'">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
-                <span v-if="fields[slotProps.item.kind]">{{
+                <span v-if="fields[slotProps.item.kind] && slotProps.item.kind !== 'event'">{{
                   fields[slotProps.item.kind]["12"].tooltip
                 }}</span>
               </v-tooltip>
@@ -791,7 +791,7 @@ const fields = {
   },
   event: {
     "1": {
-      label: "1. Gib Deiner Veranstaltungen einen Namen *",
+      label: "1. Gib deiner Veranstaltungen einen Namen *",
       tooltip: "",
       description: "Name",
       index: 1,
@@ -817,13 +817,13 @@ const fields = {
     },
     "6": {
       label:
-        "5. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+        "5. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
       tooltip: "",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "6. Ordne Deiner Einrichtung passende Filter zu *",
+      label: "6. Ordne deiner Einrichtung passende Filter zu *",
       tooltip: "",
       description: "Leistung",
       index: 7,
@@ -835,7 +835,7 @@ const fields = {
       index: 8,
     },
     "12": {
-      label: "8. Lade Dokumente hoch",
+      label: "8. Wurden zur Veranstaltung Dokumente (z.B. Flyer) erstellt, kannst du diese hier gerne hochladen und den Benutzern zur Verfügung stellen",
       tooltip: "",
       description: "Dokumente",
       index: 12,

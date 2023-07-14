@@ -64,7 +64,6 @@
               rounded="pill"
               size="large"
               :href="`/public/care_facilities/${careFacility.id}`"
-              target="_blank"
               >
               <span>
                 Details ansehen

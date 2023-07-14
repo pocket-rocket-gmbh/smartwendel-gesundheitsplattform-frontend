@@ -250,7 +250,7 @@ const handleMove = (e: { newIndex: number; oldIndex: number; item: HTMLDivElemen
 .item-title {
   user-select: none;
   &:not(.no-drag) {
-    cursor: move;
+    cursor: pointer;
   }
 }
 
