@@ -12,7 +12,7 @@
             density="compact" icon="mdi-file-pdf-box"
             >
         </v-btn>
-        {{ document.name.replace('-documents', '') }}
+        <i>{{ document.name.replace('-documents', '.pdf') }}</i>
         <v-divider class="my-5"></v-divider>
       </div>
     </div>

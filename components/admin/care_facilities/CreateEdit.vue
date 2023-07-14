@@ -328,7 +328,20 @@
               />
             </div>
             <div class="field my-5" v-if="slotProps.item.billable_through_health_insurance">
-              <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="insurance" :offline-documents="slotProps.item.offlineDocuments" @offline="handleDocumentsOffline"/>
+              <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="insurance" :document-acepted="slotProps.item.billable_through_health_insurance_approved" :offline-documents="slotProps.item.offlineDocuments" @offline="handleDocumentsOffline"/>
+              <div class="d-flex align-center">
+                <span>
+                  <v-icon color="primary">mdi-check-decagram-outline</v-icon>
+                </span>
+                <v-checkbox
+                  v-if="slotProps.item.billable_through_health_insurance && useUser().isAdmin()"
+                  :model-value="slotProps.item.billable_through_health_insurance_approved"
+                  hide-details
+                  density="compact"
+                  label="gültig (Wenn ja, wird in frontend angezeigt)"
+                  @click="slotProps.item.billable_through_health_insurance_approved = !slotProps.item.billable_through_health_insurance_approved"
+                />
+              </div>
             </div>
           </div>
           <v-divider
@@ -360,7 +373,6 @@
                 @accepted="editInformations = true; confirmEditDialogOpen = false"
                 @close="confirmEditDialogOpen = false; editInformations = false"
               />
-
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.phone"
@@ -574,6 +586,7 @@ import { de } from 'date-fns/locale';
 import { CreateEditFacility } from "types/facilities";
 
 const user = useUser();
+const infosChanged = ref(false);
 
 const textOptions = ref({
   debug: false,
