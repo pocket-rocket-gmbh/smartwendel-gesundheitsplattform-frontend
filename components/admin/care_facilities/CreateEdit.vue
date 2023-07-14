@@ -1,11 +1,21 @@
 <template>
-  <CreateEdit v-slot="slotProps" @hasChanged="changed = true" size="100wh">
+  <CreateEdit v-slot="slotProps" size="100wh">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
-            <div class="d-flex align-center my-3 justify-center select-box mx-1 pa-1" v-for="(item, index) in fields[slotProps.item.kind]" :key="index">
-              <div class="is-clickable" @click="goToField(item.index)">{{ item.description }}</div>
+            <div class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable" v-for="(item, index) in fields[slotProps.item.kind]" :key="index" @click="goToField(item.index)">
+              <div class="is-clickable d-flex" @click="goToField(item.index)">
+                <span>{{ item.description }}</span>
+               <!--  <div class="">
+                  <div v-if="isFilled(slotProps, item)">
+                    <v-icon color="success">mdi-check-circle-outline</v-icon>
+                  </div>
+                  <div v-else>
+                    <v-icon color="error">mdi-close-circle-outline</v-icon>
+                  </div>
+                </div> -->
+              </div>
             </div>
           </div> 
         </v-col>
@@ -24,7 +34,7 @@
             </div>
             <div v-if="slotProps.item.kind === 'course'">
               <span class="text-h6"
-                >Hier kannst Du eigene Kurse anlegen. Bitte fülle dazu wenn
+                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn
                 möglich alle Felder sorgfältig aus. Pflichtfelder sind mit einem
                 Sternchen versehen.</span
               >
@@ -136,7 +146,6 @@
               />
             </ClientOnly>
           </div>
-
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="6">
@@ -319,7 +328,20 @@
               />
             </div>
             <div class="field my-5" v-if="slotProps.item.billable_through_health_insurance">
-              <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="insurance" :offline-documents="slotProps.item.offlineDocuments" @offline="handleDocumentsOffline"/>
+              <AdminCareFacilitiesAddFiles :item-id="slotProps.item.id" tag-name="insurance" :document-acepted="slotProps.item.billable_through_health_insurance_approved" :offline-documents="slotProps.item.offlineDocuments" @offline="handleDocumentsOffline"/>
+              <div class="d-flex align-center">
+                <span>
+                  <v-icon color="primary">mdi-check-decagram-outline</v-icon>
+                </span>
+                <v-checkbox
+                  v-if="slotProps.item.billable_through_health_insurance && useUser().isAdmin()"
+                  :model-value="slotProps.item.billable_through_health_insurance_approved"
+                  hide-details
+                  density="compact"
+                  label="gültig (Wenn ja, wird in frontend angezeigt)"
+                  @click="slotProps.item.billable_through_health_insurance_approved = !slotProps.item.billable_through_health_insurance_approved"
+                />
+              </div>
             </div>
           </div>
           <v-divider
@@ -351,7 +373,6 @@
                 @accepted="editInformations = true; confirmEditDialogOpen = false"
                 @close="confirmEditDialogOpen = false; editInformations = false"
               />
-
             <div class="field">
               <v-text-field
                 v-model="slotProps.item.phone"
@@ -538,13 +559,13 @@
                 v-if="fields[slotProps.item.kind]"
                 >{{ fields[slotProps.item.kind]["12"].label }}</span
               >
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top" width="300px" v-if="slotProps.item.kind !== 'event'">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
-                <span v-if="fields[slotProps.item.kind]">{{
+                <span v-if="fields[slotProps.item.kind] && slotProps.item.kind !== 'event'">{{
                   fields[slotProps.item.kind]["12"].tooltip
                 }}</span>
               </v-tooltip>
@@ -565,6 +586,7 @@ import { de } from 'date-fns/locale';
 import { CreateEditFacility } from "types/facilities";
 
 const user = useUser();
+const infosChanged = ref(false);
 
 const textOptions = ref({
   debug: false,
@@ -573,9 +595,6 @@ const textOptions = ref({
   toolbar: "essential",
   required: true,
 });
-
-const changed = ref(false)
-
 
 const deleteDate = (index:number, dates:string []) => {
   const confirmed = confirm(
@@ -606,13 +625,15 @@ const fields = {
       tooltip: "",
       description: "Name",
       index: 1,
-      changed: false
+      changed: false,
+      prop: 'name'
     },
     "2": {
       label: "2. Lade dein Logo hoch *",
       tooltip: "",
       description: "Logo",
       index: 2,
+      prop: 'logo'
     },
     "3": {
       label: "3. Lade ein Coverbild hoch *",
@@ -620,6 +641,7 @@ const fields = {
         "Das Coverbild ziert den Header-Bereich Ihrer Detail-Seite und gibt dem Besucher einen ersten Einblick auf deine Einrichtung. Mit den weiteren Einrichtungsbildern, die man im nächsten Schritt hochladen kann, erstellst du eine Galerie, die dem Besucher weitere Einblicke in Ihre Einrichtung geben. ",
       description: "Foto",
       index: 3,
+      prop: 'image_url'
     },
     "4": {
       label: "4. Lade Bilder für eine Galerie hoch",
@@ -632,7 +654,8 @@ const fields = {
       tooltip: "",
       description: "Beschreibung",
       index: 5,
-      placeholder: "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc."
+      placeholder: "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc.",
+      prop: 'description'
     },
     "6": {
       label:
@@ -640,6 +663,7 @@ const fields = {
       tooltip: "",
       description: "Berufszweig",
       index: 6,
+      prop: 'tag_category_ids'
     },
     "7": {
       label: "7. Ordne deiner Einrichtung passende Filter zu *",
@@ -647,6 +671,7 @@ const fields = {
         "Anhand der ausgewählten Filter beschreibst du deine Einrichtung genauer. Deine Leistungen und dein Alleinstellungsmerkmal hilft den Benutzern, dich und deine Einrichtung in der Anbietersuche schneller zu finden. Sollte deine Leistung nicht aufgeführt sein, darfst du Liste gerne erweitern.",
       description: "Leistung",
       index: 7,
+      prop: 'tag_category_ids'
     },
     "8": {
       label: "8. Deine Adresse *",
@@ -654,6 +679,7 @@ const fields = {
       description: "Kontaktdaten",
       index: 8,
     },
+
     "9": {
       label:
         "9. Falls deine Einrichtung mehrere Standorte hat, füge diese hier hinzu",
@@ -778,7 +804,7 @@ const fields = {
   },
   event: {
     "1": {
-      label: "1. Gib Deiner Veranstaltungen einen Namen *",
+      label: "1. Gib deiner Veranstaltungen einen Namen *",
       tooltip: "",
       description: "Name",
       index: 1,
@@ -804,13 +830,13 @@ const fields = {
     },
     "6": {
       label:
-        "5. Weise Deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+        "5. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
       tooltip: "",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "6. Ordne Deiner Einrichtung passende Filter zu *",
+      label: "6. Ordne deiner Einrichtung passende Filter zu *",
       tooltip: "",
       description: "Leistung",
       index: 7,
@@ -822,13 +848,22 @@ const fields = {
       index: 8,
     },
     "12": {
-      label: "8. Lade Dokumente hoch",
+      label: "8. Wurden zur Veranstaltung Dokumente (z.B. Flyer) erstellt, kannst du diese hier gerne hochladen und den Benutzern zur Verfügung stellen",
       tooltip: "",
       description: "Dokumente",
       index: 12,
     },
   },
 };
+
+const isFilled = (slotProps:any, item:any) => {
+  const prop = item.prop;
+  if (prop && slotProps.item[prop] && slotProps.item[prop].length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 const setTagCategoryIds = (tags: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
@@ -872,21 +907,11 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
   });
 }
 
-const status = ref([
-  { name: "In Prüfung", id: "is_checked" },
-  { name: "Freigegeben", id: "confirmed" },
-  { name: "Abgelehnt", id: "rejected" },
-]);
 
-const eventTyp = ref([
-  { name: "Kurs", id: "" },
-  { name: "Veranstaltung", id: "" },
-]);
-
-const goToField = (n: Number) => {
+const goToField = (n:string) => {
   const id = n;
   if (id) {
-    const el = document.getElementById(n);
+    const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -938,7 +963,7 @@ onMounted(async () => {
   border: black solid 1px
   border-radius: 10px
   background: $light-grey
-  
+  width: 100%
 
 .menu-boxes
   position: sticky

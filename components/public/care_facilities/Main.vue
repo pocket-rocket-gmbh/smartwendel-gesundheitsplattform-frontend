@@ -1,8 +1,11 @@
 <template>
    <div class="my-15">
     <v-row>
-      <v-col>
+      <v-col class="d-flex align-center">
         <h1 class="is-dark-grey">{{ careFacility.name }}</h1>
+        <span v-if="careFacility.billable_through_health_insurance_approved">
+          <v-icon size="x-large" class="pl-8" color="primary">mdi-check-decagram-outline</v-icon>
+        </span>
       </v-col>
       <v-col md="4" class="d-flex align-center justify-end" v-if="careFacility.kind === 'news'">
         <v-row>

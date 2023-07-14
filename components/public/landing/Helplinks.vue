@@ -1,22 +1,27 @@
 <template>
-  <div class="ma-15">
+  <div class="mx-15">
     <v-row>
-      <v-col  v-for="(item, index) in items" :key="index">
+      <v-col class="d-flex justify-center my-15">
+        <h2 class="is-uppercase">Du benötigst dringend Hilfe?</h2>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col v-for="(item, index) in items" :key="index">
         <div class="justify-center text-center align-center">
-          <div class="icons d-flex justify-center align-center ma-5">
-            <img class="is-clickable" :src="item.content.image" min-width="50" max-width="50"/>
+          <div class="icons d-flex justify-center align-center ">
+            <img :src="item.content.image" min-width="50" max-width="50"/>
           </div>
-        <h3 class="is-dark-grey my-5 font-weight-bold" >
-          {{ item.content.heading }}
-        </h3>
-        <div class=" my-5 is-dark-grey">
-          {{ item.content.description }}
-        </div>
-        <div>
-          <a :href="item.content.linkText" target="_blank" class="is-red is-clickable">
-            {{ item.content.linkText }}
-          </a>
-        </div>
+          <h3 class="is-dark-grey my-5 font-weight-bold" >
+            {{ item.content.heading }}
+          </h3>
+          <div class="my-5 is-dark-grey">
+            {{ item.content.description }}
+          </div>
+          <div>
+            <a :href="item.content.linkText" target="_blank" class="is-red is-clickable">
+              {{ item.content.linkText }}
+            </a>
+          </div>
         </div>
       </v-col>
     </v-row>

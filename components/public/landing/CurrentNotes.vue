@@ -13,8 +13,16 @@
     <div>
       <v-row>
         <v-col md="12" class="d-flex justify-center mt-10">
-          <v-btn variant="outlined" size="large" rounded="pill" color="primary" @click="goToNews()">
-            Mehr anzeigen
+          <v-btn
+            variant="flat"
+            color="primary"
+            rounded="pill"
+            size="large"
+            @click="goToNews()"
+            >
+            <span>
+              Mehr anzeigen
+            </span>
           </v-btn>
         </v-col>
       </v-row>
@@ -64,6 +72,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
 
 .note-title
   font-weight: 600
@@ -78,6 +87,4 @@ export default defineComponent({
 .articles
   display: flex
 
-  .limited-width
-      width: 50%
 </style>

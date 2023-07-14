@@ -81,6 +81,4 @@ const getSubSubCategories = async () => {
   flex-wrap: wrap
   columns: 2
 
-  .limited-width
-    width: 47%
 </style>

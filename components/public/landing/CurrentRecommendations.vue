@@ -10,7 +10,9 @@
       <v-col class="flex-column justify-center text-center text-white align-center my-5" v-for="(item, index) in items" :key="index">
         <img class="is-clickable icons" :src="item.content.image" width="120"/>
         <div class="has-font-size-medium font-weight-bold">
-          {{ item.content.heading }}
+          <a :href="item.content.link" target="_blank" class="is-white is-clickable">
+            {{ item.content.heading }}
+          </a>
         </div>
       </v-col>
     </v-row>
@@ -30,7 +32,7 @@ export default defineComponent({
         'content': {
           heading: 'Sport und Bewegung',
           image: image1,
-          link: ''
+          link: 'www.google.com'
           }
         },
         {
