@@ -1,35 +1,39 @@
 <template>
   <div>
     <h2 class="is-dark-grey is-uppercase mb-4">Suche filtern</h2>
-    <LoadingSpinner v-if="loading">Filter wird geladen... </LoadingSpinner>
-    <div v-else class="filter-tiles">
-      <div v-for="filter in itemsForServiceList">
-        <div v-for="item in filter.next" class="mt-5">
-          <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
-          <v-row no-gutters class="mt-3 fill-height mr-1">
-            <v-col
-              cols="12"
-              md="6"
-              class="align-center column-items pr-1 pt-1"
-              v-for="subItem in item.next"
-              v-auto-animate
-            >
-              <div
-                class="filter-tile pa-5 "
-                :class="{ selected: isSelected(subItem.id) }"
-                @click="toggleSelection(subItem.id)"
+    <v-skeleton-loader
+      :loading="loading"
+      type="article"
+      >
+      <div class="filter-tiles">
+        <div v-for="filter in itemsForServiceList">
+          <div v-for="item in filter.next" class="mt-5">
+            <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
+            <v-row no-gutters class="mt-3 fill-height mr-1">
+              <v-col
+                cols="12"
+                md="6"
+                class="align-center column-items pr-1 pt-1"
+                v-for="subItem in item.next"
+                v-auto-animate
               >
-                {{ subItem.title }}
-              </div>
-              <PublicTagSelect
-                v-if="subItem.next.length && filterStore.currentTags.includes(subItem?.id)"
-                :filterId="subItem.id"
-              />
-            </v-col>
-          </v-row>
+                <div
+                  class="filter-tile pa-5 "
+                  :class="{ selected: isSelected(subItem.id) }"
+                  @click="toggleSelection(subItem.id)"
+                >
+                  {{ subItem.title }}
+                </div>
+                <PublicTagSelect
+                  v-if="subItem.next.length && filterStore.currentTags.includes(subItem?.id)"
+                  :filterId="subItem.id"
+                />
+              </v-col>
+            </v-row>
+          </div>
         </div>
       </div>
-    </div>
+    </v-skeleton-loader>
     <v-btn
       class="mt-6"
       variant="flat"
@@ -72,10 +76,12 @@
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 
 const props = defineProps<{
   filterKind: FilterKind;
 }>();
+
 
 const filterStore = useFilterStore();
 const snackbar = useSnackbar();
