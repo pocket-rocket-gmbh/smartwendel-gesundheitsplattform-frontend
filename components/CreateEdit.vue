@@ -102,6 +102,8 @@ const getItem = async () => {
   await showApi.getItem();
   loadingItem.value = false;
   item.value = showApi.item.value;
+
+  console.log(item.value)
 };
 
 const handleCta = async () => {

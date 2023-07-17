@@ -116,6 +116,8 @@ const itemPlaceholder = ref<any>({
   is_active: false,
   description: "",
   category_ids: [],
+  tags: [],
+  tag_ids: [],
   tag_category_ids: [],
   offlineDocuments: [],
 });

@@ -1,10 +1,7 @@
 <template>
   <div>
     <h2 class="is-dark-grey is-uppercase mb-4">Suche filtern</h2>
-    <v-skeleton-loader
-      :loading="loading"
-      type="article"
-      >
+    <v-skeleton-loader :loading="loading" type="article">
       <div class="filter-tiles">
         <div v-for="filter in itemsForServiceList">
           <div v-for="item in filter.next" class="mt-5">
@@ -18,30 +15,21 @@
                 v-auto-animate
               >
                 <div
-                  class="filter-tile pa-5 "
+                  class="filter-tile pa-5"
                   :class="{ selected: isSelected(subItem.id) }"
-                  @click="toggleSelection(subItem.id)"
+                  @click="toggleSelection(subItem)"
                 >
                   {{ subItem.title }}
                 </div>
-                <PublicTagSelect
-                  v-if="subItem.next.length && filterStore.currentTags.includes(subItem?.id)"
-                  :filterId="subItem.id"
-                />
+                <PublicTagSelect v-if="subItem.next.length && expandedItemId === subItem.id" :filterId="subItem.id" />
+                <!-- TODO: PublicTagSelect is loading all the filters from the fiven filterId AGAIN. But we already have all the filters in out 'next' array -->
               </v-col>
             </v-row>
           </div>
         </div>
       </div>
     </v-skeleton-loader>
-    <v-btn
-      class="mt-6"
-      variant="flat"
-      size="large"
-      rounded="pill"
-      color="primary"
-      @click="applyFilters"
-    >
+    <v-btn class="mt-6" variant="flat" size="large" rounded="pill" color="primary" @click="applyFilters">
       Filter anwenden
     </v-btn>
     <div>
@@ -76,12 +64,11 @@
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
-import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
+import { VSkeletonLoader } from "vuetify/labs/VSkeletonLoader";
 
 const props = defineProps<{
   filterKind: FilterKind;
 }>();
-
 
 const filterStore = useFilterStore();
 const snackbar = useSnackbar();
@@ -89,6 +76,7 @@ const snackbar = useSnackbar();
 const loading = ref(false);
 
 const itemsForServiceList = ref<CollapsibleListItem[]>([]);
+const expandedItemId = ref("");
 
 const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
@@ -100,11 +88,7 @@ type FilterResponse = {
   menu_order: number;
 };
 
-const getItemsAndNext = async (
-  filter: FilterResponse,
-  arrayToAdd: CollapsibleListItem[],
-  layer: number
-) => {
+const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number) => {
   api.setEndpoint(`tag_categories?parent_id=${filter.id}`);
   const options = {
     page: 1,
@@ -169,19 +153,14 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter(
-    (item: Facility) => props.filterKind === item.kind
-  ); // Filter items for current kind (event/facility/news/course) // hereeeeee!!!!
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind); // Filter items for current kind (event/facility/news/course) // hereeeeee!!!!
   if (!filters) {
     console.error("No filters!");
     return;
   }
 
-  const serviceFilters = filters.filter(
-    (filter) => filter.filter_type === "filter_service"
-  );
+  const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
 
-  const tmpItemsForFacilityList: CollapsibleListItem[] = [];
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
   const nextLayerWavePromisesService = serviceFilters.map((filter) =>
@@ -198,11 +177,16 @@ const isSelected = (itemId: string) => {
   return filterStore.currentTags.includes(itemId);
 };
 
-const toggleSelection = (itemId: string) => {
-  if (isSelected(itemId)) {
-    filterStore.currentTags = filterStore.currentTags.filter((id) => id !== itemId);
+const toggleSelection = (item: CollapsibleListItem) => {
+  if (item.next?.length) {
+    expandedItemId.value = expandedItemId.value === item.id ? "" : item.id;
+    return;
+  }
+
+  if (isSelected(item.id)) {
+    filterStore.currentTags = filterStore.currentTags.filter((id) => id !== item.id);
   } else {
-    filterStore.currentTags.push(itemId);
+    filterStore.currentTags.push(item.id);
   }
 };
 
@@ -223,7 +207,7 @@ const applyFilters = () => {
 onMounted(async () => {
   loading.value = true;
   await getItems();
-  loading.value = false
+  loading.value = false;
 });
 </script>
 
@@ -238,7 +222,7 @@ onMounted(async () => {
       place-items: center;
       text-align: center;
       display: flex;
-      justify-content: center!important;
+      justify-content: center !important;
       cursor: pointer;
       width: inherit;
       flex: 1 auto;
@@ -251,7 +235,7 @@ onMounted(async () => {
       &:hover,
       &.selected {
         background-color: #8ab61d;
-        border-color: #9EA10C;
+        border-color: #9ea10c;
         color: white;
       }
     }

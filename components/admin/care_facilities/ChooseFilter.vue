@@ -1,5 +1,7 @@
 <template>
-    <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable>Bitte mindestens einen Filter auswählen</v-alert>
+  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable
+    >Bitte mindestens einen Filter auswählen</v-alert
+  >
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
     Filter werden geladen ...
   </LoadingSpinner>
@@ -8,7 +10,7 @@
       v-for="mainFilter in availableFilters"
       :id="mainFilter.id"
       :expand="expandId === mainFilter.id"
-      @expand-toggled="expandId = mainFilter.id"
+      @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title>
         {{ mainFilter.name }}
@@ -72,6 +74,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
+  (event: "expandToggled"): void;
 }>();
 
 type Filter = { id: string; name: string; next?: Filter[] };
@@ -193,8 +196,6 @@ const handleSubFilterClick = async (parent: Filter, current: Filter) => {
 };
 
 const handleClick = (parent: Filter, current: Filter) => {
-  console.log(availableFilters.value);
-
   selectedFilter.value = current;
 
   const removeIndex = props.preSetTags.findIndex((tagId) => tagId === current.id);
@@ -248,7 +249,6 @@ const handleCreateNewService = async (parentId: string, name: string) => {
 const reloadFilters = async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters(props.filterType, props.filterKind);
-  console.log(mainFilters.value)
 
   const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
 
@@ -260,6 +260,17 @@ const reloadFilters = async () => {
 
   loadingFilters.value = false;
 };
+
+const handleExpandToggle = (selectedId: string) => {
+  expandId.value = expandId.value == selectedId ? "" : selectedId;
+  emit("expandToggled");
+};
+
+const resetExpand = () => {
+  expandId.value = "";
+};
+
+defineExpose({ resetExpand });
 
 onMounted(async () => {
   reloadFilters();

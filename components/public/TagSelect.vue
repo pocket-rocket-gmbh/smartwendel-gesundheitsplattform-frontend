@@ -58,7 +58,7 @@ const loading = ref(false);
 const filterStore = useFilterStore();
 
 const availableTags = ref<Tag[]>([]);
-const maxTagsToShow = ref(1);
+const maxTagsToShow = ref(5);
 const showMoreButton = ref(true);
 
 const limitedTags = computed(() => {
