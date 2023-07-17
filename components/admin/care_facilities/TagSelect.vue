@@ -60,34 +60,27 @@
 </template>
 
 <script setup lang="ts">
-import { FilterKind } from "~/store/searchFilter";
+import { FilterKind, FilterTag } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 
 const props = defineProps<{
   expand: boolean;
   kind: FilterKind;
-  preSetTags: Tag[];
+  preSetTags: FilterTag[];
 }>();
 
 const emit = defineEmits<{
   (event: "toggleExpand"): void;
-  (event: "setTags", tags: Tag[]): void;
+  (event: "setTags", tags: FilterTag[]): void;
 }>();
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 api.setEndpoint("tags");
 
-type Tag = {
-  id: string;
-  menu_order: number;
-  name: string;
-  scope: string;
-};
+const allTags = ref<FilterTag[]>([]);
 
-const allTags = ref<Tag[]>([]);
-
-const currentTag = ref<Tag>(null);
+const currentTag = ref<FilterTag>(null);
 const currentTagSearch = ref("");
 
 const handleExpandToggled = () => {
@@ -98,7 +91,7 @@ const allTagsWithoutSelected = computed(() => {
   return allTags.value.filter((tag) => !props.preSetTags.find((preSetTag) => preSetTag.id === tag.id));
 });
 
-const handleRemoveTag = (tag: Tag) => {
+const handleRemoveTag = (tag: FilterTag) => {
   const tagIndex = props.preSetTags.findIndex((preSetTag) => preSetTag.id === tag.id);
 
   if (tagIndex === -1) return;

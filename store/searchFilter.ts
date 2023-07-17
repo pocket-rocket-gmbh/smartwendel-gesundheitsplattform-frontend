@@ -7,6 +7,12 @@ export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
 export type FilterType = "filter_facility" | "filter_service";
+export type FilterTag = {
+  id: string;
+  menu_order: number;
+  name: string;
+  scope: string;
+};
 
 export type Facility = {
   id: string;
@@ -14,6 +20,7 @@ export type Facility = {
   description?: string;
   kind: FilterKind;
   filterType: FilterType;
+  tags: FilterTag[];
   zip?: string;
   street?: string;
   latitude?: string;
@@ -148,6 +155,7 @@ export const useFilterStore = defineStore({
       await api.retrieveCollection(options as any);
 
       const allResultsFromApi: Facility[] = api.items.value;
+      console.log(allResultsFromApi);
 
       const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
         api.setEndpoint(`care_facilities/${result.id}`);
@@ -211,7 +219,8 @@ export const useFilterStore = defineStore({
           return (
             result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
             (!this.onlySearchInTitle &&
-              result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))
+              (result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
+                result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
           );
         });
 
