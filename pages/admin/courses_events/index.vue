@@ -3,7 +3,7 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
     <h2 v-else>Kurse und Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Legen Sie hier Ihre Veranstaltung oder Ihren Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
+      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
     >
     <template v-if="setupFinished">
       <div class="my-5">

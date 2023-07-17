@@ -66,8 +66,16 @@
             >
             </v-btn>
           </template>
-          <p>{{ document.name }}</p>
+          <i>{{ document.name.replace('-insurance', '.pdf') }}</i>
           <v-divider></v-divider>
+          <span v-if="documentAcepted" class="d-flex align-center text-primary">
+            <v-icon>mdi-check-decagram-outline</v-icon>
+            <i>Genehmigt</i>
+          </span>
+          <span v-else class="d-flex align-center text-warning">
+            <v-icon>mdi-alert-outline</v-icon>
+            <i>Datei wird überprüft</i>
+          </span>
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteFile(document.signed_id)"></v-btn>
           </template>
@@ -92,7 +100,7 @@
             >
             </v-btn>
           </template>
-          <v-divider></v-divider>
+          <v-divider></v-divider>       
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteOfflineFile('insurance', index)"></v-btn>
           </template>
@@ -119,7 +127,7 @@
             >
             </v-btn>
           </template>
-          <p>{{ document.name }}</p>
+          <i>{{ document.name.replace('-documents', '.pdf') }}</i>
           <v-divider></v-divider>
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteFile(document.signed_id)"></v-btn>
@@ -164,9 +172,9 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
+  documentAcepted: boolean;
   itemId: string;
   tagName: "documents" | "insurance";
-
   offlineDocuments?: CreateEditFacility["offlineDocuments"];
 }>();
 
@@ -322,7 +330,7 @@ const handleMount = () => {
 
 watch(
   () => props.itemId,
-  () => handleMount()
+  () => handleMount(),
 );
 
 onMounted(() => {

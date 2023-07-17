@@ -64,7 +64,6 @@
               rounded="pill"
               size="large"
               :href="`/public/care_facilities/${careFacility.id}`"
-              target="_blank"
               >
               <span>
                 Details ansehen
@@ -97,6 +96,7 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
 </script>
 
 <style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
 .item
   background: #FFFFFF
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
@@ -124,4 +124,3 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
   .content-box
     flex: 1
 </style>
-~/store/SearchFilter

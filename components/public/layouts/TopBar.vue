@@ -3,7 +3,7 @@
     <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10"> 
       <v-app-bar-title>
         <div class="d-flex align-center">
-          <img @click="handleResetLink()" class="logo-header is-clickable" src="~/assets/images/logo.png" width="200" />
+          <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />
           <div class="align-center d-none d-sm-flex mx-2">
             <div class="is-clickable d-flex" v-for="(category, index) in categories" :key="index">
               <v-menu
@@ -293,9 +293,6 @@ export default defineComponent({
 .hero
   background: linear-gradient(270deg, #017DC2 0.29%, #015281 100%)
   height: 100%
-
-.logo-header
-  padding: 10px
 
 .my-account
   background-color: #F5F5F5
