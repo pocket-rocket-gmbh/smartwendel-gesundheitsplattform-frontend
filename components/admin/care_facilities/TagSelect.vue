@@ -150,7 +150,6 @@ const loadAllTags = async () => {
   const tags = res.data.resources;
 
   allTags.value = tags;
-  console.log(allTags.value);
 };
 
 onMounted(async () => {

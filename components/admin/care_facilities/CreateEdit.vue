@@ -843,7 +843,6 @@ const setTagCategoryIds = (tags: any) => {
 };
 
 const setTagIds = (tags: any) => {
-  console.log({ tags });
   if (!tags || !Array.isArray(tags)) return;
 
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
