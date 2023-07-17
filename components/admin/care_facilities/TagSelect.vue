@@ -133,6 +133,7 @@ const handleAddTag = async () => {
     const newTag = await createTag(currentTag.value);
     if (!newTag) return;
     emit("setTags", [...props.preSetTags, newTag]);
+    currentTag.value = null;
     loadAllTags();
   } else {
     // TODO: "Offline"-add-tag
