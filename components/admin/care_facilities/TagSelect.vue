@@ -103,7 +103,6 @@ const handleRemoveTag = (tag: FilterTag) => {
   emit("setTags", [...props.preSetTags]);
 };
 
-
 const createTag = async (name: string) => {
   api.setEndpoint(`tags`);
   const res = await api.createItem({
@@ -137,8 +136,13 @@ const loadAllTags = async () => {
   const res = await api.retrieveCollection();
   if (res.status !== ResultStatus.SUCCESSFUL) return;
 
+  console.log(res.data.resources);
+
   // const tags = res.data.resources;
-  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => filterKindToFilterScope(props.kind) === item.scope);
+  const scope = filterKindToFilterScope(props.kind);
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>
+    scope === "course" || scope === "event" ? item.scope === "course" || item.scope === "event" : scope === item.scope
+  );
 
   allTags.value = tags;
 };

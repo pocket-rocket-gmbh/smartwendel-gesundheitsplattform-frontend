@@ -171,7 +171,11 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind); // Filter items for current kind (event/facility/news/course)
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) =>
+    props.filterKind === "course" || props.filterKind === "event"
+      ? item.kind === "course" || item.kind === "event"
+      : props.filterKind === item.kind
+  ); // Filter items for current kind (event/facility/news/course)
   if (!filters) {
     console.error("No filters!");
     return;
@@ -232,7 +236,10 @@ const loadAllTags = async () => {
   if (res.status !== ResultStatus.SUCCESSFUL) return;
 
   // const tags: FilterTag[] = res.data.resources;
-  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => filterKindToFilterScope(props.filterKind) === item.scope);
+  const scope = filterKindToFilterScope(props.filterKind);
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>
+    scope === "course" || scope === "event" ? item.scope === "course" || item.scope === "event" : scope === item.scope
+  );
 
   return tags;
 };
