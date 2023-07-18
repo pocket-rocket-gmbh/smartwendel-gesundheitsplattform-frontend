@@ -37,6 +37,7 @@
             :item-title="'name'"
             :item-value="'id'"
             hide-details="auto"
+            v-on:keyup.enter="handleAddTag"
           >
             <template v-slot:no-data>
               <v-list-item>
