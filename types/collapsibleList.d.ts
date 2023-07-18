@@ -16,11 +16,14 @@ export type CollapsibleListItemAdditionalData = AdditionalRaw | AdditionalApi;
 export type CollapsibleListItem = {
   id: string;
   title: string;
-  menuOrder: number,
-  layer: number,
+  menuOrder: number;
+  layer: number;
   additionalData?: CollapsibleListItemAdditionalData;
   canAddAdditionalData?: boolean;
   addEntryButtonText?: string;
+  specialType?: string;
   specialActionOnEditClick?: string;
+  specialActionOnEditClick?: string;
+  static?: boolean;
   next?: CollapsibleListItem[];
 };

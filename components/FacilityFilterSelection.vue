@@ -109,7 +109,7 @@ const handleOptionSelect = (option: Filter) => {
 
 onMounted(async () => {
   loadingFilters.value = true;
-  mainFilters.value = await getMainFilters("facility");
+  mainFilters.value = await getMainFilters('filter_facility', 'facility');
 
   const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
   const allOptions = await Promise.all(allOptionsPromises);

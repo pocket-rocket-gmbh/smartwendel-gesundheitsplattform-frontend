@@ -6,12 +6,21 @@ export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
+export type FilterType = "filter_facility" | "filter_service";
+export type FilterTag = {
+  id: string;
+  menu_order: number;
+  name: string;
+  scope: string;
+};
 
 export type Facility = {
   id: string;
   name: string;
   description?: string;
   kind: FilterKind;
+  filterType: FilterType;
+  tags: FilterTag[];
   zip?: string;
   street?: string;
   latitude?: string;
@@ -19,8 +28,8 @@ export type Facility = {
   town?: string;
   phone?: string;
   email?: string;
-  url?: string,
-  image_url?: string,
+  url?: string;
+  image_url?: string;
 };
 
 export type Filter = {
@@ -209,7 +218,8 @@ export const useFilterStore = defineStore({
           return (
             result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
             (!this.onlySearchInTitle &&
-              result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))
+              (result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
+                result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
           );
         });
 

@@ -36,7 +36,7 @@
                 v-model="tempAdditionalData"
               />
             </div>
-            <div class="actions" v-auto-animate>
+            <div v-if="!element.static" class="actions" v-auto-animate>
               <v-tooltip top v-if="openEdit !== element.id">
                 <template v-slot:activator="{ props }">
                   <v-icon class="clickable" v-bind="props" @click.stop="editClick(element)">mdi-pencil</v-icon>
@@ -70,8 +70,8 @@
               :items="element.next"
               :layer="layer + 1"
               @entry-click="
-                (action, prevItems, originalStep, title, additional) =>
-                  handleEmit(action, [...prevItems, element.id], originalStep, title, additional)
+                (action, prevItems, originalStep, title, additional, specialType) =>
+                  handleEmit(action, [...prevItems, element.id], originalStep, title, additional, specialType)
               "
               @edit-click="
                 (action, prevItems, originalStep) => handleEditEmit(action, [...prevItems, element.id], originalStep)
@@ -90,7 +90,7 @@
                 <div class="title">
                   <v-text-field v-model="tempTitle" hide-details="auto" label="Neuer Eintragstitel" />
                 </div>
-                <div v-if="!element.canAddAdditionalData" class="additional">
+                <div v-if="element.canAddAdditionalData" class="additional">
                   <v-textarea
                     v-model="tempAdditionalData"
                     hide-details="auto"
@@ -102,7 +102,7 @@
                 <div class="actions">
                   <v-tooltip top>
                     <template v-slot:activator="{ props }">
-                      <v-icon class="clickable" v-bind="props" @click.stop="save(element.id)"
+                      <v-icon class="clickable" v-bind="props" @click.stop="save(element)"
                         >mdi-content-save-outline</v-icon
                       >
                     </template>
@@ -142,7 +142,8 @@ const emit = defineEmits<{
     itemIds: string[],
     layer: number,
     title?: string,
-    additionalData?: string
+    additionalData?: string,
+    specialType?: string,
   ): void;
   (event: "editClick", action: string, itemIds: string[], layer: number): void;
   (
@@ -179,8 +180,8 @@ const handleClick = (itemId: string) => {
   openAddNew.value = itemId;
 };
 
-const handleEmit = (action: EmitAction, itemIds: string[], layer: number, title?: string, additionalData?: string) => {
-  emit("entryClick", action, itemIds, layer, title, additionalData);
+const handleEmit = (action: EmitAction, itemIds: string[], layer: number, title?: string, additionalData?: string, specialType?: string) => {
+  emit("entryClick", action, itemIds, layer, title, additionalData, specialType);
 };
 
 const handleEditEmit = (action: string, itemIds: string[], layer: number) => {
@@ -200,19 +201,19 @@ const editClick = (item: CollapsibleListItem) => {
 const deleteClick = (item: CollapsibleListItem) => {
   discard();
 
-  handleEmit("DELETE", [item.id], props.layer);
+  handleEmit("DELETE", [item.id], props.layer, null, null, item.specialType);
 };
 
 const editSaveClick = (item: CollapsibleListItem) => {
-  handleEmit("EDIT", [item.id], props.layer, tempTitle.value, tempAdditionalData.value);
+  handleEmit("EDIT", [item.id], props.layer, tempTitle.value, tempAdditionalData.value, item.specialType);
 
   openEdit.value = null;
   tempTitle.value = "";
   tempAdditionalData.value = "";
 };
 
-const save = (itemId: string) => {
-  handleEmit("CREATE", [itemId], props.layer, tempTitle.value, tempAdditionalData.value);
+const save = (item: CollapsibleListItem) => {
+  handleEmit("CREATE", [item.id], props.layer, tempTitle.value, tempAdditionalData.value, item.specialType);
 
   openAddNew.value = null;
   tempTitle.value = "";

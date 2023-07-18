@@ -5,7 +5,7 @@
     </v-col>
   </v-row>
   <div class="mx-15 my-10">    
-    <PublicNewsTheFilter />
+    <PublicNewsTheFilter :filterKind="'news'"/>
     <v-row>
       <PublicContentBox
         v-for="news in newsArticles" :key="news.id"

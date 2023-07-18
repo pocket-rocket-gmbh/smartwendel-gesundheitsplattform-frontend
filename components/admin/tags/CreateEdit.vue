@@ -1,5 +1,5 @@
 <template>
-  <CreateEdit v-slot="slotProps">
+  <CreateEdit v-slot="slotProps" v-bind="{ ...$props }">
     <v-card-text>
       <div class="field">
         <v-text-field
@@ -8,20 +8,23 @@
           label="Bezeichnung"
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         />
-        <!-- <v-text-field
-          v-model="slotProps.item.kind"
-          hide-details="auto"
-          label="Art"
-        /> -->
+        <v-text-field v-model="slotProps.item.filter_type" hide-details="auto" label="Art" />
       </div>
     </v-card-text>
-    <!-- {{ setKind(slotProps) }} -->
+    {{ setKind(slotProps) }}
   </CreateEdit>
 </template>
-<!-- 
+
 <script setup lang="ts">
+import { Facility, FilterKind } from "~/store/searchFilter";
 const setKind = (slotProps: any) => {
-  slotProps.item.kind = 'facility'
-}
-</script> -->
-<!-- Falls man später noch andere extra filter-oberkategorien will ist das hier nützlich um die kind zu setzen -->
+  slotProps.item.filter_type = "filter_service";
+};
+
+const props = defineProps<{
+  itemId: string;
+  itemPlaceholder: Partial<Facility>;
+  endpoint: string;
+  conceptName: string;
+}>();
+</script>

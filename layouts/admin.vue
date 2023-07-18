@@ -32,7 +32,9 @@
         <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
           <v-list-item link to="/admin" nuxt> Dashboard (Change Log) </v-list-item>
-          <v-list-item link to="/admin/filter" nuxt> Filter </v-list-item>
+          <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
+          <v-list-item link to="/admin/filter/events" nuxt> Veranstaltungsfilter </v-list-item>
+          <v-list-item link to="/admin/filter/news" nuxt> Beitragsfilter </v-list-item>
           <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
         </template>
         <v-list-item
