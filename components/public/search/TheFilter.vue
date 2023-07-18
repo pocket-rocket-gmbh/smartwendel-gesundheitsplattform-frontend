@@ -1,10 +1,10 @@
 <template>
   <div>
     <h2 class="is-dark-grey is-uppercase mb-4">Suche filtern</h2>
-    <v-skeleton-loader :loading="loading" type="article">
+    <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
       <div class="filter-tiles">
-        <div v-for="filter in itemsForServiceList">
-          <div v-for="item in filter.next" class="mt-5">
+        <div v-for="filter in itemsForServiceList" class="filter-group">
+          <div v-for="item in filter.next" class="mt-5 filter-selections">
             <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
             <v-row no-gutters class="mt-3 fill-height mr-1">
               <v-col
@@ -21,8 +21,16 @@
                 >
                   {{ subItem.title }}
                 </div>
-                <PublicTagSelect v-if="subItem.next.length && expandedItemId === subItem.id" :filterId="subItem.id" />
-                <!-- TODO: PublicTagSelect is loading all the filters from the fiven filterId AGAIN. But we already have all the filters in out 'next' array -->
+
+                <div v-if="subItem.next.length && expandedItemId === subItem.id" class="tag-select">
+                  <v-checkbox
+                    v-for="tag in subItem.next"
+                    class="mb-n10"
+                    :label="tag.title"
+                    v-model="filterStore.currentTags"
+                    :value="tag.id"
+                  />
+                </div>
               </v-col>
             </v-row>
           </div>
@@ -213,9 +221,20 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";
+
+.filter-wrapper {
+  display: flex;
+  justify-content: stretch;
+}
+
 .filter-tiles {
   display: flex;
   flex-wrap: wrap;
+  flex: 1;
+
+  .filter-group {
+    flex: 1;
+  }
 
   .column-items {
     .filter-tile {
