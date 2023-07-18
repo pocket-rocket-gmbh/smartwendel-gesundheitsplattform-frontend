@@ -209,6 +209,7 @@
                   <Datepicker
                     v-if="slotProps.item.kind === 'event'"
                     inline
+                    multi-dates
                     preview-format="dd.MM.yyyy HH:mm"
                     format="dd.MM.yyyy HH:mm"
                     model-type="dd.MM.yyyy HH:mm"
@@ -226,7 +227,7 @@
                     :clearable="false"
                   />
                 </v-col>
-                <v-col>
+                <v-col md="7">
                   <v-table density="compact" fixed-header height="400px" v-if="slotProps.item.kind === 'course'">
                     <thead>
                       <tr>
@@ -266,8 +267,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>{{ slotProps.item.event_dates }}</td>
+                      <tr v-for="(date, index) in slotProps.item.event_dates"
+                      :key="index">
+                        <td>{{ date }}</td>
                       </tr>
                     </tbody>
                   </v-table>
