@@ -12,8 +12,8 @@
       :items="itemsForFacilityList"
       :layer="0"
       @entry-click="
-        (action, itemIds, layer, title, additionalInformation) =>
-          handleClick(action, itemIds, layer, title, additionalInformation, 'filter_facility')
+        (action, itemIds, layer, title, additionalInformation, specialType) =>
+          handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_facility')
       "
       @entry-moved="handleMove"
       :disable-draggable="true"
@@ -24,8 +24,8 @@
       :items="itemsForServiceList"
       :layer="0"
       @entry-click="
-        (action, itemIds, layer, title, additionalInformation) =>
-          handleClick(action, itemIds, layer, title, additionalInformation, 'filter_service')
+        (action, itemIds, layer, title, additionalInformation, specialType) =>
+          handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_service')
       "
       @entry-moved="handleMove"
       :disable-draggable="true"
@@ -45,7 +45,7 @@
       v-if="confirmDeleteDialogOpen"
       @close="handleItemDeleted"
       :item-id="itemId"
-      endpoint="tag_categories"
+      :endpoint="deleteEndpoint"
       term="diesen Filter"
     />
   </div>
@@ -59,7 +59,8 @@ import { useCollectionApi } from "../../../composables/api/collectionApi";
 import { usePrivateApi } from "../../../composables/api/private";
 import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
 import { ResultStatus } from "../../../types/serverCallResult";
-import { Facility, FilterKind, FilterType } from "../../../store/searchFilter";
+import { Facility, FilterKind, FilterTag, FilterType } from "../../../store/searchFilter";
+import { filterKindToFilterScope } from "~/utils/filter.utils";
 
 const props = defineProps<{
   filterKind: FilterKind;
@@ -69,6 +70,8 @@ const props = defineProps<{
 const itemsForFacilityList = ref<CollapsibleListItem[]>([]);
 const itemsForServiceList = ref<CollapsibleListItem[]>([]);
 const adminStore = useAdminStore();
+
+const deleteEndpoint = ref("tag_categories");
 
 const itemPlaceholder = ref({
   name: "",
@@ -125,6 +128,7 @@ const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleLi
     //   path: "resource.kind",
     // },
     // canAddAdditionalData: layer === 0,
+    static: layer === 0,
     next: [],
   };
 
@@ -187,10 +191,50 @@ const getItems = async () => {
   );
   await Promise.all([...nextLayerWavePromisesFacility, ...nextLayerWavePromisesService]);
 
+  const tags = await loadAllTags();
+
   adminStore.loading = false;
+
+  const transformedTags: CollapsibleListItem[] = tags.map((tag) => ({
+    id: tag.id,
+    title: tag.name,
+    menuOrder: tag.menu_order,
+    specialType: "tag",
+    layer: 0,
+  }));
+
+  tmpItemsForServiceList[0].next.push({
+    id: "0",
+    layer: 1,
+    title: "Leistungsangebote (branchenspezifisch)",
+    menuOrder: 0,
+    static: true,
+    specialType: "tag",
+    next: [...transformedTags],
+  });
 
   itemsForFacilityList.value = [...tmpItemsForFacilityList];
   itemsForServiceList.value = [...tmpItemsForServiceList];
+};
+
+const loadAllTags = async () => {
+  api.setEndpoint("tags");
+  const options = {
+    page: 1,
+    per_page: 999,
+    sort_by: "menu_order",
+    sort_order: "asc",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+  const res = await api.retrieveCollection(options);
+  if (res.status !== ResultStatus.SUCCESSFUL) return;
+
+  // const tags: FilterTag[] = res.data.resources;
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => filterKindToFilterScope(props.filterKind) === item.scope);
+
+  return tags;
 };
 
 const handleClick = async (
@@ -199,20 +243,21 @@ const handleClick = async (
   layer: number,
   name: string,
   kind: string,
+  specialType: string,
   filterType: FilterType
 ) => {
   switch (action) {
     case "CREATE":
-      return handleCreate(itemIds, layer, name, filterType);
+      return handleCreate(itemIds, layer, name, filterType, specialType);
     case "DELETE":
-      return handleDelete(itemIds, layer);
+      return handleDelete(itemIds, layer, specialType);
     case "EDIT":
-      return handleEdit(itemIds, layer, name, kind);
+      return handleEdit(itemIds, layer, name, kind, specialType);
   }
 };
 
-const handleEdit = async (itemIds: string[], layer: number, name: string, kind: string) => {
-  api.setEndpoint(`tag_categories/${itemIds[0]}`);
+const handleEdit = async (itemIds: string[], layer: number, name: string, kind: string, specialType: string) => {
+  api.setEndpoint(`${specialType === "tag" ? "tags" : "tag_categories"}/${itemIds[0]}`);
 
   const result = await api.updateItem({ name, kind }, "Erfolgreich aktualisiert");
 
@@ -224,7 +269,30 @@ const handleEdit = async (itemIds: string[], layer: number, name: string, kind: 
   }
 };
 
-const handleCreate = async (itemIds: string[], layer: number, name: string, filterType: FilterType) => {
+const handleCreate = async (
+  itemIds: string[],
+  layer: number,
+  name: string,
+  filterType: FilterType,
+  specialType: string
+) => {
+  if (specialType === "tag") {
+    api.setEndpoint(`tags`);
+    const res = await api.createItem({
+      name,
+      scope: filterKindToFilterScope(props.filterKind),
+    });
+
+    if (res.status === ResultStatus.SUCCESSFUL) {
+      console.log("SUCCESS");
+      getItems();
+    } else {
+      console.error("ERROR");
+    }
+
+    return;
+  }
+
   api.setEndpoint(`tag_categories`);
 
   const result = await api.createItem({ name, parent_id: itemIds[0], filter_type: filterType }, `Erfolgreich erstellt`);
@@ -237,7 +305,8 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, filt
   }
 };
 
-const handleDelete = async (itemIds: string[], layer: number) => {
+const handleDelete = async (itemIds: string[], layer: number, specialType: string) => {
+  deleteEndpoint.value = specialType === "tag" ? "tags" : "tag_categories";
   openDeleteDialog(itemIds[0]);
 };
 

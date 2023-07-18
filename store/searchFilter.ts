@@ -155,7 +155,6 @@ export const useFilterStore = defineStore({
       await api.retrieveCollection(options as any);
 
       const allResultsFromApi: Facility[] = api.items.value;
-      console.log(allResultsFromApi);
 
       const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
         api.setEndpoint(`care_facilities/${result.id}`);

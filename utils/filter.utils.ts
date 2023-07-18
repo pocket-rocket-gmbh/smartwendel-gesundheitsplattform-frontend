@@ -59,3 +59,9 @@ export const getCurrentUserFacilities = async () => {
 
   return userFacility;
 };
+
+export const filterKindToFilterScope = (kind: FilterKind) => {
+  if (kind !== "facility") return kind;
+
+  return "care_facility";
+};

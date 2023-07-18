@@ -60,6 +60,7 @@
 </template>
 
 <script setup lang="ts">
+import { filterKindToFilterScope } from "~/utils/filter.utils";
 import { FilterKind, FilterTag } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 
@@ -101,11 +102,6 @@ const handleRemoveTag = (tag: FilterTag) => {
   emit("setTags", [...props.preSetTags]);
 };
 
-const filterKindToFilterScope = (kind: FilterKind) => {
-  if (kind !== "facility") return kind;
-
-  return "care_facility";
-};
 
 const createTag = async (name: string) => {
   api.setEndpoint(`tags`);
@@ -140,7 +136,8 @@ const loadAllTags = async () => {
   const res = await api.retrieveCollection();
   if (res.status !== ResultStatus.SUCCESSFUL) return;
 
-  const tags = res.data.resources;
+  // const tags = res.data.resources;
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => filterKindToFilterScope(props.kind) === item.scope);
 
   allTags.value = tags;
 };
