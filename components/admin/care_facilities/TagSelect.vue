@@ -1,6 +1,15 @@
 <template>
   <CollapsibleItem class="tag-select" id="tag-select" :expand="expand" @expand-toggled="handleExpandToggled">
-    <template #title> Leistungsangebote (branchenspezifisch) </template>
+    <template #title>
+      <div class="title">
+        <div>Leistungsangebote (branchenspezifisch)</div>
+        <div v-if="!expand" class="selected">
+          <v-chip v-for="tag in preSetTags" :key="tag.id">
+            {{ tag.name }}
+          </v-chip>
+        </div>
+      </div>
+    </template>
     <template #content>
       <div class="content">
         <div class="content-title">
@@ -155,6 +164,18 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .tag-select {
   margin-top: 0.5rem;
+
+  .title {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+
+    .selected {
+      display: flex;
+      gap: 1rem;
+    }
+  }
 }
 
 .content-title {
