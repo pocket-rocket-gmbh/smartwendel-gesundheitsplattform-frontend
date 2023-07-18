@@ -1,7 +1,7 @@
 <template>
-  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable
-    >Bitte mindestens einen Filter auswählen</v-alert
-  >
+  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable>
+    Bitte mindestens einen Filter auswählen
+  </v-alert>
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
     Filter werden geladen ...
   </LoadingSpinner>
@@ -9,7 +9,7 @@
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
       :id="mainFilter.id"
-      :expand="expandId === mainFilter.id"
+      :expand="!expandIds.includes(mainFilter.id)"
       @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title>
@@ -74,7 +74,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
-  (event: "expandToggled"): void;
 }>();
 
 type Filter = { id: string; name: string; next?: Filter[] };
@@ -98,7 +97,7 @@ const filterSelected = computed(() => {
 });
 
 const mainFilters = ref([]);
-const expandId = ref("");
+const expandIds = ref<string[]>([]);
 
 const loadingFilters = ref(false);
 
@@ -262,15 +261,15 @@ const reloadFilters = async () => {
 };
 
 const handleExpandToggle = (selectedId: string) => {
-  expandId.value = expandId.value == selectedId ? "" : selectedId;
-  emit("expandToggled");
-};
+  const expandIndex = expandIds.value.findIndex(id => id === selectedId);
 
-const resetExpand = () => {
-  expandId.value = "";
-};
+  if (expandIndex === -1) {
+    expandIds.value.push(selectedId);
+    return;
+  }
 
-defineExpose({ resetExpand });
+  expandIds.value.splice(expandIndex, 1);
+};
 
 onMounted(async () => {
   reloadFilters();

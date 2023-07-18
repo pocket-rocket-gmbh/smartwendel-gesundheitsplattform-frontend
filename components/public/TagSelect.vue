@@ -1,5 +1,5 @@
 <template>
-  <LoadingSpinner class="d-flex justify-center mt-5" v-if="loading">laden... </LoadingSpinner>
+  <LoadingSpinner class="d-flex justify-center mt-5" v-if="loading"> Laden... </LoadingSpinner>
   <div class="selection" v-else>
     <div v-for="(tag, index) in limitedTags" :key="tag.id">
       <v-checkbox

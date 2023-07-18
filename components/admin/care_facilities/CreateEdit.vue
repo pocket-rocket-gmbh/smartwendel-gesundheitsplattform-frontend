@@ -162,13 +162,11 @@
               </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
-              ref="serviceFilterRef"
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_service"
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
-              @expand-toggled="expandTagSelect = false"
             />
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
@@ -565,9 +563,6 @@ const textOptions = ref({
 });
 
 const handleTagSelectToggle = () => {
-  if (!serviceFilterRef.value) return;
-
-  serviceFilterRef.value.resetExpand();
   expandTagSelect.value = !expandTagSelect.value;
 };
 
