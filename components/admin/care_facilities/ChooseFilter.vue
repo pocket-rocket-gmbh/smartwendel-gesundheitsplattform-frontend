@@ -44,18 +44,6 @@
           </div>
         </div>
         <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
-        <div v-if="isCurrentMainFilterServices(mainFilter)" class="add-new">
-          <v-text-field
-            @click.stop
-            hide-details="auto"
-            v-model="newServiceName"
-            label="Neue Leistung"
-            density="compact"
-          />
-          <v-btn variant="outlined" elevation="0" @click="handleCreateNewService(mainFilter.id, newServiceName)"
-            >Neue Leistung hinzufügen</v-btn
-          >
-        </div>
       </template>
     </CollapsibleItem>
   </div>
@@ -221,10 +209,6 @@ const handleClick = (parent: Filter, current: Filter) => {
 
 const isChecked = (option: Filter) => {
   return props.preSetTags?.includes(option.id);
-};
-
-const isCurrentMainFilterServices = (mainFilter: Filter) => {
-  return mainFilter.name === "Leistungen";
 };
 
 const handleCreateNewService = async (parentId: string, name: string) => {
