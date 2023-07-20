@@ -7,21 +7,21 @@
         </router-link>
       </div>
       <v-list-item>
-        <v-list-item-title class="text-h6 my-3">
-          Gesundheitsplattform
-        </v-list-item-title>
+        <v-list-item-title class="text-h6 my-3"> Gesundheitsplattform </v-list-item-title>
         <v-list-item-subtitle> Smart Wendeler Land </v-list-item-subtitle>
       </v-list-item>
       <v-divider></v-divider>
       <div v-if="!user.currentUser.is_active_on_health_scope" class="d-flex align-center">
-        <v-alert type="warning" density="compact">Du bist zur Zeit in Prüfung und nicht freigegeben.
+        <v-alert type="warning" density="compact"
+          >Du bist zur Zeit in Prüfung und nicht freigegeben.
           <v-tooltip location="top" width="200">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props"
-                >mdi-information-outline</v-icon
-              >
+              <v-icon class="is-clickable" v-bind="props">mdi-information-outline</v-icon>
             </template>
-            <span> Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner Einrichtung. Nach erfolgreichem Abschluss wirst du freigeschaltet. Du kannst weiterhin deine Inhalte pflegen. </span>
+            <span>
+              Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner Einrichtung. Nach erfolgreichem
+              Abschluss wirst du freigeschaltet. Du kannst weiterhin deine Inhalte pflegen.
+            </span>
           </v-tooltip>
         </v-alert>
       </div>
@@ -32,8 +32,13 @@
         <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
           <v-list-item link to="/admin" nuxt> Dashboard (Change Log) </v-list-item>
-          <v-list-item link to="/admin/filter" nuxt> Filter </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
+          <v-list-item link to="/admin/filter/events" nuxt> Veranstaltungsfilter </v-list-item>
+          <v-list-item link to="/admin/filter/news" nuxt> Beitragsfilter </v-list-item>
+          <v-divider></v-divider>
           <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
+          <v-divider></v-divider>
         </template>
         <v-list-item
           link
@@ -41,9 +46,8 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-        <span v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
-        <span v-else>Einrichtungen</span>
-          
+          <span v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
+          <span v-else>Einrichtungen</span>
         </v-list-item>
         <v-list-item
           link
@@ -51,8 +55,8 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-        <span v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</span>
-        <span v-else>Kurse und Veranstaltungen</span>
+          <span v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</span>
+          <span v-else>Kurse und Veranstaltungen</span>
         </v-list-item>
         <v-list-item
           link
@@ -60,16 +64,17 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-        <span v-if="useUser().isFacilityOwner()">Meine Beiträge</span>
-        <span v-else>Beiträge</span>
+          <span v-if="useUser().isFacilityOwner()">Meine Beiträge</span>
+          <span v-else>Beiträge</span>
         </v-list-item>
+        <v-divider></v-divider>
         <v-list-item
           link
           to="/admin/user_profile"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-        <span>Mein Profil</span>
+          <span>Mein Profil</span>
         </v-list-item>
         <v-list-item
           link

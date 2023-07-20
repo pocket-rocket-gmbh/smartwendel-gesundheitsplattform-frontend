@@ -1,5 +1,7 @@
 <template>
-    <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable>Bitte mindestens einen Filter auswählen</v-alert>
+  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable>
+    Bitte mindestens einen Filter auswählen
+  </v-alert>
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
     Filter werden geladen ...
   </LoadingSpinner>
@@ -7,8 +9,8 @@
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
       :id="mainFilter.id"
-      :expand="expandId === mainFilter.id"
-      @expand-toggled="expandId = mainFilter.id"
+      :expand="!expandIds.includes(mainFilter.id)"
+      @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title>
         {{ mainFilter.name }}
@@ -42,18 +44,6 @@
           </div>
         </div>
         <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
-        <div v-if="isCurrentMainFilterServices(mainFilter)" class="add-new">
-          <v-text-field
-            @click.stop
-            hide-details="auto"
-            v-model="newServiceName"
-            label="Neue Leistung"
-            density="compact"
-          />
-          <v-btn variant="outlined" elevation="0" @click="handleCreateNewService(mainFilter.id, newServiceName)"
-            >Neue Leistung hinzufügen</v-btn
-          >
-        </div>
       </template>
     </CollapsibleItem>
   </div>
@@ -61,11 +51,12 @@
 
 <script setup lang="ts">
 import { ResultStatus } from "~/types/serverCallResult";
-import { FilterType } from "~/utils/filter.utils";
+import { FilterKind, FilterType } from "~/store/searchFilter";
 
 const props = defineProps<{
   preSetTags: string[];
   filterType: FilterType;
+  filterKind: FilterKind;
   enableMultiSelect?: boolean;
 }>();
 
@@ -94,7 +85,7 @@ const filterSelected = computed(() => {
 });
 
 const mainFilters = ref([]);
-const expandId = ref("");
+const expandIds = ref<string[]>([]);
 
 const loadingFilters = ref(false);
 
@@ -192,8 +183,6 @@ const handleSubFilterClick = async (parent: Filter, current: Filter) => {
 };
 
 const handleClick = (parent: Filter, current: Filter) => {
-  console.log(availableFilters.value);
-
   selectedFilter.value = current;
 
   const removeIndex = props.preSetTags.findIndex((tagId) => tagId === current.id);
@@ -222,10 +211,6 @@ const isChecked = (option: Filter) => {
   return props.preSetTags?.includes(option.id);
 };
 
-const isCurrentMainFilterServices = (mainFilter: Filter) => {
-  return mainFilter.name === "Leistungen";
-};
-
 const handleCreateNewService = async (parentId: string, name: string) => {
   if (!name) return;
 
@@ -246,7 +231,7 @@ const handleCreateNewService = async (parentId: string, name: string) => {
 
 const reloadFilters = async () => {
   loadingFilters.value = true;
-  mainFilters.value = await getMainFilters(props.filterType);
+  mainFilters.value = await getMainFilters(props.filterType, props.filterKind);
 
   const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
 
@@ -257,6 +242,17 @@ const reloadFilters = async () => {
   });
 
   loadingFilters.value = false;
+};
+
+const handleExpandToggle = (selectedId: string) => {
+  const expandIndex = expandIds.value.findIndex(id => id === selectedId);
+
+  if (expandIndex === -1) {
+    expandIds.value.push(selectedId);
+    return;
+  }
+
+  expandIds.value.splice(expandIndex, 1);
 };
 
 onMounted(async () => {

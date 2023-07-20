@@ -1,12 +1,12 @@
 <template>
   <div class="collapsible-item" v-auto-animate>
     <div class="title-bar" @click.stop="toggleExpand">
-      <div class="title" :class="isExpand && 'bold'" >
+      <div class="title" :class="expand && 'bold'" >
        <slot name="title" />
       </div>
-      <div class="chevron" :class="[isExpand ? 'down' : 'up']"></div>
+      <div class="chevron" :class="[expand ? 'down' : 'up']"></div>
     </div>
-    <div class="content" v-if="isExpand">
+    <div class="content" v-if="expand">
       <slot name="content"/>
     </div>
   </div>
@@ -18,22 +18,12 @@ const props = defineProps<{
   expand?: boolean;
 }>();
 
-watch(
-  () => props.expand,
-  () => {
-    isExpand.value = props.expand;
-  }
-);
-
 const emit = defineEmits<{
   (event: "expandToggled", expandValue: boolean): void;
 }>();
 
-const isExpand = ref(props.expand);
-
 const toggleExpand = () => {
-  isExpand.value = !isExpand.value;
-  emit("expandToggled", isExpand.value);
+  emit("expandToggled", !props.expand);
 };
 </script>
 

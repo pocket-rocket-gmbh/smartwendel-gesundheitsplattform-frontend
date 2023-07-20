@@ -75,6 +75,8 @@ const itemPlaceholder = ref({
   status: "is_checked",
   description: "",
   category_ids: [],
+  tags: [],
+  tag_ids: [],
   tag_category_ids: [],
   offlineImage: null,
   offlineLocations: [],

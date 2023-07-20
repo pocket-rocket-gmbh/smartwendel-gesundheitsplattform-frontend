@@ -5,9 +5,9 @@
       <v-container class="container limited padding">
         <v-row class="mt-1">
           <v-col md="4" lg="3" class="mt-4">
-            <PublicSearchTheFilter />
+            <PublicSearchTheFilter :filterKind="'event'"/>
           </v-col>
-          <v-col md="8" lg="9" class="filtered-items mb-10 d-flex justify-center align-center">
+          <v-col md="8" lg="9" class="filtered-items">
             <PublicSearchTheFilteredCareFacilities />
           </v-col>
         </v-row>

@@ -69,7 +69,6 @@ const routeToResults = (result?: Facility) => {
     router.push({ path: "/public/search" });
     return;
   }
-  console.log(result.id)
 
   if (result.kind === "facility") {
     return router.push({ path: `/public/care_facilities/${result.id}` });
