@@ -25,11 +25,22 @@ const props = defineProps<{
 const buttonHref = computed(() => {
   if (!props.item) return null;
 
-  if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
-  if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
-  if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
-  if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
-  if (props.item.url) return "https://" + props.item.url;
+  if (props.item.kind) {
+    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
+  }
+
+  if (props.item.url) {
+    if (props.item.url_kind === "internal") {
+      return props.item.url;
+    }
+
+    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
+      return props.item.url;
+    } else return "https://" + props.item.url;
+  }
 
   return null;
 });

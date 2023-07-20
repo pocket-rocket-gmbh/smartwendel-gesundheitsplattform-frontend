@@ -29,6 +29,7 @@ export type Facility = {
   phone?: string;
   email?: string;
   url?: string;
+  url_kind?: "internal" | "external";
   image_url?: string;
 };
 
