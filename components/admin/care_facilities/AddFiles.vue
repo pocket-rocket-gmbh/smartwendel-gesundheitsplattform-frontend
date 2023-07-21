@@ -39,7 +39,7 @@
       class="mt-5"
       @click="save"
       v-if="!loadingItem"
-      :disabled="filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge && file"
+      :disabled="filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge || !fileUrl?.length"
     >
       Hinzufügen
     </v-btn>

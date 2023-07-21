@@ -161,8 +161,8 @@ const register = async () => {
   const data = {
     email: email.value,
     firstname: firstname.value,
-    lastname: phone.value,
-    phone: lastname.value,
+    lastname: lastname.value,
+    phone: phone.value,
     commercial_register_number: " ",
     care_facility_name: careFacilityName.value,
     care_facility_zip: careFacilityZip.value,

@@ -314,7 +314,7 @@
                 @offline="handleDocumentsOffline"
               />
               <div class="d-flex align-center">
-                <span>
+                <span v-if="useUser().isAdmin()">
                   <v-icon color="primary">mdi-check-decagram-outline</v-icon>
                 </span>
                 <v-checkbox
