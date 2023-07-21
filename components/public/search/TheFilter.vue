@@ -22,7 +22,7 @@
                   {{ subItem.title }}
                 </div>
 
-                <div v-if="subItem.next.length && expandedItemId === subItem.id" class="tag-select">
+                <div v-if="subItem.next.length && expandedItemIds.includes(subItem.id)" class="tag-select">
                   <v-checkbox
                     v-for="tag in subItem.next"
                     class="mb-n10"
@@ -84,7 +84,7 @@ const snackbar = useSnackbar();
 const loading = ref(false);
 
 const itemsForServiceList = ref<CollapsibleListItem[]>([]);
-const expandedItemId = ref("");
+const expandedItemIds = ref([]);
 
 const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
@@ -187,7 +187,13 @@ const isSelected = (itemId: string) => {
 
 const toggleSelection = (item: CollapsibleListItem) => {
   if (item.next?.length) {
-    expandedItemId.value = expandedItemId.value === item.id ? "" : item.id;
+    const index = expandedItemIds.value.findIndex((expandedItemId) => expandedItemId === item.id);
+
+    if (index === -1) {
+      expandedItemIds.value.push(item.id);
+    } else {
+      expandedItemIds.value.splice(index, 1);
+    }
     return;
   }
 
