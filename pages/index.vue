@@ -1,14 +1,21 @@
 <template>
-  <header class="background">
-    <v-container>
+  <div>
+    <div class="background">
       <v-row>
-        <v-col md="7">
+        <v-col class="flex-column align-start justify-start ma-15" md="5" xl="4">
           <PublicLandingHeader />
-          <PublicLandingChooseCategory />
         </v-col>
-      </v-row>
-    </v-container>
-  </header>
+        </v-row>
+    </div>
+    <PublicLandingCurrentNotes />
+      <div class="divider ma-10"></div>
+    <PublicLandingCategories />
+    <PublicLandingCurrentRecommendations/>
+    <PublicLandingCurrentEvents />
+      <div class="divider ma-10"></div>
+    <PublicLandingHelplinks />
+  </div>
+  
 </template>
 
 <script lang="ts">
@@ -17,14 +24,10 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-header
-  height: 100vh
-  // slide into second navbar
-  margin-top: -50px
-.background
-  background: url('@/assets/images/home.jpg') no-repeat center center fixed
-  -webkit-background-size: cover
-  -moz-background-size: cover
-  -o-background-size: cover
+@import "@/assets/sass/main.sass"  
+.background 
+  background: url('../assets/images/home.svg') no-repeat center center
   background-size: cover
+  height: 100vh
+
 </style>

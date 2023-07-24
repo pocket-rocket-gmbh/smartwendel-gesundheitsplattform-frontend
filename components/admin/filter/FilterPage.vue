@@ -1,0 +1,399 @@
+<template>
+  <div>
+    <h2>{{ name }}</h2>
+    <!-- <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn> -->
+    <v-alert type="info" density="compact" closable class="mt-2"
+      >Filter erleichtern den Besuchern die Auffindbarkeit von Inhalten, Beispiele können zielgruppenspezifische Tags
+      wie z.B. nach Alter oder Geschlecht sein.</v-alert
+    >
+
+    <!-- Einrichtungsfilter -->
+    <CollapsibleListRec
+      :items="itemsForFacilityList"
+      :layer="0"
+      @entry-click="
+        (action, itemIds, layer, title, additionalInformation, specialType) =>
+          handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_facility')
+      "
+      @entry-moved="handleMove"
+      :disable-draggable="true"
+    />
+
+    <!-- Leistungsfilter -->
+    <CollapsibleListRec
+      :items="itemsForServiceList"
+      :layer="0"
+      @entry-click="
+        (action, itemIds, layer, title, additionalInformation, specialType) =>
+          handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_service')
+      "
+      @entry-moved="handleMove"
+      :disable-draggable="true"
+    />
+
+    <AdminTagsCreateEdit
+      :item-id="itemId"
+      v-if="createEditDialogOpen"
+      :item-placeholder="itemPlaceholder"
+      endpoint="tag_categories"
+      @close="handleAddTagClose"
+      :conceptName="name"
+      :kind="filterKind"
+    />
+
+    <DeleteItem
+      v-if="confirmDeleteDialogOpen"
+      @close="handleItemDeleted"
+      :item-id="itemId"
+      :endpoint="deleteEndpoint"
+      term="diesen Filter"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { useAdminStore } from "../../../store/admin";
+import { useSnackbar } from "../../../composables/ui/snackbar";
+import { useCollectionApi } from "../../../composables/api/collectionApi";
+import { usePrivateApi } from "../../../composables/api/private";
+import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
+import { ResultStatus } from "../../../types/serverCallResult";
+import { Facility, FilterKind, FilterTag, FilterType } from "../../../store/searchFilter";
+import { filterKindToFilterScope } from "~/utils/filter.utils";
+
+const props = defineProps<{
+  filterKind: FilterKind;
+  name: string;
+}>();
+
+const itemsForFacilityList = ref<CollapsibleListItem[]>([]);
+const itemsForServiceList = ref<CollapsibleListItem[]>([]);
+const adminStore = useAdminStore();
+
+const deleteEndpoint = ref("tag_categories");
+
+const itemPlaceholder = ref({
+  name: "",
+  scope: "care_facility",
+  kind: props.filterKind,
+});
+
+const createEditDialogOpen = ref(false);
+const confirmDeleteDialogOpen = ref(false);
+const itemId = ref<string | null>(null);
+
+const snackbar = useSnackbar();
+
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
+api.setEndpoint("tag_categories");
+
+const openCreateDialog = (id: string) => {
+  itemId.value = null;
+  createEditDialogOpen.value = true;
+};
+
+const openDeleteDialog = (id: string) => {
+  itemId.value = id;
+  confirmDeleteDialogOpen.value = true;
+};
+
+type FilterResponse = {
+  id: string;
+  name: string;
+  menu_order: number;
+};
+
+const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number) => {
+  api.setEndpoint(`tag_categories?parent_id=${filter.id}`);
+  const options = {
+    page: 1,
+    per_page: 999,
+    sort_by: "menu_order",
+    sort_order: "asc",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+
+  const filterItem: CollapsibleListItem = {
+    id: filter.id,
+    title: filter.name,
+    menuOrder: filter.menu_order,
+    layer,
+    // additionalData: layer === 0 && {
+    //   type: "api",
+    //   endpoint: `tag_categories/${filter.id}`,
+    //   path: "resource.kind",
+    // },
+    // canAddAdditionalData: layer === 0,
+    static: layer === 0,
+    next: [],
+  };
+
+  arrayToAdd.push(filterItem);
+
+  const response = await api.retrieveCollection(options);
+  if (response.status === ResultStatus.FAILED) {
+    console.error(response);
+    throw "Api failure";
+  }
+  const filterItems: FilterResponse[] = response?.data?.resources;
+  if (!filterItems) {
+    console.error("No filterItems!");
+    return false;
+  }
+
+  const nextLayerWave: any[] = filterItems.map((filterItemFromResponse) =>
+    getItemsAndNext(filterItemFromResponse, filterItem.next || [], layer + 1)
+  );
+  return Promise.all(nextLayerWave);
+};
+
+const getItems = async () => {
+  api.setEndpoint(`tag_categories`);
+
+  const options = {
+    page: 1,
+    per_page: 999,
+    sort_by: "menu_order",
+    sort_order: "asc",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+  adminStore.loading = true;
+  const result = await api.retrieveCollection(options);
+
+  if (result.status === ResultStatus.FAILED) {
+    console.error(result);
+    return;
+  }
+
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) =>
+    props.filterKind === "course" || props.filterKind === "event"
+      ? item.kind === "course" || item.kind === "event"
+      : props.filterKind === item.kind
+  ); // Filter items for current kind (event/facility/news/course)
+  if (!filters) {
+    console.error("No filters!");
+    return;
+  }
+
+  const facilityFilters = filters.filter((filter) => filter.filter_type === "filter_facility");
+  const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
+
+  const tmpItemsForFacilityList: CollapsibleListItem[] = [];
+  const tmpItemsForServiceList: CollapsibleListItem[] = [];
+
+  const nextLayerWavePromisesFacility = facilityFilters.map((filter) =>
+    getItemsAndNext(filter, tmpItemsForFacilityList, 0)
+  );
+  const nextLayerWavePromisesService = serviceFilters.map((filter) =>
+    getItemsAndNext(filter, tmpItemsForServiceList, 0)
+  );
+  await Promise.all([...nextLayerWavePromisesFacility, ...nextLayerWavePromisesService]);
+
+  const tags = await loadAllTags();
+
+  adminStore.loading = false;
+
+  const transformedTags: CollapsibleListItem[] = tags.map((tag) => ({
+    id: tag.id,
+    title: tag.name,
+    menuOrder: tag.menu_order,
+    specialType: "tag",
+    layer: 0,
+  }));
+
+  tmpItemsForServiceList[0].next.push({
+    id: "0",
+    layer: 1,
+    title: "Leistungsangebote (branchenspezifisch)",
+    menuOrder: 0,
+    static: true,
+    specialType: "tag",
+    next: [...transformedTags],
+  });
+
+  itemsForFacilityList.value = [...tmpItemsForFacilityList];
+  itemsForServiceList.value = [...tmpItemsForServiceList];
+};
+
+const loadAllTags = async () => {
+  api.setEndpoint("tags");
+  const options = {
+    page: 1,
+    per_page: 999,
+    sort_by: "menu_order",
+    sort_order: "asc",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+  const res = await api.retrieveCollection(options);
+  if (res.status !== ResultStatus.SUCCESSFUL) return;
+
+  // const tags: FilterTag[] = res.data.resources;
+  const scope = filterKindToFilterScope(props.filterKind);
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>
+    scope === "course" || scope === "event" ? item.scope === "course" || item.scope === "event" : scope === item.scope
+  );
+
+  return tags;
+};
+
+const handleClick = async (
+  action: EmitAction,
+  itemIds: string[],
+  layer: number,
+  name: string,
+  kind: string,
+  specialType: string,
+  filterType: FilterType
+) => {
+  switch (action) {
+    case "CREATE":
+      return handleCreate(itemIds, layer, name, filterType, specialType);
+    case "DELETE":
+      return handleDelete(itemIds, layer, specialType);
+    case "EDIT":
+      return handleEdit(itemIds, layer, name, kind, specialType);
+  }
+};
+
+const handleEdit = async (itemIds: string[], layer: number, name: string, kind: string, specialType: string) => {
+  api.setEndpoint(`${specialType === "tag" ? "tags" : "tag_categories"}/${itemIds[0]}`);
+
+  const result = await api.updateItem({ name, kind }, "Erfolgreich aktualisiert");
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    getItems();
+  } else {
+    console.error("error");
+  }
+};
+
+const handleCreate = async (
+  itemIds: string[],
+  layer: number,
+  name: string,
+  filterType: FilterType,
+  specialType: string
+) => {
+  if (specialType === "tag") {
+    api.setEndpoint(`tags`);
+    const res = await api.createItem({
+      name,
+      scope: filterKindToFilterScope(props.filterKind),
+    });
+
+    if (res.status === ResultStatus.SUCCESSFUL) {
+      console.log("SUCCESS");
+      getItems();
+    } else {
+      console.error("ERROR");
+    }
+
+    return;
+  }
+
+  api.setEndpoint(`tag_categories`);
+
+  const result = await api.createItem({ name, parent_id: itemIds[0], filter_type: filterType }, `Erfolgreich erstellt`);
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    console.log("SUCCESS");
+    getItems();
+  } else {
+    console.error("ERROR");
+  }
+};
+
+const handleDelete = async (itemIds: string[], layer: number, specialType: string) => {
+  deleteEndpoint.value = specialType === "tag" ? "tags" : "tag_categories";
+  openDeleteDialog(itemIds[0]);
+};
+
+const handleMove = async (
+  itemsInFilter: CollapsibleListItem[],
+  layer: number,
+  startIndex: number,
+  endIndex: number
+) => {
+  /**
+   * TODO: Move fix again
+   */
+
+  if (startIndex === endIndex) return;
+
+  const actualStartIndex = Math.min(startIndex, endIndex);
+  const actualEndIndex = Math.max(startIndex, endIndex);
+
+  const itemsToUpdate: any[] = [];
+
+  if (layer === 0) {
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
+      const filter = itemsForFacilityList.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      if (!filter) throw "Filter not found";
+      itemsToUpdate.push(filter);
+    }
+  } else if (layer === 1) {
+    const subFilters = itemsForFacilityList.value.reduce((prev, curr) => {
+      return [...prev, ...(curr.next || [])];
+    }, [] as CollapsibleListItem[]);
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
+      const subFilter = subFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      if (!subFilter) throw "SubFilter not found";
+      itemsToUpdate.push(subFilter);
+    }
+  } else if (layer === 2) {
+    const subFilters = itemsForFacilityList.value.reduce((prev, curr) => {
+      return [...prev, ...(curr.next || [])];
+    }, [] as CollapsibleListItem[]);
+    const subSubFilters = subFilters.reduce((prev, curr) => {
+      return [...prev, ...(curr.next || [])];
+    }, [] as CollapsibleListItem[]);
+    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
+      const subSubFilter = subSubFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      if (!subSubFilter) throw "SubSubFilter not found";
+      itemsToUpdate.push(subSubFilter);
+    }
+  }
+
+  for (let i = 0; i < itemsToUpdate.length; i++) {
+    const currentItem = itemsToUpdate[i];
+
+    api.setEndpoint(`tag_categories/${currentItem.id}`);
+    const result = await api.updateItem({ menu_order: actualStartIndex + i });
+
+    if (result.status !== ResultStatus.SUCCESSFUL) {
+      throw "Something went wrong while moving the items!";
+    }
+  }
+
+  snackbar.showSuccess("Filter wurde erfolgreich verschoben");
+};
+
+const handleAddTagClose = () => {
+  itemId.value = null;
+  createEditDialogOpen.value = false;
+  getItems();
+};
+
+const handleItemDeleted = () => {
+  itemId.value = null;
+  confirmDeleteDialogOpen.value = false;
+  getItems();
+};
+
+onMounted(async () => {
+  getItems();
+});
+</script>
+
+<style lang="sass">
+@import "@/assets/sass/main.sass"
+</style>

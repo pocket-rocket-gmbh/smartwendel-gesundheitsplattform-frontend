@@ -1,4 +1,5 @@
 import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
+import { useSnackbar } from "~/composables/ui/snackbar";
 
 export function useCollectionApi() {
 
@@ -84,6 +85,7 @@ export function useCollectionApi() {
     if (result.status === ResultStatus.SUCCESSFUL) {
       item.value = result.data['resource']
     }
+    return result
   }
 
   const getPlain = async () => {   

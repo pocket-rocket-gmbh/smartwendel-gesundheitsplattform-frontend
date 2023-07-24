@@ -1,5 +1,5 @@
 <template>
-  <CreateEdit v-slot="slotProps">
+  <CreateEdit v-slot="slotProps" :size="800" :height="600">
     <v-card-text>
       <div class="field">
         <v-text-field
@@ -9,15 +9,23 @@
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         />
       </div>
-
       <div class="field">
-        <v-combobox
-          v-model="slotProps.item.tags"
-          chips
-          multiple
-          label="Leistungen"
-        />
+        <v-textarea
+          v-model="slotProps.item.description"
+          hide-details="auto"
+          label="Beschreibung"
+          :rules="[rules.length]"
+          :error-messages="useErrors().checkAndMapErrors('Beschreibung', slotProps.errors)"
+          />
       </div>
     </v-card-text>
   </CreateEdit>
 </template>
+<script lang="ts" setup>
+  import { rules } from '../../../data/validationRules'
+
+</script>
+<style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
+
+</style>

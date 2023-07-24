@@ -1,9 +1,9 @@
 <template>
-  <img src="@/assets/images/logo.png" class="logo my-10" />
-  <h1>
-    Ihre Gesundheits plattform im Landkreis St. Wendel
-  </h1>
-  <p>Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unser umfangreiche Pflegeangebote aus der Region St. Wendel</p>
+  <div class="mt-15 my-15">
+    <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
+    <PublicLandingChooseCategory class="my-15"/>
+    <p class="has-font-size-medium sub-title my-15">Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.</p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -15,18 +15,18 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.logo
-  width: 30%
-h1
-  color: #015281
+.title
+  color: white
   font-size: 55px
-  font-weight: 600
   text-transform: uppercase
-  line-height: 120%
-p
-  color: #015281
+  line-height: 150%
+.sub-title
+  color: white
   font-style: normal
   font-weight: 400
-  font-size: 15px
   line-height: 160%
+  width: 75%
+
+.header
+  margin-top: 20%
 </style>
