@@ -1,5 +1,5 @@
 <template>
-  {{  refinedData.length }}
+  <p><b>Zeichen: {{ refinedData?.length }}</b></p>
   <div v-if="!edit" v-html="refinedData"></div>
   <template v-else>
     <v-text-field @click.stop v-if="data.type === 'raw'" v-model="refinedData" hide-details="auto" label="Zusatzangaben"/>
