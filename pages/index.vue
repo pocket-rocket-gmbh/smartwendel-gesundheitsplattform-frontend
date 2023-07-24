@@ -24,22 +24,10 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-header
-  height: 100vh
-  
-.background
-  background: url('@/assets/images/home.svg') no-repeat center center fixed
-  height: 100vh
-  -webkit-background-size: cover
-  -moz-background-size: cover
-  -o-background-size: cover
+@import "@/assets/sass/main.sass"  
+.background 
+  background: url('../assets/images/home.svg') no-repeat center center
   background-size: cover
-
-.background::before 
-  content: ""
-  top: 0px
-  right: 0px
-  bottom: 0px
-  left: 0px
+  height: 100vh
 
 </style>
