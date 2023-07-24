@@ -6,7 +6,7 @@
           <h2 class="is-white" v-if="category">{{ category.name }}</h2>
           <h2 class="is-white" v-else>{{ title }}</h2>
         </div>
-      </div>      
+      </div>
     <v-spacer></v-spacer>
   </v-app-bar>
 </template>

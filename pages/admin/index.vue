@@ -4,6 +4,15 @@
   </div>
   <div>
     <v-list>
+      <v-list-item title="Änderungen am: 24.07 12:40Uhr - Alex L.">
+        <v-container>
+          <b>Startseite</b><br>
+          - Neue startbild<br>        
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list>
       <v-list-item title="Änderungen am: 24.07 12:07Uhr - Alex L.">
         <v-container>
           <b>Bereiche</b><br>
