@@ -227,7 +227,7 @@ const getItems = async () => {
   loading.value = true;
   const options = {
     page: 1,
-    per_page: 999,
+    per_page: 9999999999,
     sort_by: props.defaultSortBy,
     sort_order: props.defaultSortOrder,
     searchQuery: null as string,

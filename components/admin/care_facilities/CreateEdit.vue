@@ -86,7 +86,7 @@
             <ChooseAndCropSingleImage
               height="20"
               :pre-set-image-url="slotProps.item.logo_url"
-              label="Logo wählen"
+              label="Logo"
               @setImage="setLogo"
             />
           </div>
@@ -100,7 +100,7 @@
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
-              label="Cover Bild wählen"
+              label="Cover Bild"
               @setImage="setCoverBild"
             />
           </div>
