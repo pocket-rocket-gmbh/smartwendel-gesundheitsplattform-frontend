@@ -78,7 +78,7 @@ const loading = ref(false);
 const fields = [
   { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { prop: "name", text: "Name", value: "name", type: "string" },
-  { prop: "user.name", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
 const dataTableRef = ref();
 const itemsExist = ref(false);

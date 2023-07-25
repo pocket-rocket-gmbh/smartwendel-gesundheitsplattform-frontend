@@ -55,9 +55,9 @@ definePageMeta({
   layout: "admin",
 });
 const fields = ref([
-  { text: "Name", value: "name", type: "string" },
-  { text: "Inhalt", value: "content", type: "string" },
-  { text: "Url", value: "url", type: "string" },
+  { prop: "name", text: "Name", value: "name", type: "string" },
+  { prop: "content", text: "Inhalt", value: "content", type: "string" },
+  { prop: "url", text: "Url", value: "url", type: "string" },
 ]);
 
 const itemPlaceholder = ref({

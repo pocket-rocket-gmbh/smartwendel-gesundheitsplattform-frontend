@@ -44,7 +44,7 @@ definePageMeta({
 const fields = ref([
   { prop: "firstname", text: 'Vorname', value: 'firstname', type: 'string' },
   { prop: "lastname", text: 'Nachname', value: 'lastname', type: 'string' },
-  { prop: "care_facilities", text: 'Einrichtung',endpoint: 'users',  value: 'care_facilities', type: "facilities" },
+  { prop: "", text: 'Einrichtung',endpoint: 'users',  value: 'care_facilities', type: "facilities" },
   { prop: "is_active_on_health_scope", text: 'Status', type: 'enumDropdown', endpoint: 'users', value: 'is_active_on_health_scope', enum_name: 'facilitiesStatus', condition: "admin" },
   { prop: "last_seen", text: 'Zuletzt gesehen', value: 'last_seen', type: 'datetime' },
   { prop: "", text: '', value: 'mdi-email-outline', type: 'icon', emit: 'mailUser', tooltip: 'E-Mail an Benutzer' },
