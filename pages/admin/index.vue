@@ -69,6 +69,15 @@
       </v-list-item>
     </v-list>
     <v-divider></v-divider>
+    <v-list>
+      <v-list-item title="Änderungen am: 25.07 11:30Uhr - Norman">
+        <v-container>
+          - Tabellen sind sortierbar<br>
+        
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
   </div>
 </template>
 
