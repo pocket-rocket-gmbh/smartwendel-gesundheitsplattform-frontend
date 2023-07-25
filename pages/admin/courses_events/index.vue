@@ -91,7 +91,7 @@ const loading = ref(false);
 const fields = [
   { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { prop: "name", text: "Titel", value: "name", type: "string" },
-  { prop: "user.name", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
   { prop: "kind", text: "Art (Kurs oder Veranstaltung)", endpoint: "care_facilities", value: "kind", type: "enum", enum_name: "facilitiesKind" }
 ];
 

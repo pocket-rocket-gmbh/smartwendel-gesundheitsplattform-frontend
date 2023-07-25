@@ -7,13 +7,16 @@
           :key="field.text"
           :width="[
             field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch'
-              ? '15px'
+              ? '30px'
               : field.width,
           ]"
-          class="is-clickable"
-          @click="rotateColumnSortOrder(field)"
+          :class="{ 'is-clickable': field.prop }"
+          @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
-          {{ field.text }}
+          <div class="table-head-item">
+            {{ field.text }}
+            <div v-if="sortBy === field.prop" class="chevron" :class="{ up: sortOrder === 'desc' }"></div>
+          </div>
         </th>
         <th width="15px" v-if="!disableEdit"></th>
         <th width="15px"></th>
@@ -140,6 +143,9 @@ const props = withDefaults(
 
 const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded"]);
 
+const sortOrder = ref(props.defaultSortOrder);
+const sortBy = ref(props.defaultSortBy);
+
 const loading = ref(false);
 
 const resetActiveItems = () => {
@@ -212,9 +218,9 @@ const filteredItems = computed(() => {
         if (typeof column === "string") {
           return column.toUpperCase().includes(searchTerm);
         }
-        if(Array.isArray(column)) {
+        if (Array.isArray(column)) {
           // TODO: Right now i only check for the 'name' field on my items, not all
-          return column.find(item => item.name?.toUpperCase().includes(searchTerm))
+          return column.find((item) => item.name?.toUpperCase().includes(searchTerm));
         }
       }
     });
@@ -228,8 +234,8 @@ const getItems = async () => {
   const options = {
     page: 1,
     per_page: 999,
-    sort_by: props.defaultSortBy,
-    sort_order: props.defaultSortOrder,
+    sort_by: sortBy.value,
+    sort_order: sortOrder.value,
     searchQuery: null as string,
     concat: false,
     filters: [] as any[],
@@ -241,8 +247,14 @@ const getItems = async () => {
   loading.value = false;
 };
 
-const rotateColumnSortOrder = (column: string) => {
-  console.log(column);
+const rotateColumnSortOrder = (columnProp: string) => {
+  if (sortBy.value !== columnProp) {
+    sortOrder.value = "asc";
+  } else {
+    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+  }
+  sortBy.value = columnProp;
+  getItems();
 };
 
 onMounted(() => {
@@ -263,4 +275,20 @@ defineExpose({ resetActiveItems, getItems });
   position: absolute
   margin-left: 100px
   margin-top: -50px
+
+.table-head-item
+  display: flex
+  align-items: center
+
+  .chevron
+    margin-left: 0.5rem
+    width: 20px
+    height: 20px
+    background-image: url("@/assets/icons/chevron-down.svg")
+    background-repeat: no-repeat
+    background-position: center
+    transition: transform 150ms linear
+
+    &.up
+      transform: rotate(180deg)
 </style>
