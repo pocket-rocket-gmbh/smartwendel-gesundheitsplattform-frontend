@@ -2,9 +2,18 @@
   <div>
     <h2>Benutzer</h2>
     <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Neuer Benutzer</v-btn>
+
+    <v-text-field
+      v-model="facilitySearchTerm"
+      hide-details="auto"
+      label="Einrichtungen durchsuchen"
+    />
+
     <DataTable
       :fields="fields"
       endpoint="users"
+      :search-query="facilitySearchTerm"
+      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @mailUser="mailUser"
@@ -33,12 +42,12 @@ definePageMeta({
 })
 
 const fields = ref([
-  { text: 'Vorname', value: 'firstname', type: 'string' },
-  { text: 'Nachname', value: 'lastname', type: 'string' },
-  { text: 'Einrichtung',endpoint: 'users',  value: 'care_facilities', type: "facilities" },
-  { text: 'Status', type: 'enumDropdown', endpoint: 'users', value: 'is_active_on_health_scope', enum_name: 'facilitiesStatus', condition: "admin" },
-  { text: 'Zuletzt gesehen', value: 'last_seen', type: 'datetime' },
-  { text: '', value: 'mdi-email-outline', type: 'icon', emit: 'mailUser', tooltip: 'E-Mail an Benutzer' },
+  { prop: "firstname", text: 'Vorname', value: 'firstname', type: 'string' },
+  { prop: "lastname", text: 'Nachname', value: 'lastname', type: 'string' },
+  { prop: "care_facilities", text: 'Einrichtung',endpoint: 'users',  value: 'care_facilities', type: "facilities" },
+  { prop: "is_active_on_health_scope", text: 'Status', type: 'enumDropdown', endpoint: 'users', value: 'is_active_on_health_scope', enum_name: 'facilitiesStatus', condition: "admin" },
+  { prop: "last_seen", text: 'Zuletzt gesehen', value: 'last_seen', type: 'datetime' },
+  { prop: "", text: '', value: 'mdi-email-outline', type: 'icon', emit: 'mailUser', tooltip: 'E-Mail an Benutzer' },
 ])
 
 const loading = ref(false)
@@ -47,6 +56,9 @@ const confirmDeleteDialogOpen = ref(false)
 const itemId = ref(null)
 const filter = ref({ page: 1, per_page: 1000, sort_by: 'created_at', sort_order: 'DESC', searchQuery: null, concat: false, filters: [] })
 const dataTableRef = ref();
+
+const facilitySearchColums = ref(["firstname", "lastname", "last_seen", "care_facilities"]);
+const facilitySearchTerm = ref("");
 
 const openCreateEditDialog = (id:string) => {
   itemId.value = id
