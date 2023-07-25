@@ -233,7 +233,7 @@ const getItems = async () => {
   loading.value = true;
   const options = {
     page: 1,
-    per_page: 999,
+    per_page: 9999,
     sort_by: sortBy.value,
     sort_order: sortOrder.value,
     searchQuery: null as string,

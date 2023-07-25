@@ -80,5 +80,11 @@ export default defineComponent({
 .icons
   border-radius: 50%
   border: 1px solid white
+  &:hover
+    transform: scale(1.1)
+    transition: transform 0.5s ease-in-out
+    cursor: pointer
+
+    
 
 </style>

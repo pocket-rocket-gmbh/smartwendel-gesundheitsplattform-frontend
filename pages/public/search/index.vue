@@ -3,7 +3,7 @@
     <v-container class="limited mt-8 mb-8">
       <v-row class="mt-4">
         <v-col>
-          <h1>Suchbegriff: {{ filterStore.currentSearchTerm }}</h1>
+          <h2>Suchbegriff: {{ filterStore.currentSearchTerm }}</h2>
         </v-col>
       </v-row>
 
@@ -25,7 +25,18 @@
           </v-col>
         </v-row>
         <v-row v-else>
-          <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
+          <v-col class="d-flex justify-center">
+            <div class="flex-column" align="center">
+              <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
+              <v-btn
+                class="mt-4"
+                prepend-icon="mdi-chevron-left"
+                @click="goBack()"
+                >
+                  Zurück zur Suche
+              </v-btn>
+            </div>
+          </v-col>
         </v-row>
       </template>
     </v-container>
@@ -49,6 +60,9 @@ const filteredKinds = computed(() => {
   }
   return uniqueKinds;
 });
+const goBack = () => {
+    router.push({ path: '/' })
+  }
 
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
   if (kind === "facility") return "Zu den Einrichtungen";
