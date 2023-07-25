@@ -37,16 +37,6 @@
         </div>
       </div>
       <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
-
-      <v-btn
-        v-if="selectedFilter"
-        class="clear-button"
-        variant="outlined"
-        elevation="0"
-        @click="handleOptionSelect(null)"
-      >
-        Auswahl leeren
-      </v-btn>
     </div>
   </div>
 </template>
