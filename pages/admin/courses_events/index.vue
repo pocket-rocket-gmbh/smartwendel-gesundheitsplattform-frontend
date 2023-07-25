@@ -84,6 +84,7 @@ const fields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
   { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  { text: "Einrichtung", value: "user_care_facility_name", type: "string", condition: "admin" },
   { text: "Art (Kurs oder Veranstaltung)", endpoint: "care_facilities", value: "kind", type: "enum", enum_name: "facilitiesKind" }
 ];
 

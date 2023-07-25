@@ -61,8 +61,8 @@ const loading = ref(false);
 const availableFields = [
   { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { text: "Titel", value: "name", type: "string" },
+  { text: "Einrichtung", value: "user_care_facility_name", type: "string", condition: "admin" },
   { text: "Erstellt am", value: "created_at", type: "datetime" },
-  { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
 
 const fields = ref([]);

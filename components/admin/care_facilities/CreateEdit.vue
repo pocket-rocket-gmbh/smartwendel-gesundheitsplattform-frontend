@@ -59,6 +59,7 @@
               }}</span>
             </div>
             <v-text-field
+            
               v-if="slotProps.item.kind === 'news'"
               v-model="slotProps.item.name"
               hide-details="auto"
@@ -116,20 +117,23 @@
 
           <div class="field" id="5">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
+              <span class="text-h5 font-weight-bold" v-if="(fields[slotProps.item.kind])">{{
                 fields[slotProps.item.kind]["5"].label
               }}</span>
             </div>
-            <ClientOnly>
-              <QuillEditor
-                class="ql-blank"
-                :placeholder="fields[slotProps.item.kind]['5'].placeholder"
-                :options="textOptions"
-                v-model:content="slotProps.item.description"
-                contentType="html"
-                toolbar="minimal"
-              />
+            <div class="editor">
+              <ClientOnly>
+                <QuillEditor
+                  ref="ql-editor"
+                  class="ql-blank"
+                  :placeholder="fields[slotProps.item.kind]['5'].placeholder"
+                  :options="textOptions"
+                  v-model:content="slotProps.item.description"
+                  contentType="html"
+                  toolbar="minimal"
+                />
             </ClientOnly>
+            </div>
           </div>
           <v-divider class="my-10"></v-divider>
 
@@ -930,6 +934,7 @@ onMounted(async () => {
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
+
 .cropper-wrap
   max-width: 450px
 
