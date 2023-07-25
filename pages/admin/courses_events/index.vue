@@ -35,10 +35,18 @@
       Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
     </v-alert>
 
+    <v-text-field
+      v-model="facilitySearchTerm"
+      hide-details="auto"
+      label="Einrichtungen durchsuchen"
+    />
+
     <DataTable
       ref="dataTableRef"
       :fields="fields"
       endpoint="care_facilities?kind=event,course"
+      :search-query="facilitySearchTerm"
+      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
@@ -81,12 +89,14 @@ const user = useUser();
 const loading = ref(false);
 
 const fields = [
-  { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
-  { text: "Titel", value: "name", type: "string" },
-  { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
-  { text: "Einrichtung", value: "user_care_facility_name", type: "string", condition: "admin" },
-  { text: "Art (Kurs oder Veranstaltung)", endpoint: "care_facilities", value: "kind", type: "enum", enum_name: "facilitiesKind" }
+  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
+  { prop: "name", text: "Titel", value: "name", type: "string" },
+  { prop: "user.name", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  { prop: "kind", text: "Art (Kurs oder Veranstaltung)", endpoint: "care_facilities", value: "kind", type: "enum", enum_name: "facilitiesKind" }
 ];
+
+const facilitySearchColums = ref(["name", "user.name", "kind"]);
+const facilitySearchTerm = ref("");
 
 const dataTableRef = ref();
 

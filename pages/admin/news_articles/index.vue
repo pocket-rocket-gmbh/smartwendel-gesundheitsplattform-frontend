@@ -16,9 +16,17 @@
       Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
     </v-alert>
 
+    <v-text-field
+      v-model="facilitySearchTerm"
+      hide-details="auto"
+      label="Einrichtungen durchsuchen"
+    />
+
     <DataTable
       :fields="fields"
       endpoint="care_facilities?kind=news"
+      :search-query="facilitySearchTerm"
+      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       ref="dataTableRef"
@@ -59,11 +67,14 @@ const user = useUser();
 const loading = ref(false);
 
 const availableFields = [
-  { text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
-  { text: "Titel", value: "name", type: "string" },
-  { text: "Einrichtung", value: "user_care_facility_name", type: "string", condition: "admin" },
-  { text: "Erstellt am", value: "created_at", type: "datetime" },
+  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
+  { prop: "name", text: "Titel", value: "name", type: "string" },
+  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
+  { prop: "user.name", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
+
+const facilitySearchColums = ref(["name", "user.name", "created_at"]);
+const facilitySearchTerm = ref("");
 
 const fields = ref([]);
 
