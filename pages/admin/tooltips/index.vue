@@ -1,10 +1,23 @@
 <template>
   <div>
     <h2>Tooltips</h2>
-    <v-btn elevation="0" variant="outlined" @click="itemId = null; createEditDialogOpen = true">Tooltip erstellen</v-btn>
+    <v-btn
+      elevation="0"
+      variant="outlined"
+      @click="
+        itemId = null;
+        createEditDialogOpen = true;
+      "
+      >Tooltip erstellen</v-btn
+    >
+
+    <v-text-field v-model="facilitySearchTerm" hide-details="auto" label="Einrichtungen durchsuchen" />
+
     <DataTable
       :fields="fields"
       endpoint="tooltips"
+      :search-query="facilitySearchTerm"
+      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       ref="dataTableRef"
@@ -15,12 +28,21 @@
       v-if="createEditDialogOpen"
       :item-placeholder="itemPlaceholder"
       endpoint="tooltips"
-      @close="itemId = null; createEditDialogOpen = false; itemId = null; dataTableRef?.resetActiveItems()"
+      @close="
+        itemId = null;
+        createEditDialogOpen = false;
+        itemId = null;
+        dataTableRef?.resetActiveItems();
+      "
     />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
-      @close="itemId = null; confirmDeleteDialogOpen = false; dataTableRef?.resetActiveItems()"
+      @close="
+        itemId = null;
+        confirmDeleteDialogOpen = false;
+        dataTableRef?.resetActiveItems();
+      "
       :item-id="itemId"
       endpoint="tooltips"
       term="diesen Tooltip"
@@ -28,59 +50,42 @@
     />
   </div>
 </template>
-<script lang="ts">
-export default defineComponent({
-  name: 'AdminFilterIndex',
-  setup() {
-    definePageMeta({
-      layout: "admin",
-    })
-    const fields = ref([
-      { text: 'Name', value: 'name', type: 'string' },
-      { text: 'Inhalt', value: 'content', type: 'string' },
-      { text: 'Url', value: 'url', type: 'string' },
-    ])
+<script setup lang="ts">
+definePageMeta({
+  layout: "admin",
+});
+const fields = ref([
+  { text: "Name", value: "name", type: "string" },
+  { text: "Inhalt", value: "content", type: "string" },
+  { text: "Url", value: "url", type: "string" },
+]);
 
-    const itemPlaceholder = ref({
-      name: '',
-      scope: 'tooltips'
-    })
+const itemPlaceholder = ref({
+  name: "",
+  scope: "tooltips",
+});
 
-    const dialog = ref(false)
-    const item = ref({ name: '' })
-    const loading = ref(false)
-    const createEditDialogOpen = ref(false)
-    const confirmDeleteDialogOpen = ref(false)
-    const itemId = ref(null)
-    const dataTableRef = ref();
+const facilitySearchColums = ref(["name", "content", "url"]);
+const facilitySearchTerm = ref("");
 
-    const openCreateEditDialog = (id:string) => {
-      itemId.value = id
-      createEditDialogOpen.value = true
-    }
+const dialog = ref(false);
+const item = ref({ name: "" });
+const loading = ref(false);
+const createEditDialogOpen = ref(false);
+const confirmDeleteDialogOpen = ref(false);
+const itemId = ref(null);
+const dataTableRef = ref();
 
-    const openDeleteDialog = (id:string) => {
-      itemId.value = id
-      confirmDeleteDialogOpen.value = true
-    }
+const openCreateEditDialog = (id: string) => {
+  itemId.value = id;
+  createEditDialogOpen.value = true;
+};
 
-    return {
-      fields,
-      loading,
-      dialog,
-      item,
-      createEditDialogOpen,
-      itemPlaceholder,
-      confirmDeleteDialogOpen,
-      itemId,
-      openCreateEditDialog,
-      openDeleteDialog,
-      dataTableRef
-    }
-  }
-})
+const openDeleteDialog = (id: string) => {
+  itemId.value = id;
+  confirmDeleteDialogOpen.value = true;
+};
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"
-
 </style>
