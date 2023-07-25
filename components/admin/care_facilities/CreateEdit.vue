@@ -375,27 +375,6 @@
             />
             <div class="field">
               <v-text-field
-                v-model="slotProps.item.phone"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                hide-details="auto"
-                label="Telefonnummer"
-                :rules="[rules.required]"
-                :type="'number'"
-                :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                v-model="slotProps.item.email"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                hide-details="auto"
-                label="E-Mail"
-                :rules="[rules.required, rules.email]"
-                :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
                 v-model="slotProps.item.street"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
@@ -443,6 +422,27 @@
                 item-value="name"
                 label="Ort"
                 :rules="[rules.required]"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="slotProps.item.phone"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                hide-details="auto"
+                label="Telefonnummer"
+                :rules="[rules.required]"
+                :type="'number'"
+                :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="slotProps.item.email"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                hide-details="auto"
+                label="E-Mail"
+                :rules="[rules.required, rules.email]"
+                :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
             </div>
           </div>
@@ -624,7 +624,7 @@ const fields = {
       index: 4,
     },
     "5": {
-      label: "5. Beschreibe ausführlich deine Einrichtung *",
+      label: "5. Beschreibe deine Einrichtung ausführlich *",
       tooltip: "",
       description: "Beschreibung",
       index: 5,

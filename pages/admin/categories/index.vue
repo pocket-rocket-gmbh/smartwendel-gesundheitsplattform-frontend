@@ -46,6 +46,16 @@
       :overwrite-update-item-endpoint="`categories/${subSubCategoryId}`"
       concept-name="Unter-Kategorien"
     />
+    <AdminSubCategoriesCreateEdit
+      :item-id="itemId"
+      v-if="createEditCategoryDialogOpen"
+      :item-placeholder="itemPlaceholder"
+      @close="handleCategoryClose"
+      :endpoint="`categories`"
+      :overwrite-get-item-endpoint="`categories/${subCategoryId}`"
+      :overwrite-update-item-endpoint="`categories/${subCategoryId}`"
+      concept-name="Kategorien"
+    />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -68,20 +78,10 @@ definePageMeta({
 
 const itemsForList = ref<CollapsibleListItem[]>([]);
 
-const fields = ref([
-  { text: "Bereichsbezeichnung", value: "name", type: "string" },
-  {
-    text: "",
-    value: "mdi-plus-circle-outline",
-    type: "icon",
-    emit: "openAddSubCategoriesDialog",
-    tooltip: "Kategorien hinzufügen",
-  },
-]);
-
 const dataTable = ref(null);
 const createEditDialogOpen = ref(false);
 const createEditSubDialogOpen = ref(false);
+const createEditCategoryDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const addSubCategoriesDialogOpen = ref(false);
 const itemId = ref(null);
@@ -102,6 +102,7 @@ const adminStore = useAdminStore();
 const itemPlaceholder = ref({
   name: "",
   scope: "care_facility",
+  description: "",
 });
 
 const openCreateEditDialog = (id: string) => {
@@ -193,12 +194,8 @@ const getItems = async (endpoint = "categories") => {
         menuOrder: subCategory.menu_order,
         layer: 1,
         addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
-        additionalData: {
-          type: "api",
-          endpoint: `categories/${subCategory.id}`,
-          path: "resource.description",
-        },
-        canAddAdditionalData: true,
+        specialActionOnEditClick: "openCategoriesModal",
+        canAddAdditionalData: false,
         next: [],
       });
 
@@ -222,7 +219,7 @@ const getItems = async (endpoint = "categories") => {
           layer: 2,
           menuOrder: subSubCategory.menu_order,
           specialActionOnEditClick: "openSubCategoriesModal",
-          canAddAdditionalData: false
+          canAddAdditionalData: false,
         });
       }
     }
@@ -237,6 +234,10 @@ const handleEditClick = (action: string, itemIds: string[], layer: number) => {
     subCategoryId.value = itemIds[1];
     subSubCategoryId.value = itemIds[0];
     createEditSubDialogOpen.value = true;
+  } else if (action === "openCategoriesModal") {
+    itemId.value = itemIds[1];
+    subCategoryId.value = itemIds[0];
+    createEditCategoryDialogOpen.value = true;
   }
 };
 
@@ -284,9 +285,8 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, desc
 
   const result = await api.createItem({ name, description, scope: "care_facility", tags: [] }, `Erfolgreich erstellt`);
 
-  if (result.status === ResultStatus.SUCCESSFUL) 
-    getItems();
-  }
+  if (result.status === ResultStatus.SUCCESSFUL) getItems();
+};
 
 const handleDelete = async (itemIds: string[], layer: number) => {
   openDeleteDialog(itemIds[0]);
@@ -310,6 +310,14 @@ const handleSubCategoryClose = () => {
   subCategoryId.value = null;
   subSubCategoryId.value = null;
   createEditSubDialogOpen.value = false;
+
+  getItems();
+};
+
+const handleCategoryClose = () => {
+  itemId.value = null;
+  subCategoryId.value = null;
+  createEditCategoryDialogOpen.value = false;
 
   getItems();
 };
