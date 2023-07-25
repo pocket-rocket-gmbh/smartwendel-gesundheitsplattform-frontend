@@ -82,27 +82,10 @@ const user = useUser();
 const loading = ref(false);
 
 const availableFields = [
-  {
-    prop: "is_active",
-    text: "Aktiv",
-    endpoint: "care_facilities",
-    type: "switch",
-    fieldToSwitch: "is_active",
-  },
+  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { prop: "name", text: "Titel", value: "name", type: "string" },
-  {
-    prop: "created_at",
-    text: "Erstellt am",
-    value: "created_at",
-    type: "datetime",
-  },
-  {
-    prop: "user.name",
-    text: "Erstellt von",
-    value: "user.name",
-    type: "pathIntoObject",
-    condition: "admin",
-  },
+  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
+  { prop: "user.name", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
 
 const facilitySearchColums = ref(["name", "user.name", "created_at"]);
