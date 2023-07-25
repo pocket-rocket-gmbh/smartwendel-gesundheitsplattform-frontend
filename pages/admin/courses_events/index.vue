@@ -55,13 +55,7 @@
       Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige
       als nächstes deine Einrichtung
     </v-alert>
-
-    <v-text-field
-      v-model="facilitySearchTerm"
-      hide-details="auto"
-      label="Kurse und Veranstaltungen durchsuchen"
-    />
-
+    
     <DataTable
       ref="dataTableRef"
       :fields="fields"

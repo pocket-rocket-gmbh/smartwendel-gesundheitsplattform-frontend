@@ -2,17 +2,6 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-btn
-      v-if="user.isAdmin() || !itemsExist || !setupFinished"
-      elevation="0"
-      variant="outlined"
-      @click="
-        itemId = null;
-        createEditDialogOpen = true;
-      "
-    >
-      Neue Einrichtung
-    </v-btn>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
@@ -42,13 +31,6 @@
         </v-col>
       </v-row>
     </div>
-
-    <v-text-field
-      v-model="facilitySearchTerm"
-      hide-details="auto"
-      label="Einrichtungen durchsuchen"
-    />
-
     <DataTable
       ref="dataTableRef"
       :fields="fields"
