@@ -16,14 +16,14 @@
               >
                 <div
                   class="filter-tile pa-5"
-                  :class="{ selected: isSelected(subItem.id) }"
+                  :class="{ selected: isSelectedTagNext(subItem) }"
                   @click="toggleSelection(subItem)"
                 >
                   {{ subItem.title }}
                 </div>
-
                 <div v-if="subItem.next.length && expandedItemIds.includes(subItem.id)" class="tag-select">
                   <v-checkbox
+                    :class="{ selected: isSelected(tag.id) }"
                     v-for="tag in subItem.next"
                     class="mb-n10"
                     :label="tag.title"
@@ -183,6 +183,13 @@ filterStore.currentTags;
 
 const isSelected = (itemId: string) => {
   return filterStore.currentTags.includes(itemId);
+};
+
+const isSelectedTagNext = (tag: CollapsibleListItem) => {
+  if (tag.next?.length) {
+    return tag.next.some((subTag) => isSelected(subTag.id));
+  }
+  return isSelected(tag.id);
 };
 
 const toggleSelection = (item: CollapsibleListItem) => {
