@@ -59,7 +59,6 @@
               }}</span>
             </div>
             <v-text-field
-            
               v-if="slotProps.item.kind === 'news'"
               v-model="slotProps.item.name"
               hide-details="auto"
@@ -117,7 +116,7 @@
 
           <div class="field" id="5">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold" v-if="(fields[slotProps.item.kind])">{{
+              <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
                 fields[slotProps.item.kind]["5"].label
               }}</span>
             </div>
@@ -130,9 +129,13 @@
                   :options="textOptions"
                   v-model:content="slotProps.item.description"
                   contentType="html"
-                  toolbar="minimal"
+                  :toolbar="[
+                    [{ header: '1' }, { header: '2' }],
+                    ['bold', 'italic', 'underline'],
+                    [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
+                  ]"
                 />
-            </ClientOnly>
+              </ClientOnly>
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
@@ -271,8 +274,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(date, index) in slotProps.item.event_dates"
-                      :key="index">
+                      <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
                         <td>{{ date }}</td>
                       </tr>
                     </tbody>
@@ -564,8 +566,24 @@ const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
-  toolbar: "essential",
+  toolbar: ["bold", "italic", "underline"],
   required: true,
+  modules: {
+    clipboard: {
+      allowed: {
+        tags: ["a", "b", "strong", "u", "s", "i", "p", "br", "ul", "ol", "li", "span"],
+        attributes: ["href", "rel", "target", "class"],
+      },
+      keepSelection: true,
+      substituteBlockElements: true,
+      magicPasteLinks: true,
+      hooks: {
+        uponSanitizeElement(node, data, config) {
+          console.log(node);
+        },
+      },
+    },
+  },
 });
 
 const handleTagSelectToggle = () => {
