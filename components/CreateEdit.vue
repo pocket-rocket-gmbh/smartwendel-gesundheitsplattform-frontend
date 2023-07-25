@@ -10,8 +10,8 @@
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <v-form ref="form">
         <v-card-title class="text-h5 has-bg-primary py-5 text-white">
-            <span v-if="itemId">{{ conceptName }} bearbeiten</span>
-            <span v-else>{{ conceptName }} erstellen</span>        
+          <span v-if="itemId">{{ conceptName }} bearbeiten</span>
+          <span v-else>{{ conceptName }} erstellen</span>
         </v-card-title>
 
         <slot :item="item" :errors="errors"></slot>
@@ -211,27 +211,27 @@ onMounted(() => {
     getItem();
   }
   if (props.itemPlaceholder && !item.value.id) {
-    item.value = {...props.itemPlaceholder};
+    item.value = { ...props.itemPlaceholder };
   }
 });
 
 const emitClose = () => {
   const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
-    item.value = props.itemPlaceholder
+    item.value = props.itemPlaceholder;
     emit("close");
   }
 };
 
 watch(
   [
-    () => item.value.phone,
-    () => item.value.email,
-    () => item.value.street,
-    () => item.value.additional_address_info,
-    () => item.value.community_id,
-    () => item.value.zip,
-    () => item.value.town,
+    () => item.value?.phone,
+    () => item.value?.email,
+    () => item.value?.street,
+    () => item.value?.additional_address_info,
+    () => item.value?.community_id,
+    () => item.value?.zip,
+    () => item.value?.town,
   ],
   (
     [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
@@ -251,3 +251,11 @@ watch(
   }
 );
 </script>
+
+<style lang="scss">
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+</style>

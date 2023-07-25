@@ -18,6 +18,7 @@
       @entry-moved="handleMove"
       :disable-draggable="true"
     />
+    <!-- TODO: Dragging might not work on sub-items because menu_oder is all over the place... Maybe just sort alphabetically? -->
 
     <!-- Leistungsfilter -->
     <CollapsibleListRec
@@ -128,7 +129,7 @@ const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleLi
     //   path: "resource.kind",
     // },
     // canAddAdditionalData: layer === 0,
-    static: layer === 0,
+    // static: layer === 0,
     next: [],
   };
 
