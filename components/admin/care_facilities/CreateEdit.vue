@@ -129,11 +129,7 @@
                   :options="textOptions"
                   v-model:content="slotProps.item.description"
                   contentType="html"
-                  :toolbar="[
-                    [{ header: '1' }, { header: '2' }],
-                    ['bold', 'italic', 'underline'],
-                    [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
-                  ]"
+                  :toolbar="textToolbar"
                 />
               </ClientOnly>
             </div>
@@ -562,28 +558,18 @@ const infosChanged = ref(false);
 const serviceFilterRef = ref(null);
 const expandTagSelect = ref(false);
 
+const textToolbar = ref([
+  [{ header: "1" }, { header: "2" }],
+  ["bold", "italic", "underline"],
+  [{ list: "ordered" }, { list: "bullet" }, { align: [] }],
+]);
+
 const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
-  toolbar: ["bold", "italic", "underline"],
+  toolbar: textToolbar.value,
   required: true,
-  modules: {
-    clipboard: {
-      allowed: {
-        tags: ["a", "b", "strong", "u", "s", "i", "p", "br", "ul", "ol", "li", "span"],
-        attributes: ["href", "rel", "target", "class"],
-      },
-      keepSelection: true,
-      substituteBlockElements: true,
-      magicPasteLinks: true,
-      hooks: {
-        uponSanitizeElement(node, data, config) {
-          console.log(node);
-        },
-      },
-    },
-  },
 });
 
 const handleTagSelectToggle = () => {
