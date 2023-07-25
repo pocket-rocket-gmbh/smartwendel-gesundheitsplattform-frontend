@@ -15,8 +15,8 @@
         (action, itemIds, layer, title, additionalInformation, specialType) =>
           handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_facility')
       "
-      @entry-moved="handleMove"
-      :disable-draggable="true"
+      @entry-moved="(itemsInCategory: CollapsibleListItem[], layer: number, startIndex: number, endIndex: number)=>handleMove(itemsInCategory, layer, startIndex, endIndex, 'filter_facility')"
+      :disable-draggable="false"
     />
     <!-- TODO: Dragging might not work on sub-items because menu_oder is all over the place... Maybe just sort alphabetically? -->
 
@@ -28,8 +28,8 @@
         (action, itemIds, layer, title, additionalInformation, specialType) =>
           handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_service')
       "
-      @entry-moved="handleMove"
-      :disable-draggable="true"
+      @entry-moved="(itemsInCategory: CollapsibleListItem[], layer: number, startIndex: number, endIndex: number)=>handleMove(itemsInCategory, layer, startIndex, endIndex, 'filter_service')"
+      :disable-draggable="false"
     />
 
     <AdminTagsCreateEdit
@@ -322,13 +322,16 @@ const handleMove = async (
   itemsInFilter: CollapsibleListItem[],
   layer: number,
   startIndex: number,
-  endIndex: number
+  endIndex: number,
+  filterType: FilterType
 ) => {
   /**
    * TODO: Move fix again
    */
 
   if (startIndex === endIndex) return;
+
+  const relevantListItems = filterType === "filter_facility" ? itemsForFacilityList : itemsForServiceList;
 
   const actualStartIndex = Math.min(startIndex, endIndex);
   const actualEndIndex = Math.max(startIndex, endIndex);
@@ -337,12 +340,12 @@ const handleMove = async (
 
   if (layer === 0) {
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const filter = itemsForFacilityList.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+      const filter = relevantListItems.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
       if (!filter) throw "Filter not found";
       itemsToUpdate.push(filter);
     }
   } else if (layer === 1) {
-    const subFilters = itemsForFacilityList.value.reduce((prev, curr) => {
+    const subFilters = relevantListItems.value.reduce((prev, curr) => {
       return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
     for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
@@ -351,7 +354,7 @@ const handleMove = async (
       itemsToUpdate.push(subFilter);
     }
   } else if (layer === 2) {
-    const subFilters = itemsForFacilityList.value.reduce((prev, curr) => {
+    const subFilters = relevantListItems.value.reduce((prev, curr) => {
       return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
     const subSubFilters = subFilters.reduce((prev, curr) => {

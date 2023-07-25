@@ -91,6 +91,14 @@
       </v-list-item>
     </v-list>
     <v-divider></v-divider>
+    <v-list>
+      <v-list-item title="Änderungen am: 25.07 16:00Uhr - Norman">
+        <v-container>
+          - Filter DragNDrop
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
   </div>
 </template>
 
