@@ -1,8 +1,16 @@
 <template>
-  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="warning" density="compact" closable>
+  <v-alert
+    class="my-5"
+    v-if="!filterSelected && !loadingFilters"
+    type="warning"
+    density="compact"
+    closable
+  >
     Bitte mindestens einen Filter auswählen
   </v-alert>
-  <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
+  <LoadingSpinner
+    v-if="loadingFilters && (!availableFilters || !availableFilters.length)"
+  >
     Filter werden geladen ...
   </LoadingSpinner>
   <div class="choose-facility-type" v-else>
@@ -21,29 +29,38 @@
         </template>
       </template>
       <template #content>
-        <div class="filter-options">
-          <div class="option" v-for="option in mainFilter.next">
-            <label class="option-label">
-              <input
-                :type="enableMultiSelect ? 'checkbox' : 'radio'"
-                :checked="isChecked(option)"
-                @click.stop="handleSubFilterParentClick(mainFilter, option)"
-              />
+        <div class="main-class">
+          <div class="filter-options" v-for="option in mainFilter.next">
+            <div
+              class="filter-tile my-3"
+              :class="{ selected: preSetTags.includes(option.id) }"
+              @click.stop="handleSubFilterParentClick(mainFilter, option)"
+            >
               {{ option.name }}
-              <div class="option" v-for="subOption in option.next">
-                <label class="option-label">
-                  <input
-                    :type="enableMultiSelect ? 'checkbox' : 'radio'"
-                    :checked="isChecked(subOption)"
-                    @click.stop="handleSubFilterClick(option, subOption)"
-                  />
-                  {{ subOption.name }}
-                </label>
-              </div>
-            </label>
+            </div>
+            <v-row>
+              <v-col class="">
+                <div class="option" v-for="subOption in option.next">
+                  <div class="option-label">
+                    <label class="text-subOptions">
+                      <input
+                      class="my-1"
+                        :type="enableMultiSelect ? 'checkbox' : 'radio'"
+                        :checked="isChecked(subOption)"
+                        @click.stop="handleSubFilterClick(option, subOption)"
+                      />
+                        {{ subOption.name }}
+                    </label>
+                   
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
           </div>
         </div>
-        <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
+        <LoadingSpinner v-if="loadingFilters"
+          >Leistung wird hinzugefügt...
+        </LoadingSpinner>
       </template>
     </CollapsibleItem>
   </div>
@@ -80,7 +97,9 @@ const flatFilterArray = (filterArray: Filter[]) => {
 
 const filterSelected = computed(() => {
   const flat = flatFilterArray(availableFilters.value);
-  const filterOfCategoryIsSet = flat.some((item) => !!props.preSetTags.find((tag) => tag === item.id));
+  const filterOfCategoryIsSet = flat.some(
+    (item) => !!props.preSetTags.find((tag) => tag === item.id)
+  );
   return filterOfCategoryIsSet;
 });
 
@@ -129,7 +148,13 @@ const getTagName = (mainFilter: Filter, filterId: string) => {
 };
 
 const enableAllTags = (filter: Filter) => {
-  const updatedTags = [...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)])];
+  const updatedTags = [
+    ...new Set([
+      ...props.preSetTags,
+      filter.id,
+      ...filter.next.map(({ id }) => id),
+    ]),
+  ];
   emit("setTags", updatedTags);
 };
 
@@ -140,7 +165,9 @@ const disableAllTags = (filter: Filter) => {
   }
 
   filter.next.forEach((nextFilter) => {
-    const nextIndex = props.preSetTags.findIndex((tag) => tag === nextFilter.id);
+    const nextIndex = props.preSetTags.findIndex(
+      (tag) => tag === nextFilter.id
+    );
     if (nextIndex !== -1) {
       props.preSetTags.splice(nextIndex, 1);
     }
@@ -161,12 +188,16 @@ const handleSubFilterParentClick = async (parent: Filter, current: Filter) => {
 const handleSubFilterClick = async (parent: Filter, current: Filter) => {
   selectedFilter.value = current;
 
-  const removeIndex = props.preSetTags.findIndex((tagId) => tagId === current.id);
+  const removeIndex = props.preSetTags.findIndex(
+    (tagId) => tagId === current.id
+  );
   selectedFilter.value = null;
   if (removeIndex !== -1) {
     props.preSetTags.splice(removeIndex, 1);
 
-    const parentIndex = props.preSetTags.findIndex((item) => item === parent.id);
+    const parentIndex = props.preSetTags.findIndex(
+      (item) => item === parent.id
+    );
     if (parentIndex !== -1) props.preSetTags.splice(parentIndex, 1);
 
     emit("setTags", props.preSetTags);
@@ -175,7 +206,11 @@ const handleSubFilterClick = async (parent: Filter, current: Filter) => {
 
   props.preSetTags.push(current.id);
 
-  if (parent.next.map((next) => next.id).every((id) => props.preSetTags.includes(id))) {
+  if (
+    parent.next
+      .map((next) => next.id)
+      .every((id) => props.preSetTags.includes(id))
+  ) {
     props.preSetTags.push(parent.id);
   }
 
@@ -185,7 +220,9 @@ const handleSubFilterClick = async (parent: Filter, current: Filter) => {
 const handleClick = (parent: Filter, current: Filter) => {
   selectedFilter.value = current;
 
-  const removeIndex = props.preSetTags.findIndex((tagId) => tagId === current.id);
+  const removeIndex = props.preSetTags.findIndex(
+    (tagId) => tagId === current.id
+  );
   selectedFilter.value = null;
   if (removeIndex !== -1) {
     props.preSetTags.splice(removeIndex, 1);
@@ -218,7 +255,10 @@ const handleCreateNewService = async (parentId: string, name: string) => {
   api.setBaseApi(usePrivateApi());
   api.setEndpoint(`tag_categories`);
 
-  const result = await api.createItem({ name, parent_id: parentId }, `Erfolgreich erstellt`);
+  const result = await api.createItem(
+    { name, parent_id: parentId },
+    `Erfolgreich erstellt`
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     newServiceName.value = "";
@@ -233,7 +273,9 @@ const reloadFilters = async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters(props.filterType, props.filterKind);
 
-  const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
+  const nextFiltersPromises = mainFilters.value.map((mainFilter) =>
+    getFilterOptions(mainFilter.id)
+  );
 
   const allNextFilters = await Promise.all(nextFiltersPromises);
   availableFilters.value = [];
@@ -245,7 +287,7 @@ const reloadFilters = async () => {
 };
 
 const handleExpandToggle = (selectedId: string) => {
-  const expandIndex = expandIds.value.findIndex(id => id === selectedId);
+  const expandIndex = expandIds.value.findIndex((id) => id === selectedId);
 
   if (expandIndex === -1) {
     expandIds.value.push(selectedId);
@@ -271,11 +313,56 @@ onMounted(async () => {
   margin-left: 1rem;
 }
 
+.filter-tile {
+  place-items: center;
+  text-align: center;
+  display: flex;
+  justify-content: center !important;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 0.5rem;
+  border: 1px solid #ddd;
+  background-color: white;
+  min-height: 50px;
+  min-height: 100px;
+  max-height: 50px;
+  max-height: 100px;
+  &:hover,
+  &.selected {
+    background-color: #8ab61d;
+    border-color: #9ea10c;
+    color: white;
+  }
+}
+
+.main-class {
+  margin-bottom: 30px;
+  display: grid;
+  gap: 1%;
+  justify-content: space-between;
+  grid-template-columns: 24% 24% 24% 24%;
+}
+
 .add-new {
   margin-top: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+}
+
+.content {
+  display: flex;
+}
+
+.column_wrapper {
+  max-height: 200px;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.text-subOptions {
+  font-size: 18px;
+  line-height: 1.4;
 }
 </style>

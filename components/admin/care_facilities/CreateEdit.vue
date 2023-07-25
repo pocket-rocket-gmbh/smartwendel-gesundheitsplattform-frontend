@@ -326,7 +326,7 @@
                   :model-value="slotProps.item.billable_through_health_insurance_approved"
                   hide-details
                   density="compact"
-                  label="gültig (Wenn ja, wird in frontend angezeigt)"
+                  label="Bitte prüfe, ob das Zertifikat gültig ist. Wenn ja, bestätige es hier."
                   @click="
                     slotProps.item.billable_through_health_insurance_approved =
                       !slotProps.item.billable_through_health_insurance_approved
