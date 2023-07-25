@@ -6,7 +6,7 @@
     <v-text-field
       v-model="facilitySearchTerm"
       hide-details="auto"
-      label="Einrichtungen durchsuchen"
+      label="Benutzer durchsuchen"
     />
 
     <DataTable
