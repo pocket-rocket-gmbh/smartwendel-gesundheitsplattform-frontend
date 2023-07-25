@@ -111,9 +111,7 @@ onMounted(async () => {
 
 .filtered-items
   display: flex
-  justify-content: flex-end
   flex-direction: column
-  align-items: flex-end
 
   .map-widget
     align-self: stretch
