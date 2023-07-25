@@ -4,6 +4,18 @@
   </div>
   <div>
     <v-list>
+      <v-list-item title="Änderungen am: 25.07 11:00Uhr - Alex L.">
+        <v-container>
+          <b>Startseite</b><br>
+          - Neue startbild (fix)<br>
+          - Startseite optimierungen (fix)<br>
+          <b>Backend</b><br>
+          - Einrichtung name für News/Events<br>
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list>
       <v-list-item title="Änderungen am: 24.07 12:40Uhr - Alex L.">
         <v-container>
           <b>Startseite</b><br>

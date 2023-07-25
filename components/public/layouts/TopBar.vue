@@ -11,7 +11,7 @@
                 transition="scale-transition"
               >
                 <template v-slot:activator="{ props }">
-                  <v-list-item-title  color="primary"  v-bind="props">
+                  <v-list-item-title  color="primary" v-bind="props">
                     <div class="mx-5">
                       <span class="is-clickable main" @click="setItemsAndGo(category, null)">
                       {{ category.name }}
@@ -182,15 +182,18 @@ export default defineComponent({
     const menu = ref(false)
     const appStore = useAppStore();
     const route = useRoute()
+    const loading = ref(false)
 
     const categoriesApi = useCollectionApi()
     categoriesApi.setBaseApi(usePublicApi())
 
     const getCategories = async () => {
+      loading.value = true
       categoriesApi.setEndpoint(`categories`)
       const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
       await categoriesApi.retrieveCollection(options)
       categories.value = categoriesApi.items.value
+      loading.value = false
     }
     const getSubCategories = async (categoryId: string) => {
       categoriesApi.setEndpoint(`categories/${categoryId}/sub_categories`)
@@ -273,7 +276,8 @@ export default defineComponent({
       goToRegister,
       saveCurrentUrlAndRoute,
       subCategories,
-      currentRoute
+      currentRoute,
+      loading
     }
   }
 })

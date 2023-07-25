@@ -23,9 +23,9 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col class="d-flex" md="6">
+        <v-col class="d-flex" md="8">
           <v-row>
-            <v-col xl="6" class="d-flex" v-for="(item, index) in items" :key="index">
+            <v-col class="d-flex" v-for="(item, index) in items" :key="index">
               <div class="ml-15 pa-2 d-flex ml-5 align-end">
                 <div class="d-flex align-center is-clickable">
                   <img class="icons" :src="item.content.icon" />
@@ -110,6 +110,9 @@ export default defineComponent({
   border-radius: 50%
   border: 1px solid black
   background-color: white
-
+  &:hover
+    transform: scale(1.1)
+    transition: transform 0.5s ease-in-out
+    cursor: pointer
 
 </style>

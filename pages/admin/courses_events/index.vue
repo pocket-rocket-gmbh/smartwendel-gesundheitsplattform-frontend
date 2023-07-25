@@ -3,44 +3,59 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
     <h2 v-else>Kurse und Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
+      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind
+      einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse
+      sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
     >
     <template v-if="setupFinished">
-      <div class="my-5">
-        <v-btn
-        elevation="0"
-        variant="outlined"
-        class="mr-5"
-        @click="
-          itemPlaceholder.kind = 'course';
-          itemId = null;
-          createEditDialogOpen = true;
-        "
-        >Kurs anlegen</v-btn
-      >
-      <v-btn
-        elevation="0"
-        variant="outlined"
-        @click="
-          itemPlaceholder.kind = 'event';
-          itemId = null;
-          createEditDialogOpen = true;
-        "
-        >Veranstaltung anlegen</v-btn
-      >
-      </div>
-
+      <v-row align="center">
+        <v-col md="5">
+          <div class="my-5">
+            <v-btn
+              elevation="0"
+              variant="outlined"
+              class="mr-5"
+              @click="
+                itemPlaceholder.kind = 'course';
+                itemId = null;
+                createEditDialogOpen = true;
+              "
+              >Kurs anlegen</v-btn
+            >
+            <v-btn
+              elevation="0"
+              variant="outlined"
+              @click="
+                itemPlaceholder.kind = 'event';
+                itemId = null;
+                createEditDialogOpen = true;
+              "
+              >Veranstaltung anlegen</v-btn
+            >
+          </div>
+        </v-col>
+        <v-col>
+          <v-text-field
+            width="50"
+            prepend-icon="mdi-magnify"
+            v-model="facilitySearchTerm"
+            hide-details="auto"
+            label="Kurse und Veranstaltungen durchsuchen"
+          />
+        </v-col>
+      </v-row>
     </template>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige
+      als nächstes deine Einrichtung
     </v-alert>
-
-    <v-text-field
-      v-model="facilitySearchTerm"
-      hide-details="auto"
-      label="Kurse und Veranstaltungen durchsuchen"
-    />
-
+    
     <DataTable
       ref="dataTableRef"
       :fields="fields"
@@ -62,7 +77,9 @@
         dataTableRef?.resetActiveItems();
       "
       endpoint="care_facilities"
-      :concept-name="itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'"
+      :concept-name="
+        itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'
+      "
     />
 
     <DeleteItem
@@ -140,7 +157,8 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
+    itemPlaceholder.value.tag_category_ids =
+      currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();

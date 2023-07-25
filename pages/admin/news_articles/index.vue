@@ -2,25 +2,40 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Beiträge</h2>
     <h2 v-else>Beiträge</h2>
-    <v-btn
-      v-if="setupFinished"
-      elevation="0"
-      variant="outlined"
-      @click="
-        itemId = null;
-        createEditDialogOpen = true;
-      "
-      >Beitrag anlegen</v-btn
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
     >
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
+      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige
+      als nächstes deine Einrichtung
     </v-alert>
 
-    <v-text-field
-      v-model="facilitySearchTerm"
-      hide-details="auto"
-      label="Beiträge durchsuchen"
-    />
+    <v-row align="center">
+      <v-col md="3">
+        <v-btn
+          v-if="setupFinished"
+          elevation="0"
+          variant="outlined"
+          @click="
+            itemId = null;
+            createEditDialogOpen = true;
+          "
+          >Beitrag anlegen</v-btn
+        >
+      </v-col>
+      <v-col>
+        <v-text-field
+          width="50"
+          prepend-icon="mdi-magnify"
+          v-model="facilitySearchTerm"
+          hide-details="auto"
+          label="Beiträge durchsuchen"
+        />
+      </v-col>
+    </v-row>
 
     <DataTable
       :fields="fields"
@@ -120,7 +135,8 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
+    itemPlaceholder.value.tag_category_ids =
+      currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();
