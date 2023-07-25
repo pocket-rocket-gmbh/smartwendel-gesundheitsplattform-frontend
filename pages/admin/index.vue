@@ -14,6 +14,7 @@
         </v-container>
       </v-list-item>
     </v-list>
+    <v-divider></v-divider>
     <v-list>
       <v-list-item title="Änderungen am: 24.07 12:40Uhr - Alex L.">
         <v-container>
