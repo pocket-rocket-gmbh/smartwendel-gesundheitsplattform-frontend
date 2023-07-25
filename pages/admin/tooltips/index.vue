@@ -11,7 +11,7 @@
       >Tooltip erstellen</v-btn
     >
 
-    <v-text-field v-model="facilitySearchTerm" hide-details="auto" label="Einrichtungen durchsuchen" />
+    <v-text-field v-model="facilitySearchTerm" hide-details="auto" label="Tooltips durchsuchen" />
 
     <DataTable
       :fields="fields"
