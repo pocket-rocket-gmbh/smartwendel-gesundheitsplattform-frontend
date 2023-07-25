@@ -2,13 +2,18 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-alert
-      v-if="!setupFinished && !loading"
-      type="info"
-      density="compact"
-      closable
-      class="my-2"
+    <v-btn
+      v-if="user.isAdmin() || !itemsExist || !setupFinished"
+      elevation="0"
+      variant="outlined"
+      @click="
+        itemId = null;
+        createEditDialogOpen = true;
+      "
     >
+      Neue Einrichtung
+    </v-btn>
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
     <div>
@@ -37,6 +42,12 @@
         </v-col>
       </v-row>
     </div>
+
+    <v-text-field
+      v-model="facilitySearchTerm"
+      hide-details="auto"
+      label="Einrichtungen durchsuchen"
+    />
 
     <DataTable
       ref="dataTableRef"
@@ -83,21 +94,9 @@ const user = useUser();
 const loading = ref(false);
 
 const fields = [
-  {
-    prop: "is_active",
-    text: "Aktiv",
-    endpoint: "care_facilities",
-    type: "switch",
-    fieldToSwitch: "is_active",
-  },
+  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { prop: "name", text: "Name", value: "name", type: "string" },
-  {
-    prop: "user.name",
-    text: "Erstellt von",
-    value: "user.name",
-    type: "pathIntoObject",
-    condition: "admin",
-  },
+  { prop: "user.name", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
 const dataTableRef = ref();
 const itemsExist = ref(false);
