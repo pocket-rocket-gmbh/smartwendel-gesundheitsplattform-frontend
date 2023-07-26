@@ -15,6 +15,7 @@
             @click="
               itemId = null;
               createEditDialogOpen = true;
+              itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder))
             "
           >
             Neue Einrichtung
@@ -84,7 +85,7 @@ const dataTableRef = ref();
 const itemsExist = ref(false);
 const setupFinished = ref(false);
 
-const itemPlaceholder = ref({
+const originalItemPlaceholder = ref({
   name: "",
   kind: "facility",
   is_active: false,
@@ -98,6 +99,7 @@ const itemPlaceholder = ref({
   offlineLocations: [],
   offlineDocuments: [],
 });
+const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);

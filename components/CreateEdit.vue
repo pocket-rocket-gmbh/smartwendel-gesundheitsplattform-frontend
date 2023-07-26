@@ -87,7 +87,7 @@ const form = ref<VForm>();
 const snackbar = useSnackbar();
 const adminStore = useAdminStore();
 const showSaveHint = ref(false);
-const saveHintTimeout = ref<NodeJS.Timeout>()
+const saveHintTimeout = ref<NodeJS.Timeout>();
 
 const showApi = useCollectionApi();
 showApi.setBaseApi(usePrivateApi());
@@ -144,12 +144,14 @@ const create = async () => {
     const facilityId = result.data.resource.id;
 
     loadingItem.value = true;
-    if (item.value.offlineImageFile) {
-      createUpdateApi.setEndpoint(`care_facilities/${facilityId}/images`);
-      const data = {
-        file: item.value.offlineImageFile,
-      };
-      await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
+    if (item.value.offlineImageFiles.length) {
+      for (const offlineImageFile of item.value.offlineImageFiles) {
+        createUpdateApi.setEndpoint(`care_facilities/${facilityId}/images`);
+        const data = {
+          file: offlineImageFile,
+        };
+        await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
+      }
     }
 
     if (item.value.offlineLocations && item.value.offlineLocations.length) {
@@ -215,12 +217,12 @@ useNuxtApp().$bus.$on("setPayloadFromSlotChild", (payload) => {
 
 const triggerSaveHintTimeout = () => {
   showSaveHint.value = false;
-  if(saveHintTimeout.value) clearTimeout(saveHintTimeout.value)
+  if (saveHintTimeout.value) clearTimeout(saveHintTimeout.value);
 
   saveHintTimeout.value = setTimeout(() => {
     showSaveHint.value = true;
   }, 30 * 1000); // Nach einer halben Minute wird ein Hinweis zum Speichern angezeigt
-}
+};
 
 onMounted(() => {
   if (props.itemId) {
@@ -230,7 +232,7 @@ onMounted(() => {
     item.value = { ...props.itemPlaceholder };
   }
 
-  triggerSaveHintTimeout() 
+  triggerSaveHintTimeout();
 });
 
 const emitClose = () => {
