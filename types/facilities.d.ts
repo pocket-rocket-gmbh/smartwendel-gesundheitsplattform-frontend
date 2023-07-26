@@ -2,7 +2,7 @@ import { Facility } from "~/store/searchFilter";
 
 export type CreateEditFacility = Partial<
   Facility & {
-    offlineImageFile?: string;
+    offlineImageFiles?: string[];
     offlineLocations?: { latitude: number; longitude: number }[];
     offlineDocuments?: {
       document: string;

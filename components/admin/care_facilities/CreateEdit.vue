@@ -907,10 +907,10 @@ const setCoverBild = (image: any) => {
   });
 };
 
-const setOfflineImage = (image: any) => {
+const setOfflineImage = (images: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
-    name: "offlineImageFile",
-    value: image,
+    name: "offlineImageFiles",
+    value: images,
   });
 };
 
