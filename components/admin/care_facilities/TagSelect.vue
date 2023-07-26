@@ -145,8 +145,6 @@ const loadAllTags = async () => {
   const res = await api.retrieveCollection();
   if (res.status !== ResultStatus.SUCCESSFUL) return;
 
-  console.log(res.data.resources);
-
   // const tags = res.data.resources;
   const scope = filterKindToFilterScope(props.kind);
   const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>

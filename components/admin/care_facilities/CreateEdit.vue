@@ -59,7 +59,6 @@
               }}</span>
             </div>
             <v-text-field
-            
               v-if="slotProps.item.kind === 'news'"
               v-model="slotProps.item.name"
               hide-details="auto"
@@ -117,7 +116,7 @@
 
           <div class="field" id="5">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold" v-if="(fields[slotProps.item.kind])">{{
+              <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
                 fields[slotProps.item.kind]["5"].label
               }}</span>
             </div>
@@ -130,9 +129,9 @@
                   :options="textOptions"
                   v-model:content="slotProps.item.description"
                   contentType="html"
-                  toolbar="minimal"
+                  :toolbar="textToolbar"
                 />
-            </ClientOnly>
+              </ClientOnly>
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
@@ -271,8 +270,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(date, index) in slotProps.item.event_dates"
-                      :key="index">
+                      <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
                         <td>{{ date }}</td>
                       </tr>
                     </tbody>
@@ -560,11 +558,17 @@ const infosChanged = ref(false);
 const serviceFilterRef = ref(null);
 const expandTagSelect = ref(false);
 
+const textToolbar = ref([
+  [{ header: "1" }, { header: "2" }],
+  ["bold", "italic", "underline"],
+  [{ list: "ordered" }, { list: "bullet" }, { align: [] }],
+]);
+
 const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
-  toolbar: "essential",
+  toolbar: textToolbar.value,
   required: true,
 });
 
