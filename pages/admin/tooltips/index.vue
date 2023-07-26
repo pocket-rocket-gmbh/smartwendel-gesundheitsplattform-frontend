@@ -1,17 +1,31 @@
 <template>
   <div>
     <h2>Tooltips</h2>
-    <v-btn
-      elevation="0"
-      variant="outlined"
-      @click="
-        itemId = null;
-        createEditDialogOpen = true;
-      "
-      >Tooltip erstellen</v-btn
-    >
 
-    <v-text-field v-model="facilitySearchTerm" hide-details="auto" label="Tooltips durchsuchen" />
+    <div>
+      <v-row align="center">
+        <v-col md="3">
+          <v-btn
+            elevation="0"
+            variant="outlined"
+            @click="
+              itemId = null;
+              createEditDialogOpen = true;
+            "
+            >Tooltip erstellen</v-btn
+          >
+        </v-col>
+        <v-col>
+          <v-text-field
+            width="50"
+            prepend-icon="mdi-magnify"
+            v-model="facilitySearchTerm"
+            hide-details="auto"
+            label="Tooltips durchsuchen"
+          />
+        </v-col>
+      </v-row>
+    </div>
 
     <DataTable
       :fields="fields"
