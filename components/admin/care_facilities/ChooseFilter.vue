@@ -20,13 +20,22 @@
       :expand="expandIds.includes(mainFilter.id)"
       @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
-      <template #title>
-        {{ mainFilter.name }}
-        <template v-for="tag in preSetTags">
-          <v-chip class="mx-2" v-if="getTagName(mainFilter, tag)">
-            {{ getTagName(mainFilter, tag) }}
-          </v-chip>
-        </template>
+      <template #title align="center">
+        <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : '']">
+          {{ mainFilter.name }}
+        </span>
+        <div>
+          <span>Bereits ausgewählt: </span>
+          <span v-for="tag in preSetTags">
+            <v-chip
+              size="small"
+              class="mx-2 my-2"
+              v-if="getTagName(mainFilter, tag)"
+            >
+              {{ getTagName(mainFilter, tag) }}
+            </v-chip>
+          </span>
+        </div>
       </template>
       <template #content>
         <div class="main-class">
@@ -139,7 +148,6 @@ const getTagName = (mainFilter: Filter, filterId: string) => {
 
   for (const next of mainFilter.next) {
     const foundNext = next?.next?.find((filter) => filter.id === filterId);
-
     if (foundNext) return foundNext.name;
   }
 
@@ -292,7 +300,7 @@ const handleExpandToggle = (selectedId: string) => {
     expandIds.value.push(selectedId);
     return;
   }
-
+  console.log(selectedId);
   expandIds.value.splice(expandIndex, 1);
 };
 
