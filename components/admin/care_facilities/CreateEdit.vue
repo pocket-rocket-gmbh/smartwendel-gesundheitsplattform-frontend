@@ -12,14 +12,14 @@
             >
               <div class="is-clickable d-flex" @click="goToField(item.index)">
                 <span>{{ item.description }}</span>
-                <!--  <div class="">
+                <div class="">
                   <div v-if="isFilled(slotProps, item)">
                     <v-icon color="success">mdi-check-circle-outline</v-icon>
                   </div>
                   <div v-else>
                     <v-icon color="error">mdi-close-circle-outline</v-icon>
                   </div>
-                </div> -->
+                </div>
               </div>
             </div>
           </div>
@@ -481,6 +481,7 @@
               :offline-name="slotProps.item.name"
               :offline-locations="slotProps.item.offlineLocations"
               @offline="handleLocationsAddOffline"
+              @update="handleLocationsUpdate"
             />
           </div>
 
@@ -637,14 +638,14 @@ const fields = {
       description: "Name",
       index: 1,
       changed: false,
-      prop: "name",
+      props: ["name"],
     },
     "2": {
       label: "2. Lade dein Logo hoch *",
       tooltip: "",
       description: "Logo",
       index: 2,
-      prop: "logo",
+      props: ["logo_url"],
     },
     "3": {
       label: "3. Lade ein Coverbild hoch *",
@@ -652,13 +653,14 @@ const fields = {
         "Das Coverbild ziert den Header-Bereich Ihrer Detail-Seite und gibt dem Besucher einen ersten Einblick auf deine Einrichtung. Mit den weiteren Einrichtungsbildern, die man im nächsten Schritt hochladen kann, erstellst du eine Galerie, die dem Besucher weitere Einblicke in Ihre Einrichtung geben. ",
       description: "Foto",
       index: 3,
-      prop: "image_url",
+      props: ["image_url"],
     },
     "4": {
       label: "4. Lade Bilder für eine Galerie hoch",
       tooltip: "",
       description: "Galerie Fotos",
       index: 4,
+      props: ["sanitized_images"],
     },
     "5": {
       label: "5. Beschreibe deine Einrichtung ausführlich *",
@@ -667,14 +669,14 @@ const fields = {
       index: 5,
       placeholder:
         "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc.",
-      prop: "description",
+      props: ["description"],
     },
     "6": {
       label: "6. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte zu *",
       tooltip: "",
       description: "Berufszweig",
       index: 6,
-      prop: "tag_category_ids",
+      props: ["tag_category_ids"],
     },
     "7": {
       label: "7. Ordne deiner Einrichtung passende Filter zu *",
@@ -682,13 +684,14 @@ const fields = {
         "Anhand der ausgewählten Filter beschreibst du deine Einrichtung genauer. Deine Leistungen und dein Alleinstellungsmerkmal hilft den Benutzern, dich und deine Einrichtung in der Anbietersuche schneller zu finden. Sollte deine Leistung nicht aufgeführt sein, darfst du Liste gerne erweitern.",
       description: "Leistung",
       index: 7,
-      prop: "tag_category_ids",
+      props: ["tag_category_ids"],
     },
     "8": {
       label: "8. Deine Adresse *",
       tooltip: "Ihr Adresse wir auf der Karte in der Anbietersuche angezeigt",
       description: "Kontaktdaten",
       index: 8,
+      props: ["street", "zip", "community_id", "town", "email", "phone"],
     },
 
     "9": {
@@ -696,18 +699,22 @@ const fields = {
       tooltip: "",
       description: "Standorte",
       index: 9,
+      props: ["locations", "offlineLocations"],
+      justSome: true
     },
     "10": {
       label: "10. Trage deine Öffnungszeiten ein",
       tooltip: "",
       description: "Öffnungszeiten",
       index: 10,
+      props: ["opening_hours"],
     },
     "11": {
       label: "11. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
       tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
       description: "Webseite",
       index: 11,
+      props: ["website"],
     },
     "12": {
       label: "12. Lade Dokumente hoch",
@@ -715,6 +722,8 @@ const fields = {
         "Die gesammelten Dokumente (Berichte, Ratgeber, etc.) werden den Benutzern auf deiner Einrichtungs-Seite zum Download angeboten. Es können lediglich PDF-Dokumente zur Verfügung gestellt werden.",
       description: "Dokumente",
       index: 12,
+      props: ["sanitized_documents", "offlineDocuments"],
+      justSome: true,
     },
   },
   news: {
@@ -865,12 +874,22 @@ const fields = {
 };
 
 const isFilled = (slotProps: any, item: any) => {
-  const prop = item.prop;
-  if (prop && slotProps.item[prop] && slotProps.item[prop].length > 0) {
-    return true;
-  } else {
-    return false;
+  const props: string[] = item.props;
+  if (!props) return;
+
+  const slotPropsItem = slotProps.item;
+
+  if (item.justSome) {
+    const result = props.some((prop) => {
+      return slotPropsItem[prop] && slotPropsItem[prop].length;
+    });
+    return result;
   }
+
+  const result = props.every((prop) => {
+    return slotPropsItem[prop] && slotPropsItem[prop].length;
+  });
+  return result;
 };
 
 const setTagCategoryIds = (tags: any) => {
@@ -927,6 +946,13 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
     value: newOfflineDocuments,
   });
 };
+
+const handleLocationsUpdate = (locations: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "locations",
+    value: locations,
+  });
+}
 
 const goToField = (n: string) => {
   const id = n;
