@@ -26,7 +26,7 @@
           {{ mainFilter.name }}
         </span>
         <div>
-          <span>Bereits ausgewählt: </span>
+          <span v-if="filterHasSelected(mainFilter)">Bereits ausgewählt: </span>
           <span v-for="tag in preSetTags">
             <v-chip
               size="small"
@@ -49,7 +49,7 @@
               {{ option.name }}
             </div>
             <v-row>
-              <v-col class="">
+              <v-col>
                 <div class="option" v-for="subOption in option.next">
                   <div class="option-label">
                     <label class="text-subOptions">
@@ -139,6 +139,12 @@ const getFilterOptions = async (id: string) => {
 
   return filters;
 };
+
+const filterHasSelected = (mainFilter: Filter) => {
+  if (!mainFilter.next) return false;
+
+  return mainFilter.next.find((filter) => props.preSetTags.includes(filter.id));
+}
 
 const getTagName = (mainFilter: Filter, filterId: string) => {
   if (!mainFilter.next) return "";

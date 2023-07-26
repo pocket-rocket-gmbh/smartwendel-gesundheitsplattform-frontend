@@ -31,6 +31,12 @@ export type Facility = {
   url?: string;
   url_kind?: "internal" | "external";
   image_url?: string;
+  created_at: Date;
+  user: {
+    id: string;
+    name: string;
+  };
+  user_care_facility_name: string;
 };
 
 export type Filter = {

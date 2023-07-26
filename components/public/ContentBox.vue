@@ -1,12 +1,19 @@
 <template>
   <div class="content-box">
-    <div class="image">
+    <a class="image" :href="buttonHref">
       <img v-if="item.image_url" :src="item.image_url" />
       <div v-else class="placeholder"></div>
-    </div>
+    </a>
     <div class="content">
       <div class="title">
-        {{ item.name }}
+        <a :href="buttonHref" class="name">{{ item.name }}</a>
+        <div class="info">
+          <div class="author">{{ item.user.name }}</div>
+          <span> &nbsp;-&nbsp;</span>
+          <div class="facility">{{ item.user_care_facility_name }}</div>
+          <span> &nbsp;-&nbsp;</span>
+          <div class="date">{{ useDatetime().parseDateAndTime(item.created_at) }}</div>
+        </div>
       </div>
       <div class="description break-text" v-html="item.description"></div>
       <div class="action" v-if="buttonHref">
@@ -16,11 +23,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Facility } from "~/store/searchFilter"; 
+import { Facility } from "~/store/searchFilter";
 
 const props = defineProps<{
   item: Facility;
 }>();
+
+const log = console.log;
 
 const buttonHref = computed(() => {
   if (!props.item) return null;
@@ -85,12 +94,28 @@ $max-height: 240px;
     padding: 1.75rem 1.25rem;
     display: flex;
     flex-direction: column;
+    flex: 1;
 
     .title {
       color: #8ab61d;
       font-size: 1.5rem;
       font-weight: bold;
       margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .name {
+        color: #8ab61d;
+      }
+
+      .info {
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+      }
     }
 
     .description {

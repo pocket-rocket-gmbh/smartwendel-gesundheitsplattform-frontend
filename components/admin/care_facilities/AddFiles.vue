@@ -12,6 +12,7 @@
         label="Datei auswählen"
         v-model="file"
         @change="handleFile"
+        accept="application/pdf,application/vnd.ms-excel"
       />
       <v-text-field
         :disabled="
@@ -172,9 +173,9 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
-  documentAcepted: boolean;
   itemId: string;
   tagName: "documents" | "insurance";
+  documentAcepted?: boolean;
   offlineDocuments?: CreateEditFacility["offlineDocuments"];
 }>();
 
