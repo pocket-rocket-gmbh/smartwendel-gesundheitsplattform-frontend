@@ -103,6 +103,7 @@
               :temp-image="slotProps.item.file"
               label="Cover Bild"
               @setImage="setCoverBild"
+              :min-size="true"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -906,10 +907,10 @@ const setCoverBild = (image: any) => {
   });
 };
 
-const setOfflineImage = (image: any) => {
+const setOfflineImage = (images: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
-    name: "offlineImageFile",
-    value: image,
+    name: "offlineImageFiles",
+    value: images,
   });
 };
 

@@ -10,6 +10,7 @@
         filled
         prepend-icon="mdi-camera"
         @change="handleFile()"
+        accept="image/*"
       />
       <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
       <div class="text-error" v-if="item?.sanitized_images.length >= 6">
@@ -34,26 +35,17 @@
       <v-col v-for="(image, index) in item?.sanitized_images" :key="index" md="2">
         <v-card>
           <v-img :lazy-src="image.url" :src="image.url" max-width="200" />
-          <div
-            @click="deleteImage(image.signed_id)"
-            class="text-error ml-1 mt-1 is-clickable"
-          >
-            Bild löschen
-          </div>
+          <div @click="deleteImage(image.signed_id)" class="text-error ml-1 mt-1 is-clickable">Bild löschen</div>
         </v-card>
       </v-col>
     </v-row>
     <v-row v-else>
-      <v-card>
-          <v-img :lazy-src="item.file" :src="item.file" max-width="200" />
-          <div
-            @click="item.file = ''; item.sanitized_images = []"
-            class="text-error ml-1 mt-1 is-clickable"
-            v-if="item.file"
-          >
-            Bild löschen
-          </div>
+      <v-col v-for="(image, index) in item?.offline_images" :key="index" md="2">
+        <v-card>
+          <v-img :lazy-src="image" :src="image" max-width="200" />
+          <div @click="deleteImageOffline(index)" class="text-error ml-1 mt-1 is-clickable">Bild löschen</div>
         </v-card>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -74,9 +66,9 @@ const image = ref({});
 const errorFileSizeTooLarge = ref(false);
 const item = ref({
   sanitized_images: [],
+  offline_images: [],
   file: "",
 });
-
 
 const setImage = (image: any) => {
   imgUrl.value = null;
@@ -136,7 +128,8 @@ const save = async () => {
       item.value.file = "";
     }
   } else {
-    emit("offline",item.value.file);
+    item.value.offline_images.push(item.value.file);
+    emit("offline", item.value.offline_images);
   }
 };
 
@@ -151,6 +144,11 @@ const deleteImage = async (signedId: string) => {
     errors.value = result.data;
     loadingItem.value = false;
   }
+};
+
+const deleteImageOffline = async (index: number) => {
+  item.value.offline_images.splice(index, 1);
+  emit("offline", item.value.offline_images);
 };
 
 watch(
