@@ -1,5 +1,6 @@
 <template>
-  <v-container class="limited offset my-15">
+
+  <v-container class="limited offset my-15" v-if="!loading">
     <v-btn
     
     prepend-icon="mdi-chevron-left"
@@ -36,7 +37,7 @@ export default defineComponent({
     const route = useRoute()
     const router = useRouter()
     const careFacility = ref({})
-    const loading = ref(false)
+    const loading = ref(true)
 
     const careFacilityId = computed(() => {
       return route.params.id
@@ -63,7 +64,8 @@ export default defineComponent({
     })
     return {
       careFacility,
-      goBack
+      goBack,
+      loading
     }
   }
 })
