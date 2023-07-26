@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10">
-      {{ userIsAdmin }}
       <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />

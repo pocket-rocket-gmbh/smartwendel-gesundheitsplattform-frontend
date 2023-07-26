@@ -179,7 +179,16 @@
               @set-tags="setTagIds"
             />
           </div>
-          
+          <v-alert type="info" closable color="grey">
+            <div class="d-flex align-center filter-request">
+              <div class="py-1">
+                <span>Wenn unter den angegebenen Leistungskatalog nicht die passende Leistung für deine Einrichtung zu finden ist, kontaktiere uns bitte </span>
+                <span>
+                  <a class="is-white text-decoration-underline" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">Hier</a>
+                </span>
+              </div>
+            </div>
+          </v-alert>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="8" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
             <div class="my-2">
@@ -945,6 +954,9 @@ onMounted(async () => {
 
 .fields
   max-width: 70vw
+
+.filter-request
+  font-size: 16px
 
 .select-box
   border: black solid 1px
