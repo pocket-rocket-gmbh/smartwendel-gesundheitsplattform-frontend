@@ -85,7 +85,6 @@ const handleFile = async () => {
     return;
   } else if (image && image.value[0]) {
     errorFileSizeTooLarge.value = false;
-    console.log(image.value[0]);
     imgUrl.value = await toBase64(image.value[0]);
     return;
   }
@@ -98,7 +97,6 @@ const removeFile = () => {
 };
 
 const setImage = (image: any) => {
-  console.log(image);
   imgUrl.value = null;
   croppedImage.value = image;
   emit("setImage", image);

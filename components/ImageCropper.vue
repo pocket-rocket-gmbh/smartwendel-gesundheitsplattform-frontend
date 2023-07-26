@@ -20,7 +20,7 @@
     />
     <v-card-actions>
       <v-btn @click="emitClose()"> Bild verwerfen </v-btn>
-      <v-btn color="blue darken-1" dark :disabled="selectedImageTooSmall" @click="crop()">
+      <v-btn color="blue darken-1" dark :disabled="selectedImageTooSmall || croppedImageTooSmall" @click="crop()">
         {{ cta }}
       </v-btn>
     </v-card-actions>
