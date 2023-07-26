@@ -12,7 +12,7 @@ export function useUser() {
 
   const isAdmin = (): Boolean => {
     if (currentUser) {
-      return currentUser.role === "root" || currentUser.role === "admin";
+      return currentUser.role === "root" || currentUser.role === "admin" || currentUser.role === "care_facility_admin";
     }
   };
 
