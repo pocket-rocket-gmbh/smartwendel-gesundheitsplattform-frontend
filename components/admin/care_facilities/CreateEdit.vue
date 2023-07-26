@@ -700,7 +700,7 @@ const fields = {
       description: "Standorte",
       index: 9,
       props: ["locations", "offlineLocations"],
-      justSome: true
+      justSome: true,
     },
     "10": {
       label: "10. Trage deine Öffnungszeiten ein",
@@ -952,7 +952,7 @@ const handleLocationsUpdate = (locations: any) => {
     name: "locations",
     value: locations,
   });
-}
+};
 
 const goToField = (n: string) => {
   const id = n;
