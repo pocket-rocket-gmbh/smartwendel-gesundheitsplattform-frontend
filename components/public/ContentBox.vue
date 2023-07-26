@@ -10,13 +10,13 @@
       </div>
       <div class="description break-text" v-html="item.description"></div>
       <div class="action" v-if="buttonHref">
-        <a :href="buttonHref" :target="item.url ? '_blank' : ''">Weiterlesen &gt;</a>
+        <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { Facility } from "~/store/searchFilter";
+import { Facility } from "~/store/searchFilter"; 
 
 const props = defineProps<{
   item: Facility;
