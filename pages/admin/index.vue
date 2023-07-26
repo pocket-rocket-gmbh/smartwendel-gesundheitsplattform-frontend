@@ -110,6 +110,14 @@
       </v-list-item>
     </v-list>
     <v-divider></v-divider>
+    <v-list>
+      <v-list-item title="Änderungen am: 26.07 10:30Uhr - Norman">
+        <v-container>
+          - Filter Radio-Buttons toggle
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
   </div>
 </template>
 

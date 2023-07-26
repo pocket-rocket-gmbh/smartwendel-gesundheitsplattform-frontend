@@ -13,6 +13,7 @@ const errorCodes: { [key: string]: string } = {
 
 export function useErrors() {
   const checkAndMapErrors = (fieldName:string, errors:any) => {
+    if (!errors) return;
     let errorMessages = [] as any
     if (errors["errors"]) {
       errors["errors"].forEach((error:any) => {
