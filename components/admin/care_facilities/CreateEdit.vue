@@ -103,6 +103,7 @@
               :temp-image="slotProps.item.file"
               label="Cover Bild"
               @setImage="setCoverBild"
+              :min-size="true"
             />
           </div>
           <v-divider class="my-10"></v-divider>
