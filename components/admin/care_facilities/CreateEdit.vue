@@ -85,6 +85,7 @@
             <ChooseAndCropSingleImage
               height="20"
               :pre-set-image-url="slotProps.item.logo_url"
+              :temp-image="slotProps.item.logo"
               label="Logo"
               @setImage="setLogo"
             />
@@ -99,6 +100,7 @@
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
+              :temp-image="slotProps.item.file"
               label="Cover Bild"
               @setImage="setCoverBild"
             />
@@ -130,6 +132,7 @@
                   v-model:content="slotProps.item.description"
                   contentType="html"
                   :toolbar="textToolbar"
+                  @ready="onQuillReady"
                 />
               </ClientOnly>
             </div>
@@ -182,9 +185,16 @@
           <v-alert type="info" closable color="grey">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
-                <span>Wenn unter den angegebenen Leistungskatalog nicht die passende Leistung für deine Einrichtung zu finden ist, kontaktiere uns bitte </span>
+                <span
+                  >Wenn unter den angegebenen Leistungskatalog nicht die passende Leistung für deine Einrichtung zu
+                  finden ist, kontaktiere uns bitte
+                </span>
                 <span>
-                  <a class="is-white text-decoration-underline" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">Hier</a>
+                  <a
+                    class="is-white text-decoration-underline"
+                    :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
+                    >Hier</a
+                  >
                 </span>
               </div>
             </div>
@@ -581,6 +591,18 @@ const textOptions = ref({
   toolbar: textToolbar.value,
   required: true,
 });
+
+const onQuillReady = (quill: any) => {
+  quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node: any, delta: any[]) => {
+    delta.forEach((e) => {
+      if (e && e.attributes) {
+        e.attributes.color = "";
+        e.attributes.background = "";
+      }
+    });
+    return delta;
+  });
+};
 
 const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;

@@ -1,4 +1,5 @@
 <template>
+  <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Erforderlich']"></v-checkbox>
   <v-alert
     class="my-5"
     v-if="!filterSelected && !loadingFilters"
@@ -90,6 +91,7 @@ const emit = defineEmits<{
 }>();
 
 type Filter = { id: string; name: string; next?: Filter[] };
+
 
 const selectedFilter = ref<Filter>();
 const availableFilters = ref<Filter[]>([]);
