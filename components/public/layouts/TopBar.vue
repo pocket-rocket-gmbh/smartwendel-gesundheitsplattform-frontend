@@ -184,8 +184,6 @@ export default defineComponent({
     const route = useRoute()
     const loading = ref(false)
 
-    console.log(currentUser)
-
     const categoriesApi = useCollectionApi()
     categoriesApi.setBaseApi(usePublicApi())
 
