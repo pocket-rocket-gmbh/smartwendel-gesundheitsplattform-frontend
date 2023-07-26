@@ -3,6 +3,17 @@
     <h2>Dashboard</h2>
   </div>
   <div>
+        <v-list>
+      <v-list-item title="Änderungen am: 26.07 08:30Uhr - Alex L.">
+        <v-container>
+          <b>Filter</b><br />
+          - Neue Filter Darstellungr<br />
+          <b>Frontend</b><br />
+          - Optimization nach LK Wünsche <br />
+        </v-container>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
     <v-list>
       <v-list-item title="Änderungen am: 25.07 11:00Uhr - Alex L.">
         <v-container>
