@@ -1,5 +1,4 @@
 <template>
-  {{ filterStore.currentSearchTerm }}
   <div class="choose-category">
     <div class="category-input is-dark-grey py-2">
       <form @submit.prevent="routeToResults()">
