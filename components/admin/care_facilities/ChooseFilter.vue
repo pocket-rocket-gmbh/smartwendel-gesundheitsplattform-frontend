@@ -17,7 +17,7 @@
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
       :id="mainFilter.id"
-      :expand="!expandIds.includes(mainFilter.id)"
+      :expand="expandIds.includes(mainFilter.id)"
       @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title>
@@ -44,14 +44,13 @@
                   <div class="option-label">
                     <label class="text-subOptions">
                       <input
-                      class="my-1"
+                        class="my-1"
                         :type="enableMultiSelect ? 'checkbox' : 'radio'"
                         :checked="isChecked(subOption)"
                         @click.stop="handleSubFilterClick(option, subOption)"
                       />
-                        {{ subOption.name }}
+                      {{ subOption.name }}
                     </label>
-                   
                   </div>
                 </div>
               </v-col>

@@ -43,7 +43,6 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            text
             @click="closeMenuAndRouteTo(``)"
           >
           schließen
