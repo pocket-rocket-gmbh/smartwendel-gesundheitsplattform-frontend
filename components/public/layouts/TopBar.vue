@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10"> 
+    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10">
+      {{ userIsAdmin }}
       <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />
@@ -147,7 +148,7 @@
           </template>
           <v-divider v-if="userIsAdmin" class="my-5"></v-divider>
             <v-list-item v-if="userIsAdmin">
-              <router-link class="mr-6" to="/admin">Dashboard</router-link>
+              <router-link class="mr-6" to="/admin">Admin-Bereich</router-link>
             </v-list-item>
           <v-divider v-if="currentUser" class="my-5"></v-divider>
             <v-list-item v-if="currentUser && userIsAdmin">
@@ -183,6 +184,8 @@ export default defineComponent({
     const appStore = useAppStore();
     const route = useRoute()
     const loading = ref(false)
+
+    console.log(currentUser)
 
     const categoriesApi = useCollectionApi()
     categoriesApi.setBaseApi(usePublicApi())
@@ -232,7 +235,7 @@ export default defineComponent({
 
     const userIsAdmin = computed(() => {
       if (currentUser.value) {
-        return currentUser.value.role === 'root' || currentUser.value.role === 'admin'
+        return currentUser.value.role === 'root' || currentUser.value.role === 'admin' || currentUser.value.role === 'care_facility_admin'
       }
       return false
     })

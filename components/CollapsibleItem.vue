@@ -4,7 +4,7 @@
       <div class="title" :class="expand && 'bold'" >
        <slot name="title" />
       </div>
-      <div class="chevron" :class="[expand ? 'down' : 'up']"></div>
+      <div class="chevron" :class="[expand ? 'up' : 'down']"></div>
     </div>
     <div class="content" v-if="expand">
       <slot name="content"/>

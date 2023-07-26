@@ -179,6 +179,7 @@
               @set-tags="setTagIds"
             />
           </div>
+          
           <v-divider class="my-10"></v-divider>
           <div class="field" id="8" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
             <div class="my-2">
