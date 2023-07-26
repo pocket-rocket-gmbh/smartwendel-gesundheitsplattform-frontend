@@ -85,7 +85,6 @@ const onChange = ({ canvas, image: originalImage }: CropperUpdate) => {
 };
 
 const crop = () => {
-  console.log(image.value);
   emit("crop", image.value);
 };
 
