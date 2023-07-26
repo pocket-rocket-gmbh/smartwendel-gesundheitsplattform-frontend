@@ -21,6 +21,9 @@
           <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
             Speichern
           </v-btn>
+          <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
+            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
+          </v-alert>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -83,6 +86,8 @@ const form = ref<VForm>();
 
 const snackbar = useSnackbar();
 const adminStore = useAdminStore();
+const showSaveHint = ref(false);
+const saveHintTimeout = ref<NodeJS.Timeout>()
 
 const showApi = useCollectionApi();
 showApi.setBaseApi(usePrivateApi());
@@ -193,9 +198,11 @@ const save = async () => {
   const result = await createUpdateApi.updateItem(item.value, "Erfolgreich aktualisiert");
   adminStore.loading = false;
   loadingItem.value = false;
+  triggerSaveHintTimeout();
+
   if (result.status === ResultStatus.SUCCESSFUL) {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
-    emit("close");
+    // emit("close");
   } else {
     errors.value = result.data;
   }
@@ -206,6 +213,15 @@ useNuxtApp().$bus.$on("setPayloadFromSlotChild", (payload) => {
   item.value[payload.name] = payload.value;
 });
 
+const triggerSaveHintTimeout = () => {
+  showSaveHint.value = false;
+  if(saveHintTimeout.value) clearTimeout(saveHintTimeout.value)
+
+  saveHintTimeout.value = setTimeout(() => {
+    showSaveHint.value = true;
+  }, 30 * 1000); // Nach einer halben Minute wird ein Hinweis zum Speichern angezeigt
+}
+
 onMounted(() => {
   if (props.itemId) {
     getItem();
@@ -213,6 +229,8 @@ onMounted(() => {
   if (props.itemPlaceholder && !item.value.id) {
     item.value = { ...props.itemPlaceholder };
   }
+
+  triggerSaveHintTimeout() 
 });
 
 const emitClose = () => {
@@ -257,5 +275,19 @@ watch(
   display: flex;
   align-items: center;
   gap: 1rem;
+  height: 61px;
+
+  .save-hint {
+    animation: fadeIn 200ms ease-in-out forwards;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
 }
 </style>

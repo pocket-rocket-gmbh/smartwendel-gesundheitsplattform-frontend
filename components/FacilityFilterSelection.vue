@@ -29,7 +29,7 @@
                 @click.prevent="handleOptionSelect(option)"
                 hide-details
                 density="compact"
-                :label="String(selectedFilter?.id === option.id)"
+                :label="option.name"
                 color="#8AB61D"
               />
             </label>
