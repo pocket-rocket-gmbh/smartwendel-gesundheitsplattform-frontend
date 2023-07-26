@@ -3,11 +3,11 @@
     <h2>Dashboard</h2>
   </div>
   <div>
-        <v-list>
+    <v-list>
       <v-list-item title="Änderungen am: 26.07 08:30Uhr - Alex L.">
         <v-container>
           <b>Filter</b><br />
-          - Neue Filter Darstellungr<br />
+          - Neue Filter Darstellung<br />
           <b>Frontend</b><br />
           - Optimization nach LK Wünsche <br />
         </v-container>
