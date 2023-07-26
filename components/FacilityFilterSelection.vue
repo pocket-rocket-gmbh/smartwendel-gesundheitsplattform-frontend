@@ -20,19 +20,19 @@
             {{ filter.name }}
           </div>
           <div class="filter-options">
-            <div
+            <label
               class="option"
               v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options"
-              @click="handleOptionSelect(option)"
             >
               <v-radio
                 :model-value="selectedFilter?.id === option.id"
+                @click.prevent="handleOptionSelect(option)"
                 hide-details
                 density="compact"
-                :label="option.name"
+                :label="String(selectedFilter?.id === option.id)"
                 color="#8AB61D"
               />
-            </div>
+            </label>
           </div>
         </div>
       </div>
@@ -82,6 +82,10 @@ const filterOptions = ref<FilterOption[]>([]);
 const loadingFilters = ref(false);
 
 const handleOptionSelect = (option: Filter) => {
+  if (selectedFilter.value === option) {
+    selectedFilter.value = null;
+    return;
+  }
   const previous = { ...selectedFilter.value };
   selectedFilter.value = option;
 
