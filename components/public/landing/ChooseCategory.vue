@@ -18,7 +18,7 @@
       <div v-show="filterStore.currentSearchTerm && showPopover" class="search-results-popover" ref="popoverParentRef">
         <div class="wrapper">
           <div v-if="filterStore.loading" class="result">
-            <LoadingSpinner>Suchergebnisse werden geladen...</LoadingSpinner>
+            <LoadingSpinner :style="'inline'">Suchergebnisse werden geladen...</LoadingSpinner>
           </div>
           <template v-else>
             <div class="result" @click.stop="routeToResults(); trackSearch();">

@@ -23,7 +23,7 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col class="d-flex" md="8">
+        <v-col class="d-flex" xl="6" md="8">
           <v-row>
             <v-col class="d-flex" v-for="(item, index) in items" :key="index">
               <div class="ml-15 pa-2 d-flex ml-5 align-end">

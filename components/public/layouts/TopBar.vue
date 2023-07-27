@@ -222,9 +222,9 @@ export default defineComponent({
         per_page: 25,
         sort_by: "menu_order",
         sort_order: "ASC",
-        searchQuery: null,
+        searchQuery: null as any,
         concat: false,
-        filters: [],
+        filters: [] as any,
       };
       await categoriesApi.retrieveCollection(options);
       categories.value = categoriesApi.items.value;
@@ -237,9 +237,9 @@ export default defineComponent({
         per_page: 25,
         sort_by: "menu_order",
         sort_order: "ASC",
-        searchQuery: null,
+        searchQuery: null as any,
         concat: false,
-        filters: [],
+        filters: [] as any,
       };
       await categoriesApi.retrieveCollection(options);
       return categoriesApi.items.value;

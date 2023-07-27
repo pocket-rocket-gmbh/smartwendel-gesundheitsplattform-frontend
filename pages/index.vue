@@ -28,6 +28,12 @@ export default defineComponent({});
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .background
+  width: 100vw
+  height: 100vh
   background: url('../assets/images/home.jpg') no-repeat center center
+  background-repeat: no-repeat
   background-size: cover
+  background-position: right top
+
+
 </style>

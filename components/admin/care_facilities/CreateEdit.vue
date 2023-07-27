@@ -5,21 +5,14 @@
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
             <div
-              class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable"
+            :class="[isFilled(slotProps, item) ? 'is-filled' : '']"
+              class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable text-h5"
               v-for="(item, index) in fields[slotProps.item.kind]"
               :key="index"
               @click="goToField(item.index)"
             >
-              <div class="is-clickable d-flex" @click="goToField(item.index)">
+              <div class="is-clickable d-flex" @click="goToField(item.index)" >
                 <span>{{ item.description }}</span>
-                <div class="">
-                  <div v-if="isFilled(slotProps, item)">
-                    <v-icon color="success">mdi-check-circle-outline</v-icon>
-                  </div>
-                  <div v-else>
-                    <v-icon color="error">mdi-close-circle-outline</v-icon>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -59,6 +52,7 @@
               }}</span>
             </div>
             <v-text-field
+              class="text-field"
               v-if="slotProps.item.kind === 'news'"
               v-model="slotProps.item.name"
               hide-details="auto"
@@ -67,6 +61,7 @@
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
             <v-text-field
+              class="text-field"
               v-if="slotProps.item.kind !== 'news'"
               v-model="slotProps.item.name"
               hide-details="auto"
@@ -90,6 +85,7 @@
               @setImage="setLogo"
             />
           </div>
+
           <v-divider class="my-10" v-if="slotProps.item.kind === 'facility'"></v-divider>
 
           <div class="field" id="3">
@@ -394,6 +390,7 @@
             />
             <div class="field">
               <v-text-field
+                class="text-field"
                 v-model="slotProps.item.street"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
@@ -404,6 +401,7 @@
             </div>
             <div class="field">
               <v-text-field
+                class="text-field"
                 v-model="slotProps.item.additional_address_info"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
@@ -413,6 +411,7 @@
             <div class="field">
               <v-select
                 hide-details="auto"
+                class="text-field"
                 v-model="slotProps.item.community_id"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="communities"
@@ -424,6 +423,7 @@
             </div>
             <div class="field split">
               <v-text-field
+                class="text-field"
                 v-model="slotProps.item.zip"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
@@ -434,6 +434,7 @@
               />
               <v-select
                 hide-details="auto"
+                class="text-field"
                 v-model="slotProps.item.town"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
@@ -445,6 +446,7 @@
             </div>
             <div class="field">
               <v-text-field
+                class="text-field"
                 v-model="slotProps.item.phone"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
@@ -456,6 +458,7 @@
             </div>
             <div class="field">
               <v-text-field
+                class="text-field"
                 v-model="slotProps.item.email"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
@@ -511,6 +514,7 @@
                 </v-row>
               </div> -->
               <v-textarea
+                class="text-field"
                 rows="4"
                 hide-details="auto"
                 v-model="slotProps.item.opening_hours"
@@ -529,6 +533,7 @@
               }}</span>
             </div>
             <v-text-field
+              class="text-field"
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
@@ -1013,12 +1018,35 @@ onMounted(async () => {
   background: $light-grey
   width: 100%
 
+.is-filled
+  background-color: $primary-color
+  color: white
+
 .menu-boxes
   position: sticky
   z-index: 9999
   top: 30px
 </style>
+
 <style lang="css">
+.text-field .v-label {
+  font-size: 20px!important;
+}
+
+.text-field input,
+.text-field input{
+  padding-top: 10px!important;
+}
+
+.v-select .v-select__selection-text {
+  padding-top: 10px!important;
+}
+
+.v-textarea .v-field__input {
+  margin-top: 20px!important;
+  padding-top: 20px!important;
+}
+
 .dp__selection_preview {
   display: none;
 }
@@ -1054,4 +1082,13 @@ onMounted(async () => {
   content: "Datum auswählen";
   margin-left: 0.25rem;
 }
+
+.ql-editor p, .ql-editor ol, .ql-editor ul {
+  font-size: 22px;
+}
+
+.ql-blank::before {
+  font-size: 18px;
+}
+
 </style>
