@@ -8,7 +8,7 @@
         <v-col md="5" class="d-none d-md-flex">
           <v-img
             v-if="item.image_url"
-            class="align-center"
+            class="align-center is-clickable"
             cover
             max-height="300px"
             :src="item.image_url"
@@ -23,10 +23,19 @@
                 </div>
               </v-col>
               <v-col>
-                <div class="d-flex align-center" v-if="item.user_care_facility_name">
-                  <v-icon>mdi-home-outline</v-icon
+                <div
+                  class="d-flex align-center is-clickable"
+                  v-if="item.user_care_facility_name"
+                >
+                  <a
+                    :href="`/public/care_facilities/${item.id}`"
+                    class="is-red is-clickable"
                   >
-                  <p class="break-title">{{ item.user_care_facility_name }}</p>
+                    <span class="break-title d-flex align-center">
+                      <v-icon>mdi-home-outline</v-icon
+                      >{{ item.user_care_facility_name }}</span
+                    >
+                  </a>
                 </div>
               </v-col>
               <v-col>
@@ -39,7 +48,11 @@
             <v-divider v-if="item.user" class="my-1"></v-divider>
             <div class="flex-grow-1 d-flex flex-column justify-start">
               <v-card-title class="is-primary pa-0 mt-2">
-                <p class="break-title" v-html="item.name"></p>
+                <div class="action text-h5" v-if="buttonHref">
+                  <a :href="buttonHref">
+                    <p class="break-title" v-html="item.name"></p>
+                  </a>
+                </div>
               </v-card-title>
               <v-card-text class="flex-grow-1 pa-0 mt-2">
                 <p class="break-text" v-html="item.description"></p
@@ -63,7 +76,7 @@
 </template>
 <script lang="ts" setup>
 import { Facility } from "~/store/searchFilter";
-import noImage from '@/assets/images/no-image.png'
+import noImage from "@/assets/images/no-image.png";
 
 const props = withDefaults(
   defineProps<{
