@@ -30,6 +30,10 @@
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
+        <v-list-item link to="/admin/matomo" nuxt>
+            <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken
+          </v-list-item>
+        <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
           <v-list-item link to="/admin" nuxt>  Admin-Bereich (Change Log) </v-list-item>
           <v-divider></v-divider>
