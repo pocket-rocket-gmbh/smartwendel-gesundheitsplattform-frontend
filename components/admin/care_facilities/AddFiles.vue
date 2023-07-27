@@ -1,24 +1,23 @@
 <template>
   <div>
-    <Loading v-if="loadingItem" />
+   <Loading v-if="loadingItem" />
     <div class="field split">
       <v-file-input
         :disabled="
           tagName === 'insurance' && (itemId ? (item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1) :  offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
-        class="mt-5"
-        variant="underlined"
-        clearable
+        class="text-field file-input"
+        hide-details="auto"
         label="Datei auswählen"
         v-model="file"
         @change="handleFile"
         accept="application/pdf,application/vnd.ms-excel"
       />
       <v-text-field
+        class="text-field"
         :disabled="
         tagName === 'insurance' && (itemId ? (item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1) :  offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
-        variant="underlined"
         hide-details="auto"
         label="Bezeichnung*"
         v-model="filename"
@@ -339,6 +338,14 @@ onMounted(() => {
 });
 </script>
 <style lang="sass">
+
+.text-field .v-label
+  font-size: 20px!important
+
+.text-field input,
+.text-field input
+  padding-top: 10px!important
+  
 .close
   position: absolute
   top: -10px

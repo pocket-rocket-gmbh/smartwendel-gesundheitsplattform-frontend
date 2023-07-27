@@ -1,6 +1,7 @@
 <template>
   <div class="field">
     <v-file-input
+      class="text-field"
       hide-details="auto"
       v-model="image"
       :label="`${labelText} wählen`"
@@ -106,4 +107,12 @@ const setImage = (image: any) => {
 <style lang="sass" scoped>
 .img-container
   max-width: 300px
+
+.text-field .v-label
+  font-size: 20px!important
+
+.text-field input,
+.text-field input
+  padding-top: 10px!important
+
 </style>

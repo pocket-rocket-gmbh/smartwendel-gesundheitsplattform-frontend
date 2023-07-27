@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <v-container class="limited mt-8 mb-8">
-      <v-row class="mt-4">
+      <v-row class="mt-4" v-if="filterStore.filteredResults.length">
         <v-col>
           <h2>Suchbegriff: {{ filterStore.currentSearchTerm }}</h2>
         </v-col>
@@ -24,7 +24,7 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row v-else>
+        <v-row v-else class="mt-15">
           <v-col class="d-flex justify-center">
             <div class="flex-column" align="center">
               <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>

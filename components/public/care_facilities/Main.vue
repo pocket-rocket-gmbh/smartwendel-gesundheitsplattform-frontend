@@ -51,7 +51,7 @@
       <div>
         <i>Inhaltlich verantwortlich: {{ careFacility.user?.name }} </i>
       </div>
-      <div>
+      <div v-if="careFacility.street && careFacility.zip && careFacility.town">
         <i>
           Adresse: {{ careFacility.street }}, {{ careFacility.zip }} {{ careFacility.town }}
         </i>

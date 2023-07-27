@@ -3,6 +3,7 @@
     <Loading v-if="loadingItem" />
     <div class="field mt-3">
       <v-file-input
+        class="text-field"
         :disabled="item?.sanitized_images.length >= 6"
         hide-details="auto"
         v-model="image"
@@ -165,6 +166,14 @@ onMounted(() => {
 });
 </script>
 <style lang="sass">
+
+.text-field .v-label
+  font-size: 20px!important
+
+.text-field input,
+.text-field input
+  padding-top: 10px!important
+
 .close
   position: absolute
   top: -10px
