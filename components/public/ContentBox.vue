@@ -22,24 +22,28 @@
                   <v-icon>mdi-account-outline</v-icon>{{ item.user.name }}
                 </div>
               </v-col>
-              <v-col>
+              <v-col class="justify-center d-flex">
                 <div
                   class="d-flex align-center is-clickable"
                   v-if="item.user_care_facility_name"
                 >
                   <a
                     :href="`/public/care_facilities/${item.id}`"
-                    class="is-red is-clickable"
+                    class="is-clickable d-flex"
                   >
-                    <span class="break-title d-flex align-center">
-                      <v-icon>mdi-home-outline</v-icon
-                      >{{ item.user_care_facility_name }}</span
-                    >
+                    <v-icon>mdi-home-outline</v-icon>
+                    <p
+                      class="break-title"
+                      v-html="item.user_care_facility_name"
+                    ></p>
                   </a>
                 </div>
               </v-col>
               <v-col>
-                <div class="d-flex align-center" v-if="item.created_at">
+                <div
+                  class="d-flex align-center justify-end"
+                  v-if="item.created_at"
+                >
                   <v-icon>mdi-calendar-outline</v-icon
                   >{{ useDatetime().parseDateAndTime(item.created_at) }}
                 </div>
@@ -50,7 +54,7 @@
               <v-card-title class="is-primary pa-0 mt-2">
                 <div class="action text-h5" v-if="buttonHref">
                   <a :href="buttonHref">
-                    <p class="break-title" v-html="item.name"></p>
+                    <p class="break-title action" v-html="item.name"></p>
                   </a>
                 </div>
               </v-card-title>

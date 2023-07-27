@@ -41,7 +41,10 @@
       </template>
     </v-container>
   </ClientOnly>
-  <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+  <v-container>
+    <PublicContentBox :size="'12'" v-for="category in filterStore.filteredResults" :key="category.id" :item="category"/>
+  </v-container>
+
 </template>
 
 <script setup lang="ts">
