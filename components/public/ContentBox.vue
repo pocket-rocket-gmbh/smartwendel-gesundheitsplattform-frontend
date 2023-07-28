@@ -18,23 +18,23 @@
           <div class="notes-card">
             <v-row v-if="item.user">
               <v-col class="d-flex">
-                <div class="d-flex align-center" v-if="item.user.name">
+                <div class="d-flex align-center user-informations" v-if="item.user.name">
                   <v-icon>mdi-account-outline</v-icon>{{ item.user.name }}
                 </div>
               </v-col>
               <v-col class="justify-center d-flex">
                 <div
                   class="d-flex align-center is-clickable"
-                  v-if="item.user_care_facility_name"
+                  v-if="item.user_care_facility?.name"
                 >
                   <a
-                    :href="`/public/care_facilities/${item.id}`"
+                    :href="`/public/care_facilities/${item.user_care_facility?.id}`"
                     class="is-clickable d-flex"
                   >
                     <v-icon>mdi-home-outline</v-icon>
                     <p
                       class="break-title"
-                      v-html="item.user_care_facility_name"
+                      v-html="item.user_care_facility?.name"
                     ></p>
                   </a>
                 </div>
@@ -45,7 +45,7 @@
                   v-if="item.created_at"
                 >
                   <v-icon>mdi-calendar-outline</v-icon
-                  >{{ useDatetime().parseDateAndTime(item.created_at) }}
+                  >{{ useDatetime().parseDatetime(item.created_at) }}
                 </div>
               </v-col>
             </v-row>
@@ -80,8 +80,7 @@
 </template>
 <script lang="ts" setup>
 import { Facility } from "~/store/searchFilter";
-import noImage from "@/assets/images/no-image.png";
-
+import noImage from "@/assets/images/no-image.svg";
 const props = withDefaults(
   defineProps<{
     item: Facility;
@@ -193,12 +192,14 @@ $max-height: 240px;
       flex: 1;
     }
 
+    .user-informations {
+      font-size: 12px;
+    }
+
     .action {
       a {
         cursor: pointer;
         font-size: 1.25rem;
-        color: #636362;
-        font-weight: bold;
       }
     }
   }
