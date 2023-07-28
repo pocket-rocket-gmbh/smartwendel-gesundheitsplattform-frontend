@@ -7,9 +7,10 @@
         <v-select variant="underlined" v-model="filterStore.filterSort" :items="filterSortingDirections" />
       </div>
     </div>
-    <div v-if="!filterStore.currentKinds.includes('facility')" class="items">
+    <div v-if="!filterStore.currentKinds.includes('facility')" class="">
       <PublicContentBox
-        class="content-box"
+        :size="'12'"
+        class=""
         v-for="category in filterStore.filteredResults"
         :key="category.id"
         :item="category"

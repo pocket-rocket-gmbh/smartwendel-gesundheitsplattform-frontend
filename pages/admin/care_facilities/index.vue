@@ -2,24 +2,41 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-
-    <v-btn
-      v-if="user.isAdmin() || (!itemsExist || !setupFinished)"
-      elevation="0"
-      variant="outlined"
-      @click="
-        itemId = null;
-        createEditDialogOpen = true;
-      "
-      >Neue Einrichtung</v-btn
-    >
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
-
+    <div>
+      <v-row align="center">
+        <v-col md="3" class="d-flex">
+          <v-btn
+            v-if="user.isAdmin() || !itemsExist || !setupFinished"
+            elevation="0"
+            variant="outlined"
+            @click="
+              itemId = null;
+              createEditDialogOpen = true;
+              itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder))
+            "
+          >
+            Neue Einrichtung
+          </v-btn>
+        </v-col>
+        <v-col>
+          <v-text-field
+            width="50"
+            prepend-icon="mdi-magnify"
+            v-model="facilitySearchTerm"
+            hide-details="auto"
+            label="Einrichtungen durchsuchen"
+          />
+        </v-col>
+      </v-row>
+    </div>
     <DataTable
       ref="dataTableRef"
       :fields="fields"
+      :search-query="facilitySearchTerm"
+      :search-columns="facilitySearchColums"
       endpoint="care_facilities?kind=facility"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
@@ -60,15 +77,15 @@ const user = useUser();
 const loading = ref(false);
 
 const fields = [
-  { text: 'Aktiv', endpoint: 'care_facilities', type: 'switch', fieldToSwitch: 'is_active' },
-  { text: "Name", value: "name", type: "string" },
-  { text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
+  { prop: "name", text: "Name", value: "name", type: "string" },
+  { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
 ];
 const dataTableRef = ref();
 const itemsExist = ref(false);
 const setupFinished = ref(false);
 
-const itemPlaceholder = ref({
+const originalItemPlaceholder = ref({
   name: "",
   kind: "facility",
   is_active: false,
@@ -82,12 +99,16 @@ const itemPlaceholder = ref({
   offlineLocations: [],
   offlineDocuments: [],
 });
+const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const addImagesDialogOpen = ref(false);
 const addFilesDialogOpen = ref(false);
 const itemId = ref(null);
+
+const facilitySearchColums = ref(["name", "user.name"]);
+const facilitySearchTerm = ref("");
 
 const handleItemsLoaded = (items: any[]) => {
   itemsExist.value = !!items.length;

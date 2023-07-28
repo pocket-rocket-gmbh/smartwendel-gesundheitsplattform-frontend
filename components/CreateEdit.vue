@@ -10,8 +10,8 @@
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <v-form ref="form">
         <v-card-title class="text-h5 has-bg-primary py-5 text-white">
-            <span v-if="itemId">{{ conceptName }} bearbeiten</span>
-            <span v-else>{{ conceptName }} erstellen</span>        
+          <span v-if="itemId">{{ conceptName }} bearbeiten</span>
+          <span v-else>{{ conceptName }} erstellen</span>
         </v-card-title>
 
         <slot :item="item" :errors="errors"></slot>
@@ -21,6 +21,9 @@
           <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
             Speichern
           </v-btn>
+          <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
+            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
+          </v-alert>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -83,6 +86,8 @@ const form = ref<VForm>();
 
 const snackbar = useSnackbar();
 const adminStore = useAdminStore();
+const showSaveHint = ref(false);
+const saveHintTimeout = ref<NodeJS.Timeout>();
 
 const showApi = useCollectionApi();
 showApi.setBaseApi(usePrivateApi());
@@ -139,12 +144,14 @@ const create = async () => {
     const facilityId = result.data.resource.id;
 
     loadingItem.value = true;
-    if (item.value.offlineImageFile) {
-      createUpdateApi.setEndpoint(`care_facilities/${facilityId}/images`);
-      const data = {
-        file: item.value.offlineImageFile,
-      };
-      await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
+    if (item.value.offlineImageFiles.length) {
+      for (const offlineImageFile of item.value.offlineImageFiles) {
+        createUpdateApi.setEndpoint(`care_facilities/${facilityId}/images`);
+        const data = {
+          file: offlineImageFile,
+        };
+        await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
+      }
     }
 
     if (item.value.offlineLocations && item.value.offlineLocations.length) {
@@ -193,9 +200,11 @@ const save = async () => {
   const result = await createUpdateApi.updateItem(item.value, "Erfolgreich aktualisiert");
   adminStore.loading = false;
   loadingItem.value = false;
+  triggerSaveHintTimeout();
+
   if (result.status === ResultStatus.SUCCESSFUL) {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
-    emit("close");
+    // emit("close");
   } else {
     errors.value = result.data;
   }
@@ -206,32 +215,43 @@ useNuxtApp().$bus.$on("setPayloadFromSlotChild", (payload) => {
   item.value[payload.name] = payload.value;
 });
 
+const triggerSaveHintTimeout = () => {
+  showSaveHint.value = false;
+  if (saveHintTimeout.value) clearTimeout(saveHintTimeout.value);
+
+  saveHintTimeout.value = setTimeout(() => {
+    showSaveHint.value = true;
+  }, 30 * 1000); // Nach einer halben Minute wird ein Hinweis zum Speichern angezeigt
+};
+
 onMounted(() => {
   if (props.itemId) {
     getItem();
   }
   if (props.itemPlaceholder && !item.value.id) {
-    item.value = {...props.itemPlaceholder};
+    item.value = { ...props.itemPlaceholder };
   }
+
+  triggerSaveHintTimeout();
 });
 
 const emitClose = () => {
   const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
-    item.value = props.itemPlaceholder
+    item.value = props.itemPlaceholder;
     emit("close");
   }
 };
 
 watch(
   [
-    () => item.value.phone,
-    () => item.value.email,
-    () => item.value.street,
-    () => item.value.additional_address_info,
-    () => item.value.community_id,
-    () => item.value.zip,
-    () => item.value.town,
+    () => item.value?.phone,
+    () => item.value?.email,
+    () => item.value?.street,
+    () => item.value?.additional_address_info,
+    () => item.value?.community_id,
+    () => item.value?.zip,
+    () => item.value?.town,
   ],
   (
     [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
@@ -251,3 +271,25 @@ watch(
   }
 );
 </script>
+
+<style lang="scss">
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 61px;
+
+  .save-hint {
+    animation: fadeIn 200ms ease-in-out forwards;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+}
+</style>

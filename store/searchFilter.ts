@@ -31,6 +31,12 @@ export type Facility = {
   url?: string;
   url_kind?: "internal" | "external";
   image_url?: string;
+  created_at: Date;
+  user: {
+    id: string;
+    name: string;
+  };
+  user_care_facility_name: string;
 };
 
 export type Filter = {
@@ -52,7 +58,7 @@ const initialFilterState: Filter = {
   currentSearchTerm: "",
   currentTags: [],
   currentZip: null,
-  filterSort: "Aufsteigend",
+  filterSort: "Absteigend",
   loading: false,
   mapFilter: null,
   currentKinds: [],
@@ -139,7 +145,7 @@ export const useFilterStore = defineStore({
       const options = {
         page: 1,
         per_page: 25,
-        sort_by: "name",
+        sort_by: "created_at",
         sort_order: this.filterSort == "Aufsteigend" ? "ASC" : "DESC",
         searchQuery: null as any,
         concat: false,
@@ -182,7 +188,7 @@ export const useFilterStore = defineStore({
 
           const bestResult = data[0];
 
-          return [bestResult.lat, bestResult.lon];
+          return [bestResult.lat, bestResult.lon] as [string, string];
         } catch (err) {
           console.error(err);
           return null;
@@ -190,18 +196,19 @@ export const useFilterStore = defineStore({
       };
 
       if (this.currentKinds.includes("facility")) {
-        for (const facility of this.allResults) {
-          if (facility.zip && facility.street) {
-            const response = await getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
-
-            if (response) {
-              const [lat, lon] = response;
-
-              facility.latitude = lat;
-              facility.longitude = lon;
-            }
+        const newLocationLatLongsPromises = this.allResults.map((facility) => {
+          if (!facility.zip || !facility.street) {
+            return null;
           }
-        }
+          return getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
+        });
+
+        const newLocationLatLongs = await Promise.all(newLocationLatLongsPromises);
+        newLocationLatLongs.forEach((item, index) => {
+          if (!item) return;
+          this.allResults[index].latitude = item[0];
+          this.allResults[index].longitude = item[1];
+        });
       }
 
       this.loading = false;

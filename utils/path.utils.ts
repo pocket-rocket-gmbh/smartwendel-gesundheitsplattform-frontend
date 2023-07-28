@@ -22,3 +22,23 @@ export const pathInto = (myJson: any, key: string): string => {
 
   return translated;
 };
+
+export const pathIntoObject = (obj: any, path: string): any => {
+  if (!isValidJSONPath(path)) throw `Path '${path}' is no valid JSON path`;
+  const properties = path.split(".");
+  let result = obj;
+
+  for (const property of properties) {
+    if (result.hasOwnProperty(property)) {
+      result = result[property];
+    } else {
+      return undefined;
+    }
+  }
+
+  return result;
+};
+
+export const isValidJSONPath = (path: string) => {
+  return !!path.match(/^[\w$]+(\.[\w$]+)*$/)?.length;
+};

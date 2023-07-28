@@ -19,9 +19,9 @@
       <v-card class="mx-auto ma-2" width="300" v-if="currentUser">
         <v-list class="card-header">
           <v-list-item-content>
-            <v-list-item-title>{{currentUser.name}}</v-list-item-title>
-            <v-list-item-subtitle>{{currentUser.role}}</v-list-item-subtitle>
-            <v-list-item-subtitle>{{currentUser.email}}</v-list-item-subtitle>
+            <v-list-item-title>{{currentUser?.name}}</v-list-item-title>
+            <v-list-item-subtitle>{{currentUser?.role}}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{currentUser?.email}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list>
         <v-divider></v-divider>
@@ -43,7 +43,6 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            text
             @click="closeMenuAndRouteTo(``)"
           >
           schließen

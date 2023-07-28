@@ -11,17 +11,17 @@
             @input="handleInput"
             @click="showPopover = true"
           />
-          <img class="icon" :src="searchIcon" @click="routeToResults()" />
+          <img class="icon" :src="searchIcon" @click="routeToResults(); trackSearch();" />
         </div>
       </form>
 
       <div v-show="filterStore.currentSearchTerm && showPopover" class="search-results-popover" ref="popoverParentRef">
         <div class="wrapper">
           <div v-if="filterStore.loading" class="result">
-            <LoadingSpinner>Suchergebnisse werden geladen...</LoadingSpinner>
+            <LoadingSpinner :style="'inline'">Suchergebnisse werden geladen...</LoadingSpinner>
           </div>
           <template v-else>
-            <div class="result" @click.stop="routeToResults()">
+            <div class="result" @click.stop="routeToResults(); trackSearch();">
               <div class="icon">
                 <img :src="getIconSourceFor()" />
               </div>
@@ -31,7 +31,7 @@
               class="result"
               v-for="result in filterStore.filteredResults"
               :key="result.id"
-              @click.stop="routeToResults(result)"
+              @click.stop="routeToResults(result); trackSearch();"
             >
               <div class="icon">
                 <img :src="getIconSourceFor(result.kind)" />
@@ -60,6 +60,9 @@ api.setBaseApi(usePublicApi());
 
 const router = useRouter();
 
+const trackSearch = () => {
+  window._paq.push(["trackEvent", "Gesucht:", `${filterStore.currentSearchTerm}`])
+}
 const popoverParentRef = ref();
 const showPopover = ref(false);
 

@@ -90,7 +90,7 @@
 import { ResultStatus } from "@/types/serverCallResult";
 import { MapLocation } from "@/types/MapLocation";
 
-const emit = defineEmits(["offline"]);
+const emit = defineEmits(["offline", "update"]);
 const props = defineProps<{
   itemId: string | null;
 
@@ -124,6 +124,7 @@ const getCareFacility = async () => {
   await api.getItem();
   loadingItem.value = false;
   careFacility.value = api.item.value;
+  emit("update", careFacility.value.locations);
 };
 
 const closeLocationDialog = async () => {

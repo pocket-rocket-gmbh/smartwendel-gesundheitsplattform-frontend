@@ -17,7 +17,7 @@
           <div><b>Schlagwort eingeben</b></div>
           <v-tooltip location="top" width="300px">
             <template v-slot:activator="{ props }">
-              <v-icon class="help-tooltip" v-bind="props">mdi-help</v-icon>
+              <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
             </template>
             <span
               >Trage hier deine individuellen Leisungsangebote in Form von Schlagwörtern ein. Hiermit ermöglichst du den
@@ -144,8 +144,6 @@ const loadAllTags = async () => {
   api.setEndpoint("tags");
   const res = await api.retrieveCollection();
   if (res.status !== ResultStatus.SUCCESSFUL) return;
-
-  console.log(res.data.resources);
 
   // const tags = res.data.resources;
   const scope = filterKindToFilterScope(props.kind);
