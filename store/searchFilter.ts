@@ -58,7 +58,7 @@ const initialFilterState: Filter = {
   currentSearchTerm: "",
   currentTags: [],
   currentZip: null,
-  filterSort: "Aufsteigend",
+  filterSort: "Absteigend",
   loading: false,
   mapFilter: null,
   currentKinds: [],
@@ -145,7 +145,7 @@ export const useFilterStore = defineStore({
       const options = {
         page: 1,
         per_page: 25,
-        sort_by: "name",
+        sort_by: "created_at",
         sort_order: this.filterSort == "Aufsteigend" ? "ASC" : "DESC",
         searchQuery: null as any,
         concat: false,
