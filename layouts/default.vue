@@ -1,7 +1,8 @@
 <template>
   <v-app>
+    <div v-if="loading"></div>
     <PublicPasswordProtection
-      v-if="!authenticated"
+      v-else-if="!authenticated"
     />
     <div v-else>
       <ClientOnly>
@@ -22,33 +23,35 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth";
 import { useTooltipsStore } from '~~/store/tooltips'
+const loading = ref(true)
 
-  onMounted(() => {
-    const auth = localStorage.getItem("smartwendel_gesundheitsplattform_authenticated");
-    if (auth && auth === "true") {
-      useAuthStore().$patch({
-        authenticated: true,
-      });
-    }
-  });
+const tooltipsStore = useTooltipsStore()
+const api = useCollectionApi()
+api.setBaseApi(usePublicApi())
+api.setEndpoint('tooltips')
 
-  const tooltipsStore = useTooltipsStore()
-  const api = useCollectionApi()
-  api.setBaseApi(usePublicApi())
-  api.setEndpoint('tooltips')
 
-  const getTooltips = async () => {
+onMounted(async () => {
+  loading.value = true
+  const auth = localStorage.getItem("smartwendel_gesundheitsplattform_authenticated");
+
+  if (auth && auth === "true") {
+    useAuthStore().$patch({
+      authenticated: true
+    });
+  }
+
+  if (!tooltipsStore.tooltips) {
     await api.retrieveCollection()
     tooltipsStore.tooltips = api.items
   }
 
-  onMounted(() => {
-    getTooltips()
-  })
+  loading.value = false
+});
 
-  const authenticated = computed(() => {
-    return useAuthStore().authenticated;
-  });
+const authenticated = computed(() => {
+  return useAuthStore().authenticated;
+});
 </script>
 
 <style lang="sass" scoped></style>
