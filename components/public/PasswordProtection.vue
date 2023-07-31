@@ -18,36 +18,29 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import axios from 'axios'
 import { useAuthStore } from '@/store/auth'
-import { defineComponent } from 'vue'
-export default defineComponent({
-  setup() {
-    const password = ref('')
-    const animated = ref(false)
-    const config = useRuntimeConfig()
 
-    const auth = () => {
-      if (password.value === config.public.LOGIN_PASSWORD) {
-        useAuthStore().$patch({
-          'authenticated': true
-        })
-        localStorage.setItem('smartwendel_gesundheitsplattform_authenticated', 'true')
-      } else {
-        animated.value = true
-        setTimeout(() => {
-          animated.value = false
-        }, 2000)
-      }
-    }
+const password = ref('')
+const animated = ref(false)
 
-    return {
-      password,
-      animated,
-      auth
-    }
+const auth = async () => {
+
+  const res = await axios.post("/api/password_protection", { password: password.value });
+
+  if (res.data === true) {
+    useAuthStore().$patch({
+      'authenticated': true
+    })
+    localStorage.setItem('smartwendel_gesundheitsplattform_authenticated', 'true')
+  } else {
+    animated.value = true
+    setTimeout(() => {
+      animated.value = false
+    }, 2000)
   }
-})
+}
 </script>
 
 <style lang="css" scoped>

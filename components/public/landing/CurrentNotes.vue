@@ -48,8 +48,8 @@ export default defineComponent({
       const options = {
         page: 1,
         per_page: 2,
-        sort_by: "menu_order",
-        sort_order: "ASC",
+        sort_by: "created_at",
+        sort_order: "DESC",
         searchQuery: null as any,
         concat: false,
         filters: [] as any,

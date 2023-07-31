@@ -71,6 +71,8 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
+
+       
           <div class="field" id="2" v-if="slotProps.item.kind === 'facility'">
             <div class="my-2">
               <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
@@ -200,7 +202,7 @@
           <div class="field" id="8" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
             <div class="my-2">
               <span class="text-h5 mr-2 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["date"].label
+                fields[slotProps.item.kind]["14"].label
               }}</span>
             </div>
             <div class="mb-15">
@@ -304,13 +306,13 @@
           <div class="field" id="9" v-if="slotProps.item.kind === 'course'">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["insurance"].label
+                fields[slotProps.item.kind]["13"].label
               }}</span>
               <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
-                <span v-if="fields[slotProps.item.kind]">{{ fields[slotProps.item.kind]["insurance"].tooltip }}</span>
+                <span v-if="fields[slotProps.item.kind]">{{ fields[slotProps.item.kind]["13"].tooltip }}</span>
               </v-tooltip>
             </div>
             <div>
@@ -526,7 +528,7 @@
 
           <v-divider class="my-10" v-if="slotProps.item.kind === 'facility'"></v-divider>
 
-          <div class="field" id="11" v-if="slotProps.item.kind === 'facility'">
+          <div class="field" id="11" v-if="slotProps.item.kind !== 'news'">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{
                 fields[slotProps.item.kind]["11"].label
@@ -542,7 +544,7 @@
             />
           </div>
 
-          <v-divider class="my-10" v-if="slotProps.item.kind === 'facility'"></v-divider>
+          <v-divider class="my-10" v-if="slotProps.item.kind !== 'nes'"></v-divider>
 
           <div class="field" id="12" v-if="slotProps.item.kind !== 'news'">
             <div class="my-2 d-flex align-center">
@@ -565,6 +567,94 @@
               @offline="handleDocumentsOffline"
             />
           </div>
+          <div class="field" id="13" v-if="slotProps.item.kind === 'course'">
+            <div class="my-2">
+              <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
+                fields[slotProps.item.kind]["15"].label
+              }}</span>
+              </div>
+              <v-text-field
+              class="text-field"
+             
+              v-model="slotProps.item.name_instructor"
+              hide-details="auto"
+              label="Name / Vorname des Kursleiters"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+            
+          </div>
+          <v-divider class="my-10" v-if="slotProps.item.kind === 'course'"></v-divider>
+
+          <div v-if="slotProps.item.kind === 'course'">
+            <div class="my-2">
+              <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
+                fields[slotProps.item.kind]["16"].label
+              }}</span>
+              </div>
+
+            <div class="field">
+              <v-text-field
+                class="text-field"
+                v-model="slotProps.item.street"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                hide-details="auto"
+                label="Straße und Nummer"
+                :rules="[rules.counterStreet]"
+                :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                class="text-field"
+                v-model="slotProps.item.additional_address_info"
+                hide-details="auto"
+                label="Adresszusatz"
+              />
+            </div>
+            <div class="field">
+              <v-select
+                hide-details="auto"
+                class="text-field"
+                v-model="slotProps.item.community_id"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                :items="communities"
+                item-title="name"
+                item-value="id"
+                label="Gemeinde"
+              />
+            </div>
+            <div class="field split">
+              <v-text-field
+                class="text-field"
+                v-model="slotProps.item.zip"
+                hide-details="auto"
+                label="PLZ"
+                :type="'number'"
+                :rules="[rules.required, rules.zip]"
+                :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+              />
+              <v-select
+                hide-details="auto"
+                class="text-field"
+                v-model="slotProps.item.town"
+                :items="getTownsByCommunityId(slotProps.item.community_id)"
+                item-title="name"
+                item-value="name"
+                label="Ort"
+              />
+            </div>
+          
+
+
+
+
+
+          </div>
+
+
+          <v-divider class="my-10" v-if="slotProps.item.kind === 'course'"></v-divider>
+
         </v-col>
       </v-row>
     </v-card-text>
@@ -642,7 +732,6 @@ const fields = {
       tooltip: "",
       description: "Name",
       index: 1,
-      changed: false,
       props: ["name"],
     },
     "2": {
@@ -737,6 +826,7 @@ const fields = {
       tooltip: "",
       description: "Name",
       index: 1,
+      props: ["name"],
     },
     "3": {
       label: "2. Lade Bilder für eine Galerie hoch *",
@@ -770,6 +860,7 @@ const fields = {
       tooltip: "",
       description: "Name",
       index: 1,
+      props: ["name"],
     },
     "3": {
       label: "2. Lade ein Coverbild hoch *",
@@ -802,26 +893,47 @@ const fields = {
       description: "Leistung",
       index: 7,
     },
-    date: {
+    "14": {
       label:
         "7. Gib das Kursdatum, sowie die Uhrzeit an. Findet dein Kurs öfter statt, kannst du mehrere Termine auswählen und diese auch wieder löschen *",
       tooltip: "",
       description: "Kursdatum",
       index: 8,
     },
-    insurance: {
+    "13": {
       label:
         "8. Handelt es sich um einen von GKV geförderten Präventionskurs? Falls ja, lade bitte das Zertifikat der ZPP (Zentrale Prüfstelle Prävention) hoch",
       tooltip: "",
       description: "Zertifikat",
       index: 9,
     },
+    "11": {
+      label: "9. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+      tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
+      description: "Webseite",
+      index: 11,
+      props: ["website"],
+    },
     "12": {
       label:
-        "9. Hier hast du die Möglichkeit, weitere Dokumente (z.B. Kursplan) zu deinem Kurs/Veranstaltung hochzuladen",
+        "10. Hier hast du die Möglichkeit, weitere Dokumente (z.B. Kursplan) zu deinem Kurs/Veranstaltung hochzuladen",
       tooltip: "",
       description: "Dokumente",
       index: 12,
+    },
+    "15": {
+      label:
+        "11. Vor- und Nachname der Kursleitung",
+      tooltip: "",
+      description: "Kursleitung",
+      index: 13,
+    },
+    "16": {
+      label:
+        "12. Adresse des Kurses",
+      tooltip: "",
+      description: "Adresse",
+      index: 14,
     },
   },
   event: {
@@ -830,6 +942,7 @@ const fields = {
       tooltip: "",
       description: "Name",
       index: 1,
+      props: ["name"],
     },
     "3": {
       label: "2.  Lade ein Titelbild hoch *",
@@ -862,15 +975,22 @@ const fields = {
       description: "Leistung",
       index: 7,
     },
-    date: {
+    "14": {
       label: "7. Gib das Veranstaltungsdatum, sowie die Uhrzeit an *",
       tooltip: "",
-      description: "Kursdatum",
+      description: "Veranstaltungsdatum",
       index: 8,
+    },
+    "11": {
+      label: "8. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+      tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
+      description: "Webseite",
+      index: 11,
+      props: ["website"],
     },
     "12": {
       label:
-        "8. Wurden zur Veranstaltung Dokumente (z.B. Flyer) erstellt, kannst du diese hier gerne hochladen und den Benutzern zur Verfügung stellen",
+        "9. Wurden zur Veranstaltung Dokumente (z.B. Flyer) erstellt, kannst du diese hier gerne hochladen und den Benutzern zur Verfügung stellen",
       tooltip: "",
       description: "Dokumente",
       index: 12,
