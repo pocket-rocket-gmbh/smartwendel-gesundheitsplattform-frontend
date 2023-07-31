@@ -7,8 +7,8 @@
         <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
       </span>
     </div>
-      <div v-if="careFacility.email" class="py-1">
-        <span>
+    <div v-if="careFacility.email" class="py-1">
+      <span>
         <v-icon class="mr-2" color="primary">mdi-email-outline</v-icon>
         <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
       </span>
@@ -24,18 +24,18 @@
       </div>
     </div>
     <div class="my-4" v-if="careFacility.website">
-      <v-btn 
+      <v-btn
         append-icon="mdi-open-in-new"
         variant="outlined"
         size="large"
         rounded="pill"
         color="primary"
         width="100%"
-        :href="'https://' + careFacility.website"
+        :href="buttonHref"
         target="_blank"
-        >
-          weitere Informationen 
-    </v-btn>
+      >
+        weitere Informationen
+      </v-btn>
     </div>
     <div class="my-4">
       <v-btn
@@ -45,21 +45,32 @@
         color="primary"
         width="100%"
         :href="`mailto:${careFacility.email}`"
-        >
-          Kontakt aufnehmen
+      >
+        Kontakt aufnehmen
       </v-btn>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  const props = defineProps({
-    careFacility: {
-      type: Object,
-      required: true
-    }
-  })
+const props = defineProps({
+  careFacility: {
+    type: Object,
+    required: true,
+  },
+});
 
+const buttonHref = computed(() => {
+  if (!props.careFacility) return null;
+
+  if (props.careFacility.website) {
+    if (props.careFacility.website.includes("http://") || props.careFacility.website.includes("https://")) {
+      return props.careFacility.website;
+    } else return "https://" + props.careFacility.website;
+  }
+
+  return null;
+});
 </script>
 
 <style lang="sass" scoped>
@@ -68,5 +79,4 @@
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
   border-radius: 20px
   padding: 20px
-
 </style>

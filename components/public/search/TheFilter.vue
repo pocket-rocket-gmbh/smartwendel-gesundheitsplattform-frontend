@@ -5,7 +5,9 @@
       <div class="filter-tiles">
         <div v-for="filter in itemsForServiceList" class="filter-group">
           <div v-for="item in filter.next" class="mt-5 filter-selections">
-            <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
+            <span v-if="item.next.length" class="text-h5">{{
+              item.title
+            }}</span>
             <v-row no-gutters class="mt-3 fill-height mr-1">
               <v-col
                 cols="12"
@@ -16,16 +18,22 @@
               >
                 <div
                   class="filter-tile pa-5"
-                  :class="{ selected: isSelected(subItem.id) }"
+                  :class="{ selected: isSelectedTagNext(subItem) }"
                   @click="toggleSelection(subItem)"
                 >
                   {{ subItem.title }}
                 </div>
-
-                <div v-if="subItem.next.length && expandedItemIds.includes(subItem.id)" class="tag-select">
+                <div
+                  v-if="
+                    subItem.next.length && expandedItemIds.includes(subItem.id)
+                  "
+                  class="tag-select"
+                  v-for="tag in subItem.next"
+                >
+                  <v-divider></v-divider>
                   <v-checkbox
-                    v-for="tag in subItem.next"
-                    class="mb-n10"
+                    :class="{ selected: isSelected(tag.id) }"
+                    class="mb-n4"
                     :label="tag.title"
                     v-model="filterStore.currentTags"
                     :value="tag.id"
@@ -37,7 +45,14 @@
         </div>
       </div>
     </v-skeleton-loader>
-    <v-btn class="mt-6" variant="flat" size="large" rounded="pill" color="primary" @click="applyFilters">
+    <v-btn
+      class="mt-6"
+      variant="flat"
+      size="large"
+      rounded="pill"
+      color="primary"
+      @click="applyFilters"
+    >
       Filter anwenden
     </v-btn>
     <div>
@@ -71,7 +86,10 @@
 <script setup lang="ts">
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
-import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
+import {
+  CollapsibleListItem,
+  EmitAction,
+} from "../../../types/collapsibleList";
 import { VSkeletonLoader } from "vuetify/labs/VSkeletonLoader";
 
 const props = defineProps<{
@@ -96,7 +114,11 @@ type FilterResponse = {
   menu_order: number;
 };
 
-const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number) => {
+const getItemsAndNext = async (
+  filter: FilterResponse,
+  arrayToAdd: CollapsibleListItem[],
+  layer: number
+) => {
   api.setEndpoint(`tag_categories?parent_id=${filter.id}`);
   const options = {
     page: 1,
@@ -161,13 +183,17 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind); // Filter items for current kind (event/facility/news/course) // hereeeeee!!!!
+  const filters: any[] = result?.data?.resources?.filter(
+    (item: Facility) => props.filterKind === item.kind
+  ); // Filter items for current kind (event/facility/news/course) // hereeeeee!!!!
   if (!filters) {
     console.error("No filters!");
     return;
   }
 
-  const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
+  const serviceFilters = filters.filter(
+    (filter) => filter.filter_type === "filter_service"
+  );
 
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
@@ -185,9 +211,18 @@ const isSelected = (itemId: string) => {
   return filterStore.currentTags.includes(itemId);
 };
 
+const isSelectedTagNext = (tag: CollapsibleListItem) => {
+  if (tag.next?.length) {
+    return tag.next.some((subTag) => isSelected(subTag.id));
+  }
+  return isSelected(tag.id);
+};
+
 const toggleSelection = (item: CollapsibleListItem) => {
   if (item.next?.length) {
-    const index = expandedItemIds.value.findIndex((expandedItemId) => expandedItemId === item.id);
+    const index = expandedItemIds.value.findIndex(
+      (expandedItemId) => expandedItemId === item.id
+    );
 
     if (index === -1) {
       expandedItemIds.value.push(item.id);
@@ -198,7 +233,9 @@ const toggleSelection = (item: CollapsibleListItem) => {
   }
 
   if (isSelected(item.id)) {
-    filterStore.currentTags = filterStore.currentTags.filter((id) => id !== item.id);
+    filterStore.currentTags = filterStore.currentTags.filter(
+      (id) => id !== item.id
+    );
   } else {
     filterStore.currentTags.push(item.id);
   }

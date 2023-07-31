@@ -1,5 +1,4 @@
 <template>
-  <p><b>Zeichen: {{ refinedData?.length }}</b></p>
   <div v-if="!edit" v-html="refinedData"></div>
   <template v-else>
     <v-text-field @click.stop v-if="data.type === 'raw'" v-model="refinedData" hide-details="auto" label="Zusatzangaben"/>
@@ -8,7 +7,6 @@
       v-model="refinedData"
       hide-details="auto"
       label="Beschreibung"
-      :rules="[(v) => (v || '').length <= 600 || 'Die Beschreibung darf höchstens 500 Zeichen lang sein.']"
       @update:model-value="handleModelChange"
       @click.stop
     />

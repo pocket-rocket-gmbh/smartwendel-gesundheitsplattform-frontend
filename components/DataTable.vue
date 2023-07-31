@@ -7,18 +7,27 @@
           :key="field.text"
           :width="[
             field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch'
-              ? '15px'
+              ? '30px'
               : field.width,
           ]"
+          :class="{ 'is-clickable': field.prop }"
+          @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
-          {{ field.text }}
+          <div class="table-head-item">
+            {{ field.text }}
+            <div v-if="sortBy === field.prop" class="chevron" :class="{ up: sortOrder === 'desc' }"></div>
+          </div>
         </th>
         <th width="15px" v-if="!disableEdit"></th>
         <th width="15px"></th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, indexMain) in items" :key="item.id" :class="[item === activeItems ? 'activeItems' : '']">
+      <tr
+        v-for="(item, indexMain) in filteredItems"
+        :key="item.id"
+        :class="[item === activeItems ? 'activeItems' : '']"
+      >
         <td
           v-for="(field, index) in fields"
           :key="index"
@@ -45,7 +54,7 @@
             </template>
             <span>Nach oben</span>
           </v-tooltip>
-          <v-tooltip top v-else-if="field.type === 'move_down' && indexMain !== items.length - 1">
+          <v-tooltip top v-else-if="field.type === 'move_down' && indexMain !== filteredItems.length - 1">
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
             </template>
@@ -92,7 +101,7 @@
                   <v-col>
                     <v-chip class="mx-2 mt-2" color="grey" v-if="facility.kind === 'facility'">
                       <v-icon v-if="facility.kind === 'facility'" class="mr-2">mdi-home-city-outline</v-icon>
-                        {{ facility.name }}
+                      {{ facility.name }}
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -110,6 +119,7 @@
 
 <script setup lang="ts">
 import { useEnums } from "@/composables/data/enums";
+import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
 
 const router = useRouter();
@@ -120,6 +130,8 @@ const props = withDefaults(
     endpoint: string;
     disableEdit?: boolean;
     overwriteMoveEndpoint?: string;
+    searchQuery?: string;
+    searchColumns?: string[];
     defaultSortBy?: string;
     defaultSortOrder?: string;
   }>(),
@@ -131,17 +143,20 @@ const props = withDefaults(
 
 const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded"]);
 
+const sortOrder = ref(props.defaultSortOrder);
+const sortBy = ref(props.defaultSortBy);
+
 const loading = ref(false);
 
 const resetActiveItems = () => {
   activeItems.value = null;
 };
 
-const emitopenDeleteDialog = (itemId:any) => {
+const emitopenDeleteDialog = (itemId: any) => {
   emit("openDeleteDialog", itemId);
 };
 const activeItems = ref(null);
-const handleEmitParent = (item:any, field:any, menu_order:any) => {
+const handleEmitParent = (item: any, field: any, menu_order: any) => {
   activeItems.value = item;
   if (field.type === "move_up") {
     move(item, items.value[(menu_order -= 1)]);
@@ -152,7 +167,7 @@ const handleEmitParent = (item:any, field:any, menu_order:any) => {
   }
 };
 
-const emitParent = (itemId:any, fieldEmit:any) => {
+const emitParent = (itemId: any, fieldEmit: any) => {
   if (!fieldEmit) {
     emit("openCreateEditDialog", itemId);
   } else {
@@ -160,7 +175,7 @@ const emitParent = (itemId:any, fieldEmit:any) => {
   }
 };
 
-const move = async (entry:any, nextEntry:any) => {
+const move = async (entry: any, nextEntry: any) => {
   let endpoint = props.overwriteMoveEndpoint;
   if (!props.overwriteMoveEndpoint) {
     endpoint = props.endpoint;
@@ -178,13 +193,49 @@ api.setBaseApi(usePrivateApi());
 api.setEndpoint(props.endpoint);
 const items = api.items;
 
+const filteredItems = computed(() => {
+  if (props.searchQuery === undefined || props.searchColumns === undefined) return items.value;
+
+  const itemsFiltered = items.value.filter((item) => {
+    const some = props.searchColumns.some((columnProp) => {
+      let column = pathIntoObject(item, columnProp);
+      if (column) {
+        let searchTerm = props.searchQuery.toUpperCase();
+        if (columnProp === "kind") {
+          if ("VERANSTALTUNG".includes(searchTerm)) {
+            searchTerm = "EVENT";
+          } else if ("BERICHT".includes(searchTerm)) {
+            searchTerm = "NEWS";
+          } else if ("KURS".includes(searchTerm)) {
+            searchTerm = "COURSE";
+          } else if ("EINRICHTUNG".includes(searchTerm)) {
+            searchTerm = "FACILITY";
+          }
+        }
+        if (columnProp === "created_at" || columnProp === "last_seen") {
+          column = useDatetime().parseDatetime(column);
+        }
+        if (typeof column === "string") {
+          return column.toUpperCase().includes(searchTerm);
+        }
+        if (Array.isArray(column)) {
+          // TODO: Right now i only check for the 'name' field on my items, not all
+          return column.find((item) => item.name?.toUpperCase().includes(searchTerm));
+        }
+      }
+    });
+    return some;
+  });
+  return itemsFiltered;
+});
+
 const getItems = async () => {
   loading.value = true;
   const options = {
     page: 1,
-    per_page: 999,
-    sort_by: props.defaultSortBy,
-    sort_order: props.defaultSortOrder,
+    per_page: 9999,
+    sort_by: sortBy.value,
+    sort_order: sortOrder.value,
     searchQuery: null as string,
     concat: false,
     filters: [] as any[],
@@ -192,8 +243,18 @@ const getItems = async () => {
   adminStore.loading = true;
   await api.retrieveCollection(options);
   adminStore.loading = false;
-  emit("itemsLoaded", items.value)
+  emit("itemsLoaded", items.value);
   loading.value = false;
+};
+
+const rotateColumnSortOrder = (columnProp: string) => {
+  if (sortBy.value !== columnProp) {
+    sortOrder.value = "asc";
+  } else {
+    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+  }
+  sortBy.value = columnProp;
+  getItems();
 };
 
 onMounted(() => {
@@ -203,7 +264,7 @@ onMounted(() => {
   getItems();
 });
 
-defineExpose({ resetActiveItems });
+defineExpose({ resetActiveItems, getItems });
 </script>
 
 <style lang="sass">
@@ -214,4 +275,20 @@ defineExpose({ resetActiveItems });
   position: absolute
   margin-left: 100px
   margin-top: -50px
+
+.table-head-item
+  display: flex
+  align-items: center
+
+  .chevron
+    margin-left: 0.5rem
+    width: 20px
+    height: 20px
+    background-image: url("@/assets/icons/chevron-down.svg")
+    background-repeat: no-repeat
+    background-position: center
+    transition: transform 150ms linear
+
+    &.up
+      transform: rotate(180deg)
 </style>

@@ -22,7 +22,7 @@
                     disableDraggable && 'no-drag',
                   ]"
                   >{{ element.title }}
-                  <v-icon v-if="element.id === expandCategory && element.next">mdi-arrow-down-right</v-icon></span
+                  <v-icon v-if="element.next">mdi-arrow-down-right</v-icon></span
                 >
               </template>
               <template v-else>

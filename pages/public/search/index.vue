@@ -1,9 +1,9 @@
 <template>
   <ClientOnly>
     <v-container class="limited mt-8 mb-8">
-      <v-row class="mt-4">
+      <v-row class="mt-4" v-if="filterStore.filteredResults.length">
         <v-col>
-          <h1>Suchbegriff: {{ filterStore.currentSearchTerm }}</h1>
+          <h2>Suchbegriff: {{ filterStore.currentSearchTerm }}</h2>
         </v-col>
       </v-row>
 
@@ -24,13 +24,27 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row v-else>
-          <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
+        <v-row v-else class="mt-15">
+          <v-col class="d-flex justify-center">
+            <div class="flex-column" align="center">
+              <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
+              <v-btn
+                class="mt-4"
+                prepend-icon="mdi-chevron-left"
+                @click="goBack()"
+                >
+                  Zurück zur Suche
+              </v-btn>
+            </div>
+          </v-col>
         </v-row>
       </template>
     </v-container>
   </ClientOnly>
-  <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+  <v-container>
+    <PublicContentBox :size="'12'" v-for="category in filterStore.filteredResults" :key="category.id" :item="category"/>
+  </v-container>
+
 </template>
 
 <script setup lang="ts">
@@ -49,6 +63,9 @@ const filteredKinds = computed(() => {
   }
   return uniqueKinds;
 });
+const goBack = () => {
+    router.push({ path: '/' })
+  }
 
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
   if (kind === "facility") return "Zu den Einrichtungen";

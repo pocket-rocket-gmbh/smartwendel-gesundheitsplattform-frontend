@@ -1,17 +1,25 @@
 <template>
   <div class="mt-15 my-15">
-    <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
-    <PublicLandingChooseCategory class="my-15"/>
-    <p class="has-font-size-medium sub-title my-15">Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.</p>
+    <v-row>
+      <v-col cols="12" xl="8" md="10">
+        <h1 class="title">
+          Deine Gesundheits-plattform im Landkreis Sankt Wendel
+        </h1>
+        <PublicLandingChooseCategory class="my-15" />
+        <p class="has-font-size-medium sub-title my-15">
+          Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie
+          umfangreiche Pflegeangebote finden.
+        </p>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 export default defineComponent({
-  setup() {
-  },
-})
+  setup() {},
+});
 </script>
 
 <style lang="sass" scoped>
