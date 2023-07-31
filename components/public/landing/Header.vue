@@ -18,6 +18,10 @@
 @import "@/assets/sass/main.sass";
 
 .wrapper {
+  @include md {
+    padding: 1rem;
+  }
+
   .title {
     color: white;
     font-size: 55px;
@@ -30,6 +34,10 @@
     font-weight: 400;
     line-height: 160%;
     width: 75%;
+
+    @include md {
+      width: 100%;
+    }
   }
   .header {
     margin-top: 20%;

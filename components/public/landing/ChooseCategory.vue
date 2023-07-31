@@ -11,7 +11,14 @@
             @input="handleInput"
             @click="showPopover = true"
           />
-          <img class="icon" :src="searchIcon" @click="routeToResults(); trackSearch();" />
+          <img
+            class="icon"
+            :src="searchIcon"
+            @click="
+              routeToResults();
+              trackSearch();
+            "
+          />
         </div>
       </form>
 
@@ -21,7 +28,13 @@
             <LoadingSpinner :style="'inline'">Suchergebnisse werden geladen...</LoadingSpinner>
           </div>
           <template v-else>
-            <div class="result" @click.stop="routeToResults(); trackSearch();">
+            <div
+              class="result"
+              @click.stop="
+                routeToResults();
+                trackSearch();
+              "
+            >
               <div class="icon">
                 <img :src="getIconSourceFor()" />
               </div>
@@ -31,7 +44,10 @@
               class="result"
               v-for="result in filterStore.filteredResults"
               :key="result.id"
-              @click.stop="routeToResults(result); trackSearch();"
+              @click.stop="
+                routeToResults(result);
+                trackSearch();
+              "
             >
               <div class="icon">
                 <img :src="getIconSourceFor(result.kind)" />
@@ -61,8 +77,8 @@ api.setBaseApi(usePublicApi());
 const router = useRouter();
 
 const trackSearch = () => {
-  window._paq.push(["trackEvent", "Gesucht:", `${filterStore.currentSearchTerm}`])
-}
+  window._paq.push(["trackEvent", "Gesucht:", `${filterStore.currentSearchTerm}`]);
+};
 const popoverParentRef = ref();
 const showPopover = ref(false);
 
@@ -110,6 +126,8 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/sass/main";
+
 .choose-category {
   position: relative;
   flex-direction: row;
@@ -149,6 +167,10 @@ onMounted(async () => {
           }
         }
       }
+    }
+
+    @include md {
+      width: 100%;
     }
   }
 
@@ -217,6 +239,10 @@ onMounted(async () => {
           }
         }
       }
+    }
+
+    @include md {
+      width: 100%;
     }
   }
 }

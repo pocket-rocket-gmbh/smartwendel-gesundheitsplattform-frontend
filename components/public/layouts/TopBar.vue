@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-app-bar v-model="appStore.showTopbar" :elevation="2" class="hero-menu pa-3 px-10">
+    <v-app-bar v-model="appStore.showTopbar" :elevation="2" class="hero-menu">
       <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />
@@ -32,9 +32,19 @@
               </div>
             </div>
             <div v-if="!loading">
-              <a href="/public/search/facilities" class="is-clickable mx-5"> Anbieter </a>
-              <a href="/public/search/events" class="is-clickable mx-5"> Kurse </a>
-              <a href="/public/search/news" class="is-clickable mx-5"> Beiträge </a>
+              <a
+                href="/public/search/facilities"
+                class="is-clickable mx-5"
+                @click.prevent="goTo('/public/search/facilities')"
+              >
+                Anbieter
+              </a>
+              <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')">
+                Kurse
+              </a>
+              <a href="/public/search/news" class="is-clickable mx-5" @click.prevent="goTo('/public/search/news')">
+                Beiträge
+              </a>
             </div>
           </div>
         </div>
@@ -52,7 +62,7 @@
           </v-row>
         </div>
         <div>
-          <v-btn v-if="!useUser().loggedIn()" href="/login" color="primary" icon>
+          <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
             <v-icon size="x-large">mdi-account-circle-outline</v-icon>
           </v-btn>
         </div>
@@ -131,150 +141,142 @@
   </div>
 </template>
 
-<script lang="ts">
-import { useUserStore } from "@/store/user";
+<script setup lang="ts">
 import { useAppStore } from "@/store/app";
+import { useUserStore } from "@/store/user";
+const currentUser = ref(null);
+const router = useRouter();
+const categories = ref([]);
+const subCategories = ref<any>({});
+const sub_categoryId = ref({});
+const drawer = ref(false);
+const menu = ref(false);
+const appStore = useAppStore();
+const route = useRoute();
+const loading = ref(true);
 
-export default defineComponent({
-  setup() {
-    const currentUser = ref(null);
-    const router = useRouter();
-    const categories = ref([]);
-    const subCategories = ref<any>({});
-    const sub_categoryId = ref({});
-    const drawer = ref(false);
-    const menu = ref(false);
-    const appStore = useAppStore();
-    const route = useRoute();
-    const loading = ref(true);
+const categoriesApi = useCollectionApi();
+categoriesApi.setBaseApi(usePublicApi());
 
-    const categoriesApi = useCollectionApi();
-    categoriesApi.setBaseApi(usePublicApi());
+const getCategories = async () => {
+  loading.value = true;
+  categoriesApi.setEndpoint(`categories`);
+  const options = {
+    page: 1,
+    per_page: 25,
+    sort_by: "menu_order",
+    sort_order: "ASC",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+  await categoriesApi.retrieveCollection(options);
+  categories.value = categoriesApi.items.value;
+  loading.value = false;
+};
 
-    const getCategories = async () => {
-      loading.value = true;
-      categoriesApi.setEndpoint(`categories`);
-      const options = {
-        page: 1,
-        per_page: 25,
-        sort_by: "menu_order",
-        sort_order: "ASC",
-        searchQuery: null as any,
-        concat: false,
-        filters: [] as any,
-      };
-      await categoriesApi.retrieveCollection(options);
-      categories.value = categoriesApi.items.value;
-      loading.value = false;
-    };
-    const getSubCategories = async (categoryId: string) => {
-      categoriesApi.setEndpoint(`categories/${categoryId}/sub_categories`);
-      const options = {
-        page: 1,
-        per_page: 25,
-        sort_by: "menu_order",
-        sort_order: "ASC",
-        searchQuery: null as any,
-        concat: false,
-        filters: [] as any,
-      };
-      await categoriesApi.retrieveCollection(options);
-      return categoriesApi.items.value;
-    };
+const getSubCategories = async (categoryId: string) => {
+  categoriesApi.setEndpoint(`categories/${categoryId}/sub_categories`);
+  const options = {
+    page: 1,
+    per_page: 25,
+    sort_by: "menu_order",
+    sort_order: "ASC",
+    searchQuery: null as any,
+    concat: false,
+    filters: [] as any,
+  };
+  await categoriesApi.retrieveCollection(options);
+  return categoriesApi.items.value;
+};
 
-    const handleResetLink = () => {
-      if (router.currentRoute.value.path === "/") {
-        location.reload();
-      } else {
-        router.push({ path: "/" });
-      }
-    };
+const goToLogin = () => {
+  router.push({ path: "/login" });
+};
 
-    const currentRoute = computed(() => {
-      return route.path as string;
-    });
+const goTo = (path: string) => {
+  router.push({ path });
+};
 
-    const goToRegister = () => {
-      router.push({ path: "/register" });
-    };
+const handleResetLink = () => {
+  if (router.currentRoute.value.path === "/") {
+    location.reload();
+  } else {
+    router.push({ path: "/" });
+  }
+};
 
-    const setItemsAndGo = (category: any, sub_category: any) => {
-      if (sub_category) {
-        router.push({
-          path: `/public/categories/${category.id}`,
-          query: { sub_category_id: sub_category.id },
-        });
-        if (sub_category.id) {
-          sub_categoryId.value = sub_category.id;
-        }
-      } else {
-        return router.push({
-          path: `/public/categories/${category.id}`,
-          query: null,
-        });
-      }
-      useNuxtApp().$bus.$emit("setSubCategory", sub_category.id);
-    };
-
-    const userIsAdmin = computed(() => {
-      if (currentUser.value) {
-        return (
-          currentUser.value.role === "root" ||
-          currentUser.value.role === "admin" ||
-          currentUser.value.role === "care_facility_admin"
-        );
-      }
-      return false;
-    });
-
-    const reload = () => {
-      router.push({ path: "/" });
-    };
-
-    onMounted(async () => {
-      if (useUserStore().currentUser) {
-        currentUser.value = useUserStore().currentUser;
-      }
-      await getCategories();
-      for (const category of categories.value) {
-        subCategories.value[category.id] = await getSubCategories(category.id);
-      }
-    });
-    // watch store changes
-    useUserStore().$subscribe((mutation, state) => {
-      currentUser.value = state.currentUser;
-    });
-
-    const saveCurrentUrlAndRoute = (routeTo: string) => {
-      appStore.dashboardBackLink = window.location.pathname;
-
-      router.push({ path: routeTo });
-    };
-
-    return {
-      handleResetLink,
-      menu,
-      currentUser,
-      drawer,
-      categories,
-      userIsAdmin,
-      reload,
-      setItemsAndGo,
-      sub_categoryId,
-      goToRegister,
-      saveCurrentUrlAndRoute,
-      subCategories,
-      currentRoute,
-      loading,
-      appStore,
-    };
-  },
+const currentRoute = computed(() => {
+  return route.path as string;
 });
+
+const goToRegister = () => {
+  router.push({ path: "/register" });
+};
+
+const setItemsAndGo = (category: any, sub_category: any) => {
+  if (sub_category) {
+    router.push({
+      path: `/public/categories/${category.id}`,
+      query: { sub_category_id: sub_category.id },
+    });
+    if (sub_category.id) {
+      sub_categoryId.value = sub_category.id;
+    }
+  } else {
+    return router.push({
+      path: `/public/categories/${category.id}`,
+      query: null,
+    });
+  }
+  useNuxtApp().$bus.$emit("setSubCategory", sub_category.id);
+};
+
+const userIsAdmin = computed(() => {
+  if (currentUser.value) {
+    return (
+      currentUser.value.role === "root" ||
+      currentUser.value.role === "admin" ||
+      currentUser.value.role === "care_facility_admin"
+    );
+  }
+  return false;
+});
+
+const reload = () => {
+  router.push({ path: "/" });
+};
+
+onMounted(async () => {
+  if (useUserStore().currentUser) {
+    currentUser.value = useUserStore().currentUser;
+  }
+  await getCategories();
+  for (const category of categories.value) {
+    subCategories.value[category.id] = await getSubCategories(category.id);
+  }
+});
+// watch store changes
+useUserStore().$subscribe((mutation, state) => {
+  currentUser.value = state.currentUser;
+});
+
+const saveCurrentUrlAndRoute = (routeTo: string) => {
+  appStore.dashboardBackLink = window.location.pathname;
+
+  router.push({ path: routeTo });
+};
 </script>
 
 <style lang="sass">
+@import "@/assets/sass/main"
+
 header, .v-toolbar-title__placeholder
   overflow: visible !important
+
+.hero-menu
+  @include md
+    max-width: 100vw
 
 .pointer
   cursor: pointer
@@ -284,6 +286,16 @@ header, .v-toolbar-title__placeholder
 
 .v-toolbar
   background: white
+  @include md
+    padding: 0
+
+.v-toolbar__content
+  @include md
+    padding: 0.5rem
+
+    .v-toolbar-title
+      margin-inline-start: 0
+
 
 .hero
   background: linear-gradient(270deg, #017DC2 0.29%, #015281 100%)
@@ -346,7 +358,7 @@ header, .v-toolbar-title__placeholder
     box-shadow: 0px 5px 10px rgba(black, 0.5)
 
     .list-item
-      padding: 0.75rem 1rem 
+      padding: 0.75rem 1rem
 
       &:hover
         background: #f2f2f2

@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-15">
+  <div class="wrapper">
     <div class="my-15">
       <v-row no-gutters>
         <v-col class="d-flex align-center">
@@ -86,4 +86,10 @@ export default defineComponent({
 
   @include md
     flex-direction: column
+    gap: 0.5rem
+
+.wrapper
+  margin: 0 5rem
+  @include md
+    margin: 0 1rem
 </style>

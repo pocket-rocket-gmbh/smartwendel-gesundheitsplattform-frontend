@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="background">
-      <v-row>
+      <v-row class="row">
         <v-col class="header-wrapper flex-column align-start justify-start" md="6" xl="6">
           <PublicLandingHeader />
         </v-col>
@@ -30,13 +30,22 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: right top;
+
+  @include sm {
+    background-position: center;
+  }
+}
+
+.row {
+  @include sm {
+    max-width: 100%;
+    margin: 0;
+  }
 }
 
 .header-wrapper {
-  margin: 5rem;
-
   @include sm {
-    margin: 1rem;
+    padding: 0;
   }
 }
 </style>

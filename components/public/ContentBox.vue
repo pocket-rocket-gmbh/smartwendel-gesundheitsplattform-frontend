@@ -1,5 +1,5 @@
 <template>
-  <v-col :md="`${size}`" class="d-flex flex-column">
+  <v-col :md="`${size}`" class="content-box d-flex flex-column">
     <v-card
       class="rounded-xl mx-auto has-bg-light-grey content elevation-3 fill-height d-flex flex-column"
       width="100%"
@@ -107,6 +107,15 @@ const buttonHref = computed(() => {
 
 $max-height: 240px;
 
+.content-box {
+  padding: 1rem;
+
+  @include md {
+    padding: 0;
+    margin: 0;
+  }
+}
+
 .content-footer {
   position: absolute;
   bottom: 0;
@@ -114,73 +123,5 @@ $max-height: 240px;
 
 .notes-card {
   flex: 1;
-}
-
-.content-box {
-  display: flex;
-  width: 100%;
-  min-height: $max-height;
-  max-height: $max-height;
-  background-color: #f5f5f5;
-  display: flex;
-  margin: 1rem;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
-
-  .image {
-    width: $max-height;
-    height: $max-height;
-    max-width: $max-height;
-    max-height: $max-height;
-    min-width: $max-height;
-    min-height: $max-height;
-
-    img {
-      width: $max-height;
-      height: $max-height;
-      max-width: $max-height;
-      max-height: $max-height;
-      min-width: $max-height;
-      min-height: $max-height;
-      object-fit: cover;
-    }
-  }
-
-  .content {
-    padding: 1.75rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-
-    .title {
-      color: #8ab61d;
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .name {
-        color: #8ab61d;
-      }
-    }
-
-    .description {
-      flex: 1;
-    }
-
-    .user-informations {
-      font-size: 12px;
-    }
-
-    .action {
-      a {
-        cursor: pointer;
-        font-size: 1.25rem;
-      }
-    }
-  }
 }
 </style>
