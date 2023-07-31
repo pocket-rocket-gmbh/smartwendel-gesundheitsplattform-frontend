@@ -37,6 +37,7 @@ export type Facility = {
     name: string;
   };
   user_care_facility_name: string;
+  user_care_facility?: Facility;
 };
 
 export type Filter = {

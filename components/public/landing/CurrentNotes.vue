@@ -8,7 +8,7 @@
       </v-row>
     </div>
     <div class="articles">
-      <PublicContentBox :size="'6'" v-for="news in newsArticles" :key="news.id" :item="news" :item-type="'news'" />
+      <PublicContentBox :size="6" v-for="news in newsArticles" :key="news.id" :item="news" :item-type="'news'" />
     </div>
     <div>
       <v-row>
@@ -86,5 +86,8 @@ export default defineComponent({
 
 .articles
   display: flex
+
+  @include md 
+    flex-direction: column
 
 </style>

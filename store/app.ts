@@ -5,5 +5,6 @@ export const useAppStore = defineStore({
   state: () => ({
     dashboardBackLink: "",
     showTopbar: true,
+    windowWidth: -1,
   }),
 });

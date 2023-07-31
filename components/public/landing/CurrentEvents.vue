@@ -10,21 +10,19 @@
       </v-row>
     </div>
     <div class="articles">
-      <PublicContentBox class="limited-width" v-for="courses in eventArticles" :key="courses.id" :item="courses" :item-type="'event'" />
+      <PublicContentBox
+        :size="6"
+        v-for="courses in eventArticles"
+        :key="courses.id"
+        :item="courses"
+        :item-type="'event'"
+      />
     </div>
     <div>
       <v-row>
         <v-col md="12" class="d-flex justify-center mt-10">
-          <v-btn
-            variant="flat"
-            color="primary"
-            rounded="pill"
-            size="large"
-            @click="goToEvents()"
-            >
-            <span>
-              Mehr anzeigen
-            </span>
+          <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToEvents()">
+            <span> Mehr anzeigen </span>
           </v-btn>
         </v-col>
       </v-row>
@@ -86,4 +84,6 @@ export default defineComponent({
 .articles
   display: flex
 
+  @include md
+    flex-direction: column
 </style>

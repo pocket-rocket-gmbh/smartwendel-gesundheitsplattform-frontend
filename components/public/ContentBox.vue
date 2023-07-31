@@ -13,6 +13,7 @@
             max-height="300px"
             :src="item.image_url"
           />
+          <!-- <div v-else></div> -->
         </v-col>
         <v-col class="d-flex ma-2">
           <div class="notes-card">
@@ -23,29 +24,16 @@
                 </div>
               </v-col>
               <v-col class="justify-center d-flex">
-                <div
-                  class="d-flex align-center is-clickable"
-                  v-if="item.user_care_facility?.name"
-                >
-                  <a
-                    :href="`/public/care_facilities/${item.user_care_facility?.id}`"
-                    class="is-clickable d-flex"
-                  >
+                <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
+                  <a :href="`/public/care_facilities/${item.user_care_facility?.id}`" class="is-clickable d-flex">
                     <v-icon>mdi-home-outline</v-icon>
-                    <p
-                      class="break-title"
-                      v-html="item.user_care_facility?.name"
-                    ></p>
+                    <p class="break-title" v-html="item.user_care_facility?.name"></p>
                   </a>
                 </div>
               </v-col>
               <v-col>
-                <div
-                  class="d-flex align-center justify-end"
-                  v-if="item.created_at"
-                >
-                  <v-icon>mdi-calendar-outline</v-icon
-                  >{{ useDatetime().parseDatetime(item.created_at) }}
+                <div class="d-flex align-center justify-end" v-if="item.created_at">
+                  <v-icon>mdi-calendar-outline</v-icon>{{ useDatetime().parseDatetime(item.created_at) }}
                 </div>
               </v-col>
             </v-row>
@@ -65,9 +53,7 @@
               <v-card-actions>
                 <div class="content-footer d-flex mb-3">
                   <div class="action text-h5" v-if="buttonHref">
-                    <a :href="buttonHref" :target="item.url ? '_blank' : ''"
-                      >Mehr anzeigen &gt;</a
-                    >
+                    <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
                   </div>
                 </div>
               </v-card-actions>
@@ -84,10 +70,10 @@ import noImage from "@/assets/images/no-image.svg";
 const props = withDefaults(
   defineProps<{
     item: Facility;
-    size?: string;
+    size?: number;
   }>(),
   {
-    size: "6",
+    size: 6,
   }
 );
 
@@ -97,14 +83,10 @@ const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "facility")
-      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
   }
 
   if (props.item.url) {
@@ -112,10 +94,7 @@ const buttonHref = computed(() => {
       return props.item.url;
     }
 
-    if (
-      props.item.url.includes("http://") ||
-      props.item.url.includes("https://")
-    ) {
+    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
       return props.item.url;
     } else return "https://" + props.item.url;
   }
