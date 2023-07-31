@@ -153,8 +153,13 @@ export default defineComponent({
     const loadingItem = ref(false)
     const dialog = ref(true)
     const errors = ref([])
+
+    const config = useRuntimeConfig();
+    const registerToken = config.REGISTER_TOKEN;
+
     const item = ref({
-      name: ''
+      name: '',
+      register_token: registerToken
     })
     const roles = ref([
       { name: 'Einrichtung', id: 'facility_owner'},
@@ -188,6 +193,9 @@ export default defineComponent({
     const invite = async () => {
       createUpdateApi.setEndpoint(`users/invite`)
       loadingItem.value = true
+
+      item.value.register_token = registerToken
+
       const result = await createUpdateApi.createItem(item.value, 'Benutzer erfolgreich eingeladen')
       loadingItem.value = false
       if (result.status === ResultStatus.SUCCESSFUL) {

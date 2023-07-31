@@ -47,10 +47,13 @@ export default defineComponent({
     const privateApi = usePrivateApi()
     const userStore = useUserStore()
 
+    const config = useRuntimeConfig();
+    const registerToken = config.REGISTER_TOKEN;
+
     const auth = async () => {
       loading.value = true
       errors.value = ''
-      const data = { email: email.value, password: password.value }
+      const data = { email: email.value, password: password.value, register_token: registerToken }
 
       const result = await privateApi?.call('post', '/auth', data)
 
