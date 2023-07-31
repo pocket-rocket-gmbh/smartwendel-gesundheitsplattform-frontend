@@ -85,6 +85,12 @@ const getSubSubCategories = async () => {
   await listApi.retrieveCollection(options);
   loading.value = false;
   subSubCategories.value = listApi.items.value as any;
+
+  requestAnimationFrame(goToSubCategory);
+
+  if (subCategoryId.value) {
+    useNuxtApp().$bus.$emit("updateSubCategoriesFromUrl", subCategoryId.value);
+  }
 };
 </script>
 <style lang="sass" scoped>

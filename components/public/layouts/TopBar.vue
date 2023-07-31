@@ -16,16 +16,16 @@
                   <v-list-item>
                     <div
                       v-for="(sub_category, index) in subCategories[category.id]"
-                      :key="index"
+                      :key="sub_category.id"
                       @click="setItemsAndGo(category, sub_category)"
                     >
-                      <v-list class="pa-0 main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
-                        <v-list-item>
+                      <div class="list-item main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
+                        <div>
                           <span class="is-clickable">
                             {{ sub_category.name }}
                           </span>
-                        </v-list-item>
-                      </v-list>
+                        </div>
+                      </div>
                     </div>
                   </v-list-item>
                 </v-list>
@@ -266,7 +266,7 @@ export default defineComponent({
       subCategories,
       currentRoute,
       loading,
-      appStore
+      appStore,
     };
   },
 });
@@ -324,7 +324,9 @@ header, .v-toolbar-title__placeholder
   position: relative
 
   &:hover .content
-    display: block
+    opacity: 1
+    transform: scale(1)
+    pointer-events: all
 
   .title
     position: relative
@@ -333,9 +335,19 @@ header, .v-toolbar-title__placeholder
     border-radius: 0.25rem
     overflow: hidden
     position: absolute
-    display: none
+    opacity: 0
+    transform: scale(0)
+    transform-origin: top left
+    transition: transform 200ms ease-in-out, opacity 200ms
+    pointer-events: none
     z-index: 5
     top: 100%
     width: 100%
     box-shadow: 0px 5px 10px rgba(black, 0.5)
+
+    .list-item
+      padding: 0.75rem 1rem 
+
+      &:hover
+        background: #f2f2f2
 </style>

@@ -33,6 +33,11 @@ const setSubCategoryAndScroll = (id: any) => {
   useNuxtApp().$bus.$emit("setSubCategory", id);
   selectedId.value = id;
 };
+
+useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
+  selectedId.value = id;
+});
+
 </script>
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
