@@ -196,8 +196,6 @@ export default defineComponent({
       const res = await axios.post("/api/get_register_token");
       item.value.register_token = res.data
 
-      console.log(item.value)
-
       const result = await createUpdateApi.createItem(item.value, 'Benutzer erfolgreich eingeladen')
       loadingItem.value = false
       if (result.status === ResultStatus.SUCCESSFUL) {

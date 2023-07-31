@@ -16,7 +16,6 @@ export default defineEventHandler(async (event): Promise<ServerCallResult> => {
     );
     return ServerCallResult.success(response.data.status, response.data);
   } catch (error) {
-
-    return ServerCallResult.error(error)
+    return ServerCallResult.error(error as any)
   }
 });
