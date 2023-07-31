@@ -18,7 +18,7 @@
               >
                 <div
                   class="filter-tile pa-5"
-                  :class="{ selected: isSelectedTagNext(subItem) }"
+                  :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
                 >
                   {{ subItem.title }}
