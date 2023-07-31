@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-app-bar scroll-behavior="hide" :elevation="2" class="hero-menu pa-3 px-10">
+    <v-app-bar v-model="appStore.showTopbar" :elevation="2" class="hero-menu pa-3 px-10">
       <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />
@@ -266,6 +266,7 @@ export default defineComponent({
       subCategories,
       currentRoute,
       loading,
+      appStore
     };
   },
 });

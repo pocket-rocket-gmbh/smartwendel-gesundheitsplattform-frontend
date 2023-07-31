@@ -9,41 +9,52 @@
         <slot />
       </v-main>
       <PublicLayoutsFooter />
-      <PublicLoginPanel  v-if="!useUser().loggedIn()"/>
+      <PublicLoginPanel v-if="!useUser().loggedIn()" />
     </div>
   </v-app>
 </template>
 
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth";
-import { useTooltipsStore } from '~~/store/tooltips'
+import { useAppStore } from "~/store/app";
+import { useTooltipsStore } from "~~/store/tooltips";
+
+const appStore = useAppStore();
+const tooltipsStore = useTooltipsStore();
+const api = useCollectionApi();
+api.setBaseApi(usePublicApi());
+api.setEndpoint("tooltips");
+
+const getTooltips = async () => {
+  await api.retrieveCollection();
+  tooltipsStore.tooltips = api.items;
+};
+
+const handleScroll = (e: WheelEvent) => {
+  const direction = e.deltaY > 0 ? 1 : -1;
+
+  appStore.showTopbar = direction === -1;
+};
 
 onMounted(() => {
+  getTooltips();
   const auth = localStorage.getItem("smartwendel_gesundheitsplattform_authenticated");
   if (auth && auth === "true") {
     useAuthStore().$patch({
       authenticated: true,
     });
   }
+
+  document.addEventListener("wheel", handleScroll);
 });
 
-  const tooltipsStore = useTooltipsStore()
-  const api = useCollectionApi()
-  api.setBaseApi(usePublicApi())
-  api.setEndpoint('tooltips')
+onUnmounted(() => {
+  document.removeEventListener("wheel", handleScroll);
+});
 
-    const getTooltips = async () => {
-      await api.retrieveCollection()
-      tooltipsStore.tooltips = api.items
-    }
-
-    onMounted(() => {
-        getTooltips()
-      })
-
-  const authenticated = computed(() => {
-    return useAuthStore().authenticated;
-  });
+const authenticated = computed(() => {
+  return useAuthStore().authenticated;
+});
 </script>
 
 <style lang="sass" scoped></style>
