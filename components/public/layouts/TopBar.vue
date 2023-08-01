@@ -42,9 +42,6 @@
               <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')">
                 Kurse
               </a>
-              <a href="/public/search/news" class="is-clickable mx-5" @click.prevent="goTo('/public/search/news')">
-                Beiträge
-              </a>
             </div>
           </div>
         </div>
@@ -176,7 +173,6 @@
           <a href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')">
             Kurse
           </a>
-          <a href="/public/search/news" class="is-clickable" @click.prevent="goTo('/public/search/news')"> Beiträge </a>
         </template>
       </div>
     </v-navigation-drawer>
