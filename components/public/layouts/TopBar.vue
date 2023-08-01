@@ -91,52 +91,179 @@
       </div>
     </v-app-bar>
     <v-navigation-drawer class="d-flex d-sm-none" v-model="drawer" fixed temporary>
-      <v-list nav flat>
-        <v-list-item-group>
-          <v-list class="my-10">
-            <div class="d-inline-flex" v-if="currentUser">
-              <img v-if="currentUser.image_url" :src="currentUser.image_url" class="is-rounded" height="60" />
-              <img
-                v-if="!currentUser.image_url"
-                src="~/assets/images/user-standard.png"
-                class="is-rounded"
-                height="60"
-              />
-              <v-list-item v-if="currentUser">
-                <v-list-item-title>{{ currentUser.name }}</v-list-item-title>
-                <v-list-item-subtitle>{{ currentUser.role }}</v-list-item-subtitle>
-                <v-list-item-subtitle>{{ currentUser.email }}</v-list-item-subtitle>
+      <!-- <v-list nav flat>
+        <div class="d-inline-flex" v-if="currentUser">
+          <img v-if="currentUser.image_url" :src="currentUser.image_url" class="is-rounded" height="60" />
+          <img v-if="!currentUser.image_url" src="~/assets/images/user-standard.png" class="is-rounded" height="60" />
+          <v-list-item v-if="currentUser">
+            <v-list-item-title>{{ currentUser.name }}</v-list-item-title>
+            <v-list-item-subtitle>{{ currentUser.role }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ currentUser.email }}</v-list-item-subtitle>
+          </v-list-item>
+          <v-menu v-model="menu" :close-on-content-click="false"> </v-menu>
+        </div>
+        <div v-if="!useUser().loggedIn()" class="mb-5">
+          <v-icon class="mr-2">mdi-note-check-outline</v-icon>
+          <router-link class="mr-6" to="/terms_of_use">Nutzungsbedingungen</router-link>
+        </div>
+        <template v-slot:activator="{ props }">
+          <div class="account-button" v-bind="props">
+            <p class="mr-2 menu-list">Mein Account</p>
+            <UserProfile :user="currentUser" />
+          </div>
+        </template>
+        <v-divider v-if="userIsAdmin" class="my-5"></v-divider>
+        <v-list-item v-if="userIsAdmin">
+          <router-link class="mr-6" to="/admin">Admin-Bereich</router-link>
+        </v-list-item>
+        <v-divider v-if="currentUser" class="my-5"></v-divider>
+        <v-list-item v-if="currentUser && userIsAdmin">
+          <v-icon class="mr-2">mdi-note-check-outline</v-icon>
+          <router-link to="/terms_of_use">Nutzungsbedingungen - ??</router-link>
+        </v-list-item>
+        <v-list-item v-if="currentUser">
+          <v-icon class="mr-2">mdi-logout</v-icon>
+          <span class="is-clickable" @click="useUser().logout(), (drawer = !drawer), reload()"
+            ><span>Logout</span></span
+          >
+        </v-list-item>
+        <v-list-item v-for="(category, index) in categories" :key="index">
+          <div class="title mx-5">
+            <span class="is-clickable main" @click="setItemsAndGo(category, null)">
+              {{ category.name }}
+            </span>
+          </div>
+          <div class="content">
+            <v-list v-if="category.sub_categories.length > 0">
+              <v-list-item>
+                <div
+                  v-for="(sub_category, index) in subCategories[category.id]"
+                  :key="sub_category.id"
+                  @click="setItemsAndGo(category, sub_category)"
+                >
+                  <div class="list-item main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
+                    <div>
+                      <span class="is-clickable">
+                        {{ sub_category.name }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </v-list-item>
-              <v-menu v-model="menu" :close-on-content-click="false"> </v-menu>
-            </div>
-            <div v-if="!useUser().loggedIn()" class="mb-5">
-              <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-              <router-link class="mr-6" to="/terms_of_use">Nutzungsbedingungen</router-link>
-            </div>
-            <template v-slot:activator="{ props }">
-              <div class="account-button" v-bind="props">
-                <p class="mr-2 menu-list">Mein Account</p>
-                <UserProfile :user="currentUser" />
-              </div>
-            </template>
-            <v-divider v-if="userIsAdmin" class="my-5"></v-divider>
-            <v-list-item v-if="userIsAdmin">
-              <router-link class="mr-6" to="/admin">Admin-Bereich</router-link>
-            </v-list-item>
-            <v-divider v-if="currentUser" class="my-5"></v-divider>
-            <v-list-item v-if="currentUser && userIsAdmin">
-              <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-              <router-link to="/terms_of_use">Nutzungsbedingungen</router-link>
-            </v-list-item>
-            <v-list-item v-if="currentUser">
-              <v-icon class="mr-2">mdi-logout</v-icon>
-              <span class="is-clickable" @click="useUser().logout(), (drawer = !drawer), reload()"
-                ><span>Logout</span></span
-              >
-            </v-list-item>
-          </v-list>
-        </v-list-item-group>
-      </v-list>
+            </v-list>
+          </div>
+        </v-list-item>
+        <template v-if="!loading">
+          <v-list-item>
+            <a
+              href="/public/search/facilities"
+              class="is-clickable mx-5"
+              @click.prevent="goTo('/public/search/facilities')"
+            >
+              Anbieter
+            </a>
+          </v-list-item>
+          <v-list-item>
+            <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')">
+              Kurse
+            </a>
+          </v-list-item>
+          <v-list-item>
+            <a href="/public/search/news" class="is-clickable mx-5" @click.prevent="goTo('/public/search/news')">
+              Beiträge
+            </a>
+          </v-list-item>
+        </template>
+      </v-list> -->
+
+      <div class="navigation-drawer-content">
+        <div
+          class="has-bg-primary text-white offer d-flex align-center justify-center py-2"
+          v-if="!useUser().loggedIn() && currentRoute !== '/register'"
+        >
+          <div @click="goToRegister()">
+            <div class="font-weight-bold">Dein Angebot fehlt?</div>
+            <div class="font-weight-light">Registriere dich!</div>
+          </div>
+        </div>
+        <v-btn v-if="!useUser().loggedIn()" color="primary" @click="goToLogin"> Einloggen </v-btn>
+        <div v-if="useUser().loggedIn() && currentUser" class="d-flex">
+          <img v-if="currentUser.image_url" :src="currentUser.image_url" class="is-rounded" height="60" />
+          <img v-if="!currentUser.image_url" src="~/assets/images/user-standard.png" class="is-rounded" height="60" />
+          <v-list-item v-if="currentUser">
+            <v-list-item-title>{{ currentUser.name }}</v-list-item-title>
+            <v-list-item-subtitle>{{ currentUser.role }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ currentUser.email }}</v-list-item-subtitle>
+          </v-list-item>
+        </div>
+        <div class="logged-in-actions">
+          <a
+            class="menu-list pointer"
+            v-if="useUser().isAdmin()"
+            href="/admin"
+            @click.prevent="saveCurrentUrlAndRoute('/admin')"
+          >
+            <v-icon class="mr-2">mdi-cog</v-icon>
+            <span>Admin-Bereich</span>
+          </a>
+          <a
+            class="menu-list pointer"
+            v-else-if="useUser().isFacilityOwner()"
+            href="/admin/care_facilities"
+            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
+          >
+            Meine Einrichtungen
+          </a>
+          <div @click="useUser().logout(), (drawer = !drawer), reload()">
+            <v-icon class="mr-2">mdi-logout</v-icon>
+            <span>Logout</span>
+          </div>
+        </div>
+
+        <v-divider></v-divider>
+        <div>
+          <v-icon class="mr-2">mdi-note-check-outline</v-icon>
+          <a class="mr-6" href="/terms_of_use">Nutzungsbedingungen</a>
+        </div>
+        <v-divider></v-divider>
+
+        <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
+          <div class="title">
+            <span class="is-clickable main" @click="setItemsAndGo(category, null)">
+              {{ category.name }}
+            </span>
+          </div>
+          <div class="content">
+            <v-list v-if="category.sub_categories.length > 0">
+              <v-list-item>
+                <div
+                  v-for="(sub_category, index) in subCategories[category.id]"
+                  :key="sub_category.id"
+                  @click="setItemsAndGo(category, sub_category)"
+                >
+                  <div class="list-item main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
+                    <div>
+                      <span class="is-clickable">
+                        {{ sub_category.name }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </v-list-item>
+            </v-list>
+          </div>
+        </div>
+        <template v-if="!loading">
+          <v-divider></v-divider>
+          <a href="/public/search/facilities" class="is-clickable" @click.prevent="goTo('/public/search/facilities')">
+            Anbieter
+          </a>
+          <a href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')">
+            Kurse
+          </a>
+          <a href="/public/search/news" class="is-clickable" @click.prevent="goTo('/public/search/news')"> Beiträge </a>
+        </template>
+      </div>
     </v-navigation-drawer>
   </div>
 </template>
@@ -268,102 +395,123 @@ const saveCurrentUrlAndRoute = (routeTo: string) => {
 };
 </script>
 
-<style lang="sass">
-@import "@/assets/sass/main"
+<style lang="scss">
+@import "@/assets/sass/main";
 
-header, .v-toolbar-title__placeholder
-  overflow: visible !important
+header,
+.v-toolbar-title__placeholder {
+  overflow: visible !important;
+}
+.hero-menu {
+  padding: 0.75rem 2.5rem;
+  --v-scrollbar-offset: 2.5rem;
 
-.hero-menu
-  padding: 0.75rem 2.5rem
-  --v-scrollbar-offset: 2.5rem
+  @include md {
+    max-width: 100vw;
+    --v-scrollbar-offset: 0;
+  }
+}
+.pointer {
+  cursor: pointer;
+}
+.v-toolbar__title {
+  font-size: 1.5rem !important;
+}
+.v-toolbar {
+  background: white;
+  @include md {
+    padding: 0;
+  }
+}
+.v-toolbar__content {
+  @include md {
+    padding: 0.5rem;
 
-  @include md
-    max-width: 100vw
-    --v-scrollbar-offset: 0
+    .v-toolbar-title {
+      margin-inline-start: 0;
+    }
+  }
+}
+.hero {
+  background: linear-gradient(270deg, #017dc2 0.29%, #015281 100%);
+  height: 100%;
+}
+.my-account {
+  background-color: #f5f5f5;
+}
+.account-button {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.card-header {
+  margin-left: 30px;
+  flex-direction: row;
+  align-items: center;
+}
+.divider {
+  color: #015281;
+}
+.mobile-logo-height {
+  max-height: 40px;
+}
+.desktop-logo-height {
+  max-height: 50px;
+}
+.main {
+  font-size: 1.2rem !important;
+}
+.offer {
+  border-radius: 20px;
+  line-height: 1.5rem;
+  font-size: 16px;
+}
+.categories-wrapper {
+  position: relative;
 
-.pointer
-  cursor: pointer
+  &:hover .content {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+  }
+  .title {
+    position: relative;
+  }
+  .content {
+    border-radius: 0.25rem;
+    overflow: hidden;
+    position: absolute;
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: top left;
+    transition: transform 200ms ease-in-out, opacity 200ms;
+    pointer-events: none;
+    z-index: 5;
+    top: 100%;
+    width: 100%;
+    box-shadow: 0px 5px 10px rgba(black, 0.5);
 
-.v-toolbar__title
-  font-size: 1.5rem !important
+    .list-item {
+      padding: 0.75rem 1rem;
 
-.v-toolbar
-  background: white
-  @include md
-    padding: 0
+      &:hover {
+        background: #f2f2f2;
+      }
+    }
+  }
+}
 
-.v-toolbar__content
-  @include md
-    padding: 0.5rem
+.navigation-drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem;
 
-    .v-toolbar-title
-      margin-inline-start: 0
-
-
-.hero
-  background: linear-gradient(270deg, #017DC2 0.29%, #015281 100%)
-  height: 100%
-
-.my-account
-  background-color: #F5F5F5
-
-.account-button
-  display: flex
-  align-content: center
-  align-items: center
-  cursor: pointer
-
-.card-header
-  margin-left: 30px
-  flex-direction: row
-  align-items: center
-
-.divider
-  color: #015281
-
-.mobile-logo-height
-  max-height: 40px
-
-.desktop-logo-height
-  max-height: 50px
-
-.main
-  font-size: 1.2rem !important
-
-.offer
-  border-radius: 20px
-  line-height: 1.5rem
-  font-size: 16px
-
-.categories-wrapper
-  position: relative
-
-  &:hover .content
-    opacity: 1
-    transform: scale(1)
-    pointer-events: all
-
-  .title
-    position: relative
-
-  .content
-    border-radius: 0.25rem
-    overflow: hidden
-    position: absolute
-    opacity: 0
-    transform: scale(0)
-    transform-origin: top left
-    transition: transform 200ms ease-in-out, opacity 200ms
-    pointer-events: none
-    z-index: 5
-    top: 100%
-    width: 100%
-    box-shadow: 0px 5px 10px rgba(black, 0.5)
-
-    .list-item
-      padding: 0.75rem 1rem
-
-      &:hover
-        background: #f2f2f2
+  .logged-in-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
 </style>
