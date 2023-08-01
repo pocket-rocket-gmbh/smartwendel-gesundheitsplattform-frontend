@@ -7,11 +7,12 @@
         :map-controls="true"
         :show-map="showMap"
         @toggle-map="mapToogle"
+        :filter-kind="'facility'"
       />
       <v-container class="container limited padding">
-        <v-row>
-          <v-col md="5" lg="3" class="mt-8">
-            <PublicSearchTheFilter :filterKind="'facility'"/>
+        <v-row class="row">
+          <v-col v-if="showSearchFilter" md="5" lg="3" class="mt-8">
+            <PublicSearchTheFilter :filterKind="'facility'" />
           </v-col>
           <v-col md="7" lg="9" class="filtered-items mb-10">
             <div class="map-widget">
@@ -28,7 +29,7 @@
               />
             </div>
 
-            <PublicSearchTheFilteredCareFacilities />
+            <div class="facilities"><PublicSearchTheFilteredCareFacilities /></div>
           </v-col>
         </v-row>
       </v-container>
@@ -37,11 +38,13 @@
 </template>
 
 <script setup lang="ts">
-import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
+import { useFilterStore } from "~/store/searchFilter";
 import { MapLocation } from "~/types/MapLocation";
+import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const filterStore = useFilterStore();
 const showMap = ref(true);
+const breakpoints = useBreakpoints();
 
 watch(
   () => filterStore.filterSort,
@@ -54,6 +57,10 @@ watch(
   () => filterStore.filteredResults,
   () => updateLocations()
 );
+
+const showSearchFilter = computed(() => {
+  return breakpoints.width.value > BreakPoints.md;
+});
 
 const locations = ref<MapLocation[]>([]);
 const getLocationsFromFacilies = async (facilities: any[]) => {
@@ -109,9 +116,20 @@ onMounted(async () => {
 .container
   padding: 0
 
+  .row
+    max-width: 100%
+    @include md
+      margin: 0
+
 .filtered-items
   display: flex
   flex-direction: column
+
+  .facilities
+    margin-top: 1rem
+
+  @include md
+    padding: 0
 
   .map-widget
     align-self: stretch

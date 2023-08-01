@@ -104,6 +104,7 @@ type FilterResponse = {
   id: string;
   name: string;
   menu_order: number;
+  kind: FilterKind;
 };
 
 const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number) => {
@@ -267,7 +268,7 @@ const handleClick = async (
 const handleEdit = async (itemIds: string[], layer: number, name: string, kind: string, specialType: string) => {
   api.setEndpoint(`${specialType === "tag" ? "tags" : "tag_categories"}/${itemIds[0]}`);
 
-  const result = await api.updateItem({ name, kind }, "Erfolgreich aktualisiert");
+  const result = await api.updateItem({ name, kind: props.filterKind }, "Erfolgreich aktualisiert");
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     console.log("SUCCESS");

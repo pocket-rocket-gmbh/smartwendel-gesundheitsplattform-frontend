@@ -1,76 +1,63 @@
 <template>
-  <div>
-    <h2 class="is-dark-grey is-uppercase mb-4">Suche filtern</h2>
-    <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
-      <div class="filter-tiles">
-        <div v-for="filter in itemsForServiceList" class="filter-group">
-          <div v-for="item in filter.next" class="mt-5 filter-selections">
-            <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
-            <v-row no-gutters class="mt-3 fill-height mr-1">
-              <v-col
-                cols="12"
-                md="6"
-                class="align-center column-items pr-1 pt-1"
-                v-for="subItem in item.next"
-                v-auto-animate
-              >
-                <div
-                  class="filter-tile pa-5"
-                  :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
-                  @click="toggleSelection(subItem)"
-                >
-                  {{ subItem.title }}
-                </div>
-                <div
-                  v-if="subItem.next.length && expandedItemIds.includes(subItem.id)"
-                  class="tag-select"
-                  v-for="tag in subItem.next"
-                >
-                  <v-divider></v-divider>
-                  <v-checkbox
-                    :class="{ selected: isSelected(tag.id) }"
-                    class="mb-n4"
-                    :label="tag.title"
-                    v-model="filterStore.currentTags"
-                    :value="tag.id"
-                  />
-                </div>
-              </v-col>
-            </v-row>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+      <template v-slot:activator="{ props }">
+        <div class="field" v-bind="props">
+          <div class="input more-filters">
+            <div class="text">weitere Filter</div>
+            <div class="icon"><v-icon>mdi-filter-outline</v-icon></div>
           </div>
         </div>
-      </div>
-    </v-skeleton-loader>
-    <div>
-      <v-btn
-        prepend-icon="mdi-trash-can-outline"
-        size="small"
-        class="mt-4"
-        variant="text"
-        color="secondary"
-        rounded="pill"
-        @click="emitResetFilter"
-      >
-        Alle Filter löschen
-      </v-btn>
-      <v-btn
-        v-if="useUser().loggedIn()"
-        prepend-icon="mdi-content-copy"
-        size="small"
-        class="mt-4"
-        variant="text"
-        color="primary"
-        rounded="pill"
-        @click="copySearchFilterUrl"
-      >
-        Such-Filter kopieren
-      </v-btn>
-    </div>
-  </div>
+      </template>
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Filter</v-toolbar-title>
+          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+        </v-toolbar>
+        <div class="filter-tiles">
+          <template v-if="!loading">
+            <div v-for="filter in itemsForServiceList" class="filter-group">
+              <div v-for="item in filter.next" class="filter-selections">
+                <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
+                <v-row no-gutters class="fill-height item-row">
+                  <v-col cols="12" md="6" class="align-center column-items" v-for="subItem in item.next" v-auto-animate>
+                    <div
+                      class="filter-tile pa-5"
+                      :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
+                      @click="toggleSelection(subItem)"
+                    >
+                      {{ subItem.title }}
+                    </div>
+                    <div
+                      v-if="subItem.next.length && expandedItemIds.includes(subItem.id)"
+                      class="tag-select"
+                      v-for="tag in subItem.next"
+                    >
+                      <v-divider></v-divider>
+                      <v-checkbox
+                        :class="{ selected: isSelected(tag.id) }"
+                        class="mb-n4"
+                        :label="tag.title"
+                        v-model="filterStore.currentTags"
+                        :value="tag.id"
+                      />
+                    </div>
+                  </v-col>
+                </v-row>
+              </div>
+            </div>
+          </template>
+          <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
+        </div>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script setup lang="ts">
-import { VSkeletonLoader } from "vuetify/labs/VSkeletonLoader";
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem } from "../../../types/collapsibleList";
@@ -80,8 +67,8 @@ const props = defineProps<{
 }>();
 
 const filterStore = useFilterStore();
-const snackbar = useSnackbar();
 
+const dialog = ref(false);
 const loading = ref(false);
 
 const itemsForServiceList = ref<CollapsibleListItem[]>([]);
@@ -162,7 +149,7 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind); // Filter items for current kind (event/facility/news/course) // hereeeeee!!!!
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
   if (!filters) {
     console.error("No filters!");
     return;
@@ -212,16 +199,6 @@ const toggleSelection = (item: CollapsibleListItem) => {
   }
 };
 
-const emitResetFilter = () => {
-  filterStore.clearSearch();
-};
-
-const copySearchFilterUrl = () => {
-  snackbar.showSuccess("Filter in Zwischenablage gespeichert!");
-  const url = filterStore.getUrlQuery();
-  navigator.clipboard.writeText(url);
-};
-
 onMounted(async () => {
   loading.value = true;
   await getItems();
@@ -229,54 +206,61 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/sass/main.sass";
 
-.filter-wrapper {
+.dialog-bottom-transition-enter-active,
+.dialog-bottom-transition-leave-active {
+  transition: transform 0.2s ease-in-out;
+}
+
+.more-filters {
   display: flex;
-  justify-content: stretch;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .filter-tiles {
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
+  padding: 0.5rem;
 
   .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     flex: 1;
-  }
 
-  .column-items {
-    .filter-tile {
-      place-items: center;
-      text-align: center;
+    .filter-selections {
       display: flex;
-      justify-content: center !important;
-      cursor: pointer;
-      width: inherit;
-      flex: 1 auto;
-      border-radius: 0.5rem;
-      border: 1px solid #ddd;
-      background-color: white;
-      max-height: 100px;
-      min-height: 100px;
+      flex-direction: column;
+      gap: 0.5rem;
 
-      &:hover,
-      &.selected {
-        background-color: #8ab61d;
-        border-color: #9ea10c;
-        color: white;
+      .item-row {
+        gap: 0.5rem;
+
+        .column-items {
+          .filter-tile {
+            place-items: center;
+            text-align: center;
+            display: flex;
+            justify-content: center !important;
+            cursor: pointer;
+            width: inherit;
+            flex: 1 auto;
+            border-radius: 0.5rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            max-height: 100px;
+            min-height: 100px;
+
+            &.selected {
+              background-color: #8ab61d;
+              border-color: #9ea10c;
+              color: white;
+            }
+          }
+        }
       }
     }
   }
-}
-
-.sub-filter {
-  margin-top: 2rem;
-}
-
-.filter-sticky {
-  position: sticky;
-  top: 8rem;
 }
 </style>

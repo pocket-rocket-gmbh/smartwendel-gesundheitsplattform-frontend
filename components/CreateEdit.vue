@@ -96,6 +96,8 @@ const createUpdateApi = useCollectionApi();
 createUpdateApi.setBaseApi(usePrivateApi());
 
 const getItem = async () => {
+  if (!props.itemId) return;
+
   let endpoint = `${props.endpoint}/${props.itemId}`;
   if (props.overwriteGetItemEndpoint) {
     endpoint = props.overwriteGetItemEndpoint;
@@ -242,6 +244,8 @@ const emitClose = () => {
     emit("close");
   }
 };
+
+defineExpose({ getItem });
 
 watch(
   [

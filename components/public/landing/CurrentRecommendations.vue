@@ -1,5 +1,5 @@
 <template>
-  <div class="py-15 bg-gradient">
+  <div class="wrapper bg-gradient">
     <div class="d-flex align-center justify-center is-uppercase">
       <h2 class="text-white">Wir zeigen dir, was du für deinen Gesundheitszustand und dein Wohlbefinden tun kannst.</h2>
     </div>
@@ -7,8 +7,12 @@
       <h3>Bitte Bereich auswählen:</h3>
     </div>
     <v-row>
-      <v-col class="flex-column justify-center text-center text-white align-center my-5" v-for="(item, index) in items" :key="index">
-        <img class="is-clickable icons" :src="item.content.image" width="120"/>
+      <v-col
+        class="flex-column justify-center text-center text-white align-center my-5"
+        v-for="(item, index) in items"
+        :key="index"
+      >
+        <img class="is-clickable icons" :src="item.content.image" width="120" />
         <div class="has-font-size-medium font-weight-bold">
           <a :href="item.content.link" target="_blank" class="is-white is-clickable">
             {{ item.content.heading }}
@@ -16,60 +20,60 @@
         </div>
       </v-col>
     </v-row>
-  </div>  
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import image1 from '@/assets/images/current-recommendations/icon_sport.svg'
-import image2 from '@/assets/images/current-recommendations/icon_nutrition.svg'
-import image3 from '@/assets/images/current-recommendations/icon_mental_health.svg'
-import image4 from '@/assets/images/current-recommendations/icon_health_course.svg'
-import image5 from '@/assets/images/current-recommendations/icon_free_time.svg'
+import { defineComponent } from "vue";
+import image1 from "@/assets/images/current-recommendations/icon_sport.svg";
+import image2 from "@/assets/images/current-recommendations/icon_nutrition.svg";
+import image3 from "@/assets/images/current-recommendations/icon_mental_health.svg";
+import image4 from "@/assets/images/current-recommendations/icon_health_course.svg";
+import image5 from "@/assets/images/current-recommendations/icon_free_time.svg";
 export default defineComponent({
   setup() {
     const items = [
-        {
-        'content': {
-          heading: 'Sport und Bewegung',
+      {
+        content: {
+          heading: "Sport und Bewegung",
           image: image1,
-          link: 'www.google.com'
-          }
+          link: "www.google.com",
         },
-        {
-        'content': {
-          heading: 'Ernährung',
+      },
+      {
+        content: {
+          heading: "Ernährung",
           image: image2,
-          link: ''
-          }
+          link: "",
         },
-        {
-        'content': {
-          heading: 'Mentale Gesundheit',
+      },
+      {
+        content: {
+          heading: "Mentale Gesundheit",
           image: image3,
-          link: ''
-          }
+          link: "",
         },
-        {
-        'content': {
-          heading: 'Gesundheitskurse',
+      },
+      {
+        content: {
+          heading: "Gesundheitskurse",
           image: image4,
-          link: ''
-          }
+          link: "",
         },
-        {
-        'content': {
-          heading: 'Freizeitgestaltung',
+      },
+      {
+        content: {
+          heading: "Freizeitgestaltung",
           image: image5,
-          link: ''
-          }
-        }
-      ]
+          link: "",
+        },
+      },
+    ];
 
-      return {
-      items
-    }
+    return {
+      items,
+    };
   },
-})
+});
 </script>
 
 <style lang="sass" scoped>
@@ -85,6 +89,9 @@ export default defineComponent({
     transition: transform 0.5s ease-in-out
     cursor: pointer
 
-    
+.wrapper
+  padding: 5rem
 
+  @include md
+    padding: 1rem
 </style>

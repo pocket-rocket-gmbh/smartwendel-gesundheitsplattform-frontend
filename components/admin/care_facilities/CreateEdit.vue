@@ -1,17 +1,17 @@
 <template>
-  <CreateEdit v-slot="slotProps" size="100wh">
+  <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
             <div
-            :class="[isFilled(slotProps, item) ? 'is-filled' : '']"
+              :class="[isFilled(slotProps, item) ? 'is-filled' : '']"
               class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable text-h5"
               v-for="(item, index) in fields[slotProps.item.kind]"
               :key="index"
               @click="goToField(item.index)"
             >
-              <div class="is-clickable d-flex" @click="goToField(item.index)" >
+              <div class="is-clickable d-flex" @click="goToField(item.index)">
                 <span>{{ item.description }}</span>
               </div>
             </div>
@@ -72,7 +72,6 @@
           </div>
           <v-divider class="my-10"></v-divider>
 
-       
           <div class="field" id="2" v-if="slotProps.item.kind === 'facility'">
             <div class="my-2">
               <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
@@ -173,6 +172,23 @@
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
             />
+            <v-alert type="info" color="grey" class="mt-2">
+              <div class="d-flex align-center filter-request">
+                <div class="py-1">
+                  <span
+                    >Falls unter den angegebenen Leistungskatalog nicht die passende Leistung für deine Einrichtung zu
+                    finden ist, kontaktiere uns bitte
+                  </span>
+                  <span>
+                    <a
+                      class="is-white text-decoration-underline"
+                      :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
+                      >Hier</a
+                    >
+                  </span>
+                </div>
+              </div>
+            </v-alert>
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
               :pre-set-tags="slotProps.item.tags || []"
@@ -181,23 +197,7 @@
               @set-tags="setTagIds"
             />
           </div>
-          <v-alert type="info" closable color="grey">
-            <div class="d-flex align-center filter-request">
-              <div class="py-1">
-                <span
-                  >Wenn unter den angegebenen Leistungskatalog nicht die passende Leistung für deine Einrichtung zu
-                  finden ist, kontaktiere uns bitte
-                </span>
-                <span>
-                  <a
-                    class="is-white text-decoration-underline"
-                    :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
-                    >Hier</a
-                  >
-                </span>
-              </div>
-            </div>
-          </v-alert>
+
           <v-divider class="my-10"></v-divider>
           <div class="field" id="8" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
             <div class="my-2">
@@ -333,6 +333,7 @@
                 :document-acepted="slotProps.item.billable_through_health_insurance_approved"
                 :offline-documents="slotProps.item.offlineDocuments"
                 @offline="handleDocumentsOffline"
+                @document-deleted="handleDocumentDeleted"
               />
               <div class="d-flex align-center">
                 <span v-if="useUser().isAdmin()">
@@ -565,6 +566,7 @@
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
+              @document-deleted="handleDocumentDeleted"
             />
           </div>
           <div class="field" id="13" v-if="slotProps.item.kind === 'course'">
@@ -572,17 +574,15 @@
               <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
                 fields[slotProps.item.kind]["15"].label
               }}</span>
-              </div>
-              <v-text-field
+            </div>
+            <v-text-field
               class="text-field"
-             
               v-model="slotProps.item.name_instructor"
               hide-details="auto"
               label="Name / Vorname des Kursleiters"
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
-            
           </div>
           <v-divider class="my-10" v-if="slotProps.item.kind === 'course'"></v-divider>
 
@@ -591,7 +591,7 @@
               <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
                 fields[slotProps.item.kind]["16"].label
               }}</span>
-              </div>
+            </div>
 
             <div class="field">
               <v-text-field
@@ -644,17 +644,9 @@
                 label="Ort"
               />
             </div>
-          
-
-
-
-
-
           </div>
 
-
           <v-divider class="my-10" v-if="slotProps.item.kind === 'course'"></v-divider>
-
         </v-col>
       </v-row>
     </v-card-text>
@@ -673,7 +665,8 @@ const user = useUser();
 const infosChanged = ref(false);
 
 const serviceFilterRef = ref(null);
-const expandTagSelect = ref(false);
+const expandTagSelect = ref(true);
+const createEditRef = ref();
 
 const textToolbar = ref([
   [{ header: "1" }, { header: "2" }],
@@ -922,15 +915,13 @@ const fields = {
       index: 12,
     },
     "15": {
-      label:
-        "11. Vor- und Nachname der Kursleitung",
+      label: "11. Vor- und Nachname der Kursleitung",
       tooltip: "",
       description: "Kursleitung",
       index: 13,
     },
     "16": {
-      label:
-        "12. Adresse des Kurses",
+      label: "12. Adresse des Kurses",
       tooltip: "",
       description: "Adresse",
       index: 14,
@@ -1072,6 +1063,13 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
   });
 };
 
+const handleDocumentDeleted = () => {
+  if(!createEditRef.value) return;
+
+  console.log("Get item")
+  createEditRef.value.getItem();
+}
+
 const handleLocationsUpdate = (locations: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "locations",
@@ -1150,21 +1148,21 @@ onMounted(async () => {
 
 <style lang="css">
 .text-field .v-label {
-  font-size: 20px!important;
+  font-size: 20px !important;
 }
 
 .text-field input,
-.text-field input{
-  padding-top: 10px!important;
+.text-field input {
+  padding-top: 10px !important;
 }
 
 .v-select .v-select__selection-text {
-  padding-top: 10px!important;
+  padding-top: 10px !important;
 }
 
 .v-textarea .v-field__input {
-  margin-top: 20px!important;
-  padding-top: 20px!important;
+  margin-top: 20px !important;
+  padding-top: 20px !important;
 }
 
 .dp__selection_preview {
@@ -1203,12 +1201,13 @@ onMounted(async () => {
   margin-left: 0.25rem;
 }
 
-.ql-editor p, .ql-editor ol, .ql-editor ul {
+.ql-editor p,
+.ql-editor ol,
+.ql-editor ul {
   font-size: 22px;
 }
 
 .ql-blank::before {
   font-size: 18px;
 }
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-15">
+  <div class="wrapper">
     <div class="my-10">
       <v-row justify="space-between">
         <v-col class="d-flex justify-start align-center is-uppercase">
@@ -8,21 +8,13 @@
       </v-row>
     </div>
     <div class="articles">
-      <PublicContentBox :size="'6'" v-for="news in newsArticles" :key="news.id" :item="news" :item-type="'news'" />
+      <PublicContentBox :size="6" v-for="news in newsArticles" :key="news.id" :item="news" :item-type="'news'" />
     </div>
     <div>
       <v-row>
         <v-col md="12" class="d-flex justify-center mt-10">
-          <v-btn
-            variant="flat"
-            color="primary"
-            rounded="pill"
-            size="large"
-            @click="goToNews()"
-            >
-            <span>
-              Mehr anzeigen
-            </span>
+          <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToNews()">
+            <span> Mehr anzeigen </span>
           </v-btn>
         </v-col>
       </v-row>
@@ -84,7 +76,16 @@ export default defineComponent({
 .default-button
   color: red
 
+.wrapper
+  margin: 0 5rem
+
+  @include md
+    margin: 0 1rem
+
 .articles
   display: flex
 
+  @include md
+    flex-direction: column
+    gap: 0.5rem
 </style>

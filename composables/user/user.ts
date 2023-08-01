@@ -16,6 +16,12 @@ export function useUser() {
     }
   };
 
+  const isSuperAdmin = (): Boolean => {
+    if (currentUser) {
+      return currentUser.role === "root" || currentUser.role === "care_facility_admin";
+    }
+  };
+
   const setupFinished = async () => {
     if (isAdmin()) return true;
 
@@ -48,6 +54,7 @@ export function useUser() {
   return {
     loggedIn,
     isAdmin,
+    isSuperAdmin,
     isFacilityOwner,
     currentUser,
     logout,

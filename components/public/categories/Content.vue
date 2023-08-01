@@ -8,14 +8,8 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  subCategories: {
-    type: Array,
-    required: true
-  },
-  categoryId: {
-    required: true
-  }
-})
-
+const props = defineProps<{
+  subCategories: any[];
+  categoryId: string;
+}>();
 </script>

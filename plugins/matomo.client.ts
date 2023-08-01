@@ -19,5 +19,4 @@ export default defineNuxtPlugin(nuxtApp => {
     trackerScriptUrl: 'https://matomo.pocket-rocket.io/matomo.js',
     userId: ''
   })
-  console.log('matomo fired')
 })

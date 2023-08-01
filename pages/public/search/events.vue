@@ -1,11 +1,15 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox title="Kurse & Veranstaltungen" sub-title="Deine Wunschkurs auswählen" />
+      <PublicSearchTheBasicSearchBox
+        title="Kurse & Veranstaltungen"
+        sub-title="Deine Wunschkurs auswählen"
+        :filter-kind="'event'"
+      />
       <v-container class="container limited padding">
         <v-row class="mt-1">
-          <v-col md="4" lg="3" class="mt-4">
-            <PublicSearchTheFilter :filterKind="'event'"/>
+          <v-col v-if="showSearchFilter" md="4" lg="3" class="mt-4">
+            <PublicSearchTheFilter :filterKind="'event'" />
           </v-col>
           <v-col md="8" lg="9" class="filtered-items">
             <PublicSearchTheFilteredCareFacilities />
@@ -17,9 +21,11 @@
 </template>
 
 <script setup lang="ts">
+import { useBreakpoints, BreakPoints } from "~/composables/ui/breakPoints";
 import { useFilterStore } from "~/store/searchFilter";
 
 const filterStore = useFilterStore();
+const breakpoints = useBreakpoints();
 
 watch(
   () => filterStore.filterSort,
@@ -27,6 +33,10 @@ watch(
     filterStore.loadAllResults();
   }
 );
+
+const showSearchFilter = computed(() => {
+  return breakpoints.width.value > BreakPoints.md;
+});
 
 onMounted(async () => {
   filterStore.currentKinds = ["event", "course"];
@@ -40,9 +50,18 @@ onMounted(async () => {
 
 .container
   padding: 0
-//   margin: 60px
+
+  .row
+    max-width: 100%
+    @include md
+      margin: 0
+
 
 .filtered-items
   display: flex
-  justify-content: flex-end
+  justify-content: center
+  margin-top: 1rem
+
+  @include md
+    padding: 0
 </style>

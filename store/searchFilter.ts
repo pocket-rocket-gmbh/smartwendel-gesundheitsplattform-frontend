@@ -14,6 +14,17 @@ export type FilterTag = {
   scope: string;
 };
 
+export type User = {
+  id: string;
+  name: string;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  email: string;
+  role: string;
+  register_token?: string
+};
+
 export type Facility = {
   id: string;
   name: string;
@@ -32,11 +43,9 @@ export type Facility = {
   url_kind?: "internal" | "external";
   image_url?: string;
   created_at: Date;
-  user: {
-    id: string;
-    name: string;
-  };
+  user: User;
   user_care_facility_name: string;
+  user_care_facility?: Facility;
 };
 
 export type Filter = {

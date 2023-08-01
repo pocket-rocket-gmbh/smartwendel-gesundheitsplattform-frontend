@@ -154,6 +154,7 @@ const users = api.items;
 const getUsers = async () => {
   loading.value = true;
   await api.retrieveCollection(filter.value);
+  dataTableRef.value?.getItems();
   loading.value = false;
 };
 </script>

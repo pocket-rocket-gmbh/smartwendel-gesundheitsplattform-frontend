@@ -1,5 +1,5 @@
 <template>
-  <v-col :md="`${size}`" class="d-flex flex-column">
+  <v-col :md="`${size}`" class="content-box d-flex flex-column">
     <v-card
       class="rounded-xl mx-auto has-bg-light-grey content elevation-3 fill-height d-flex flex-column"
       width="100%"
@@ -13,6 +13,7 @@
             max-height="300px"
             :src="item.image_url"
           />
+          <!-- <div v-else></div> -->
         </v-col>
         <v-col class="d-flex ma-2">
           <div class="notes-card">
@@ -23,29 +24,16 @@
                 </div>
               </v-col>
               <v-col class="justify-center d-flex">
-                <div
-                  class="d-flex align-center is-clickable"
-                  v-if="item.user_care_facility?.name"
-                >
-                  <a
-                    :href="`/public/care_facilities/${item.user_care_facility?.id}`"
-                    class="is-clickable d-flex"
-                  >
+                <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
+                  <a :href="`/public/care_facilities/${item.user_care_facility?.id}`" class="is-clickable d-flex">
                     <v-icon>mdi-home-outline</v-icon>
-                    <p
-                      class="break-title"
-                      v-html="item.user_care_facility?.name"
-                    ></p>
+                    <p class="break-title" v-html="item.user_care_facility?.name"></p>
                   </a>
                 </div>
               </v-col>
               <v-col>
-                <div
-                  class="d-flex align-center justify-end"
-                  v-if="item.created_at"
-                >
-                  <v-icon>mdi-calendar-outline</v-icon
-                  >{{ useDatetime().parseDatetime(item.created_at) }}
+                <div class="d-flex align-center justify-end" v-if="item.created_at">
+                  <v-icon>mdi-calendar-outline</v-icon>{{ useDatetime().parseDatetime(item.created_at) }}
                 </div>
               </v-col>
             </v-row>
@@ -65,9 +53,7 @@
               <v-card-actions>
                 <div class="content-footer d-flex mb-3">
                   <div class="action text-h5" v-if="buttonHref">
-                    <a :href="buttonHref" :target="item.url ? '_blank' : ''"
-                      >Mehr anzeigen &gt;</a
-                    >
+                    <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
                   </div>
                 </div>
               </v-card-actions>
@@ -84,27 +70,21 @@ import noImage from "@/assets/images/no-image.svg";
 const props = withDefaults(
   defineProps<{
     item: Facility;
-    size?: string;
+    size?: number;
   }>(),
   {
-    size: "6",
+    size: 6,
   }
 );
-
-const log = console.log;
 
 const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "facility")
-      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
   }
 
   if (props.item.url) {
@@ -112,10 +92,7 @@ const buttonHref = computed(() => {
       return props.item.url;
     }
 
-    if (
-      props.item.url.includes("http://") ||
-      props.item.url.includes("https://")
-    ) {
+    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
       return props.item.url;
     } else return "https://" + props.item.url;
   }
@@ -128,6 +105,15 @@ const buttonHref = computed(() => {
 
 $max-height: 240px;
 
+.content-box {
+  padding: 1rem;
+
+  @include md {
+    padding: 0;
+    margin: 0;
+  }
+}
+
 .content-footer {
   position: absolute;
   bottom: 0;
@@ -135,73 +121,5 @@ $max-height: 240px;
 
 .notes-card {
   flex: 1;
-}
-
-.content-box {
-  display: flex;
-  width: 100%;
-  min-height: $max-height;
-  max-height: $max-height;
-  background-color: #f5f5f5;
-  display: flex;
-  margin: 1rem;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
-
-  .image {
-    width: $max-height;
-    height: $max-height;
-    max-width: $max-height;
-    max-height: $max-height;
-    min-width: $max-height;
-    min-height: $max-height;
-
-    img {
-      width: $max-height;
-      height: $max-height;
-      max-width: $max-height;
-      max-height: $max-height;
-      min-width: $max-height;
-      min-height: $max-height;
-      object-fit: cover;
-    }
-  }
-
-  .content {
-    padding: 1.75rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-
-    .title {
-      color: #8ab61d;
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .name {
-        color: #8ab61d;
-      }
-    }
-
-    .description {
-      flex: 1;
-    }
-
-    .user-informations {
-      font-size: 12px;
-    }
-
-    .action {
-      a {
-        cursor: pointer;
-        font-size: 1.25rem;
-      }
-    }
-  }
 }
 </style>
