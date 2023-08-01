@@ -31,7 +31,8 @@
 
 <script lang="ts">
 import { useUserStore } from '@/store/user'
-import { ResultStatus } from '@/types/serverCallResult'
+import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'Login',
@@ -52,15 +53,13 @@ export default defineComponent({
       errors.value = ''
       const data = { email: email.value, password: password.value }
 
-      const result = await privateApi?.call('post', '/auth', data)
+      const {data: result} = await axios.post<ServerCallResult>("/api/login", {data});
 
-      if (result?.status === ResultStatus.SUCCESSFUL) {
+      if (result.status === ResultStatus.SUCCESSFUL) {
         const jwt = result.data.jwt_token
 
-        if (process.client) {
-          localStorage.setItem('auth._token.jwt', jwt)
-          localStorage.setItem('smartwendelerland_gesundheitsplattform._remembered_email', email.value)
-        }
+        localStorage.setItem('auth._token.jwt', jwt)
+        localStorage.setItem('smartwendelerland_gesundheitsplattform._remembered_email', email.value)
 
         // set user
         userStore.currentUser = result.data.user

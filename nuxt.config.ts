@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     PUBLIC_API_PASSWORD: process.env.PUBLIC_API_PASSWORD,
     REGISTER_TOKEN: process.env.REGISTER_TOKEN,
     SENDINBLUE_API_KEY: process.env.SENDINBLUE_API_KEY,
+    LOGIN_PASSWORD: process.env.LOGIN_PASSWORD,
     public: {
       WEB_SOCKET_URL: process.env.WEB_SOCKET_URL,
       API_BASE_URL: process.env.API_BASE_URL

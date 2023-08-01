@@ -144,6 +144,7 @@
 
 <script lang="ts">
 import { ResultStatus } from '@/types/serverCallResult'
+import axios from 'axios'
 export default defineComponent({
   emits: ['close'],
   props: {
@@ -153,8 +154,10 @@ export default defineComponent({
     const loadingItem = ref(false)
     const dialog = ref(true)
     const errors = ref([])
+
     const item = ref({
-      name: ''
+      name: '',
+      register_token: ''
     })
     const roles = ref([
       { name: 'Einrichtung', id: 'facility_owner'},
@@ -189,6 +192,10 @@ export default defineComponent({
     const invite = async () => {
       createUpdateApi.setEndpoint(`users/invite`)
       loadingItem.value = true
+
+      const res = await axios.post("/api/get_register_token");
+      item.value.register_token = res.data
+
       const result = await createUpdateApi.createItem(item.value, 'Benutzer erfolgreich eingeladen')
       loadingItem.value = false
       if (result.status === ResultStatus.SUCCESSFUL) {
