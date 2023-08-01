@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-15 my-10 mt-15" v-if="subSubCategories?.length > 0">
+  <div class="sub-categories-wrapper" v-if="subSubCategories?.length > 0">
     <v-divider class="my-5"></v-divider>
     <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')">
       <v-col cols="12" md="10" class="d-flex is-dark-grey justify-center">
@@ -11,7 +11,6 @@
     </v-row>
     <div class="articles mt-15">
       <PublicContentBox
-        class="limited-width"
         v-for="subSubCategory in subSubCategories"
         :key="subSubCategory.id"
         :item="subSubCategory"
@@ -93,13 +92,29 @@ const getSubSubCategories = async () => {
   }
 };
 </script>
-<style lang="sass" scoped>
-@import "@/assets/sass/main.sass"
-.sub-category
-  scroll-margin: -200px
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
 
-.articles
-  display: flex
-  flex-wrap: wrap
-  columns: 2
+.sub-categories-wrapper {
+  margin: 5rem 5rem 2rem 5rem;
+
+  @include md {
+    margin: 1rem;
+  }
+
+  .sub-category {
+    scroll-margin: -200px;
+  }
+
+  .articles {
+    display: flex;
+    flex-wrap: wrap;
+    columns: 2;
+
+    @include md {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}
 </style>

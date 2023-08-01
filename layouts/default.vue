@@ -41,6 +41,18 @@ const handleScroll = (e: WheelEvent) => {
 
   appStore.showTopbar = direction === -1;
 };
+const lastTouchY = ref(-1);
+const handleTouchStart = (e: TouchEvent) => {
+  lastTouchY.value = e.touches[0].clientY;
+};
+const handleTouchMove = (e: TouchEvent) => {
+  const direction = lastTouchY.value - e.touches[0].clientY > 0 ? 1 : -1;
+  appStore.showTopbar = direction === -1;
+  lastTouchY.value = e.touches[0].clientY;
+};
+const handleTouchEnd = (e: TouchEvent) => {
+  lastTouchY.value = -1;
+};
 
 onMounted(async () => {
   loading.value = true;
@@ -54,6 +66,9 @@ onMounted(async () => {
   }
 
   document.addEventListener("wheel", handleScroll);
+  document.addEventListener("touchstart", handleTouchStart);
+  document.addEventListener("touchmove", handleTouchMove);
+  document.addEventListener("touchend", handleTouchEnd);
 
   if (auth && auth === "true") {
     useAuthStore().$patch({
@@ -71,6 +86,9 @@ onMounted(async () => {
 
 onUnmounted(() => {
   document.removeEventListener("wheel", handleScroll);
+  document.removeEventListener("touchstart", handleTouchStart);
+  document.removeEventListener("touchmove", handleTouchMove);
+  document.removeEventListener("touchend", handleTouchEnd);
 });
 
 const authenticated = computed(() => {

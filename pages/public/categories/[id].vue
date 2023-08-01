@@ -1,10 +1,8 @@
 <template>
-  <div v-if="finishedLoading">
-    <div class="">
-      <PublicLayoutsHeader :category="category" :sub-categories="subCategories" />
-    </div>
+  <div v-if="finishedLoading" class="current-categories-wrapper">
     <div>
-      <PublicCategoriesFilter :sub-categories="subCategories" />
+      <PublicLayoutsHeader :category="category" :sub-categories="subCategories" />
+      <!-- <PublicCategoriesFilter :sub-categories="subCategories" /> -->
     </div>
     <div class="content">
       <PublicCategoriesContent :sub-categories="subCategories" :category-id="category.id" />
@@ -92,6 +90,10 @@ onMounted(() => {
 });
 </script>
 
-<style lang="sass" scoped>
-@import "@/assets/sass/main.sass"
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
+
+.categories-wrapper {
+  padding: 0.5rem;
+}
 </style>
