@@ -18,6 +18,9 @@
 @import "@/assets/sass/main.sass";
 
 .wrapper {
+  padding: 5rem;
+  padding-bottom: 0;
+
   @include md {
     padding: 1rem;
   }

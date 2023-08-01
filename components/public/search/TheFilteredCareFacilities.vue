@@ -7,16 +7,16 @@
         <v-select variant="underlined" v-model="filterStore.filterSort" :items="filterSortingDirections" />
       </div>
     </div>
-    <div v-if="!filterStore.currentKinds.includes('facility')" class="">
+    <div v-if="!filterStore.currentKinds.includes('facility')" class="boxes">
       <PublicContentBox
-        :size="'12'"
+        :size="12"
         class=""
         v-for="category in filterStore.filteredResults"
         :key="category.id"
         :item="category"
       />
     </div>
-    <template v-else>
+    <div v-else class="boxes">
       <div class="item mb-6" v-for="careFacility in filterStore.filteredResults" :key="careFacility.id">
         <v-row>
           <v-col md="8">
@@ -65,17 +65,15 @@
               rounded="pill"
               size="large"
               :href="`/public/care_facilities/${careFacility.id}`"
-              >
-              <span>
-                Details ansehen
-              </span>
+            >
+              <span> Details ansehen </span>
             </v-btn>
           </v-col>
         </v-row>
       </div>
-    </template>
+    </div>
   </div>
-  <div v-else-if="!filterStore.loading">
+  <div v-else-if="!filterStore.loading" class="no-items">
     <div class="item">Leider keine Ergebnisse. Bitte Suche anpassen.</div>
   </div>
 </template>
@@ -104,8 +102,15 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
   border-radius: 20px
   padding: 20px
 
+
+.no-items
+  flex: 1
+
 .entries
   width: 100%
+
+  @include md
+    padding: 1rem
 
 .sort-order
   width: 200px
@@ -124,4 +129,10 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
 
   .content-box
     flex: 1
+
+.boxes
+  @include md
+    display: flex
+    flex-direction: column
+    gap: 0.5rem
 </style>

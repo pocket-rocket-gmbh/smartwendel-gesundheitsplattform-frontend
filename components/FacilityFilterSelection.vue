@@ -82,10 +82,6 @@ const filterOptions = ref<FilterOption[]>([]);
 const loadingFilters = ref(false);
 
 const handleOptionSelect = (option: Filter) => {
-  if (selectedFilter.value === option) {
-    selectedFilter.value = null;
-    return;
-  }
   const previous = { ...selectedFilter.value };
   selectedFilter.value = option;
 
@@ -93,17 +89,21 @@ const handleOptionSelect = (option: Filter) => {
 
   if (previousIndex !== -1) {
     props.modelValue.splice(previousIndex, 1);
+    selectedFilter.value = null;
+    emit("update:modelValue", props.modelValue);
+    return;
   }
 
   if (selectedFilter.value) {
     props.modelValue.push(selectedFilter.value.id);
   }
+
   emit("update:modelValue", props.modelValue);
 };
 
 onMounted(async () => {
   loadingFilters.value = true;
-  mainFilters.value = await getMainFilters('filter_facility', 'facility');
+  mainFilters.value = await getMainFilters("filter_facility", "facility");
 
   const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
   const allOptions = await Promise.all(allOptionsPromises);

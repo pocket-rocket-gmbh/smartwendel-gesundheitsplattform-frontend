@@ -143,8 +143,6 @@ onMounted(() => {
         return role;
     })
     .filter(Boolean);
-
-  console.log(roles.value);
 });
 
 const emitClose = () => {

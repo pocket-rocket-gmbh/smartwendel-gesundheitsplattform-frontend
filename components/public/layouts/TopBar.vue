@@ -275,8 +275,12 @@ header, .v-toolbar-title__placeholder
   overflow: visible !important
 
 .hero-menu
+  padding: 0.75rem 2.5rem
+  --v-scrollbar-offset: 2.5rem
+
   @include md
     max-width: 100vw
+    --v-scrollbar-offset: 0
 
 .pointer
   cursor: pointer
@@ -325,7 +329,7 @@ header, .v-toolbar-title__placeholder
   max-height: 50px
 
 .main
-  font-size: 1.2rem!important
+  font-size: 1.2rem !important
 
 .offer
   border-radius: 20px

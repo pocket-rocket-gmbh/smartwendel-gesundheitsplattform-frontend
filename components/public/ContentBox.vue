@@ -77,8 +77,6 @@ const props = withDefaults(
   }
 );
 
-const log = console.log;
-
 const buttonHref = computed(() => {
   if (!props.item) return null;
 

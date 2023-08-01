@@ -26,5 +26,7 @@ export const useBreakpoints = () => {
 
   const width = computed(() => windowWidth.value);
 
-  return { width, type };
+  const isMobile = computed(() => width.value < BreakPoints.md);
+
+  return { width, type, isMobile };
 };
