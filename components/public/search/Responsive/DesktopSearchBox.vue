@@ -30,24 +30,15 @@
           </div>
         </v-col>
         <v-col class="align-end field">
-          <v-btn
-            class="mx-3"
-            variant="outlined"
-            size="large"
-            rounded="pill"
-            color="white"
-            @click="filterStore.clearSearch()"
-          >
+          <v-btn class="mx-3 bordered" variant="outlined" rounded="pill" color="white" @click="filterStore.clearSearch()">
             Auswahl zurücksetzen
           </v-btn>
-          <v-btn class="ml-3" variant="flat" size="large" rounded="pill" color="white" @click="startSearch">
-            Suche starten
-          </v-btn>
+          <v-btn class="ml-3 bordered" variant="flat" rounded="pill" color="white" @click="startSearch"> Suche starten </v-btn>
         </v-col>
       </v-row>
       <v-row class="bottom-actions" v-if="mapControls">
         <v-col class="center">
-          <v-btn variant="outlined" size="large" rounded="pill" color="white" @click="emit('toggleMap')">
+          <v-btn variant="outlined" rounded="pill" color="white" @click="emit('toggleMap')">
             <span v-if="showMap"> Karte ausblenden </span>
             <span v-if="!showMap"> Karte einblenden </span>
           </v-btn>
@@ -149,4 +140,7 @@ onMounted(() => {
   display: flex
   align-items: center
   gap: 1rem
+
+.bordered 
+  --v-btn-height: 38px
 </style>

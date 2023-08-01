@@ -117,8 +117,8 @@ onMounted(async () => {
   padding: 0
 
   .row
+    max-width: 100%
     @include md
-      max-width: 100%
       margin: 0
 
 .filtered-items
