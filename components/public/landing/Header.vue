@@ -1,14 +1,10 @@
 <template>
-  <div class="wrapper mt-15 my-15">
-    <v-row>
-      <v-col cols="12" xl="8" md="10">
-        <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
-        <PublicLandingChooseCategory class="my-15" />
-        <p class="has-font-size-medium sub-title my-15">
-          Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.
-        </p>
-      </v-col>
-    </v-row>
+  <div class="wrapper">
+    <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
+    <PublicLandingChooseCategory />
+    <p class="has-font-size-medium sub-title">
+      Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.
+    </p>
   </div>
 </template>
 
@@ -18,11 +14,17 @@
 @import "@/assets/sass/main.sass";
 
 .wrapper {
-  padding: 5rem;
-  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+  justify-content: center;
+  width: 40%;
+  padding: 1rem;
 
   @include md {
     padding: 1rem;
+    width: 100%;
   }
 
   .title {
