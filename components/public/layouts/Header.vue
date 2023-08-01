@@ -47,77 +47,65 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
   selectedId.value = id;
 });
 </script>
-<style lang="scss">
-@import "@/assets/sass/main.sass";
+<style lang="sass">
+@import "@/assets/sass/main.sass"
 
-.main-layouts-title-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: fit-content;
+.main-layouts-title-bar
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  height: fit-content
 
-  margin-top: 1rem;
+  margin-top: 1rem
 
-  @include md {
-    margin-top: 0;
-  }
+  @include md
+    margin-top: 0
 
-  .v-toolbar__content {
-    height: fit-content !important;
-    padding: 0;
-  }
+  .v-toolbar__content
+    height: fit-content !important
+    padding: 0
 
-  .main-toolbar-content {
-    max-width: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.5rem;
+  .main-toolbar-content
+    max-width: 100%
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    gap: 0.5rem
 
-    .menu-title {
-      background: linear-gradient(89.48deg, #91a80d 19.14%, #bac323 42.28%, #9ea100 83.7%);
-      width: 100%;
-      padding: 1rem;
+    .menu-title
+      background: linear-gradient(89.48deg, #91a80d 19.14%, #bac323 42.28%, #9ea100 83.7%)
+      width: 100%
+      padding: 1rem
 
-      .text {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        margin-top: 2rem;
+      .text
+        display: flex
+        align-items: center
+        justify-content: center
+        width: 100%
+        margin-top: 2rem
 
-        @include md {
-          margin-top: 0;
-        }
-      }
-      h2 {
-        @include md {
-          font-size: 1.75rem;
-        }
-      }
-    }
+        @include md
+          margin-top: 0
+      h2
+        @include md
+          font-size: 1.75rem
 
-    .menu-bar-wrapper {
-      padding: 0.5rem;
-      padding-top: 0;
+    .menu-bar-wrapper
+      padding: 0.5rem
+      padding-top: 0
 
-      .menu-bar {
-        border-radius: 20px;
-        min-height: 60px;
-        width: 100%;
-        color: $dark-green;
+      .menu-bar
+        border-radius: 20px
+        min-height: 60px
+        width: 100%
+        color: $dark-green
 
-        @include md {
-          padding: 0.5rem;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-          height: fit-content;
-        }
-      }
-    }
-  }
-}
+        @include md
+          padding: 0.5rem
+          flex-wrap: wrap
+          gap: 0.5rem
+          height: fit-content
 </style>
