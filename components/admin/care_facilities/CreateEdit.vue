@@ -996,7 +996,6 @@ const isFilled = (slotProps: any, item: any) => {
   const slotPropsItem = slotProps.item;
 
   if (item.justSome) {
-    console.log(slotPropsItem)
     const result = props.some((prop) => {
       return slotPropsItem[prop] && slotPropsItem[prop].length;
     });
@@ -1065,7 +1064,6 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
 };
 
 const handleDocumentDeleted = () => {
-  console.log("Handle delete")
   if(!createEditRef.value) return;
 
   console.log("Get item")

@@ -308,7 +308,6 @@ const handleExpandToggle = (selectedId: string) => {
     expandIds.value.push(selectedId);
     return;
   }
-  console.log(selectedId);
   expandIds.value.splice(expandIndex, 1);
 };
 
