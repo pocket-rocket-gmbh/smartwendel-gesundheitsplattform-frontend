@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar v-model="appStore.showTopbar" :elevation="2" density="compact" class="title-bar">
+  <v-app-bar v-model="appStore.showTopbar" :elevation="2" density="compact" class="main-layouts-title-bar">
     <div class="main-toolbar-content main-toolbar-content">
       <div class="menu-title is-uppercase has-font-size-big d-flex align-center justify-center text">
         <h2 class="is-white" v-if="category">{{ category.name }}</h2>
@@ -50,7 +50,7 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
 <style lang="scss">
 @import "@/assets/sass/main.sass";
 
-.title-bar {
+.main-layouts-title-bar {
   display: flex;
   align-items: center;
   justify-content: center;
