@@ -3,7 +3,7 @@
   <v-alert
     class="my-5"
     v-if="!filterSelected && !loadingFilters"
-    type="warning"
+    type="info"
     density="compact"
     closable
   >
