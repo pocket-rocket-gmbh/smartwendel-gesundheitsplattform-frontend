@@ -1,81 +1,47 @@
 <template>
-  <v-col :md="`${size}`" class="content-box d-flex flex-column">
-    <v-card
-      class="rounded-xl mx-auto has-bg-light-grey content elevation-3 fill-height d-flex flex-column"
-      width="100%"
-    >
-      <v-row>
-        <v-col md="5" class="d-none d-md-flex">
-          <v-img
-            v-if="item.image_url"
-            class="align-center is-clickable"
-            cover
-            max-height="300px"
-            :src="item.image_url"
-          />
-          <!-- <div v-else></div> -->
-        </v-col>
-        <v-col class="d-flex ma-2">
-          <div class="notes-card">
-            <v-row v-if="item.user">
-              <v-col class="d-flex">
-                <div class="d-flex align-center user-informations" v-if="item.user.name">
-                  <v-icon>mdi-account-outline</v-icon>{{ item.user.name }}
-                </div>
-              </v-col>
-              <v-col class="justify-center d-flex">
-                <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
-                  <a :href="`/public/care_facilities/${item.user_care_facility?.id}`" class="is-clickable d-flex">
-                    <v-icon>mdi-home-outline</v-icon>
-                    <p class="break-title" v-html="item.user_care_facility?.name"></p>
-                  </a>
-                </div>
-              </v-col>
-              <v-col>
-                <div class="d-flex align-center justify-end" v-if="item.created_at">
-                  <v-icon>mdi-calendar-outline</v-icon>{{ useDatetime().parseDatetime(item.created_at) }}
-                </div>
-              </v-col>
-            </v-row>
-            <v-divider v-if="item.user" class="my-1"></v-divider>
-            <div class="flex-grow-1 d-flex flex-column justify-start">
-              <v-card-title class="is-primary pa-0 mt-2">
-                <div class="action text-h5" v-if="buttonHref">
-                  <a :href="buttonHref">
-                    <p class="break-title action" v-html="item.name"></p>
-                  </a>
-                </div>
-              </v-card-title>
-              <v-card-text class="flex-grow-1 pa-0 mt-2">
-                <p class="break-text" v-html="item.description"></p
-              ></v-card-text>
-              <v-spacer></v-spacer>
-              <v-card-actions>
-                <div class="content-footer d-flex mb-3">
-                  <div class="action text-h5" v-if="buttonHref">
-                    <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
-                  </div>
-                </div>
-              </v-card-actions>
-            </div>
+  <div class="content-box">
+    <a class="image" :href="buttonHref">
+      <img v-if="item.image_url" :src="item.image_url" />
+      <img v-else :src="noImage" />
+    </a>
+
+    <div class="text">
+      <template v-if="item.user">
+        <div class="info">
+          <div class="d-flex align-center user-informations" v-if="item.user.name">
+            <v-icon>mdi-account-outline</v-icon><span class="break-title">{{ item.user.name }}</span>
           </div>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-col>
+          <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
+            <a :href="`/public/care_facilities/${item.user_care_facility?.id}`" class="is-clickable d-flex">
+              <v-icon>mdi-home-outline</v-icon>
+              <span class="break-title" v-html="item.user_care_facility?.name"></span>
+            </a>
+          </div>
+          <div class="d-flex align-center justify-end" v-if="item.created_at">
+            <v-icon>mdi-calendar-outline</v-icon
+            ><span class="break-title">{{ useDatetime().parseDatetime(item.created_at) }}</span>
+          </div>
+        </div>
+        <hr />
+      </template>
+
+      <div class="content-wrapper">
+        <a :href="buttonHref" class="title">{{ item.name }}</a>
+        <div class="content break-text" v-html="item.description"></div>
+      </div>
+      <div class="action">
+        <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
+      </div>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { Facility } from "~/store/searchFilter";
 import noImage from "@/assets/images/no-image.svg";
-const props = withDefaults(
-  defineProps<{
-    item: Facility;
-    size?: number;
-  }>(),
-  {
-    size: 6,
-  }
-);
+const props = defineProps<{
+  item: Facility;
+  size?: number;
+}>();
 
 const buttonHref = computed(() => {
   if (!props.item) return null;
@@ -106,20 +72,56 @@ const buttonHref = computed(() => {
 $max-height: 240px;
 
 .content-box {
-  padding: 1rem;
+  background-color: #f5f5f5;
+  width: 100%;
+  height: $max-height;
+  border-radius: 2rem;
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  display: flex;
 
-  @include md {
-    padding: 0;
-    margin: 0;
+  .image {
+    display: block;
+
+    img {
+      width: $max-height;
+      height: $max-height;
+      object-fit: cover;
+    }
+
+    @include md {
+      display: none;
+    }
   }
-}
 
-.content-footer {
-  position: absolute;
-  bottom: 0;
-}
+  .text {
+    flex: 1;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
 
-.notes-card {
-  flex: 1;
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .content-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 100%;
+      overflow: hidden;
+
+      .title {
+        font-size: 1.5rem;
+      }
+    }
+
+    .action {
+      font-size: 1.5rem;
+    }
+  }
 }
 </style>

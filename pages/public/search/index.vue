@@ -37,7 +37,7 @@
     </v-container>
   </ClientOnly>
   <v-container class="container">
-    <PublicContentBox :size="12" v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+    <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
   </v-container>
 </template>
 
@@ -102,6 +102,10 @@ h1
     gap: 0.5rem
 
 .container
+  display: grid
+  grid-gap: 2rem
+  grid-template-columns: 1fr 1fr
+
   @include md
     gap: 0.5rem
     display: flex

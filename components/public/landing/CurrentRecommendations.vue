@@ -6,9 +6,9 @@
     <div class="d-flex align-center justify-center text-white is-uppercase my-5">
       <h3>Bitte Bereich auswählen:</h3>
     </div>
-    <v-row>
-      <v-col
-        class="flex-column justify-center text-center text-white align-center my-5"
+    <div class="recommendations-wrapper">
+      <div
+        class="recommendation flex-column justify-center text-center text-white align-center my-5"
         v-for="(item, index) in items"
         :key="index"
       >
@@ -18,8 +18,8 @@
             {{ item.content.heading }}
           </a>
         </div>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -94,4 +94,13 @@ export default defineComponent({
 
   @include md
     padding: 1rem
+
+.recommendations-wrapper
+  display: flex
+  flex-wrap: wrap
+  gap: 1rem
+
+  .recommendation
+    flex: 1
+
 </style>
