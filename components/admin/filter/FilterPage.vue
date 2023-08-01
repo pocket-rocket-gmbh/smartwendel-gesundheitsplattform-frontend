@@ -208,7 +208,7 @@ const getItems = async () => {
     layer: 0,
   }));
 
-  tmpItemsForServiceList[0].next.push({
+  tmpItemsForServiceList[0]?.next.push({
     id: "0",
     layer: 1,
     title: "Leistungsangebote (branchenspezifisch)",
