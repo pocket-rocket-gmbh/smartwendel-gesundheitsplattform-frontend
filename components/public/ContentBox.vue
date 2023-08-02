@@ -8,7 +8,7 @@
     <div class="text">
       <template v-if="item.user">
         <div class="info">
-          <div class="d-flex align-center user-informations" v-if="item.user.name">
+          <div class="align-center user-information" v-if="item.user.name">
             <v-icon>mdi-account-outline</v-icon><span class="break-title">{{ item.user.name }}</span>
           </div>
           <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
@@ -105,6 +105,14 @@ $max-height: 240px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      .user-information {
+        display: flex;
+
+        @include sm {
+          display: none;
+        }
+      }
     }
 
     .content-wrapper {

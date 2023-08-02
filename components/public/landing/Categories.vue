@@ -13,19 +13,19 @@
         Leistung, nach der du suchst. Informierest du über die Angebote oder nimmst direkt Kontakt auf und vereinbarst
         du persönliches Beratungsgespräch.
       </p>
-      <div class="my-5">
+      <div class="button my-5">
         <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToSearch()">
           <span> Alle Einrichtungen </span>
         </v-btn>
       </div>
     </div>
     <div class="icons">
-      <div v-for="(item, index) in items" :key="index" class="d-flex is-clickable d-flex align-end">
+      <div v-for="(item, index) in items" :key="index" class="d-flex is-clickable d-flex icon">
         <img class="image" :src="item.content.icon" />
         <div class="d-flex align-center">
-          <v-card-title class="has-font-size-medium font-weight-bold d-flex align-center is-clickable">
+          <div class="font-weight-bold d-flex align-center is-clickable">
             <span class="is-dark-grey" v-html="item.content.heading"></span>
-          </v-card-title>
+          </div>
         </div>
       </div>
     </div>
@@ -100,6 +100,14 @@ const items = [
 
   .text {
     flex: 3;
+    display: flex;
+    flex-direction: column;
+
+    .button {
+      @include md {
+        align-self: center;
+      }
+    }
   }
 
   .icons {
@@ -112,19 +120,27 @@ const items = [
       grid-template-columns: 1fr 1fr;
     }
 
-    @include sm {
-      grid-template-columns: 1fr;
-    }
+    .icon {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      gap: 0.5rem;
 
-    .image {
-      border-radius: 50%;
-      border: 1px solid black;
-      background-color: white;
-      transition: transform 0.5s ease-in-out;
+      .image {
+        border-radius: 50%;
+        border: 1px solid black;
+        background-color: white;
+        transition: transform 0.5s ease-in-out;
 
-      &:hover {
-        transform: scale(1.1);
-        cursor: pointer;
+        &:hover {
+          transform: scale(1.1);
+          cursor: pointer;
+        }
+      }
+
+      @include md {
+        flex-direction: column;
+        font-size: 18px;
       }
     }
   }
