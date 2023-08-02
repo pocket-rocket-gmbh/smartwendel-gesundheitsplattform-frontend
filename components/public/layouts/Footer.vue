@@ -7,7 +7,7 @@
             <div>Deine Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
-          <v-col class="d-flex ml-15">
+          <v-col class="d-flex px-0">
             <v-btn variant="flat" color="grey" rounded="pill" size="x-large" href="/login">
               <span>Jetzt registrieren</span>
             </v-btn>
