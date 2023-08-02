@@ -99,6 +99,7 @@ $max-height: 240px;
     padding: 0.75rem;
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
 
     .info {
       display: flex;
@@ -116,11 +117,19 @@ $max-height: 240px;
 
       .title {
         font-size: 1.5rem;
+        color: #8ab61d;
+        &:visited {
+          color: #8ab61d;
+        }
       }
     }
 
     .action {
       font-size: 1.5rem;
+      color: #8ab61d;
+      &:visited {
+        color: #8ab61d;
+      }
     }
   }
 }

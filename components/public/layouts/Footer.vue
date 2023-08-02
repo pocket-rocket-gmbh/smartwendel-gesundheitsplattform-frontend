@@ -135,6 +135,8 @@ const currentRoute = computed(() => {
 .social-buttons
   border: 3px solid
   color: $dark-grey
+  &:visited
+    color: $dark-grey
 
 .divider
   border: 1px $dark-grey solid
@@ -186,5 +188,4 @@ const currentRoute = computed(() => {
       @include md
         display: flex
         justify-content: space-between
-
 </style>
