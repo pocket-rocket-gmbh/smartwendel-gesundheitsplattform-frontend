@@ -49,6 +49,7 @@ onMounted(async () => {
 
   .row
     max-width: 100%
+    margin: 0
     @include md
       margin: 0
 

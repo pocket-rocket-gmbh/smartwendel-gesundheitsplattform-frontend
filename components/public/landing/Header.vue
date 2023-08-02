@@ -25,6 +25,8 @@
   @include md {
     padding: 1rem;
     width: 100%;
+    justify-content: flex-start;
+    padding-top: 4rem;
   }
 
   .title {

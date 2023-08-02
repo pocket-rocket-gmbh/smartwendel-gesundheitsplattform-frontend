@@ -1,6 +1,6 @@
 <template>
-  <v-app-bar v-model="appStore.showTopbar" :elevation="2" density="compact" class="main-layouts-title-bar">
-    <div class="main-toolbar-content main-toolbar-content">
+  <v-app-bar v-model="appStore.showTopbar" :elevation="0" density="compact" class="main-layouts-title-bar">
+    <div class="main-toolbar-content">
       <div class="menu-title is-uppercase has-font-size-big d-flex align-center justify-center text">
         <h2 class="is-white" v-if="category">{{ category.name }}</h2>
         <h2 class="is-white" v-else>{{ title }}</h2>
@@ -74,11 +74,14 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
     justify-content: center
     flex-direction: column
     gap: 0.5rem
+    background-image: linear-gradient(89.48deg, #91a80d 19.14%, #bac323 42.28%, #9ea100 83.7%)
+    background-position: 0 -35px
 
     .menu-title
-      background: linear-gradient(89.48deg, #91a80d 19.14%, #bac323 42.28%, #9ea100 83.7%)
       width: 100%
       padding: 1rem
+      position: relative
+      top: 0.5rem
 
       .text
         display: flex

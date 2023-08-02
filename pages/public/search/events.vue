@@ -7,7 +7,7 @@
         :filter-kind="'event'"
       />
       <v-container class="container limited padding">
-        <v-row class="mt-1">
+        <v-row class="mt-1 row">
           <v-col v-if="showSearchFilter" md="4" lg="3" class="mt-4">
             <PublicSearchTheFilter :filterKind="'event'" />
           </v-col>
@@ -53,6 +53,7 @@ onMounted(async () => {
 
   .row
     max-width: 100%
+    margin: 0
     @include md
       margin: 0
 
