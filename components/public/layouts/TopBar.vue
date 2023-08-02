@@ -126,7 +126,7 @@
           >
             Meine Einrichtungen
           </a>
-          <div @click="useUser().logout(), (drawer = !drawer), reload()">
+          <div v-if="useUser().currentUser" @click="useUser().logout(), (drawer = !drawer), reload()">
             <v-icon class="mr-2">mdi-logout</v-icon>
             <span>Logout</span>
           </div>
