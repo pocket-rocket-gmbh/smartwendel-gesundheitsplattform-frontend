@@ -100,6 +100,7 @@ const getSubSubCategories = async () => {
 
   @include md {
     margin: 1rem;
+    margin-top: 3rem;
   }
 
   .sub-category {
