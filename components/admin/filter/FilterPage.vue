@@ -121,6 +121,7 @@ const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleLi
 
   const filterItem: CollapsibleListItem = {
     id: filter.id,
+    // title: `${filter.name} - ${filter.kind}`,
     title: filter.name,
     menuOrder: filter.menu_order,
     layer,
@@ -177,7 +178,8 @@ const getItems = async () => {
     props.filterKind === "course" || props.filterKind === "event"
       ? item.kind === "course" || item.kind === "event"
       : props.filterKind === item.kind
-  ); // Filter items for current kind (event/facility/news/course)
+  );
+  // const filters: any[] = result?.data?.resources;
   if (!filters) {
     console.error("No filters!");
     return;
@@ -268,6 +270,7 @@ const handleClick = async (
 const handleEdit = async (itemIds: string[], layer: number, name: string, kind: string, specialType: string) => {
   api.setEndpoint(`${specialType === "tag" ? "tags" : "tag_categories"}/${itemIds[0]}`);
 
+  // Hint: Send kind or scope
   const result = await api.updateItem({ name, kind: props.filterKind }, "Erfolgreich aktualisiert");
 
   if (result.status === ResultStatus.SUCCESSFUL) {
