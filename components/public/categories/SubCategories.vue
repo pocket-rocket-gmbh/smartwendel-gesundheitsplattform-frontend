@@ -107,11 +107,12 @@ const getSubSubCategories = async () => {
   }
 
   .articles {
-    display: flex;
-    flex-wrap: wrap;
-    columns: 2;
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: 1fr 1fr;
 
     @include md {
+      display: flex;
       flex-direction: column;
       gap: 0.5rem;
     }

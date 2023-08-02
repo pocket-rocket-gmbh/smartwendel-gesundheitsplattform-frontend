@@ -1,11 +1,7 @@
 <template>
   <div>
     <div class="background">
-      <v-row class="row">
-        <v-col class="header-wrapper flex-column align-start justify-start" md="6" xl="6">
-          <PublicLandingHeader />
-        </v-col>
-      </v-row>
+      <PublicLandingHeader />
     </div>
     <PublicLandingCurrentNotes />
     <div class="divider ma-10"></div>

@@ -83,6 +83,7 @@ export default defineComponent({
 
 .articles
   display: flex
+  gap: 3rem
 
   @include md
     flex-direction: column

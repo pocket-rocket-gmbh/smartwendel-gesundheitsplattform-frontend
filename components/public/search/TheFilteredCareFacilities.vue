@@ -17,7 +17,7 @@
       />
     </div>
     <div v-else class="boxes">
-      <div class="item mb-6" v-for="careFacility in filterStore.filteredResults" :key="careFacility.id">
+      <div class="item" v-for="careFacility in filterStore.filteredResults" :key="careFacility.id">
         <v-row>
           <v-col md="8">
             <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
@@ -101,7 +101,10 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
   border-radius: 20px
   padding: 20px
+  margin-bottom: 1rem
 
+  @include md 
+   margin-bottom: 0
 
 .no-items
   flex: 1
