@@ -4,7 +4,7 @@
       <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />
-          <div class="align-center d-none d-sm-flex mx-2">
+          <div class="align-center d-none d-lg-flex mx-2">
             <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
               <div class="title mx-5">
                 <span class="is-clickable main" @click="setItemsAndGo(category, null)">
@@ -46,7 +46,7 @@
           </div>
         </div>
       </v-app-bar-title>
-      <div class="align-center d-none d-sm-flex" v-if="!loading">
+      <div class="align-center d-none d-lg-flex" v-if="!loading">
         <div
           class="has-bg-primary mr-5 text-white offer py-1"
           v-if="!useUser().loggedIn() && currentRoute !== '/register'"
@@ -83,11 +83,11 @@
           <PublicLayoutsMiniMenu :current-user="currentUser" :user-is-admin="userIsAdmin" />
         </div>
       </div>
-      <div class="d-flex d-sm-none align-center" align="center">
+      <div class="d-flex d-lg-none align-center" align="center">
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </div>
     </v-app-bar>
-    <v-navigation-drawer class="d-flex d-sm-none" v-model="drawer" fixed temporary>
+    <v-navigation-drawer class="d-flex d-lg-none" v-model="drawer" fixed temporary>
       <div class="navigation-drawer-content">
         <div
           class="has-bg-primary text-white offer d-flex align-center justify-center py-2"
@@ -418,6 +418,11 @@ header,
   flex-direction: column;
   gap: 1rem;
   padding: 0.5rem;
+  margin-top: 2rem;
+
+  @include md {
+    margin-top: 0;
+  }
 
   .logged-in-actions {
     display: flex;
