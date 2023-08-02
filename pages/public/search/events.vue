@@ -3,7 +3,7 @@
     <div>
       <PublicSearchTheBasicSearchBox
         title="Kurse & Veranstaltungen"
-        sub-title="Deine Wunschkurs auswählen"
+        sub-title="Deinen Wunschkurs auswählen"
         :filter-kind="'event'"
       />
       <v-container class="container limited padding">

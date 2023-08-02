@@ -16,18 +16,13 @@
           label="Beschreibung"
           :rules="[rules.length]"
           :error-messages="useErrors().checkAndMapErrors('Beschreibung', slotProps.errors)"
-          />
-      </div>
-      <div class="field">
-        <v-combobox
-          v-model="slotProps.item.tags"
-          chips
-          multiple
-          label="Tags"
         />
       </div>
+      <div class="field">
+        <v-combobox v-model="slotProps.item.tags" chips multiple label="Tags" />
+      </div>
       <ChooseAndCropSingleImage
-        :aspect-ratio="1/1"
+        :aspect-ratio="1 / 1"
         class="field"
         label="Bild"
         :pre-set-image-url="slotProps.item.image_url"
@@ -47,14 +42,9 @@
         </div>
       </div>
 
-      <v-alert
-        v-if="slotProps.item.url_kind === 'internal'"
-        type="info"
-        density="compact"
-        closable
-        class="mb-15"
-        >
-         "bitte z.B.: "/public/categories/95bd1f21-800a-47a6-bb0c-afba56f33619?sub_category_id=d41393e1-20f2-4fee-8872-c275201dd26d"
+      <v-alert v-if="slotProps.item.url_kind === 'internal'" type="info" density="compact" closable class="mb-15">
+        "bitte z.B.:
+        "/public/categories/95bd1f21-800a-47a6-bb0c-afba56f33619?sub_category_id=d41393e1-20f2-4fee-8872-c275201dd26d"
       </v-alert>
 
       <div class="field mb-15">
@@ -63,6 +53,7 @@
           v-model="slotProps.item.url"
           hide-details="auto"
           label="Url"
+          :rules="[rules.isUrl]"
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         /><v-text-field
           v-else
@@ -73,16 +64,15 @@
         />
       </div>
     </v-card-text>
-    
   </CreateEdit>
 </template>
 <script lang="ts" setup>
-  import { rules } from '../../../data/validationRules'
-  const status = ref([
-    { name: 'external', id: 'external'},
-    { name: 'internal', id: 'internal'}
-  ])
-  const setLogo = (image:any) => {
-    useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'file', value: image })
-  }
+import { rules } from "../../../data/validationRules";
+const status = ref([
+  { name: "external", id: "external" },
+  { name: "internal", id: "internal" },
+]);
+const setLogo = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", { name: "file", value: image });
+};
 </script>

@@ -8,7 +8,7 @@
     <div class="text">
       <template v-if="item.user">
         <div class="info">
-          <div class="d-flex align-center user-informations" v-if="item.user.name">
+          <div class="align-center user-information" v-if="item.user.name">
             <v-icon>mdi-account-outline</v-icon><span class="break-title">{{ item.user.name }}</span>
           </div>
           <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
@@ -29,7 +29,7 @@
         <a :href="buttonHref" class="title">{{ item.name }}</a>
         <div class="content break-text" v-html="item.description"></div>
       </div>
-      <div class="action">
+      <div class="action" v-if="buttonHref">
         <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
       </div>
     </div>
@@ -99,11 +99,20 @@ $max-height: 240px;
     padding: 0.75rem;
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
 
     .info {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      .user-information {
+        display: flex;
+
+        @include sm {
+          display: none;
+        }
+      }
     }
 
     .content-wrapper {
@@ -116,11 +125,19 @@ $max-height: 240px;
 
       .title {
         font-size: 1.5rem;
+        color: #8ab61d;
+        &:visited {
+          color: #8ab61d;
+        }
       }
     }
 
     .action {
       font-size: 1.5rem;
+      color: #8ab61d;
+      &:visited {
+        color: #8ab61d;
+      }
     }
   }
 }

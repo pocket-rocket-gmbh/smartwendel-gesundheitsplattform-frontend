@@ -99,8 +99,5 @@ export default defineComponent({
   display: flex
   flex-wrap: wrap
   gap: 1rem
-
-  .recommendation
-    flex: 1
-
+  justify-content: space-between
 </style>
