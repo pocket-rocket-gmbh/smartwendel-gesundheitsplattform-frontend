@@ -1,8 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
 export const useAppStore = defineStore({
-  id: 'app',
+  id: "app",
   state: () => ({
-    dashboardBackLink: ""
-  })
-})
+    dashboardBackLink: "",
+    showTopbar: true,
+    windowWidth: -1,
+  }),
+});

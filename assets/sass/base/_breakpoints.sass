@@ -1,0 +1,25 @@
+$screen-xs: 360px
+$screen-sm: 600px
+$screen-md: 960px
+$screen-lg: 1264px
+$screen-xl: 1904px
+
+@mixin xs
+    @media (max-width: #{$screen-sm})
+        @content
+
+@mixin sm
+    @media (max-width: #{$screen-sm})
+        @content
+
+@mixin md
+    @media (max-width: #{$screen-md})
+        @content
+
+@mixin lg
+    @media (max-width: #{$screen-lg})
+        @content
+
+@mixin xl
+    @media (max-width: #{$screen-xl})
+        @content

@@ -1,15 +1,7 @@
 <template>
   <div>
     <div class="background">
-      <v-row>
-        <v-col
-          class="flex-column align-start justify-start ma-15"
-          md="6"
-          xl="6"
-        >
-          <PublicLandingHeader />
-        </v-col>
-      </v-row>
+      <PublicLandingHeader />
     </div>
     <PublicLandingCurrentNotes />
     <div class="divider ma-10"></div>
@@ -21,19 +13,35 @@
   </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({});
-</script>
+<script lang="ts"></script>
 
-<style lang="sass" scoped>
-@import "@/assets/sass/main.sass"
-.background
-  width: 100vw
-  height: 100vh
-  background: url('../assets/images/home.jpg') no-repeat center center
-  background-repeat: no-repeat
-  background-size: cover
-  background-position: right top
+<style lang="scss" scoped>
+@import "@/assets/sass/base/breakpoints";
+@import "@/assets/sass/main.sass";
 
+.background {
+  width: 100vw;
+  height: 100vh;
+  background: url("../assets/images/home.jpg") no-repeat center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right top;
 
+  @include sm {
+    background-position: center;
+  }
+}
+
+.row {
+  @include sm {
+    max-width: 100%;
+    margin: 0;
+  }
+}
+
+.header-wrapper {
+  @include sm {
+    padding: 0;
+  }
+}
 </style>

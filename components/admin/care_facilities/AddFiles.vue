@@ -1,10 +1,13 @@
 <template>
   <div>
-   <Loading v-if="loadingItem" />
+    <Loading v-if="loadingItem" />
     <div class="field split">
       <v-file-input
         :disabled="
-          tagName === 'insurance' && (itemId ? (item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1) :  offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
+          tagName === 'insurance' &&
+          (itemId
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
+            : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         class="text-field file-input"
         hide-details="auto"
@@ -16,7 +19,10 @@
       <v-text-field
         class="text-field"
         :disabled="
-        tagName === 'insurance' && (itemId ? (item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1) :  offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
+          tagName === 'insurance' &&
+          (itemId
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
+            : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         hide-details="auto"
         label="Bezeichnung*"
@@ -39,7 +45,7 @@
       class="mt-5"
       @click="save"
       v-if="!loadingItem"
-      :disabled="filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge || !fileUrl?.length"
+      :disabled="(filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge) || !fileUrl?.length"
     >
       Hinzufügen
     </v-btn>
@@ -66,7 +72,7 @@
             >
             </v-btn>
           </template>
-          <i>{{ document.name.replace('-insurance', '.pdf') }}</i>
+          <i>{{ document.name.replace("-insurance", ".pdf") }}</i>
           <v-divider></v-divider>
           <span v-if="documentAcepted" class="d-flex align-center text-primary">
             <v-icon>mdi-check-decagram-outline</v-icon>
@@ -100,7 +106,7 @@
             >
             </v-btn>
           </template>
-          <v-divider></v-divider>       
+          <v-divider></v-divider>
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteOfflineFile('insurance', index)"></v-btn>
           </template>
@@ -127,7 +133,7 @@
             >
             </v-btn>
           </template>
-          <i>{{ document.name.replace('-documents', '.pdf') }}</i>
+          <i>{{ document.name.replace("-documents", ".pdf") }}</i>
           <v-divider></v-divider>
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteFile(document.signed_id)"></v-btn>
@@ -169,6 +175,7 @@ import { CreateEditFacility } from "~/types/facilities";
 
 const emit = defineEmits<{
   (event: "offline", docs: CreateEditFacility["offlineDocuments"]): void;
+  (event: "documentDeleted"): void;
 }>();
 
 const props = defineProps<{
@@ -264,7 +271,7 @@ const save = async () => {
   }
 
   emit("offline", [
-    ...(props.offlineDocuments || []), 
+    ...(props.offlineDocuments || []),
     {
       document: fileUrl.value,
       documentname: filename.value,
@@ -306,6 +313,7 @@ const deleteFile = async (signedId: string) => {
   if (result.status === ResultStatus.SUCCESSFUL) {
     loadingItem.value = false;
     getCareFacility();
+    emit("documentDeleted");
   } else {
     errors.value = result.data;
     loadingItem.value = false;
@@ -330,7 +338,7 @@ const handleMount = () => {
 
 watch(
   () => props.itemId,
-  () => handleMount(),
+  () => handleMount()
 );
 
 onMounted(() => {
@@ -345,7 +353,7 @@ onMounted(() => {
 .text-field input,
 .text-field input
   padding-top: 10px!important
-  
+
 .close
   position: absolute
   top: -10px

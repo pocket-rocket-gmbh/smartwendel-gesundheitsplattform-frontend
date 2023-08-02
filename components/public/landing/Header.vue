@@ -1,40 +1,53 @@
 <template>
-  <div class="mt-15 my-15">
-    <v-row>
-      <v-col cols="12" xl="8" md="10">
-        <h1 class="title">
-          Deine Gesundheits-plattform im Landkreis Sankt Wendel
-        </h1>
-        <PublicLandingChooseCategory class="my-15" />
-        <p class="has-font-size-medium sub-title my-15">
-          Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie
-          umfangreiche Pflegeangebote finden.
-        </p>
-      </v-col>
-    </v-row>
+  <div class="wrapper">
+    <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
+    <PublicLandingChooseCategory />
+    <p class="has-font-size-medium sub-title">
+      Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.
+    </p>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  setup() {},
-});
-</script>
+<script lang="ts" setup></script>
 
-<style lang="sass" scoped>
-.title
-  color: white
-  font-size: 55px
-  text-transform: uppercase
-  line-height: 150%
-.sub-title
-  color: white
-  font-style: normal
-  font-weight: 400
-  line-height: 160%
-  width: 75%
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
 
-.header
-  margin-top: 20%
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+  justify-content: center;
+  width: 40%;
+  padding: 1rem;
+
+  @include md {
+    padding: 1rem;
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 4rem;
+  }
+
+  .title {
+    color: white;
+    font-size: 55px;
+    text-transform: uppercase;
+    line-height: 150%;
+  }
+  .sub-title {
+    color: white;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+    width: 75%;
+
+    @include md {
+      width: 100%;
+    }
+  }
+  .header {
+    margin-top: 20%;
+  }
+}
 </style>

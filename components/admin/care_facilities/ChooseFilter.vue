@@ -3,7 +3,7 @@
   <v-alert
     class="my-5"
     v-if="!filterSelected && !loadingFilters"
-    type="warning"
+    type="info"
     density="compact"
     closable
   >
@@ -308,7 +308,6 @@ const handleExpandToggle = (selectedId: string) => {
     expandIds.value.push(selectedId);
     return;
   }
-  console.log(selectedId);
   expandIds.value.splice(expandIndex, 1);
 };
 

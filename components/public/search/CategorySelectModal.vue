@@ -1,0 +1,175 @@
+<template>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+      <template v-slot:activator="{ props }">
+        <div class="field">
+          <label class="label is-white">
+            <div class="search-term">
+              Suchbegriff
+              <v-chip v-if="filterStore.currentSearchTerm" closable @click:close="resetSearchTerm">
+                {{ filterStore.currentSearchTerm }}
+              </v-chip>
+            </div>
+          </label>
+          <div class="field" v-bind="props">
+            <div class="input">{{ selectedFilter?.name || "Filter wählen" }}</div>
+          </div>
+        </div>
+      </template>
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Filter</v-toolbar-title>
+          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+        </v-toolbar>
+        <div class="all-filters">
+          <div v-if="!loadingFilters" class="filters">
+            <div v-for="filter in mainFilters" :key="filter.id">
+              <div class="filter-name">
+                {{ filter.name }}
+              </div>
+              <div class="filter-options">
+                <label
+                  class="option"
+                  v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options"
+                >
+                  <v-radio
+                    :model-value="selectedFilter?.id === option.id"
+                    @click.prevent="handleOptionSelect(option)"
+                    hide-details
+                    density="compact"
+                    :label="option.name"
+                    color="#8AB61D"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+          <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
+        </div>
+      </v-card>
+    </v-dialog>
+  </v-row>
+</template>
+
+<script setup lang="ts">
+import { useFilterStore } from "~/store/searchFilter";
+
+const props = defineProps<{
+  modelValue: string[];
+}>();
+
+const emit = defineEmits<{
+  (event: "update:modelValue", values: string[]): void;
+}>();
+
+watch(
+  () => props.modelValue,
+  () => {
+    if (!props.modelValue.length) {
+      selectedFilter.value = null;
+    }
+  }
+);
+
+type Filter = { id: string; name: string };
+type FilterOption = {
+  parentId: string;
+  options: Filter[];
+};
+
+const dialog = ref(false);
+
+const filterStore = useFilterStore();
+const loadingFilters = ref(false);
+const mainFilters = ref([]);
+const filterOptions = ref<FilterOption[]>([]);
+const selectedFilter = ref<Filter>();
+
+const resetSearchTerm = () => {
+  filterStore.currentSearchTerm = "";
+  filterStore.loadFilteredResults();
+};
+
+const handleOptionSelect = (option: Filter) => {
+  const previous = { ...selectedFilter.value };
+  selectedFilter.value = option;
+
+  const previousIndex = props.modelValue.findIndex((item) => item === previous.id);
+
+  if (previousIndex !== -1) {
+    props.modelValue.splice(previousIndex, 1);
+    selectedFilter.value = null;
+    emit("update:modelValue", props.modelValue);
+    return;
+  }
+
+  if (selectedFilter.value) {
+    props.modelValue.push(selectedFilter.value.id);
+  }
+
+  emit("update:modelValue", props.modelValue);
+};
+
+onMounted(async () => {
+  loadingFilters.value = true;
+  mainFilters.value = await getMainFilters("filter_facility", "facility");
+
+  const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
+  const allOptions = await Promise.all(allOptionsPromises);
+
+  allOptions.forEach((options, index) => {
+    filterOptions.value.push({
+      parentId: mainFilters.value[index].id,
+      options,
+    });
+  });
+  loadingFilters.value = false;
+
+  const allAvailableOptions = filterOptions.value.reduce((prev, curr) => {
+    return [...prev, ...curr.options];
+  }, [] as Filter[]);
+
+  const foundFilter = allAvailableOptions.find((option) => {
+    const doesInclude = props.modelValue.find((item: string) => item === option.id);
+    return doesInclude;
+  });
+
+  selectedFilter.value = foundFilter;
+});
+</script>
+
+<style lang="scss">
+@import "@/assets/sass/main.sass";
+
+.dialog-bottom-transition-enter-active,
+.dialog-bottom-transition-leave-active {
+  transition: transform 0.2s ease-in-out;
+}
+
+.all-filters {
+  padding: 0.5rem;
+
+  .filters {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      .option {
+        border: 1px solid black;
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        display: flex;
+        gap: 1rem;
+      }
+    }
+  }
+}
+</style>

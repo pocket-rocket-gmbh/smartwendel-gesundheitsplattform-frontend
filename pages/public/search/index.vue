@@ -18,6 +18,7 @@
               size="large"
               rounded="lg"
               color="primary"
+              class="kind"
               @click="routeToFilterPage(kind)"
             >
               {{ getMappedKindName(kind) }}
@@ -28,23 +29,16 @@
           <v-col class="d-flex justify-center">
             <div class="flex-column" align="center">
               <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
-              <v-btn
-                class="mt-4"
-                prepend-icon="mdi-chevron-left"
-                @click="goBack()"
-                >
-                  Zurück zur Suche
-              </v-btn>
+              <v-btn class="mt-4" prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
             </div>
           </v-col>
         </v-row>
       </template>
     </v-container>
   </ClientOnly>
-  <v-container>
-    <PublicContentBox :size="'12'" v-for="category in filterStore.filteredResults" :key="category.id" :item="category"/>
+  <v-container class="container">
+    <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
   </v-container>
-
 </template>
 
 <script setup lang="ts">
@@ -64,8 +58,8 @@ const filteredKinds = computed(() => {
   return uniqueKinds;
 });
 const goBack = () => {
-    router.push({ path: '/' })
-  }
+  router.push({ path: "/" });
+};
 
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
   if (kind === "facility") return "Zu den Einrichtungen";
@@ -101,4 +95,19 @@ h1
 .kinds
   display: flex
   gap: 2rem
+  flex-wrap: wrap
+
+  @include md
+    flex-direction: column
+    gap: 0.5rem
+
+.container
+  display: grid
+  grid-gap: 2rem
+  grid-template-columns: 1fr 1fr
+
+  @include md
+    gap: 0.5rem
+    display: flex
+    flex-direction: column
 </style>

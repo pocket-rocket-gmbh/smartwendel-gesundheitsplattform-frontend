@@ -1,11 +1,9 @@
 <template>
-  <v-container class="limited offset my-15" v-if="!loading">
-    <v-btn prepend-icon="mdi-chevron-left" @click="goBack()">
-      Zurück zur Suche
-    </v-btn>
+  <v-container class="facility-wrapper limited offset" v-if="!loading">
+    <v-btn prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
     <PublicCareFacilitiesImages :care-facility="careFacility" />
-    <v-row>
-      <v-col>
+    <v-row class="row">
+      <v-col class="column">
         <PublicCareFacilitiesMain :care-facility="careFacility" />
       </v-col>
       <v-col md="4" v-if="careFacility?.kind !== 'news'">
@@ -13,7 +11,7 @@
         <div class="mt-5" v-if="careFacility?.kind === 'course'">
           <PublicCareFacilitiesDates :care-facility="careFacility" />
         </div>
-        <div class="mt-5" v-if="careFacility?.kind !== 'news'">
+        <div class="mt-5">
           <PublicCareFacilitiesDocuments :care-facility="careFacility" />
         </div>
       </v-col>
@@ -21,44 +19,57 @@
   </v-container>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  setup() {
-    const route = useRoute();
-    const router = useRouter();
-    const careFacility = ref({});
-    const loading = ref(true);
+<script lang="ts" setup>
+import { Facility } from "~/store/searchFilter";
 
-    const careFacilityId = computed(() => {
-      return route.params.id;
-    });
+const route = useRoute();
+const router = useRouter();
+const careFacility = ref<Facility>();
+const loading = ref(true);
 
-    const goBack = () => {
-      router.push({ path: "/public/search/facilities" });
-    };
+const careFacilityId = computed(() => {
+  return route.params.id;
+});
 
-    const showApi = useCollectionApi();
-    showApi.setBaseApi(usePublicApi());
+const goBack = () => {
+  router.push({ path: "/public/search/facilities" });
+};
 
-    const getCareFacility = async () => {
-      showApi.setEndpoint(`care_facilities/${careFacilityId.value}`);
+const showApi = useCollectionApi();
+showApi.setBaseApi(usePublicApi());
 
-      loading.value = true;
-      await showApi.getItem();
-      loading.value = false;
-      careFacility.value = showApi.item.value;
-    };
+const getCareFacility = async () => {
+  showApi.setEndpoint(`care_facilities/${careFacilityId.value}`);
 
-    onMounted(() => {
-      getCareFacility();
-    });
-    return {
-      careFacility,
-      goBack,
-      loading,
-    };
-  },
+  loading.value = true;
+  await showApi.getItem();
+  loading.value = false;
+  careFacility.value = showApi.item.value;
+};
+
+onMounted(() => {
+  getCareFacility();
 });
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/sass/main";
+
+.facility-wrapper {
+  margin: 0 5rem;
+
+  @include md {
+    margin: 0;
+    padding: 1rem !important;
+  }
+
+  .row {
+    .column {
+      @include md {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}
+</style>
