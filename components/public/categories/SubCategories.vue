@@ -103,6 +103,10 @@ const getSubSubCategories = async () => {
     margin-top: 3rem;
   }
 
+  @include sm {
+    margin-top: 7rem;
+  }
+
   .sub-category {
     scroll-margin: -200px;
   }
@@ -115,7 +119,7 @@ const getSubSubCategories = async () => {
     @include md {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 2rem;
     }
   }
 }

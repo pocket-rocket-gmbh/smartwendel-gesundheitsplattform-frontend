@@ -145,25 +145,6 @@
               {{ category.name }}
             </span>
           </div>
-          <div class="content">
-            <v-list v-if="category.sub_categories.length > 0">
-              <v-list-item>
-                <div
-                  v-for="(sub_category, index) in subCategories[category.id]"
-                  :key="sub_category.id"
-                  @click="setItemsAndGo(category, sub_category)"
-                >
-                  <div class="list-item main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
-                    <div>
-                      <span class="is-clickable">
-                        {{ sub_category.name }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </v-list-item>
-            </v-list>
-          </div>
         </div>
         <template v-if="!loading">
           <v-divider></v-divider>
