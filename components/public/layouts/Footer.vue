@@ -7,7 +7,7 @@
             <div>Deine Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
-          <v-col class="d-flex ml-15">
+          <v-col class="d-flex px-0 register-button">
             <v-btn variant="flat" color="grey" rounded="pill" size="x-large" href="/login">
               <span>Jetzt registrieren</span>
             </v-btn>
@@ -135,6 +135,8 @@ const currentRoute = computed(() => {
 .social-buttons
   border: 3px solid
   color: $dark-grey
+  &:visited
+    color: $dark-grey
 
 .divider
   border: 1px $dark-grey solid
@@ -171,6 +173,15 @@ const currentRoute = computed(() => {
   @include md
     padding: 0 1rem
 
+
+.register-button
+  width: inherit
+
+  @include md
+    justify-content: stretch
+    a
+      flex: 1
+
 .footer-content
   .footer-content-row
     @include md
@@ -186,5 +197,4 @@ const currentRoute = computed(() => {
       @include md
         display: flex
         justify-content: space-between
-
 </style>

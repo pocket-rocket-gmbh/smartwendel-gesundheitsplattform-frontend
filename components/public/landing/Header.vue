@@ -20,13 +20,12 @@
   gap: 1rem;
   justify-content: center;
   width: 40%;
-  padding: 1rem;
+  padding: 0 0 0 5rem;
 
   @include md {
     padding: 1rem;
     width: 100%;
     justify-content: flex-start;
-    padding-top: 4rem;
   }
 
   .title {

@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox title="Beiträge" sub-title="Deine Wunschbeitrag auswählen" :filter-kind="'news'" />
+      <PublicSearchTheBasicSearchBox title="Beiträge" sub-title="Deinen Wunschbeitrag auswählen" :filter-kind="'news'" />
       <v-container class="container limited padding">
         <v-row class="row mt-1">
           <v-col v-if="showSearchFilter" md="4" lg="3" class="mt-4">

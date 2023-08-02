@@ -4,7 +4,7 @@
       {{ selectedFilter?.name || "Filter wählen" }}
 
       <div class="actions">
-        <div class="chevron" :class="[showPopover ? 'down' : 'up']"></div>
+        <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
 
