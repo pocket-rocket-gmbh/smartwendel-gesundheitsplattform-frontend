@@ -107,7 +107,7 @@ h1
   grid-template-columns: 1fr 1fr
 
   @include md
-    gap: 0.5rem
+    gap: 2rem
     display: flex
     flex-direction: column
 </style>
