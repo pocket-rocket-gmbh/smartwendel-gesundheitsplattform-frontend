@@ -7,7 +7,7 @@
             <div>Deine Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
-          <v-col class="d-flex px-0">
+          <v-col class="d-flex px-0 register-button">
             <v-btn variant="flat" color="grey" rounded="pill" size="x-large" href="/login">
               <span>Jetzt registrieren</span>
             </v-btn>
@@ -172,6 +172,15 @@ const currentRoute = computed(() => {
   padding: 0 5rem
   @include md
     padding: 0 1rem
+
+
+.register-button
+  width: inherit
+
+  @include md
+    justify-content: stretch
+    a
+      flex: 1
 
 .footer-content
   .footer-content-row
