@@ -11,6 +11,12 @@
       </div>
     </v-card-text>
 
-    <TextEditor v-model="slotProps.item.description" />
+    <div class="pa-4 pt-0">
+      <TextEditor v-model="slotProps.item.description" height="325px" />
+    </div>
   </CreateEdit>
 </template>
+<script lang="ts" setup></script>
+<style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
+</style>

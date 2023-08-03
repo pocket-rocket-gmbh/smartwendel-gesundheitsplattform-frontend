@@ -20,13 +20,6 @@
       @entry-moved="handleMove"
     />
 
-    <AdminCategoriesAddSubCategories
-      v-if="addSubCategoriesDialogOpen"
-      :category-id="itemId"
-      @close="handleDialogClosed"
-      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
-    />
-
     <AdminCategoriesCreateEdit
       :item-id="itemId"
       v-if="createEditDialogOpen"
@@ -36,26 +29,27 @@
       endpoint="categories"
       concept-name="Bereich"
     />
-
-    <AdminSubSubCategoriesCreateEdit
-      :item-id="itemId"
-      v-if="createEditSubDialogOpen"
-      :item-placeholder="itemPlaceholder"
-      @close="handleSubCategoryClose"
-      :endpoint="`categories/${itemId}/sub_categories/${subCategoryId}`"
-      :overwrite-get-item-endpoint="`categories/${subSubCategoryId}`"
-      :overwrite-update-item-endpoint="`categories/${subSubCategoryId}`"
-      concept-name="Unter-Kategorien"
-    />
     <AdminSubCategoriesCreateEdit
       :item-id="itemId"
       v-if="createEditCategoryDialogOpen"
       :item-placeholder="itemPlaceholder"
       @close="handleCategoryClose"
+      @save="handleItemSaved"
       :endpoint="`categories`"
       :overwrite-get-item-endpoint="`categories/${subCategoryId}`"
       :overwrite-update-item-endpoint="`categories/${subCategoryId}`"
       concept-name="Kategorien"
+    />
+    <AdminSubSubCategoriesCreateEdit
+      :item-id="itemId"
+      v-if="createEditSubDialogOpen"
+      :item-placeholder="itemPlaceholder"
+      @close="handleSubCategoryClose"
+      @save="handleItemSaved"
+      :endpoint="`categories/${itemId}/sub_categories/${subCategoryId}`"
+      :overwrite-get-item-endpoint="`categories/${subSubCategoryId}`"
+      :overwrite-update-item-endpoint="`categories/${subSubCategoryId}`"
+      concept-name="Unter-Kategorien"
     />
 
     <DeleteItem
@@ -106,27 +100,9 @@ const itemPlaceholder = ref({
   description: "",
 });
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
-  createEditDialogOpen.value = true;
-};
-
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
-};
-
-const openAddSubCategoriesDialog = (id: string) => {
-  itemId.value = id;
-  addSubCategoriesDialogOpen.value = true;
-};
-
-const handleDialogClosed = () => {
-  dataTable.value.resetActiveItems();
-  itemId.value = null;
-  createEditDialogOpen.value = false;
-  confirmDeleteDialogOpen.value = false;
-  addSubCategoriesDialogOpen.value = false;
 };
 
 const getItems = async (endpoint = "categories") => {
@@ -319,8 +295,6 @@ const deleteItemComplete = () => {
 const handleNewAreaAdded = () => {
   itemId.value = null;
   createEditDialogOpen.value = false;
-
-  getItems();
 };
 
 const handleItemSaved = () => {
@@ -332,16 +306,12 @@ const handleSubCategoryClose = () => {
   subCategoryId.value = null;
   subSubCategoryId.value = null;
   createEditSubDialogOpen.value = false;
-
-  getItems();
 };
 
 const handleCategoryClose = () => {
   itemId.value = null;
   subCategoryId.value = null;
   createEditCategoryDialogOpen.value = false;
-
-  getItems();
 };
 
 const handleMove = async (
