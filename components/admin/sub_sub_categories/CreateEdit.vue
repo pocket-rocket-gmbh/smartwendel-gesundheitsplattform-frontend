@@ -25,7 +25,7 @@
         :aspect-ratio="1 / 1"
         class="field"
         label="Bild"
-        :pre-set-image-url="slotProps.item.image_url"
+        :pre-set-image-url="slotProps.item.image_url || slotProps.item.file"
         @setImage="setLogo"
       />
       <div class="field" v-if="useUser().isAdmin()">
