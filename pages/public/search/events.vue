@@ -43,6 +43,10 @@ onMounted(async () => {
   filterStore.updateFromUrlQuery();
   filterStore.loadAllResults();
 });
+
+onBeforeUnmount(()=> {
+  filterStore.resetAllFilters();
+})
 </script>
 
 <style lang="sass" scoped>

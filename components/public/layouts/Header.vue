@@ -1,26 +1,47 @@
 <template>
-  <v-app-bar v-model="appStore.showTopbar" :elevation="0" density="compact" class="main-layouts-title-bar">
-    <div class="main-toolbar-content">
-      <div class="menu-title is-uppercase has-font-size-big d-flex align-center justify-center text">
-        <h2 class="is-white" v-if="category">{{ category.name }}</h2>
-        <h2 class="is-white" v-else>{{ title }}</h2>
+  <template v-if="breakPoints.isMobile.value">
+    <v-app-bar :elevation="0" density="compact" class="main-layouts-title-bar">
+      <div class="main-toolbar-content">
+        <div class="menu-title is-uppercase has-font-size-big d-flex align-center justify-space-between text">
+          <div class="spacer">
+            <PublicCategoriesSelectCategoriesModal
+              :sub-categories="subCategories"
+              :selected-id="selectedId"
+              @set-category-and-scroll="setSubCategoryAndScroll"
+            />
+          </div>
+          <h2 class="is-white text-center" v-if="category">{{ category.name }}</h2>
+          <h2 class="is-white text-center" v-else>{{ title }}</h2>
+          <div class="spacer"></div>
+        </div>
       </div>
-      <div class="menu-bar-wrapper">
-        <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
-          <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
-            <span
-              class="px-5 is-dark-grey"
-              :class="[selectedId === item?.id ? 'text-decoration-underline' : '']"
-              v-show="item.sub_sub_categories.length > 0"
-              >{{ item?.name }}
-            </span>
+    </v-app-bar>
+  </template>
+  <template v-else>
+    <v-app-bar v-model="appStore.showTopbar" :elevation="0" density="compact" class="main-layouts-title-bar">
+      <div class="main-toolbar-content">
+        <div class="menu-title is-uppercase has-font-size-big d-flex align-center justify-center text">
+          <h2 class="is-white" v-if="category">{{ category.name }}</h2>
+          <h2 class="is-white" v-else>{{ title }}</h2>
+        </div>
+        <div class="menu-bar-wrapper">
+          <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
+            <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
+              <span
+                class="px-5 is-dark-grey"
+                :class="[selectedId === item?.id ? 'text-decoration-underline' : '']"
+                v-show="item.sub_sub_categories.length > 0"
+                >{{ item?.name }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </v-app-bar>
+    </v-app-bar>
+  </template>
 </template>
 <script lang="ts" setup>
+import { useBreakpoints } from "~/composables/ui/breakPoints";
 import { useAppStore } from "~/store/app";
 
 const props = defineProps({
@@ -36,11 +57,14 @@ const props = defineProps({
 });
 
 const appStore = useAppStore();
+const breakPoints = useBreakpoints();
 const selectedId = ref(null);
 
 const setSubCategoryAndScroll = (id: any) => {
-  useNuxtApp().$bus.$emit("setSubCategory", id);
-  selectedId.value = id;
+  requestAnimationFrame(() => {
+    useNuxtApp().$bus.$emit("setSubCategory", id);
+    selectedId.value = id;
+  });
 };
 
 useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
@@ -77,11 +101,17 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
     background-image: linear-gradient(89.48deg, #91a80d 19.14%, #bac323 42.28%, #9ea100 83.7%)
     background-position: 0 -35px
 
+    @include md
+      background-position: unset
+
     .menu-title
       width: 100%
       padding: 1rem
       position: relative
       top: 0.5rem
+
+      @include md
+        top: 0
 
       .text
         display: flex
@@ -95,6 +125,9 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
       h2
         @include md
           font-size: 1.75rem
+
+      .spacer
+        width: 4rem
 
     .menu-bar-wrapper
       padding: 0.5rem

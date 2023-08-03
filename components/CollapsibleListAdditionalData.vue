@@ -1,7 +1,13 @@
 <template>
-  <div v-if="!edit" v-html="refinedData"></div>
+  <div v-if="!edit" class="break-title" v-html="refinedData"></div>
   <template v-else>
-    <v-text-field @click.stop v-if="data.type === 'raw'" v-model="refinedData" hide-details="auto" label="Zusatzangaben"/>
+    <v-text-field
+      @click.stop
+      v-if="data.type === 'raw'"
+      v-model="refinedData"
+      hide-details="auto"
+      label="Zusatzangaben"
+    />
     <v-textarea
       v-else
       v-model="refinedData"
@@ -33,7 +39,13 @@ const handleModelChange = () => {
 };
 
 const getAdditionalData = async () => {
-  if (!props.data || props.data.type !== "api") return "nothing";
+  if (!props.data) return;
+
+  if (props.data.type === "raw") {
+    refinedData.value = props.data.value;
+
+    return;
+  }
 
   const api = useCollectionApi();
   api.setBaseApi(usePrivateApi());
@@ -59,6 +71,16 @@ const getAdditionalData = async () => {
 onMounted(() => {
   getAdditionalData();
 });
+
+watch(
+  () => props.data,
+  () => {
+    getAdditionalData();
+  },
+  { deep: true }
+);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
+</style>

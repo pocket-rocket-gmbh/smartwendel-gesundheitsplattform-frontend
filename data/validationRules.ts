@@ -8,7 +8,7 @@ export const rules = {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return pattern.test(value) || "Ungültige E-Mail-Adresse";
   },
-  length: (value: string) => !value || value.length < 300 || "Die Beschreibung darf höchstens 300 Zeichen lang sein.",
+  length: (value: string) => !value || value.length < 1000 || "Die Beschreibung darf höchstens 1000 Zeichen lang sein.",
   fileRequired: (v: File) => (v && v.size > 0) || "Erforderlich",
   isUrl: (url: string) => {
     const urlRegex =

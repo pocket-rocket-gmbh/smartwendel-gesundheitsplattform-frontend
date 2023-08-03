@@ -44,7 +44,7 @@ import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
 import { CreateEditFacility } from "~/types/facilities";
 
-const emit = defineEmits(["close", "hasChanged"]);
+const emit = defineEmits(["close", "hasChanged", "save"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -94,6 +94,8 @@ showApi.setBaseApi(usePrivateApi());
 
 const createUpdateApi = useCollectionApi();
 createUpdateApi.setBaseApi(usePrivateApi());
+
+const itemHastChanged = ref(false);
 
 const getItem = async () => {
   if (!props.itemId) return;
@@ -206,7 +208,8 @@ const save = async () => {
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
-    // emit("close");
+    itemHastChanged.value = false;
+    emit("save");
   } else {
     errors.value = result.data;
   }
@@ -226,18 +229,32 @@ const triggerSaveHintTimeout = () => {
   }, 30 * 1000); // Nach einer halben Minute wird ein Hinweis zum Speichern angezeigt
 };
 
-onMounted(() => {
+onMounted(async () => {
   if (props.itemId) {
-    getItem();
+    await getItem();
   }
   if (props.itemPlaceholder && !item.value.id) {
     item.value = { ...props.itemPlaceholder };
   }
 
   triggerSaveHintTimeout();
+
+  watch(
+    () => item.value,
+    () => {
+      itemHastChanged.value = true;
+    },
+    { deep: true }
+  );
 });
 
 const emitClose = () => {
+  if (!itemHastChanged.value) {
+    emit("close");
+    item.value = props.itemPlaceholder;
+    return;
+  }
+
   const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
     item.value = props.itemPlaceholder;

@@ -2,7 +2,7 @@
   <ClientOnly>
     <div class="wrapper has-bg-grey">
       <div class="has-bg-grey py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
-        <v-row class="align-center">
+        <v-row class="align-center register-hint">
           <v-col md="8" class="flex-column justify-start text-h3 is-dark-grey font-weight-bold">
             <div>Deine Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
@@ -173,14 +173,14 @@ const currentRoute = computed(() => {
   @include md
     padding: 0 1rem
 
+  .register-hint
+    @include md
+      flex-direction: column
+      justify-content: stretch
 
-.register-button
-  width: inherit
-
-  @include md
-    justify-content: stretch
-    a
-      flex: 1
+      .register-button
+        a
+          flex: 1
 
 .footer-content
   .footer-content-row
