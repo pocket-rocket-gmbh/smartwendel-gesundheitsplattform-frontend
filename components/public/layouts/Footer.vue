@@ -4,7 +4,7 @@
       <div class="has-bg-grey py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
         <v-row class="align-center register-hint">
           <v-col md="8" class="flex-column justify-start text-h3 is-dark-grey font-weight-bold">
-            <div>Deine Angebot fehlt?</div>
+            <div>Dein Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
           <v-col class="d-flex px-0 register-button">
