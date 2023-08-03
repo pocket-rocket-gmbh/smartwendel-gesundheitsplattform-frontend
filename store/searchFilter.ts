@@ -250,5 +250,17 @@ export const useFilterStore = defineStore({
     toggleSort() {
       this.filterSort = this.filterSort === "Absteigend" ? "Aufsteigend" : "Absteigend";
     },
+    resetAllFilters() {
+      this.currentSearchTerm = "";
+      this.currentTags = [];
+      this.currentZip = null;
+      this.filterSort = "Absteigend";
+      this.loading = false;
+      this.mapFilter = null;
+      this.currentKinds = [];
+      this.allResults = [];
+      this.filteredResults = [];
+      this.onlySearchInTitle = false;
+    },
   },
 });
