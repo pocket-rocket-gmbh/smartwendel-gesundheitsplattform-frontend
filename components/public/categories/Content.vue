@@ -14,6 +14,6 @@ const props = defineProps<{
 }>();
 
 const filteredSubCategories = computed(() => {
-  return props.subCategories.filter((category: any) => category?.sub_sub_categories?.length);
+  return props.subCategories?.filter((category: any) => category?.sub_sub_categories?.length);
 });
 </script>
