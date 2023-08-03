@@ -7,9 +7,6 @@
         </v-col>
       </v-row>
       <v-row>
-        {{ filterStore.currentTags }}
-      </v-row>
-      <v-row>
         <v-col class="align-end">
           <div class="field">
             <label class="label is-white">
