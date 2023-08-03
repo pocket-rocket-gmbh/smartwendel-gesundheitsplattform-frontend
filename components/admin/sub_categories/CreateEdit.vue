@@ -1,6 +1,19 @@
 <template>
   <CreateEdit v-slot="slotProps" :size="800" :height="600">
-    <TextEditor v-model="slotProps.item.description" />
+    <v-card-text>
+      <div class="field">
+        <v-text-field
+          v-model="slotProps.item.name"
+          hide-details="auto"
+          label="Name der Kategorie"
+          :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+        />
+      </div>
+    </v-card-text>
+
+    <div class="pa-4">
+      <TextEditor v-model="slotProps.item.description" height="325px" />
+    </div>
   </CreateEdit>
 </template>
 <script lang="ts" setup></script>

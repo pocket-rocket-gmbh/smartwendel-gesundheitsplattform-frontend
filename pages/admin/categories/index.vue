@@ -20,41 +20,36 @@
       @entry-moved="handleMove"
     />
 
-    <AdminCategoriesAddSubCategories
-      v-if="addSubCategoriesDialogOpen"
-      :category-id="itemId"
-      @close="handleDialogClosed"
-      @refreshCollection="useNuxtApp().$bus.$emit('triggerGetItems', null)"
-    />
-
     <AdminCategoriesCreateEdit
       :item-id="itemId"
       v-if="createEditDialogOpen"
       @close="handleNewAreaAdded"
+      @save="handleItemSaved"
       :item-placeholder="itemPlaceholder"
       endpoint="categories"
       concept-name="Bereich"
-    />
-
-    <AdminSubSubCategoriesCreateEdit
-      :item-id="itemId"
-      v-if="createEditSubDialogOpen"
-      :item-placeholder="itemPlaceholder"
-      @close="handleSubCategoryClose"
-      :endpoint="`categories/${itemId}/sub_categories/${subCategoryId}`"
-      :overwrite-get-item-endpoint="`categories/${subSubCategoryId}`"
-      :overwrite-update-item-endpoint="`categories/${subSubCategoryId}`"
-      concept-name="Unter-Kategorien"
     />
     <AdminSubCategoriesCreateEdit
       :item-id="itemId"
       v-if="createEditCategoryDialogOpen"
       :item-placeholder="itemPlaceholder"
       @close="handleCategoryClose"
+      @save="handleItemSaved"
       :endpoint="`categories`"
       :overwrite-get-item-endpoint="`categories/${subCategoryId}`"
       :overwrite-update-item-endpoint="`categories/${subCategoryId}`"
       concept-name="Kategorien"
+    />
+    <AdminSubSubCategoriesCreateEdit
+      :item-id="itemId"
+      v-if="createEditSubDialogOpen"
+      :item-placeholder="itemPlaceholder"
+      @close="handleSubCategoryClose"
+      @save="handleItemSaved"
+      :endpoint="`categories/${itemId}/sub_categories/${subCategoryId}`"
+      :overwrite-get-item-endpoint="`categories/${subSubCategoryId}`"
+      :overwrite-update-item-endpoint="`categories/${subSubCategoryId}`"
+      concept-name="Unter-Kategorien"
     />
 
     <DeleteItem
@@ -105,27 +100,9 @@ const itemPlaceholder = ref({
   description: "",
 });
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
-  createEditDialogOpen.value = true;
-};
-
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
-};
-
-const openAddSubCategoriesDialog = (id: string) => {
-  itemId.value = id;
-  addSubCategoriesDialogOpen.value = true;
-};
-
-const handleDialogClosed = () => {
-  dataTable.value.resetActiveItems();
-  itemId.value = null;
-  createEditDialogOpen.value = false;
-  confirmDeleteDialogOpen.value = false;
-  addSubCategoriesDialogOpen.value = false;
 };
 
 const getItems = async (endpoint = "categories") => {
@@ -166,7 +143,12 @@ const getItems = async (endpoint = "categories") => {
       layer: 0,
       menuOrder: category.menu_order,
       addEntryButtonText: "Neue Kategorie hinzufügen",
-      canAddAdditionalData: true,
+      additionalData: {
+        type: "raw",
+        value: category.description,
+      },
+      specialActionOnEditClick: "openMainModal",
+      canAddAdditionalData: false,
       next: [],
     };
 
@@ -194,6 +176,10 @@ const getItems = async (endpoint = "categories") => {
         menuOrder: subCategory.menu_order,
         layer: 1,
         addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
+        additionalData: {
+          type: "raw",
+          value: subCategory.description,
+        },
         specialActionOnEditClick: "openCategoriesModal",
         canAddAdditionalData: false,
         next: [],
@@ -218,6 +204,10 @@ const getItems = async (endpoint = "categories") => {
           title: subSubCategory.name,
           layer: 2,
           menuOrder: subSubCategory.menu_order,
+          additionalData: {
+            type: "raw",
+            value: subSubCategory.description,
+          },
           specialActionOnEditClick: "openSubCategoriesModal",
           canAddAdditionalData: false,
         });
@@ -238,6 +228,9 @@ const handleEditClick = (action: string, itemIds: string[], layer: number) => {
     itemId.value = itemIds[1];
     subCategoryId.value = itemIds[0];
     createEditCategoryDialogOpen.value = true;
+  } else if (action === "openMainModal") {
+    itemId.value = itemIds[0];
+    createEditDialogOpen.value = true;
   }
 };
 
@@ -300,8 +293,11 @@ const deleteItemComplete = () => {
 };
 
 const handleNewAreaAdded = () => {
+  itemId.value = null;
   createEditDialogOpen.value = false;
+};
 
+const handleItemSaved = () => {
   getItems();
 };
 
@@ -310,16 +306,12 @@ const handleSubCategoryClose = () => {
   subCategoryId.value = null;
   subSubCategoryId.value = null;
   createEditSubDialogOpen.value = false;
-
-  getItems();
 };
 
 const handleCategoryClose = () => {
   itemId.value = null;
   subCategoryId.value = null;
   createEditCategoryDialogOpen.value = false;
-
-  getItems();
 };
 
 const handleMove = async (

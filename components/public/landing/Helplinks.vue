@@ -48,7 +48,7 @@ export default defineComponent({
       {
         content: {
           heading: "Rettungsdienste",
-          image: image2,
+          image: image3,
           description:
             "Rufe den Rettungsdienst, wenn Du akut medizinische Hilfe benötigst. Egal ob es sich um die Folgen eines Unfalls handelt oder plötzliche starke gesundheitliche Beschwerden auftreten.",
           linkText: "Notruf 112",
@@ -58,7 +58,7 @@ export default defineComponent({
       {
         content: {
           heading: "Apothekennotdienst",
-          image: image3,
+          image: image2,
           description:
             "Es ist Wochenende und Du benötigst dringend Medikamente? Rufe sofort den Apothekennotdienst an und erfahre, welche Apotheke im Landkreis Sankt Wendel für Dich da ist.",
           linkText: "Notruf 22833",
