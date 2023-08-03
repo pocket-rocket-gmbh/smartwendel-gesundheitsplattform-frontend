@@ -31,6 +31,7 @@
       :item-id="itemId"
       v-if="createEditDialogOpen"
       @close="handleNewAreaAdded"
+      @save="handleItemSaved"
       :item-placeholder="itemPlaceholder"
       endpoint="categories"
       concept-name="Bereich"
@@ -166,7 +167,12 @@ const getItems = async (endpoint = "categories") => {
       layer: 0,
       menuOrder: category.menu_order,
       addEntryButtonText: "Neue Kategorie hinzufügen",
-      canAddAdditionalData: true,
+      additionalData: {
+        type: "raw",
+        value: category.description,
+      },
+      specialActionOnEditClick: "openMainModal",
+      canAddAdditionalData: false,
       next: [],
     };
 
@@ -194,6 +200,10 @@ const getItems = async (endpoint = "categories") => {
         menuOrder: subCategory.menu_order,
         layer: 1,
         addEntryButtonText: "Neue Unter-Kategorie hinzufügen",
+        additionalData: {
+          type: "raw",
+          value: subCategory.description,
+        },
         specialActionOnEditClick: "openCategoriesModal",
         canAddAdditionalData: false,
         next: [],
@@ -218,6 +228,10 @@ const getItems = async (endpoint = "categories") => {
           title: subSubCategory.name,
           layer: 2,
           menuOrder: subSubCategory.menu_order,
+          additionalData: {
+            type: "raw",
+            value: subSubCategory.description,
+          },
           specialActionOnEditClick: "openSubCategoriesModal",
           canAddAdditionalData: false,
         });
@@ -238,6 +252,9 @@ const handleEditClick = (action: string, itemIds: string[], layer: number) => {
     itemId.value = itemIds[1];
     subCategoryId.value = itemIds[0];
     createEditCategoryDialogOpen.value = true;
+  } else if (action === "openMainModal") {
+    itemId.value = itemIds[0];
+    createEditDialogOpen.value = true;
   }
 };
 
@@ -300,8 +317,13 @@ const deleteItemComplete = () => {
 };
 
 const handleNewAreaAdded = () => {
+  itemId.value = null;
   createEditDialogOpen.value = false;
 
+  getItems();
+};
+
+const handleItemSaved = () => {
   getItems();
 };
 

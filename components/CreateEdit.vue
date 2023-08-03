@@ -44,7 +44,7 @@ import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
 import { CreateEditFacility } from "~/types/facilities";
 
-const emit = defineEmits(["close", "hasChanged"]);
+const emit = defineEmits(["close", "hasChanged", "save"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -209,7 +209,7 @@ const save = async () => {
   if (result.status === ResultStatus.SUCCESSFUL) {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
     itemHastChanged.value = false;
-    // emit("close");
+    emit("save");
   } else {
     errors.value = result.data;
   }
