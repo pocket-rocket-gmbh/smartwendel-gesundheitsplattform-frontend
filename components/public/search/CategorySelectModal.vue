@@ -94,20 +94,22 @@ const resetSearchTerm = () => {
 };
 
 const handleOptionSelect = (option: Filter) => {
-  const previous = { ...selectedFilter.value };
-  selectedFilter.value = option;
+  if (selectedFilter.value && selectedFilter.value.id !== option.id) {
+    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
 
-  const previousIndex = props.modelValue.findIndex((item) => item === previous.id);
+    if (indexOfAlreadySetFilter !== -1) {
+      props.modelValue.splice(indexOfAlreadySetFilter, 1);
+    }
+  }
+
+  const previousIndex = props.modelValue.findIndex((item) => item === option.id);
 
   if (previousIndex !== -1) {
     props.modelValue.splice(previousIndex, 1);
     selectedFilter.value = null;
-    emit("update:modelValue", props.modelValue);
-    return;
-  }
-
-  if (selectedFilter.value) {
-    props.modelValue.push(selectedFilter.value.id);
+  } else if (option) {
+    props.modelValue.push(option.id);
+    selectedFilter.value = option;
   }
 
   emit("update:modelValue", props.modelValue);
