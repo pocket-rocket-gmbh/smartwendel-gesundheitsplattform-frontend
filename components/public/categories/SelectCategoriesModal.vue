@@ -15,7 +15,7 @@
       </v-toolbar>
 
       <div class="menu-items">
-        <div v-for="item in visibleSubCategories" @click="setSubCategoryAndScroll(item?.id)" class="menu-item">
+        <div v-for="item in props.subCategories" @click="setSubCategoryAndScroll(item?.id)" class="menu-item">
           {{ item?.name }}
         </div>
       </div>
@@ -28,10 +28,6 @@ const props = defineProps<{
   subCategories: any;
   selectedId: string;
 }>();
-
-const visibleSubCategories = computed(() => {
-  return props.subCategories.filter((category: any) => category?.sub_sub_categories?.length);
-});
 
 const emit = defineEmits<{
   (event: "setCategoryAndScroll", id: string): void;
