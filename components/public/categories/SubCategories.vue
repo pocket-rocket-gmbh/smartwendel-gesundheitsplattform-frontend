@@ -1,5 +1,5 @@
 <template>
-  <div class="sub-categories-wrapper" v-if="subSubCategories?.length > 0">
+  <div class="sub-categories-wrapper">
     <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')">
       <v-col cols="12" md="10" class="d-flex is-dark-grey justify-center">
         <div>

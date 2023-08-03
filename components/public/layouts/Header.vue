@@ -27,11 +27,8 @@
         <div class="menu-bar-wrapper">
           <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
             <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
-              <span
-                class="px-5 is-dark-grey"
-                :class="[selectedId === item?.id ? 'text-decoration-underline' : '']"
-                v-show="item.sub_sub_categories.length > 0"
-                >{{ item?.name }}
+              <span class="px-5 is-dark-grey" :class="[selectedId === item?.id ? 'text-decoration-underline' : '']">
+                {{ item?.name }}
               </span>
             </div>
           </div>
