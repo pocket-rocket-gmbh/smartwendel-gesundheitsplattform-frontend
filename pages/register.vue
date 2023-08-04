@@ -3,7 +3,7 @@
     <v-col sm="3" md="4" offset-sm="4">
       <v-card elevation="10" :class="['pa-6', {'shake' : animated}]">
         <img class="is-fullwidth" src="~/assets/images/logo.png" />
-        <div v-if="registerSuccessful" class="mt-3">
+        <div v-if="!registerSuccessful" class="mt-3">
           <div class="field">
             <v-text-field
               v-model="careFacilityName"
@@ -121,7 +121,7 @@
         <div v-else align="center">
           Deine Registrierung war erfolgreich.<br/>Wir haben Dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt.
         </div>
-        <v-btn block depressed to="/" class="mt-2">zurück</v-btn>
+        <v-btn block depressed to="/login" class="mt-2">Jetzt anmelden</v-btn>
       </v-card>
     </v-col>
   </v-row>
