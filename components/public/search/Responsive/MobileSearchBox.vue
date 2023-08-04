@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col class="align-end">
-          <PublicSearchCategorySelectModal v-model="filterStore.currentTags" />
+          <PublicSearchCategorySelectModal v-model="filterStore.currentTags" :filter-kind="filterKind" />
         </v-col>
       </v-row>
       <v-row>
