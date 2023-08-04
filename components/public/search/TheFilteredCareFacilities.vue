@@ -122,9 +122,6 @@ const toggleFilterSort = () => {
 .entries
   width: 100%
 
-  @include md
-    padding: 1rem
-
 .actions
   display: flex
   align-items: center
