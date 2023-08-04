@@ -1,30 +1,47 @@
 <template>
-  <header class="background">
-    <v-container>
-      <v-row>
-        <v-col md="7">
-          <PublicLandingHeader />
-          <PublicLandingChooseCategory />
-        </v-col>
-      </v-row>
-    </v-container>
-  </header>
+  <div>
+    <div class="background">
+      <PublicLandingHeader />
+    </div>
+    <PublicLandingCurrentNotes />
+    <div class="divider ma-10"></div>
+    <PublicLandingCategories />
+    <PublicLandingCurrentRecommendations />
+    <PublicLandingCurrentEvents />
+    <div class="divider ma-10"></div>
+    <PublicLandingHelplinks />
+  </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-})
-</script>
+<script lang="ts"></script>
 
-<style lang="sass" scoped>
-header
-  height: 100vh
-  // slide into second navbar
-  margin-top: -50px
-.background
-  background: url('@/assets/images/home.jpg') no-repeat center center fixed
-  -webkit-background-size: cover
-  -moz-background-size: cover
-  -o-background-size: cover
-  background-size: cover
+<style lang="scss" scoped>
+@import "@/assets/sass/base/breakpoints";
+@import "@/assets/sass/main.sass";
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  background: url("../assets/images/home.jpg") no-repeat center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right top;
+
+  @include sm {
+    background-position: center;
+  }
+}
+
+.row {
+  @include sm {
+    max-width: 100%;
+    margin: 0;
+  }
+}
+
+.header-wrapper {
+  @include sm {
+    padding: 0;
+  }
+}
 </style>

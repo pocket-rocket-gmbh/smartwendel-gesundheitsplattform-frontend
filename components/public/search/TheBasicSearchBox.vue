@@ -1,69 +1,49 @@
 <template>
-  <div class="basic-search-box">
-    <h2 class="is-uppercase">Wählen Sie hier Ihre Suchkriterien aus</h2>
-
-    <v-row>
-      <v-col>
-        <div class="field">
-          <label class="label">Einrichtung, Arzt, Name etc.</label>
-          <input type="text" class="input" />
-        </div>
-      </v-col>
-      <v-col>
-        <PublicFilterSelect
-          :key="currentCategoryId"
-          color="is-white"
-          filter-name="category"
-          label="Leistungsbereich"
-          endpoint="categories"
-        />
-      </v-col>
-      <v-col>
-        <div class="field">
-          <label class="label">Ort, Adresse, PLZ</label>
-          <input type="text" class="input" />
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col align="right">
-        <v-btn
-          variant="flat"
-          color="info"
-          rounded="pill"
-        >
-          Suche starten
-        </v-btn>
-      </v-col>
-    </v-row>
-  </div>
+  <PublicSearchResponsiveMobileSearchBox
+    v-if="breakPoints.isMobile.value"
+    v-bind="{ ...$props }"
+    @toggle-map="emit('toggleMap')"
+  />
+  <PublicSearchResponsiveDesktopSearchBox v-else v-bind="{ ...$props }" @toggle-map="emit('toggleMap')" />
 </template>
-s
-<script lang="ts">
-import { useFilterStore } from '@/store/filter';
+<script setup lang="ts">
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+import { FilterKind, useFilterStore } from "~/store/searchFilter";
 
-export default defineComponent({
-  setup () {
-    const searchQuery = ref('')
-    const filterStore = useFilterStore()
+const props = defineProps<{
+  title: string;
+  subTitle: string;
+  filterKind: FilterKind;
+  mapControls?: boolean;
+  showMap?: boolean;
+}>();
 
-    const currentCategoryId = computed(() => {
-      return filterStore.currentCategoryId
-    })
+const emit = defineEmits<{
+  (event: "toggleMap"): void;
+}>();
 
-    return {
-      useFilterStore,
-      searchQuery,
-      currentCategoryId
-    }
+const breakPoints = useBreakpoints();
+const filterStore = useFilterStore();
+
+watch(
+  () => filterStore.currentTags,
+  debounce(() => {
+    filterStore.loadAllResults();
+  }),
+  {
+    deep: true,
   }
-})
+);
+
+watch(
+  () => filterStore.currentZip,
+  debounce(() => {
+    filterStore.loadAllResults();
+  }),
+  {
+    deep: true,
+  }
+);
 </script>
 
-<style lang="sass" scoped>
-.basic-search-box
-  background: linear-gradient(180deg, #007EC3 0%, #005180 100%)
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
-  border-radius: 20px
-  padding: 20px
-</style>
+<style lang="sass" scoped></style>

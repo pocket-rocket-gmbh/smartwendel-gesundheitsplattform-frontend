@@ -1,32 +1,52 @@
 <template>
-  <img src="@/assets/images/logo.png" class="logo my-10" />
-  <h1>
-    Ihre Gesundheits plattform im Landkreis St. Wendel
-  </h1>
-  <p>Finden Sie Informationen zu Gesundheitsthemen und Präventionsmaßnahmen sowie unser umfangreiche Pflegeangebote aus der Region St. Wendel</p>
+  <div class="wrapper">
+    <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
+    <PublicLandingChooseCategory />
+    <p class="has-font-size-medium sub-title">
+      Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.
+    </p>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  setup() {
-  },
-})
-</script>
+<script lang="ts" setup></script>
 
-<style lang="sass" scoped>
-.logo
-  width: 30%
-h1
-  color: #015281
-  font-size: 55px
-  font-weight: 600
-  text-transform: uppercase
-  line-height: 120%
-p
-  color: #015281
-  font-style: normal
-  font-weight: 400
-  font-size: 15px
-  line-height: 160%
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+  justify-content: center;
+  width: 40%;
+  padding: 0 0 0 5rem;
+
+  @include md {
+    padding: 1rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .title {
+    color: white;
+    font-size: 55px;
+    text-transform: uppercase;
+    line-height: 150%;
+  }
+  .sub-title {
+    color: white;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+    width: 75%;
+
+    @include md {
+      width: 100%;
+    }
+  }
+  .header {
+    margin-top: 20%;
+  }
+}
 </style>

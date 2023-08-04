@@ -3,11 +3,11 @@
     v-model="dialog"
     width="700"
     transition="dialog-bottom-transition"
-    @click:outside="emitClose()"
+    @click:outside="close()"
   >
     <v-card class="dialog-700">
       <v-card-title class="text-h5">
-        Leistungsarten
+        {{ category?.name }}: Kategorien
       </v-card-title>
 
       <v-btn
@@ -15,44 +15,50 @@
         elevation="0"
         variant="outlined"
         class="mb-1 ml-4"
-        @click="itemId = null; createEditDialogueOpen = true"
+        @click="itemId = null; createEditDialogOpen = true"
       >
-        Neue Leistungsart
+        Neue Kategorie
       </v-btn>
 
       <AdminSubCategoriesCreateEdit
         :item-id="itemId"
-        v-if="createEditDialogueOpen"
+        v-if="createEditDialogOpen"
         :item-placeholder="itemPlaceholder"
-        @close="createEditDialogueOpen = false"
+        @close="createEditDialogOpen = false; itemId = null;"
         :endpoint="`categories/${categoryId}`"
         :overwrite-get-item-endpoint="`categories/${itemId}`"
         :overwrite-update-item-endpoint="`categories/${itemId}`"
-        concept-name="Leistungsarten"
+        concept-name="Kategorien"
+      />
+
+      <AdminCategoriesAddSubSubCategories
+        v-if="addSubSubCategoriesDialogOpen"
+        :category-id="categoryId"
+        :sub-category-id="itemId"
+        @close="itemId = null; addSubSubCategoriesDialogOpen = false;"
       />
 
       <DeleteItem
-        v-if="confirmDeleteDialogueOpen"
-        @close="itemId = null; confirmDeleteDialogueOpen = false"
+        v-if="confirmDeleteDialogOpen"
+        @close="itemId = null; confirmDeleteDialogOpen = false"
         :item-id="itemId"
         endpoint="categories"
-        term="diesen Leistungsbereich"
+        term="diese Kategorie"
       />
-      
       <DataTable
         :fields="fields"
         :endpoint="`categories/${categoryId}/sub_categories`"
         overwrite-move-endpoint="categories"
         default-sort-order="asc"
         default-sort-by="menu_order"
-        @openCreateEditDialogue="openCreateEditDialogue"
-        @openDeleteDialogue="openDeleteDialogue"
+        @openCreateEditDialog="openCreateEditDialog"
+        @openDeleteDialog="openDeleteDialog"
+        @openAddSubSubCategoriesDialog="openAddSubSubCategoriesDialog"
       />
 
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn
-          text
           @click="emitClose()"
         >
           Schließen
@@ -71,46 +77,72 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const dialog = ref(true)
-    const createEditDialogueOpen = ref(false)
-    const confirmDeleteDialogueOpen = ref(false)
+    const createEditDialogOpen = ref(false)
+    const confirmDeleteDialogOpen = ref(false)
+    const addSubSubCategoriesDialogOpen = ref(false)
     const itemId = ref(null)
 
     const fields = ref([
       { text: '', type: 'move_down' },
       { text: '', type: 'move_up' },
-      { text: 'Name', value: 'name', type: 'string' },
-      { text: 'Leistungen', value: 'tags', type: 'array' }
+      { text: 'Bezeichnung', value: 'name', type: 'string' },
+      { text: 'Unter-Kategorien', value: 'sub_sub_categories', type: 'associations_name' },
+      { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubSubCategoriesDialog', tooltip: 'Unter-Kategorien hinzufügen' },
     ])
 
-    const openCreateEditDialogue = (id:string) => {
+    const openCreateEditDialog = (id:string) => {
       itemId.value = id
-      createEditDialogueOpen.value = true
+      createEditDialogOpen.value = true
     }
 
-    const openDeleteDialogue = (id:string) => {
+    const category = ref(null)
+    const api = useCollectionApi()
+    api.setBaseApi(usePrivateApi())
+
+    const getCategory = async () => {
+      api.setEndpoint(`categories/${props.categoryId}`)
+      await api.getItem()
+      category.value = api.item.value as any
+    }
+
+    const openDeleteDialog = (id:string) => {
       itemId.value = id
-      confirmDeleteDialogueOpen.value = true
+      confirmDeleteDialogOpen.value = true
     }
 
     const itemPlaceholder = ref({
       name: '',
-      tags: []
+      scope: 'care_facility'
     })
+
+    const openAddSubSubCategoriesDialog = (id:String) => {
+      itemId.value = id
+      addSubSubCategoriesDialogOpen.value = true
+    }
 
     const emitClose = () => {
       emit('close')
     }
 
+    onMounted(() => {
+      getCategory()
+    
+    })
+    
     return {
       dialog,
       emitClose,
-      createEditDialogueOpen,
-      confirmDeleteDialogueOpen,
-      openCreateEditDialogue,
-      openDeleteDialogue,
+      close,
+      createEditDialogOpen,
+      confirmDeleteDialogOpen,
+      openCreateEditDialog,
+      openDeleteDialog,
+      addSubSubCategoriesDialogOpen,
+      openAddSubSubCategoriesDialog,
       fields,
       itemId,
-      itemPlaceholder
+      itemPlaceholder,
+      category
     }
   }
 })

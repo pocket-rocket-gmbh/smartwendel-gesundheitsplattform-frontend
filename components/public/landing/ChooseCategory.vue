@@ -1,85 +1,252 @@
 <template>
-  <div class="choose-category" v-if="categories.length > 0">
-    <div class="category-input py-2 px-4 mt-4" @click="chooseBoxOpen = !chooseBoxOpen">Leistung auswählen</div>
-    <transition>
-      <div class="choose-box py-2 px-4" v-if="chooseBoxOpen">
-        <div v-for="category in categories" :key="category.id">
-          <div class="category-headline mb-1"><i>{{ category.name }}</i></div>
-          <div class="ml-5" v-if="category.sub_categories.length > 0">
-            <div class="pa-2 selectable" v-for="sub_category in category.sub_categories" :key="sub_category.id" @click="setFilterAndMove(category.id, sub_category.id)">{{ sub_category.name }}</div>
+  <div class="choose-category">
+    <div class="category-input is-dark-grey py-2">
+      <form @submit.prevent="routeToResults()">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            v-model="filterStore.currentSearchTerm"
+            class="input"
+            placeholder="Suchebegriff eingeben"
+            @input="handleInput"
+            @click="showPopover = true"
+          />
+          <img
+            class="icon"
+            :src="searchIcon"
+            @click="
+              routeToResults();
+              trackSearch();
+            "
+          />
+        </div>
+      </form>
+
+      <div v-show="filterStore.currentSearchTerm && showPopover" class="search-results-popover" ref="popoverParentRef">
+        <div class="wrapper">
+          <div v-if="filterStore.loading" class="result">
+            <LoadingSpinner :style="'inline'">Suchergebnisse werden geladen...</LoadingSpinner>
           </div>
+          <template v-else>
+            <div
+              class="result"
+              @click.stop="
+                routeToResults();
+                trackSearch();
+              "
+            >
+              <div class="icon">
+                <img :src="getIconSourceFor()" />
+              </div>
+              <div class="name">{{ filterStore.currentSearchTerm }}</div>
+            </div>
+            <div
+              class="result"
+              v-for="result in filterStore.filteredResults"
+              :key="result.id"
+              @click.stop="
+                routeToResults(result);
+                trackSearch();
+              "
+            >
+              <div class="icon">
+                <img :src="getIconSourceFor(result.kind)" />
+              </div>
+              <div class="name">{{ result.name }}</div>
+            </div>
+          </template>
         </div>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { useFilterStore } from '@/store/filter'
-export default defineComponent({
-  setup () {
-    const chooseBoxOpen = ref(false)
+<script setup lang="ts">
+import { onClickOutside } from "@vueuse/core";
+import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
+import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
+import newsIcon from "~/assets/icons/facilityTypes/news.svg";
+import eventsIcon from "~/assets/icons/facilityTypes/events.svg";
+import searchIcon from "~/assets/icons/facilityTypes/search.svg";
 
-    const categoriesApi = useCollectionApi()
-    categoriesApi.setBaseApi(usePublicApi())
-    categoriesApi.setEndpoint(`categories`)
-    const categories = categoriesApi.items
-    const router = useRouter()
+const filterStore = useFilterStore();
 
-    const getCategories = async () => {
-      const options = { page: 1, per_page: 25, sort_by: 'menu_order', sort_order: 'ASC', searchQuery: null, concat: false, filters: [] }
-      await categoriesApi.retrieveCollection(options)
-    }
+const api = useCollectionApi();
+api.setBaseApi(usePublicApi());
 
-    const setFilterAndMove = (categoryId:string, subCategoryId: string) => {
-      useFilterStore().$patch({
-        'currentCategoryId': categoryId,
-        'currentSubCategoryId': subCategoryId
-      })
+const router = useRouter();
 
-      router.push({ path: '/public/search'})
-    }
+const trackSearch = () => {
+  window._paq.push(["trackEvent", "Gesucht:", `${filterStore.currentSearchTerm}`]);
+};
+const popoverParentRef = ref();
+const showPopover = ref(false);
 
-    onMounted(() => {
-      getCategories()
-    })
-
-    return {
-      chooseBoxOpen,
-      categories,
-      setFilterAndMove
-    }
+const routeToResults = (result?: Facility) => {
+  if (!result) {
+    filterStore.currentSearchTerm = filterStore.currentSearchTerm;
+    router.push({ path: "/public/search" });
+    return;
   }
-})
+
+  if (result.kind === "facility") {
+    return router.push({ path: `/public/care_facilities/${result.id}` });
+  }
+  if (result.kind === "course" || result.kind === "event") {
+    return router.push({ path: `/public/care_facilities/${result.id}` });
+  }
+  if (result.kind === "news") {
+    return router.push({ path: `/public/care_facilities/${result.id}` });
+  }
+
+  router.push({ path: "/public/search" });
+};
+
+onClickOutside(popoverParentRef, () => (showPopover.value = false));
+
+const getIconSourceFor = (kind?: FilterKind) => {
+  if (kind === "facility") return facilityIcon;
+  if (kind === "course" || kind === "event") return eventsIcon;
+  if (kind === "news") return newsIcon;
+  return searchIcon;
+};
+
+const handleInput = () => {
+  filterStore.onlySearchInTitle = true;
+  filterStore.loadFilteredResults();
+};
+
+onMounted(async () => {
+  filterStore.currentKinds = [];
+  filterStore.currentTags = [];
+  filterStore.currentZip = null;
+  filterStore.onlySearchInTitle = true;
+  await filterStore.loadAllResults();
+});
 </script>
 
-<style lang="sass" scoped>
-.choose-category
-  position: relative
-  width: 50%
-  .category-input
-    border: 2px solid #015281
-    border-radius: 58px
-    cursor: pointer
-    color: #015281
-    font-weight: 700
-  .choose-box
-    border-radius: 20px
-    background: white
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
-    color: #015281
-    position: absolute
-    top: 50px
-    left: 0
-    width: 100%
-    z-index: 100
-    font-size: 18px
-    .selectable
-      cursor: pointer
-      &:hover
-        background: lightgrey
-  .category-headline
-    text-transform: uppercase
-    font-weight: 700
+<style lang="scss" scoped>
+@import "@/assets/sass/main";
+
+.choose-category {
+  position: relative;
+  flex-direction: row;
+
+  .category-input {
+    border: 2px solid white;
+    background: white;
+    height: 50px;
+    border-radius: 50px;
+    cursor: pointer;
+    color: grey;
+    width: 70%;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+
+    form {
+      flex: 1;
+
+      .input-wrapper {
+        display: flex;
+        padding: 0 1rem;
+        align-items: center;
+        flex: 1;
+
+        .icon {
+          width: 1.25rem;
+        }
+
+        .input {
+          flex: 1;
+          outline: none;
+          border: none;
+
+          &::placeholder {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+
+    @include md {
+      width: 100%;
+    }
+  }
+
+  .search-results-popover {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+    width: 70%;
+
+    .wrapper {
+      max-height: 300px;
+      overflow-y: scroll;
+      padding-right: 0.25rem;
+
+      /* width */
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      /* Track */
+      &::-webkit-scrollbar-track {
+        background: white;
+        border-radius: 10px;
+        margin: 1rem;
+      }
+
+      /* Handle */
+      &::-webkit-scrollbar-thumb {
+        background: #d3d3d3;
+        border-radius: 10px;
+      }
+
+      /* Handle on hover */
+      &::-webkit-scrollbar-thumb:hover {
+        background: hsl(0, 0%, 73%);
+      }
+
+      .result {
+        padding: 0.75rem;
+        border-bottom: 1px solid #8ab61d;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 1.25rem;
+          }
+        }
+      }
+    }
+
+    @include md {
+      width: 100%;
+    }
+  }
+}
+.v-input__icon.v-input__icon--append-outer i {
+  font-size: 48px;
+}
 </style>

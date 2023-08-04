@@ -6,24 +6,30 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
-    'nuxt-icons'
+    'nuxt-icons',
+    '@nuxtjs/device'
   ],
+  experimental: {
+    treeshakeClientOnly: false
+  },
   runtimeConfig: {
+    PUBLIC_API_USERNAME: process.env.PUBLIC_API_USERNAME,
+    PUBLIC_API_PASSWORD: process.env.PUBLIC_API_PASSWORD,
+    REGISTER_TOKEN: process.env.REGISTER_TOKEN,
+    SENDINBLUE_API_KEY: process.env.SENDINBLUE_API_KEY,
+    LOGIN_PASSWORD: process.env.LOGIN_PASSWORD,
     public: {
-      API_BASE_URL: process.env.API_BASE_URL,
-      PUBLIC_API_USERNAME: process.env.PUBLIC_API_USERNAME,
-      PUBLIC_API_PASSWORD: process.env.PUBLIC_API_PASSWORD,
-      REGISTER_TOKEN: process.env.REGISTER_TOKEN
+      WEB_SOCKET_URL: process.env.WEB_SOCKET_URL,
+      API_BASE_URL: process.env.API_BASE_URL
     }
   },
   app: {
     head: {
       charset: 'utf-16',
-      viewport: 'width=500, initial-scale=1',
-      title: 'SMART WENDELER LAND',
+      title: 'gesundesWND',
       meta: [
         { property: 'og:type', content: 'website' },
-        { property: 'og:title', content: 'SMART WENDELER LAND' },
+        { property: 'og:title', content: 'gesundesWND' },
         { property: 'og:description', content: 'Gesundheitsplattform' }
       ],
     }

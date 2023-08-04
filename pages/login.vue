@@ -1,35 +1,38 @@
 <template>
-  <v-row>
+  <v-row class="my-15">
     <v-col sm="3" md="4" offset-sm="4">
-      <v-card  :class="['pa-6', {'shake' : animated}]">
-        <img class="is-fullwidth" src="~/assets/images/logo.png" />
-
-        <div class="mb-3">
-          <v-text-field v-model="email"
-            class="pt-6"
-            label="E-Mail Adresse"
-            hide-details="auto"
-          />
-        </div>
-        <div class="mb-3">
-          <v-text-field v-model="password"
-            type="password"
-            label="Passwort"
-            :error-messages="useErrors().mappedErrorCode(errors)"
-            hide-details="auto"
-          />
-        </div>
-        <v-btn color="primary" block depressed @click="auth">Login</v-btn>
-        <nuxt-link to="/password_forgotten"><div align="center" class="mt-2">Passwort vergessen?</div></nuxt-link>
-        <nuxt-link to="/register"><div align="center" class="mt-6">Noch keinen Account? Jetzt registrieren!</div></nuxt-link>
-      </v-card>
+      <v-form @submit.prevent="auth">
+        <v-card  :class="['pa-6', {'shake' : animated}]">
+          <img class="is-fullwidth" src="~/assets/images/logo.png" />
+          <div class="mb-3">
+            <v-text-field v-model="email"
+              class="pt-6"
+              label="E-Mail Adresse"
+              hide-details="auto"
+              @keyup.enter="auth"
+            />
+          </div>
+          <div class="mb-3">
+            <v-text-field v-model="password"
+              type="password"
+              label="Passwort"
+              :error-messages="useErrors().mappedErrorCode(errors)"
+              hide-details="auto"
+            />
+          </div>
+          <v-btn color="primary" block depressed type="submit">Login</v-btn>
+          <nuxt-link to="/password_forgotten"><div align="center" class="mt-2">Passwort vergessen?</div></nuxt-link>
+          <nuxt-link to="/register"><div align="center" class="mt-6">Noch keinen Account? Jetzt registrieren!</div></nuxt-link>
+        </v-card>
+      </v-form>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import { useUserStore } from '@/store/user'
-import { ResultStatus } from '@/types/serverCallResult'
+import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'Login',
@@ -50,28 +53,28 @@ export default defineComponent({
       errors.value = ''
       const data = { email: email.value, password: password.value }
 
-      const result = await privateApi?.call('post', '/auth', data)
+      const {data: result} = await axios.post<ServerCallResult>("/api/login", {data});
 
-      if (result?.status === ResultStatus.SUCCESSFUL) {
+      if (result.status === ResultStatus.SUCCESSFUL) {
         const jwt = result.data.jwt_token
 
-        if (process.client) {
-          localStorage.setItem('auth._token.jwt', jwt)
-          localStorage.setItem('smartwendelerland_gesundheitsplattform._remembered_email', email.value)
-        }
+        localStorage.setItem('auth._token.jwt', jwt)
+        localStorage.setItem('smartwendelerland_gesundheitsplattform._remembered_email', email.value)
 
         // set user
         userStore.currentUser = result.data.user
         userStore.loggedIn = true
 
         if (userStore.currentUser) {
-          // move to dashboard
+          // move to Dashboard
           if (lastRoute.value && lastRoute.value !== '/password_forgotten') {
             router.push({ path: lastRoute.value })
           } else if (result.data.user.role === 'user') {
             router.push({ path: '/' })
-          } else {
+          } else if (result.data.user.role === 'admin') {
             router.push({ path: '/admin' })
+          } else {
+            router.push({ path: '/admin/user_profile' })
           }
         }
       } else {
