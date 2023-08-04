@@ -2,7 +2,8 @@
   <div>
     <h2>Mein Profil</h2>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige als nächstes deine Einrichtung
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
+      du Kurse und Veranstaltungen sowie Beiträge anlegen.
     </v-alert>
     <h2 class="mt-5">Bitte vervollständige deine Daten und ändere dein Passwort:</h2>
     <div class="box my-15">
@@ -10,22 +11,10 @@
         <h3 class="mb-4">Persönliche Daten</h3>
         <v-row justify="center">
           <v-col>
-            <v-text-field 
-              v-model="item.firstname"
-              label="Vorname"
-            />
-            <v-text-field
-              v-model="item.lastname"
-              label="Nachname"
-            />
-            <v-text-field 
-              v-model="item.phone"
-              label="Telefonnummer*"
-            />
-            <v-text-field
-              v-model="item.email"
-              label="E-Mail *"
-            />
+            <v-text-field v-model="item.firstname" label="Vorname" />
+            <v-text-field v-model="item.lastname" label="Nachname" />
+            <v-text-field v-model="item.phone" label="Telefonnummer*" />
+            <v-text-field v-model="item.email" label="E-Mail *" />
             <h3 class="mb-4">Profilbild</h3>
             <PublicUsersProfileImage
               :preset-image-url="item.image_url"
@@ -34,36 +23,17 @@
               @save="saveUserData"
               class="my-3"
             />
-            <v-btn
-              elevation="0"
-              variant="outlined"
-              @click="saveUserData()"
-              >
-              Persönliche Daten Speichern
-            </v-btn>
+            <v-btn elevation="0" variant="outlined" @click="saveUserData()"> Persönliche Daten Speichern </v-btn>
           </v-col>
-          <v-col>    
-          </v-col>
+          <v-col> </v-col>
         </v-row>
         <v-divider class="my-5"></v-divider>
         <v-row>
           <v-col md="6">
             <h3 class="mb-4">Passwort ändern</h3>
-            <v-text-field v-model="password"
-              type="password"
-              label="Neues Passwort"
-            />
-            <v-text-field v-model="password_confirmation"
-              type="password"
-              label="Passwort Bestätigung"
-            />
-            <v-btn
-              elevation="0"
-              variant="outlined"
-              @click="updatePassword()"
-              >
-              Passwort ändern
-            </v-btn>
+            <v-text-field v-model="password" type="password" label="Neues Passwort" />
+            <v-text-field v-model="password_confirmation" type="password" label="Passwort Bestätigung" />
+            <v-btn elevation="0" variant="outlined" @click="updatePassword()"> Passwort ändern </v-btn>
           </v-col>
         </v-row>
         <v-divider class="my-5"></v-divider>
@@ -78,10 +48,10 @@
             Zu meinen Veranstaltungen
           </v-btn>
           <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('news_articles')">
-              Zu meinen Beiträgen
+            Zu meinen Beiträgen
           </v-btn>
         </div>
-<!--         <v-divider class="my-5"></v-divider>
+        <!--         <v-divider class="my-5"></v-divider>
         <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
           <h3 class="mb-4">Deine Einrichtungen:</h3>
           <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'facility')" :key="facilities.id">
@@ -163,7 +133,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useUserStore } from "@/store/user"
+import { useUserStore } from "@/store/user";
 definePageMeta({
   layout: "admin",
 });
@@ -172,68 +142,65 @@ const loading = ref(false);
 const router = useRouter();
 const setupFinished = ref(false);
 
-const goToFacility = (page:string) => {
-  router.push({ path: `/admin/${page}` })
-}
+const goToFacility = (page: string) => {
+  router.push({ path: `/admin/${page}` });
+};
 
-const currentUser = useUserStore().currentUser
+const currentUser = useUserStore().currentUser;
 const item = ref({
-  firstname: '',
-  lastname: '',
-  email:'',
-  phone: '',
-  file: '',
-  image_url: null
-})
+  firstname: "",
+  lastname: "",
+  email: "",
+  phone: "",
+  file: "",
+  image_url: null,
+});
 
+const password = ref("");
+const password_confirmation = ref("");
 
-const password = ref('')
-const password_confirmation = ref('')
-
-const api = useCollectionApi()
-api.setBaseApi(usePrivateApi())
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
 
 const getUser = async () => {
-  api.setEndpoint(`users/me`)
-  await api.getItem()
-  item.value = api.item.value
-}
+  api.setEndpoint(`users/me`);
+  await api.getItem();
+  item.value = api.item.value;
+};
 
-const setImage = (image:any) => {
-  item.value.file = image
-}
+const setImage = (image: any) => {
+  item.value.file = image;
+};
 
 const saveUserData = async () => {
-  api.setEndpoint(`users/${currentUser.id}`)
+  api.setEndpoint(`users/${currentUser.id}`);
   const data = {
     firstname: item.value.firstname,
     lastname: item.value.lastname,
     phone: item.value.phone,
     email: item.value.email,
     file: item.value.file,
-    image_url: item.value.image_url
-  }
-  await api.updateItem(data, 'Benutzer erfolgreich aktualisiert')
-}
+    image_url: item.value.image_url,
+  };
+  await api.updateItem(data, "Benutzer erfolgreich aktualisiert");
+};
 
 const updatePassword = async () => {
-  api.setEndpoint(`users/${currentUser.value}/update-password`)
+  api.setEndpoint(`users/${currentUser.value}/update-password`);
   const data = {
     password: password.value,
-    password_confirmation: password_confirmation.value
-  }
-  const result = await api.updateItem(data, 'Passwort erfolgreich geändert')
-}
+    password_confirmation: password_confirmation.value,
+  };
+  const result = await api.updateItem(data, "Passwort erfolgreich geändert");
+};
 
 onMounted(async () => {
   loading.value = true;
-  getUser()
+  getUser();
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
 });
-
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"
-
 </style>
