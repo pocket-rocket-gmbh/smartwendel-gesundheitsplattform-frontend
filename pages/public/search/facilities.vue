@@ -9,30 +9,28 @@
         @toggle-map="mapToogle"
         :filter-kind="'facility'"
       />
-      <v-container class="container limited padding">
-        <v-row class="row">
-          <v-col v-if="showSearchFilter" md="5" lg="3" class="mt-8">
-            <PublicSearchTheFilter :filterKind="'facility'" />
-          </v-col>
-          <v-col md="7" lg="9" class="filtered-items mb-10">
-            <div class="map-widget">
-              <ClientMap
-                :locations="locations"
-                v-if="showMap"
-                ref="map"
-                :auto-fit="false"
-                :center-point="{
-                  lng: 7.131735,
-                  lat: 49.523656,
-                }"
-                :min-zoom="11"
-              />
-            </div>
+      <div class="container">
+        <div class="filters" v-if="showSearchFilter">
+          <PublicSearchTheFilter :filterKind="'facility'" />
+        </div>
+        <div class="results">
+          <div class="map-widget">
+            <ClientMap
+              :locations="locations"
+              v-if="showMap"
+              ref="map"
+              :auto-fit="false"
+              :center-point="{
+                lng: 7.131735,
+                lat: 49.523656,
+              }"
+              :min-zoom="11"
+            />
+          </div>
 
-            <div class="facilities"><PublicSearchTheFilteredCareFacilities /></div>
-          </v-col>
-        </v-row>
-      </v-container>
+          <div class="facilities"><PublicSearchTheFilteredCareFacilities /></div>
+        </div>
+      </div>
     </div>
   </ClientOnly>
 </template>
@@ -109,32 +107,37 @@ onMounted(async () => {
   filterStore.loadAllResults();
 });
 
-onBeforeUnmount(()=> {
+onBeforeUnmount(() => {
   filterStore.resetAllFilters();
-})
+});
 </script>
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 
 .container
-  padding: 0
+  padding: 2rem 5rem
+  display: flex
+  gap: 1rem
+
+  @include md
+    padding: 1rem
+
+  @include sm
+    padding: 0
+
+  .filters
+    flex: 1
+
+  .results
+    flex: 2
 
   .row
     max-width: 100%
     margin: 0
+    gap: 1rem
     @include md
       margin: 0
-
-.filtered-items
-  display: flex
-  flex-direction: column
-
-  .facilities
-    margin-top: 1rem
-
-  @include md
-    padding: 0
 
   .map-widget
     align-self: stretch

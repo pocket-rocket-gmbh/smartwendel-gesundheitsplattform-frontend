@@ -241,6 +241,7 @@ onMounted(async () => {
   display: flex;
   flex-wrap: wrap;
   flex: 1;
+  padding: 0;
 
   .filter-group {
     flex: 1;

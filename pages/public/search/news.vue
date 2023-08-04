@@ -1,24 +1,26 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox title="Beiträge" sub-title="Deinen Wunschbeitrag auswählen" :filter-kind="'news'" />
-      <v-container class="container limited padding">
-        <v-row class="row mt-1">
-          <v-col v-if="showSearchFilter" md="4" lg="3" class="mt-4">
-            <PublicSearchTheFilter :filterKind="'news'" />
-          </v-col>
-          <v-col md="8" lg="9" class="filtered-items mb-10">
-            <PublicSearchTheFilteredCareFacilities />
-          </v-col>
-        </v-row>
-      </v-container>
+      <PublicSearchTheBasicSearchBox
+        title="Beiträge"
+        sub-title="Deinen Wunschbeitrag auswählen"
+        :filter-kind="'news'"
+      />
+      <div class="container">
+        <div class="filters" v-if="showSearchFilter">
+          <PublicSearchTheFilter :filterKind="'news'" />
+        </div>
+        <div class="results">
+          <PublicSearchTheFilteredCareFacilities />
+        </div>
+      </div>
     </div>
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
+import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useFilterStore } from "~/store/searchFilter";
-import { useBreakpoints, BreakPoints } from "~/composables/ui/breakPoints";
 
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
@@ -40,28 +42,35 @@ onMounted(async () => {
   filterStore.loadAllResults();
 });
 
-onBeforeUnmount(()=> {
+onBeforeUnmount(() => {
   filterStore.resetAllFilters();
-})
+});
 </script>
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 
 .container
-  padding: 0
+  padding: 2rem 5rem
+  display: flex
+  gap: 1rem
+
+  @include md
+    padding: 1rem
+
+  @include sm
+    padding: 0
+
+  .filters
+    flex: 1
+
+  .results
+    flex: 2
 
   .row
     max-width: 100%
     margin: 0
+    gap: 1rem
     @include md
       margin: 0
-
-.filtered-items
-  display: flex
-  justify-content: center
-  margin-top: 1rem
-
-  @include md
-    padding: 0
 </style>
