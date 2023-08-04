@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <v-navigation-drawer permanent>
-      <div class="d-flex justify-center">
+      <div class="d-flex">
         <router-link to="/admin">
-          <img class="mt-3 ml-3" src="~/assets/images/logo.png" width="200" />
+          <img class="mt-3 ml-4" src="~/assets/images/logo.png" width="200" />
         </router-link>
       </div>
       <v-list-item>
@@ -12,8 +12,8 @@
       </v-list-item>
       <v-divider></v-divider>
       <div v-if="!user.currentUser.is_active_on_health_scope" class="d-flex align-center">
-        <v-alert type="warning" density="compact"
-          >Du bist zur Zeit in Prüfung und nicht freigegeben.
+        <v-alert type="info" density="compact" color="grey">
+          Du bist zur Zeit in Prüfung und nicht freigegeben.
           <v-tooltip location="top" width="200">
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-information-outline</v-icon>
@@ -30,12 +30,10 @@
           <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item link to="/admin/matomo" nuxt>
-            <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken
-          </v-list-item>
-        <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
-          <v-list-item link to="/admin" nuxt>  Admin-Bereich (Change Log) </v-list-item>
+          <v-list-item link to="/admin/matomo" nuxt> <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item link to="/admin" nuxt> Admin-Bereich (Change Log) </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
           <v-list-item link to="/admin/filter/events" nuxt> Veranstaltungsfilter </v-list-item>

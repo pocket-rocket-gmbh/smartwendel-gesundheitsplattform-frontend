@@ -1,20 +1,18 @@
 <template>
   <v-app>
-    <div v-if="loading"></div>
+    <template v-if="loading"></template>
     <PublicPasswordProtection v-else-if="!authenticated" />
-    <div v-else>
+    <template v-else>
       <ClientOnly>
         <ClientSnackbar />
       </ClientOnly>
-      <div>
-        <PublicLayoutsTopBar />
-        <v-main>
-          <slot />
-        </v-main>
-        <PublicLayoutsFooter />
-        <PublicLoginPanel v-if="!useUser().loggedIn()" />
-      </div>
-    </div>
+      <PublicLayoutsTopBar />
+      <v-main>
+        <slot />
+      </v-main>
+      <PublicLayoutsFooter />
+      <PublicLoginPanel v-if="!useUser().loggedIn()" />
+    </template>
   </v-app>
 </template>
 
@@ -39,7 +37,7 @@ const getTooltips = async () => {
 const handleScroll = (e: WheelEvent) => {
   const direction = e.deltaY > 0 ? 1 : -1;
 
-  appStore.showTopbar = direction === -1;
+  appStore.showTopbar = window.scrollY < 100 || direction === -1;
 };
 const lastTouchY = ref(-1);
 const handleTouchStart = (e: TouchEvent) => {
@@ -47,7 +45,7 @@ const handleTouchStart = (e: TouchEvent) => {
 };
 const handleTouchMove = (e: TouchEvent) => {
   const direction = lastTouchY.value - e.touches[0].clientY > 0 ? 1 : -1;
-  appStore.showTopbar = direction === -1;
+  appStore.showTopbar = window.scrollY < 100 || direction === -1;
   lastTouchY.value = e.touches[0].clientY;
 };
 const handleTouchEnd = (e: TouchEvent) => {

@@ -55,10 +55,11 @@
 </template>
 
 <script setup lang="ts">
-import { useFilterStore } from "~/store/searchFilter";
+import { FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];
+  filterKind: FilterKind;
 }>();
 
 const emit = defineEmits<{
@@ -94,20 +95,22 @@ const resetSearchTerm = () => {
 };
 
 const handleOptionSelect = (option: Filter) => {
-  const previous = { ...selectedFilter.value };
-  selectedFilter.value = option;
+  if (selectedFilter.value && selectedFilter.value.id !== option.id) {
+    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
 
-  const previousIndex = props.modelValue.findIndex((item) => item === previous.id);
+    if (indexOfAlreadySetFilter !== -1) {
+      props.modelValue.splice(indexOfAlreadySetFilter, 1);
+    }
+  }
+
+  const previousIndex = props.modelValue.findIndex((item) => item === option.id);
 
   if (previousIndex !== -1) {
     props.modelValue.splice(previousIndex, 1);
     selectedFilter.value = null;
-    emit("update:modelValue", props.modelValue);
-    return;
-  }
-
-  if (selectedFilter.value) {
-    props.modelValue.push(selectedFilter.value.id);
+  } else if (option) {
+    props.modelValue.push(option.id);
+    selectedFilter.value = option;
   }
 
   emit("update:modelValue", props.modelValue);
@@ -115,7 +118,7 @@ const handleOptionSelect = (option: Filter) => {
 
 onMounted(async () => {
   loadingFilters.value = true;
-  mainFilters.value = await getMainFilters("filter_facility", "facility");
+  mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
 
   const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
   const allOptions = await Promise.all(allOptionsPromises);

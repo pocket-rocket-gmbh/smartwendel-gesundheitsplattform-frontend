@@ -56,7 +56,8 @@ onMounted(() => {
 @import "@/assets/sass/main";
 
 .facility-wrapper {
-  margin: 0 5rem;
+  margin: 0 auto;
+  margin-top: 4rem;
 
   @include md {
     margin: 0;

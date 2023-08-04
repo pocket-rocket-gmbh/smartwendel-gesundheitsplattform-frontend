@@ -1,10 +1,10 @@
 <template>
-  <PublicCategoriesSubCategories
-    v-for="subCategory in subCategories"
-    :key="subCategory?.id"
-    :sub-category="subCategory"
-    :category-id="categoryId"
-  />
+  <template v-for="(subCategory, index) in subCategories" :key="subCategory?.id">
+    <v-divider v-if="index !== 0" class="my-5"></v-divider>
+    <div v-else class="mt-10">&nbsp;</div>
+
+    <PublicCategoriesSubCategories :sub-category="subCategory" :category-id="categoryId" />
+  </template>
 </template>
 
 <script lang="ts" setup>

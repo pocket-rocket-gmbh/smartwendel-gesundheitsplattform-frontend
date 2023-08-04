@@ -1,6 +1,6 @@
 <template>
-  <div class="content-box">
-    <a class="image" :href="buttonHref">
+  <div ref="contentBoxRef" class="content-box" v-resize="handleResize">
+    <a class="image" :href="buttonHref" v-if="showImage">
       <img v-if="item.image_url" :src="item.image_url" />
       <img v-else :src="noImage" />
     </a>
@@ -8,7 +8,7 @@
     <div class="text">
       <template v-if="item.user">
         <div class="info">
-          <div class="d-flex align-center user-informations" v-if="item.user.name">
+          <div class="align-center user-information" v-if="item.user.name">
             <v-icon>mdi-account-outline</v-icon><span class="break-title">{{ item.user.name }}</span>
           </div>
           <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
@@ -29,7 +29,7 @@
         <a :href="buttonHref" class="title">{{ item.name }}</a>
         <div class="content break-text" v-html="item.description"></div>
       </div>
-      <div class="action">
+      <div class="action" v-if="buttonHref">
         <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
       </div>
     </div>
@@ -42,6 +42,9 @@ const props = defineProps<{
   item: Facility;
   size?: number;
 }>();
+
+const contentBoxRef = ref<HTMLDivElement>();
+const showImage = ref(true);
 
 const buttonHref = computed(() => {
   if (!props.item) return null;
@@ -65,6 +68,12 @@ const buttonHref = computed(() => {
 
   return null;
 });
+
+const handleResize = () => {
+  if (!contentBoxRef.value) return;
+
+  showImage.value = contentBoxRef.value.getBoundingClientRect().width > 550;
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";
@@ -99,11 +108,20 @@ $max-height: 240px;
     padding: 0.75rem;
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
 
     .info {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      .user-information {
+        display: flex;
+
+        @include sm {
+          display: none;
+        }
+      }
     }
 
     .content-wrapper {
@@ -116,11 +134,19 @@ $max-height: 240px;
 
       .title {
         font-size: 1.5rem;
+        color: #8ab61d;
+        &:visited {
+          color: #8ab61d;
+        }
       }
     }
 
     .action {
       font-size: 1.5rem;
+      color: black;
+      &:visited {
+        color: black;
+      }
     }
   }
 }

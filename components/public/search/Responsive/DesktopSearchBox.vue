@@ -17,29 +17,43 @@
                 </v-chip>
               </div>
             </label>
-            <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" />
+            <FacilityFilterSelection
+              v-model="filterStore.currentTags"
+              :popover-width="popoverWidth"
+              :filter-kind="filterKind"
+            />
           </div>
         </v-col>
         <v-col class="align-end">
           <div class="field">
             <label class="label is-white">Gemeinde</label>
-            <select class="input select" v-model="filterStore.currentZip">
-              <option :value="null">Keine Auswahl</option>
-              <option v-for="community in communities" :value="community.zip">{{ community.name }}</option>
-            </select>
+            <div class="select-wrapper">
+              <select class="input select" v-model="filterStore.currentZip">
+                <option :value="null">Keine Auswahl</option>
+                <option v-for="community in communities" :value="community.zip">{{ community.name }}</option>
+              </select>
+            </div>
           </div>
         </v-col>
         <v-col class="align-end field">
-          <v-btn class="mx-3 bordered" variant="outlined" rounded="pill" color="white" @click="filterStore.clearSearch()">
+          <v-btn
+            class="mx-3 bordered"
+            variant="outlined"
+            rounded="pill"
+            color="white"
+            @click="filterStore.clearSearch()"
+          >
             Auswahl zurücksetzen
           </v-btn>
-          <v-btn class="ml-3 bordered" variant="flat" rounded="pill" color="white" @click="startSearch"> Suche starten </v-btn>
+          <v-btn class="ml-3 bordered" variant="flat" rounded="pill" color="white" @click="startSearch">
+            Suche starten
+          </v-btn>
         </v-col>
       </v-row>
       <v-row class="bottom-actions" v-if="mapControls">
         <v-col class="center">
           <v-btn variant="outlined" rounded="pill" color="white" @click="emit('toggleMap')">
-            <span v-if="showMap"> Karte ausblenden </span>
+            <span v-if="showMap"> Listenansicht </span>
             <span v-if="!showMap"> Karte einblenden </span>
           </v-btn>
         </v-col>
@@ -48,11 +62,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useFilterStore } from "~/store/searchFilter";
+import { FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   title: string;
   subTitle: string;
+  filterKind: FilterKind;
   mapControls?: boolean;
   showMap?: boolean;
 }>();
@@ -67,6 +82,7 @@ const contentWrapperRef = ref<HTMLDivElement>();
 const popoverWidth = ref(0);
 
 const updatePopoverWidth = () => {
+  if (!contentWrapperRef.value) return;
   popoverWidth.value = contentWrapperRef.value.getBoundingClientRect().width;
 };
 
@@ -98,14 +114,10 @@ onMounted(() => {
 @import "@/assets/sass/main.sass"
 .basic-search-box
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-  padding: 2rem 4rem 2rem 4rem
+  padding: 2rem 5rem
 
   @include md
     padding: 1rem
-
-.content
-  max-width: 1500px
-  margin: 0 auto
 
 .align-end
   display: flex
@@ -133,14 +145,30 @@ onMounted(() => {
 .bottom-actions
   min-height: 80px
 
-.select
-  cursor: pointer
+.select-wrapper
+  position: relative
+  display: flex
+  align-items: center
+
+  .select
+    cursor: pointer
+
+  &::after
+    content: ""
+    width: 20px
+    height: 20px
+    position: absolute
+    right: 0.75rem
+    background-image: url("@/assets/icons/chevron-down.svg")
+    background-repeat: no-repeat
+    background-position: center
+    pointer-events: none
 
 .search-term
   display: flex
   align-items: center
   gap: 1rem
 
-.bordered 
+.bordered
   --v-btn-height: 38px
 </style>

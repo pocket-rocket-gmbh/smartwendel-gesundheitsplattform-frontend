@@ -87,7 +87,7 @@ export default defineComponent({
 
   @include md
     flex-direction: column
-    gap: 0.5rem
+    gap: 2rem
 
 .wrapper
   margin: 0 5rem

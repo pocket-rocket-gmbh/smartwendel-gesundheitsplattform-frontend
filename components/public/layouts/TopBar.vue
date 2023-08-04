@@ -4,7 +4,7 @@
       <v-app-bar-title>
         <div class="d-flex align-center">
           <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />
-          <div class="align-center d-none d-sm-flex mx-2">
+          <div class="align-center d-none d-lg-flex mx-2">
             <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
               <div class="title mx-5">
                 <span class="is-clickable main" @click="setItemsAndGo(category, null)">
@@ -12,14 +12,14 @@
                 </span>
               </div>
               <div class="content">
-                <v-list v-if="category.sub_categories.length > 0">
+                <v-list>
                   <v-list-item>
                     <div
                       v-for="(sub_category, index) in subCategories[category.id]"
                       :key="sub_category.id"
                       @click="setItemsAndGo(category, sub_category)"
                     >
-                      <div class="list-item main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
+                      <div class="list-item main">
                         <div>
                           <span class="is-clickable">
                             {{ sub_category.name }}
@@ -46,7 +46,7 @@
           </div>
         </div>
       </v-app-bar-title>
-      <div class="align-center d-none d-sm-flex" v-if="!loading">
+      <div class="align-center d-none d-lg-flex" v-if="!loading">
         <div
           class="has-bg-primary mr-5 text-white offer py-1"
           v-if="!useUser().loggedIn() && currentRoute !== '/register'"
@@ -78,16 +78,16 @@
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
-            Meine Einrichtungen
+            Meine Einrichtung
           </a>
           <PublicLayoutsMiniMenu :current-user="currentUser" :user-is-admin="userIsAdmin" />
         </div>
       </div>
-      <div class="d-flex d-sm-none align-center" align="center">
+      <div class="d-flex d-lg-none align-center" align="center">
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </div>
     </v-app-bar>
-    <v-navigation-drawer class="d-flex d-sm-none" v-model="drawer" fixed temporary>
+    <v-navigation-drawer class="d-flex d-lg-none" v-model="drawer" fixed temporary>
       <div class="navigation-drawer-content">
         <div
           class="has-bg-primary text-white offer d-flex align-center justify-center py-2"
@@ -124,9 +124,9 @@
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
-            Meine Einrichtungen
+            Meine Einrichtung
           </a>
-          <div @click="useUser().logout(), (drawer = !drawer), reload()">
+          <div v-if="useUser().currentUser" @click="useUser().logout(), (drawer = !drawer), reload()">
             <v-icon class="mr-2">mdi-logout</v-icon>
             <span>Logout</span>
           </div>
@@ -144,25 +144,6 @@
             <span class="is-clickable main" @click="setItemsAndGo(category, null)">
               {{ category.name }}
             </span>
-          </div>
-          <div class="content">
-            <v-list v-if="category.sub_categories.length > 0">
-              <v-list-item>
-                <div
-                  v-for="(sub_category, index) in subCategories[category.id]"
-                  :key="sub_category.id"
-                  @click="setItemsAndGo(category, sub_category)"
-                >
-                  <div class="list-item main" v-if="sub_category && sub_category.sub_sub_categories.length > 0">
-                    <div>
-                      <span class="is-clickable">
-                        {{ sub_category.name }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </v-list-item>
-            </v-list>
           </div>
         </div>
         <template v-if="!loading">
@@ -314,8 +295,8 @@ header,
   overflow: visible !important;
 }
 .hero-menu {
-  padding: 0.75rem 2.5rem;
-  --v-scrollbar-offset: 2.5rem;
+  padding: 0.75rem 5rem;
+  --v-scrollbar-offset: 5rem;
 
   @include md {
     max-width: 100vw;
@@ -335,12 +316,11 @@ header,
   }
 }
 .v-toolbar__content {
+  .v-toolbar-title {
+    margin-inline-start: 0;
+  }
   @include md {
-    padding: 0.5rem;
-
-    .v-toolbar-title {
-      margin-inline-start: 0;
-    }
+    padding: 1rem;
   }
 }
 .hero {
@@ -418,6 +398,11 @@ header,
   flex-direction: column;
   gap: 1rem;
   padding: 0.5rem;
+  margin-top: 2rem;
+
+  @include md {
+    margin-top: 0;
+  }
 
   .logged-in-actions {
     display: flex;

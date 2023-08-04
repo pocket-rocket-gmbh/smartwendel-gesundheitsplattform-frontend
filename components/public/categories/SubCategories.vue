@@ -1,10 +1,9 @@
 <template>
-  <div class="sub-categories-wrapper" v-if="subSubCategories?.length > 0">
-    <v-divider class="my-5"></v-divider>
+  <div class="sub-categories-wrapper">
     <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')">
       <v-col cols="12" md="10" class="d-flex is-dark-grey justify-center">
         <div>
-          <h2 class="is-uppercase mt-15">{{ subCategory?.name }}</h2>
+          <h2 class="is-uppercase mt-5">{{ subCategory?.name }}</h2>
           <span class="my-5" v-html="subCategory?.description"></span>
         </div>
       </v-col>
@@ -100,6 +99,7 @@ const getSubSubCategories = async () => {
 
   @include md {
     margin: 1rem;
+    margin-top: 3rem;
   }
 
   .sub-category {
@@ -114,7 +114,7 @@ const getSubSubCategories = async () => {
     @include md {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 2rem;
     }
   }
 }

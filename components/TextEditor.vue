@@ -1,48 +1,47 @@
 <template>
-  <div class="">
-    <ClientOnly>
-      <QuillEditor
-        :value="modelValue"
-        :content="modelValue"
-        style="height: 200px"
-        :options="textOptions"
-        @input="emitSetInput"
-        :placeholder="textOptions.placeholder"
-        contentType="html"
-        toolbar="minimal"
-      />
-    </ClientOnly>
-  </div>
+  <ClientOnly>
+    <QuillEditor
+      v-model:content="text"
+      class="ql-main-editor"
+      :style="{ height: height || '200px' }"
+      :options="textOptions"
+      :placeholder="textOptions.placeholder"
+      contentType="html"
+      toolbar="minimal"
+    />
+  </ClientOnly>
 </template>
-<script lang="ts">
-export default defineComponent({ 
-  emits: ['update:modelValue'],
-  props: {
-    modelValue: {
-      required: true,
-      type: String
-    },
+<script setup lang="ts">
+const props = defineProps<{
+  modelValue: string;
+  height?: string;
+}>();
+
+const emit = defineEmits(["update:modelValue"]);
+
+const textOptions = ref({
+  debug: false,
+  placeholder: "Beschreibung",
+  theme: "snow",
+  contentType: "html",
+  toolbar: "essential",
+});
+
+const text = computed({
+  get() {
+    return props.modelValue;
   },
-  setup (props, {emit}) {
-    const textOptions = ref({
-      debug: false,
-      placeholder: "Beschreibung",
-      theme: 'snow',
-      contentType: "html",
-      toolbar: "essential"
-    })
-
-    const emitSetInput = (val:any) => {
-      emit('update:modelValue', val.target.innerHTML)
-    }
-
-    return {
-      textOptions,
-      emitSetInput
-    }
-  }
-})
+  set(updatedValue) {
+    emit("update:modelValue", updatedValue);
+  },
+});
 </script>
-<style lang="sass" scoped>
-
+<style lang="scss">
+.ql-main-editor {
+  .ql-editor p,
+  .ql-editor ol,
+  .ql-editor ul {
+    font-size: 16px;
+  }
+}
 </style>

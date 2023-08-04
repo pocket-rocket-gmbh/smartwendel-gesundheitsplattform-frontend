@@ -1,13 +1,13 @@
 <template>
-  <ClientOnly>
-    <v-container class="limited mt-8 mb-8">
+  <div class="search-page-wrapper">
+    <div>
       <v-row class="mt-4" v-if="filterStore.filteredResults.length">
         <v-col>
           <h2>Suchbegriff: {{ filterStore.currentSearchTerm }}</h2>
         </v-col>
       </v-row>
 
-      <LoadingSpinner v-if="filterStore.loading">Ergebnisse werden geladen...</LoadingSpinner>
+      <LoadingSpinner class="loading" v-if="filterStore.loading">Ergebnisse werden geladen...</LoadingSpinner>
       <template v-else>
         <v-row v-if="filteredKinds.length" class="mt-4">
           <v-col class="kinds">
@@ -34,11 +34,11 @@
           </v-col>
         </v-row>
       </template>
-    </v-container>
-  </ClientOnly>
-  <v-container class="container">
-    <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
-  </v-container>
+    </div>
+    <div class="container">
+      <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -87,27 +87,46 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="sass" scoped>
-@import "@/assets/sass/main.sass"
-h1
-  color: black
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
 
-.kinds
-  display: flex
-  gap: 2rem
-  flex-wrap: wrap
+.search-page-wrapper {
+  padding: 2rem 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 
-  @include md
-    flex-direction: column
-    gap: 0.5rem
+  @include md {
+    padding: 1rem;
+  }
 
-.container
-  display: grid
-  grid-gap: 2rem
-  grid-template-columns: 1fr 1fr
+  .loading {
+    margin-top: 4rem;
+  }
 
-  @include md
-    gap: 0.5rem
-    display: flex
-    flex-direction: column
+  h1 {
+    color: black;
+  }
+  .kinds {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    @include md {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+  .container {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+
+    @include md {
+      gap: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
 </style>

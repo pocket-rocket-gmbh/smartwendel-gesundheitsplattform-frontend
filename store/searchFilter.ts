@@ -22,7 +22,7 @@ export type User = {
   phone: string;
   email: string;
   role: string;
-  register_token?: string
+  register_token?: string;
 };
 
 export type Facility = {
@@ -246,6 +246,21 @@ export const useFilterStore = defineStore({
       }
 
       this.filteredResults = filteredResults;
+    },
+    toggleSort() {
+      this.filterSort = this.filterSort === "Absteigend" ? "Aufsteigend" : "Absteigend";
+    },
+    resetAllFilters() {
+      this.currentSearchTerm = "";
+      this.currentTags = [];
+      this.currentZip = null;
+      this.filterSort = "Absteigend";
+      this.loading = false;
+      this.mapFilter = null;
+      this.currentKinds = [];
+      this.allResults = [];
+      this.filteredResults = [];
+      this.onlySearchInTitle = false;
     },
   },
 });
