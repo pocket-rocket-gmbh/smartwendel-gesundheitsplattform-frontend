@@ -77,6 +77,7 @@ const contentWrapperRef = ref<HTMLDivElement>();
 const popoverWidth = ref(0);
 
 const updatePopoverWidth = () => {
+  if (!contentWrapperRef.value) return;
   popoverWidth.value = contentWrapperRef.value.getBoundingClientRect().width;
 };
 
