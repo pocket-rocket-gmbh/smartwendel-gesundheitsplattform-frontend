@@ -77,6 +77,7 @@ const contentWrapperRef = ref<HTMLDivElement>();
 const popoverWidth = ref(0);
 
 const updatePopoverWidth = () => {
+  if (!contentWrapperRef.value) return;
   popoverWidth.value = contentWrapperRef.value.getBoundingClientRect().width;
 };
 
@@ -108,14 +109,10 @@ onMounted(() => {
 @import "@/assets/sass/main.sass"
 .basic-search-box
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-  padding: 2rem 4rem 2rem 4rem
+  padding: 2rem 5rem
 
   @include md
     padding: 1rem
-
-.content
-  max-width: 1500px
-  margin: 0 auto
 
 .align-end
   display: flex

@@ -1,6 +1,6 @@
 <template>
-  <div class="content-box">
-    <a class="image" :href="buttonHref">
+  <div ref="contentBoxRef" class="content-box" v-resize="handleResize">
+    <a class="image" :href="buttonHref" v-if="showImage">
       <img v-if="item.image_url" :src="item.image_url" />
       <img v-else :src="noImage" />
     </a>
@@ -43,6 +43,9 @@ const props = defineProps<{
   size?: number;
 }>();
 
+const contentBoxRef = ref<HTMLDivElement>();
+const showImage = ref(true);
+
 const buttonHref = computed(() => {
   if (!props.item) return null;
 
@@ -65,6 +68,12 @@ const buttonHref = computed(() => {
 
   return null;
 });
+
+const handleResize = () => {
+  if (!contentBoxRef.value) return;
+
+  showImage.value = contentBoxRef.value.getBoundingClientRect().width > 550;
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";

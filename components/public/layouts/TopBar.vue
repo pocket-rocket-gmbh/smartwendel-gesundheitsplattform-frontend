@@ -295,8 +295,8 @@ header,
   overflow: visible !important;
 }
 .hero-menu {
-  padding: 0.75rem 2.5rem;
-  --v-scrollbar-offset: 2.5rem;
+  padding: 0.75rem 5rem;
+  --v-scrollbar-offset: 5rem;
 
   @include md {
     max-width: 100vw;
@@ -316,12 +316,11 @@ header,
   }
 }
 .v-toolbar__content {
+  .v-toolbar-title {
+    margin-inline-start: 0;
+  }
   @include md {
-    padding: 0.5rem;
-
-    .v-toolbar-title {
-      margin-inline-start: 0;
-    }
+    padding: 1rem;
   }
 }
 .hero {
