@@ -147,6 +147,7 @@
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_facility"
               :filter-kind="slotProps.item.kind"
+              :enable-multi-select="true"
               @setTags="setTagCategoryIds"
             />
           </div>
