@@ -41,8 +41,8 @@ import { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const filterStore = useFilterStore();
-const showMap = ref(true);
 const breakpoints = useBreakpoints();
+const showMap = ref(!breakpoints.isMobile.value);
 
 watch(
   () => filterStore.filterSort,

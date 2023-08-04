@@ -15,7 +15,7 @@
                 v-auto-animate
               >
                 <div
-                  class="filter-tile pa-5"
+                  class="filter-tile"
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
                 >
@@ -261,6 +261,8 @@ onMounted(async () => {
       background-color: white;
       max-height: 100px;
       min-height: 100px;
+      padding: 0.5rem;
+      word-break: break-all;
 
       &:hover,
       &.selected {

@@ -143,9 +143,9 @@ $max-height: 240px;
 
     .action {
       font-size: 1.5rem;
-      color: #8ab61d;
+      color: black;
       &:visited {
-        color: #8ab61d;
+        color: black;
       }
     }
   }

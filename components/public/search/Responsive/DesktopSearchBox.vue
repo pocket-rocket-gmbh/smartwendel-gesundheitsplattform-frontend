@@ -17,7 +17,11 @@
                 </v-chip>
               </div>
             </label>
-            <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" />
+            <FacilityFilterSelection
+              v-model="filterStore.currentTags"
+              :popover-width="popoverWidth"
+              :filter-kind="filterKind"
+            />
           </div>
         </v-col>
         <v-col class="align-end">
@@ -49,7 +53,7 @@
       <v-row class="bottom-actions" v-if="mapControls">
         <v-col class="center">
           <v-btn variant="outlined" rounded="pill" color="white" @click="emit('toggleMap')">
-            <span v-if="showMap"> Karte ausblenden </span>
+            <span v-if="showMap"> Listenansicht </span>
             <span v-if="!showMap"> Karte einblenden </span>
           </v-btn>
         </v-col>
@@ -58,11 +62,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useFilterStore } from "~/store/searchFilter";
+import { FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   title: string;
   subTitle: string;
+  filterKind: FilterKind;
   mapControls?: boolean;
   showMap?: boolean;
 }>();
