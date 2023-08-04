@@ -2,15 +2,9 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Beiträge</h2>
     <h2 v-else>Beiträge</h2>
-    <v-alert
-      v-if="!setupFinished && !loading"
-      type="info"
-      density="compact"
-      closable
-      class="mt-2"
-    >
-      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige
-      als nächstes deine Einrichtung
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
+      du Kurse und Veranstaltungen sowie Beiträge anlegen.
     </v-alert>
 
     <v-row align="center">
@@ -135,8 +129,7 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids =
-      currentUserFacility?.tag_category_ids;
+    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();

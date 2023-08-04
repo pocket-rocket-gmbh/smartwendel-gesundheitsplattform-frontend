@@ -3,9 +3,8 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
     <h2 v-else>Kurse und Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind
-      einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse
-      sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
+      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über
+      mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">
@@ -45,17 +44,11 @@
         </v-col>
       </v-row>
     </template>
-    <v-alert
-      v-if="!setupFinished && !loading"
-      type="info"
-      density="compact"
-      closable
-      class="mt-2"
-    >
-      Bitte kontrolliere zunächst deine Persönlichen Daten und vervollständige
-      als nächstes deine Einrichtung
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
+      du Kurse und Veranstaltungen sowie Beiträge anlegen.
     </v-alert>
-    
+
     <DataTable
       ref="dataTableRef"
       :fields="fields"
@@ -77,9 +70,7 @@
         dataTableRef?.resetActiveItems();
       "
       endpoint="care_facilities"
-      :concept-name="
-        itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'
-      "
+      :concept-name="itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'"
     />
 
     <DeleteItem
@@ -109,7 +100,14 @@ const fields = [
   { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
-  { prop: "kind", text: "Art (Kurs oder Veranstaltung)", endpoint: "care_facilities", value: "kind", type: "enum", enum_name: "facilitiesKind" }
+  {
+    prop: "kind",
+    text: "Art (Kurs oder Veranstaltung)",
+    endpoint: "care_facilities",
+    value: "kind",
+    type: "enum",
+    enum_name: "facilitiesKind",
+  },
 ];
 
 const facilitySearchColums = ref(["name", "user.name", "kind"]);
@@ -157,8 +155,7 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids =
-      currentUserFacility?.tag_category_ids;
+    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();

@@ -78,7 +78,7 @@
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
-            Meine Einrichtungen
+            Meine Einrichtung
           </a>
           <PublicLayoutsMiniMenu :current-user="currentUser" :user-is-admin="userIsAdmin" />
         </div>
@@ -124,7 +124,7 @@
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
-            Meine Einrichtungen
+            Meine Einrichtung
           </a>
           <div v-if="useUser().currentUser" @click="useUser().logout(), (drawer = !drawer), reload()">
             <v-icon class="mr-2">mdi-logout</v-icon>
