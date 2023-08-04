@@ -1,6 +1,5 @@
 <template>
   <ClientOnly>
-    {{ modelValue }}
     <QuillEditor
       v-model:content="text"
       class="ql-main-editor"
