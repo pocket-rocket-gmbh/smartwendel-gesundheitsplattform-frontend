@@ -91,7 +91,6 @@ onMounted(async () => {
 @import "@/assets/sass/main.sass";
 
 .search-page-wrapper {
-  padding: 2rem 5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;

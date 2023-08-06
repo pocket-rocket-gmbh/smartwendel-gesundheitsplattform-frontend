@@ -112,6 +112,8 @@ $max-height: 240px;
 
     .info {
       display: flex;
+      font-size: 12px;
+      color: #a3a3a3;
       align-items: center;
       justify-content: space-between;
 
