@@ -51,7 +51,6 @@ onBeforeUnmount(() => {
 @import "@/assets/sass/main.sass"
 
 .container
-  padding: 2rem 5rem
   display: flex
   gap: 1rem
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper bg-gradient">
+  <div class="bg-gradient py-10">
     <div class="d-flex align-center justify-center is-uppercase">
       <h2 class="text-white">Wir zeigen dir, was du für deinen Gesundheitszustand und dein Wohlbefinden tun kannst.</h2>
     </div>
@@ -81,13 +81,6 @@ const items = [
     transform: scale(1.1);
     transition: transform 0.5s ease-in-out;
     cursor: pointer;
-  }
-}
-.wrapper {
-  padding: 5rem;
-
-  @include md {
-    padding: 1rem;
   }
 }
 .recommendations-wrapper {
