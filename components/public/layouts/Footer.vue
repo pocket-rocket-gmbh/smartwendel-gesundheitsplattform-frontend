@@ -1,74 +1,101 @@
 <template>
   <ClientOnly>
     <div class="wrapper has-bg-grey">
-      <div class="has-bg-grey py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
+      <div
+        class="has-bg-grey py-5"
+        v-if="!useUser().loggedIn() && currentRoute !== '/register'"
+      >
         <v-row class="align-center register-hint">
-          <v-col md="8" class="flex-column justify-start text-h3 is-dark-grey font-weight-bold">
+          <v-col
+            md="8"
+            class="flex-column justify-start text-h3 is-dark-grey font-weight-bold"
+          >
             <div>Dein Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
-          <v-col class="d-flex px-0 register-button">
-            <v-btn variant="flat" color="grey" rounded="pill" size="x-large" href="/login">
+          <v-col class="d-flex justify-center register-button">
+            <v-btn
+              variant="flat"
+              color="grey"
+              rounded="pill"
+              size="x-large"
+              href="/login"
+            >
               <span>Jetzt registrieren</span>
             </v-btn>
           </v-col>
         </v-row>
       </div>
-      <v-divider v-if="!useUser().loggedIn() && currentRoute !== '/register'" class="py-5" thickness="2"></v-divider>
+      <v-divider
+        v-if="!useUser().loggedIn() && currentRoute !== '/register'"
+        class="py-5"
+        thickness="2"
+      ></v-divider>
       <div class="footer-content">
         <v-row class="footer-content-row align-center">
           <v-col md="8">
             <v-row class="align-center bg-white">
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center">
+              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
                 <a href="https://www.landkreis-st-wendel.de/" target="_blank">
                   <img
-                    src="~/assets/images/sub-footer/logo-footer-wnd(black).png"
-                    class="is-clickable"
+                    src="~/assets/images/sub-footer/logo-footer-wnd.png"
+                    class="is-clickable logo-footer"
                     :class="[$device.isMobile ? 'mobile-height' : 'desktop-height']"
                   />
                 </a>
               </v-col>
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center">
+              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
                 <a href=" https://www.wfg-wnd.de/" target="_blank">
                   <img
                     src="~/assets/images/sub-footer/logo-footer-wfg.png"
-                    class="is-clickable"
-                    :class="[$device.isMobile ? 'mobile-bigger-width' : 'desktop-height desktop-height-wfg']"
+                    class="is-clickable logo-footer"
+                    :class="[
+                      $device.isMobile
+                        ? 'mobile-bigger-width'
+                        : 'desktop-height desktop-height-wfg',
+                    ]"
                   />
                 </a>
               </v-col>
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center">
+              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
                 <a href="https://www.bmwsb.bund.de" target="_blank">
                   <img
                     src="~/assets/images/sub-footer/logo-bundesministerium.png"
-                    class="is-clickable"
+                    class="is-clickable logo-footer"
                     :class="[$device.isMobile ? 'mobile-height' : 'desktop-height']"
                   />
                 </a>
               </v-col>
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center">
+              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
                 <a href="https://www.kfw.de/kfw.de.html" target="_blank">
                   <img
                     src="~/assets/images/sub-footer/logo-footer-kfw.png"
-                    class="is-clickable"
+                    class="is-clickable logo-footer"
                     :class="[$device.isMobile ? 'mobile-height' : 'desktop-height-kfw']"
                   />
                 </a>
               </v-col>
             </v-row>
           </v-col>
-          <v-col class="links d-flex justify-center">
-            <h2 class="mb-5">Landkreis Sankt Wendel</h2>
-            <div class="footer-links">
-              <p class="has-text-white is-clickable"><router-link to="/contact">Kontakt</router-link></p>
-              <p class="has-text-white is-clickable">
-                <router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link>
-              </p>
-              <p class="has-text-white is-clickable">
-                <router-link to="/privacy_policy">Datenschutzerklärung</router-link>
-              </p>
-              <p class="has-text-white is-clickable"><router-link to="/imprint">Impressum</router-link></p>
+          <v-col class="links d-flex align-center">
+            <div>
+              <h2 class="mb-5">Landkreis Sankt Wendel</h2>
+              <div class="footer-links">
+                <p class="has-text-white is-clickable">
+                  <router-link to="/contact">Kontakt</router-link>
+                </p>
+                <p class="has-text-white is-clickable">
+                  <router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link>
+                </p>
+                <p class="has-text-white is-clickable">
+                  <router-link to="/privacy_policy">Datenschutzerklärung</router-link>
+                </p>
+                <p class="has-text-white is-clickable">
+                  <router-link to="/imprint">Impressum</router-link>
+                </p>
+              </div>
             </div>
+
             <div class="socials mt-5">
               <v-btn
                 href="https://www.facebook.com/Landkreis.StWendel/"
@@ -152,14 +179,10 @@ const currentRoute = computed(() => {
   max-width: 100px
 
 .desktop-height
-  max-width: 200px
+  max-width: 150px
 
 .desktop-height-kfw
-  margin-top: -30px
   max-width: 100px
-
-.desktop-height-wfg
-  margin-top: -30px
 
 .mobile-bigger-width
   max-width: 150px

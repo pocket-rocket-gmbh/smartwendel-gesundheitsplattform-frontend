@@ -55,10 +55,11 @@
 </template>
 
 <script setup lang="ts">
-import { useFilterStore } from "~/store/searchFilter";
+import { FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];
+  filterKind: FilterKind;
 }>();
 
 const emit = defineEmits<{
@@ -117,7 +118,7 @@ const handleOptionSelect = (option: Filter) => {
 
 onMounted(async () => {
   loadingFilters.value = true;
-  mainFilters.value = await getMainFilters("filter_facility", "facility");
+  mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
 
   const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
   const allOptions = await Promise.all(allOptionsPromises);

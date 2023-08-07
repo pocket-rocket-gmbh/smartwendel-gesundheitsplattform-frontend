@@ -112,6 +112,8 @@ $max-height: 240px;
 
     .info {
       display: flex;
+      font-size: 12px;
+      color: #a3a3a3;
       align-items: center;
       justify-content: space-between;
 
@@ -143,9 +145,9 @@ $max-height: 240px;
 
     .action {
       font-size: 1.5rem;
-      color: #8ab61d;
+      color: black;
       &:visited {
-        color: #8ab61d;
+        color: black;
       }
     }
   }

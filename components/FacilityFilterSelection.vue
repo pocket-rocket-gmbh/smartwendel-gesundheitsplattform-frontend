@@ -43,9 +43,11 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
+import { FilterKind } from "store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];
+  filterKind: FilterKind;
   popoverWidth?: number;
 }>();
 
@@ -104,7 +106,7 @@ const handleOptionSelect = (option: Filter) => {
 
 onMounted(async () => {
   loadingFilters.value = true;
-  mainFilters.value = await getMainFilters("filter_facility", "facility");
+  mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
 
   const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
   const allOptions = await Promise.all(allOptionsPromises);

@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col class="align-end">
-          <PublicSearchCategorySelectModal v-model="filterStore.currentTags" />
+          <PublicSearchCategorySelectModal v-model="filterStore.currentTags" :filter-kind="filterKind" />
         </v-col>
       </v-row>
       <v-row>
@@ -33,7 +33,7 @@
       <v-row v-if="mapControls" class="bottom-actions">
         <v-col class="center">
           <v-btn variant="outlined" size="large" rounded="pill" color="white" @click="emit('toggleMap')">
-            <span v-if="showMap"> Karte ausblenden </span>
+            <span v-if="showMap"> Listenansicht </span>
             <span v-if="!showMap"> Karte einblenden </span>
           </v-btn>
         </v-col>

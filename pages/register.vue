@@ -86,12 +86,12 @@
               <div>
                 Ich stimme der
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
+                  <template v-slot:activator="{ props }">
                     <a
                       target="_blank"
                       href="/privacy_policy"
                       @click.stop
-                      v-on="on"
+                      v-bind="props"
                     >
                       <u>Datenschutzerklärung</u>
                     </a>
@@ -100,12 +100,12 @@
                 </v-tooltip>
                 <span> und den </span>
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
+                  <template v-slot:activator="{ props }">
                     <a
                       target="_blank"
                       href="/terms_of_use"
                       @click.stop
-                      v-on="on"
+                      v-bind="props"
                     >
                       <u>Nutzungsbedingungen</u>
                     </a>
@@ -121,7 +121,7 @@
         <div v-else align="center">
           Deine Registrierung war erfolgreich.<br/>Wir haben Dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt.
         </div>
-        <v-btn block depressed to="/" class="mt-2">zurück</v-btn>
+        <v-btn block depressed to="/login" class="mt-2">Jetzt anmelden</v-btn>
       </v-card>
     </v-col>
   </v-row>
