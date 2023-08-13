@@ -19,7 +19,9 @@
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
                 >
+                <span class="word-break">
                   {{ subItem.title }}
+                </span>
                 </div>
                 <div
                   v-if="subItem.next.length && expandedItemIds.includes(subItem.id)"
