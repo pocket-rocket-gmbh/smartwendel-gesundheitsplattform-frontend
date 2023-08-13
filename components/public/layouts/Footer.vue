@@ -94,49 +94,48 @@
                   <router-link to="/imprint">Impressum</router-link>
                 </p>
               </div>
-            </div>
-
-            <div class="socials mt-5">
-              <v-btn
-                href="https://www.facebook.com/Landkreis.StWendel/"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-facebook</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-instagram</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-youtube</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.linkedin.com/showcase/smart-wendeler-land"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons"
-              >
-                <v-icon>mdi-linkedin</v-icon>
-              </v-btn>
+              <div class="socials mt-5">
+                <v-btn
+                  href="https://www.facebook.com/Landkreis.StWendel/"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-facebook</v-icon>
+                </v-btn>
+                <v-btn
+                  href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-instagram</v-icon>
+                </v-btn>
+                <v-btn
+                  href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-youtube</v-icon>
+                </v-btn>
+                <v-btn
+                  href="https://www.linkedin.com/showcase/smart-wendeler-land"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons"
+                >
+                  <v-icon>mdi-linkedin</v-icon>
+                </v-btn>
+              </div>
             </div>
           </v-col>
         </v-row>
