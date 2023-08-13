@@ -1,6 +1,9 @@
 <template>
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
-    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
+    <v-card-text
+      v-if="slotProps.item && Object.entries(slotProps.item).length"
+      class="mb-15"
+    >
       <v-row>
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
@@ -22,26 +25,29 @@
           <div class="py-10">
             <div v-if="slotProps.item.kind === 'facility'">
               <span class="text-h6"
-                >Hier kannst du eine eigene Detailseite für deine Einrichtung anlegen. Bitte fülle dazu, wenn möglich,
-                alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.</span
+                >Hier kannst du eine eigene Detailseite für deine Einrichtung anlegen.
+                Bitte fülle dazu, wenn möglich, alle Felder sorgfältig aus. Pflichtfelder
+                sind mit einem Sternchen versehen.</span
               >
             </div>
             <div v-if="slotProps.item.kind === 'news'">
               <span class="text-h6"
-                >Hier kannst du News oder Beiträge anlegen. Bitte fülle alle Felder sorgfältig aus. Pflichtfelder sind
-                mit einem Sternchen versehen.</span
+                >Hier kannst du News oder Beiträge anlegen. Bitte fülle alle Felder
+                sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.</span
               >
             </div>
             <div v-if="slotProps.item.kind === 'course'">
               <span class="text-h6"
-                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn möglich alle Felder sorgfältig aus.
-                Pflichtfelder sind mit einem Sternchen versehen.</span
+                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn möglich alle
+                Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen
+                versehen.</span
               >
             </div>
             <div v-if="slotProps.item.kind === 'event'">
               <span class="text-h6"
-                >Hier kannst Du eigene Veranstaltungen anlegen. Bitte fülle dazu wenn möglich alle Felder sorgfältig
-                aus. Pflichtfelder sind mit einem Sternchen versehen.</span
+                >Hier kannst Du eigene Veranstaltungen anlegen. Bitte fülle dazu wenn
+                möglich alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen
+                versehen.</span
               >
             </div>
           </div>
@@ -91,9 +97,11 @@
 
           <div class="field" id="3">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["3"].label
-              }}</span>
+              <span
+                class="text-h5 font-weight-bold mr-3"
+                v-if="fields[slotProps.item.kind]"
+                >{{ fields[slotProps.item.kind]["3"].label }}</span
+              >
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
@@ -110,7 +118,10 @@
                 fields[slotProps.item.kind]["4"].label
               }}</span>
             </div>
-            <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
+            <AdminCareFacilitiesAddImages
+              :item-id="slotProps.item.id"
+              @offline="(file) => setOfflineImage(file)"
+            />
           </div>
           <v-divider class="my-10" v-if="slotProps.item.kind !== 'news'"></v-divider>
 
@@ -156,14 +167,24 @@
 
           <div class="field" id="7">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["7"].label
-              }}</span>
-              <v-tooltip location="top" width="300px" v-if="slotProps.item.kind === 'facility'">
+              <span
+                class="text-h5 font-weight-bold mr-3"
+                v-if="fields[slotProps.item.kind]"
+                >{{ fields[slotProps.item.kind]["7"].label }}</span
+              >
+              <v-tooltip
+                location="top"
+                width="300px"
+                v-if="slotProps.item.kind === 'facility'"
+              >
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
                 </template>
-                <span v-if="fields[slotProps.item.kind]">{{ fields[slotProps.item.kind]["7"].tooltip }}</span>
+                <span v-if="fields[slotProps.item.kind]">{{
+                  fields[slotProps.item.kind]["7"].tooltip
+                }}</span>
               </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
@@ -177,8 +198,8 @@
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
-                    >Falls unter den angegebenen Leistungskatalog nicht die passende Leistung für deine Einrichtung zu
-                    finden ist, kontaktiere uns bitte
+                    >Falls unter den angegebenen Leistungskatalog nicht die passende
+                    Leistung für deine Einrichtung zu finden ist, kontaktiere uns bitte
                   </span>
                   <span>
                     <a
@@ -200,11 +221,17 @@
           </div>
 
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="8" v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'">
+          <div
+            class="field"
+            id="8"
+            v-if="slotProps.item.kind === 'course' || slotProps.item.kind === 'event'"
+          >
             <div class="my-2">
-              <span class="text-h5 mr-2 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["14"].label
-              }}</span>
+              <span
+                class="text-h5 mr-2 font-weight-bold"
+                v-if="fields[slotProps.item.kind]"
+                >{{ fields[slotProps.item.kind]["14"].label }}</span
+              >
             </div>
             <div class="mb-15">
               <v-row>
@@ -251,7 +278,12 @@
                   />
                 </v-col>
                 <v-col md="7">
-                  <v-table density="compact" fixed-header height="400px" v-if="slotProps.item.kind === 'course'">
+                  <v-table
+                    density="compact"
+                    fixed-header
+                    height="400px"
+                    v-if="slotProps.item.kind === 'course'"
+                  >
                     <thead>
                       <tr>
                         <th></th>
@@ -260,7 +292,10 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
+                      <tr
+                        v-for="(date, index) in slotProps.item.event_dates"
+                        :key="index"
+                      >
                         <td>
                           <v-btn
                             class="mx-3"
@@ -283,14 +318,22 @@
                       </tr>
                     </tbody>
                   </v-table>
-                  <v-table density="compact" fixed-header height="400px" v-if="slotProps.item.kind === 'event'">
+                  <v-table
+                    density="compact"
+                    fixed-header
+                    height="400px"
+                    v-if="slotProps.item.kind === 'event'"
+                  >
                     <thead>
                       <tr>
                         <th class="text-left">Datum</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
+                      <tr
+                        v-for="(date, index) in slotProps.item.event_dates"
+                        :key="index"
+                      >
                         <td>{{ date }}</td>
                       </tr>
                     </tbody>
@@ -306,14 +349,20 @@
 
           <div class="field" id="9" v-if="slotProps.item.kind === 'course'">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["13"].label
-              }}</span>
+              <span
+                class="text-h5 font-weight-bold mr-3"
+                v-if="fields[slotProps.item.kind]"
+                >{{ fields[slotProps.item.kind]["13"].label }}</span
+              >
               <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
                 </template>
-                <span v-if="fields[slotProps.item.kind]">{{ fields[slotProps.item.kind]["13"].tooltip }}</span>
+                <span v-if="fields[slotProps.item.kind]">{{
+                  fields[slotProps.item.kind]["13"].tooltip
+                }}</span>
               </v-tooltip>
             </div>
             <div>
@@ -323,15 +372,21 @@
                 density="compact"
                 label="Ja"
                 @click="
-                  slotProps.item.billable_through_health_insurance = !slotProps.item.billable_through_health_insurance
+                  slotProps.item.billable_through_health_insurance = !slotProps.item
+                    .billable_through_health_insurance
                 "
               />
             </div>
-            <div class="field my-5" v-if="slotProps.item.billable_through_health_insurance">
+            <div
+              class="field my-5"
+              v-if="slotProps.item.billable_through_health_insurance"
+            >
               <AdminCareFacilitiesAddFiles
                 :item-id="slotProps.item.id"
                 tag-name="insurance"
-                :document-acepted="slotProps.item.billable_through_health_insurance_approved"
+                :document-acepted="
+                  slotProps.item.billable_through_health_insurance_approved
+                "
                 :offline-documents="slotProps.item.offlineDocuments"
                 @offline="handleDocumentsOffline"
                 @document-deleted="handleDocumentDeleted"
@@ -341,14 +396,17 @@
                   <v-icon color="primary">mdi-check-decagram-outline</v-icon>
                 </span>
                 <v-checkbox
-                  v-if="slotProps.item.billable_through_health_insurance && useUser().isAdmin()"
+                  v-if="
+                    slotProps.item.billable_through_health_insurance &&
+                    useUser().isAdmin()
+                  "
                   :model-value="slotProps.item.billable_through_health_insurance_approved"
                   hide-details
                   density="compact"
                   label="Bitte prüfe, ob das Zertifikat gültig ist. Wenn ja, bestätige es hier."
                   @click="
-                    slotProps.item.billable_through_health_insurance_approved =
-                      !slotProps.item.billable_through_health_insurance_approved
+                    slotProps.item.billable_through_health_insurance_approved = !slotProps
+                      .item.billable_through_health_insurance_approved
                   "
                 />
               </div>
@@ -359,24 +417,32 @@
             class="field"
             id="8"
             v-if="slotProps.item.kind === 'facility'"
-            :class="[(changed && setupFinished) || editInformations ? 'has-bg-light-red pa-5' : '']"
+            :class="[
+              (changed && setupFinished) || editInformations
+                ? 'has-bg-light-red pa-5'
+                : '',
+            ]"
           >
             <span v-if="changed && setupFinished">
               <v-alert type="warning" density="compact" class="mt-2"
-                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben
-                werden</v-alert
+                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung
+                vom Landkreis neu freigegeben werden</v-alert
               >
             </span>
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 mr-2 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["8"].label
-              }}</span>
+              <span
+                class="text-h5 mr-2 font-weight-bold"
+                v-if="fields[slotProps.item.kind]"
+                >{{ fields[slotProps.item.kind]["8"].label }}</span
+              >
               <div v-if="setupFinished && !useUser().isAdmin()">
                 <span v-if="editInformations">
                   <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
                 </span>
                 <span v-else>
-                  <v-btn size="small" @click="confirmEditDialogOpen = true"> Adresse ändern </v-btn>
+                  <v-btn size="small" @click="confirmEditDialogOpen = true">
+                    Adresse ändern
+                  </v-btn>
                 </span>
               </div>
             </div>
@@ -400,7 +466,9 @@
                 hide-details="auto"
                 label="Straße und Nummer"
                 :rules="[rules.required, rules.counterStreet]"
-                :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
+                :error-messages="
+                  useErrors().checkAndMapErrors('street', slotProps.errors)
+                "
               />
             </div>
             <div class="field">
@@ -478,9 +546,11 @@
           <div class="field" id="9" v-if="slotProps.item.kind === 'facility'">
             <div class="my-2">
               <div class="text-h5 font-weight-bold">
-                <span class="text-h5 mr-2 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
-                  fields[slotProps.item.kind]["9"].label
-                }}</span>
+                <span
+                  class="text-h5 mr-2 font-weight-bold"
+                  v-if="fields[slotProps.item.kind]"
+                  >{{ fields[slotProps.item.kind]["9"].label }}</span
+                >
               </div>
             </div>
             <AdminCareFacilitiesAddLocations
@@ -523,7 +593,9 @@
                 hide-details="auto"
                 v-model="slotProps.item.opening_hours"
                 label="Wochentag/e - Uhrzeit"
-                :error-messages="useErrors().checkAndMapErrors('opening_hours', slotProps.errors)"
+                :error-messages="
+                  useErrors().checkAndMapErrors('opening_hours', slotProps.errors)
+                "
               />
             </div>
           </div>
@@ -532,9 +604,11 @@
 
           <div class="field" id="11" v-if="slotProps.item.kind !== 'news'">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["11"].label
-              }}</span>
+              <span
+                class="text-h5 font-weight-bold mr-3"
+                v-if="fields[slotProps.item.kind]"
+                >{{ fields[slotProps.item.kind]["11"].label }}</span
+              >
             </div>
             <v-text-field
               class="text-field"
@@ -546,20 +620,29 @@
             />
           </div>
 
-          <v-divider class="my-10" v-if="slotProps.item.kind !== 'nes'"></v-divider>
+          <v-divider class="my-10" v-if="slotProps.item.kind !== 'news'"></v-divider>
 
           <div class="field" id="12" v-if="slotProps.item.kind !== 'news'">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3" v-if="fields[slotProps.item.kind]">{{
-                fields[slotProps.item.kind]["12"].label
-              }}</span>
-              <v-tooltip location="top" width="300px" v-if="slotProps.item.kind !== 'event'">
+              <span
+                class="text-h5 font-weight-bold mr-3"
+                v-if="fields[slotProps.item.kind]"
+                >{{ fields[slotProps.item.kind]["12"].label }}</span
+              >
+              <v-tooltip
+                location="top"
+                width="300px"
+                v-if="slotProps.item.kind !== 'event'"
+              >
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
                 </template>
-                <span v-if="fields[slotProps.item.kind] && slotProps.item.kind !== 'event'">{{
-                  fields[slotProps.item.kind]["12"].tooltip
-                }}</span>
+                <span
+                  v-if="fields[slotProps.item.kind] && slotProps.item.kind !== 'event'"
+                  >{{ fields[slotProps.item.kind]["12"].tooltip }}</span
+                >
               </v-tooltip>
             </div>
             <AdminCareFacilitiesAddFiles
@@ -592,58 +675,62 @@
               <span class="text-h5 font-weight-bold" v-if="fields[slotProps.item.kind]">{{
                 fields[slotProps.item.kind]["16"].label
               }}</span>
+              <v-checkbox hide-details density="compact" :model-value="courseHasAnotherAdress" @click="courseHasAnotherAdress = !courseHasAnotherAdress" label="Ja" />
             </div>
-
-            <div class="field">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.street"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                hide-details="auto"
-                label="Straße und Nummer"
-                :rules="[rules.counterStreet]"
-                :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.additional_address_info"
-                hide-details="auto"
-                label="Adresszusatz"
-              />
-            </div>
-            <div class="field">
-              <v-select
-                hide-details="auto"
-                class="text-field"
-                v-model="slotProps.item.community_id"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                :items="communities"
-                item-title="name"
-                item-value="id"
-                label="Gemeinde"
-              />
-            </div>
-            <div class="field split">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.zip"
-                hide-details="auto"
-                label="PLZ"
-                :type="'number'"
-                :rules="[rules.required, rules.zip]"
-                :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
-              />
-              <v-select
-                hide-details="auto"
-                class="text-field"
-                v-model="slotProps.item.town"
-                :items="getTownsByCommunityId(slotProps.item.community_id)"
-                item-title="name"
-                item-value="name"
-                label="Ort"
-              />
+            <div v-if="courseHasAnotherAdress">
+              <div class="field">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.street"
+                  :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                  hide-details="auto"
+                  label="Straße und Nummer"
+                  :rules="[rules.counterStreet]"
+                  :error-messages="
+                    useErrors().checkAndMapErrors('street', slotProps.errors)
+                  "
+                />
+              </div>
+              <div class="field">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.additional_address_info"
+                  hide-details="auto"
+                  label="Adresszusatz"
+                />
+              </div>
+              <div class="field">
+                <v-select
+                  hide-details="auto"
+                  class="text-field"
+                  v-model="slotProps.item.community_id"
+                  :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                  :items="communities"
+                  item-title="name"
+                  item-value="id"
+                  label="Gemeinde"
+                />
+              </div>
+              <div class="field split">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.zip"
+                  hide-details="auto"
+                  label="PLZ"
+                  :type="'number'"
+                  :rules="[rules.required, rules.zip]"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+                <v-select
+                  hide-details="auto"
+                  class="text-field"
+                  v-model="slotProps.item.town"
+                  :items="getTownsByCommunityId(slotProps.item.community_id)"
+                  item-title="name"
+                  item-value="name"
+                  label="Ort"
+                />
+              </div>
             </div>
           </div>
 
@@ -668,6 +755,8 @@ const infosChanged = ref(false);
 const serviceFilterRef = ref(null);
 const expandTagSelect = ref(true);
 const createEditRef = ref();
+
+const courseHasAnotherAdress = ref(false)
 
 const textToolbar = ref([
   [{ header: "1" }, { header: "2" }],
@@ -798,7 +887,8 @@ const fields = {
       props: ["opening_hours"],
     },
     "11": {
-      label: "11. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+      label:
+        "11. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
       tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
       description: "Webseite",
       index: 11,
@@ -842,7 +932,8 @@ const fields = {
       index: 6,
     },
     "7": {
-      label: "5. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
+      label:
+        "5. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
       tooltip: "",
       description: "Leistung",
       index: 7,
@@ -873,16 +964,18 @@ const fields = {
       tooltip: "",
       description: "Beschreibung",
       index: 5,
-      placeholder: "Beschreibung des Kurses",
+      placeholder: "Beschreibung des Kurses. Nützliche Inhalte: Kursdauer, empfohlene Kleidung, etc",
     },
     "6": {
-      label: "5. Weise deinen Kurs / Veranstaltung gezielt einem Berufszweig / einer Sparte zu ",
+      label:
+        "5. Weise deinen Kurs / Veranstaltung gezielt einem Berufszweig / einer Sparte zu ",
       tooltip: "",
       description: "Berufszweig",
       index: 6,
     },
     "7": {
-      label: "6. Ordne deinem Kurs / Veranstaltung passende Filter zu, um die Leistungen gezielter zu beschreiben *",
+      label:
+        "6. Ordne deinem Kurs / Veranstaltung passende Filter zu, um die Leistungen gezielter zu beschreiben *",
       tooltip: "",
       description: "Leistung",
       index: 7,
@@ -902,7 +995,8 @@ const fields = {
       index: 9,
     },
     "11": {
-      label: "9. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+      label:
+        "9. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
       tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
       description: "Webseite",
       index: 11,
@@ -922,7 +1016,7 @@ const fields = {
       index: 13,
     },
     "16": {
-      label: "12. Adresse des Kurses",
+      label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
       tooltip: "",
       description: "Adresse",
       index: 14,
@@ -956,7 +1050,8 @@ const fields = {
       placeholder: "Beschreibung der Veranstaltung",
     },
     "6": {
-      label: "5. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+      label:
+        "5. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
       tooltip: "",
       description: "Berufszweig",
       index: 6,
@@ -974,7 +1069,8 @@ const fields = {
       index: 8,
     },
     "11": {
-      label: "8. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+      label:
+        "8. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
       tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
       description: "Webseite",
       index: 11,
@@ -1050,14 +1146,18 @@ const setOfflineImage = (images: any) => {
   });
 };
 
-const handleLocationsAddOffline = (newOfflineLocations: { latitude: number; longitude: number }[]) => {
+const handleLocationsAddOffline = (
+  newOfflineLocations: { latitude: number; longitude: number }[]
+) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "offlineLocations",
     value: newOfflineLocations,
   });
 };
 
-const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offlineDocuments"]) => {
+const handleDocumentsOffline = (
+  newOfflineDocuments: CreateEditFacility["offlineDocuments"]
+) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "offlineDocuments",
     value: newOfflineDocuments,
@@ -1065,11 +1165,11 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
 };
 
 const handleDocumentDeleted = () => {
-  if(!createEditRef.value) return;
+  if (!createEditRef.value) return;
 
-  console.log("Get item")
+  console.log("Get item");
   createEditRef.value.getItem();
-}
+};
 
 const handleLocationsUpdate = (locations: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
@@ -1178,7 +1278,7 @@ onMounted(async () => {
 
 .dp__action_button {
   padding-left: 10px;
-  height: 30px;
+  height: 50px;
   padding-right: 10px;
   background-color: #8ab61d;
 }

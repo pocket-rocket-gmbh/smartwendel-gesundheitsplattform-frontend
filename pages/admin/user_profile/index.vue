@@ -5,7 +5,24 @@
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
       du Kurse und Veranstaltungen sowie Beiträge anlegen.
     </v-alert>
-    <h2 class="mt-5">Bitte vervollständige deine Daten und ändere dein Passwort:</h2>
+    <v-alert v-if="!setupFinished && !loading" type="info" color="yellow" density="compact" closable class="mt-2">
+      Bitte vervollständige deine Daten und ändere dein Passwort
+    </v-alert>
+    <v-divider class="my-5"></v-divider>
+    <div class="d-flex">
+      <v-btn elevation="0" class="mr-5" variant="outlined" color="primary" @click="goToFacility('care_facilities')">
+        Zu meiner Einrichtung
+      </v-btn>
+      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
+        Zu meinen Kursen
+      </v-btn>
+      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
+        Zu meinen Veranstaltungen
+      </v-btn>
+      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('news_articles')">
+        Zu meinen Beiträgen
+      </v-btn>
+    </div>
     <div class="box my-15">
       <div class="main" v-if="item">
         <h3 class="mb-4">Persönliche Daten</h3>
@@ -36,21 +53,7 @@
             <v-btn elevation="0" variant="outlined" @click="updatePassword()"> Passwort ändern </v-btn>
           </v-col>
         </v-row>
-        <v-divider class="my-5"></v-divider>
-        <div class="d-flex">
-          <v-btn elevation="0" class="mr-5" variant="outlined" color="primary" @click="goToFacility('care_facilities')">
-            Zu meiner Einrichtung
-          </v-btn>
-          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
-            Zu meinen Kursen
-          </v-btn>
-          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
-            Zu meinen Veranstaltungen
-          </v-btn>
-          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('news_articles')">
-            Zu meinen Beiträgen
-          </v-btn>
-        </div>
+      
         <!--         <v-divider class="my-5"></v-divider>
         <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
           <h3 class="mb-4">Deine Einrichtungen:</h3>
