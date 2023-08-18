@@ -13,3 +13,15 @@ export type CreateEditFacility = Partial<
     community_id?: string;
   }
 >;
+
+type CreateEditStep = {
+  label: string;
+  description: string;
+  props: string[];
+  placeholder?: string;
+  tooltip?: string;
+  justSome?: boolean;
+};
+export type CreateEditSteps<T extends string> = {
+  [key in T]: CreateEditStep;
+};

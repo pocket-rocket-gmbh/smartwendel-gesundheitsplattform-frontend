@@ -1,0 +1,371 @@
+<template>
+  <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
+    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
+      <v-row>
+        <v-col md="2">
+          <div class="mt-10 mx-5 menu-boxes">
+            <div
+              v-for="[key, step] in Object.entries(steps)"
+              :class="[isFilled(slotProps, step) ? 'is-filled' : '']"
+              class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable text-h5"
+              :key="key"
+              @click="goToField(key)"
+            >
+              <div class="is-clickable d-flex" @click="goToField(key)">
+                <span>{{ step.description }}</span>
+              </div>
+            </div>
+          </div>
+        </v-col>
+        <v-col md="10">
+          <!-- facility / news / event -->
+          <div class="py-10">
+            <div>
+              <span class="text-h6"
+                >Hier kannst du News oder Beiträge anlegen. Bitte fülle alle Felder sorgfältig aus. Pflichtfelder sind
+                mit einem Sternchen versehen.</span
+              >
+            </div>
+          </div>
+          <div class="field" id="name">
+            <div class="my-2">
+              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
+            </div>
+            <v-text-field
+              class="text-field"
+              v-model="slotProps.item.name"
+              hide-details="auto"
+              label="Überschrift"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+            <v-text-field
+              class="text-field"
+              v-if="slotProps.item.kind !== 'news'"
+              v-model="slotProps.item.name"
+              hide-details="auto"
+              label="Name"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
+
+          <div class="field" id="photo">
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["photo"].label }}</span>
+            </div>
+            <ChooseAndCropSingleImage
+              :pre-set-image-url="slotProps.item.image_url"
+              :temp-image="slotProps.item.file"
+              label="Cover Bild"
+              @setImage="setCoverBild"
+              :min-size="true"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
+
+          <div class="field" id="description">
+            <div class="my-2">
+              <span class="text-h5 font-weight-bold">{{ steps["description"].label }}</span>
+            </div>
+            <div class="editor">
+              <ClientOnly>
+                <QuillEditor
+                  ref="ql-editor"
+                  class="ql-blank"
+                  :placeholder="steps['description'].placeholder"
+                  :options="textOptions"
+                  v-model:content="slotProps.item.description"
+                  contentType="html"
+                  :toolbar="textToolbar"
+                  @ready="onQuillReady"
+                />
+              </ClientOnly>
+            </div>
+          </div>
+          <v-divider class="my-10"></v-divider>
+
+          <div class="field" id="category">
+            <div class="my-3">
+              <span class="text-h5 font-weight-bold">{{ steps["category"].label }}</span>
+            </div>
+            <AdminCareFacilitiesChooseFilter
+              :pre-set-tags="slotProps.item.tag_category_ids"
+              filter-type="filter_facility"
+              :filter-kind="slotProps.item.kind"
+              :enable-multi-select="true"
+              @setTags="setTagCategoryIds"
+            />
+          </div>
+
+          <v-divider class="my-10"></v-divider>
+
+          <div class="field" id="services">
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
+            </div>
+            <AdminCareFacilitiesChooseFilter
+              :pre-set-tags="slotProps.item.tag_category_ids"
+              filter-type="filter_service"
+              :filter-kind="slotProps.item.kind"
+              :enable-multi-select="true"
+              @setTags="setTagCategoryIds"
+            />
+            <v-alert type="info" color="grey" class="mt-2">
+              <div class="d-flex align-center filter-request">
+                <div class="py-1">
+                  <span
+                    >Falls unter den angegebenen Leistungskatalog nicht die passende Leistung für deine Einrichtung zu
+                    finden ist, kontaktiere uns bitte
+                  </span>
+                  <span>
+                    <a
+                      class="is-white text-decoration-underline"
+                      :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
+                      >Hier</a
+                    >
+                  </span>
+                </div>
+              </div>
+            </v-alert>
+            <AdminCareFacilitiesTagSelect
+              :kind="slotProps.item.kind"
+              :pre-set-tags="slotProps.item.tags || []"
+              :expand="expandTagSelect"
+              @toggle-expand="handleTagSelectToggle"
+              @set-tags="setTagIds"
+            />
+          </div>
+
+          <v-divider class="my-10"></v-divider>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </CreateEdit>
+</template>
+
+<script setup lang="ts">
+import "@vuepic/vue-datepicker/dist/main.css";
+import { CreateEditSteps } from "types/facilities";
+import { rules } from "../../../data/validationRules";
+
+const stepNames = ["name", "photo", "description", "category", "services"] as const;
+type StepNames = (typeof stepNames)[number];
+const steps: CreateEditSteps<StepNames> = {
+  name: {
+    label: "1. Beitrags-Titel *",
+    tooltip: "",
+    description: "Name",
+    props: ["name"],
+  },
+  photo: {
+    label: "2. Lade Bilder für eine Galerie hoch *",
+    tooltip: "",
+    description: "Foto",
+    props: ["image_url"],
+  },
+  description: {
+    label: "3. Gib hier den Inhalt deines Beitrags an *",
+    tooltip: "",
+    description: "Beschreibung",
+    placeholder: "Inhalt des Beitrags",
+    props: ["description"],
+  },
+  category: {
+    label: "4. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
+    tooltip: "",
+    description: "Berufszweig",
+    props: ["tag_category_ids"],
+  },
+  services: {
+    label: "5. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
+    tooltip: "",
+    description: "Leistung",
+    props: ["tag_category_ids"],
+  },
+};
+
+const expandTagSelect = ref(true);
+const createEditRef = ref();
+
+const textToolbar = ref([
+  [{ header: "1" }, { header: "2" }],
+  ["bold", "italic", "underline"],
+  [{ list: "ordered" }, { list: "bullet" }, { align: [] }],
+]);
+
+const textOptions = ref({
+  debug: false,
+  theme: "snow",
+  contentType: "html",
+  toolbar: textToolbar.value,
+  required: true,
+});
+
+const onQuillReady = (quill: any) => {
+  quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node: any, delta: any[]) => {
+    delta.forEach((e) => {
+      if (e && e.attributes) {
+        e.attributes.color = "";
+        e.attributes.background = "";
+      }
+    });
+    return delta;
+  });
+};
+
+const handleTagSelectToggle = () => {
+  expandTagSelect.value = !expandTagSelect.value;
+};
+
+const isFilled = (slotProps: any, item: any) => {
+  const props: string[] = item.props;
+  if (!props) return;
+
+  const slotPropsItem = slotProps.item;
+
+  if (item.justSome) {
+    const result = props.some((prop) => {
+      return slotPropsItem[prop] && slotPropsItem[prop].length;
+    });
+    return result;
+  }
+
+  const result = props.every((prop) => {
+    return slotPropsItem[prop] && slotPropsItem[prop].length;
+  });
+  return result;
+};
+
+const setTagCategoryIds = (tags: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "tag_category_ids",
+    value: tags,
+  });
+};
+
+const setTagIds = (tags: any) => {
+  if (!tags || !Array.isArray(tags)) return;
+
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "tag_ids",
+    value: tags.map((tag) => tag.id),
+  });
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "tags",
+    value: tags,
+  });
+};
+
+const setCoverBild = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "file",
+    value: image,
+  });
+};
+
+const goToField = (n: string) => {
+  const id = n;
+  if (id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+};
+</script>
+
+<style lang="sass" scoped>
+@import "@/assets/sass/main.sass"
+
+.cropper-wrap
+  max-width: 450px
+
+.fields
+  max-width: 70vw
+
+.filter-request
+  font-size: 16px
+
+.select-box
+  border: black solid 1px
+  border-radius: 10px
+  background: $light-grey
+  width: 100%
+
+.is-filled
+  background-color: $primary-color
+  color: white
+
+.menu-boxes
+  position: sticky
+  z-index: 9999
+  top: 30px
+</style>
+
+<style lang="css">
+.text-field .v-label {
+  font-size: 20px !important;
+}
+
+.text-field input,
+.text-field input {
+  padding-top: 10px !important;
+}
+
+.v-select .v-select__selection-text {
+  padding-top: 10px !important;
+}
+
+.v-textarea .v-field__input {
+  margin-top: 20px !important;
+  padding-top: 20px !important;
+}
+
+.dp__selection_preview {
+  display: none;
+}
+
+.dp__action_buttons {
+  justify-content: center;
+  margin-right: auto;
+  padding: 10px;
+}
+
+.dp__action_button {
+  padding-left: 10px;
+  height: 50px;
+  padding-right: 10px;
+  background-color: #8ab61d;
+}
+
+.dp__action_button:hover {
+  background-color: #8ab61d;
+}
+
+.dp__instance_calendar .dp__button {
+  background-color: #8ab61d;
+  color: white;
+  height: 3rem;
+  font-weight: bold;
+}
+.dp__button::after {
+  content: "Uhrzeit auswählen";
+  margin-left: 0.25rem;
+}
+.dp__overlay_container .dp__button::after {
+  content: "Datum auswählen";
+  margin-left: 0.25rem;
+}
+
+.ql-editor p,
+.ql-editor ol,
+.ql-editor ul {
+  font-size: 22px;
+}
+
+.ql-blank::before {
+  font-size: 18px;
+}
+</style>

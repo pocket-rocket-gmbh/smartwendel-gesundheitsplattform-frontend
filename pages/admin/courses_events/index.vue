@@ -3,7 +3,9 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
     <h2 v-else>Kurse und Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.). Deine Veranstaltungen und Kurse findest du gebündelt auf der Gesundheitsplattform unter dem Menü-Punkt Kurse</v-alert
+      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über
+      mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.). Deine Veranstaltungen und
+      Kurse findest du gebündelt auf der Gesundheitsplattform unter dem Menü-Punkt Kurse</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">
@@ -59,18 +61,32 @@
       defaultSortBy="kind"
     />
 
-    <AdminCareFacilitiesCreateEdit
-      v-if="createEditDialogOpen"
-      :item-id="itemId"
-      :item-placeholder="itemPlaceholder"
-      @close="
-        createEditDialogOpen = false;
-        itemId = null;
-        dataTableRef?.resetActiveItems();
-      "
-      endpoint="care_facilities"
-      :concept-name="itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'"
-    />
+    <template v-if="createEditDialogOpen">
+      <AdminCoursesCreateEdit
+        v-if="itemPlaceholder.kind === 'course'"
+        :item-id="itemId"
+        :item-placeholder="itemPlaceholder"
+        @close="
+          createEditDialogOpen = false;
+          itemId = null;
+          dataTableRef?.resetActiveItems();
+        "
+        endpoint="care_facilities"
+        :concept-name="'Kurs'"
+      />
+      <AdminEventsCreateEdit
+        v-if="itemPlaceholder.kind === 'event'"
+        :item-id="itemId"
+        :item-placeholder="itemPlaceholder"
+        @close="
+          createEditDialogOpen = false;
+          itemId = null;
+          dataTableRef?.resetActiveItems();
+        "
+        endpoint="care_facilities"
+        :concept-name="'Veranstaltung'"
+      />
+    </template>
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -154,7 +170,7 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
+    // itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();

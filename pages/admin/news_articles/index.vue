@@ -41,7 +41,7 @@
       ref="dataTableRef"
     />
 
-    <AdminCareFacilitiesCreateEdit
+    <AdminNewsCreateEdit
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
@@ -129,7 +129,7 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
+    // itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();
