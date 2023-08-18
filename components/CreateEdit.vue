@@ -21,6 +21,9 @@
           <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
             Speichern
           </v-btn>
+          <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined">
+            Zurücksetzen
+          </v-btn>
           <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
             Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
           </v-alert>
@@ -40,6 +43,7 @@
 
 <script setup lang="ts">
 import { ResultStatus } from "@/types/serverCallResult";
+import { areObjectsEqual, deepToRaw } from "~/utils/global.utils";
 import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
 import { CreateEditFacility } from "~/types/facilities";
@@ -76,12 +80,20 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  enableCache: {
+    type: Boolean,
+    default: false,
+  },
+  cacheKey: {
+    type: String,
+  },
 });
 
 const loadingItem = ref(false);
 const dialog = ref(true);
 const errors = ref([]);
 const item = ref<CreateEditFacility>({});
+const originalItem = ref<CreateEditFacility>({});
 const form = ref<VForm>();
 
 const snackbar = useSnackbar();
@@ -97,6 +109,8 @@ createUpdateApi.setBaseApi(usePrivateApi());
 
 const itemHastChanged = ref(false);
 
+const isCachedItem = ref(false);
+
 const getItem = async () => {
   if (!props.itemId) return;
 
@@ -108,7 +122,10 @@ const getItem = async () => {
   showApi.setEndpoint(endpoint);
 
   loadingItem.value = true;
-  await showApi.getItem();
+  const itemResponse = await showApi.getItem();
+  if (itemResponse.status === ResultStatus.SUCCESSFUL) {
+    originalItem.value = { ...itemResponse.data.resource };
+  }
   loadingItem.value = false;
   item.value = showApi.item.value;
 };
@@ -127,12 +144,6 @@ const handleCta = async () => {
   } else {
     create();
   }
-};
-const setLogo = (image: string) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
-    name: "logo",
-    value: image,
-  });
 };
 
 const create = async () => {
@@ -187,6 +198,9 @@ const create = async () => {
 
     loadingItem.value = false;
     emit("close");
+    if (props.enableCache && props.cacheKey) {
+      localStorage.removeItem(props.cacheKey);
+    }
   } else {
     errors.value = result.data;
   }
@@ -210,8 +224,34 @@ const save = async () => {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
     itemHastChanged.value = false;
     emit("save");
+    if (props.enableCache && props.cacheKey) {
+      localStorage.removeItem(props.cacheKey);
+    }
   } else {
     errors.value = result.data;
+  }
+};
+
+const checkCachedItem = () => {
+  isCachedItem.value = !!(props.enableCache && props.cacheKey && localStorage.getItem(props.cacheKey));
+};
+
+const handleResetCache = async () => {
+  if (!props.enableCache || !props.cacheKey) {
+    return;
+  }
+  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
+  if (confirmed) {
+    localStorage.removeItem(props.cacheKey);
+    checkCachedItem();
+
+    if (props.itemId) {
+      await getItem();
+    }
+    if (props.itemPlaceholder && !item?.value?.id) {
+      item.value = { ...props.itemPlaceholder };
+    }
+    triggerSaveHintTimeout();
   }
 };
 
@@ -229,37 +269,28 @@ const triggerSaveHintTimeout = () => {
   }, 30 * 1000); // Nach einer halben Minute wird ein Hinweis zum Speichern angezeigt
 };
 
-onMounted(async () => {
-  if (props.itemId) {
-    await getItem();
-  }
-  if (props.itemPlaceholder && !item.value.id) {
-    item.value = { ...props.itemPlaceholder };
-  }
-
-  triggerSaveHintTimeout();
-
-  watch(
-    () => item.value,
-    () => {
-      itemHastChanged.value = true;
-    },
-    { deep: true }
-  );
-});
-
 const emitClose = () => {
   if (!itemHastChanged.value) {
     emit("close");
-    item.value = props.itemPlaceholder;
+    item.value = { ...props.itemPlaceholder };
     return;
   }
 
-  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
-  if (confirmed) {
-    item.value = props.itemPlaceholder;
-    emit("close");
+  if (!props.enableCache || !props.cacheKey) {
+    const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
+    if (confirmed) {
+      item.value = { ...props.itemPlaceholder };
+      emit("close");
+    }
+    return;
   }
+
+  if (!areObjectsEqual(deepToRaw(item.value), deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder))) {
+    localStorage.setItem(props.cacheKey, JSON.stringify(toRaw(item.value)));
+  }
+
+  item.value = { ...props.itemPlaceholder };
+  emit("close");
 };
 
 defineExpose({ getItem });
@@ -288,9 +319,35 @@ watch(
       (oldTown && newTown !== oldTown)
     ) {
       emit("hasChanged");
+      checkCachedItem();
     }
   }
 );
+
+onMounted(async () => {
+  const cachedItem = props.enableCache && props.cacheKey && JSON.parse(localStorage.getItem(props.cacheKey));
+  if (!cachedItem) {
+    if (props.itemId) {
+      await getItem();
+    }
+    if (props.itemPlaceholder && !item.value.id) {
+      item.value = { ...props.itemPlaceholder };
+    }
+  } else {
+    item.value = cachedItem;
+    isCachedItem.value = true;
+  }
+
+  triggerSaveHintTimeout();
+
+  watch(
+    () => item.value,
+    () => {
+      itemHastChanged.value = true;
+    },
+    { deep: true }
+  );
+});
 </script>
 
 <style lang="scss">
@@ -299,6 +356,8 @@ watch(
   align-items: center;
   gap: 1rem;
   height: 61px;
+  position: relative;
+  z-index: 10000;
 
   .save-hint {
     animation: fadeIn 200ms ease-in-out forwards;

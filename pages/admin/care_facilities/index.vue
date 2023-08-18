@@ -52,6 +52,8 @@
       @close="handleCreateEditClose"
       endpoint="care_facilities"
       concept-name="Einrichtung"
+      :enableCache="true"
+      :cacheKey="cacheKey"
     />
 
     <DeleteItem
@@ -109,6 +111,14 @@ const itemId = ref(null);
 
 const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
+
+const cacheKey = computed(() => {
+  if (!itemId.value) {
+    return `facilities_new`;
+  }
+
+  return `facilities_${itemId.value.replaceAll("-", "_")}`;
+});
 
 const handleItemsLoaded = (items: any[]) => {
   itemsExist.value = !!items.length;

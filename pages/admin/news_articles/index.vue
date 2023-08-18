@@ -52,6 +52,8 @@
       "
       endpoint="care_facilities"
       concept-name="Beiträge"
+      :enableCache="true"
+      :cacheKey="cacheKey"
     />
 
     <DeleteItem
@@ -104,6 +106,16 @@ const itemPlaceholder = ref<any>({
   tag_ids: [],
   tag_category_ids: [],
   offlineDocuments: [],
+  image_url: "",
+  file: ""
+});
+
+const cacheKey = computed(() => {
+  if (!itemId.value) {
+    return `news_new`;
+  }
+
+  return `news_${itemId.value.replaceAll("-", "_")}`;
 });
 
 const openCreateEditDialog = (id: string) => {

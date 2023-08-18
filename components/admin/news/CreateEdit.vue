@@ -18,7 +18,6 @@
           </div>
         </v-col>
         <v-col md="10">
-          <!-- facility / news / event -->
           <div class="py-10">
             <div>
               <span class="text-h6"
@@ -160,10 +159,11 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name"],
   },
   photo: {
-    label: "2. Lade Bilder für eine Galerie hoch *",
+    label: "2. Lade ein Coverbild hoch *",
     tooltip: "",
     description: "Foto",
-    props: ["image_url"],
+    props: ["image_url", "file"],
+    justSome: true
   },
   description: {
     label: "3. Gib hier den Inhalt deines Beitrags an *",

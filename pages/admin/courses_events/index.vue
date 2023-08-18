@@ -73,6 +73,8 @@
         "
         endpoint="care_facilities"
         :concept-name="'Kurs'"
+        :enableCache="true"
+        :cacheKey="coursesCacheKey"
       />
       <AdminEventsCreateEdit
         v-if="itemPlaceholder.kind === 'event'"
@@ -85,6 +87,8 @@
         "
         endpoint="care_facilities"
         :concept-name="'Veranstaltung'"
+        :enableCache="true"
+        :cacheKey="eventsCacheKey"
       />
     </template>
 
@@ -157,6 +161,21 @@ const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
 };
+
+const eventsCacheKey = computed(() => {
+  if (!itemId.value) {
+    return `events_new`;
+  }
+
+  return `events_${itemId.value.replaceAll("-", "_")}`;
+});
+const coursesCacheKey = computed(() => {
+  if (!itemId.value) {
+    return `courses_new`;
+  }
+
+  return `courses_${itemId.value.replaceAll("-", "_")}`;
+});
 
 onMounted(async () => {
   loading.value = true;
