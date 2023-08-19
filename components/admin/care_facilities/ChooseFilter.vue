@@ -73,6 +73,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
+  (event: "areFiltersSet", areFiltersSet: boolean, filterType: FilterType): void;
 }>();
 
 type Filter = { id: string; name: string; next?: Filter[] };
@@ -92,6 +93,7 @@ const flatFilterArray = (filterArray: Filter[]) => {
 const filterSelected = computed(() => {
   const flat = flatFilterArray(availableFilters.value);
   const filterOfCategoryIsSet = flat.some((item) => !!props.preSetTags.find((tag) => tag === item.id));
+  emit("areFiltersSet", filterOfCategoryIsSet, props.filterType);
   return filterOfCategoryIsSet;
 });
 

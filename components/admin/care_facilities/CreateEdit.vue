@@ -105,6 +105,7 @@
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
+              @are-filters-set="setFiltersSet"
             />
           </div>
 
@@ -126,6 +127,7 @@
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
+              @are-filters-set="setFiltersSet"
             />
             <v-alert type="info" color="grey" class="mt-2">
               <div class="d-flex align-center filter-request">
@@ -343,7 +345,8 @@
 
 <script setup lang="ts">
 import "@vuepic/vue-datepicker/dist/main.css";
-import { CreateEditFacility, CreateEditSteps } from "~/types/facilities";
+import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [
@@ -371,7 +374,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "2. Lade dein Logo hoch *",
     description: "Logo",
     props: ["logo_url", "logo"],
-    justSome: true
+    justSome: true,
   },
   photo: {
     label: "3. Lade ein Coverbild hoch *",
@@ -396,6 +399,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "6. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte zu *",
     description: "Berufszweig",
     props: ["tag_category_ids"],
+    specialFilter: "filter_facility",
   },
   services: {
     label: "7. Ordne deiner Einrichtung passende Filter zu *",
@@ -403,6 +407,7 @@ const steps: CreateEditSteps<StepNames> = {
       "Anhand der ausgewählten Filter beschreibst du deine Einrichtung genauer. Deine Leistungen und dein Alleinstellungsmerkmal hilft den Benutzern, dich und deine Einrichtung in der Anbietersuche schneller zu finden. Sollte deine Leistung nicht aufgeführt sein, darfst du Liste gerne erweitern.",
     description: "Leistung",
     props: ["tag_category_ids"],
+    specialFilter: "filter_service",
   },
   contact: {
     label: "8. Deine Adresse *",
@@ -440,6 +445,9 @@ const steps: CreateEditSteps<StepNames> = {
 const expandTagSelect = ref(true);
 const createEditRef = ref();
 
+const facilitiesFilterSet = ref(false);
+const servicesFilterSet = ref(false);
+
 const textToolbar = ref([
   [{ header: "1" }, { header: "2" }],
   ["bold", "italic", "underline"],
@@ -473,11 +481,27 @@ const handleTagSelectToggle = () => {
 const editInformations = ref(false);
 const confirmEditDialogOpen = ref(false);
 
-const isFilled = (slotProps: any, item: any) => {
+const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
+  if (filterType === "filter_facility") {
+    facilitiesFilterSet.value = isSet;
+  } else if (filterType === "filter_service") {
+    servicesFilterSet.value = isSet;
+  }
+};
+
+const isFilled = (slotProps: any, item: CreateEditStep) => {
   const props: string[] = item.props;
   if (!props) return;
 
   const slotPropsItem = slotProps.item;
+
+  if (item.specialFilter) {
+    if (item.specialFilter === "filter_facility") {
+      return facilitiesFilterSet.value;
+    } else if (item.specialFilter === "filter_service") {
+      return servicesFilterSet.value;
+    }
+  }
 
   if (item.justSome) {
     const result = props.some((prop) => {

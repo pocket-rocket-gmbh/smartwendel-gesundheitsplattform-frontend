@@ -342,8 +342,6 @@ onMounted(async () => {
     isCachedItem.value = true;
   }
 
-  console.log(props.cacheKey, props.itemId)
-
   triggerSaveHintTimeout();
   requestAnimationFrame(() => form.value?.validate());
 
@@ -363,7 +361,7 @@ onMounted(async () => {
   align-items: center;
   gap: 1rem;
   height: 61px;
-  position: relative;
+  position: sticky;
   z-index: 10000;
 
   .save-hint {

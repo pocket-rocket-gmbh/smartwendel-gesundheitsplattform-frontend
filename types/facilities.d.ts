@@ -1,4 +1,4 @@
-import { Facility } from "~/store/searchFilter";
+import { Facility, FilterType } from "~/store/searchFilter";
 
 export type CreateEditFacility = Partial<
   Facility & {
@@ -14,13 +14,14 @@ export type CreateEditFacility = Partial<
   }
 >;
 
-type CreateEditStep = {
+export type CreateEditStep = {
   label: string;
   description: string;
   props: string[];
   placeholder?: string;
   tooltip?: string;
   justSome?: boolean;
+  specialFilter?: FilterType;
 };
 export type CreateEditSteps<T extends string> = {
   [key in T]: CreateEditStep;

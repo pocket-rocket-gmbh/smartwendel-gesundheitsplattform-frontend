@@ -92,6 +92,7 @@
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
+              @are-filters-set="setFiltersSet"
             />
           </div>
 
@@ -107,6 +108,7 @@
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
+              @are-filters-set="setFiltersSet"
             />
             <v-alert type="info" color="grey" class="mt-2">
               <div class="d-flex align-center filter-request">
@@ -219,7 +221,8 @@
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
-import { CreateEditFacility, CreateEditSteps } from "~/types/facilities";
+import { FilterType } from "~/store/searchFilter";
+import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [
@@ -260,11 +263,13 @@ const steps: CreateEditSteps<StepNames> = {
     label: "5. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
     description: "Berufszweig",
     props: ["tag_category_ids"],
+    specialFilter: "filter_facility",
   },
   services: {
     label: "6. Ordne deiner Einrichtung passende Filter zu *",
     description: "Leistung",
     props: ["tag_category_ids"],
+    specialFilter: "filter_service",
   },
   date: {
     label: "7. Gib das Veranstaltungsdatum, sowie die Uhrzeit an *",
@@ -288,6 +293,9 @@ const steps: CreateEditSteps<StepNames> = {
 
 const expandTagSelect = ref(true);
 const createEditRef = ref();
+
+const facilitiesFilterSet = ref(false);
+const servicesFilterSet = ref(false);
 
 const textToolbar = ref([
   [{ header: "1" }, { header: "2" }],
@@ -319,11 +327,27 @@ const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
 };
 
-const isFilled = (slotProps: any, item: any) => {
+const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
+  if (filterType === "filter_facility") {
+    facilitiesFilterSet.value = isSet;
+  } else if (filterType === "filter_service") {
+    servicesFilterSet.value = isSet;
+  }
+};
+
+const isFilled = (slotProps: any, item: CreateEditStep) => {
   const props: string[] = item.props;
   if (!props) return;
 
   const slotPropsItem = slotProps.item;
+
+  if (item.specialFilter) {
+    if (item.specialFilter === "filter_facility") {
+      return facilitiesFilterSet.value;
+    } else if (item.specialFilter === "filter_service") {
+      return servicesFilterSet.value;
+    }
+  }
 
   if (item.justSome) {
     const result = props.some((prop) => {

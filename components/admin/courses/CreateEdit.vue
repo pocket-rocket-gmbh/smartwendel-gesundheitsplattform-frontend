@@ -92,6 +92,7 @@
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
+              @are-filters-set="setFiltersSet"
             />
           </div>
 
@@ -107,6 +108,7 @@
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
+              @are-filters-set="setFiltersSet"
             />
             <v-alert type="info" color="grey" class="mt-2">
               <div class="d-flex align-center filter-request">
@@ -316,7 +318,6 @@
                 <v-text-field
                   class="text-field"
                   v-model="slotProps.item.street"
-                  :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                   hide-details="auto"
                   label="Straße und Nummer"
                   :rules="[rules.counterStreet]"
@@ -336,7 +337,6 @@
                   hide-details="auto"
                   class="text-field"
                   v-model="slotProps.item.community_id"
-                  :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                   :items="communities"
                   item-title="name"
                   item-value="id"
@@ -377,7 +377,8 @@
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
-import { CreateEditFacility, CreateEditSteps } from "~/types/facilities";
+import { FilterType } from "~/store/searchFilter";
+import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [
@@ -426,12 +427,14 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Berufszweig",
     props: ["tag_category_ids"],
+    specialFilter: "filter_facility",
   },
   services: {
     label: "6. Ordne deinem Kurs / Veranstaltung passende Filter zu, um die Leistungen gezielter zu beschreiben *",
     tooltip: "",
     description: "Leistung",
     props: ["tag_category_ids"],
+    specialFilter: "filter_service",
   },
   date: {
     label:
@@ -478,6 +481,9 @@ const steps: CreateEditSteps<StepNames> = {
 const expandTagSelect = ref(true);
 const createEditRef = ref();
 
+const facilitiesFilterSet = ref(false);
+const servicesFilterSet = ref(false);
+
 const courseHasAnotherAdress = ref(false);
 
 const textToolbar = ref([
@@ -517,12 +523,27 @@ const deleteDate = (index: number, dates: string[]) => {
   }
 };
 
-const editInformations = ref(false);
-const isFilled = (slotProps: any, item: any) => {
+const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
+  if (filterType === "filter_facility") {
+    facilitiesFilterSet.value = isSet;
+  } else if (filterType === "filter_service") {
+    servicesFilterSet.value = isSet;
+  }
+};
+
+const isFilled = (slotProps: any, item: CreateEditStep) => {
   const props: string[] = item.props;
   if (!props) return;
 
   const slotPropsItem = slotProps.item;
+
+  if (item.specialFilter) {
+    if (item.specialFilter === "filter_facility") {
+      return facilitiesFilterSet.value;
+    } else if (item.specialFilter === "filter_service") {
+      return servicesFilterSet.value;
+    }
+  }
 
   if (item.justSome) {
     const result = props.some((prop) => {
