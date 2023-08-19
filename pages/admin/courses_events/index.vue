@@ -120,7 +120,14 @@ const user = useUser();
 const loading = ref(false);
 
 const fields = [
-  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
+  {
+    prop: "is_active",
+    text: "Aktiv",
+    endpoint: "care_facilities",
+    type: "switch",
+    tooltip: "Hiermit kannst du deinen Kurs/deine Veranstaltung aktivieren und deaktivieren",
+    fieldToSwitch: "is_active",
+  },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
   {

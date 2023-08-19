@@ -65,18 +65,26 @@
           <span v-else-if="item[field.value] && field.type === 'associations_name'">
             <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">{{ subItem.name }}</div>
           </span>
-          <TableSwitch
-            v-else-if="field.type === 'switch'"
-            :item="item"
-            :endpoint="field.endpoint"
-            :field-to-switch="field.fieldToSwitch"
-            :ask-notification="field.askNotification"
-            :notification-kind="field.notificationKind"
-            :notification-kind-explicit="field.notificationKindExplicit"
-            :notification-pre-filled-headline="field.notificationPreFilledHeadline"
-            :notification-pre-filled-text="field.notificationPreFilledText"
-            :notification-cta-link="field.notificationCtaLink"
-          />
+          <template v-else-if="field.type === 'switch'">
+            <v-tooltip top>
+              <template v-slot:activator="{ props }">
+                <div v-bind="props">
+                  <TableSwitch
+                    :item="item"
+                    :endpoint="field.endpoint"
+                    :field-to-switch="field.fieldToSwitch"
+                    :ask-notification="field.askNotification"
+                    :notification-kind="field.notificationKind"
+                    :notification-kind-explicit="field.notificationKindExplicit"
+                    :notification-pre-filled-headline="field.notificationPreFilledHeadline"
+                    :notification-pre-filled-text="field.notificationPreFilledText"
+                    :notification-cta-link="field.notificationCtaLink"
+                  />
+                </div>
+              </template>
+              <span>{{ field.tooltip }}</span>
+            </v-tooltip>
+          </template>
 
           <TableDropdown
             v-else-if="field.type === 'enumDropdown'"
