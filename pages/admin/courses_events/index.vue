@@ -76,6 +76,8 @@
         :concept-name="'Kurs'"
         :enableCache="true"
         :cacheKey="coursesCacheKey"
+        :showPreviewButton="true"
+        @showPreview="handleShowPreview"
       />
       <AdminEventsCreateEdit
         v-if="itemPlaceholder.kind === 'event'"
@@ -86,8 +88,12 @@
         :concept-name="'Veranstaltung'"
         :enableCache="true"
         :cacheKey="eventsCacheKey"
+        :showPreviewButton="true"
+        @showPreview="handleShowPreview"
       />
     </template>
+
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -104,6 +110,7 @@
 </template>
 <script lang="ts" setup>
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
+import { Facility } from "~/store/searchFilter";
 
 definePageMeta({
   layout: "admin",
@@ -125,6 +132,8 @@ const fields = [
     enum_name: "facilitiesKind",
   },
 ];
+
+const previewItem = ref<Facility>();
 
 const newCourseFromCache = ref(false);
 const newEventFromCache = ref(false);
@@ -191,6 +200,13 @@ const handleCreateEditClose = () => {
   dataTableRef.value?.resetActiveItems();
   newCourseFromCache.value = !!localStorage.getItem("courses_new");
   newEventFromCache.value = !!localStorage.getItem("events_new");
+};
+
+const handleShowPreview = (item: any) => {
+  previewItem.value = item;
+};
+const handlePreviewClose = () => {
+  previewItem.value = null;
 };
 
 onMounted(async () => {

@@ -18,6 +18,9 @@
 
         <v-card-actions class="card-actions">
           <v-btn @click="emitClose()"> Schließen </v-btn>
+          <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
+            Vorschau anzeigen
+          </v-btn>
           <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
             Speichern
           </v-btn>
@@ -48,7 +51,7 @@ import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
 import { CreateEditFacility } from "~/types/facilities";
 
-const emit = defineEmits(["close", "hasChanged", "save"]);
+const emit = defineEmits(["close", "hasChanged", "save", "showPreview"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -86,6 +89,10 @@ const props = defineProps({
   },
   cacheKey: {
     type: String,
+  },
+  showPreviewButton: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -145,6 +152,10 @@ const handleCta = async () => {
     create();
   }
 };
+
+const handleShowPreviewClicked = () => {
+  emit("showPreview", item.value);
+}
 
 const create = async () => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);

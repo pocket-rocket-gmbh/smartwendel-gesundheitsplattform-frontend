@@ -53,7 +53,11 @@
       concept-name="Beiträge"
       :enableCache="true"
       :cacheKey="cacheKey"
+      :showPreviewButton="true"
+      @showPreview="handleShowPreview"
     />
+
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -69,9 +73,13 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { Facility } from "~/store/searchFilter";
+
 definePageMeta({
   layout: "admin",
 });
+
+const previewItem = ref<Facility>();
 
 const user = useUser();
 const loading = ref(false);
@@ -134,6 +142,13 @@ const openCreateEditDialog = (item: any) => {
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
+};
+
+const handleShowPreview = (item: any) => {
+  previewItem.value = item;
+};
+const handlePreviewClose = () => {
+  previewItem.value = null;
 };
 
 onMounted(async () => {

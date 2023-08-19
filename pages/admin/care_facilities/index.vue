@@ -56,7 +56,11 @@
       concept-name="Einrichtung"
       :enableCache="true"
       :cacheKey="cacheKey"
+      :showPreviewButton="true"
+      @showPreview="handleShowPreview"
     />
+
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -73,6 +77,8 @@
 </template>
 
 <script lang="ts" setup>
+import { Facility } from "~/store/searchFilter";
+
 definePageMeta({
   layout: "admin",
 });
@@ -110,6 +116,7 @@ const confirmDeleteDialogOpen = ref(false);
 const addImagesDialogOpen = ref(false);
 const addFilesDialogOpen = ref(false);
 const itemId = ref(null);
+const previewItem = ref<Facility>();
 
 const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
@@ -154,6 +161,13 @@ const openAddImagesDialog = (id: string) => {
 const openAddFilesDialog = (id: string) => {
   itemId.value = id;
   addFilesDialogOpen.value = true;
+};
+
+const handleShowPreview = (item: any) => {
+  previewItem.value = item;
+};
+const handlePreviewClose = () => {
+  previewItem.value = null;
 };
 
 onMounted(async () => {
