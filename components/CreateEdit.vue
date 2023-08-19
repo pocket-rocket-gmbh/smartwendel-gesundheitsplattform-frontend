@@ -159,7 +159,7 @@ const create = async () => {
     const facilityId = result.data.resource.id;
 
     loadingItem.value = true;
-    if (item.value.offlineImageFiles.length) {
+    if (item.value.offlineImageFiles?.length) {
       for (const offlineImageFile of item.value.offlineImageFiles) {
         createUpdateApi.setEndpoint(`care_facilities/${facilityId}/images`);
         const data = {
@@ -295,6 +295,10 @@ const emitClose = () => {
 
 defineExpose({ getItem });
 
+watch(item, () => form.value?.validate(), {
+  deep: true,
+});
+
 watch(
   [
     () => item.value?.phone,
@@ -339,6 +343,7 @@ onMounted(async () => {
   }
 
   triggerSaveHintTimeout();
+  requestAnimationFrame(() => form.value?.validate());
 
   watch(
     () => item.value,

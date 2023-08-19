@@ -370,7 +370,8 @@ const steps: CreateEditSteps<StepNames> = {
   logo: {
     label: "2. Lade dein Logo hoch *",
     description: "Logo",
-    props: ["logo_url"],
+    props: ["logo_url", "logo"],
+    justSome: true
   },
   photo: {
     label: "3. Lade ein Coverbild hoch *",

@@ -25,8 +25,6 @@ export function areObjectsEqual(obj1: Record<string, any>, obj2: Record<string, 
   const keys2 = Object.keys(obj2);
 
   if (keys1.length !== keys2.length) {
-    console.log(keys1, keys2);
-
     return false;
   }
 
