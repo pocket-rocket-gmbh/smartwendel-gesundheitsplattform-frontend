@@ -43,7 +43,6 @@ export function areObjectsEqual(obj1: Record<string, any>, obj2: Record<string, 
         }
       }
 
-      console.log(obj1[key], obj2[key]);
       return false;
     }
   }

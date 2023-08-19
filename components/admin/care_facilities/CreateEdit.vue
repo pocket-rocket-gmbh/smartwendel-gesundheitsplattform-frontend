@@ -6,14 +6,13 @@
           <div class="mt-10 mx-5 menu-boxes">
             <div
               v-for="[key, step] in Object.entries(steps)"
-              :class="[isFilled(slotProps, step) ? 'is-filled' : '']"
               class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable text-h5"
+              :class="[isFilled(slotProps, step) ? 'is-filled' : '']"
               :key="key"
               @click="goToField(key)"
+              v-fit-text="{ min: 16, max: 45 }"
             >
-              <div class="is-clickable d-flex" @click="goToField(key)">
-                <span>{{ step.description }}</span>
-              </div>
+              <span>{{ step.description }}</span>
             </div>
           </div>
         </v-col>
