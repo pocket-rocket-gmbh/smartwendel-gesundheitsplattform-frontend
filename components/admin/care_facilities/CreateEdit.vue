@@ -17,7 +17,6 @@
           </div>
         </v-col>
         <v-col md="10">
-          <!-- facility / news / event -->
           <div class="py-10">
             <span class="text-h6"
               >Hier kannst du eine eigene Detailseite für deine Einrichtung anlegen. Bitte fülle dazu, wenn möglich,
