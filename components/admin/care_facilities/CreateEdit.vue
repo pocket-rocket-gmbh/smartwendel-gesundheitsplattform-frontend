@@ -222,7 +222,7 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.zip"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                disabled
                 hide-details="auto"
                 label="PLZ"
                 :type="'number'"
@@ -248,8 +248,8 @@
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Telefonnummer"
-                :rules="[rules.required]"
-                :type="'number'"
+                :rules="[rules.required, rules.validateNumber]"
+                :type="'tel'"
                 :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
               />
             </div>

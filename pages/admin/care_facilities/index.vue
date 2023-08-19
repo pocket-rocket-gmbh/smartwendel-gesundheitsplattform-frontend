@@ -15,10 +15,11 @@
             @click="
               itemId = null;
               createEditDialogOpen = true;
-              itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder))
+              itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
             "
+            :class="{ orange: newFacilityFromCache }"
           >
-            Neue Einrichtung
+            Neue Einrichtung <span v-if="newFacilityFromCache"> - weiter</span>
           </v-btn>
         </v-col>
         <v-col>
@@ -37,6 +38,7 @@
       :fields="fields"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
+      :cache-prefix="'facilities'"
       endpoint="care_facilities?kind=facility"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
@@ -112,6 +114,8 @@ const itemId = ref(null);
 const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
 
+const newFacilityFromCache = ref(false);
+
 const cacheKey = computed(() => {
   if (!itemId.value) {
     return `facilities_new`;
@@ -129,10 +133,11 @@ const handleCreateEditClose = async () => {
   itemId.value = null;
   dataTableRef.value?.resetActiveItems();
   setupFinished.value = await useUser().setupFinished();
+  newFacilityFromCache.value = !!localStorage.getItem("facilities_new");
 };
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const openCreateEditDialog = (item: any) => {
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 
@@ -155,9 +160,14 @@ onMounted(async () => {
   loading.value = true;
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
+
+  newFacilityFromCache.value = !!localStorage.getItem("facilities_new");
 });
 </script>
 <style lang="sass">
+.orange
+  color: orange
+
 .v-dialog--custom
   width: 30%
 </style>

@@ -26,7 +26,7 @@
       <tr
         v-for="(item, indexMain) in filteredItems"
         :key="item.id"
-        :class="[item === activeItems ? 'activeItems' : '']"
+        :class="[item === activeItems ? 'activeItems' : '', { cached: isCached(item.id) }]"
       >
         <td
           v-for="(field, index) in fields"
@@ -110,7 +110,7 @@
           </span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
-        <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item.id, null)">mdi-pencil</v-icon></td>
+        <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon></td>
         <td><v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)">mdi-delete</v-icon></td>
       </tr>
     </tbody>
@@ -134,6 +134,7 @@ const props = withDefaults(
     searchColumns?: string[];
     defaultSortBy?: string;
     defaultSortOrder?: string;
+    cachePrefix?: string;
   }>(),
   {
     defaultSortBy: "created_at",
@@ -152,6 +153,16 @@ const resetActiveItems = () => {
   activeItems.value = null;
 };
 
+const isCached = (itemId: string) => {
+  if (!props.cachePrefix) return false;
+  if (!props.cachePrefix.includes(",")) {
+    return localStorage.getItem(`${props.cachePrefix}_${itemId.replaceAll("-", "_")}`);
+  }
+  return props.cachePrefix
+    .split(",")
+    .some((prefix) => localStorage.getItem(`${prefix}_${itemId.replaceAll("-", "_")}`));
+};
+
 const emitopenDeleteDialog = (itemId: any) => {
   emit("openDeleteDialog", itemId);
 };
@@ -163,15 +174,15 @@ const handleEmitParent = (item: any, field: any, menu_order: any) => {
   } else if (field.type === "move_down") {
     move(item, items.value[(menu_order += 1)]);
   } else if (field.type !== "switch" && field.type !== "enumDropdown") {
-    emitParent(item.id, field.emit);
+    emitParent(item, field.emit);
   }
 };
 
-const emitParent = (itemId: any, fieldEmit: any) => {
+const emitParent = (item: any, fieldEmit: any) => {
   if (!fieldEmit) {
-    emit("openCreateEditDialog", itemId);
+    emit("openCreateEditDialog", item);
   } else {
-    emit(fieldEmit, itemId);
+    emit(fieldEmit, item.id);
   }
 };
 
@@ -268,6 +279,9 @@ defineExpose({ resetActiveItems, getItems });
 </script>
 
 <style lang="sass">
+.cached
+  background: rgba(orange, 0.1)
+
 .small
   font-size: 8px
 

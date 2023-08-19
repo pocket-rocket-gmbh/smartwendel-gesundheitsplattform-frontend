@@ -20,8 +20,10 @@
                 itemId = null;
                 createEditDialogOpen = true;
               "
-              >Kurs anlegen</v-btn
+              :class="{ orange: newCourseFromCache }"
             >
+              Kurs anlegen<span v-if="newCourseFromCache"> - weiter</span>
+            </v-btn>
             <v-btn
               elevation="0"
               variant="outlined"
@@ -30,8 +32,10 @@
                 itemId = null;
                 createEditDialogOpen = true;
               "
-              >Veranstaltung anlegen</v-btn
+              :class="{ orange: newEventFromCache }"
             >
+              Veranstaltung anlegen <span v-if="newEventFromCache"> - weiter</span>
+            </v-btn>
           </div>
         </v-col>
         <v-col>
@@ -56,6 +60,7 @@
       endpoint="care_facilities?kind=event,course"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
+      :cache-prefix="'events,courses'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
@@ -66,11 +71,7 @@
         v-if="itemPlaceholder.kind === 'course'"
         :item-id="itemId"
         :item-placeholder="itemPlaceholder"
-        @close="
-          createEditDialogOpen = false;
-          itemId = null;
-          dataTableRef?.resetActiveItems();
-        "
+        @close="handleCreateEditClose"
         endpoint="care_facilities"
         :concept-name="'Kurs'"
         :enableCache="true"
@@ -80,11 +81,7 @@
         v-if="itemPlaceholder.kind === 'event'"
         :item-id="itemId"
         :item-placeholder="itemPlaceholder"
-        @close="
-          createEditDialogOpen = false;
-          itemId = null;
-          dataTableRef?.resetActiveItems();
-        "
+        @close="handleCreateEditClose"
         endpoint="care_facilities"
         :concept-name="'Veranstaltung'"
         :enableCache="true"
@@ -129,6 +126,9 @@ const fields = [
   },
 ];
 
+const newCourseFromCache = ref(false);
+const newEventFromCache = ref(false);
+
 const facilitySearchColums = ref(["name", "user.name", "kind"]);
 const facilitySearchTerm = ref("");
 
@@ -139,7 +139,7 @@ const confirmDeleteDialogOpen = ref(false);
 const itemId = ref(null);
 const setupFinished = ref(false);
 
-const itemPlaceholder = ref<any>({
+const itemPlaceholder = ref({
   name: "",
   kind: "event",
   status: "is_checked",
@@ -150,10 +150,18 @@ const itemPlaceholder = ref<any>({
   tag_ids: [],
   tag_category_ids: [],
   offlineDocuments: [],
+  email: "",
+  zip: "",
+  town: "",
+  street: "",
+  phone: "",
+  community: "",
+  community_id: "",
 });
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const openCreateEditDialog = (item: any) => {
+  itemPlaceholder.value.kind = item.kind;
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 
@@ -177,6 +185,14 @@ const coursesCacheKey = computed(() => {
   return `courses_${itemId.value.replaceAll("-", "_")}`;
 });
 
+const handleCreateEditClose = () => {
+  createEditDialogOpen.value = false;
+  itemId.value = null;
+  dataTableRef.value?.resetActiveItems();
+  newCourseFromCache.value = !!localStorage.getItem("courses_new");
+  newEventFromCache.value = !!localStorage.getItem("events_new");
+};
+
 onMounted(async () => {
   loading.value = true;
   if (!user.isAdmin()) {
@@ -194,8 +210,13 @@ onMounted(async () => {
 
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
+
+  newCourseFromCache.value = !!localStorage.getItem("courses_new");
+  newEventFromCache.value = !!localStorage.getItem("events_new");
 });
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"
+.orange
+  color: orange
 </style>

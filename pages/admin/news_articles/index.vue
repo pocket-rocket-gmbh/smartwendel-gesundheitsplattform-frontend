@@ -17,8 +17,10 @@
             itemId = null;
             createEditDialogOpen = true;
           "
-          >Beitrag anlegen</v-btn
+          :class="{ orange: newNewsFromCache }"
         >
+          Beitrag anlegen <span v-if="newNewsFromCache"> - weiter</span>
+        </v-btn>
       </v-col>
       <v-col>
         <v-text-field
@@ -36,6 +38,7 @@
       endpoint="care_facilities?kind=news"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
+      :cache-prefix="'news'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       ref="dataTableRef"
@@ -45,11 +48,7 @@
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
-      @close="
-        createEditDialogOpen = false;
-        itemId = null;
-        dataTableRef?.resetActiveItems();
-      "
+      @close="handleCreateEditClose"
       endpoint="care_facilities"
       concept-name="Beiträge"
       :enableCache="true"
@@ -107,8 +106,10 @@ const itemPlaceholder = ref<any>({
   tag_category_ids: [],
   offlineDocuments: [],
   image_url: "",
-  file: ""
+  file: "",
 });
+
+const newNewsFromCache = ref(false);
 
 const cacheKey = computed(() => {
   if (!itemId.value) {
@@ -118,8 +119,15 @@ const cacheKey = computed(() => {
   return `news_${itemId.value.replaceAll("-", "_")}`;
 });
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const handleCreateEditClose = () => {
+  createEditDialogOpen.value = false;
+  itemId.value = null;
+  dataTableRef.value?.resetActiveItems();
+  newNewsFromCache.value = !!localStorage.getItem("facilities_new");
+};
+
+const openCreateEditDialog = (item: any) => {
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 
@@ -147,6 +155,8 @@ onMounted(async () => {
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
 
+  newNewsFromCache.value = !!localStorage.getItem("news_new");
+
   const currentUserRole = user.currentUser.role;
   availableFields.forEach((field) => {
     if (!field.condition) fields.value.push(field);
@@ -156,4 +166,6 @@ onMounted(async () => {
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"
+.orange
+  color: orange
 </style>

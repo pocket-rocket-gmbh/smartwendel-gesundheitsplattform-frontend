@@ -342,6 +342,8 @@ onMounted(async () => {
     isCachedItem.value = true;
   }
 
+  console.log(props.cacheKey, props.itemId)
+
   triggerSaveHintTimeout();
   requestAnimationFrame(() => form.value?.validate());
 
