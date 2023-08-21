@@ -2,7 +2,7 @@
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
-        <v-col md="2">
+        <v-col md="3">
           <div class="mt-10 mx-5 menu-boxes">
             <div
               v-for="[key, step] in Object.entries(steps)"
@@ -16,7 +16,7 @@
             </div>
           </div>
         </v-col>
-        <v-col md="10">
+        <v-col md="9">
           <div class="py-10">
             <span class="text-h6"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein spezifisches Leistungsangebot in einem eigenen Profil darstellen und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen und Besucher der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</span
@@ -411,7 +411,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   logo: {
     label: "2. Hier kannst du dein Logo hochladen. *",
-    description: "Logo",
+    description: "Dein Logo",
     props: ["logo_url", "logo"],
     justSome: true,
     tooltip: "Dein Logo wird im Kopfbereich deiner Profilseite angezeigt. Falls du kein eigenes Logo hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. "
@@ -420,25 +420,25 @@ const steps: CreateEditSteps<StepNames> = {
     label: "3.	Bitte lade hier dein Coverbild hoch. *",
     tooltip:
       "Das Coverbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Coverbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
-    description: "Foto",
+    description: "Coverbild",
     props: ["image_url"],
   },
   gallery: {
     label: "4.	Hier kannst du Bilder für deine Galerie hochladen.",
-    description: "Galerie Fotos",
+    description: "Fotogalerie",
     props: ["sanitized_images"],
     tooltip: "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten."
   },
   description: {
     label: "5. Bitte beschreibe deine Einrichtung/dein Unternehmen und das damit verbundene Leistungsangebot ausführlich. *",
-    description: "Beschreibung",
+    description: "Beschreibungstext",
     placeholder:
       "Nutze dieses Feld, um deine Einrichtung/dein Unternehmen ausführlich zu präsentieren. Hier kannst du bspw. Informationen zu deinem individuellen Leistungsangebot, deinem Standort, den wichtigsten Ansprechpartnerinnen und Ansprechpartnern, Links zu deinen Sozialen Medien und weitere Informationen, die du den Nutzerinnen und Nutzern mitgeben möchtest hinterlegen. Je detaillierter die Beschreibung, desto einfacher können dich Besucherinnen und Besucher über das Suchfeld der Startseite finden.",
     props: ["description"],
   },
   category: {
     label: "6. Bitte wähle deine Branche aus *",
-    description: "Berufszweig",
+    description: "Branchenzugehörigkeit",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
     tooltip: "Mehrfachangaben möglich."
@@ -447,7 +447,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "7. Bitte ordne deiner Einrichtung/deinem Unternehmen passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
       "Wähle alle für dich relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, umso leichter können dich Besucherinnen und Besucher im Rahmen einer benutzerdefinierten Suche finden. ",
-    description: "Leistung",
+    description: "Leistungen und Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
@@ -459,7 +459,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   locations: {
     label: "9. Falls deine Einrichtung mehrere Standorte hat, kannst du diese hier ergänzen.",
-    description: "Standorte",
+    description: "Weitere -Standorte",
     props: ["locations", "offlineLocations"],
     justSome: true,
     tooltip: " Bitte beachte, dass nur Standorte innerhalb des Landkreises Sankt Wendel angegeben werden können."
@@ -473,14 +473,14 @@ const steps: CreateEditSteps<StepNames> = {
   website: {
     label: "11.	Hier kannst du einen Link zu deiner Webseite oder einem deiner Kanäle in den Sozialen Medien hinterlegen.",
     tooltip: "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
-    description: "Webseite",
+    description: "Links",
     props: ["website"],
   },
   documents: {
     label: "12.	Hier kannst du Dokumente zu deiner Einrichtung/deinem Unternehmen hochladen.",
     tooltip:
       "Dokumente können z. B. dein aktueller Kursplan, eine Unternehmenspräsentation oder Anmeldebögen sein. ",
-    description: "Dokumente",
+    description: "Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
   },
