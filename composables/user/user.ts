@@ -27,6 +27,22 @@ export function useUser() {
 
     const currentUserFacility = await getCurrentUserFacilities();
 
+    const test =
+      !!currentUserFacility &&
+      !!currentUserFacility?.zip &&
+      !!currentUserFacility?.town &&
+      !!currentUserFacility?.street &&
+      !!currentUserFacility?.phone &&
+      !!currentUserFacility?.community &&
+      !!currentUserFacility?.community_id;
+    return test;
+  };
+
+  const facilityFinished = async () => {
+    if (isAdmin()) return true;
+
+    const currentUserFacility = await getCurrentUserFacilities();
+
     return isCompleteFacility(currentUserFacility);
   };
 
@@ -51,5 +67,6 @@ export function useUser() {
     currentUser,
     logout,
     setupFinished,
+    facilityFinished,
   };
 }
