@@ -54,7 +54,7 @@
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
-          <!-- <div class="field">
+          <div class="field">
             <v-select
               hide-details="auto"
               v-model="careFacilityCommunityId"
@@ -84,7 +84,7 @@
               label="Ort"
               :rules="[rules.required]"
             />
-          </div> -->
+          </div>
           <v-checkbox v-model="privacyAccepted" :rules="[rules.required]">
             <template v-slot:label>
               <div>
