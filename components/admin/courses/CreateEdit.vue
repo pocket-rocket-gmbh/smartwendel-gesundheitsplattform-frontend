@@ -318,7 +318,7 @@
           <div class="field" id="leader">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["leader"].label }}</span>
-                <v-tooltip location="top" width="300px">
+              <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
@@ -439,9 +439,11 @@ const steps: CreateEditSteps<StepNames> = {
   },
   photo: {
     label: "2. Bitte lade hier ein Coverbild hoch. *",
-    tooltip: "Das Coverbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
+    tooltip:
+      "Das Coverbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
     description: "Coverbild",
-    props: ["image_url"],
+    props: ["image_url", "file"],
+    justSome: true,
   },
   gallery: {
     label: "3. Lade weitere Bilder für eine Galerie hoch",
@@ -453,7 +455,8 @@ const steps: CreateEditSteps<StepNames> = {
     label: "4. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
     tooltip: "",
     description: "Beschreibungstext",
-    placeholder: "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
+    placeholder:
+      "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
@@ -466,7 +469,8 @@ const steps: CreateEditSteps<StepNames> = {
   },
   services: {
     label: "6. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
-    tooltip: "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
+    tooltip:
+      "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
     description: "Leistungen und Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
@@ -481,19 +485,20 @@ const steps: CreateEditSteps<StepNames> = {
   certificates: {
     label:
       "8.	Bitte lade das Zertifikat der Zentralen Prüfungsstelle Prävention (ZPP) hoch, wenn es sich um einen von der gesetzlichen Krankenkasse geförderten Präventionskurs handelt",
-    tooltip: "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
+    tooltip:
+      "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
     description: "Zertifikate",
     props: ["billable_through_health_insurance"],
   },
   website: {
-    label: "9. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können",
+    label:
+      "9. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können",
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
     props: ["website"],
   },
   documents: {
-    label:
-      "10. Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen.",
+    label: "10. Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen.",
     tooltip: "",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],

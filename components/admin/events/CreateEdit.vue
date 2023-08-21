@@ -1,9 +1,6 @@
 <template>
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
-    <v-card-text
-      v-if="slotProps.item && Object.entries(slotProps.item).length"
-      class="mb-15"
-    >
+    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
@@ -23,9 +20,9 @@
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind,
-                desto besser können dich Besucherinnen und Besuchern auf der Webseite
-                finden. Pflichtfelder sind mit einem Sternchen versehen.</span
+                >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich
+                Besucherinnen und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen
+                versehen.</span
               >
             </div>
           </div>
@@ -46,14 +43,10 @@
 
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["photo"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["photo"].label }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
@@ -72,18 +65,13 @@
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{ steps["gallery"].label }}</span>
             </div>
-            <AdminCareFacilitiesAddImages
-              :item-id="slotProps.item.id"
-              @offline="(file) => setOfflineImage(file)"
-            />
+            <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
           </div>
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="description">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["description"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["description"].label }}</span>
             </div>
             <div class="editor">
               <ClientOnly>
@@ -103,18 +91,11 @@
                     :toolbar="textToolbar"
                     @ready="onQuillReady"
                   />
-                  <div
-                    v-if="isDescriptionEmpty(slotProps.item.description)"
-                    class="required"
-                  >
-                    Erforderlich
-                  </div>
+                  <div v-if="isDescriptionEmpty(slotProps.item.description)" class="required">Erforderlich</div>
                   <v-text-field
                     v-show="false"
                     class="hidden-text-field"
-                    :model-value="
-                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
-                    "
+                    :model-value="isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'"
                     :rules="[rules.required]"
                   />
                 </div>
@@ -125,14 +106,10 @@
 
           <div class="field" id="category">
             <div class="my-3 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["category"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["category"].label }}</span>
               <v-tooltip location="top" width="200px">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
                 <span>{{ steps["category"].tooltip }}</span>
               </v-tooltip>
@@ -151,14 +128,10 @@
 
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["services"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
                 <span>{{ steps["services"].tooltip }}</span>
               </v-tooltip>
@@ -175,8 +148,8 @@
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein
-                    Unternehmen nicht zu finden ist, kontaktiere uns bitte
+                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden
+                    ist, kontaktiere uns bitte
                   </span>
                   <span>
                     <a
@@ -233,10 +206,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr
-                        v-for="(date, index) in slotProps.item.event_dates"
-                        :key="index"
-                      >
+                      <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
                         <td>{{ date }}</td>
                       </tr>
                     </tbody>
@@ -249,9 +219,7 @@
 
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["website"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["website"].label }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -267,9 +235,7 @@
 
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["documents"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["documents"].label }}</span>
             </div>
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
@@ -282,14 +248,10 @@
 
           <div class="field" id="leader">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["leader"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["leader"].label }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
                 <span>{{ steps["leader"].tooltip }}</span>
               </v-tooltip>
@@ -323,9 +285,7 @@
                   hide-details="auto"
                   label="Straße und Nummer"
                   :rules="[rules.counterStreet]"
-                  :error-messages="
-                    useErrors().checkAndMapErrors('street', slotProps.errors)
-                  "
+                  :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
                 />
               </div>
               <div class="field">
@@ -398,7 +358,7 @@ const stepNames = [
   "leader",
   "address",
 ] as const;
-type StepNames = typeof stepNames[number];
+type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deines Kurses ein. *",
@@ -408,9 +368,10 @@ const steps: CreateEditSteps<StepNames> = {
   photo: {
     label: "2. Bitte lade hier ein Coverbild hoch.  *",
     description: "Foto",
-    props: ["image_url"],
+    props: ["image_url", "file"],
     tooltip:
       "Das Coverbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
+    justSome: true,
   },
   gallery: {
     label: "3. Hier kannst du weitere Bilder für deine Galerie hochladen.",
@@ -455,8 +416,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["website"],
   },
   documents: {
-    label:
-      "9.	Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen. ",
+    label: "9.	Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen. ",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
@@ -627,9 +587,7 @@ const setOfflineImage = (images: any) => {
   });
 };
 
-const handleDocumentsOffline = (
-  newOfflineDocuments: CreateEditFacility["offlineDocuments"]
-) => {
+const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offlineDocuments"]) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "offlineDocuments",
     value: newOfflineDocuments,
