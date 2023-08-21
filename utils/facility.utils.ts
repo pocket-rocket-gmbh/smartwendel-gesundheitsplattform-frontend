@@ -7,6 +7,7 @@ export const isCompleteFacility = (facility: Facility) => {
     facility.logo_url &&
     facility.image_url &&
     facility.description &&
+    facility.description !== "<p><br></p>" &&
     facility.tag_category_ids?.length &&
     facility.street &&
     facility.community_id &&

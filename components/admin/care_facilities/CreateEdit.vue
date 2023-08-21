@@ -92,6 +92,12 @@
                     @ready="onQuillReady"
                   />
                   <div v-if="isDescriptionEmpty(slotProps.item.description)" class="required">Erforderlich</div>
+                  <v-text-field
+                    v-show="false"
+                    class="hidden-text-field"
+                    :model-value="isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'"
+                    :rules="[rules.required]"
+                  />
                 </div>
               </ClientOnly>
             </div>
@@ -397,6 +403,7 @@ const steps: CreateEditSteps<StepNames> = {
     placeholder:
       "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc.",
     props: ["description"],
+    checkHandler: isDescriptionEmpty,
   },
   category: {
     label: "6. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte zu *",
@@ -477,9 +484,9 @@ const onQuillReady = (quill: any) => {
   });
 };
 
-const isDescriptionEmpty = (description?: string) => {
+function isDescriptionEmpty(description?: string) {
   return !description || description === "<p><br></p>";
-};
+}
 
 const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
@@ -508,6 +515,13 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
     }
+  }
+
+  if (item.checkHandler) {
+    const result = props.every((prop) => {
+      return !item.checkHandler(slotPropsItem[prop]);
+    });
+    return result;
   }
 
   if (item.justSome) {

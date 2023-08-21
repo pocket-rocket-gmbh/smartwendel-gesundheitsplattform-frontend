@@ -22,6 +22,7 @@ export type CreateEditStep = {
   tooltip?: string;
   justSome?: boolean;
   specialFilter?: FilterType;
+  checkHandler?: (item: any) => boolean
 };
 export type CreateEditSteps<T extends string> = {
   [key in T]: CreateEditStep;
