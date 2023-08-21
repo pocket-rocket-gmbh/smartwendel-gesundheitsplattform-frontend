@@ -758,7 +758,7 @@ onMounted(async () => {
 .dp__action_buttons {
   justify-content: center;
   margin-right: auto;
-  padding: 10px;
+  padding: 20px;
 }
 
 .dp__action_button {
