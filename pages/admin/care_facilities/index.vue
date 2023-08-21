@@ -191,7 +191,7 @@ const handlePreviewClose = () => {
 
 onMounted(async () => {
   loading.value = true;
-  setupFinished.value = await useUser().setupFinished();
+  setupFinished.value = await useUser().facilityFinished();
   loading.value = false;
 
   newFacilityFromCache.value = !!localStorage.getItem("facilities_new");

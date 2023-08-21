@@ -110,7 +110,7 @@
               </div>
             </template>
           </v-checkbox>
-          <v-btn color="primary" block depressed @click="register" :disabled="!formValidated">Registrieren</v-btn>
+          <v-btn color="primary" block depressed @click="register">Registrieren</v-btn>
         </v-form>
         <div v-if="registerSuccessful" align="center">
           Deine Registrierung war erfolgreich.<br />Wir haben Dir soeben eine E-Mail mit weiteren Anweisungen und einem
@@ -147,11 +147,15 @@ const isValidEmail = (email: string) => {
   return re.test(email);
 };
 
-const formValidated = computed(() => {
-  return registerForm.value?.isValid;
-});
+// const formValidated = computed(() => {
+//   return registerForm.value?.isValid;
+// });
 
 const register = async () => {
+  const { valid } = await registerForm.value.validate();
+
+  if (!valid) return;
+
   loading.value = true;
   errors.value = {};
   const data = {
@@ -211,7 +215,7 @@ onMounted(() => {
     }, 300);
   }
 
-  registerForm.value?.validate()
+  // registerForm.value?.validate()
 });
 </script>
 

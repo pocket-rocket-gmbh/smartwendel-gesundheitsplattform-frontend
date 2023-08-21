@@ -38,6 +38,14 @@ export function useUser() {
     return test;
   };
 
+  const facilityFinished = async () => {
+    if (isAdmin()) return true;
+
+    const currentUserFacility = await getCurrentUserFacilities();
+
+    return isCompleteFacility(currentUserFacility);
+  };
+
   const isFacilityOwner = (): Boolean => {
     if (currentUser) {
       return currentUser.role === "facility_owner";
@@ -59,5 +67,6 @@ export function useUser() {
     currentUser,
     logout,
     setupFinished,
+    facilityFinished,
   };
 }
