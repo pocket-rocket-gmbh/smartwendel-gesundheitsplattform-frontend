@@ -2,7 +2,7 @@
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
-        <v-col md="2">
+        <v-col md="3">
           <div class="mt-10 mx-5 menu-boxes">
             <div
               v-for="[key, step] in Object.entries(steps)"
@@ -16,7 +16,7 @@
             </div>
           </div>
         </v-col>
-        <v-col md="10">
+        <v-col md="9">
           <div class="py-10">
             <div>
               <span class="text-h6"
@@ -202,12 +202,32 @@
                   <v-table density="compact" fixed-header height="400px">
                     <thead>
                       <tr>
+                        <th></th>
                         <th class="text-left">Datum</th>
+                        <th class="text-left">Löschen</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
+                        <td>
+                          <v-btn
+                            class="mx-3"
+                            size="large"
+                            color="primary"
+                            target="_blank"
+                            density="compact"
+                            icon="mdi-calendar-outline"
+                          >
+                          </v-btn>
+                        </td>
                         <td>{{ date }}</td>
+                        <td>
+                          <v-btn
+                            icon="mdi-delete"
+                            variant="text"
+                            @click="deleteDate(index, slotProps.item.event_dates)"
+                          ></v-btn>
+                        </td>
                       </tr>
                     </tbody>
                   </v-table>
@@ -456,6 +476,13 @@ const textOptions = ref({
   toolbar: textToolbar.value,
   required: true,
 });
+
+const deleteDate = (index: number, dates: string[]) => {
+  const confirmed = confirm("Sicher dass du diesen Termin löschen möchtest?");
+  if (confirmed) {
+    dates.splice(index, 1);
+  }
+};
 
 const communitiesApi = useCollectionApi();
 communitiesApi.setBaseApi(usePrivateApi());
