@@ -83,8 +83,9 @@ const previewItem = ref<Facility>();
 
 const user = useUser();
 const loading = ref(false);
+const router = useRouter();
 
-const availableFields = [
+const fields = [
   {
     prop: "is_active",
     text: "Aktiv",
@@ -95,13 +96,18 @@ const availableFields = [
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
-  { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  {
+    prop: "user.firstname",
+    text: "Erstellt von",
+    value: "user.name",
+    condition: "admin",
+    type: "button",
+    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+  },
 ];
 
 const facilitySearchColums = ref(["name", "user.name", "created_at"]);
 const facilitySearchTerm = ref("");
-
-const fields = ref([]);
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
@@ -180,10 +186,10 @@ onMounted(async () => {
   newNewsFromCache.value = !!localStorage.getItem("news_new");
 
   const currentUserRole = user.currentUser.role;
-  availableFields.forEach((field) => {
-    if (!field.condition) fields.value.push(field);
-    if (currentUserRole === field.condition) fields.value.push(field);
-  });
+  // availableFields.forEach((field) => {
+  //   if (!field.condition) fields.value.push(field);
+  //   if (currentUserRole === field.condition) fields.value.push(field);
+  // });
 });
 </script>
 <style lang="sass">

@@ -118,6 +118,11 @@
               </div>
             </div>
           </span>
+          <span v-else-if="field.type === 'button' && field.action">
+            <button @click.stop="field.action(item)">
+              {{ pathInto(item, field.value) }}
+            </button>
+          </span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit"><v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon></td>
