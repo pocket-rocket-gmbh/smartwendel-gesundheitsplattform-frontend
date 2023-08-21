@@ -19,7 +19,10 @@
         <v-col md="9">
           <div class="py-10">
             <span class="text-h6"
-              >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein spezifisches Leistungsangebot in einem eigenen Profil darstellen und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen und Besucher der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</span
+              >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein spezifisches Leistungsangebot in einem
+              eigenen Profil darstellen und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer
+              deine Angaben sind, desto besser können dich Besucherinnen und Besucher der Webseite finden. Pflichtfelder
+              sind mit einem Sternchen versehen.</span
             >
           </div>
           <div class="field" id="name">
@@ -312,8 +315,8 @@
 
           <div class="field" id="locations">
             <div class="my-2 d-flex align-center">
-                <span class="text-h5 mr-3 font-weight-bold">{{ steps["locations"].label }}</span>
-                <v-tooltip location="top" width="300px">
+              <span class="text-h5 mr-3 font-weight-bold">{{ steps["locations"].label }}</span>
+              <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
@@ -425,23 +428,27 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Dein Logo",
     props: ["logo_url", "logo"],
     justSome: true,
-    tooltip: "Dein Logo wird im Kopfbereich deiner Profilseite angezeigt. Falls du kein eigenes Logo hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. "
+    tooltip:
+      "Dein Logo wird im Kopfbereich deiner Profilseite angezeigt. Falls du kein eigenes Logo hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. ",
   },
   photo: {
     label: "3.	Bitte lade hier dein Coverbild hoch. *",
     tooltip:
       "Das Coverbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Coverbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
     description: "Coverbild",
-    props: ["image_url"],
+    props: ["image_url", "file"],
+    justSome: true,
   },
   gallery: {
     label: "4.	Hier kannst du Bilder für deine Galerie hochladen.",
     description: "Fotogalerie",
     props: ["sanitized_images"],
-    tooltip: "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten."
+    tooltip:
+      "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
   },
   description: {
-    label: "5. Bitte beschreibe deine Einrichtung/dein Unternehmen und das damit verbundene Leistungsangebot ausführlich. *",
+    label:
+      "5. Bitte beschreibe deine Einrichtung/dein Unternehmen und das damit verbundene Leistungsangebot ausführlich. *",
     description: "Beschreibungstext",
     placeholder:
       "Nutze dieses Feld, um deine Einrichtung/dein Unternehmen ausführlich zu präsentieren. Hier kannst du bspw. Informationen zu deinem individuellen Leistungsangebot, deinem Standort, den wichtigsten Ansprechpartnerinnen und Ansprechpartnern, Links zu deinen Sozialen Medien und weitere Informationen, die du den Nutzerinnen und Nutzern mitgeben möchtest hinterlegen. Je detaillierter die Beschreibung, desto einfacher können dich Besucherinnen und Besucher über das Suchfeld der Startseite finden.",
@@ -453,7 +460,7 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Branchenzugehörigkeit",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
-    tooltip: "Mehrfachangaben möglich."
+    tooltip: "Mehrfachangaben möglich.",
   },
   services: {
     label: "7. Bitte ordne deiner Einrichtung/deinem Unternehmen passende Ausstattungs- und Leistungsfilter zu. *",
@@ -474,24 +481,26 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Weitere -Standorte",
     props: ["locations", "offlineLocations"],
     justSome: true,
-    tooltip: " Bitte beachte, dass nur Standorte innerhalb des Landkreises Sankt Wendel angegeben werden können."
+    tooltip: " Bitte beachte, dass nur Standorte innerhalb des Landkreises Sankt Wendel angegeben werden können.",
   },
   openingHours: {
     label: "10.	Bitte trage hier deine genauen Öffnungszeiten ein.",
     description: "Öffnungszeiten",
     props: ["opening_hours"],
-    tooltip: "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen."
+    tooltip:
+      "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
   },
   website: {
-    label: "11.	Hier kannst du einen Link zu deiner Webseite oder einem deiner Kanäle in den Sozialen Medien hinterlegen.",
-    tooltip: "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
+    label:
+      "11.	Hier kannst du einen Link zu deiner Webseite oder einem deiner Kanäle in den Sozialen Medien hinterlegen.",
+    tooltip:
+      "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
     description: "Links",
     props: ["website"],
   },
   documents: {
     label: "12.	Hier kannst du Dokumente zu deiner Einrichtung/deinem Unternehmen hochladen.",
-    tooltip:
-      "Dokumente können z. B. dein aktueller Kursplan, eine Unternehmenspräsentation oder Anmeldebögen sein. ",
+    tooltip: "Dokumente können z. B. dein aktueller Kursplan, eine Unternehmenspräsentation oder Anmeldebögen sein. ",
     description: "Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
