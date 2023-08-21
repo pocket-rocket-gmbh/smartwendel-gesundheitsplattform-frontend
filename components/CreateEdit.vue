@@ -18,11 +18,11 @@
 
         <v-card-actions class="card-actions">
           <v-btn @click="emitClose()"> Schließen </v-btn>
-          <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
+          <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
-          </v-btn>
+          </v-btn> TODO: Testen/Fixen -->
           <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
-            Speichern
+            {{ saveButtonText }}
           </v-btn>
           <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined">
             Zurücksetzen
@@ -118,6 +118,16 @@ const itemHastChanged = ref(false);
 
 const isCachedItem = ref(false);
 
+const saveButtonText = computed(() => {
+  if (!props.enableCache) return "Speichern";
+  const allValid = form.value?.isValid;
+  if (!allValid) {
+    return "Zwischenspeichern";
+  }
+
+  return "Speichern";
+});
+
 const getItem = async () => {
   if (!props.itemId) return;
 
@@ -141,6 +151,19 @@ const handleCta = async () => {
   const { valid } = await form.value.validate();
 
   if (!valid) {
+    if (props.enableCache && props.cacheKey) {
+      if (
+        !areObjectsEqual(deepToRaw(item.value), deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder))
+      ) {
+        localStorage.setItem(props.cacheKey, JSON.stringify(toRaw(item.value)));
+        checkCachedItem();
+      }
+
+      snackbar.showInfo("Die Änderungen wurden zwischengespeichert");
+
+      itemHastChanged.value = false;
+      return;
+    }
     const formErrors = await form.value.errors;
     errors.value = formErrors.map((err) => err.errorMessages[0]);
     snackbar.showError("Speichern fehlgeschlagen! Es gibt ungültige Felder!");
@@ -155,7 +178,7 @@ const handleCta = async () => {
 
 const handleShowPreviewClicked = () => {
   emit("showPreview", item.value);
-}
+};
 
 const create = async () => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
@@ -255,6 +278,7 @@ const handleResetCache = async () => {
   if (confirmed) {
     localStorage.removeItem(props.cacheKey);
     checkCachedItem();
+    itemHastChanged.value = false;
 
     if (props.itemId) {
       await getItem();
@@ -287,28 +311,15 @@ const emitClose = () => {
     return;
   }
 
-  if (!props.enableCache || !props.cacheKey) {
-    const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
-    if (confirmed) {
-      item.value = { ...props.itemPlaceholder };
-      emit("close");
-    }
-    return;
+  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
+  if (confirmed) {
+    item.value = { ...props.itemPlaceholder };
+    emit("close");
   }
 
-  if (!areObjectsEqual(deepToRaw(item.value), deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder))) {
-    localStorage.setItem(props.cacheKey, JSON.stringify(toRaw(item.value)));
-  }
-
-  item.value = { ...props.itemPlaceholder };
-  emit("close");
 };
 
 defineExpose({ getItem });
-
-watch(item, () => form.value?.validate(), {
-  deep: true,
-});
 
 watch(
   [
@@ -356,10 +367,15 @@ onMounted(async () => {
   triggerSaveHintTimeout();
   requestAnimationFrame(() => form.value?.validate());
 
+  const initialItem = deepToRaw(item.value);
+
   watch(
     () => item.value,
     () => {
-      itemHastChanged.value = true;
+      if (!areObjectsEqual(deepToRaw(item.value), initialItem)) {
+        itemHastChanged.value = true;
+      }
+      form.value?.validate();
     },
     { deep: true }
   );
