@@ -32,6 +32,7 @@
           v-for="(field, index) in fields"
           :key="index"
           class="is-clickable"
+          :class="{ disabled: field?.disabledCondition?.(item) }"
           @click="handleEmitParent(item, field, indexMain)"
           :width="field.width"
         >
@@ -79,10 +80,11 @@
                     :notification-pre-filled-headline="field.notificationPreFilledHeadline"
                     :notification-pre-filled-text="field.notificationPreFilledText"
                     :notification-cta-link="field.notificationCtaLink"
+                    :disabled="field?.disabledCondition?.(item)"
                   />
                 </div>
               </template>
-              <span>{{ field.tooltip }}</span>
+              <span>{{ field?.disabledCondition?.(item) ? field.disabledTooltip : field.tooltip }}</span>
             </v-tooltip>
           </template>
 
@@ -313,4 +315,8 @@ defineExpose({ resetActiveItems, getItems });
 
     &.up
       transform: rotate(180deg)
+
+
+.disabled
+  cursor: not-allowed !important
 </style>

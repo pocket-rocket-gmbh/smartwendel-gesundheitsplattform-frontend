@@ -49,6 +49,7 @@
               :temp-image="slotProps.item.file"
               label="Cover Bild"
               @setImage="setCoverBild"
+              @delete-image="handleDeleteCover"
               :min-size="true"
             />
           </div>
@@ -67,16 +68,25 @@
             </div>
             <div class="editor">
               <ClientOnly>
-                <QuillEditor
-                  ref="ql-editor"
-                  class="ql-blank"
-                  :placeholder="steps['description'].placeholder"
-                  :options="textOptions"
-                  v-model:content="slotProps.item.description"
-                  contentType="html"
-                  :toolbar="textToolbar"
-                  @ready="onQuillReady"
-                />
+                <div class="text-editor" :class="{ 'empty-editor': isDescriptionEmpty(slotProps.item.description) }">
+                  <QuillEditor
+                    ref="ql-editor"
+                    class="ql-blank"
+                    :placeholder="steps['description'].placeholder"
+                    :options="textOptions"
+                    v-model:content="slotProps.item.description"
+                    contentType="html"
+                    :toolbar="textToolbar"
+                    @ready="onQuillReady"
+                  />
+                  <div v-if="isDescriptionEmpty(slotProps.item.description)" class="required">Erforderlich</div>
+                  <v-text-field
+                    v-show="false"
+                    class="hidden-text-field"
+                    :model-value="isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'"
+                    :rules="[rules.required]"
+                  />
+                </div>
               </ClientOnly>
             </div>
           </div>
@@ -421,6 +431,7 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Beschreibung",
     placeholder: "Beschreibung des Kurses. Nützliche Inhalte: Kursdauer, empfohlene Kleidung, etc",
     props: ["description"],
+    checkHandler: isDescriptionEmpty,
   },
   category: {
     label: "5. Weise deinen Kurs / Veranstaltung gezielt einem Berufszweig / einer Sparte zu ",
@@ -465,7 +476,7 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   leader: {
-    label: "11. Vor- und Nachname der Kursleitung",
+    label: "11. Vor- und Nachname der Kursleitung *",
     tooltip: "",
     description: "Kursleitung",
     props: ["name_instructor"],
@@ -512,6 +523,10 @@ const onQuillReady = (quill: any) => {
   });
 };
 
+function isDescriptionEmpty(description?: string) {
+  return !description || description === "<p><br></p>";
+}
+
 const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
 };
@@ -543,6 +558,13 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
     }
+  }
+
+  if (item.checkHandler) {
+    const result = props.every((prop) => {
+      return !item.checkHandler(slotPropsItem[prop]);
+    });
+    return result;
   }
 
   if (item.justSome) {
@@ -582,6 +604,17 @@ const setCoverBild = (image: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
     value: image,
+  });
+};
+
+const handleDeleteCover = () => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "file",
+    value: null,
+  });
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "image_url",
+    value: null,
   });
 };
 
@@ -738,5 +771,23 @@ onMounted(async () => {
 
 .ql-blank::before {
   font-size: 18px;
+}
+
+.text-editor {
+  padding-top: calc(0.5rem + 1px);
+  padding-bottom: calc(0.5rem + 1px + 12px);
+}
+
+.empty-editor {
+  border-top: 1px solid rgb(164, 34, 88);
+  border-bottom: 1px solid rgb(164, 34, 88);
+  padding-top: 0.5rem;
+  padding-bottom: 0;
+}
+
+.required {
+  color: rgb(164, 34, 88);
+  font-size: 12px;
+  padding-left: 16px;
 }
 </style>

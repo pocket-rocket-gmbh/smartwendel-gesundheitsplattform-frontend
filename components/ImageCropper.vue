@@ -17,6 +17,8 @@
         aspectRatio: aspectRatio,
       }"
       @change="onChange"
+      :auto-zoom="true"
+      :imageRestriction="'none'"
     />
     <v-card-actions>
       <v-btn @click="emitClose()"> Bild verwerfen </v-btn>

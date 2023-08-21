@@ -15,10 +15,11 @@
     v-model="switchValue"
     color="success"
     hide-details
+    :disabled="disabled"
   ></v-switch>
 </template>
 <script lang="ts">
-import SendNotification from '@/components/SendNotification.vue'
+import SendNotification from "@/components/SendNotification.vue";
 export default defineComponent({
   components: { SendNotification },
   props: {
@@ -30,38 +31,42 @@ export default defineComponent({
     notificationKindExplicit: String,
     notificationPreFilledHeadline: String,
     notificationPreFilledText: String,
-    notificationCtaLink: String
+    notificationCtaLink: String,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup (props) {
-    const switchValue = ref(props.item[props.fieldToSwitch])
-    const updateApi = useCollectionApi()
-    updateApi.setBaseApi(usePrivateApi())
-    const sendNotificationDialogOpen = ref(false)
+  setup(props) {
+    const switchValue = ref(props.item[props.fieldToSwitch]);
+    const updateApi = useCollectionApi();
+    updateApi.setBaseApi(usePrivateApi());
+    const sendNotificationDialogOpen = ref(false);
 
     onMounted(() => {
-      switchValue.value = props.item[props.fieldToSwitch]
-    })
+      switchValue.value = props.item[props.fieldToSwitch];
+    });
 
     const save = async () => {
-      updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`)
-      let data = {}
-      data[props.fieldToSwitch] = switchValue.value
+      updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`);
+      let data = {};
+      data[props.fieldToSwitch] = switchValue.value;
 
-      await updateApi.updateItem(data, null)
-    }
+      await updateApi.updateItem(data, null);
+    };
 
     watch(switchValue, () => {
-      save()
+      save();
       if (props.askNotification && switchValue.value === true) {
-        sendNotificationDialogOpen.value = true
+        sendNotificationDialogOpen.value = true;
       }
-    })
+    });
 
     return {
       switchValue,
       sendNotificationDialogOpen,
-      save
-    }
-  }
-})
+      save,
+    };
+  },
+});
 </script>
