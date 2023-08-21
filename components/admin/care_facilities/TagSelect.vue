@@ -21,12 +21,15 @@
       <div class="content">
         <div v-if="kind === 'facility'"
               >Hier hast du die Möglichkeit, dein individuelles Leistungsangebot
-              mit Hilfe von Schlagwörtern zu beschreiben. </div
+              mit Hilfe von Schlagwörtern zu beschreiben. </div  
             >
-            <div v-else-if="kind === 'course'">
+            <div v-if="kind === 'course'">
               Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern individuell zu beschreiben.
             </div>
-            <div v-else>
+            <div v-if="kind === 'event'">
+              Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern individuell zu beschreiben.
+            </div>
+            <div v-if="kind === 'news'">
               Bitte hinterlege hier alle relevanten Schlagwörter, die den Inhalt deines Newsartikels/Beitrages widerspiegeln.
             </div>
         <div class="content-title mt-5 d-flex align-center">
@@ -51,11 +54,11 @@
               deinem Profil, sobald sie nach den entsprechenden Schlagwörtern
               suchen.
             </span>
-            
-            <span v-else-if="kind === 'course'"
-              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen. </span
+            <span v-if="kind === 'course'">Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen. </span
             >
-            <span v-else>
+            <span v-if="kind === 'event'">Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen. </span
+            >
+            <span v-if="kind === 'news'">
               Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie die entsprechenden Schlagwörter suchen. 
             </span>
           </v-tooltip>

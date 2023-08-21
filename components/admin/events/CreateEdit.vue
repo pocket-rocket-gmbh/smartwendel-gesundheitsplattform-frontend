@@ -1,6 +1,9 @@
 <template>
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
-    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
+    <v-card-text
+      v-if="slotProps.item && Object.entries(slotProps.item).length"
+      class="mb-15"
+    >
       <v-row>
         <v-col md="2">
           <div class="mt-10 mx-5 menu-boxes">
@@ -20,8 +23,9 @@
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst Du eigene Veranstaltungen anlegen. Bitte fülle dazu wenn möglich alle Felder sorgfältig
-                aus. Pflichtfelder sind mit einem Sternchen versehen.</span
+                >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind,
+                desto besser können dich Besucherinnen und Besuchern auf der Webseite
+                finden. Pflichtfelder sind mit einem Sternchen versehen.</span
               >
             </div>
           </div>
@@ -42,7 +46,17 @@
 
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["photo"].label }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["photo"].label
+              }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>{{ steps["photo"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
@@ -58,17 +72,27 @@
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{ steps["gallery"].label }}</span>
             </div>
-            <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
+            <AdminCareFacilitiesAddImages
+              :item-id="slotProps.item.id"
+              @offline="(file) => setOfflineImage(file)"
+            />
           </div>
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="description">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["description"].label }}</span>
+              <span class="text-h5 font-weight-bold">{{
+                steps["description"].label
+              }}</span>
             </div>
             <div class="editor">
               <ClientOnly>
-                <div class="text-editor" :class="{ 'empty-editor': isDescriptionEmpty(slotProps.item.description) }">
+                <div
+                  class="text-editor"
+                  :class="{
+                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
+                  }"
+                >
                   <QuillEditor
                     ref="ql-editor"
                     class="ql-blank"
@@ -79,11 +103,18 @@
                     :toolbar="textToolbar"
                     @ready="onQuillReady"
                   />
-                  <div v-if="isDescriptionEmpty(slotProps.item.description)" class="required">Erforderlich</div>
+                  <div
+                    v-if="isDescriptionEmpty(slotProps.item.description)"
+                    class="required"
+                  >
+                    Erforderlich
+                  </div>
                   <v-text-field
                     v-show="false"
                     class="hidden-text-field"
-                    :model-value="isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'"
+                    :model-value="
+                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
+                    "
                     :rules="[rules.required]"
                   />
                 </div>
@@ -93,8 +124,18 @@
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="category">
-            <div class="my-3">
-              <span class="text-h5 font-weight-bold">{{ steps["category"].label }}</span>
+            <div class="my-3 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["category"].label
+              }}</span>
+              <v-tooltip location="top" width="200px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>{{ steps["category"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
@@ -110,7 +151,17 @@
 
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["services"].label
+              }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>{{ steps["services"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
@@ -124,8 +175,8 @@
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden
-                    ist, kontaktiere uns bitte
+                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein
+                    Unternehmen nicht zu finden ist, kontaktiere uns bitte
                   </span>
                   <span>
                     <a
@@ -182,7 +233,10 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
+                      <tr
+                        v-for="(date, index) in slotProps.item.event_dates"
+                        :key="index"
+                      >
                         <td>{{ date }}</td>
                       </tr>
                     </tbody>
@@ -195,7 +249,9 @@
 
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["website"].label }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["website"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -211,7 +267,9 @@
 
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["documents"].label }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["documents"].label
+              }}</span>
             </div>
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
@@ -221,6 +279,98 @@
               @document-deleted="handleDocumentDeleted"
             />
           </div>
+
+          <div class="field" id="leader">
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["leader"].label
+              }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>{{ steps["leader"].tooltip }}</span>
+              </v-tooltip>
+            </div>
+            <v-text-field
+              class="text-field"
+              v-model="slotProps.item.name_instructor"
+              hide-details="auto"
+              label="Name / Vorname des Kursleiters"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
+          <div id="address">
+            <div class="my-2">
+              <span class="text-h5 font-weight-bold">{{ steps["address"].label }}</span>
+              <v-checkbox
+                hide-details
+                density="compact"
+                :model-value="courseHasAnotherAdress"
+                @click="courseHasAnotherAdress = !courseHasAnotherAdress"
+                label="Ja"
+              />
+            </div>
+            <div v-if="courseHasAnotherAdress">
+              <div class="field">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.street"
+                  hide-details="auto"
+                  label="Straße und Nummer"
+                  :rules="[rules.counterStreet]"
+                  :error-messages="
+                    useErrors().checkAndMapErrors('street', slotProps.errors)
+                  "
+                />
+              </div>
+              <div class="field">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.additional_address_info"
+                  hide-details="auto"
+                  label="Adresszusatz"
+                />
+              </div>
+              <div class="field">
+                <v-select
+                  hide-details="auto"
+                  class="text-field"
+                  v-model="slotProps.item.community_id"
+                  :items="communities"
+                  item-title="name"
+                  item-value="id"
+                  label="Gemeinde"
+                />
+              </div>
+              <div class="field split">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.zip"
+                  hide-details="auto"
+                  label="PLZ"
+                  :type="'number'"
+                  :rules="[rules.required, rules.zip]"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+                <v-select
+                  hide-details="auto"
+                  class="text-field"
+                  v-model="slotProps.item.town"
+                  :items="getTownsByCommunityId(slotProps.item.community_id)"
+                  item-title="name"
+                  item-value="name"
+                  label="Ort"
+                />
+              </div>
+            </div>
+          </div>
+
+          <v-divider class="my-10"></v-divider>
         </v-col>
       </v-row>
     </v-card-text>
@@ -245,60 +395,83 @@ const stepNames = [
   "website",
   "documents",
   "date",
+  "leader",
+  "address",
 ] as const;
-type StepNames = (typeof stepNames)[number];
+type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
-    label: "1. Gib deiner Veranstaltungen einen Namen *",
+    label: "1. Bitte trage hier den Namen deines Kurses ein. *",
     description: "Name",
     props: ["name"],
   },
   photo: {
-    label: "2.  Lade ein Titelbild hoch *",
+    label: "2. Bitte lade hier ein Coverbild hoch.  *",
     description: "Foto",
     props: ["image_url"],
+    tooltip:
+      "Das Coverbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
   },
   gallery: {
-    label: "3. Lade weitere Bilder für eine Galerie hoch",
+    label: "3. Hier kannst du weitere Bilder für deine Galerie hochladen.",
     description: "Galerie Fotos",
     props: ["sanitized_images"],
   },
   description: {
-    label: "4. Gib hier eine Veranstaltungsbeschreibung an *",
+    label: "4.	Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
     description: "Beschreibung",
-    placeholder: "Beschreibung der Veranstaltung",
+    placeholder:
+      "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
   category: {
-    label: "5. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte themenspezifisch zu *",
+    label: "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu *",
     description: "Berufszweig",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
+    tooltip: "Mehrfachauswahl möglich.",
   },
   services: {
-    label: "6. Ordne deiner Einrichtung passende Filter zu *",
+    label: "6. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
     description: "Leistung",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
+    tooltip:
+      "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden.",
   },
   date: {
-    label: "7. Gib das Veranstaltungsdatum, sowie die Uhrzeit an *",
+    label:
+      "7. Bitte gib die Kurstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     description: "Veranstaltungsdatum",
     props: ["event_dates"],
+    tooltip: "Mehrfachauswahl möglich.",
   },
   website: {
-    label: "8. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+    label:
+      "8.	Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können",
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Webseite",
     props: ["website"],
   },
   documents: {
     label:
-      "9. Wurden zur Veranstaltung Dokumente (z.B. Flyer) erstellt, kannst du diese hier gerne hochladen und den Benutzern zur Verfügung stellen",
+      "9.	Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen. ",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
+  },
+  leader: {
+    label: "11.	Bitte gib hier den Namen der Kursleitung an",
+    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    description: "Name der Kursleitung",
+    props: ["name_instructor"],
+  },
+  address: {
+    label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
+    tooltip: "",
+    description: "Adresse",
+    props: ["street", "zip", "community_id", "town"],
   },
 };
 
@@ -314,6 +487,8 @@ const textToolbar = ref([
   [{ list: "ordered" }, { list: "bullet" }, { align: [] }],
 ]);
 
+const courseHasAnotherAdress = ref(false);
+
 const textOptions = ref({
   debug: false,
   theme: "snow",
@@ -321,6 +496,29 @@ const textOptions = ref({
   toolbar: textToolbar.value,
   required: true,
 });
+
+const communitiesApi = useCollectionApi();
+communitiesApi.setBaseApi(usePrivateApi());
+communitiesApi.setEndpoint(`communities`);
+const communities = communitiesApi.items;
+
+const getCommunities = async () => {
+  await communitiesApi.retrieveCollection();
+};
+
+const getTownsByCommunityId = (communityId: string) => {
+  const found = communities.value.find((community: any) => community.id === communityId);
+
+  if (found) {
+    useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+      name: "zip",
+      value: found.zip,
+    });
+    return found.towns;
+  } else {
+    [];
+  }
+};
 
 const onQuillReady = (quill: any) => {
   quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node: any, delta: any[]) => {
@@ -429,7 +627,9 @@ const setOfflineImage = (images: any) => {
   });
 };
 
-const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offlineDocuments"]) => {
+const handleDocumentsOffline = (
+  newOfflineDocuments: CreateEditFacility["offlineDocuments"]
+) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "offlineDocuments",
     value: newOfflineDocuments,
@@ -457,6 +657,7 @@ const setupFinished = ref(false);
 
 onMounted(async () => {
   setupFinished.value = await useUser().setupFinished();
+  getCommunities();
 });
 </script>
 
@@ -541,6 +742,10 @@ onMounted(async () => {
 .dp__overlay_container .dp__button::after {
   content: "Datum auswählen";
   margin-left: 0.25rem;
+}
+
+.ql-editor {
+  min-height: 200px;
 }
 
 .ql-editor p,
