@@ -6,12 +6,14 @@
         class="text-field"
         :disabled="item?.sanitized_images.length >= 6"
         hide-details="auto"
-        v-model="image"
+        v-model="images"
         label="Neues Bild wählen"
         filled
         prepend-icon="mdi-camera"
-        @change="handleFile()"
+        @change="handleFiles()"
         accept="image/*"
+        multiple
+        show-size
       />
       <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
       <div class="text-error" v-if="item?.sanitized_images.length >= 6">
@@ -23,13 +25,10 @@
     </div>
     <ImageCropper
       class="mb-5"
-      v-if="imgUrl"
-      :imgUrl="imgUrl"
+      v-if="currentCroppingImageUrl"
+      :imgUrl="currentCroppingImageUrl"
       cta="Bild speichern"
-      @close="
-        imgUrl = null;
-        image = {};
-      "
+      @close="handleRemoveImage"
       @crop="setImage"
     />
     <v-row v-if="itemId">
@@ -61,9 +60,10 @@ const props = defineProps({
   },
 });
 const loadingItem = ref(false);
-const imgUrl = ref(null);
 const errors = ref([]);
-const image = ref({});
+const images = ref<File[]>([]);
+const imageUrls = ref<string[]>([]);
+const currentCroppingImageUrl = ref("");
 const errorFileSizeTooLarge = ref(false);
 const item = ref({
   sanitized_images: [],
@@ -72,28 +72,58 @@ const item = ref({
 });
 
 const setImage = (image: any) => {
-  imgUrl.value = null;
   item.value.file = image;
   save();
 };
 
-const toBase64 = (file: any) =>
+const handleRemoveImage = () => {
+  const indexOfItemToRemove = imageUrls.value.findIndex((item) => item === currentCroppingImageUrl.value);
+
+  if (indexOfItemToRemove === -1) {
+    images.value = [];
+    imageUrls.value = [];
+    currentCroppingImageUrl.value = "";
+    return;
+  }
+
+  images.value.splice(indexOfItemToRemove, 1);
+  imageUrls.value.splice(indexOfItemToRemove, 1);
+  setNextImageForCrop();
+};
+
+const toBase64 = (file: any): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    // @ts-expect-error typing
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
 
-const handleFile = async () => {
-  if (image && image.value[0] && image.value[0].size / 1000000 > 5) {
+const handleFiles = async () => {
+  if (!images.value?.length) return;
+
+  const validImages = images.value.filter((image) => image.size / 1000000 < 5);
+  console.log(validImages, images.value);
+
+  if (validImages.length !== images.value.length) {
     errorFileSizeTooLarge.value = true;
-    image.value = {};
-    return;
-  } else if (image && image.value[0]) {
-    errorFileSizeTooLarge.value = false;
-    imgUrl.value = await toBase64(image.value[0]);
   }
+
+  const imageUrlPromises = validImages.map((image) => toBase64(image));
+  const imgUrlResults = await Promise.allSettled(imageUrlPromises);
+  imageUrls.value = imgUrlResults.map((item) => (item.status === "fulfilled" ? item.value : "")).filter(Boolean);
+
+  setNextImageForCrop();
+};
+
+const setNextImageForCrop = () => {
+  if (!imageUrls.value.length) {
+    currentCroppingImageUrl.value = "";
+    return;
+  }
+
+  currentCroppingImageUrl.value = imageUrls.value.at(0);
 };
 
 const api = useCollectionApi();
@@ -115,12 +145,12 @@ const save = async () => {
       file: item.value.file,
     };
     const result = await api.createItem(data, "Bild erfolgreich hinzugefügt");
-    imgUrl.value = null;
+
+    handleRemoveImage();
 
     if (result.status === ResultStatus.SUCCESSFUL) {
       loadingItem.value = true;
       item.value.file = "";
-      image.value = {};
       getCareFacility();
       loadingItem.value = false;
     } else {
@@ -130,6 +160,7 @@ const save = async () => {
     }
   } else {
     item.value.offline_images.push(item.value.file);
+    handleRemoveImage();
     emit("offline", item.value.offline_images);
   }
 };

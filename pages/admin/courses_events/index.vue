@@ -3,7 +3,9 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
     <h2 v-else>Kurse und Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.). Deine Veranstaltungen und Kurse findest du gebündelt auf der Gesundheitsplattform unter dem Menü-Punkt Kurse</v-alert
+      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über
+      mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.). Deine Veranstaltungen und
+      Kurse findest du gebündelt auf der Gesundheitsplattform unter dem Menü-Punkt Kurse</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">
@@ -18,8 +20,10 @@
                 itemId = null;
                 createEditDialogOpen = true;
               "
-              >Kurs anlegen</v-btn
+              :class="{ orange: newCourseFromCache }"
             >
+              Kurs anlegen<span v-if="newCourseFromCache"> - weiter</span>
+            </v-btn>
             <v-btn
               elevation="0"
               variant="outlined"
@@ -28,8 +32,10 @@
                 itemId = null;
                 createEditDialogOpen = true;
               "
-              >Veranstaltung anlegen</v-btn
+              :class="{ orange: newEventFromCache }"
             >
+              Veranstaltung anlegen <span v-if="newEventFromCache"> - weiter</span>
+            </v-btn>
           </div>
         </v-col>
         <v-col>
@@ -54,23 +60,40 @@
       endpoint="care_facilities?kind=event,course"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
+      :cache-prefix="'events,courses'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
     />
 
-    <AdminCareFacilitiesCreateEdit
-      v-if="createEditDialogOpen"
-      :item-id="itemId"
-      :item-placeholder="itemPlaceholder"
-      @close="
-        createEditDialogOpen = false;
-        itemId = null;
-        dataTableRef?.resetActiveItems();
-      "
-      endpoint="care_facilities"
-      :concept-name="itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'"
-    />
+    <template v-if="createEditDialogOpen">
+      <AdminCoursesCreateEdit
+        v-if="itemPlaceholder.kind === 'course'"
+        :item-id="itemId"
+        :item-placeholder="itemPlaceholder"
+        @close="handleCreateEditClose"
+        endpoint="care_facilities"
+        :concept-name="'Kurs'"
+        :enableCache="true"
+        :cacheKey="coursesCacheKey"
+        :showPreviewButton="true"
+        @showPreview="handleShowPreview"
+      />
+      <AdminEventsCreateEdit
+        v-if="itemPlaceholder.kind === 'event'"
+        :item-id="itemId"
+        :item-placeholder="itemPlaceholder"
+        @close="handleCreateEditClose"
+        endpoint="care_facilities"
+        :concept-name="'Veranstaltung'"
+        :enableCache="true"
+        :cacheKey="eventsCacheKey"
+        :showPreviewButton="true"
+        @showPreview="handleShowPreview"
+      />
+    </template>
+
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -87,6 +110,7 @@
 </template>
 <script lang="ts" setup>
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
+import { Facility } from "~/store/searchFilter";
 
 definePageMeta({
   layout: "admin",
@@ -96,7 +120,14 @@ const user = useUser();
 const loading = ref(false);
 
 const fields = [
-  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
+  {
+    prop: "is_active",
+    text: "Aktiv",
+    endpoint: "care_facilities",
+    type: "switch",
+    tooltip: "Hiermit kannst du deinen Kurs/deine Veranstaltung aktivieren und deaktivieren",
+    fieldToSwitch: "is_active",
+  },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
   {
@@ -109,6 +140,11 @@ const fields = [
   },
 ];
 
+const previewItem = ref<Facility>();
+
+const newCourseFromCache = ref(false);
+const newEventFromCache = ref(false);
+
 const facilitySearchColums = ref(["name", "user.name", "kind"]);
 const facilitySearchTerm = ref("");
 
@@ -119,7 +155,7 @@ const confirmDeleteDialogOpen = ref(false);
 const itemId = ref(null);
 const setupFinished = ref(false);
 
-const itemPlaceholder = ref<any>({
+const itemPlaceholder = ref({
   name: "",
   kind: "event",
   status: "is_checked",
@@ -130,16 +166,54 @@ const itemPlaceholder = ref<any>({
   tag_ids: [],
   tag_category_ids: [],
   offlineDocuments: [],
+  email: "",
+  zip: "",
+  town: "",
+  street: "",
+  phone: "",
+  community: "",
+  community_id: "",
 });
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const openCreateEditDialog = (item: any) => {
+  itemPlaceholder.value.kind = item.kind;
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
+};
+
+const eventsCacheKey = computed(() => {
+  if (!itemId.value) {
+    return `events_new`;
+  }
+
+  return `events_${itemId.value.replaceAll("-", "_")}`;
+});
+const coursesCacheKey = computed(() => {
+  if (!itemId.value) {
+    return `courses_new`;
+  }
+
+  return `courses_${itemId.value.replaceAll("-", "_")}`;
+});
+
+const handleCreateEditClose = () => {
+  createEditDialogOpen.value = false;
+  itemId.value = null;
+  dataTableRef.value?.resetActiveItems();
+  newCourseFromCache.value = !!localStorage.getItem("courses_new");
+  newEventFromCache.value = !!localStorage.getItem("events_new");
+};
+
+const handleShowPreview = (item: any) => {
+  previewItem.value = item;
+};
+const handlePreviewClose = () => {
+  previewItem.value = null;
 };
 
 onMounted(async () => {
@@ -154,13 +228,18 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
+    // itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
+
+  newCourseFromCache.value = !!localStorage.getItem("courses_new");
+  newEventFromCache.value = !!localStorage.getItem("events_new");
 });
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"
+.orange
+  color: orange
 </style>

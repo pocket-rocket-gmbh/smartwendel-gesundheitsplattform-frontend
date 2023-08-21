@@ -9,7 +9,7 @@
       prepend-icon="mdi-camera"
       @change="handleFile()"
       @click:clear="removeFile()"
-      :rules="[!!preSetImageUrl || !!tempImage || 'Erforderlich']"
+      :rules="[isImageSet()]"
       accept="image/*"
     />
     <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
@@ -36,6 +36,9 @@
   </div>
   <div class="img-container" v-else-if="preSetImageUrl">
     <img class="is-fullwidth" :src="preSetImageUrl" />
+  </div>
+  <div class="img-container" v-else-if="tempImage">
+    <img class="is-fullwidth" :src="tempImage" />
   </div>
 </template>
 
@@ -70,6 +73,10 @@ const aspectRatioValue = ref(props.aspectRatio);
 const labelText = ref(props.label);
 const errorFileSizeTooLarge = ref(false);
 const croppedImage = ref(null);
+
+const isImageSet = () => {
+  return !!props.preSetImageUrl || !!props.tempImage || "Erforderlich";
+};
 
 const toBase64 = (file: any) =>
   new Promise((resolve, reject) => {
@@ -114,5 +121,4 @@ const setImage = (image: any) => {
 .text-field input,
 .text-field input
   padding-top: 10px!important
-
 </style>
