@@ -26,6 +26,9 @@
             <div v-else-if="kind === 'course'">
               Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern individuell zu beschreiben.
             </div>
+            <div v-else>
+              Bitte hinterlege hier alle relevanten Schlagwörter, die den Inhalt deines Newsartikels/Beitrages widerspiegeln.
+            </div>
         <div class="content-title mt-5 d-flex align-center">
           <v-icon>mdi-tag-outline</v-icon>
           <div>
@@ -51,8 +54,10 @@
             
             <span v-else-if="kind === 'course'"
               >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen. </span
-             
             >
+            <span v-else>
+              Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie die entsprechenden Schlagwörter suchen. 
+            </span>
           </v-tooltip>
         </div>
         <div class="inputs">
