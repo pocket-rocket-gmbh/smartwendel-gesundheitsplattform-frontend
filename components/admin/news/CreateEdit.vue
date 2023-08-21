@@ -2,7 +2,7 @@
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
-        <v-col md="2">
+        <v-col md="3">
           <div class="mt-10 mx-5 menu-boxes">
             <div
               v-for="[key, step] in Object.entries(steps)"
@@ -16,12 +16,11 @@
             </div>
           </div>
         </v-col>
-        <v-col md="10">
+        <v-col md="9">
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst du News oder Beiträge anlegen. Bitte fülle alle Felder sorgfältig aus. Pflichtfelder sind
-                mit einem Sternchen versehen.</span
+                >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen. Je mehr Angaben du machst, umso leichter können Besucherinnen und Besucher deine Beiträge finden. Pflichtfelder sind mit einem Sternchen versehen.</span
               >
             </div>
           </div>
@@ -93,7 +92,20 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
-
+          <div class="field" id="leader">
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["leader"].label }}</span>
+            </div>
+            <v-text-field
+              class="text-field"
+              v-model="slotProps.item.name_instructor"
+              hide-details="auto"
+              label="Name / Vorname des Kursleiters"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-3">
               <span class="text-h5 font-weight-bold">{{ steps["category"].label }}</span>
@@ -107,9 +119,7 @@
               @are-filters-set="setFiltersSet"
             />
           </div>
-
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
@@ -161,39 +171,45 @@ import { CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
-const stepNames = ["name", "photo", "description", "category", "services"] as const;
+const stepNames = ["name", "photo", "description", "category", "leader","services"] as const;
 type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
-    label: "1. Beitrags-Titel *",
+    label: "1. Bitte gib hier den Titel deines Newsartikels/Beitrags an. *",
     tooltip: "",
     description: "Name",
     props: ["name"],
   },
   photo: {
-    label: "2. Lade ein Coverbild hoch *",
+    label: "2. Hier kannst du passende Bilder zu deinem Beitrag hochladen.",
     tooltip: "",
-    description: "Foto",
+    description: "Fotogalerie",
     props: ["image_url", "file"],
     justSome: true,
   },
   description: {
-    label: "3. Gib hier den Inhalt deines Beitrags an *",
+    label: "3. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
     tooltip: "",
-    description: "Beschreibung",
+    description: "Beschreibungstext",
     placeholder: "Inhalt des Beitrags",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
-  category: {
-    label: "4. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
+  leader: {
+    label: "4.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
     tooltip: "",
-    description: "Berufszweig",
+    description: "Name der Autorin/des Autors",
+    props: ["name_instructor"],
+  },
+  category: {
+    label: "5. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
+    tooltip: "",
+    description: "Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
   services: {
-    label: "5. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
+    label: "6. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
     tooltip: "",
     description: "Leistung",
     props: ["tag_category_ids"],

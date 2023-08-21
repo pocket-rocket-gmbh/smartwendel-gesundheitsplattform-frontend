@@ -2,7 +2,7 @@
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
-        <v-col md="2">
+        <v-col md="3">
           <div class="mt-10 mx-5 menu-boxes">
             <div
               v-for="[key, step] in Object.entries(steps)"
@@ -16,7 +16,7 @@
             </div>
           </div>
         </v-col>
-        <v-col md="10">
+        <v-col md="9">
           <div class="py-10">
             <div>
               <span class="text-h6"
@@ -43,6 +43,12 @@
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["photo"].label }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["photo"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
@@ -55,16 +61,16 @@
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
-            <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["gallery"].label }}</span>
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["gallery"].label }}</span>
             </div>
             <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
           </div>
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="description">
-            <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["description"].label }}</span>
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["description"].label }}</span>
             </div>
             <div class="editor">
               <ClientOnly>
@@ -93,8 +99,14 @@
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="category">
-            <div class="my-3">
-              <span class="text-h5 font-weight-bold">{{ steps["category"].label }}</span>
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["category"].label }}</span>
+              <v-tooltip location="top" width="200px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["category"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
@@ -111,6 +123,12 @@
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["services"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
@@ -216,7 +234,7 @@
           <div class="field" id="certificates">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["certificates"].label }}</span>
-              <v-tooltip location="top">
+              <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
@@ -298,8 +316,14 @@
             />
           </div>
           <div class="field" id="leader">
-            <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["leader"].label }}</span>
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["leader"].label }}</span>
+                <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["leader"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <v-text-field
               class="text-field"
@@ -408,77 +432,77 @@ const stepNames = [
 type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
-    label: "1. Gib deinem Kurs einen Namen *",
+    label: "1. Bitte trage hier den Namen deines Kurses ein. *",
     tooltip: "",
     description: "Name",
     props: ["name"],
   },
   photo: {
-    label: "2. Lade ein Coverbild hoch *",
-    tooltip: "",
-    description: "Foto",
+    label: "2. Bitte lade hier ein Coverbild hoch. *",
+    tooltip: "Das Coverbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
+    description: "Coverbild",
     props: ["image_url"],
   },
   gallery: {
     label: "3. Lade weitere Bilder für eine Galerie hoch",
     tooltip: "",
-    description: "Galerie Fotos",
+    description: "Fotogalerie",
     props: ["sanitized_images"],
   },
   description: {
-    label: "4. Gib hier eine Kursbeschreibung an *",
+    label: "4. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
     tooltip: "",
-    description: "Beschreibung",
-    placeholder: "Beschreibung des Kurses. Nützliche Inhalte: Kursdauer, empfohlene Kleidung, etc",
+    description: "Beschreibungstext",
+    placeholder: "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
   category: {
-    label: "5. Weise deinen Kurs / Veranstaltung gezielt einem Berufszweig / einer Sparte zu ",
-    tooltip: "",
-    description: "Berufszweig",
+    label: "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu * ",
+    tooltip: "Mehrfachauswahl möglich.",
+    description: "Branchenzugehörigkeit",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
   services: {
-    label: "6. Ordne deinem Kurs / Veranstaltung passende Filter zu, um die Leistungen gezielter zu beschreiben *",
-    tooltip: "",
-    description: "Leistung",
+    label: "6. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
+    tooltip: "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
+    description: "Leistungen und Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
   date: {
     label:
-      "7. Gib das Kursdatum, sowie die Uhrzeit an. Findet dein Kurs öfter statt, kannst du mehrere Termine auswählen und diese auch wieder löschen *",
+      "7.	Bitte gib die Kurstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     tooltip: "",
-    description: "Kursdatum",
+    description: "Kursdaten",
     props: ["event_dates"],
   },
   certificates: {
     label:
-      "8. Handelt es sich um einen von GKV geförderten Präventionskurs? Falls ja, lade bitte das Zertifikat der ZPP (Zentrale Prüfstelle Prävention) hoch",
-    tooltip: "",
-    description: "Zertifikat",
+      "8.	Bitte lade das Zertifikat der Zentralen Prüfungsstelle Prävention (ZPP) hoch, wenn es sich um einen von der gesetzlichen Krankenkasse geförderten Präventionskurs handelt",
+    tooltip: "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
+    description: "Zertifikate",
     props: ["billable_through_health_insurance"],
   },
   website: {
-    label: "9. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+    label: "9. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können",
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
-    description: "Webseite",
+    description: "Link zur Webseite",
     props: ["website"],
   },
   documents: {
     label:
-      "10. Hier hast du die Möglichkeit, weitere Dokumente (z.B. Kursplan) zu deinem Kurs/Veranstaltung hochzuladen",
+      "10. Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen.",
     tooltip: "",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
   },
   leader: {
-    label: "11. Vor- und Nachname der Kursleitung *",
-    tooltip: "",
-    description: "Kursleitung",
+    label: "11.	Bitte gib hier den Namen der Kursleitung an",
+    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    description: "Name der Kursleitung",
     props: ["name_instructor"],
   },
   address: {
@@ -715,11 +739,11 @@ onMounted(async () => {
 
 .text-field input,
 .text-field input {
-  padding-top: 10px !important;
+  padding-top: 30px !important;
 }
 
 .v-select .v-select__selection-text {
-  padding-top: 10px !important;
+  padding-top: 30px !important;
 }
 
 .v-textarea .v-field__input {
@@ -761,6 +785,10 @@ onMounted(async () => {
 .dp__overlay_container .dp__button::after {
   content: "Datum auswählen";
   margin-left: 0.25rem;
+}
+
+.ql-editor {
+  min-height: 200px;
 }
 
 .ql-editor p,

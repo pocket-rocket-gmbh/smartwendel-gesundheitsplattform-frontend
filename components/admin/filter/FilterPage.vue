@@ -2,11 +2,6 @@
   <div>
     <h2>{{ name }}</h2>
     <!-- <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn> -->
-    <v-alert type="info" density="compact" closable class="mt-2"
-      >Filter erleichtern den Besuchern die Auffindbarkeit von Inhalten, Beispiele können zielgruppenspezifische Tags
-      wie z.B. nach Alter oder Geschlecht sein.</v-alert
-    >
-
     <!-- Einrichtungsfilter -->
     <CollapsibleListRec
       :items="itemsForFacilityList"
@@ -214,7 +209,7 @@ const getItems = async () => {
   tmpItemsForServiceList[0]?.next.push({
     id: "0",
     layer: 1,
-    title: "Leistungsangebote (branchenspezifisch)",
+    title: "Branchenspezifisches Leistungsangebot",
     menuOrder: 0,
     static: true,
     specialType: "tag",

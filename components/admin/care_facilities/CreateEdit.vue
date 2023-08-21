@@ -2,7 +2,7 @@
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
-        <v-col md="2">
+        <v-col md="3">
           <div class="mt-10 mx-5 menu-boxes">
             <div
               v-for="[key, step] in Object.entries(steps)"
@@ -16,11 +16,10 @@
             </div>
           </div>
         </v-col>
-        <v-col md="10">
+        <v-col md="9">
           <div class="py-10">
             <span class="text-h6"
-              >Hier kannst du eine eigene Detailseite für deine Einrichtung anlegen. Bitte fülle dazu, wenn möglich,
-              alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.</span
+              >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein spezifisches Leistungsangebot in einem eigenen Profil darstellen und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen und Besucher der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</span
             >
           </div>
           <div class="field" id="name">
@@ -31,7 +30,7 @@
               class="text-field"
               v-model="slotProps.item.name"
               hide-details="auto"
-              label="Name"
+              label="Einrichtung/Unternehmen/Behörde/Verein/Verband"
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
@@ -39,8 +38,14 @@
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="logo">
-            <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["logo"].label }}</span>
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["logo"].label }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["logo"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <ChooseAndCropSingleImage
               height="20"
@@ -57,6 +62,12 @@
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["photo"].label }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["photo"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
@@ -69,8 +80,14 @@
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
-            <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["gallery"].label }}</span>
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["gallery"].label }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["photo"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
           </div>
@@ -107,8 +124,14 @@
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="category">
-            <div class="my-3">
-              <span class="text-h5 font-weight-bold">{{ steps["category"].label }}</span>
+            <div class="my-3 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["category"].label }}</span>
+              <v-tooltip location="top" width="200px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["category"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
@@ -176,7 +199,13 @@
               >
             </span>
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 mr-2 font-weight-bold">{{ steps["contact"].label }}</span>
+              <span class="text-h5 mr-3 font-weight-bold">{{ steps["contact"].label }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["contact"].tooltip }}</span>
+              </v-tooltip>
               <div v-if="setupFinished && !useUser().isAdmin()">
                 <span v-if="editInformations">
                   <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
@@ -282,10 +311,14 @@
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="locations">
-            <div class="my-2">
-              <div class="text-h5 font-weight-bold">
-                <span class="text-h5 mr-2 font-weight-bold">{{ steps["locations"].label }}</span>
-              </div>
+            <div class="my-2 d-flex align-center">
+                <span class="text-h5 mr-3 font-weight-bold">{{ steps["locations"].label }}</span>
+                <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["locations"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <AdminCareFacilitiesAddLocations
               :item-id="slotProps.item.id"
@@ -317,6 +350,12 @@
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["website"].label }}</span>
+              <v-tooltip location="top" width="200px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["website"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <v-text-field
               class="text-field"
@@ -382,73 +421,78 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name"],
   },
   logo: {
-    label: "2. Lade dein Logo hoch *",
-    description: "Logo",
+    label: "2. Hier kannst du dein Logo hochladen. *",
+    description: "Dein Logo",
     props: ["logo_url", "logo"],
     justSome: true,
+    tooltip: "Dein Logo wird im Kopfbereich deiner Profilseite angezeigt. Falls du kein eigenes Logo hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. "
   },
   photo: {
-    label: "3. Lade ein Coverbild hoch *",
+    label: "3.	Bitte lade hier dein Coverbild hoch. *",
     tooltip:
-      "Das Coverbild ziert den Header-Bereich Ihrer Detail-Seite und gibt dem Besucher einen ersten Einblick auf deine Einrichtung. Mit den weiteren Einrichtungsbildern, die man im nächsten Schritt hochladen kann, erstellst du eine Galerie, die dem Besucher weitere Einblicke in Ihre Einrichtung geben. ",
-    description: "Foto",
+      "Das Coverbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Coverbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
+    description: "Coverbild",
     props: ["image_url"],
   },
   gallery: {
-    label: "4. Lade Bilder für eine Galerie hoch",
-    description: "Galerie Fotos",
+    label: "4.	Hier kannst du Bilder für deine Galerie hochladen.",
+    description: "Fotogalerie",
     props: ["sanitized_images"],
+    tooltip: "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten."
   },
   description: {
-    label: "5. Beschreibe deine Einrichtung ausführlich *",
-    description: "Beschreibung",
+    label: "5. Bitte beschreibe deine Einrichtung/dein Unternehmen und das damit verbundene Leistungsangebot ausführlich. *",
+    description: "Beschreibungstext",
     placeholder:
-      "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc.",
+      "Nutze dieses Feld, um deine Einrichtung/dein Unternehmen ausführlich zu präsentieren. Hier kannst du bspw. Informationen zu deinem individuellen Leistungsangebot, deinem Standort, den wichtigsten Ansprechpartnerinnen und Ansprechpartnern, Links zu deinen Sozialen Medien und weitere Informationen, die du den Nutzerinnen und Nutzern mitgeben möchtest hinterlegen. Je detaillierter die Beschreibung, desto einfacher können dich Besucherinnen und Besucher über das Suchfeld der Startseite finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
   category: {
-    label: "6. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte zu *",
-    description: "Berufszweig",
+    label: "6. Bitte wähle deine Branche aus *",
+    description: "Branchenzugehörigkeit",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
+    tooltip: "Mehrfachangaben möglich."
   },
   services: {
-    label: "7. Ordne deiner Einrichtung passende Filter zu *",
+    label: "7. Bitte ordne deiner Einrichtung/deinem Unternehmen passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
-      "Anhand der ausgewählten Filter beschreibst du deine Einrichtung genauer. Deine Leistungen und dein Alleinstellungsmerkmal hilft den Benutzern, dich und deine Einrichtung in der Anbietersuche schneller zu finden. Sollte deine Leistung nicht aufgeführt sein, darfst du Liste gerne erweitern.",
-    description: "Leistung",
+      "Wähle alle für dich relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, umso leichter können dich Besucherinnen und Besucher im Rahmen einer benutzerdefinierten Suche finden. ",
+    description: "Leistungen und Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
   contact: {
-    label: "8. Deine Adresse *",
-    tooltip: "Ihr Adresse wir auf der Karte in der Anbietersuche angezeigt",
+    label: "8. Bitte gib hier die Adresse und Kontaktdaten deiner Einrichtung/deines Unternehmens an. *",
+    tooltip: "Hauptstandort deines Unternehmens/deiner Einrichtung.",
     description: "Kontaktdaten",
     props: ["street", "zip", "community_id", "town", "email", "phone"],
   },
   locations: {
-    label: "9. Falls deine Einrichtung mehrere Standorte hat, füge diese hier hinzu",
-    description: "Standorte",
+    label: "9. Falls deine Einrichtung mehrere Standorte hat, kannst du diese hier ergänzen.",
+    description: "Weitere -Standorte",
     props: ["locations", "offlineLocations"],
     justSome: true,
+    tooltip: " Bitte beachte, dass nur Standorte innerhalb des Landkreises Sankt Wendel angegeben werden können."
   },
   openingHours: {
-    label: "10. Trage deine Öffnungszeiten ein",
+    label: "10.	Bitte trage hier deine genauen Öffnungszeiten ein.",
     description: "Öffnungszeiten",
     props: ["opening_hours"],
+    tooltip: "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen."
   },
   website: {
-    label: "11. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
-    tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
-    description: "Webseite",
+    label: "11.	Hier kannst du einen Link zu deiner Webseite oder einem deiner Kanäle in den Sozialen Medien hinterlegen.",
+    tooltip: "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
+    description: "Links",
     props: ["website"],
   },
   documents: {
-    label: "12. Lade Dokumente hoch",
+    label: "12.	Hier kannst du Dokumente zu deiner Einrichtung/deinem Unternehmen hochladen.",
     tooltip:
-      "Die gesammelten Dokumente (Berichte, Ratgeber, etc.) werden den Benutzern auf deiner Einrichtungs-Seite zum Download angeboten. Es können lediglich PDF-Dokumente zur Verfügung gestellt werden.",
-    description: "Dokumente",
+      "Dokumente können z. B. dein aktueller Kursplan, eine Unternehmenspräsentation oder Anmeldebögen sein. ",
+    description: "Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
   },
@@ -698,16 +742,16 @@ onMounted(async () => {
 
 <style lang="css">
 .text-field .v-label {
-  font-size: 20px !important;
+  font-size: 15px !important;
 }
 
 .text-field input,
 .text-field input {
-  padding-top: 10px !important;
+  padding-top: 30px !important;
 }
 
 .v-select .v-select__selection-text {
-  padding-top: 10px !important;
+  padding-top: 30px !important;
 }
 
 .v-textarea .v-field__input {
@@ -749,6 +793,10 @@ onMounted(async () => {
 .dp__overlay_container .dp__button::after {
   content: "Datum auswählen";
   margin-left: 0.25rem;
+}
+
+.ql-editor {
+  min-height: 200px;
 }
 
 .ql-editor p,

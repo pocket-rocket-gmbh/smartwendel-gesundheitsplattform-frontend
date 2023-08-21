@@ -3,9 +3,7 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
     <h2 v-else>Kurse und Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über
-      mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.). Deine Veranstaltungen und
-      Kurse findest du gebündelt auf der Gesundheitsplattform unter dem Menü-Punkt Kurse</v-alert
+      >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">

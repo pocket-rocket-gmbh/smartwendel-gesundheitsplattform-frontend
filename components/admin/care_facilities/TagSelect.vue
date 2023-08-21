@@ -1,8 +1,14 @@
 <template>
-  <CollapsibleItem class="tag-select" id="tag-select" :expand="expand" @expand-toggled="handleExpandToggled">
+  <CollapsibleItem
+    class="tag-select"
+    id="tag-select"
+    :expand="expand"
+    @expand-toggled="handleExpandToggled"
+  >
     <template #title>
       <div class="title">
-        <div>Leistungsangebote (branchenspezifisch)</div>
+        <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
+        <div v-else-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
         <div v-if="!expand" class="selected">
           <v-chip v-for="tag in preSetTags" :key="tag.id">
             {{ tag.name }}
@@ -11,18 +17,47 @@
       </div>
     </template>
     <template #content>
+
       <div class="content">
-        <div class="content-title">
+        <div v-if="kind === 'facility'"
+              >Hier hast du die Möglichkeit, dein individuelles Leistungsangebot
+              mit Hilfe von Schlagwörtern zu beschreiben. </div
+            >
+            <div v-else-if="kind === 'course'">
+              Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern individuell zu beschreiben.
+            </div>
+            <div v-else>
+              Bitte hinterlege hier alle relevanten Schlagwörter, die den Inhalt deines Newsartikels/Beitrages widerspiegeln.
+            </div>
+        <div class="content-title mt-5 d-flex align-center">
           <v-icon>mdi-tag-outline</v-icon>
-          <div><b>Schlagwort eingeben</b></div>
+          <div>
+            <div>
+              <b>Schlagwort eingeben</b>
+            </div>
+          </div>
           <v-tooltip location="top" width="300px">
             <template v-slot:activator="{ props }">
-              <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
+              <v-icon class="help-tooltip" v-bind="props"
+                >mdi-information-outline</v-icon
+              >
             </template>
-            <span
-              >Trage hier deine individuellen Leisungsangebote in Form von Schlagwörtern ein. Hiermit ermöglichst du den
-              Nutzer*innen eine effektive Suche auf der Webseite.</span
+            <span  v-if="kind === 'facility'">
+              Trage Begriffe ein, die dein individuelles Angebot möglichst
+              präzise beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“
+              und „Demenz“, wenn es sich um eine Pflegeinrichtung oder „Yoga“,
+              „Les Mills“ und „Krafttraining“, wenn es sich um ein Fitnessstudio
+              handelt). Auf diese Weise gelangen Besucherinnen und Besucher zu
+              deinem Profil, sobald sie nach den entsprechenden Schlagwörtern
+              suchen.
+            </span>
+            
+            <span v-else-if="kind === 'course'"
+              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen. </span
             >
+            <span v-else>
+              Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie die entsprechenden Schlagwörter suchen. 
+            </span>
           </v-tooltip>
         </div>
         <div class="inputs">
@@ -51,16 +86,31 @@
             <template v-slot:no-data>
               <v-list-item>
                 <v-list-item-title>
-                  Kein Schlagwort mit dem Namen "<strong>{{ currentTagSearch }}</strong
-                  >" gefunden. Drücke auf <kbd>Hinzufügen</kbd> um das neue Schlagwort zu erstellen
+                  Kein Schlagwort mit dem Namen "<strong>{{
+                    currentTagSearch
+                  }}</strong
+                  >" gefunden. Drücke auf <kbd>Hinzufügen</kbd> um das neue
+                  Schlagwort zu erstellen
                 </v-list-item-title>
               </v-list-item>
             </template>
           </v-combobox>
-          <v-btn class="add-button" color="grey" variant="flat" @click="handleAddTag"> Hinzufügen </v-btn>
+          <v-btn
+            class="add-button"
+            color="grey"
+            variant="flat"
+            @click="handleAddTag"
+          >
+            Hinzufügen
+          </v-btn>
         </div>
         <div class="tags">
-          <v-chip v-for="tag in preSetTags" closable @click:close="handleRemoveTag(tag)" :key="tag.id">
+          <v-chip
+            v-for="tag in preSetTags"
+            closable
+            @click:close="handleRemoveTag(tag)"
+            :key="tag.id"
+          >
             {{ tag.name }}
           </v-chip>
         </div>
@@ -99,11 +149,15 @@ const handleExpandToggled = () => {
 };
 
 const allTagsWithoutSelected = computed(() => {
-  return allTags.value.filter((tag) => !props.preSetTags.find((preSetTag) => preSetTag.id === tag.id));
+  return allTags.value.filter(
+    (tag) => !props.preSetTags.find((preSetTag) => preSetTag.id === tag.id)
+  );
 });
 
 const handleRemoveTag = (tag: FilterTag) => {
-  const tagIndex = props.preSetTags.findIndex((preSetTag) => preSetTag.id === tag.id);
+  const tagIndex = props.preSetTags.findIndex(
+    (preSetTag) => preSetTag.id === tag.id
+  );
 
   if (tagIndex === -1) return;
 
@@ -148,7 +202,9 @@ const loadAllTags = async () => {
   // const tags = res.data.resources;
   const scope = filterKindToFilterScope(props.kind);
   const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>
-    scope === "course" || scope === "event" ? item.scope === "course" || item.scope === "event" : scope === item.scope
+    scope === "course" || scope === "event"
+      ? item.scope === "course" || item.scope === "event"
+      : scope === item.scope
   );
 
   allTags.value = tags;
