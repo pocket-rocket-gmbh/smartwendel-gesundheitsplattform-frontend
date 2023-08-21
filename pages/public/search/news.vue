@@ -53,6 +53,7 @@ onBeforeUnmount(() => {
 .container
   display: flex
   gap: 1rem
+  padding: 2rem 5rem
 
   @include md
     padding: 1rem

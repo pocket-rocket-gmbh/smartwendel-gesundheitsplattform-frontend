@@ -55,6 +55,7 @@
               :temp-image="slotProps.item.file"
               label="Cover Bild"
               @setImage="setCoverBild"
+              @delete-image="handleDeleteCover"
               :min-size="true"
             />
           </div>
@@ -73,16 +74,25 @@
             </div>
             <div class="editor">
               <ClientOnly>
-                <QuillEditor
-                  ref="ql-editor"
-                  class="ql-blank"
-                  :placeholder="steps['description'].placeholder"
-                  :options="textOptions"
-                  v-model:content="slotProps.item.description"
-                  contentType="html"
-                  :toolbar="textToolbar"
-                  @ready="onQuillReady"
-                />
+                <div class="text-editor" :class="{ 'empty-editor': isDescriptionEmpty(slotProps.item.description) }">
+                  <QuillEditor
+                    ref="ql-editor"
+                    class="ql-blank"
+                    :placeholder="steps['description'].placeholder"
+                    :options="textOptions"
+                    v-model:content="slotProps.item.description"
+                    contentType="html"
+                    :toolbar="textToolbar"
+                    @ready="onQuillReady"
+                  />
+                  <div v-if="isDescriptionEmpty(slotProps.item.description)" class="required">Erforderlich</div>
+                  <v-text-field
+                    v-show="false"
+                    class="hidden-text-field"
+                    :model-value="isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'"
+                    :rules="[rules.required]"
+                  />
+                </div>
               </ClientOnly>
             </div>
           </div>
@@ -445,6 +455,7 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Beschreibungstext",
     placeholder: "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
+    checkHandler: isDescriptionEmpty,
   },
   category: {
     label: "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu * ",
@@ -536,6 +547,10 @@ const onQuillReady = (quill: any) => {
   });
 };
 
+function isDescriptionEmpty(description?: string) {
+  return !description || description === "<p><br></p>";
+}
+
 const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
 };
@@ -567,6 +582,13 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
     }
+  }
+
+  if (item.checkHandler) {
+    const result = props.every((prop) => {
+      return !item.checkHandler(slotPropsItem[prop]);
+    });
+    return result;
   }
 
   if (item.justSome) {
@@ -606,6 +628,17 @@ const setCoverBild = (image: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
     value: image,
+  });
+};
+
+const handleDeleteCover = () => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "file",
+    value: null,
+  });
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "image_url",
+    value: null,
   });
 };
 
@@ -766,5 +799,23 @@ onMounted(async () => {
 
 .ql-blank::before {
   font-size: 18px;
+}
+
+.text-editor {
+  padding-top: calc(0.5rem + 1px);
+  padding-bottom: calc(0.5rem + 1px + 12px);
+}
+
+.empty-editor {
+  border-top: 1px solid rgb(164, 34, 88);
+  border-bottom: 1px solid rgb(164, 34, 88);
+  padding-top: 0.5rem;
+  padding-bottom: 0;
+}
+
+.required {
+  color: rgb(164, 34, 88);
+  font-size: 12px;
+  padding-left: 16px;
 }
 </style>

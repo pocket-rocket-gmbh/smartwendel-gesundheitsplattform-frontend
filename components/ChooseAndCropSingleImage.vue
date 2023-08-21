@@ -4,7 +4,7 @@
       class="text-field"
       hide-details="auto"
       v-model="image"
-      :label="`${labelText} wählen`"
+      :label="`${labelText} ${tempImage || preSetImageUrl ? 'aktualisieren' : 'wählen'}`"
       filled
       prepend-icon="mdi-camera"
       @change="handleFile()"
@@ -30,16 +30,15 @@
     "
     @crop="setImage"
   />
+  <template v-else-if="croppedImage || tempImage || preSetImageUrl">
+    <v-card max-width="200">
+      <v-img v-if="croppedImage" :src="croppedImage" max-width="200" />
+      <v-img v-else-if="tempImage" :src="tempImage" max-width="200" />
+      <v-img v-else-if="preSetImageUrl" :src="preSetImageUrl" max-width="200" />
 
-  <div class="img-container" v-else-if="croppedImage">
-    <img class="is-fullwidth" :src="croppedImage" />
-  </div>
-  <div class="img-container" v-else-if="preSetImageUrl">
-    <img class="is-fullwidth" :src="preSetImageUrl" />
-  </div>
-  <div class="img-container" v-else-if="tempImage">
-    <img class="is-fullwidth" :src="tempImage" />
-  </div>
+      <div @click="deleteImage" class="text-error ml-1 mt-1 is-clickable">Bild löschen</div>
+    </v-card>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +64,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (event: "setImage", image: any): void;
+  (event: "deleteImage"): void;
 }>();
 
 const image = ref({}) as any;
@@ -108,6 +108,11 @@ const setImage = (image: any) => {
   imgUrl.value = null;
   croppedImage.value = image;
   emit("setImage", image);
+};
+
+const deleteImage = () => {
+  emit("deleteImage");
+  removeFile();
 };
 </script>
 
