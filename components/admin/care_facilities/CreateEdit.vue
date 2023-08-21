@@ -48,6 +48,7 @@
               :temp-image="slotProps.item.logo"
               label="Logo"
               @setImage="setLogo"
+              @delete-image="handleDeleteLogo"
             />
           </div>
 
@@ -62,6 +63,7 @@
               :temp-image="slotProps.item.file"
               label="Cover Bild"
               @setImage="setCoverBild"
+              @delete-image="handleDeleteCover"
               :min-size="true"
             />
           </div>
@@ -564,10 +566,31 @@ const setLogo = (image: any) => {
   });
 };
 
+const handleDeleteLogo = () => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "logo",
+    value: null,
+  });
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "logo_url",
+    value: null,
+  });
+};
+
 const setCoverBild = (image: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
     value: image,
+  });
+};
+const handleDeleteCover = () => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "file",
+    value: null,
+  });
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "image_url",
+    value: null,
   });
 };
 

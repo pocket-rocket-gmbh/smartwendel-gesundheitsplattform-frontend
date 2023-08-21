@@ -49,6 +49,7 @@
               :temp-image="slotProps.item.file"
               label="Cover Bild"
               @setImage="setCoverBild"
+              @delete-image="handleDeleteCover"
               :min-size="true"
             />
           </div>
@@ -407,6 +408,17 @@ const setCoverBild = (image: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
     value: image,
+  });
+};
+
+const handleDeleteCover = () => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "file",
+    value: null,
+  });
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "image_url",
+    value: null,
   });
 };
 
