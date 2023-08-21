@@ -27,15 +27,7 @@ export function useUser() {
 
     const currentUserFacility = await getCurrentUserFacilities();
 
-    const test =
-      !!currentUserFacility &&
-      !!currentUserFacility?.zip &&
-      !!currentUserFacility?.town &&
-      !!currentUserFacility?.street &&
-      !!currentUserFacility?.phone &&
-      !!currentUserFacility?.community &&
-      !!currentUserFacility?.community_id;
-    return test;
+    return isCompleteFacility(currentUserFacility);
   };
 
   const isFacilityOwner = (): Boolean => {
