@@ -77,6 +77,7 @@
 </template>
 
 <script lang="ts" setup>
+import { isCompleteFacility } from "~/utils/facility.utils";
 import { Facility } from "~/store/searchFilter";
 
 definePageMeta({
@@ -94,6 +95,8 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deine Einrichtung aktivieren und deaktivieren",
     fieldToSwitch: "is_active",
+    disabledCondition: isCompleteFacility,
+    disabledTooltip: "Du musst erst freigeschaltet werden bevor du deine Einrichtung aktiv schalten kannst",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },

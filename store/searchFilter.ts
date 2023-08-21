@@ -45,6 +45,10 @@ export type Facility = {
   created_at: Date;
   user: User;
   user_care_facility_name: string;
+  logo?: string;
+  logo_url?: string;
+  community_id?: string;
+  tag_category_ids?: string[];
   user_care_facility?: Facility;
 };
 
