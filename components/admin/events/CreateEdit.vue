@@ -67,16 +67,19 @@
             </div>
             <div class="editor">
               <ClientOnly>
-                <QuillEditor
-                  ref="ql-editor"
-                  class="ql-blank"
-                  :placeholder="steps['description'].placeholder"
-                  :options="textOptions"
-                  v-model:content="slotProps.item.description"
-                  contentType="html"
-                  :toolbar="textToolbar"
-                  @ready="onQuillReady"
-                />
+                <div class="text-editor" :class="{ 'empty-editor': isDescriptionEmpty(slotProps.item.description) }">
+                  <QuillEditor
+                    ref="ql-editor"
+                    class="ql-blank"
+                    :placeholder="steps['description'].placeholder"
+                    :options="textOptions"
+                    v-model:content="slotProps.item.description"
+                    contentType="html"
+                    :toolbar="textToolbar"
+                    @ready="onQuillReady"
+                  />
+                  <div v-if="isDescriptionEmpty(slotProps.item.description)" class="required">Erforderlich</div>
+                </div>
               </ClientOnly>
             </div>
           </div>
@@ -323,6 +326,10 @@ const onQuillReady = (quill: any) => {
   });
 };
 
+const isDescriptionEmpty = (description?: string) => {
+  return !description || description === "<p><br></p>";
+};
+
 const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
 };
@@ -518,5 +525,23 @@ onMounted(async () => {
 
 .ql-blank::before {
   font-size: 18px;
+}
+
+.text-editor {
+  padding-top: calc(0.5rem + 1px);
+  padding-bottom: calc(0.5rem + 1px + 12px);
+}
+
+.empty-editor {
+  border-top: 1px solid rgb(164, 34, 88);
+  border-bottom: 1px solid rgb(164, 34, 88);
+  padding-top: 0.5rem;
+  padding-bottom: 0;
+}
+
+.required {
+  color: rgb(164, 34, 88);
+  font-size: 12px;
+  padding-left: 16px;
 }
 </style>
