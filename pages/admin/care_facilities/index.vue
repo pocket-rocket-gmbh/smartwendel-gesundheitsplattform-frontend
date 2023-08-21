@@ -85,6 +85,7 @@ definePageMeta({
 });
 
 const user = useUser();
+const router = useRouter();
 const loading = ref(false);
 
 const fields = [
@@ -100,7 +101,14 @@ const fields = [
       "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button aktiv schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
-  { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  {
+    prop: "user.firstname",
+    text: "Erstellt von",
+    value: "user.name",
+    condition: "admin",
+    type: "button",
+    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+  },
 ];
 const dataTableRef = ref();
 const itemsExist = ref(false);

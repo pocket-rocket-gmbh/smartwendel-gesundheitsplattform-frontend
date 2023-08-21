@@ -2,18 +2,14 @@
   <v-row class="my-15">
     <v-col sm="3" md="4" offset-sm="4">
       <v-form @submit.prevent="auth">
-        <v-card  :class="['pa-6', {'shake' : animated}]">
+        <v-card :class="['pa-6', { shake: animated }]">
           <img class="is-fullwidth" src="~/assets/images/logo.png" />
           <div class="mb-3">
-            <v-text-field v-model="email"
-              class="pt-6"
-              label="E-Mail Adresse"
-              hide-details="auto"
-              @keyup.enter="auth"
-            />
+            <v-text-field v-model="email" class="pt-6" label="E-Mail Adresse" hide-details="auto" @keyup.enter="auth" />
           </div>
           <div class="mb-3">
-            <v-text-field v-model="password"
+            <v-text-field
+              v-model="password"
               type="password"
               label="Passwort"
               :error-messages="useErrors().mappedErrorCode(errors)"
@@ -22,7 +18,9 @@
           </div>
           <v-btn color="primary" block depressed type="submit">Login</v-btn>
           <nuxt-link to="/password_forgotten"><div align="center" class="mt-2">Passwort vergessen?</div></nuxt-link>
-          <nuxt-link to="/register"><div align="center" class="mt-6">Noch keinen Account? Jetzt registrieren!</div></nuxt-link>
+          <nuxt-link to="/register"
+            ><div align="center" class="mt-6">Noch keinen Account? Jetzt registrieren!</div></nuxt-link
+          >
         </v-card>
       </v-form>
     </v-col>
@@ -30,76 +28,81 @@
 </template>
 
 <script lang="ts">
-import { useUserStore } from '@/store/user'
-import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
-import axios from 'axios'
+import { useUserStore } from "@/store/user";
+import { ResultStatus, ServerCallResult } from "@/types/serverCallResult";
+import axios from "axios";
 
 export default defineComponent({
-  name: 'Login',
+  name: "Login",
   setup() {
-    const email = ref('')
-    const password = ref('')
-    const loading = ref(false)
-    const animated = ref(false)
-    const errors = ref('')
-    const lastRoute = ref(null)
+    const email = ref("");
+    const password = ref("");
+    const loading = ref(false);
+    const animated = ref(false);
+    const errors = ref("");
+    const lastRoute = ref(null);
 
-    const router = useRouter()
-    const privateApi = usePrivateApi()
-    const userStore = useUserStore()
+    const router = useRouter();
+    const privateApi = usePrivateApi();
+    const userStore = useUserStore();
 
     const auth = async () => {
-      loading.value = true
-      errors.value = ''
-      const data = { email: email.value, password: password.value }
+      loading.value = true;
+      errors.value = "";
+      const data = { email: email.value, password: password.value };
 
-      const {data: result} = await axios.post<ServerCallResult>("/api/login", {data});
+      const { data: result } = await axios.post<ServerCallResult>("/api/login", { data });
 
       if (result.status === ResultStatus.SUCCESSFUL) {
-        const jwt = result.data.jwt_token
+        const jwt = result.data.jwt_token;
 
-        localStorage.setItem('auth._token.jwt', jwt)
-        localStorage.setItem('smartwendelerland_gesundheitsplattform._remembered_email', email.value)
+        localStorage.setItem("auth._token.jwt", jwt);
+        localStorage.setItem("smartwendelerland_gesundheitsplattform._remembered_email", email.value);
 
         // set user
-        userStore.currentUser = result.data.user
-        userStore.loggedIn = true
+        userStore.currentUser = result.data.user;
+        userStore.loggedIn = true;
 
         if (userStore.currentUser) {
           // move to Dashboard
-          if (lastRoute.value && lastRoute.value !== '/password_forgotten' && lastRoute.value !== '/register') {
-            router.push({ path: lastRoute.value })
-          } else if (result.data.user.role === 'user') {
-            router.push({ path: '/' })
-          } else if (result.data.user.role === 'admin') {
-            router.push({ path: '/admin' })
+          if (
+            lastRoute.value &&
+            lastRoute.value !== "/password_forgotten" &&
+            lastRoute.value !== "/password_reset" &&
+            lastRoute.value !== "/register"
+          ) {
+            router.push({ path: lastRoute.value });
+          } else if (result.data.user.role === "user") {
+            router.push({ path: "/" });
+          } else if (result.data.user.role === "admin") {
+            router.push({ path: "/admin" });
           } else {
-            router.push({ path: '/admin/user_profile' })
+            router.push({ path: "/admin/user_profile" });
           }
         }
       } else {
-        errors.value = result?.data
-        loading.value = false
+        errors.value = result?.data;
+        loading.value = false;
 
         // animate shake
-        animated.value = true
+        animated.value = true;
         setTimeout(() => {
-          animated.value = false
-        }, 2000)
+          animated.value = false;
+        }, 2000);
       }
-    }
+    };
 
     onMounted(() => {
-      lastRoute.value = router.options.history.state.back as null
+      lastRoute.value = router.options.history.state.back as null;
       if (process.client) {
-        const rememberedEmail = localStorage.getItem('smartwendelerland_gesundheitsplattform._remembered_email')
+        const rememberedEmail = localStorage.getItem("smartwendelerland_gesundheitsplattform._remembered_email");
         if (rememberedEmail) {
           setTimeout(() => {
-            email.value = rememberedEmail
-          }, 300)
+            email.value = rememberedEmail;
+          }, 300);
         }
       }
-    })
+    });
 
     return {
       email,
@@ -107,28 +110,33 @@ export default defineComponent({
       loading,
       animated,
       errors,
-      auth
-    }
-  }
-})
+      auth,
+    };
+  },
+});
 </script>
 
 <style lang="css" scoped>
 .shake {
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: translate3d(0, 0, 0);
 }
 @keyframes shake {
-  10%, 90% {
+  10%,
+  90% {
     transform: translate3d(-1px, 0, 0);
   }
-  20%, 80% {
+  20%,
+  80% {
     transform: translate3d(2px, 0, 0);
   }
-  30%, 50%, 70% {
+  30%,
+  50%,
+  70% {
     transform: translate3d(-4px, 0, 0);
   }
-  40%, 60% {
+  40%,
+  60% {
     transform: translate3d(4px, 0, 0);
   }
 }
