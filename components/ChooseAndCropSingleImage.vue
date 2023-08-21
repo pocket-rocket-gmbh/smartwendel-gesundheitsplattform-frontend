@@ -34,11 +34,11 @@
   <div class="img-container" v-else-if="croppedImage">
     <img class="is-fullwidth" :src="croppedImage" />
   </div>
-  <div class="img-container" v-else-if="preSetImageUrl">
-    <img class="is-fullwidth" :src="preSetImageUrl" />
-  </div>
   <div class="img-container" v-else-if="tempImage">
     <img class="is-fullwidth" :src="tempImage" />
+  </div>
+  <div class="img-container" v-else-if="preSetImageUrl">
+    <img class="is-fullwidth" :src="preSetImageUrl" />
   </div>
 </template>
 
