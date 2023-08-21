@@ -189,11 +189,11 @@
             </span>
             <div class="my-2 d-flex align-center">
               <span class="text-h5 mr-3 font-weight-bold">{{ steps["contact"].label }}</span>
-              <v-tooltip location="top" width="200px">
+              <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
-                <span>{{ steps["category"].tooltip }}</span>
+                <span>{{ steps["contact"].tooltip }}</span>
               </v-tooltip>
               <div v-if="setupFinished && !useUser().isAdmin()">
                 <span v-if="editInformations">
@@ -302,7 +302,7 @@
           <div class="field" id="locations">
             <div class="my-2 d-flex align-center">
                 <span class="text-h5 mr-3 font-weight-bold">{{ steps["locations"].label }}</span>
-                <v-tooltip location="top" width="200px">
+                <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
                 </template>
@@ -754,6 +754,7 @@ onMounted(async () => {
 .ql-editor {
   min-height: 200px;
 }
+
 .ql-editor p,
 .ql-editor ol,
 .ql-editor ul {

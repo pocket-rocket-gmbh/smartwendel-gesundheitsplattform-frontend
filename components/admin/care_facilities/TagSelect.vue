@@ -7,7 +7,8 @@
   >
     <template #title>
       <div class="title">
-        <div>Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
+        <div v-else-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
         <div v-if="!expand" class="selected">
           <v-chip v-for="tag in preSetTags" :key="tag.id">
             {{ tag.name }}
@@ -18,10 +19,13 @@
     <template #content>
 
       <div class="content">
-        <div clss=""
+        <div v-if="kind === 'facility'"
               >Hier hast du die Möglichkeit, dein individuelles Leistungsangebot
               mit Hilfe von Schlagwörtern zu beschreiben. </div
             >
+            <div v-else-if="kind === 'course'">
+              Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern individuell zu beschreiben.
+            </div>
         <div class="content-title mt-5 d-flex align-center">
           <v-icon>mdi-tag-outline</v-icon>
           <div>
@@ -35,14 +39,19 @@
                 >mdi-information-outline</v-icon
               >
             </template>
-            <span
-              >Trage Begriffe ein, die dein individuelles Angebot möglichst
+            <span  v-if="kind === 'facility'">
+              Trage Begriffe ein, die dein individuelles Angebot möglichst
               präzise beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“
               und „Demenz“, wenn es sich um eine Pflegeinrichtung oder „Yoga“,
               „Les Mills“ und „Krafttraining“, wenn es sich um ein Fitnessstudio
               handelt). Auf diese Weise gelangen Besucherinnen und Besucher zu
               deinem Profil, sobald sie nach den entsprechenden Schlagwörtern
-              suchen.</span
+              suchen.
+            </span>
+            
+            <span v-else-if="kind === 'course'"
+              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen. </span
+             
             >
           </v-tooltip>
         </div>
