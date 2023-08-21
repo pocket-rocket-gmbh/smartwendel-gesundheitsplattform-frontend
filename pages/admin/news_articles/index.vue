@@ -17,8 +17,10 @@
             itemId = null;
             createEditDialogOpen = true;
           "
-          >Beitrag anlegen</v-btn
+          :class="{ orange: newNewsFromCache }"
         >
+          Beitrag anlegen <span v-if="newNewsFromCache"> - weiter</span>
+        </v-btn>
       </v-col>
       <v-col>
         <v-text-field
@@ -36,23 +38,26 @@
       endpoint="care_facilities?kind=news"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
+      :cache-prefix="'news'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       ref="dataTableRef"
     />
 
-    <AdminCareFacilitiesCreateEdit
+    <AdminNewsCreateEdit
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
-      @close="
-        createEditDialogOpen = false;
-        itemId = null;
-        dataTableRef?.resetActiveItems();
-      "
+      @close="handleCreateEditClose"
       endpoint="care_facilities"
       concept-name="Beiträge"
+      :enableCache="true"
+      :cacheKey="cacheKey"
+      :showPreviewButton="true"
+      @showPreview="handleShowPreview"
     />
+
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -68,15 +73,26 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { Facility } from "~/store/searchFilter";
+
 definePageMeta({
   layout: "admin",
 });
+
+const previewItem = ref<Facility>();
 
 const user = useUser();
 const loading = ref(false);
 
 const availableFields = [
-  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
+  {
+    prop: "is_active",
+    text: "Aktiv",
+    endpoint: "care_facilities",
+    type: "switch",
+    tooltip: "Hiermit kannst du deinen Beitrag aktivieren und deaktivieren",
+    fieldToSwitch: "is_active",
+  },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
@@ -104,16 +120,42 @@ const itemPlaceholder = ref<any>({
   tag_ids: [],
   tag_category_ids: [],
   offlineDocuments: [],
+  image_url: "",
+  file: "",
 });
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const newNewsFromCache = ref(false);
+
+const cacheKey = computed(() => {
+  if (!itemId.value) {
+    return `news_new`;
+  }
+
+  return `news_${itemId.value.replaceAll("-", "_")}`;
+});
+
+const handleCreateEditClose = () => {
+  createEditDialogOpen.value = false;
+  itemId.value = null;
+  dataTableRef.value?.resetActiveItems();
+  newNewsFromCache.value = !!localStorage.getItem("facilities_new");
+};
+
+const openCreateEditDialog = (item: any) => {
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
+};
+
+const handleShowPreview = (item: any) => {
+  previewItem.value = item;
+};
+const handlePreviewClose = () => {
+  previewItem.value = null;
 };
 
 onMounted(async () => {
@@ -129,11 +171,13 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
+    // itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
+
+  newNewsFromCache.value = !!localStorage.getItem("news_new");
 
   const currentUserRole = user.currentUser.role;
   availableFields.forEach((field) => {
@@ -144,4 +188,6 @@ onMounted(async () => {
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"
+.orange
+  color: orange
 </style>

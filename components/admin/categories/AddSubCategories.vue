@@ -90,8 +90,8 @@ export default defineComponent({
       { text: '', value: 'mdi-plus-circle-outline', type: 'icon', emit: 'openAddSubSubCategoriesDialog', tooltip: 'Unter-Kategorien hinzufügen' },
     ])
 
-    const openCreateEditDialog = (id:string) => {
-      itemId.value = id
+    const openCreateEditDialog = (item: any) => {
+      itemId.value = item.id
       createEditDialogOpen.value = true
     }
 

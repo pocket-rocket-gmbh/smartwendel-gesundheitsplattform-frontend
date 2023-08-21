@@ -125,8 +125,8 @@ const facilitySearchColums = ref([
 ]);
 const facilitySearchTerm = ref("");
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const openCreateEditDialog = (item: any) => {
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 

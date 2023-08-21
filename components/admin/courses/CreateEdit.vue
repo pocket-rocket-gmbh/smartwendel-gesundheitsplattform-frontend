@@ -18,10 +18,12 @@
         </v-col>
         <v-col md="10">
           <div class="py-10">
-            <span class="text-h6"
-              >Hier kannst du eine eigene Detailseite für deine Einrichtung anlegen. Bitte fülle dazu, wenn möglich,
-              alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen versehen.</span
-            >
+            <div>
+              <span class="text-h6"
+                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn möglich alle Felder sorgfältig aus.
+                Pflichtfelder sind mit einem Sternchen versehen.</span
+              >
+            </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
@@ -36,21 +38,6 @@
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
-          <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="logo">
-            <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["logo"].label }}</span>
-            </div>
-            <ChooseAndCropSingleImage
-              height="20"
-              :pre-set-image-url="slotProps.item.logo_url"
-              :temp-image="slotProps.item.logo"
-              label="Logo"
-              @setImage="setLogo"
-            />
-          </div>
-
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="photo">
@@ -114,12 +101,6 @@
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
-                </template>
-                <span>{{ steps["services"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
@@ -156,151 +137,120 @@
           </div>
 
           <v-divider class="my-10"></v-divider>
+          <div class="field" id="date">
+            <div class="my-2">
+              <span class="text-h5 mr-2 font-weight-bold">{{ steps["date"].label }}</span>
+            </div>
+            <div class="mb-15">
+              <v-row>
+                <v-col md="4" class="d-flex align-center justify-center">
+                  <Datepicker
+                    inline
+                    multi-dates
+                    preview-format="dd.MM.yyyy HH:mm"
+                    format="dd.MM.yyyy HH:mm"
+                    model-type="dd.MM.yyyy HH:mm"
+                    :format-locale="de"
+                    timezone="Europe/Brussels"
+                    locale="de-DE"
+                    v-model="slotProps.item.event_dates"
+                    label="Start"
+                    :highlight-week-days="[0, 6]"
+                    :min-date="new Date()"
+                    prevent-min-max-navigation
+                    cancelText="Abbrechen"
+                    selectText="Hinzufügen"
+                    input-class-name="dp-custom-input"
+                    :clearable="false"
+                  />
+                </v-col>
+                <v-col md="7">
+                  <v-table density="compact" fixed-header height="400px">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th class="text-left">Datum</th>
+                        <th class="text-left">Löschen</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(date, index) in slotProps.item.event_dates" :key="index">
+                        <td>
+                          <v-btn
+                            class="mx-3"
+                            size="large"
+                            color="primary"
+                            target="_blank"
+                            density="compact"
+                            icon="mdi-calendar-outline"
+                          >
+                          </v-btn>
+                        </td>
+                        <td>{{ date }}</td>
+                        <td>
+                          <v-btn
+                            icon="mdi-delete"
+                            variant="text"
+                            @click="deleteDate(index, slotProps.item.event_dates)"
+                          ></v-btn>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+          <v-divider class="my-10"></v-divider>
 
-          <div class="field" id="contact" :class="[setupFinished || editInformations ? 'has-bg-light-red pa-5' : '']">
-            <span v-if="setupFinished">
-              <v-alert type="warning" density="compact" class="mt-2"
-                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben
-                werden</v-alert
-              >
-            </span>
+          <div class="field" id="certificates">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 mr-2 font-weight-bold">{{ steps["contact"].label }}</span>
-              <div v-if="setupFinished && !useUser().isAdmin()">
-                <span v-if="editInformations">
-                  <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["certificates"].label }}</span>
+              <v-tooltip location="top">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                </template>
+                <span>{{ steps["certificates"].tooltip }}</span>
+              </v-tooltip>
+            </div>
+            <div>
+              <v-checkbox
+                :model-value="slotProps.item.billable_through_health_insurance"
+                hide-details
+                density="compact"
+                label="Ja"
+                @click="
+                  slotProps.item.billable_through_health_insurance = !slotProps.item.billable_through_health_insurance
+                "
+              />
+            </div>
+            <div class="field my-5" v-if="slotProps.item.billable_through_health_insurance">
+              <AdminCareFacilitiesAddFiles
+                :item-id="slotProps.item.id"
+                tag-name="insurance"
+                :document-acepted="slotProps.item.billable_through_health_insurance_approved"
+                :offline-documents="slotProps.item.offlineDocuments"
+                @offline="handleDocumentsOffline"
+                @document-deleted="handleDocumentDeleted"
+              />
+              <div class="d-flex align-center">
+                <span v-if="useUser().isAdmin()">
+                  <v-icon color="primary">mdi-check-decagram-outline</v-icon>
                 </span>
-                <span v-else>
-                  <v-btn size="small" @click="confirmEditDialogOpen = true"> Adresse ändern </v-btn>
-                </span>
+                <v-checkbox
+                  v-if="slotProps.item.billable_through_health_insurance && useUser().isAdmin()"
+                  :model-value="slotProps.item.billable_through_health_insurance_approved"
+                  hide-details
+                  density="compact"
+                  label="Bitte prüfe, ob das Zertifikat gültig ist. Wenn ja, bestätige es hier."
+                  @click="
+                    slotProps.item.billable_through_health_insurance_approved =
+                      !slotProps.item.billable_through_health_insurance_approved
+                  "
+                />
               </div>
             </div>
-
-            <EditItem
-              :open="confirmEditDialogOpen"
-              @accepted="
-                editInformations = true;
-                confirmEditDialogOpen = false;
-              "
-              @close="
-                confirmEditDialogOpen = false;
-                editInformations = false;
-              "
-            />
-            <div class="field">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.street"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                hide-details="auto"
-                label="Straße und Nummer"
-                :rules="[rules.required, rules.counterStreet]"
-                :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.additional_address_info"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                hide-details="auto"
-                label="Adresszusatz"
-              />
-            </div>
-            <div class="field">
-              <v-select
-                hide-details="auto"
-                class="text-field"
-                v-model="slotProps.item.community_id"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                :items="communities"
-                item-title="name"
-                item-value="id"
-                label="Gemeinde"
-                :rules="[rules.required]"
-              />
-            </div>
-            <div class="field split">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.zip"
-                disabled
-                hide-details="auto"
-                label="PLZ"
-                :type="'number'"
-                :rules="[rules.required, rules.zip]"
-                :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
-              />
-              <v-select
-                hide-details="auto"
-                class="text-field"
-                v-model="slotProps.item.town"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                :items="getTownsByCommunityId(slotProps.item.community_id)"
-                item-title="name"
-                item-value="name"
-                label="Ort"
-                :rules="[rules.required]"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.phone"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                hide-details="auto"
-                label="Telefonnummer"
-                :rules="[rules.required, rules.validateNumber]"
-                :type="'tel'"
-                :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                class="text-field"
-                v-model="slotProps.item.email"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
-                hide-details="auto"
-                label="E-Mail"
-                :rules="[rules.required, rules.email]"
-                :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
-              />
-            </div>
           </div>
-
-          <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="locations">
-            <div class="my-2">
-              <div class="text-h5 font-weight-bold">
-                <span class="text-h5 mr-2 font-weight-bold">{{ steps["locations"].label }}</span>
-              </div>
-            </div>
-            <AdminCareFacilitiesAddLocations
-              :item-id="slotProps.item.id"
-              :offline-name="slotProps.item.name"
-              :offline-locations="slotProps.item.offlineLocations"
-              @offline="handleLocationsAddOffline"
-              @update="handleLocationsUpdate"
-            />
-          </div>
-
-          <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="openingHours">
-            <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["openingHours"].label }}</span>
-              <v-textarea
-                class="text-field"
-                rows="4"
-                hide-details="auto"
-                v-model="slotProps.item.opening_hours"
-                label="Wochentag/e - Uhrzeit"
-                :error-messages="useErrors().checkAndMapErrors('opening_hours', slotProps.errors)"
-              />
-            </div>
-          </div>
-
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="website">
@@ -337,6 +287,86 @@
               @document-deleted="handleDocumentDeleted"
             />
           </div>
+          <div class="field" id="leader">
+            <div class="my-2">
+              <span class="text-h5 font-weight-bold">{{ steps["leader"].label }}</span>
+            </div>
+            <v-text-field
+              class="text-field"
+              v-model="slotProps.item.name_instructor"
+              hide-details="auto"
+              label="Name / Vorname des Kursleiters"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
+
+          <div id="address">
+            <div class="my-2">
+              <span class="text-h5 font-weight-bold">{{ steps["address"].label }}</span>
+              <v-checkbox
+                hide-details
+                density="compact"
+                :model-value="courseHasAnotherAdress"
+                @click="courseHasAnotherAdress = !courseHasAnotherAdress"
+                label="Ja"
+              />
+            </div>
+            <div v-if="courseHasAnotherAdress">
+              <div class="field">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.street"
+                  hide-details="auto"
+                  label="Straße und Nummer"
+                  :rules="[rules.counterStreet]"
+                  :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
+                />
+              </div>
+              <div class="field">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.additional_address_info"
+                  hide-details="auto"
+                  label="Adresszusatz"
+                />
+              </div>
+              <div class="field">
+                <v-select
+                  hide-details="auto"
+                  class="text-field"
+                  v-model="slotProps.item.community_id"
+                  :items="communities"
+                  item-title="name"
+                  item-value="id"
+                  label="Gemeinde"
+                />
+              </div>
+              <div class="field split">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.zip"
+                  hide-details="auto"
+                  label="PLZ"
+                  :type="'number'"
+                  :rules="[rules.required, rules.zip]"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+                <v-select
+                  hide-details="auto"
+                  class="text-field"
+                  v-model="slotProps.item.town"
+                  :items="getTownsByCommunityId(slotProps.item.community_id)"
+                  item-title="name"
+                  item-value="name"
+                  label="Ort"
+                />
+              </div>
+            </div>
+          </div>
+
+          <v-divider class="my-10"></v-divider>
         </v-col>
       </v-row>
     </v-card-text>
@@ -344,101 +374,107 @@
 </template>
 
 <script setup lang="ts">
+import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import { de } from "date-fns/locale";
 import { FilterType } from "~/store/searchFilter";
+import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [
   "name",
-  "logo",
   "photo",
   "gallery",
   "description",
   "category",
   "services",
-  "contact",
-  "locations",
-  "openingHours",
   "website",
   "documents",
+  "certificates",
+  "date",
+  "leader",
+  "address",
 ] as const;
 type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
-    label: "1. Hinterlege den Namen deiner Einrichtung *",
+    label: "1. Gib deinem Kurs einen Namen *",
+    tooltip: "",
     description: "Name",
     props: ["name"],
   },
-  logo: {
-    label: "2. Lade dein Logo hoch *",
-    description: "Logo",
-    props: ["logo_url", "logo"],
-    justSome: true,
-  },
   photo: {
-    label: "3. Lade ein Coverbild hoch *",
-    tooltip:
-      "Das Coverbild ziert den Header-Bereich Ihrer Detail-Seite und gibt dem Besucher einen ersten Einblick auf deine Einrichtung. Mit den weiteren Einrichtungsbildern, die man im nächsten Schritt hochladen kann, erstellst du eine Galerie, die dem Besucher weitere Einblicke in Ihre Einrichtung geben. ",
+    label: "2. Lade ein Coverbild hoch *",
+    tooltip: "",
     description: "Foto",
     props: ["image_url"],
   },
   gallery: {
-    label: "4. Lade Bilder für eine Galerie hoch",
+    label: "3. Lade weitere Bilder für eine Galerie hoch",
+    tooltip: "",
     description: "Galerie Fotos",
     props: ["sanitized_images"],
   },
   description: {
-    label: "5. Beschreibe deine Einrichtung ausführlich *",
+    label: "4. Gib hier eine Kursbeschreibung an *",
+    tooltip: "",
     description: "Beschreibung",
-    placeholder:
-      "Nutze dieses Feld, um deine Einrichtung detailliert zu beschreiben. Interessant sind Infos zum Standort, Deine Leistungen, Ansprechpartner, etc.",
+    placeholder: "Beschreibung des Kurses. Nützliche Inhalte: Kursdauer, empfohlene Kleidung, etc",
     props: ["description"],
   },
   category: {
-    label: "6. Weise deine Einrichtung gezielt einem Berufszweig / einer Sparte zu *",
+    label: "5. Weise deinen Kurs / Veranstaltung gezielt einem Berufszweig / einer Sparte zu ",
+    tooltip: "",
     description: "Berufszweig",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
   services: {
-    label: "7. Ordne deiner Einrichtung passende Filter zu *",
-    tooltip:
-      "Anhand der ausgewählten Filter beschreibst du deine Einrichtung genauer. Deine Leistungen und dein Alleinstellungsmerkmal hilft den Benutzern, dich und deine Einrichtung in der Anbietersuche schneller zu finden. Sollte deine Leistung nicht aufgeführt sein, darfst du Liste gerne erweitern.",
+    label: "6. Ordne deinem Kurs / Veranstaltung passende Filter zu, um die Leistungen gezielter zu beschreiben *",
+    tooltip: "",
     description: "Leistung",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
-  contact: {
-    label: "8. Deine Adresse *",
-    tooltip: "Ihr Adresse wir auf der Karte in der Anbietersuche angezeigt",
-    description: "Kontaktdaten",
-    props: ["street", "zip", "community_id", "town", "email", "phone"],
+  date: {
+    label:
+      "7. Gib das Kursdatum, sowie die Uhrzeit an. Findet dein Kurs öfter statt, kannst du mehrere Termine auswählen und diese auch wieder löschen *",
+    tooltip: "",
+    description: "Kursdatum",
+    props: ["event_dates"],
   },
-  locations: {
-    label: "9. Falls deine Einrichtung mehrere Standorte hat, füge diese hier hinzu",
-    description: "Standorte",
-    props: ["locations", "offlineLocations"],
-    justSome: true,
-  },
-  openingHours: {
-    label: "10. Trage deine Öffnungszeiten ein",
-    description: "Öffnungszeiten",
-    props: ["opening_hours"],
+  certificates: {
+    label:
+      "8. Handelt es sich um einen von GKV geförderten Präventionskurs? Falls ja, lade bitte das Zertifikat der ZPP (Zentrale Prüfstelle Prävention) hoch",
+    tooltip: "",
+    description: "Zertifikat",
+    props: ["billable_through_health_insurance"],
   },
   website: {
-    label: "11. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
+    label: "9. Hinterlege den Link zu deiner Webseite oder einer Social-Media Plattform",
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Webseite",
     props: ["website"],
   },
   documents: {
-    label: "12. Lade Dokumente hoch",
-    tooltip:
-      "Die gesammelten Dokumente (Berichte, Ratgeber, etc.) werden den Benutzern auf deiner Einrichtungs-Seite zum Download angeboten. Es können lediglich PDF-Dokumente zur Verfügung gestellt werden.",
+    label:
+      "10. Hier hast du die Möglichkeit, weitere Dokumente (z.B. Kursplan) zu deinem Kurs/Veranstaltung hochzuladen",
+    tooltip: "",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
+  },
+  leader: {
+    label: "11. Vor- und Nachname der Kursleitung",
+    tooltip: "",
+    description: "Kursleitung",
+    props: ["name_instructor"],
+  },
+  address: {
+    label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
+    tooltip: "",
+    description: "Adresse",
+    props: ["street", "zip", "community_id", "town"],
   },
 };
 
@@ -447,6 +483,8 @@ const createEditRef = ref();
 
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
+
+const courseHasAnotherAdress = ref(false);
 
 const textToolbar = ref([
   [{ header: "1" }, { header: "2" }],
@@ -478,8 +516,12 @@ const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
 };
 
-const editInformations = ref(false);
-const confirmEditDialogOpen = ref(false);
+const deleteDate = (index: number, dates: string[]) => {
+  const confirmed = confirm("Sicher dass du diesen Termin löschen möchtest?");
+  if (confirmed) {
+    dates.splice(index, 1);
+  }
+};
 
 const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   if (filterType === "filter_facility") {
@@ -536,13 +578,6 @@ const setTagIds = (tags: any) => {
   });
 };
 
-const setLogo = (image: any) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
-    name: "logo",
-    value: image,
-  });
-};
-
 const setCoverBild = (image: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
@@ -554,13 +589,6 @@ const setOfflineImage = (images: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "offlineImageFiles",
     value: images,
-  });
-};
-
-const handleLocationsAddOffline = (newOfflineLocations: { latitude: number; longitude: number }[]) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
-    name: "offlineLocations",
-    value: newOfflineLocations,
   });
 };
 
@@ -578,19 +606,14 @@ const handleDocumentDeleted = () => {
   createEditRef.value.getItem();
 };
 
-const handleLocationsUpdate = (locations: any) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
-    name: "locations",
-    value: locations,
-  });
-};
-
-const goToField = (stepName: string) => {
-  const el = document.getElementById(stepName);
-  if (!el) {
-    return;
+const goToField = (n: string) => {
+  const id = n;
+  if (id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   }
-  el.scrollIntoView({ behavior: "smooth", block: "center" });
 };
 
 const setupFinished = ref(false);

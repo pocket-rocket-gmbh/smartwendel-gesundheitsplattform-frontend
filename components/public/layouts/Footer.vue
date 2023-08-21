@@ -19,7 +19,7 @@
               color="grey"
               rounded="pill"
               size="x-large"
-              href="/login"
+              href="/register"
             >
               <span>Jetzt registrieren</span>
             </v-btn>
