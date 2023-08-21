@@ -4,7 +4,7 @@
       class="text-field"
       hide-details="auto"
       v-model="image"
-      :label="`${labelText} wählen`"
+      :label="`${labelText} ${(tempImage || preSetImageUrl) ? 'aktualisieren' : 'wählen'}`"
       filled
       prepend-icon="mdi-camera"
       @change="handleFile()"
