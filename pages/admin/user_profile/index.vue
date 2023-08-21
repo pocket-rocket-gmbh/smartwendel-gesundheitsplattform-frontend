@@ -1,6 +1,9 @@
 <template>
   <div>
     <h2>Mein Profil</h2>
+    <v-alert type="info" density="compact" closable class="mt-2">
+      Hier kannst du deine Daten vervollständigen und dein Passwort ändern.
+    </v-alert>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
       du Kurse und Veranstaltungen sowie Beiträge anlegen.
