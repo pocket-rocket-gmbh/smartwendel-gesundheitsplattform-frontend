@@ -3,7 +3,8 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
     <h2 v-else>Kurse und Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
+      >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen
+      und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">
@@ -116,6 +117,7 @@ definePageMeta({
 
 const user = useUser();
 const loading = ref(false);
+const router = useRouter();
 
 const fields = [
   {
@@ -127,7 +129,14 @@ const fields = [
     fieldToSwitch: "is_active",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
-  { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
+  {
+    prop: "user.firstname",
+    text: "Erstellt von",
+    value: "user.name",
+    condition: "admin",
+    type: "button",
+    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+  },
   {
     prop: "kind",
     text: "Art (Kurs oder Veranstaltung)",

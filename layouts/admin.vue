@@ -26,9 +26,7 @@
         </v-alert>
       </div>
       <v-list dense nav>
-        <v-list-item :to="appStore.dashboardBackLink || '/'" @click.prevent="routeBack">
-          <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
-        </v-list-item>
+        <v-list-item :to="'/'"> <v-icon>mdi-arrow-left</v-icon> Zurück zur Website </v-list-item>
         <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
           <v-list-item link to="/admin/matomo" nuxt> <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken </v-list-item>
