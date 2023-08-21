@@ -476,7 +476,7 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   leader: {
-    label: "11. Vor- und Nachname der Kursleitung",
+    label: "11. Vor- und Nachname der Kursleitung *",
     tooltip: "",
     description: "Kursleitung",
     props: ["name_instructor"],
