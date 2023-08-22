@@ -1,5 +1,5 @@
 <template>
-  <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
+  <CreateEdit v-slot="slotProps" @has-changed="adressChanged = true" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col md="3">
@@ -193,9 +193,8 @@
           </div>
 
           <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="contact" :class="[setupFinished || editInformations ? 'has-bg-light-red pa-5' : '']">
-            <span v-if="setupFinished">
+          <div class="field" id="contact" :class="[adressChanged || editInformations ? 'has-bg-light-red pa-5' : '']">
+            <span v-if="adressChanged">
               <v-alert type="warning" density="compact" class="mt-2"
                 >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben
                 werden</v-alert
@@ -690,6 +689,7 @@ const goToField = (stepName: string) => {
   el.scrollIntoView({ behavior: "smooth", block: "center" });
 };
 
+const adressChanged = ref(false);
 const setupFinished = ref(false);
 
 const communitiesApi = useCollectionApi();

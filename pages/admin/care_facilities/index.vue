@@ -61,7 +61,6 @@
     />
 
     <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
-
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
       @close="
@@ -101,6 +100,7 @@ const fields = [
       "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button aktiv schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
+  { value: "", type: "isCompleteFacility"},
   {
     prop: "user.firstname",
     text: "Erstellt von",
@@ -191,7 +191,7 @@ const handlePreviewClose = () => {
 
 onMounted(async () => {
   loading.value = true;
-  setupFinished.value = await useUser().facilityFinished();
+  setupFinished.value = await useUser().setupFinished();
   loading.value = false;
 
   newFacilityFromCache.value = !!localStorage.getItem("facilities_new");

@@ -13,9 +13,7 @@
           <span v-if="itemId">{{ conceptName }} bearbeiten</span>
           <span v-else>{{ conceptName }} erstellen</span>
         </v-card-title>
-
         <slot :item="item" :errors="errors"></slot>
-
         <v-card-actions class="card-actions">
           <v-btn @click="emitClose()"> Schließen </v-btn>
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
@@ -351,6 +349,7 @@ watch(
 );
 
 onMounted(async () => {
+
   const cachedItem = props.enableCache && props.cacheKey && JSON.parse(localStorage.getItem(props.cacheKey));
   if (!cachedItem) {
     if (props.itemId) {

@@ -50,6 +50,7 @@
           <span v-else>Einrichtungen</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
           link
           to="/admin/courses_events"
           nuxt
@@ -59,6 +60,7 @@
           <span v-else>Kurse und Veranstaltungen</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
           link
           to="/admin/news_articles"
           nuxt

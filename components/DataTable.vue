@@ -118,6 +118,12 @@
               </div>
             </div>
           </span>
+          <span v-else-if="field.type === 'isCompleteFacility'">
+            <span class="text-warning" v-if="isCompleteFacility(item)">
+              <v-icon class="mr-2">mdi-alert</v-icon>
+            <i>Nicht alle Pflichtfelder ausgefüllt</i>
+            </span>
+          </span>
           <span v-else-if="field.type === 'button' && field.action">
             <button @click.stop="field.action(item)">
               {{ pathInto(item, field.value) }}
@@ -136,6 +142,7 @@
 import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
+import { isCompleteFacility } from "~/utils/facility.utils";
 
 const router = useRouter();
 
