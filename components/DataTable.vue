@@ -61,6 +61,7 @@
             </template>
             <span>Nach unten</span>
           </v-tooltip>
+      
           <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{ field.value }}</v-icon>
           <span v-else-if="item[field.value] && field.type === 'association_name'">{{ item[field.value].name }}</span>
           <span v-else-if="item[field.value] && field.type === 'associations_name'">
@@ -117,6 +118,9 @@
                 </v-row>
               </div>
             </div>
+          </span>
+          <span v-else-if="field.type === 'beinEdited'">
+            <span v-if="isCached(item.id)"><i>wird bearbeitet</i></span>
           </span>
           <span v-else-if="field.type === 'isCompleteFacility'">
             <span class="text-warning" v-if="isCompleteFacility(item)">

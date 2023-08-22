@@ -95,6 +95,7 @@ const fields = [
     fieldToSwitch: "is_active",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
+  { value: "", type: "beinEdited"},
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",

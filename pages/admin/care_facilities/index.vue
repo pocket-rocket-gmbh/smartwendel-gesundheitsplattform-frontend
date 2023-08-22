@@ -101,6 +101,7 @@ const fields = [
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "isCompleteFacility"},
+  { value: "", type: "beinEdited"},
   {
     prop: "user.firstname",
     text: "Erstellt von",
