@@ -74,7 +74,7 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          <span>Mein Profil</span>
+          <span>Mein Konto</span>
         </v-list-item>
         <v-list-item
           link

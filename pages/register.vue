@@ -113,8 +113,13 @@
           <v-btn color="primary" block depressed @click="register">Registrieren</v-btn>
         </v-form>
         <div v-if="registerSuccessful" align="center">
-          Deine Registrierung war erfolgreich.<br />Wir haben Dir soeben eine E-Mail mit weiteren Anweisungen und einem
+          <div>
+            Deine Registrierung war erfolgreich.<br />Wir haben Dir soeben eine E-Mail mit weiteren Anweisungen und einem
           temporären Passwort geschickt.
+          </div>
+          <div class="mt-5">
+            <v-btn color="primary" @click="toLogin" block depressed>Jetzt  anmelden</v-btn>
+          </div>
         </div>
       </v-card>
     </v-col>
@@ -141,6 +146,7 @@ const errors = ref({});
 const registerSuccessful = ref(false);
 const privacyAccepted = ref(false);
 const registerForm = ref<VForm>();
+const router = useRouter();
 
 const isValidEmail = (email: string) => {
   const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -150,6 +156,10 @@ const isValidEmail = (email: string) => {
 // const formValidated = computed(() => {
 //   return registerForm.value?.isValid;
 // });
+
+const toLogin = () => {
+  router.push({ path: "/login" });
+};
 
 const register = async () => {
   const { valid } = await registerForm.value.validate();

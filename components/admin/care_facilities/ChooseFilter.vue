@@ -18,7 +18,7 @@
       @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title align="center">
-        <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : '']">
+        <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']">
           {{ mainFilter.name }}
         </span>
         <div>

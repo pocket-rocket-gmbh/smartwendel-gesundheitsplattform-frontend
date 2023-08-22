@@ -138,7 +138,7 @@
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
             />
-            <v-alert type="info" color="grey" class="mt-2">
+<!--             <v-alert type="info" color="grey" class="mt-2">
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
@@ -154,7 +154,7 @@
                   </span>
                 </div>
               </div>
-            </v-alert>
+            </v-alert> -->
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
               :pre-set-tags="slotProps.item.tags || []"
