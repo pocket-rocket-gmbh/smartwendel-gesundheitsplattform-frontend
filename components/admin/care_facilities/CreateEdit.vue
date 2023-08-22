@@ -49,7 +49,45 @@
                 </template>
                 <span>{{ steps["logo"].tooltip }}</span>
               </v-tooltip>
+              <v-btn  size="small" @click="openLogoGalery = !openLogoGalery">aus der Galerie
+                <v-icon>mdi-chevron-down</v-icon>
+              </v-btn>
+     
             </div>
+            <div v-if="openLogoGalery">
+              <v-row>
+                  <v-col
+                    v-for="n in 9"
+                    :key="n"
+                    class="d-flex child-flex"
+                    cols="4"
+                  >
+                    <v-img
+                      :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
+                      :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                      aspect-ratio="1"
+                      cover
+                      max-height="200px"
+                      max-width="400px"
+                      class="bg-grey-lighten-2 is-clickable"
+                      @click="setLogo, openLogoGalery = false"
+                    >
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey-lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+                  </v-col>
+                </v-row>
+              </div>
             <ChooseAndCropSingleImage
               height="20"
               :pre-set-image-url="slotProps.item.logo_url"
@@ -166,23 +204,6 @@
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
             />
-            <v-alert type="info" color="grey" class="mt-2">
-              <div class="d-flex align-center filter-request">
-                <div class="py-1">
-                  <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden
-                    ist, kontaktiere uns bitte
-                  </span>
-                  <span>
-                    <a
-                      class="is-white text-decoration-underline"
-                      :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
-                      >HIER</a
-                    >
-                  </span>
-                </div>
-              </div>
-            </v-alert>
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
               :pre-set-tags="slotProps.item.tags || []"
@@ -337,6 +358,7 @@
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{ steps["openingHours"].label }}</span>
               <v-textarea
+                placeholder="z.B. Montag - Freitag 8:00 - 16:00 Uhr"
                 class="text-field"
                 rows="4"
                 hide-details="auto"
@@ -508,6 +530,7 @@ const steps: CreateEditSteps<StepNames> = {
 
 const expandTagSelect = ref(true);
 const createEditRef = ref();
+const openLogoGalery = ref(false)
 
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);

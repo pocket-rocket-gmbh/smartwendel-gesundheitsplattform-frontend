@@ -61,7 +61,7 @@
               :items="communities"
               item-title="name"
               item-value="id"
-              label="Gemeinde"
+              label="Gemeinde *"
               :rules="[rules.required]"
             />
           </div>
@@ -69,7 +69,7 @@
             <v-text-field
               v-model="careFacilityZip"
               hide-details="auto"
-              label="PLZ"
+              label="PLZ *"
               :type="'number'"
               :rules="[rules.required, rules.zip]"
               :error-messages="useErrors().checkAndMapErrors('zip', errors)"
@@ -81,7 +81,7 @@
               :items="getTownsByCommunityId(careFacilityCommunityId)"
               item-title="name"
               item-value="name"
-              label="Ort"
+              label="Ort *"
               :rules="[rules.required]"
             />
           </div>
@@ -110,7 +110,7 @@
               </div>
             </template>
           </v-checkbox>
-          <v-btn color="primary" block depressed @click="register">Registrieren</v-btn>
+          <v-btn color="primary" class="mt-5" block depressed @click="register">Registrieren</v-btn>
         </v-form>
         <div v-if="registerSuccessful" align="center">
           <div>
