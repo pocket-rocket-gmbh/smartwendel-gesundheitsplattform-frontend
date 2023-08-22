@@ -10,7 +10,7 @@
       </div>
     </div>
     <template v-if="filterStore.filteredResults.length > 0">
-      <div v-if="!filterStore.currentKinds.includes('facility')" class="boxes">
+      <div v-if="!filterStore.currentKinds.includes('facility')" class="boxes" :class="{ doubled }">
         <PublicContentBox
           :size="12"
           class=""
@@ -87,6 +87,10 @@
 <script setup lang="ts">
 import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
 
+const props = defineProps<{
+  doubled?: boolean;
+}>();
+
 const filterStore = useFilterStore();
 
 const showCareFacilityInMap = async (careFacilityId: string) => {
@@ -142,6 +146,10 @@ const toggleFilterSort = () => {
   display: flex
   flex-direction: column
   gap: 2rem
+
+  &.doubled
+    display: grid
+    grid-template-columns: 1fr 1fr
 
   @include md
     display: flex

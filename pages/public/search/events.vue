@@ -2,8 +2,8 @@
   <ClientOnly>
     <div>
       <PublicSearchTheBasicSearchBox
-        title="Kurse & Veranstaltungen"
-        sub-title="Deinen Wunschkurs auswählen"
+        title="Veranstaltungen"
+        sub-title="Deine Wunschveranstaltung auswählen"
         :filter-kind="'event'"
       />
       <div class="container">
@@ -57,9 +57,6 @@ onBeforeUnmount(() => {
 
   @include md
     padding: 1rem
-
-  @include sm
-    padding: 0
 
   .filters
     flex: 1

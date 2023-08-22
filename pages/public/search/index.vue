@@ -89,6 +89,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  padding: 2rem 5rem;
 
   @include md {
     padding: 1rem;

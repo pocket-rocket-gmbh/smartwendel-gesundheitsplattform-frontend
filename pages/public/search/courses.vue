@@ -1,11 +1,7 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox
-        title="Kurse & Veranstaltungen"
-        sub-title="Deinen Wunschkurs auswählen"
-        :filter-kind="'course'"
-      />
+      <PublicSearchTheBasicSearchBox title="Kurse" sub-title="Deinen Wunschkurs auswählen" :filter-kind="'course'" />
       <div class="container">
         <div class="filters" v-if="showSearchFilter">
           <PublicSearchTheFilter :filterKind="'course'" />
@@ -57,9 +53,6 @@ onBeforeUnmount(() => {
 
   @include md
     padding: 1rem
-
-  @include sm
-    padding: 0
 
   .filters
     flex: 1
