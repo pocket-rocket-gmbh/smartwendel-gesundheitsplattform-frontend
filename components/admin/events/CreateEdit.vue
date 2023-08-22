@@ -65,7 +65,11 @@
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{ steps["gallery"].label }}</span>
             </div>
-            <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
+            <AdminCareFacilitiesAddImages
+              :item-id="slotProps.item.id"
+              @offline="(file) => setOfflineImage(file)"
+              @update-images="reloadItem"
+            />
           </div>
           <v-divider class="my-10"></v-divider>
 
@@ -262,7 +266,7 @@
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
-              @document-deleted="handleDocumentDeleted"
+              @document-deleted="reloadItem"
             />
           </div>
 
@@ -396,7 +400,8 @@ const steps: CreateEditSteps<StepNames> = {
   gallery: {
     label: "3. Hier kannst du weitere Bilder für deine Galerie hochladen.",
     description: "Galerie Fotos",
-    props: ["sanitized_images"],
+    props: ["sanitized_images", "images"],
+    justSome: true,
   },
   description: {
     label: "4.	Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
@@ -621,7 +626,7 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
   });
 };
 
-const handleDocumentDeleted = () => {
+const reloadItem = () => {
   if (!createEditRef.value) return;
 
   console.log("Get item");

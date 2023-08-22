@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
-const emit = defineEmits(["offline"]);
+const emit = defineEmits(["offline", "updateImages"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -133,6 +133,7 @@ const getCareFacility = async () => {
   api.setEndpoint(`care_facilities/${props.itemId}`);
   loadingItem.value = true;
   await api.getItem();
+  emit("updateImages");
   loadingItem.value = false;
   item.value = api.item.value;
 };

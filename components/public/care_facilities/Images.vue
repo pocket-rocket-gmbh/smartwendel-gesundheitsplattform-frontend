@@ -1,27 +1,27 @@
 <template>
-  <div :class="['image-area mt-5', { 'has-logo': careFacility.logo_url || careFacility.logo }]" v-if="careFacility.sanitized_images">
+  <div :class="['image-area mt-5', { 'has-logo': careFacility.logo_url || careFacility.logo }]">
     <v-row class="image-row">
       <v-col class="d-flex flex-wrap align-content-bottom justify-center">
         <img
           class="image"
-          :class="[careFacility.sanitized_images[0] ? 'left' : '']"
-          v-if="careFacility.image_url"
-          :src="careFacility.image_url"
+          :class="[careFacility?.sanitized_images?.[0] ? 'left' : '']"
+          v-if="careFacility.image_url || careFacility.file"
+          :src="careFacility.image_url || careFacility.file"
         />
       </v-col>
 
-      <v-col v-if="careFacility.sanitized_images[0]" md="4" class="d-flex flex-wrap align-content-center justify-end">
+      <v-col v-if="careFacility?.sanitized_images?.[0]" md="4" class="d-flex flex-wrap align-content-center justify-end">
         <v-row>
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
-            <img class="image right-top" :src="careFacility.sanitized_images[0].url" />
+            <img class="image right-top" :src="careFacility?.sanitized_images?.[0].url" />
           </v-col>
         </v-row>
         <v-row>
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
             <img
               class="image right-bottom"
-              v-if="careFacility.sanitized_images[1]"
-              :src="careFacility.sanitized_images[1].url"
+              v-if="careFacility?.sanitized_images?.[1]"
+              :src="careFacility?.sanitized_images?.[1].url"
             />
             <v-btn class="show-more" v-if="careFacility.sanitized_images.length > 0" @click="showGalery()">
               alle Bilder zeigen</v-btn
@@ -30,7 +30,7 @@
         </v-row>
       </v-col>
     </v-row>
-    <div class="logo" v-if="careFacility.logo ||  careFacility.logo_url">
+    <div class="logo" v-if="careFacility.logo || careFacility.logo_url">
       <img :src="careFacility.logo ? careFacility.logo : careFacility.logo_url" />
     </div>
   </div>
