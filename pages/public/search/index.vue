@@ -48,14 +48,7 @@ const filterStore = useFilterStore();
 const router = useRouter();
 
 const filteredKinds = computed(() => {
-  const uniqueKinds = [...new Set(filterStore.filteredResults.map((result) => result.kind))];
-  const courseIndex = uniqueKinds.findIndex((kind) => kind === "course");
-  const eventIndex = uniqueKinds.findIndex((kind) => kind === "event");
-
-  if (courseIndex !== -1 && eventIndex !== -1) {
-    uniqueKinds.splice(courseIndex, 1);
-  }
-  return uniqueKinds;
+  return filterStore.filteredResults.map((result) => result.kind);
 });
 const goBack = () => {
   router.push({ path: "/" });
@@ -64,14 +57,16 @@ const goBack = () => {
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
   if (kind === "facility") return "Zu den Einrichtungen";
   if (kind === "news") return "Zu den Beiträgen";
-  if (kind === "event" || kind === "course") return "Zu den Kursen und Veranstaltungen";
+  if (kind === "event" || kind === "course") return "Zu den Kursen";
+  if (kind === "course") return "Zu den Veranstaltungen";
 };
 
 const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
   switch (kind) {
     case "event":
-    case "course":
       return router.push({ path: "/public/search/events" });
+    case "course":
+      return router.push({ path: "/public/search/courses" });
     case "facility":
       return router.push({ path: "/public/search/facilities" });
     case "news":

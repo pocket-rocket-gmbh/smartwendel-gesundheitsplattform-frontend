@@ -67,6 +67,7 @@ import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import newsIcon from "~/assets/icons/facilityTypes/news.svg";
 import eventsIcon from "~/assets/icons/facilityTypes/events.svg";
+import coursesIcon from "~/assets/icons/facilityTypes/events.svg";
 import searchIcon from "~/assets/icons/facilityTypes/search.svg";
 
 const filterStore = useFilterStore();
@@ -92,7 +93,10 @@ const routeToResults = (result?: Facility) => {
   if (result.kind === "facility") {
     return router.push({ path: `/public/care_facilities/${result.id}` });
   }
-  if (result.kind === "course" || result.kind === "event") {
+  if (result.kind === "course") {
+    return router.push({ path: `/public/care_facilities/${result.id}` });
+  }
+  if (result.kind === "event") {
     return router.push({ path: `/public/care_facilities/${result.id}` });
   }
   if (result.kind === "news") {
@@ -106,7 +110,8 @@ onClickOutside(popoverParentRef, () => (showPopover.value = false));
 
 const getIconSourceFor = (kind?: FilterKind) => {
   if (kind === "facility") return facilityIcon;
-  if (kind === "course" || kind === "event") return eventsIcon;
+  if (kind === "course") return coursesIcon;
+  if (kind === "event") return eventsIcon;
   if (kind === "news") return newsIcon;
   return searchIcon;
 };

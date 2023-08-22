@@ -169,11 +169,7 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) =>
-    props.filterKind === "course" || props.filterKind === "event"
-      ? item.kind === "course" || item.kind === "event"
-      : props.filterKind === item.kind
-  );
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
   // const filters: any[] = result?.data?.resources;
   if (!filters) {
     console.error("No filters!");
@@ -236,9 +232,7 @@ const loadAllTags = async () => {
 
   // const tags: FilterTag[] = res.data.resources;
   const scope = filterKindToFilterScope(props.filterKind);
-  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>
-    scope === "course" || scope === "event" ? item.scope === "course" || item.scope === "event" : scope === item.scope
-  );
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => scope === item.scope);
 
   return tags;
 };

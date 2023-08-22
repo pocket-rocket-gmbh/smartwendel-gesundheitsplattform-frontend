@@ -104,7 +104,6 @@ const handleFiles = async () => {
   if (!images.value?.length) return;
 
   const validImages = images.value.filter((image) => image.size / 1000000 < 5);
-  console.log(validImages, images.value);
 
   if (validImages.length !== images.value.length) {
     errorFileSizeTooLarge.value = true;

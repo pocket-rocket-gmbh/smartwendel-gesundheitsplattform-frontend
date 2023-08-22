@@ -35,6 +35,7 @@
           <v-divider></v-divider>
           <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
           <v-list-item link to="/admin/filter/events" nuxt> Veranstaltungsfilter </v-list-item>
+          <v-list-item link to="/admin/filter/courses" nuxt> Kursfilter </v-list-item>
           <v-list-item link to="/admin/filter/news" nuxt> Beitragsfilter </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
@@ -51,12 +52,21 @@
         </v-list-item>
         <v-list-item
           link
-          to="/admin/courses_events"
+          to="/admin/courses"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          <span v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</span>
-          <span v-else>Kurse und Veranstaltungen</span>
+          <span v-if="useUser().isFacilityOwner()">Meine Kurse</span>
+          <span v-else>Kurse</span>
+        </v-list-item>
+        <v-list-item
+          link
+          to="/admin/events"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
+        >
+          <span v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</span>
+          <span v-else>Veranstaltungen</span>
         </v-list-item>
         <v-list-item
           link

@@ -39,8 +39,15 @@
               >
                 Anbieter
               </a>
-              <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')">
+              <a
+                href="/public/search/courses"
+                class="is-clickable mx-5"
+                @click.prevent="goTo('/public/search/courses')"
+              >
                 Kurse
+              </a>
+              <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')">
+                Veranstaltungen
               </a>
             </div>
           </div>

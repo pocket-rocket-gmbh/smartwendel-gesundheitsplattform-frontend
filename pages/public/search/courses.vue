@@ -4,11 +4,11 @@
       <PublicSearchTheBasicSearchBox
         title="Kurse & Veranstaltungen"
         sub-title="Deinen Wunschkurs auswählen"
-        :filter-kind="'event'"
+        :filter-kind="'course'"
       />
       <div class="container">
         <div class="filters" v-if="showSearchFilter">
-          <PublicSearchTheFilter :filterKind="'event'" />
+          <PublicSearchTheFilter :filterKind="'course'" />
         </div>
         <div class="results">
           <PublicSearchTheFilteredCareFacilities />
@@ -37,7 +37,7 @@ const showSearchFilter = computed(() => {
 });
 
 onMounted(async () => {
-  filterStore.currentKinds = ["event"];
+  filterStore.currentKinds = ["course"];
   filterStore.updateFromUrlQuery();
   filterStore.loadAllResults();
 });
