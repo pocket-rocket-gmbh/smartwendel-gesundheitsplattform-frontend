@@ -105,7 +105,7 @@
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
-          <v-divider class="my-10"></v-divider>
+<!--           <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-3">
               <span class="text-h5 font-weight-bold">{{ steps["category"].label }}</span>
@@ -118,21 +118,21 @@
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
             />
-          </div>
+          </div> -->
           <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
             </div>
-            <AdminCareFacilitiesChooseFilter
+<!--             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_service"
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
-            />
-            <v-alert type="info" color="grey" class="mt-2">
+            /> -->
+<!--             <v-alert type="info" color="grey" class="mt-2">
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
@@ -148,7 +148,7 @@
                   </span>
                 </div>
               </div>
-            </v-alert>
+            </v-alert> -->
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
               :pre-set-tags="slotProps.item.tags || []"
@@ -171,7 +171,7 @@ import { CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
-const stepNames = ["name", "photo", "description", "category", "leader","services"] as const;
+const stepNames = ["name", "photo", "description", "leader","services"] as const;
 type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
@@ -201,17 +201,17 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Name der Autorin/des Autors",
     props: ["name_instructor"],
   },
-  category: {
+/*   category: {
     label: "5. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
     tooltip: "",
     description: "Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
-  },
+  }, */
   services: {
-    label: "6. Ordne deinem Beitrag passende Filter zu, um ihn besser auffindbar zu machen *",
+    label: "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen *",
     tooltip: "",
-    description: "Leistung",
+    description: "Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
