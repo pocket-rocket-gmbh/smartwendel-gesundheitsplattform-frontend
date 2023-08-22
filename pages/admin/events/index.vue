@@ -109,15 +109,7 @@ const fields = [
     condition: "admin",
     type: "button",
     action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
-  },
-  {
-    prop: "kind",
-    text: "Art (Kurs oder Veranstaltung)",
-    endpoint: "care_facilities",
-    value: "kind",
-    type: "enum",
-    enum_name: "facilitiesKind",
-  },
+  }
 ];
 
 const previewItem = ref<Facility>();
