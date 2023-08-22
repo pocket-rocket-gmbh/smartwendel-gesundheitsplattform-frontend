@@ -386,11 +386,11 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name"],
   },
   photo: {
-    label: "2. Bitte lade hier ein Coverbild hoch.  *",
+    label: "2. Bitte lade hier ein Titelbild hoch.  *",
     description: "Foto",
     props: ["image_url", "file"],
     tooltip:
-      "Das Coverbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
+      "Das Titelbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
     justSome: true,
   },
   gallery: {

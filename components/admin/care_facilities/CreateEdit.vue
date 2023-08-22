@@ -432,10 +432,10 @@ const steps: CreateEditSteps<StepNames> = {
       "Dein Logo wird im Kopfbereich deiner Profilseite angezeigt. Falls du kein eigenes Logo hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. ",
   },
   photo: {
-    label: "3.	Bitte lade hier dein Coverbild hoch. *",
+    label: "3.	Bitte lade hier dein Titelbild hoch. *",
     tooltip:
-      "Das Coverbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Coverbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
-    description: "Coverbild",
+      "Das Titelbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Titelbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
+    description: "Titelbild",
     props: ["image_url", "file"],
     justSome: true,
   },
