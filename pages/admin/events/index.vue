@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
-    <h2 v-else>Kurse und Veranstaltungen</h2>
+    <h2 v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</h2>
+    <h2 v-else>Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
       >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen
       und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
@@ -10,19 +10,6 @@
       <v-row align="center">
         <v-col md="5">
           <div class="my-5">
-            <v-btn
-              elevation="0"
-              variant="outlined"
-              class="mr-5"
-              @click="
-                itemPlaceholder.kind = 'course';
-                itemId = null;
-                createEditDialogOpen = true;
-              "
-              :class="{ orange: newCourseFromCache }"
-            >
-              Kurs anlegen<span v-if="newCourseFromCache"> - weiter</span>
-            </v-btn>
             <v-btn
               elevation="0"
               variant="outlined"
@@ -43,54 +30,40 @@
             prepend-icon="mdi-magnify"
             v-model="facilitySearchTerm"
             hide-details="auto"
-            label="Kurse und Veranstaltungen durchsuchen"
+            label="Veranstaltungen durchsuchen"
           />
         </v-col>
       </v-row>
     </template>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
-      du Kurse und Veranstaltungen sowie Beiträge anlegen.
+      du Kurse, Veranstaltungen sowie Beiträge anlegen.
     </v-alert>
 
     <DataTable
       ref="dataTableRef"
       :fields="fields"
-      endpoint="care_facilities?kind=event,course"
+      endpoint="care_facilities?kind=event"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
-      :cache-prefix="'events,courses'"
+      :cache-prefix="'events'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
     />
 
-    <template v-if="createEditDialogOpen">
-      <AdminCoursesCreateEdit
-        v-if="itemPlaceholder.kind === 'course'"
-        :item-id="itemId"
-        :item-placeholder="itemPlaceholder"
-        @close="handleCreateEditClose"
-        endpoint="care_facilities"
-        :concept-name="'Kurs'"
-        :enableCache="true"
-        :cacheKey="coursesCacheKey"
-        :showPreviewButton="true"
-        @showPreview="handleShowPreview"
-      />
-      <AdminEventsCreateEdit
-        v-if="itemPlaceholder.kind === 'event'"
-        :item-id="itemId"
-        :item-placeholder="itemPlaceholder"
-        @close="handleCreateEditClose"
-        endpoint="care_facilities"
-        :concept-name="'Veranstaltung'"
-        :enableCache="true"
-        :cacheKey="eventsCacheKey"
-        :showPreviewButton="true"
-        @showPreview="handleShowPreview"
-      />
-    </template>
+    <AdminEventsCreateEdit
+      v-if="createEditDialogOpen"
+      :item-id="itemId"
+      :item-placeholder="itemPlaceholder"
+      @close="handleCreateEditClose"
+      endpoint="care_facilities"
+      :concept-name="'Veranstaltung'"
+      :enableCache="true"
+      :cacheKey="eventsCacheKey"
+      :showPreviewButton="true"
+      @showPreview="handleShowPreview"
+    />
 
     <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
@@ -129,7 +102,6 @@ const fields = [
     fieldToSwitch: "is_active",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
-  { value: "", type: "beinEdited"},
   {
     prop: "user.firstname",
     text: "Erstellt von",
@@ -150,7 +122,6 @@ const fields = [
 
 const previewItem = ref<Facility>();
 
-const newCourseFromCache = ref(false);
 const newEventFromCache = ref(false);
 
 const facilitySearchColums = ref(["name", "user.name", "kind"]);
@@ -201,19 +172,11 @@ const eventsCacheKey = computed(() => {
 
   return `events_${itemId.value.replaceAll("-", "_")}`;
 });
-const coursesCacheKey = computed(() => {
-  if (!itemId.value) {
-    return `courses_new`;
-  }
-
-  return `courses_${itemId.value.replaceAll("-", "_")}`;
-});
 
 const handleCreateEditClose = () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
   dataTableRef.value?.resetActiveItems();
-  newCourseFromCache.value = !!localStorage.getItem("courses_new");
   newEventFromCache.value = !!localStorage.getItem("events_new");
 };
 
@@ -242,7 +205,6 @@ onMounted(async () => {
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
 
-  newCourseFromCache.value = !!localStorage.getItem("courses_new");
   newEventFromCache.value = !!localStorage.getItem("events_new");
 });
 </script>

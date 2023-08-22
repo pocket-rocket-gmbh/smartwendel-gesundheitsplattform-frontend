@@ -1,14 +1,10 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox
-        title="Veranstaltungen"
-        sub-title="Deine Wunschveranstaltung auswählen"
-        :filter-kind="'event'"
-      />
+      <PublicSearchTheBasicSearchBox title="Kurse" sub-title="Deinen Wunschkurs auswählen" :filter-kind="'course'" />
       <div class="container">
         <div class="filters" v-if="showSearchFilter">
-          <PublicSearchTheFilter :filterKind="'event'" />
+          <PublicSearchTheFilter :filterKind="'course'" />
         </div>
         <div class="results">
           <PublicSearchTheFilteredCareFacilities />
@@ -37,7 +33,7 @@ const showSearchFilter = computed(() => {
 });
 
 onMounted(async () => {
-  filterStore.currentKinds = ["event"];
+  filterStore.currentKinds = ["course"];
   filterStore.updateFromUrlQuery();
   filterStore.loadAllResults();
 });

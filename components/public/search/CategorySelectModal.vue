@@ -5,7 +5,7 @@
         <div class="field">
           <label class="label is-white">
             <div class="search-term">
-              Suchbegriff
+              Filter
               <v-chip v-if="filterStore.currentSearchTerm" closable @click:close="resetSearchTerm">
                 {{ filterStore.currentSearchTerm }}
               </v-chip>
