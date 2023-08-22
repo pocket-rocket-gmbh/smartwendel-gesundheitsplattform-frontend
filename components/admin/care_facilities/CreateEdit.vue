@@ -1,5 +1,5 @@
 <template>
-  <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
+  <CreateEdit v-slot="slotProps" @has-changed="adressChanged = true" size="100wh" ref="createEditRef">
     <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
       <v-row>
         <v-col md="3">
@@ -49,8 +49,15 @@
                 </template>
                 <span>{{ steps["logo"].tooltip }}</span>
               </v-tooltip>
+
+              <v-btn size="small" @click="openLogoGalery = !openLogoGalery">aus der Galerie
+                <v-icon>mdi-chevron-down</v-icon>
+              </v-btn>
+
             </div>
+            <AdminCareFacilitiesChooseimageFromGalery v-if="openLogoGalery" :item="slotProps.item" galery-kind="logo"  @setImage="setLogo"/>
             <ChooseAndCropSingleImage
+            
               height="20"
               :pre-set-image-url="slotProps.item.logo_url"
               :temp-image="slotProps.item.logo"
@@ -71,7 +78,11 @@
                 </template>
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
+              <v-btn size="small" @click="openPhotoGalery = !openPhotoGalery">aus der Galerie
+                <v-icon>mdi-chevron-down</v-icon>
+              </v-btn>
             </div>
+            <AdminCareFacilitiesChooseimageFromGalery v-if="openPhotoGalery" :item="slotProps.item" galery-kind="photo" @setImage="setCoverBild"/>
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
@@ -170,23 +181,6 @@
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
             />
-            <v-alert type="info" color="grey" class="mt-2">
-              <div class="d-flex align-center filter-request">
-                <div class="py-1">
-                  <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden
-                    ist, kontaktiere uns bitte
-                  </span>
-                  <span>
-                    <a
-                      class="is-white text-decoration-underline"
-                      :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
-                      >HIER</a
-                    >
-                  </span>
-                </div>
-              </div>
-            </v-alert>
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
               :pre-set-tags="slotProps.item.tags || []"
@@ -197,9 +191,8 @@
           </div>
 
           <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="contact" :class="[setupFinished || editInformations ? 'has-bg-light-red pa-5' : '']">
-            <span v-if="setupFinished">
+          <div class="field" id="contact" :class="[adressChanged || editInformations ? 'has-bg-light-red pa-5' : '']">
+            <span v-if="adressChanged">
               <v-alert type="warning" density="compact" class="mt-2"
                 >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung vom Landkreis neu freigegeben
                 werden</v-alert
@@ -240,7 +233,7 @@
                 v-model="slotProps.item.street"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
-                label="Straße und Nummer"
+                label="Straße und Nummer *"
                 :rules="[rules.required, rules.counterStreet]"
                 :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
               />
@@ -263,7 +256,7 @@
                 :items="communities"
                 item-title="name"
                 item-value="id"
-                label="Gemeinde"
+                label="Gemeinde *"
                 :rules="[rules.required]"
               />
             </div>
@@ -273,7 +266,7 @@
                 v-model="slotProps.item.zip"
                 disabled
                 hide-details="auto"
-                label="PLZ"
+                label="PLZ *"
                 :type="'number'"
                 :rules="[rules.required, rules.zip]"
                 :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
@@ -286,7 +279,7 @@
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
-                label="Ort"
+                label="Ort *"
                 :rules="[rules.required]"
               />
             </div>
@@ -296,7 +289,7 @@
                 v-model="slotProps.item.phone"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
-                label="Telefonnummer"
+                label="Telefonnummer *"
                 :rules="[rules.required, rules.validateNumber]"
                 :type="'tel'"
                 :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
@@ -308,7 +301,7 @@
                 v-model="slotProps.item.email"
                 :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
-                label="E-Mail"
+                label="E-Mail *"
                 :rules="[rules.required, rules.email]"
                 :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
@@ -342,6 +335,7 @@
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{ steps["openingHours"].label }}</span>
               <v-textarea
+                placeholder="z.B. Montag - Freitag 8:00 - 16:00 Uhr"
                 class="text-field"
                 rows="4"
                 hide-details="auto"
@@ -424,28 +418,28 @@ type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Hinterlege den Namen deiner Einrichtung *",
-    description: "Name",
+    description: "Name *",
     props: ["name"],
   },
   logo: {
     label: "2. Hier kannst du dein Logo hochladen. *",
-    description: "Dein Logo",
+    description: "Dein Logo *",
     props: ["logo_url", "logo"],
     justSome: true,
     tooltip:
       "Dein Logo wird im Kopfbereich deiner Profilseite angezeigt. Falls du kein eigenes Logo hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. ",
   },
   photo: {
-    label: "3.	Bitte lade hier dein Coverbild hoch. *",
+    label: "3.	Bitte lade hier dein Titelbild hoch. *",
     tooltip:
-      "Das Coverbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Coverbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
-    description: "Coverbild",
+      "Das Titelbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Titelbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
+    description: "Titelbild *",
     props: ["image_url", "file"],
     justSome: true,
   },
   gallery: {
     label: "4.	Hier kannst du Bilder für deine Galerie hochladen.",
-    description: "Fotogalerie",
+    description: "Fotogalerie *",
     tooltip:
       "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
     props: ["sanitized_images", "images"],
@@ -454,7 +448,7 @@ const steps: CreateEditSteps<StepNames> = {
   description: {
     label:
       "5. Bitte beschreibe deine Einrichtung/dein Unternehmen und das damit verbundene Leistungsangebot ausführlich. *",
-    description: "Beschreibungstext",
+    description: "Beschreibungstext *",
     placeholder:
       "Nutze dieses Feld, um deine Einrichtung/dein Unternehmen ausführlich zu präsentieren. Hier kannst du bspw. Informationen zu deinem individuellen Leistungsangebot, deinem Standort, den wichtigsten Ansprechpartnerinnen und Ansprechpartnern, Links zu deinen Sozialen Medien und weitere Informationen, die du den Nutzerinnen und Nutzern mitgeben möchtest hinterlegen. Je detaillierter die Beschreibung, desto einfacher können dich Besucherinnen und Besucher über das Suchfeld der Startseite finden.",
     props: ["description"],
@@ -462,7 +456,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   category: {
     label: "6. Bitte wähle deine Branche aus *",
-    description: "Branchenzugehörigkeit",
+    description: "Branchenzugehörigkeit *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
     tooltip: "Mehrfachangaben möglich.",
@@ -471,14 +465,14 @@ const steps: CreateEditSteps<StepNames> = {
     label: "7. Bitte ordne deiner Einrichtung/deinem Unternehmen passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
       "Wähle alle für dich relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, umso leichter können dich Besucherinnen und Besucher im Rahmen einer benutzerdefinierten Suche finden. ",
-    description: "Leistungen und Schlagwörter",
+    description: "Leistungen und Schlagwörter *",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
   contact: {
     label: "8. Bitte gib hier die Adresse und Kontaktdaten deiner Einrichtung/deines Unternehmens an. *",
     tooltip: "Hauptstandort deines Unternehmens/deiner Einrichtung.",
-    description: "Kontaktdaten",
+    description: "Kontaktdaten *",
     props: ["street", "zip", "community_id", "town", "email", "phone"],
   },
   locations: {
@@ -514,6 +508,8 @@ const steps: CreateEditSteps<StepNames> = {
 
 const expandTagSelect = ref(true);
 const createEditRef = ref();
+const openLogoGalery = ref(false)
+const openPhotoGalery = ref(false)
 
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
@@ -694,6 +690,7 @@ const goToField = (stepName: string) => {
   el.scrollIntoView({ behavior: "smooth", block: "center" });
 };
 
+const adressChanged = ref(false);
 const setupFinished = ref(false);
 
 const communitiesApi = useCollectionApi();

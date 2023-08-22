@@ -51,6 +51,7 @@
           <span v-else>Einrichtungen</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
           link
           to="/admin/courses"
           nuxt
@@ -69,6 +70,7 @@
           <span v-else>Veranstaltungen</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
           link
           to="/admin/news_articles"
           nuxt
@@ -84,7 +86,7 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          <span>Mein Profil</span>
+          <span>Mein Konto</span>
         </v-list-item>
         <v-list-item
           link

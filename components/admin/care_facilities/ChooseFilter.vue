@@ -18,7 +18,7 @@
       @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title align="center">
-        <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : '']">
+        <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']">
           {{ mainFilter.name }}
         </span>
         <div>
@@ -31,6 +31,24 @@
         </div>
       </template>
       <template #content>
+        <div v-if="mainFilter.name === 'Dienstleistungsbereich'">
+            <v-alert type="info" color="grey" class="mt-2">
+              <div class="d-flex align-center filter-request">
+                <div class="py-1">
+                  <span
+                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
+                  </span>
+                  <span>
+                    <a
+                      class="is-white text-decoration-underline"
+                      :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
+                      >HIER</a
+                    >
+                  </span>
+                </div>
+              </div>
+            </v-alert>
+          </div>
         <div class="main-class">
           <div class="filter-options" v-for="option in mainFilter.next">
             <div

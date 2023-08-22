@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Mein Profil</h2>
+    <h2>Mein Konto</h2>
     <v-alert type="info" density="compact" closable class="mt-2">
       Hier kannst du deine Daten vervollständigen und dein Passwort ändern.
     </v-alert>

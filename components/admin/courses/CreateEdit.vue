@@ -142,12 +142,11 @@
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
             />
-            <v-alert type="info" color="grey" class="mt-2">
+<!--             <v-alert type="info" color="grey" class="mt-2">
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden
-                    ist, kontaktiere uns bitte
+                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
                   </span>
                   <span>
                     <a
@@ -158,7 +157,7 @@
                   </span>
                 </div>
               </div>
-            </v-alert>
+            </v-alert> -->
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
               :pre-set-tags="slotProps.item.tags || []"
@@ -442,10 +441,10 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name"],
   },
   photo: {
-    label: "2. Bitte lade hier ein Coverbild hoch. *",
+    label: "2. Bitte lade hier ein Titelbild hoch. *",
     tooltip:
-      "Das Coverbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
-    description: "Coverbild",
+      "Das Titelbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
+    description: "Titelbild",
     props: ["image_url", "file"],
     justSome: true,
   },

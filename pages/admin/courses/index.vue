@@ -103,6 +103,7 @@ const fields = [
     fieldToSwitch: "is_active",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
+  { value: "", type: "beinEdited"},
   {
     prop: "user.firstname",
     text: "Erstellt von",
@@ -110,14 +111,6 @@ const fields = [
     condition: "admin",
     type: "button",
     action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
-  },
-  {
-    prop: "kind",
-    text: "Art (Kurs oder Veranstaltung)",
-    endpoint: "care_facilities",
-    value: "kind",
-    type: "enum",
-    enum_name: "facilitiesKind",
   },
 ];
 

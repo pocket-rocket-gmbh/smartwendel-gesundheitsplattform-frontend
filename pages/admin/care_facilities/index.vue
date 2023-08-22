@@ -61,7 +61,6 @@
     />
 
     <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
-
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
       @close="
@@ -101,6 +100,8 @@ const fields = [
       "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button aktiv schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
+  { value: "", type: "isCompleteFacility"},
+  { value: "", type: "beinEdited"},
   {
     prop: "user.firstname",
     text: "Erstellt von",
