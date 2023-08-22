@@ -4,6 +4,7 @@
       <v-row no-gutters>
         <v-col class="d-flex align-center">
           <div>
+            <!-- TODO: Split? -->
             <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">Kurse und Veranstaltungen</h2>
           </div>
         </v-col>
@@ -12,9 +13,9 @@
     <div class="articles">
       <PublicContentBox
         :size="6"
-        v-for="courses in eventArticles"
-        :key="courses.id"
-        :item="courses"
+        v-for="event in eventArticles"
+        :key="event.id"
+        :item="event"
         :item-type="'event'"
       />
     </div>

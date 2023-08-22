@@ -16,10 +16,8 @@
       <v-btn elevation="0" class="mr-5" variant="outlined" color="primary" @click="goToFacility('care_facilities')">
         Zu meiner Einrichtung
       </v-btn>
-      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
-        Zu meinen Kursen
-      </v-btn>
-      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
+      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses')"> Zu meinen Kursen </v-btn>
+      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('events')">
         Zu meinen Veranstaltungen
       </v-btn>
       <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('news_articles')">

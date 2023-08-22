@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
-const emit = defineEmits(["offline"]);
+const emit = defineEmits(["offline", "updateImages"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -104,7 +104,6 @@ const handleFiles = async () => {
   if (!images.value?.length) return;
 
   const validImages = images.value.filter((image) => image.size / 1000000 < 5);
-  console.log(validImages, images.value);
 
   if (validImages.length !== images.value.length) {
     errorFileSizeTooLarge.value = true;
@@ -133,6 +132,7 @@ const getCareFacility = async () => {
   api.setEndpoint(`care_facilities/${props.itemId}`);
   loadingItem.value = true;
   await api.getItem();
+  emit("updateImages");
   loadingItem.value = false;
   item.value = api.item.value;
 };

@@ -64,7 +64,11 @@
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{ steps["gallery"].label }}</span>
             </div>
-            <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
+            <AdminCareFacilitiesAddImages
+              :item-id="slotProps.item.id"
+              @offline="(file) => setOfflineImage(file)"
+              @update-images="reloadItem"
+            />
           </div>
           <v-divider class="my-10"></v-divider>
 
@@ -259,7 +263,7 @@
                 :document-acepted="slotProps.item.billable_through_health_insurance_approved"
                 :offline-documents="slotProps.item.offlineDocuments"
                 @offline="handleDocumentsOffline"
-                @document-deleted="handleDocumentDeleted"
+                @document-deleted="reloadItem"
               />
               <div class="d-flex align-center">
                 <span v-if="useUser().isAdmin()">
@@ -312,7 +316,7 @@
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
-              @document-deleted="handleDocumentDeleted"
+              @document-deleted="reloadItem"
             />
           </div>
           <div class="field" id="leader">
@@ -449,7 +453,8 @@ const steps: CreateEditSteps<StepNames> = {
     label: "3. Lade weitere Bilder für eine Galerie hoch",
     tooltip: "",
     description: "Fotogalerie",
-    props: ["sanitized_images"],
+    props: ["sanitized_images", "images"],
+    justSome: true,
   },
   description: {
     label: "4. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
@@ -661,7 +666,7 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
   });
 };
 
-const handleDocumentDeleted = () => {
+const reloadItem = () => {
   if (!createEditRef.value) return;
 
   console.log("Get item");

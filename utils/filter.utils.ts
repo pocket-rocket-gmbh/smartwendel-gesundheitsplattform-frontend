@@ -33,13 +33,7 @@ export const getMainFilters = async (filterType: FilterType, filterKind: FilterK
   }
 
   const filters: any[] = response?.data?.resources || [];
-  const relevantFilter = filters.find(
-    (filter) =>
-      filter.filter_type === filterType &&
-      (filterKind === "course" || filterKind === "event"
-        ? filter.kind === "course" || filter.kind === "event"
-        : filter.kind === filterKind)
-  );
+  const relevantFilter = filters.find((filter) => filter.filter_type === filterType && filter.kind === filterKind);
 
   if (!relevantFilter) return [];
 

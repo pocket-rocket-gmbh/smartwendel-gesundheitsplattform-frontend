@@ -92,7 +92,11 @@
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
             </div>
-            <AdminCareFacilitiesAddImages :item-id="slotProps.item.id" @offline="(file) => setOfflineImage(file)" />
+            <AdminCareFacilitiesAddImages
+              :item-id="slotProps.item.id"
+              @offline="(file) => setOfflineImage(file)"
+              @update-images="reloadItem"
+            />
           </div>
           <v-divider class="my-10"></v-divider>
 
@@ -387,7 +391,7 @@
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
-              @document-deleted="handleDocumentDeleted"
+              @document-deleted="reloadItem"
             />
           </div>
         </v-col>
@@ -442,9 +446,10 @@ const steps: CreateEditSteps<StepNames> = {
   gallery: {
     label: "4.	Hier kannst du Bilder für deine Galerie hochladen.",
     description: "Fotogalerie",
-    props: ["sanitized_images"],
     tooltip:
       "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
+    props: ["sanitized_images", "images"],
+    justSome: true,
   },
   description: {
     label:
@@ -668,10 +673,9 @@ const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offline
   });
 };
 
-const handleDocumentDeleted = () => {
+const reloadItem = () => {
   if (!createEditRef.value) return;
 
-  console.log("Get item");
   createEditRef.value.getItem();
 };
 
