@@ -26,7 +26,7 @@
 </template>
 <script lang="ts" setup>
 import image1 from "@/assets/images/logo.png";
-import image2 from "@/assets/images/home.png";
+import image2 from "@/assets/images/cover-image.png";
 
 const emit = defineEmits(["setImage"]);
 const props = defineProps({
