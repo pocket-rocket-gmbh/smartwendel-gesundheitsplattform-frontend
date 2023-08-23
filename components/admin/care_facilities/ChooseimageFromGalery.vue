@@ -1,7 +1,12 @@
 <template>
-  <div>
+  <div class="mb-10">
     <v-row>
-      <v-col class="d-flex child-flex" cols="4"  v-for="(image, index) in images" :key="index">
+      <v-col
+        class="d-flex child-flex"
+        cols="4"
+        v-for="(image, index) in images"
+        :key="index"
+      >
         <v-img
           :src="image"
           aspect-ratio="1"
@@ -25,8 +30,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import image1 from "@/assets/images/logo.png";
 import image2 from "@/assets/images/cover-image.png";
+
+import logo1 from "@/assets/images/logo-galery/icon_care.png";
+import logo2 from "@/assets/images/logo-galery/icon_doctor.png";
+import logo3 from "@/assets/images/logo-galery/icon_fitness.png";
 
 const emit = defineEmits(["setImage"]);
 const props = defineProps({
@@ -40,7 +48,18 @@ const props = defineProps({
   },
 });
 
-const images = ref([image1, image2]);
+const logoimages = ref([logo1, logo2, logo3]);
+const coverImages = ref([image2]);
+
+const images = computed(() => {
+  if (props.galeryKind === "logo") {
+    return logoimages.value;
+  }
+  if (props.galeryKind === "cover") {
+    return coverImages.value;
+  }
+  return [];
+});
 
 const fileToBase64 = (filePath: string) => {
   return new Promise<string>((resolve, reject) => {
@@ -59,14 +78,13 @@ const fileToBase64 = (filePath: string) => {
   });
 };
 
-const selectImage =async (imagePath: string) => {
+const selectImage = async (imagePath: string) => {
   const imageBlob = await fileToBase64(imagePath);
-  setImage(imageBlob)
-}
-const setImage = (image:any) => {
+  setImage(imageBlob);
+};
+const setImage = (image: any) => {
   emit("setImage", image);
 };
-
 </script>
 
 <style lang="sass" scoped>

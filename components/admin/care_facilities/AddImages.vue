@@ -20,7 +20,8 @@
         Es können maximal 6 Bilder hinzugefügt werden
       </div>
       <div v-if="errorFileSizeTooLarge" class="text-error mt-3">
-        Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.
+        Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht
+        überschreiten.
       </div>
     </div>
     <ImageCropper
@@ -32,10 +33,20 @@
       @crop="setImage"
     />
     <v-row v-if="itemId">
-      <v-col v-for="(image, index) in item?.sanitized_images" :key="index" md="2">
+      <v-col
+        v-for="(image, index) in item?.sanitized_images"
+        :key="index"
+        md="2"
+      >
         <v-card>
           <v-img :lazy-src="image.url" :src="image.url" max-width="200" />
-          <div @click="deleteImage(image.signed_id)" class="text-error ml-1 mt-1 is-clickable">Bild löschen</div>
+          <v-btn
+            size="small"
+            width="100%"
+            color="red"
+            @click="deleteImage(image.signed_id)"
+            >Bild entfernen</v-btn
+          >
         </v-card>
       </v-col>
     </v-row>
@@ -43,7 +54,13 @@
       <v-col v-for="(image, index) in item?.offline_images" :key="index" md="2">
         <v-card>
           <v-img :lazy-src="image" :src="image" max-width="200" />
-          <div @click="deleteImageOffline(index)" class="text-error ml-1 mt-1 is-clickable">Bild löschen</div>
+          <v-btn
+            size="small"
+            width="100%"
+            color="red"
+            @click="deleteImageOffline(index)"
+            >Bild entfernen</v-btn
+          >
         </v-card>
       </v-col>
     </v-row>
@@ -77,7 +94,9 @@ const setImage = (image: any) => {
 };
 
 const handleRemoveImage = () => {
-  const indexOfItemToRemove = imageUrls.value.findIndex((item) => item === currentCroppingImageUrl.value);
+  const indexOfItemToRemove = imageUrls.value.findIndex(
+    (item) => item === currentCroppingImageUrl.value
+  );
 
   if (indexOfItemToRemove === -1) {
     images.value = [];
@@ -111,7 +130,9 @@ const handleFiles = async () => {
 
   const imageUrlPromises = validImages.map((image) => toBase64(image));
   const imgUrlResults = await Promise.allSettled(imageUrlPromises);
-  imageUrls.value = imgUrlResults.map((item) => (item.status === "fulfilled" ? item.value : "")).filter(Boolean);
+  imageUrls.value = imgUrlResults
+    .map((item) => (item.status === "fulfilled" ? item.value : ""))
+    .filter(Boolean);
 
   setNextImageForCrop();
 };

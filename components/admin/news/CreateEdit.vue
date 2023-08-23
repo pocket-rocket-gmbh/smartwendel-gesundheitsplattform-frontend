@@ -1,6 +1,9 @@
 <template>
   <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
-    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
+    <v-card-text
+      v-if="slotProps.item && Object.entries(slotProps.item).length"
+      class="mb-15"
+    >
       <v-row>
         <v-col md="3">
           <div class="mt-10 mx-5 menu-boxes">
@@ -20,13 +23,18 @@
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen. Je mehr Angaben du machst, umso leichter können Besucherinnen und Besucher deine Beiträge finden. Pflichtfelder sind mit einem Sternchen versehen.</span
+                >Hier kannst du deine News und Beiträge zu verschiedenen Themen
+                anlegen. Je mehr Angaben du machst, umso leichter können
+                Besucherinnen und Besucher deine Beiträge finden. Pflichtfelder
+                sind mit einem Sternchen versehen.</span
               >
             </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="text-h5 font-weight-bold">{{
+                steps["name"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -34,7 +42,9 @@
               hide-details="auto"
               label="Überschrift"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
             <v-text-field
               class="text-field"
@@ -43,15 +53,29 @@
               hide-details="auto"
               label="Name"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["photo"].label }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["photo"].label
+              }}</span>
+              <v-btn size="small" @click="openPhotoGalery = !openPhotoGalery"
+                >aus der Galerie
+                <v-icon v-if="openPhotoGalery">mdi-chevron-up</v-icon>
+                <v-icon v-else>mdi-chevron-down</v-icon>
+              </v-btn>
             </div>
+            <AdminCareFacilitiesChooseimageFromGalery
+              v-if="openPhotoGalery"
+              :item="slotProps.item"
+              galery-kind="cover"
+            />
             <ChooseAndCropSingleImage
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
@@ -65,11 +89,20 @@
 
           <div class="field" id="description">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["description"].label }}</span>
+              <span class="text-h5 font-weight-bold">{{
+                steps["description"].label
+              }}</span>
             </div>
             <div class="editor">
               <ClientOnly>
-                <div class="text-editor" :class="{ 'empty-editor': isDescriptionEmpty(slotProps.item.description) }">
+                <div
+                  class="text-editor"
+                  :class="{
+                    'empty-editor': isDescriptionEmpty(
+                      slotProps.item.description
+                    ),
+                  }"
+                >
                   <QuillEditor
                     ref="ql-editor"
                     class="ql-blank"
@@ -77,14 +110,22 @@
                     :options="textOptions"
                     v-model:content="slotProps.item.description"
                     contentType="html"
-                    :toolbar="textToolbar"
                     @ready="onQuillReady"
                   />
-                  <div v-if="isDescriptionEmpty(slotProps.item.description)" class="required">Erforderlich</div>
+                  <div
+                    v-if="isDescriptionEmpty(slotProps.item.description)"
+                    class="required"
+                  >
+                    Erforderlich
+                  </div>
                   <v-text-field
                     v-show="false"
                     class="hidden-text-field"
-                    :model-value="isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'"
+                    :model-value="
+                      isDescriptionEmpty(slotProps.item.description)
+                        ? ''
+                        : 'filled'
+                    "
                     :rules="[rules.required]"
                   />
                 </div>
@@ -94,7 +135,9 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="leader">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["leader"].label }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["leader"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -102,10 +145,12 @@
               hide-details="auto"
               label="Name / Vorname des Kursleiters"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
-<!--           <v-divider class="my-10"></v-divider>
+          <!--           <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-3">
               <span class="text-h5 font-weight-bold">{{ steps["category"].label }}</span>
@@ -122,9 +167,11 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["services"].label }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["services"].label
+              }}</span>
             </div>
-<!--             <AdminCareFacilitiesChooseFilter
+            <!--             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_service"
               :filter-kind="slotProps.item.kind"
@@ -132,7 +179,7 @@
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
             /> -->
-<!--             <v-alert type="info" color="grey" class="mt-2">
+            <!--             <v-alert type="info" color="grey" class="mt-2">
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
@@ -170,7 +217,13 @@ import { CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
-const stepNames = ["name", "photo", "description", "leader","services"] as const;
+const stepNames = [
+  "name",
+  "photo",
+  "description",
+  "leader",
+  "services",
+] as const;
 type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
@@ -187,7 +240,8 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   description: {
-    label: "3. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
+    label:
+      "3. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
     tooltip: "",
     description: "Beschreibungstext",
     placeholder: "Inhalt des Beitrags",
@@ -195,12 +249,13 @@ const steps: CreateEditSteps<StepNames> = {
     checkHandler: isDescriptionEmpty,
   },
   leader: {
-    label: "4.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
+    label:
+      "4.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
     tooltip: "",
     description: "Name der Autorin/des Autors",
     props: ["name_instructor"],
   },
-/*   category: {
+  /*   category: {
     label: "5. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
     tooltip: "",
     description: "Schlagwörter",
@@ -208,7 +263,8 @@ const steps: CreateEditSteps<StepNames> = {
     specialFilter: "filter_facility",
   }, */
   services: {
-    label: "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen *",
+    label:
+      "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen *",
     tooltip: "",
     description: "Schlagwörter",
     props: ["tag_category_ids"],
@@ -216,23 +272,17 @@ const steps: CreateEditSteps<StepNames> = {
   },
 };
 
+const openPhotoGalery = ref(false);
 const expandTagSelect = ref(true);
 const createEditRef = ref();
 
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
 
-const textToolbar = ref([
-  [{ header: "1" }, { header: "2" }],
-  ["bold", "italic", "underline"],
-  [{ list: "ordered" }, { list: "bullet" }, { align: [] }],
-]);
-
 const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
-  toolbar: textToolbar.value,
   required: true,
 });
 
@@ -456,5 +506,18 @@ const goToField = (n: string) => {
   color: rgb(164, 34, 88);
   font-size: 12px;
   padding-left: 16px;
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+  content: "Überschrift 1";
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+  content: "Überschrift 2";
+}
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+  content: "Überschrift 3";
 }
 </style>
