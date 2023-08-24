@@ -4,86 +4,92 @@
       <v-card elevation="10" :class="['card', { shake: animated }]">
         <img class="is-fullwidth" src="~/assets/images/logo.png" />
         <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
-          <div class="field">
-            <v-text-field
-              v-model="careFacilityName"
-              type="text"
-              label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-              :rules="[rules.required]"
-              hide-details="auto"
-            />
+          <div class="my-5">
+            <h2 class="mb-3">Meine Einrichtung</h2>
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityName"
+                type="text"
+                label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
+                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+            <div class="field">
+              <v-select
+                hide-details="auto"
+                v-model="careFacilityCommunityId"
+                :items="communities"
+                item-title="name"
+                item-value="id"
+                label="Gemeinde *"
+                :rules="[rules.required]"
+              />
+            </div>
+            <div class="field split">
+              <v-text-field
+                v-model="careFacilityZip"
+                hide-details="auto"
+                label="PLZ *"
+                :type="'number'"
+                :rules="[rules.required, rules.zip]"
+                :error-messages="useErrors().checkAndMapErrors('zip', errors)"
+                disabled
+              />
+              <v-select
+                hide-details="auto"
+                v-model="careFacilityTown"
+                :items="getTownsByCommunityId(careFacilityCommunityId)"
+                item-title="name"
+                item-value="name"
+                label="Ort *"
+                :rules="[rules.required]"
+              />
+            </div>
           </div>
-          <div class="field">
-            <v-text-field
-              v-model="firstname"
-              type="text"
-              label="Vorname *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-              :rules="[rules.required]"
-              hide-details="auto"
-            />
-          </div>
-          <div class="field">
-            <v-text-field
-              v-model="lastname"
-              type="text"
-              label="Nachname *"
-              :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
-              :rules="[rules.required]"
-              hide-details="auto"
-            />
-          </div>
-          <div class="field">
-            <v-text-field
-              v-model="phone"
-              type="tel"
-              label="Telefonnummer *"
-              hide-details="auto"
-              :rules="[rules.required, rules.validateNumber]"
-              :error-messages="useErrors().checkAndMapErrors('phone', errors)"
-            />
-          </div>
-          <div class="field">
-            <v-text-field
-              v-model="email"
-              type="email"
-              label="E-Mail Adresse *"
-              :rules="[rules.required, rules.email]"
-              hide-details="auto"
-              :error-messages="useErrors().checkAndMapErrors('email', errors)"
-            />
-          </div>
-          <div class="field">
-            <v-select
-              hide-details="auto"
-              v-model="careFacilityCommunityId"
-              :items="communities"
-              item-title="name"
-              item-value="id"
-              label="Gemeinde *"
-              :rules="[rules.required]"
-            />
-          </div>
-          <div class="field split">
-            <v-text-field
-              v-model="careFacilityZip"
-              hide-details="auto"
-              label="PLZ *"
-              :type="'number'"
-              :rules="[rules.required, rules.zip]"
-              :error-messages="useErrors().checkAndMapErrors('zip', errors)"
-              disabled
-            />
-            <v-select
-              hide-details="auto"
-              v-model="careFacilityTown"
-              :items="getTownsByCommunityId(careFacilityCommunityId)"
-              item-title="name"
-              item-value="name"
-              label="Ort *"
-              :rules="[rules.required]"
-            />
+          <div class="my-5">
+            <h3 class="mb-3">Mein Benutzerkonto</h3>
+            <div class="field">
+              <v-text-field
+                v-model="firstname"
+                type="text"
+                label="Vorname *"
+                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="lastname"
+                type="text"
+                label="Nachname *"
+                :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="phone"
+                type="tel"
+                label="Telefonnummer *"
+                hide-details="auto"
+                :rules="[rules.required, rules.validateNumber]"
+                :error-messages="useErrors().checkAndMapErrors('phone', errors)"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="email"
+                type="email"
+                label="E-Mail Adresse *"
+                :rules="[rules.required, rules.email]"
+                hide-details="auto"
+                :error-messages="useErrors().checkAndMapErrors('email', errors)"
+              />
+            </div>
           </div>
           <v-checkbox v-model="privacyAccepted" :rules="[rules.required]">
             <template v-slot:label>
@@ -110,15 +116,17 @@
               </div>
             </template>
           </v-checkbox>
-          <v-btn color="primary" class="mt-5" block depressed @click="register">Registrieren</v-btn>
+          <v-btn color="primary" class="mt-5" block depressed @click="register"
+            >Registrieren</v-btn
+          >
         </v-form>
         <div v-if="registerSuccessful" align="center">
           <div>
-            Deine Registrierung war erfolgreich.<br />Wir haben Dir soeben eine E-Mail mit weiteren Anweisungen und einem
-          temporären Passwort geschickt.
+            Deine Registrierung war erfolgreich.<br />Wir haben Dir soeben eine E-Mail mit
+            weiteren Anweisungen und einem temporären Passwort geschickt.
           </div>
           <div class="mt-5">
-            <v-btn color="primary" @click="toLogin" block depressed>Jetzt  anmelden</v-btn>
+            <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>
           </div>
         </div>
       </v-card>
@@ -180,7 +188,10 @@ const register = async () => {
     care_facility_community_id: careFacilityCommunityId.value,
   };
 
-  const { data: result } = await axios.post<ServerCallResult>("/api/register_with_facility", { data });
+  const { data: result } = await axios.post<ServerCallResult>(
+    "/api/register_with_facility",
+    { data }
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     localStorage.setItem("health_platform._remembered_email", email.value);

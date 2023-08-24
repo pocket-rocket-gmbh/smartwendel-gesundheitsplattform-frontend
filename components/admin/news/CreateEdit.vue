@@ -224,7 +224,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name"],
   },
   photo: {
-    label: "2. Hier kannst du passende Bilder zu deinem Beitrag hochladen.",
+    label: "2. Hier kannst du passende Bild zu deinem Beitrag hochladen.",
     tooltip: "",
     description: "Fotogalerie",
     props: ["image_url", "file"],

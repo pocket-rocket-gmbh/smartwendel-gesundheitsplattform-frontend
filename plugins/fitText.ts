@@ -12,12 +12,12 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       if (childWidth < containerWidth && childHeight < containerHeight) return;
 
-      let fontSize = binding.value.min || 16;
+      let fontSize = binding?.value?.min || 16;
       firstChild.style.fontSize = fontSize + "px";
       let textWidth = firstChild.clientWidth;
       let textHeight = firstChild.clientHeight;
 
-      while (fontSize < (binding.value.max || 45) && textWidth <= containerWidth && textHeight <= containerHeight) {
+      while (fontSize < (binding?.value?.max || 45) && textWidth <= containerWidth && textHeight <= containerHeight) {
         firstChild.style.fontSize = fontSize + "px";
         textWidth = firstChild.clientWidth;
         textHeight = firstChild.clientHeight;
