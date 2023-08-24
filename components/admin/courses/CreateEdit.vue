@@ -61,18 +61,10 @@
                 </template>
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
-              <v-btn size="small" @click="openPhotoGalery = !openPhotoGalery"
-                >aus der Galerie
-                <v-icon v-if="openPhotoGalery">mdi-chevron-up</v-icon>
-                <v-icon v-else>mdi-chevron-down</v-icon>
-              </v-btn>
             </div>
-            <AdminCareFacilitiesChooseimageFromGalery
-              v-if="openPhotoGalery"
-              :item="slotProps.item"
-              galery-kind="cover"
-            />
             <ChooseAndCropSingleImage
+              kind="cover"
+              :item = slotProps.item
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
               label="Cover Bild"
@@ -304,22 +296,8 @@
                 <span>{{ steps["certificates"].tooltip }}</span>
               </v-tooltip>
             </div>
-            <div>
-              <v-checkbox
-                :model-value="slotProps.item.billable_through_health_insurance"
-                hide-details
-                density="compact"
-                label="Ja"
-                @click="
-                  slotProps.item.billable_through_health_insurance =
-                    !slotProps.item.billable_through_health_insurance
-                "
-              />
-            </div>
             <div
-              class="field my-5"
-              v-if="slotProps.item.billable_through_health_insurance"
-            >
+              class="field my-5">
               <AdminCareFacilitiesAddFiles
                 :item-id="slotProps.item.id"
                 tag-name="insurance"
@@ -366,7 +344,7 @@
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
-              label="Link eintragen"
+              label="Link eintragen (z.B. www.meine-webseite.de)"
               :error-messages="
                 useErrors().checkAndMapErrors('link', slotProps.errors)
               "
@@ -476,6 +454,7 @@
                   hide-details="auto"
                   label="PLZ"
                   :type="'number'"
+                  disabled
                   :rules="[rules.required, rules.zip]"
                   :error-messages="
                     useErrors().checkAndMapErrors('zip', slotProps.errors)
@@ -548,7 +527,6 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Fotogalerie",
     props: ["sanitized_images", "images"],
-    justSome: true,
   },
   description: {
     label:
@@ -609,7 +587,7 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   leader: {
-    label: "11.	Bitte gib hier den Namen der Kursleitung an",
+    label: "11.	Bitte gib hier den Namen der Kursleitung an *",
     tooltip:
       "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
     description: "Name der Kursleitung",
@@ -623,7 +601,6 @@ const steps: CreateEditSteps<StepNames> = {
   },
 };
 
-const openPhotoGalery = ref(false);
 const expandTagSelect = ref(true);
 const createEditRef = ref();
 

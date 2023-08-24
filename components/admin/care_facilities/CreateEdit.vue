@@ -28,18 +28,15 @@
           <div class="py-10">
             <span class="text-h6"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
-              spezifisches Leistungsangebot in einem eigenen Profil darstellen
-              und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je
-              spezifischer deine Angaben sind, desto besser können dich
-              Besucherinnen und Besucher der Webseite finden. Pflichtfelder sind
-              mit einem Sternchen versehen.</span
+              spezifisches Leistungsangebot in einem eigenen Profil darstellen und
+              veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer
+              deine Angaben sind, desto besser können dich Besucherinnen und Besucher der
+              Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</span
             >
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["name"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -47,18 +44,14 @@
               hide-details="auto"
               label="Einrichtung/Unternehmen/Behörde/Verein/Verband"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="logo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["logo"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold mr-3">{{ steps["logo"].label }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -67,19 +60,10 @@
                 </template>
                 <span>{{ steps["logo"].tooltip }}</span>
               </v-tooltip>
-              <v-btn size="small" @click="openLogoGalery = !openLogoGalery"
-                >aus der Galerie
-                <v-icon v-if="openLogoGalery">mdi-chevron-up</v-icon>
-                <v-icon v-else>mdi-chevron-down</v-icon>
-              </v-btn>
             </div>
-            <AdminCareFacilitiesChooseimageFromGalery
-              v-if="openLogoGalery"
-              :item="slotProps.item"
-              galery-kind="logo"
-              @setImage="setLogo"
-            />
             <ChooseAndCropSingleImage
+              kind="logo"
+              :item = slotProps.item
               height="20"
               :pre-set-image-url="slotProps.item.logo_url"
               :temp-image="slotProps.item.logo"
@@ -102,22 +86,13 @@
                 </template>
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
-              <v-btn size="small" @click="openPhotoGalery = !openPhotoGalery"
-                >aus der Galerie
-                <v-icon v-if="openPhotoGalery">mdi-chevron-up</v-icon>
-                <v-icon v-else>mdi-chevron-down</v-icon>
-              </v-btn>
             </div>
-            <AdminCareFacilitiesChooseimageFromGalery
-              v-if="openPhotoGalery"
-              :item="slotProps.item"
-              galery-kind="cover"
-              @setImage="setCoverBild"
-            />
             <ChooseAndCropSingleImage
+              kind="cover"
+              :item = slotProps.item
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
-              label="Cover Bild"
+              label="Titelbild"
               @setImage="setCoverBild"
               @delete-image="handleDeleteCover"
               :min-size="true"
@@ -156,9 +131,7 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(
-                      slotProps.item.description
-                    ),
+                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
                   }"
                 >
                   <QuillEditor
@@ -180,9 +153,7 @@
                     v-show="false"
                     class="hidden-text-field"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description)
-                        ? ''
-                        : 'filled'
+                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -191,7 +162,6 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="category">
             <div class="my-3 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{
@@ -215,9 +185,7 @@
               @are-filters-set="setFiltersSet"
             />
           </div>
-
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{
@@ -232,6 +200,7 @@
                 <span>{{ steps["services"].tooltip }}</span>
               </v-tooltip>
             </div>
+      
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_service"
@@ -253,14 +222,12 @@
           <div
             class="field"
             id="contact"
-            :class="[
-              adressChanged || editInformations ? 'has-bg-light-red pa-5' : '',
-            ]"
+            :class="[(adressChanged || editInformations) && user.currentUser.is_active_on_health_scope ? 'has-bg-light-red pa-5' : '']"
           >
-            <span v-if="adressChanged">
+            <span v-if="adressChanged && user.currentUser.is_active_on_health_scope">
               <v-alert type="warning" density="compact" class="mt-2"
-                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese
-                Einrichtung vom Landkreis neu freigegeben werden</v-alert
+                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung
+                vom Landkreis neu freigegeben werden</v-alert
               >
             </span>
             <div class="my-2 d-flex align-center">
@@ -277,9 +244,7 @@
               </v-tooltip>
               <div v-if="setupFinished && !useUser().isAdmin()">
                 <span v-if="editInformations">
-                  <v-btn size="small" @click="editInformations = false">
-                    fertig
-                  </v-btn>
+                  <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
                 </span>
                 <span v-else>
                   <v-btn size="small" @click="confirmEditDialogOpen = true">
@@ -304,9 +269,7 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.street"
-                :disabled="
-                  !useUser().isAdmin() && !editInformations && setupFinished
-                "
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Straße und Nummer *"
                 :rules="[rules.required, rules.counterStreet]"
@@ -319,9 +282,7 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.additional_address_info"
-                :disabled="
-                  !useUser().isAdmin() && !editInformations && setupFinished
-                "
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
                 label="Adresszusatz"
               />
@@ -331,9 +292,7 @@
                 hide-details="auto"
                 class="text-field"
                 v-model="slotProps.item.community_id"
-                :disabled="
-                  !useUser().isAdmin() && !editInformations && setupFinished
-                "
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="communities"
                 item-title="name"
                 item-value="id"
@@ -350,17 +309,13 @@
                 label="PLZ *"
                 :type="'number'"
                 :rules="[rules.required, rules.zip]"
-                :error-messages="
-                  useErrors().checkAndMapErrors('zip', slotProps.errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
               />
               <v-select
                 hide-details="auto"
                 class="text-field"
                 v-model="slotProps.item.town"
-                :disabled="
-                  !useUser().isAdmin() && !editInformations && setupFinished
-                "
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
@@ -372,37 +327,27 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.phone"
-                :disabled="
-                  !useUser().isAdmin() && !editInformations && setupFinished
-                "
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
-                label="Telefonnummer *"
+                label="Telefonnummer * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
                 :rules="[rules.required, rules.validateNumber]"
                 :type="'tel'"
-                :error-messages="
-                  useErrors().checkAndMapErrors('phone', slotProps.errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
               />
             </div>
             <div class="field">
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.email"
-                :disabled="
-                  !useUser().isAdmin() && !editInformations && setupFinished
-                "
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
                 hide-details="auto"
-                label="E-Mail *"
+                label="E-Mail * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
                 :rules="[rules.required, rules.email]"
-                :error-messages="
-                  useErrors().checkAndMapErrors('email', slotProps.errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
             </div>
           </div>
-
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="locations">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 mr-3 font-weight-bold">{{
@@ -425,9 +370,7 @@
               @update="handleLocationsUpdate"
             />
           </div>
-
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="openingHours">
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{
@@ -441,17 +384,12 @@
                 v-model="slotProps.item.opening_hours"
                 label="Wochentag/e - Uhrzeit"
                 :error-messages="
-                  useErrors().checkAndMapErrors(
-                    'opening_hours',
-                    slotProps.errors
-                  )
+                  useErrors().checkAndMapErrors('opening_hours', slotProps.errors)
                 "
               />
             </div>
           </div>
-
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{
@@ -471,15 +409,11 @@
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
-              label="Link eintragen"
-              :error-messages="
-                useErrors().checkAndMapErrors('link', slotProps.errors)
-              "
+              label="Link eintragen (z.B. www.meine-webseite.de)"
+              :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
             />
           </div>
-
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{
@@ -510,11 +444,7 @@
 
 <script setup lang="ts">
 import "@vuepic/vue-datepicker/dist/main.css";
-import {
-  CreateEditFacility,
-  CreateEditStep,
-  CreateEditSteps,
-} from "~/types/facilities";
+import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
@@ -532,7 +462,7 @@ const stepNames = [
   "website",
   "documents",
 ] as const;
-type StepNames = (typeof stepNames)[number];
+type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Hinterlege den Namen deiner Einrichtung *",
@@ -556,12 +486,11 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   gallery: {
-    label: "4.	Hier kannst du Bilder für deine Galerie hochladen.",
-    description: "Fotogalerie *",
+    label: "4.	Hier kannst du weitere Bilder hochladen.",
+    description: "Fotogalerie",
     tooltip:
       "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
     props: ["sanitized_images", "images"],
-    justSome: true,
   },
   description: {
     label:
@@ -598,7 +527,7 @@ const steps: CreateEditSteps<StepNames> = {
   locations: {
     label:
       "9. Falls deine Einrichtung mehrere Standorte hat, kannst du diese hier ergänzen.",
-    description: "Weitere -Standorte",
+    description: "Weitere Standorte",
     props: ["locations", "offlineLocations"],
     justSome: true,
     tooltip:
@@ -630,10 +559,10 @@ const steps: CreateEditSteps<StepNames> = {
   },
 };
 
+const user = useUser();
+
 const expandTagSelect = ref(true);
 const createEditRef = ref();
-const openLogoGalery = ref(false);
-const openPhotoGalery = ref(false);
 
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
@@ -824,9 +753,7 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find(
-    (community: any) => community.id === communityId
-  );
+  const found = communities.value.find((community: any) => community.id === communityId);
 
   if (found) {
     useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
@@ -850,6 +777,8 @@ onMounted(async () => {
 
 .cropper-wrap
   max-width: 450px
+  //please add hover effect
+
 
 .fields
   max-width: 70vw

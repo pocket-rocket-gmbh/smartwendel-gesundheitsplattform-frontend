@@ -1,7 +1,7 @@
 <template>
-  <div v-if="showingGalery">
+  <div v-if="showingGallery">
     <div class="curtain" />
-    <div class="img-galery">
+    <div class="img-gallery">
       <img class="close is-clickable" src="~/assets/icons/icon-times.svg" height="20" @click="emitClose()" />
       <v-carousel hide-delimiters progress="primary" show-arrows="hover">
         <v-carousel-item v-for="(image, index) in careFacility.sanitized_images" :key="index" :src="image?.url" cover />
@@ -17,7 +17,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  showingGalery: {
+  showingGallery: {
     type: Boolean,
     required: true,
   },
@@ -31,7 +31,7 @@ const emitClose = () => {
 <style lang="sass" scoped>
 @import "@/assets/sass/main"
 
-.img-galery
+.img-gallery
   background: white
   color: red
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 1)

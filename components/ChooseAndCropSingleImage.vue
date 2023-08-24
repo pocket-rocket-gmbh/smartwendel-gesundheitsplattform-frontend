@@ -1,12 +1,50 @@
 <template>
+  <v-row class="mb-10 mt-5">
+    <v-col md="2" offset="1" class="d-flex align-center justify-start">
+      <v-btn
+        size="large"
+        class="px-5"
+        :class="[openImageupload ? 'text-success' : '']"
+        @click="
+          openImageupload = !openImageupload;
+          openPhotoGallery = false;
+        "
+        >Hochladen
+      </v-btn>
+    </v-col>
+    <v-col md="2" class="d-flex align-center justify-start">
+      <v-btn
+        size="large"
+        class="px-5"
+        :class="[openPhotoGallery ? 'text-success' : '']"
+        @click="
+          openPhotoGallery = !openPhotoGallery;
+          openImageupload = false;
+        "
+        >aus der Galerie
+      </v-btn>
+    </v-col>
+  </v-row>
+  <AdminCareFacilitiesChooseimageFromGallery
+    v-if="openPhotoGallery && kind ==='logo'"
+    :item="item"
+    gallery-kind="logo"
+    @setImage="setLogo"
+  />
+  <AdminCareFacilitiesChooseimageFromGallery
+    v-if="openPhotoGallery && kind ==='cover'"
+    :facility-kind="item.kind"
+    :item="item"
+    gallery-kind="cover"
+    @setImage="setCoverBild"
+  />
   <div class="field">
     <v-file-input
+      v-if="!openPhotoGallery && openImageupload"
       class="text-field"
       hide-details="auto"
       v-model="image"
-      :label="`${labelText} ${
-        tempImage || preSetImageUrl ? 'aktualisieren' : 'wählen'
-      }`"
+      :label="`${labelText} ${tempImage || preSetImageUrl ? 'aktualisieren' : 'wählen'}`"
       filled
       prepend-icon="mdi-camera"
       @change="handleFile()"
@@ -14,10 +52,14 @@
       :rules="[isImageSet()]"
       accept="image/*"
     />
-    <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
-    <div v-if="errorFileSizeTooLarge" class="text-caption text-error mt-3 mb-2">
-      Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht
-      überschreiten.
+    <div class="text-caption" v-if="!openPhotoGallery && openImageupload">
+      * Maximal 5 MB, PNG/JPG/JPEG erlaubt
+    </div>
+    <div
+      v-if="errorFileSizeTooLarge && openPhotoGallery"
+      class="text-caption text-error mt-3 mb-2"
+    >
+      Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.
     </div>
   </div>
   <ImageCropper
@@ -34,22 +76,25 @@
     @crop="setImage"
   />
   <template v-else-if="croppedImage || tempImage || preSetImageUrl">
-    <v-card max-width="200">
-      <div>
-        <v-img v-if="croppedImage" :src="croppedImage" max-width="200" />
-        <v-img v-else-if="tempImage" :src="tempImage" max-width="200" />
-        <v-img
-          v-else-if="preSetImageUrl"
-          :src="preSetImageUrl"
-          max-width="200"
-        />
-      </div>
-      <div class="d-flex align-center">
-        <v-btn size="small" width="100%" color="red" @click="deleteImage"
-          >Bild entfernen</v-btn
-        >
-      </div>
-    </v-card>
+    <v-row>
+      <v-col md="1" class="d-flex align-center justify-center">
+        <span>Bereits ausgewählt:</span>
+      </v-col>
+      <v-col>
+        <v-card max-width="200">
+          <div>
+            <v-img v-if="croppedImage" :src="croppedImage" max-width="200" />
+            <v-img v-else-if="tempImage" :src="tempImage" max-width="200" />
+            <v-img v-else-if="preSetImageUrl" :src="preSetImageUrl" max-width="200" />
+          </div>
+          <div class="d-flex align-center">
+            <v-btn size="small" width="100%" color="red" @click="deleteImage"
+              >Bild entfernen</v-btn
+            >
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
   </template>
 </template>
 
@@ -69,15 +114,40 @@ const props = defineProps({
   aspectRatio: {
     type: Number,
   },
+  item: {
+    type: Object,
+    required: true,
+  },
+  kind: {
+    type: String,
+    required: true,
+  },
   minSize: { type: Boolean, default: false },
   minWidth: { type: Number, default: 800 },
   minHeight: { type: Number, default: 450 },
 });
 
+const openPhotoGallery = ref(false);
+const openImageupload = ref(false);
+
 const emit = defineEmits<{
   (event: "setImage", image: any): void;
   (event: "deleteImage"): void;
 }>();
+
+const setCoverBild = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "file",
+    value: image,
+  });
+};
+
+const setLogo = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "logo",
+    value: image,
+  });
+};
 
 const image = ref({}) as any;
 const imgUrl = ref(null);

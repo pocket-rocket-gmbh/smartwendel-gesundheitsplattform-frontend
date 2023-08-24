@@ -34,9 +34,7 @@
           <v-list-item link to="/admin" nuxt> Admin-Bereich (Change Log) </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
-          <v-list-item link to="/admin/filter/events" nuxt> Veranstaltungsfilter </v-list-item>
           <v-list-item link to="/admin/filter/courses" nuxt> Kursfilter </v-list-item>
-          <v-list-item link to="/admin/filter/news" nuxt> Beitragsfilter </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
           <v-divider></v-divider>
@@ -61,6 +59,7 @@
           <span v-else>Kurse</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
           link
           to="/admin/events"
           nuxt
@@ -122,23 +121,14 @@
 import { useAccessPrivileges } from "~/composables";
 import { useUser } from "~/composables";
 import { useAdminStore } from "~/store/admin";
-import { useAppStore } from "~/store/app";
 
 const user = useUser();
-const appStore = useAppStore();
-const router = useRouter();
 
 const adminStore = useAdminStore();
 const setupFinished = ref(false);
 
 const handleLogout = () => {
   user.logout();
-};
-
-const routeBack = () => {
-  router.push({ path: appStore.dashboardBackLink || "/" });
-
-  appStore.dashboardBackLink = "";
 };
 
 onMounted(async () => {
