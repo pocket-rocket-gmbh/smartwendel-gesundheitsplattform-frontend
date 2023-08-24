@@ -90,7 +90,7 @@ const loading = ref(false);
 const fields = [
   {
     prop: "is_active",
-    text: "Aktiv",
+    text: "Offline/Online",
     endpoint: "care_facilities",
     type: "switch",
     tooltip: "Hiermit kannst du deine Einrichtung aktivieren und deaktivieren",
@@ -102,6 +102,7 @@ const fields = [
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "isCompleteFacility"},
   { value: "", type: "beinEdited"},
+  { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
   {
     prop: "user.firstname",
     text: "Erstellt von",

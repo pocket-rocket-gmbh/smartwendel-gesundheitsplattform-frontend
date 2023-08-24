@@ -62,18 +62,10 @@
                 </template>
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
-              <v-btn size="small" @click="openPhotoGalery = !openPhotoGalery"
-                >aus der Galerie
-                <v-icon v-if="openPhotoGalery">mdi-chevron-up</v-icon>
-                <v-icon v-else>mdi-chevron-down</v-icon>
-              </v-btn>
             </div>
-            <AdminCareFacilitiesChooseimageFromGalery
-              v-if="openPhotoGalery"
-              :item="slotProps.item"
-              galery-kind="cover"
-            />
             <ChooseAndCropSingleImage
+              kind="cover"
+              :item = slotProps.item
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
               label="Cover Bild"
@@ -143,33 +135,6 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="category">
-            <div class="my-3 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["category"].label
-              }}</span>
-              <v-tooltip location="top" width="200px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["category"].tooltip }}</span>
-              </v-tooltip>
-            </div>
-            <AdminCareFacilitiesChooseFilter
-              :pre-set-tags="slotProps.item.tag_category_ids"
-              filter-type="filter_facility"
-              :filter-kind="slotProps.item.kind"
-              :enable-multi-select="true"
-              @setTags="setTagCategoryIds"
-              @are-filters-set="setFiltersSet"
-            />
-          </div>
-
-          <v-divider class="my-10"></v-divider>
-
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{
@@ -184,32 +149,6 @@
                 <span>{{ steps["services"].tooltip }}</span>
               </v-tooltip>
             </div>
-            <AdminCareFacilitiesChooseFilter
-              :pre-set-tags="slotProps.item.tag_category_ids"
-              filter-type="filter_service"
-              :filter-kind="slotProps.item.kind"
-              :enable-multi-select="true"
-              @setTags="setTagCategoryIds"
-              @are-filters-set="setFiltersSet"
-            />
-            <v-alert type="info" color="grey" class="mt-2">
-              <div class="d-flex align-center filter-request">
-                <div class="py-1">
-                  <span
-                    >Falls der passende Dienstleistungsbereich für deine
-                    Einrichtung/dein Unternehmen nicht zu finden ist,
-                    kontaktiere uns bitte
-                  </span>
-                  <span>
-                    <a
-                      class="is-white text-decoration-underline"
-                      :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
-                      >HIER</a
-                    >
-                  </span>
-                </div>
-              </div>
-            </v-alert>
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
               :pre-set-tags="slotProps.item.tags || []"
@@ -304,7 +243,7 @@
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
-              label="Link eintragen"
+              label="Link eintragen (z.B. www.meine-webseite.de)"
               :error-messages="
                 useErrors().checkAndMapErrors('link', slotProps.errors)
               "
@@ -346,7 +285,7 @@
               class="text-field"
               v-model="slotProps.item.name_instructor"
               hide-details="auto"
-              label="Name / Vorname des Kursleiters"
+              label="Name / Vorname des Veranstalters"
               :rules="[rules.required]"
               :error-messages="
                 useErrors().checkAndMapErrors('name', slotProps.errors)
@@ -402,6 +341,7 @@
               <div class="field split">
                 <v-text-field
                   class="text-field"
+                  disabled
                   v-model="slotProps.item.zip"
                   hide-details="auto"
                   label="PLZ"
@@ -459,7 +399,7 @@ const stepNames = [
 type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
-    label: "1. Bitte trage hier den Namen deines Kurses ein. *",
+    label: "1. Bitte trage hier den Namen deiner Veranstaltung ein. *",
     description: "Name",
     props: ["name"],
   },
@@ -472,39 +412,33 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   gallery: {
-    label: "3. Hier kannst du weitere Bilder für deine Galerie hochladen.",
+    label: "3. Hier kannst du weitere Bilder hochladen.",
     description: "Galerie Fotos",
     props: ["sanitized_images", "images"],
     justSome: true,
   },
   description: {
     label:
-      "4.	Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
+      "4.	Bitte beschreibe die Inhalte deiner Veranstaltung so detailliert wie möglich. *",
     description: "Beschreibung",
     placeholder:
-      "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
+      "Nutze dieses Feld, um die Inhalte und Ziele deiner Veranstaltung näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
-  category: {
-    label: "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu *",
-    description: "Berufszweig",
-    props: ["tag_category_ids"],
-    specialFilter: "filter_facility",
-    tooltip: "Mehrfachauswahl möglich.",
-  },
+ 
   services: {
     label:
-      "6. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
-    description: "Leistung",
+      "5. Ordne deiner Veranstaltung passende Schlagwörter zu, um ihn besser auffindbar zu machen",
+    description: "Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
     tooltip:
-      "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden.",
+      "Wähle alle für die Veranstaltung relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher deine Veranstaltung über die Suchfunktion der Webseite finden.",
   },
   date: {
     label:
-      "7. Bitte gib die Kurstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
+      "7. Bitte gib die Veranstaltungstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     description: "Veranstaltungsdatum",
     props: ["event_dates"],
     tooltip: "Mehrfachauswahl möglich.",
@@ -519,27 +453,25 @@ const steps: CreateEditSteps<StepNames> = {
   },
   documents: {
     label:
-      "9.	Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen. ",
+      "9.	Hier kannst du weitere Dokumente (z. B. Anmeldungsformular) zu deinen Angeboten hochladen. ",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
   },
   leader: {
-    label: "11.	Bitte gib hier den Namen der Kursleitung an",
+    label: "11.	Bitte gib hier den Namen des Veranstalters an",
     tooltip:
-      "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+      "Der Name des Veranstalters wird in deinem des Veranstaltungsprofil zu sehen sein.",
     description: "Name der Kursleitung",
     props: ["name_instructor"],
   },
   address: {
-    label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
+    label: "12. Findet die Veranstaltung außerhalb deiner Einrichtung statt?",
     tooltip: "",
     description: "Adresse",
     props: ["street", "zip", "community_id", "town"],
   },
 };
-
-const openPhotoGalery = ref(false);
 
 const expandTagSelect = ref(true);
 const createEditRef = ref();

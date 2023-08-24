@@ -1,9 +1,10 @@
 <template>
-  <CollapsibleItem class="tag-select" id="tag-select" :expand="expand" @expand-toggled="handleExpandToggled">
+  <CollapsibleItem class="tag-select mt-10" id="tag-select" :expand="expand" @expand-toggled="handleExpandToggled">
     <template #title>
       <div class="title">
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
         <div v-if="kind === 'news'">Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'event'">Branchenspezifisches Leistungsangebot</div>
         <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
         <div v-if="!expand" class="selected">
           <v-chip v-for="tag in preSetTags" :key="tag.id">

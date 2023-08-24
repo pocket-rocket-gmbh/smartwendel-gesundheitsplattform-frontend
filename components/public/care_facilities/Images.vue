@@ -23,7 +23,7 @@
               v-if="careFacility?.sanitized_images?.[1]"
               :src="careFacility?.sanitized_images?.[1].url"
             />
-            <v-btn class="show-more" v-if="careFacility.sanitized_images.length > 0" @click="showGalery()">
+            <v-btn class="show-more" v-if="careFacility.sanitized_images.length > 0" @click="showGallery()">
               alle Bilder zeigen</v-btn
             >
           </v-col>
@@ -34,10 +34,10 @@
       <img :src="careFacility.logo ? careFacility.logo : careFacility.logo_url" />
     </div>
   </div>
-  <PublicCareFacilitiesGalery
+  <PublicCareFacilitiesGallery
     :care-facility="careFacility"
-    :showingGalery="showingGalery"
-    @close="showingGalery = false"
+    :showingGallery="showingGallery"
+    @close="showingGallery = false"
   />
 </template>
 
@@ -50,14 +50,14 @@ export default defineComponent({
     },
   },
   setup() {
-    const showingGalery = ref(false);
-    const showGalery = () => {
-      showingGalery.value = true;
+    const showingGallery = ref(false);
+    const showGallery = () => {
+      showingGallery.value = true;
     };
 
     return {
-      showingGalery,
-      showGalery,
+      showingGallery,
+      showGallery,
     };
   },
 });

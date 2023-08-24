@@ -59,24 +59,15 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["photo"].label
               }}</span>
-              <v-btn size="small" @click="openPhotoGalery = !openPhotoGalery"
-                >aus der Galerie
-                <v-icon v-if="openPhotoGalery">mdi-chevron-up</v-icon>
-                <v-icon v-else>mdi-chevron-down</v-icon>
-              </v-btn>
             </div>
-            <AdminCareFacilitiesChooseimageFromGalery
-              v-if="openPhotoGalery"
-              :item="slotProps.item"
-              galery-kind="cover"
-            />
             <ChooseAndCropSingleImage
+              kind="cover"
+              :item = slotProps.item
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
               label="Cover Bild"
@@ -264,7 +255,7 @@ const steps: CreateEditSteps<StepNames> = {
   }, */
   services: {
     label:
-      "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen *",
+      "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen",
     tooltip: "",
     description: "Schlagwörter",
     props: ["tag_category_ids"],
@@ -272,7 +263,6 @@ const steps: CreateEditSteps<StepNames> = {
   },
 };
 
-const openPhotoGalery = ref(false);
 const expandTagSelect = ref(true);
 const createEditRef = ref();
 

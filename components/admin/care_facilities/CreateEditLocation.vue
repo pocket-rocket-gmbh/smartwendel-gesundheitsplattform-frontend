@@ -29,6 +29,7 @@
               <v-text-field
                 v-model="zip"
                 hide-details="auto"
+                disabled
                 label="PLZ"
                 :type="'number'"
                 readonly
@@ -45,7 +46,7 @@
               />
             </div>
           </div>
-          <span v-if="error" class="error">{{ error }}</span>
+          <v-alert v-if="error" type="error">{{ error }}</v-alert>
         </v-form>
       </v-container>
       <v-divider></v-divider>
@@ -139,8 +140,8 @@ const emitSave = async () => {
     emit("save", lat, long);
   } else {
     console.error("Address not found");
-    snackbar.showError("Addresse konnte nicht befunden werden. Bitte eine Eingaben überprüfen!");
-    error.value = "Addresse konnte nicht befunden werden. Bitte eine Eingaben überprüfen!";
+    snackbar.showError("Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!");
+    error.value = "Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!";
   }
 };
 
@@ -182,7 +183,5 @@ const getTownsByCommunityId = (communityId: string) => {
 </script>
 
 <style lang="sass">
-.error
-  font-weight: bold
-  color: red
+
 </style>
