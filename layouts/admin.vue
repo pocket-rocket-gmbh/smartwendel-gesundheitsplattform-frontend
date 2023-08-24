@@ -59,6 +59,7 @@
           <span v-else>Kurse</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
           link
           to="/admin/events"
           nuxt
