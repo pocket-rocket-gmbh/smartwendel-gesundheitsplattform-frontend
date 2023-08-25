@@ -2,14 +2,14 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="my-2">
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
     <div>
       <v-row align="center">
         <v-col md="3" class="d-flex">
           <v-btn
-            v-if="user.isAdmin() || !itemsExist || !setupFinished"
+            v-if="user.isAdmin() || !itemsExist"
             elevation="0"
             variant="outlined"
             @click="

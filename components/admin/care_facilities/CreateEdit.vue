@@ -22,7 +22,9 @@
             >
               <span>{{ step.description }}</span>
             </div>
+            <sspan class="text-error">* Erforderlich</sspan>
           </div>
+          
         </v-col>
         <v-col md="9">
           <div class="py-10">
@@ -901,4 +903,13 @@ onMounted(async () => {
 .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
   content: "Überschrift 3";
 }
+
+.v-tooltip > .v-overlay__content {
+  font-size: 20px !important;
+}
+
+.ql-clean {
+  display: none!important;
+}
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <v-row class="mb-10 mt-5">
-    <v-col md="2" offset="1" class="d-flex align-center justify-start">
+    <v-col md="2" class="d-flex align-center justify-start">
       <v-btn
         size="large"
         class="px-5"

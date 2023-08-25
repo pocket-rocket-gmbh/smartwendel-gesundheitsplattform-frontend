@@ -17,6 +17,7 @@
             >
               <span>{{ step.description }}</span>
             </div>
+            <sspan class="text-error">* Erforderlich</sspan>
           </div>
         </v-col>
         <v-col md="9">
@@ -511,19 +512,19 @@ const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deines Kurses ein. *",
     tooltip: "",
-    description: "Name",
+    description: "Name *",
     props: ["name"],
   },
   photo: {
     label: "2. Bitte lade hier ein Titelbild hoch. *",
     tooltip:
       "Das Titelbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
-    description: "Titelbild",
+    description: "Titelbild *",
     props: ["image_url", "file"],
     justSome: true,
   },
   gallery: {
-    label: "3. Lade weitere Bilder für eine Galerie hoch",
+    label: "3. Hier kannst du weitere Bilder hochladen",
     tooltip: "",
     description: "Fotogalerie",
     props: ["sanitized_images", "images"],
@@ -532,7 +533,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "4. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
     tooltip: "",
-    description: "Beschreibungstext",
+    description: "Beschreibungstext *",
     placeholder:
       "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
@@ -542,7 +543,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu * ",
     tooltip: "Mehrfachauswahl möglich.",
-    description: "Branchenzugehörigkeit",
+    description: "Branchenzugehörigkeit *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
@@ -551,7 +552,7 @@ const steps: CreateEditSteps<StepNames> = {
       "6. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
       "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
-    description: "Leistungen und Schlagwörter",
+    description: "Leistungen und Schlagwörter *",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
@@ -559,7 +560,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "7.	Bitte gib die Kurstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     tooltip: "",
-    description: "Kursdaten",
+    description: "Kursdaten *",
     props: ["event_dates"],
   },
   certificates: {
@@ -590,7 +591,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "11.	Bitte gib hier den Namen der Kursleitung an *",
     tooltip:
       "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
-    description: "Name der Kursleitung",
+    description: "Name der Kursleitung *",
     props: ["name_instructor"],
   },
   address: {
@@ -916,4 +917,13 @@ onMounted(async () => {
 .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
   content: "Überschrift 3";
 }
+
+.v-tooltip > .v-overlay__content {
+  font-size: 20px !important;
+}
+
+.ql-clean {
+  display: none!important;
+}
+
 </style>
