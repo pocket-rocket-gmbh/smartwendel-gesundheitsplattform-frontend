@@ -2,7 +2,7 @@
   <div></div>
   <v-dialog
     width="500"
-    v-model="open"
+    v-model="opened"
     v-if="modalOpen"
     transition="dialog-bottom-transition"
     class="mt-10"
@@ -12,13 +12,26 @@
       <v-card-text class="card-text">
         <v-row>
           <v-col>
-            <h3 class="mb-4">Passwort ändern</h3>
-            <v-text-field v-model="password" type="password" label="Neues Passwort"
-                />
+            <h3 class="mb-4">Bitte ändere aus Sicherheitsgründen dein Passwort!</h3>
             <v-text-field
+              v-model="password"
+              label="Neues Passwort"
+              :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordVisible ? 'text' : 'password'"
+              :rules="[rules.required, rules.password]"
+              @click:append-inner="PasswordVisible = !PasswordVisible"
+            />
+            <v-text-field
+              :append-inner-icon="PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordConfirmationVisible ? 'text' : 'password'"
               v-model="password_confirmation"
-              type="password"
               label="Passwort Bestätigung"
+              @click:append-inner="PasswordConfirmationVisible = !PasswordConfirmationVisible"
+              :rules="[
+                password === password_confirmation || 'Passwörter stimmen nicht überein',
+                rules.required,
+                rules.password,
+              ]"
             />
           </v-col>
         </v-row>
@@ -28,6 +41,7 @@
         <v-row no-gutters>
           <v-col class="d-flex justify-center">
             <v-btn
+              :disabled="password !== password_confirmation"
               elevation="0"
               variant="outlined"
               class="text-success"
@@ -42,67 +56,49 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { useUserStore } from "@/store/user";
 import { rules } from "../data/validationRules";
-export default defineComponent({
-  emits: ["close", "accepted"],
-  props: {
-    open: Boolean,
-  },
+const emit = defineEmits(["close", "changed"]);
+const props = defineProps({
+  open: Boolean,
+});
 
-  setup(props, { emit }) {
-    const emitClose = async () => {
-      emit("close");
-    };
+const PasswordVisible = ref(false);
+const PasswordConfirmationVisible = ref(false);
 
-    const currentUser = useUserStore().currentUser;
-    const router = useRouter();
-    const password = ref("");
-    const password_confirmation = ref("");
+const opened = ref(props.open);
+const currentUser = useUserStore().currentUser;
+const router = useRouter();
+const password = ref("");
+const password_confirmation = ref("");
 
-    const modalOpen = ref(true);
-    const snackbar = useSnackbar();
+const modalOpen = ref(true);
+const snackbar = useSnackbar();
 
-    const api = useCollectionApi();
-    api.setBaseApi(usePrivateApi());
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
 
-    const getUser = async () => {
-      api.setEndpoint(`users/me`);
-      await api.getItem();
-    };
+const getUser = async () => {
+  api.setEndpoint(`users/me`);
+  await api.getItem();
+};
 
-    const updatePassword = async () => {
-      api.setEndpoint(`users/${currentUser.value}/update-password`);
-      const data = {
-        password: password.value,
-        password_confirmation: password_confirmation.value,
-      };
-      const result = await api.updateItem(data, "Passwort erfolgreich geändert");
-      modalOpen.value = false;
-      useUser().logout();
-      reload();
-      snackbar.showSuccess("bitten melden Sie sich erneut an");
-    };
+const updatePassword = async () => {
+  api.setEndpoint(`users/${currentUser.value}/update-password`);
+  const data = {
+    password: password.value,
+    password_confirmation: password_confirmation.value,
+  };
+  const result = await api.updateItem(data, "Passwort erfolgreich geändert");
+  modalOpen.value = false;
+  snackbar.showSuccess("Passwort aktualisert");
+  emit("changed", true);
+  getUser();
+};
 
-    const reload = () => {
-      router.push({ path: "/login" });
-    };
-
-    onMounted(() => {
-      getUser();
-    });
-
-    return {
-      emitClose,
-      rules,
-      password,
-      getUser,
-      updatePassword,
-      password_confirmation,
-      modalOpen,
-    };
-  },
+onMounted(() => {
+  getUser();
 });
 </script>
 

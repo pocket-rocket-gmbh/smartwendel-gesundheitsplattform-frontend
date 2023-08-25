@@ -11,7 +11,10 @@
     >
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
-    <ChangePassword :open="userLoginCount === 1" v-if="userLoginCount === 1"/>
+    <ChangePassword
+      :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
+      @changed="handleSaved()"
+    />
     <div>
       <div>
         <v-row align="center">
@@ -105,6 +108,11 @@ const userLoginCount = computed(() => {
   return user.loginCount();
 });
 
+const handleSaved = async () => {
+  dataTableRef?.value.getItems()
+  useUser().reloadUser()
+};
+
 const fields = [
   {
     prop: "is_active",
@@ -179,6 +187,7 @@ const handleCreateEditClose = async () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
   dataTableRef.value?.resetActiveItems();
+  dataTableRef?.value?.getItems();
   setupFinished.value = await useUser().setupFinished();
   newFacilityFromCache.value = !!localStorage.getItem("facilities_new");
 };

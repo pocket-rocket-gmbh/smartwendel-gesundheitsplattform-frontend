@@ -4,23 +4,60 @@
     <v-alert type="info" density="compact" closable class="mt-2">
       Hier kannst du deine Daten vervollständigen und dein Passwort ändern.
     </v-alert>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
-      du Kurse und Veranstaltungen sowie Beiträge anlegen.
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
+      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
+      anlegen.
     </v-alert>
-    <v-alert v-if="!setupFinished && !loading" type="info" color="yellow" density="compact" closable class="mt-2">
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      color="yellow"
+      density="compact"
+      closable
+      class="mt-2"
+    >
       Bitte vervollständige deine Daten und ändere dein Passwort
     </v-alert>
     <v-divider class="my-5"></v-divider>
     <div class="d-flex">
-      <v-btn elevation="0" class="mr-5" variant="outlined" color="primary" @click="goToFacility('care_facilities')">
+      <v-btn
+        elevation="0"
+        class="mr-5"
+        variant="outlined"
+        color="primary"
+        @click="goToFacility('care_facilities')"
+      >
         Zu meiner Einrichtung
       </v-btn>
-      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses')"> Zu meinen Kursen </v-btn>
-      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('events')">
+      <v-btn
+        elevation="0"
+        class="mr-5"
+        variant="outlined"
+        @click="goToFacility('courses')"
+      >
+        Zu meinen Kursen
+      </v-btn>
+      <v-btn
+        elevation="0"
+        class="mr-5"
+        variant="outlined"
+        @click="goToFacility('events')"
+      >
         Zu meinen Veranstaltungen
       </v-btn>
-      <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('news_articles')">
+      <v-btn
+        elevation="0"
+        class="mr-5"
+        variant="outlined"
+        @click="goToFacility('news_articles')"
+      >
         Zu meinen Beiträgen
       </v-btn>
     </div>
@@ -41,7 +78,9 @@
               @save="saveUserData"
               class="my-3"
             />
-            <v-btn elevation="0" variant="outlined" @click="saveUserData()"> Persönliche Daten Speichern </v-btn>
+            <v-btn elevation="0" variant="outlined" @click="saveUserData()">
+              Persönliche Daten Speichern
+            </v-btn>
           </v-col>
           <v-col> </v-col>
         </v-row>
@@ -49,9 +88,34 @@
         <v-row>
           <v-col md="6">
             <h3 class="mb-4">Passwort ändern</h3>
-            <v-text-field v-model="password" type="password" label="Neues Passwort" />
-            <v-text-field v-model="password_confirmation" type="password" label="Passwort Bestätigung" />
-            <v-btn elevation="0" variant="outlined" @click="updatePassword()"> Passwort ändern </v-btn>
+            <v-text-field
+              v-model="password"
+              :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordVisible ? 'text' : 'password'"
+              :rules="[rules.required, rules.password]"
+              @click:append-inner="PasswordVisible = !PasswordVisible"
+              label="Neues Passwort"
+            />
+            <v-text-field
+              :append-inner-icon="PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordConfirmationVisible ? 'text' : 'password'"
+              v-model="password_confirmation"
+              label="Passwort Bestätigung"
+              :rules="[
+                password === password_confirmation || 'Passwörter stimmen nicht überein',
+                rules.required,
+                rules.password,
+              ]"
+            />
+            <v-btn
+              :disabled="password !== password_confirmation"
+              elevation="0"
+              variant="outlined"
+              class="text-success"
+              @click="updatePassword()"
+            >
+              Passwort ändern
+            </v-btn>
           </v-col>
         </v-row>
       </div>
@@ -60,6 +124,7 @@
 </template>
 
 <script lang="ts" setup>
+import { rules } from "../../../data/validationRules";
 import { useUserStore } from "@/store/user";
 definePageMeta({
   layout: "admin",
@@ -85,6 +150,9 @@ const item = ref({
 
 const password = ref("");
 const password_confirmation = ref("");
+
+const PasswordVisible = ref(false);
+const PasswordConfirmationVisible = ref(false);
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
