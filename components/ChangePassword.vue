@@ -12,7 +12,7 @@
       <v-card-text class="card-text">
         <v-row>
           <v-col>
-            <h3 class="mb-4">Passwort ändern</h3>
+            <h3 class="mb-4">Bitte ändere aus Sicherheitsgründen dein Passwort!</h3>
             <v-text-field
               v-model="password"
               label="Neues Passwort"

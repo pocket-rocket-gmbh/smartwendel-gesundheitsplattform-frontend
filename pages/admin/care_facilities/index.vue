@@ -11,7 +11,6 @@
     >
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
-    {{ user?.currentUser?.password_changed_at }}aa
     <ChangePassword
       :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
       @changed="handleSaved()"
