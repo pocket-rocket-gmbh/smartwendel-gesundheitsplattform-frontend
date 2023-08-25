@@ -52,6 +52,7 @@
 
 <script setup lang="ts">
 import { Cropper } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
 
 type ImageSize = {
   width: number;
