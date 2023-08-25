@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="my-5">
-            <h3 class="mb-3">Mein Benutzerkonto</h3>
+            <h2 class="mb-3">Mein Benutzerkonto</h2>
             <div class="field">
               <v-text-field
                 v-model="firstname"

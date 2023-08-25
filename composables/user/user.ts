@@ -10,6 +10,10 @@ export function useUser() {
     return currentUser !== null;
   };
 
+  const loginCount = (): Number => {
+    return currentUser?.login_count || 0;
+  };
+
   const isAdmin = (): Boolean => {
     if (currentUser) {
       return currentUser.role === "root" || currentUser.role === "admin" || currentUser.role === "care_facility_admin";
@@ -68,5 +72,6 @@ export function useUser() {
     logout,
     setupFinished,
     facilityFinished,
+    loginCount
   };
 }

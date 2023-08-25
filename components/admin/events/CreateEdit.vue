@@ -17,6 +17,7 @@
             >
               <span>{{ step.description }}</span>
             </div>
+            <sspan class="text-error">* Erforderlich</sspan>
           </div>
         </v-col>
         <v-col md="9">
@@ -388,7 +389,6 @@ const stepNames = [
   "photo",
   "gallery",
   "description",
-  "category",
   "services",
   "website",
   "documents",
@@ -400,7 +400,7 @@ type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deiner Veranstaltung ein. *",
-    description: "Name",
+    description: "Name *",
     props: ["name"],
   },
   photo: {
@@ -413,20 +413,19 @@ const steps: CreateEditSteps<StepNames> = {
   },
   gallery: {
     label: "3. Hier kannst du weitere Bilder hochladen.",
-    description: "Galerie Fotos",
+    description: "Galerie Fotos *",
     props: ["sanitized_images", "images"],
     justSome: true,
   },
   description: {
     label:
       "4.	Bitte beschreibe die Inhalte deiner Veranstaltung so detailliert wie möglich. *",
-    description: "Beschreibung",
+    description: "Beschreibung *",
     placeholder:
       "Nutze dieses Feld, um die Inhalte und Ziele deiner Veranstaltung näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
- 
   services: {
     label:
       "5. Ordne deiner Veranstaltung passende Schlagwörter zu, um ihn besser auffindbar zu machen",
@@ -439,7 +438,7 @@ const steps: CreateEditSteps<StepNames> = {
   date: {
     label:
       "7. Bitte gib die Veranstaltungstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
-    description: "Veranstaltungsdatum",
+    description: "Veranstaltungsdatum *",
     props: ["event_dates"],
     tooltip: "Mehrfachauswahl möglich.",
   },
@@ -459,10 +458,10 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   leader: {
-    label: "11.	Bitte gib hier den Namen des Veranstalters an",
+    label: "11.	Bitte gib hier den Namen des Veranstalters an *",
     tooltip:
       "Der Name des Veranstalters wird in deinem des Veranstaltungsprofil zu sehen sein.",
-    description: "Name der Kursleitung",
+    description: "Name der Kursleitung *",
     props: ["name_instructor"],
   },
   address: {
@@ -788,4 +787,13 @@ onMounted(async () => {
 .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
   content: "Überschrift 3";
 }
+
+.v-tooltip > .v-overlay__content {
+  font-size: 20px !important;
+}
+
+.ql-clean {
+  display: none!important;
+}
+
 </style>

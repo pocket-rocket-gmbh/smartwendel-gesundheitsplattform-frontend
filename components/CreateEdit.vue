@@ -8,6 +8,15 @@
     v-if="!editUserProfile"
   >
     <v-card :class="`dialog-${size}`" :height="`${height}`">
+
+      <SaveConfirmation
+        :item="item"
+        :open="confirmSaveDialogOpen"
+        @click:outside="confirmSaveDialogOpen = false"
+        @accepted="confirmSaveDialogOpen = false"
+        @close="handleConfirmClose()"
+      />
+
       <v-form ref="form">
         <v-card-title class="text-h5 has-bg-primary py-5 text-white">
           <span v-if="itemId">{{ conceptName }} bearbeiten</span>
@@ -19,10 +28,21 @@
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
-          <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
+          <v-btn
+            color="blue darken-1"
+            variant="outlined"
+            dark
+            @click="handleCta()"
+            :loading="loadingItem"
+          >
             {{ saveButtonText }}
           </v-btn>
-          <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined">
+          <v-btn
+            v-if="isCachedItem"
+            @click="handleResetCache()"
+            color="orange darken-1"
+            variant="outlined"
+          >
             Zurücksetzen
           </v-btn>
           <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
@@ -94,6 +114,7 @@ const props = defineProps({
   },
 });
 
+const confirmSaveDialogOpen = ref(false);
 const loadingItem = ref(false);
 const dialog = ref(true);
 const errors = ref([]);
@@ -122,9 +143,13 @@ const saveButtonText = computed(() => {
   if (!allValid) {
     return "Zwischenspeichern";
   }
-
   return "Speichern";
 });
+
+const handleConfirmClose = () => {
+  confirmSaveDialogOpen.value = false;
+  getItem();
+};
 
 const getItem = async () => {
   if (!props.itemId) return;
@@ -151,7 +176,10 @@ const handleCta = async () => {
   if (!valid) {
     if (props.enableCache && props.cacheKey) {
       if (
-        !areObjectsEqual(deepToRaw(item.value), deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder))
+        !areObjectsEqual(
+          deepToRaw(item.value),
+          deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder)
+        )
       ) {
         localStorage.setItem(props.cacheKey, JSON.stringify(toRaw(item.value)));
         checkCachedItem();
@@ -204,12 +232,13 @@ const create = async () => {
     if (item.value.offlineLocations && item.value.offlineLocations.length) {
       createUpdateApi.setEndpoint(`locations/care_facility/${facilityId}`);
 
-      const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
-        createUpdateApi.createItem({
-          careFacility_id: facilityId,
-          longitude: location.longitude,
-          latitude: location.latitude,
-        })
+      const facilityLocationCreationPromises = item.value.offlineLocations.map(
+        (location) =>
+          createUpdateApi.createItem({
+            careFacility_id: facilityId,
+            longitude: location.longitude,
+            latitude: location.latitude,
+          })
       );
 
       await Promise.all(facilityLocationCreationPromises);
@@ -256,6 +285,9 @@ const save = async () => {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
     itemHastChanged.value = false;
     emit("save");
+    if(item.value?.is_active === false) {
+      confirmSaveDialogOpen.value = true;
+    }
     if (props.enableCache && props.cacheKey) {
       localStorage.removeItem(props.cacheKey);
     }
@@ -265,14 +297,18 @@ const save = async () => {
 };
 
 const checkCachedItem = () => {
-  isCachedItem.value = !!(props.enableCache && props.cacheKey && localStorage.getItem(props.cacheKey));
+  isCachedItem.value = !!(
+    props.enableCache &&
+    props.cacheKey &&
+    localStorage.getItem(props.cacheKey)
+  );
 };
 
 const handleResetCache = async () => {
   if (!props.enableCache || !props.cacheKey) {
     return;
   }
-  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
+  const confirmed = confirm("Änderungen werden verworfen.");
   if (confirmed) {
     localStorage.removeItem(props.cacheKey);
     checkCachedItem();
@@ -314,7 +350,6 @@ const emitClose = () => {
     item.value = { ...props.itemPlaceholder };
     emit("close");
   }
-
 };
 
 defineExpose({ getItem });
@@ -330,14 +365,31 @@ watch(
     () => item.value?.town,
   ],
   (
-    [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
-    [oldPhone, oldEmail, oldStreet, oldAdditionalAddressInfo, oldCommunityId, oldZip, oldTown]
+    [
+      newPhone,
+      newEmail,
+      newStreet,
+      newAdditionalAddressInfo,
+      newCommunityId,
+      newZip,
+      newTown,
+    ],
+    [
+      oldPhone,
+      oldEmail,
+      oldStreet,
+      oldAdditionalAddressInfo,
+      oldCommunityId,
+      oldZip,
+      oldTown,
+    ]
   ) => {
     if (
       (oldPhone && newPhone !== oldPhone) ||
       (oldEmail && newEmail !== oldEmail) ||
       (oldStreet && newStreet !== oldStreet) ||
-      (oldAdditionalAddressInfo && newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
+      (oldAdditionalAddressInfo &&
+        newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
       (oldCommunityId && newCommunityId !== oldCommunityId) ||
       (oldZip && newZip !== oldZip) ||
       (oldTown && newTown !== oldTown)
@@ -349,8 +401,10 @@ watch(
 );
 
 onMounted(async () => {
-
-  const cachedItem = props.enableCache && props.cacheKey && JSON.parse(localStorage.getItem(props.cacheKey));
+  const cachedItem =
+    props.enableCache &&
+    props.cacheKey &&
+    JSON.parse(localStorage.getItem(props.cacheKey));
   if (!cachedItem) {
     if (props.itemId) {
       await getItem();

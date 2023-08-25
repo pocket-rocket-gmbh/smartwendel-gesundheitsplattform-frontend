@@ -220,7 +220,7 @@ const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte gib hier den Titel deines Newsartikels/Beitrags an. *",
     tooltip: "",
-    description: "Name",
+    description: "Name *",
     props: ["name"],
   },
   photo: {
@@ -234,7 +234,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "3. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
     tooltip: "",
-    description: "Beschreibungstext",
+    description: "Beschreibungstext *",
     placeholder: "Inhalt des Beitrags",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
@@ -243,7 +243,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "4.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
     tooltip: "",
-    description: "Name der Autorin/des Autors",
+    description: "Name der Autorin/des Autors *",
     props: ["name_instructor"],
   },
   /*   category: {
@@ -510,4 +510,13 @@ const goToField = (n: string) => {
 .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
   content: "Überschrift 3";
 }
+
+.v-tooltip > .v-overlay__content {
+  font-size: 20px !important;
+}
+
+.ql-clean {
+  display: none!important;
+}
+
 </style>
