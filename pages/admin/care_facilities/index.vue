@@ -2,76 +2,90 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="my-2">
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="my-2"
+    >
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
+    <ChangePassword :open="userLoginCount === 1" v-if="userLoginCount === 1"/>
     <div>
-      <v-row align="center">
-        <v-col md="3" class="d-flex">
-          <v-btn
-            v-if="user.isAdmin() || !itemsExist"
-            elevation="0"
-            variant="outlined"
-            @click="
-              itemId = null;
-              createEditDialogOpen = true;
-              itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
-            "
-            :class="{ orange: newFacilityFromCache }"
-          >
-            Neue Einrichtung <span v-if="newFacilityFromCache"> - weiter</span>
-          </v-btn>
-        </v-col>
-        <v-col>
-          <v-text-field
-            width="50"
-            prepend-icon="mdi-magnify"
-            v-model="facilitySearchTerm"
-            hide-details="auto"
-            label="Einrichtungen durchsuchen"
-          />
-        </v-col>
-      </v-row>
+      <div>
+        <v-row align="center">
+          <v-col md="3" class="d-flex">
+            <v-btn
+              v-if="user.isAdmin() || !itemsExist"
+              elevation="0"
+              variant="outlined"
+              @click="
+                itemId = null;
+                createEditDialogOpen = true;
+                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
+              "
+              :class="{ orange: newFacilityFromCache }"
+            >
+              Neue Einrichtung <span v-if="newFacilityFromCache"> - weiter</span>
+            </v-btn>
+          </v-col>
+          <v-col>
+            <v-text-field
+              width="50"
+              prepend-icon="mdi-magnify"
+              v-model="facilitySearchTerm"
+              hide-details="auto"
+              label="Einrichtungen durchsuchen"
+            />
+          </v-col>
+        </v-row>
+      </div>
+
+      <DataTable
+        ref="dataTableRef"
+        :fields="fields"
+        :search-query="facilitySearchTerm"
+        :search-columns="facilitySearchColums"
+        :cache-prefix="'facilities'"
+        endpoint="care_facilities?kind=facility"
+        @openCreateEditDialog="openCreateEditDialog"
+        @openDeleteDialog="openDeleteDialog"
+        @openAddImagesDialog="openAddImagesDialog"
+        @openAddFilesDialog="openAddFilesDialog"
+        @items-loaded="handleItemsLoaded"
+      />
+
+      <AdminCareFacilitiesCreateEdit
+        v-if="createEditDialogOpen"
+        :item-id="itemId"
+        :item-placeholder="itemPlaceholder"
+        @close="handleCreateEditClose"
+        endpoint="care_facilities"
+        concept-name="Einrichtung"
+        :enableCache="true"
+        :cacheKey="cacheKey"
+        :showPreviewButton="true"
+        @showPreview="handleShowPreview"
+      />
+
+      <AdminPreviewDummyPage
+        v-if="previewItem"
+        :item="previewItem"
+        @close="handlePreviewClose"
+      />
+      <DeleteItem
+        v-if="confirmDeleteDialogOpen"
+        @close="
+          itemId = null;
+          confirmDeleteDialogOpen = false;
+          dataTableRef?.resetActiveItems();
+        "
+        :item-id="itemId"
+        endpoint="care_facilities"
+        term="diese Einrichtung"
+      />
     </div>
-    <DataTable
-      ref="dataTableRef"
-      :fields="fields"
-      :search-query="facilitySearchTerm"
-      :search-columns="facilitySearchColums"
-      :cache-prefix="'facilities'"
-      endpoint="care_facilities?kind=facility"
-      @openCreateEditDialog="openCreateEditDialog"
-      @openDeleteDialog="openDeleteDialog"
-      @openAddImagesDialog="openAddImagesDialog"
-      @openAddFilesDialog="openAddFilesDialog"
-      @items-loaded="handleItemsLoaded"
-    />
-
-    <AdminCareFacilitiesCreateEdit
-      v-if="createEditDialogOpen"
-      :item-id="itemId"
-      :item-placeholder="itemPlaceholder"
-      @close="handleCreateEditClose"
-      endpoint="care_facilities"
-      concept-name="Einrichtung"
-      :enableCache="true"
-      :cacheKey="cacheKey"
-      :showPreviewButton="true"
-      @showPreview="handleShowPreview"
-    />
-
-    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
-    <DeleteItem
-      v-if="confirmDeleteDialogOpen"
-      @close="
-        itemId = null;
-        confirmDeleteDialogOpen = false;
-        dataTableRef?.resetActiveItems();
-      "
-      :item-id="itemId"
-      endpoint="care_facilities"
-      term="diese Einrichtung"
-    />
   </div>
 </template>
 
@@ -87,6 +101,10 @@ const user = useUser();
 const router = useRouter();
 const loading = ref(false);
 
+const userLoginCount = computed(() => {
+  return user.loginCount();
+});
+
 const fields = [
   {
     prop: "is_active",
@@ -100,8 +118,8 @@ const fields = [
       "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button aktiv schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
-  { value: "", type: "isCompleteFacility"},
-  { value: "", type: "beinEdited"},
+  { value: "", type: "isCompleteFacility" },
+  { value: "", type: "beinEdited" },
   { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
   {
     prop: "user.firstname",
@@ -109,7 +127,8 @@ const fields = [
     value: "user.name",
     condition: "admin",
     type: "button",
-    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+    action: (item: any) =>
+      router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
   },
 ];
 const dataTableRef = ref();
