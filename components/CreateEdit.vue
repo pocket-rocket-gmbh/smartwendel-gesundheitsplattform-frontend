@@ -8,7 +8,6 @@
     v-if="!editUserProfile"
   >
     <v-card :class="`dialog-${size}`" :height="`${height}`">
-
       <SaveConfirmation
         :item="item"
         :open="confirmSaveDialogOpen"
@@ -20,7 +19,7 @@
       <v-form ref="form">
         <v-card-title class="text-h5 has-bg-primary py-5 text-white">
           <span v-if="itemId">{{ conceptName }} bearbeiten</span>
-          <span v-else>{{ conceptName }} erstellen</span>
+          <span v-else>{{ conceptName }} erstellen </span>
         </v-card-title>
         <slot :item="item" :errors="errors"></slot>
         <v-card-actions class="card-actions">
@@ -28,23 +27,33 @@
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
-          <v-btn
-            color="blue darken-1"
-            variant="outlined"
-            dark
-            @click="handleCta()"
-            :loading="loadingItem"
+          <div
+            v-if="
+              !statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded
+            "
           >
-            {{ saveButtonText }}
-          </v-btn>
-          <v-btn
-            v-if="isCachedItem"
-            @click="handleResetCache()"
-            color="orange darken-1"
-            variant="outlined"
-          >
-            Zurücksetzen
-          </v-btn>
+            <v-btn
+              color="blue darken-1"
+              variant="outlined"
+              dark
+              @click="handleCta()"
+              :loading="loadingItem"
+            >
+              {{ saveButtonText }}
+            </v-btn>
+            <v-btn
+              v-if="isCachedItem"
+              @click="handleResetCache()"
+              color="orange darken-1"
+              variant="outlined"
+            >
+              Zurücksetzen
+            </v-btn>
+          </div>
+          <div v-else>
+            <LoadingSpinner />
+          </div>
+
           <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
             Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
           </v-alert>
@@ -68,6 +77,9 @@ import { areObjectsEqual, deepToRaw } from "~/utils/global.utils";
 import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
 import { CreateEditFacility } from "~/types/facilities";
+import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
+
+const statusLoadingFilter = useStatusLoadingFilter();
 
 const emit = defineEmits(["close", "hasChanged", "save", "showPreview"]);
 const props = defineProps({
@@ -268,6 +280,7 @@ const create = async () => {
 };
 
 const save = async () => {
+  console.log(item.value);
   let endpoint = `${props.endpoint}/${props.itemId}`;
   if (props.overwriteUpdateItemEndpoint) {
     endpoint = props.overwriteUpdateItemEndpoint;
@@ -285,7 +298,7 @@ const save = async () => {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
     itemHastChanged.value = false;
     emit("save");
-    if(item.value?.is_active === false) {
+    if (item.value?.is_active === false) {
       confirmSaveDialogOpen.value = true;
     }
     if (props.enableCache && props.cacheKey) {
@@ -394,12 +407,10 @@ watch(
       (oldZip && newZip !== oldZip) ||
       (oldTown && newTown !== oldTown)
     ) {
-      emit("hasChanged");
       checkCachedItem();
     }
   }
 );
-
 onMounted(async () => {
   const cachedItem =
     props.enableCache &&

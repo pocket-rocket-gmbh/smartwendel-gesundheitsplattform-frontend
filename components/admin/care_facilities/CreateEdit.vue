@@ -202,7 +202,7 @@
                 <span>{{ steps["services"].tooltip }}</span>
               </v-tooltip>
             </div>
-      
+
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_service"

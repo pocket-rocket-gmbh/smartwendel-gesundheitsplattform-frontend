@@ -402,8 +402,8 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-
           <div id="address">
+            {{ slotProps.item.course_outside_facility }}
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{
                 steps["address"].label
@@ -411,12 +411,13 @@
               <v-checkbox
                 hide-details
                 density="compact"
-                :model-value="courseHasAnotherAdress"
-                @click="courseHasAnotherAdress = !courseHasAnotherAdress"
+                :model-value="slotProps.item.course_outside_facility"
+                @click="slotProps.item.course_outside_facility = !slotProps.item.course_outside_facility"
                 label="Ja"
               />
             </div>
-            <div v-if="courseHasAnotherAdress">
+            
+            <div v-if="slotProps.item.course_outside_facility">
               <div class="field">
                 <v-text-field
                   class="text-field"
@@ -607,8 +608,6 @@ const createEditRef = ref();
 
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
-
-const courseHasAnotherAdress = ref(false);
 
 const textOptions = ref({
   debug: false,

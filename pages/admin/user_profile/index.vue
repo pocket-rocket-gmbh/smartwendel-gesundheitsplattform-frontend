@@ -116,6 +116,14 @@
             >
               Passwort ändern
             </v-btn>
+            <div class="mt-3" v-if="currentUser?.password_changed_at">
+              <span
+                ><i
+                  >Letzte Änderung am:
+                  {{ useDatetime().parseDatetime(currentUser?.password_changed_at) }}</i
+                >
+              </span>
+            </div>
           </v-col>
         </v-row>
       </div>
