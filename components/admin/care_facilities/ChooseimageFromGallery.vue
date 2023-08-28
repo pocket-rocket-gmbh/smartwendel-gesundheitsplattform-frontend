@@ -71,7 +71,7 @@ const getImagesFromGallery = () => {
     },
   })
     .then((response) => {
-      const imagesBasePath = `/_nuxt/assets/images/cover-images-gallery/${props.facilityKind}/`;
+      const imagesBasePath = `/assets/images/cover-images-gallery/${props.facilityKind}/`;
       const imagePaths = response.data.value.map((image: string) => {
         return `${imagesBasePath}${image}`;
       });

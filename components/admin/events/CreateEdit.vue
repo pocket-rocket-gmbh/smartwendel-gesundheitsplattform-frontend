@@ -461,7 +461,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "11.	Bitte gib hier den Namen des Veranstalters an *",
     tooltip:
       "Der Name des Veranstalters wird in deinem des Veranstaltungsprofil zu sehen sein.",
-    description: "Name der Kursleitung *",
+    description: "Name des Veranstalters *",
     props: ["name_instructor"],
   },
   address: {
