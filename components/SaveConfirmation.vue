@@ -19,11 +19,11 @@
             class="text-h5 pa-10 d-flex flex-column align-center justify-center"
           >
             <span class="mb-5 text-h5"> Vielen Dank! </span>
-            <span> Deine Einrichtung wurde online geschaltet! </span>
+            <span>{{ itemkind }} wurde online geschaltet! </span>
           </div>
 
           <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
-            <a :href="`/public/care_facilities/${$props.item.id}`"
+            <a :href="`/public/care_facilities/${$props.item.id}`" target="_blank"
               ><v-btn
                 variant="outlined"
                 class="save-buttons"
@@ -35,9 +35,10 @@
             >
           </div>
         </div>
-        <div v-else class="text-h5 pa-10 d-flex flex-column justify-center align-center">
+        <div v-else class="text-h5 pa-5 d-flex flex-column justify-center align-center">
+          <span class="mb-5"><v-icon color="primary">mdi-check-outline</v-icon></span>
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
-          <span>Möchtest du deine Einrichtung veröffentlichen?</span>
+          <span>Möchtest du {{ itemkind }} veröffentlichen?</span>
         </div>
       </v-card-text>
       <v-divider></v-divider>
@@ -91,6 +92,18 @@ export default defineComponent({
       emit("close");
     };
 
+    const itemkind = computed(() => {
+      if (props.item.kind === "facility") {
+        return "deine Einrichtung";
+      } else if (props.item.kind === "course") {
+        return "dein Kurs";
+      } else if (props.item.kind === "event") {
+        return "deine Veranstaltung";
+      } else if(props.item.kind === "news") {
+        return "dein Beitrag";
+      }
+    });
+
     const itemId = props.item.id;
 
     const config = {
@@ -131,6 +144,7 @@ export default defineComponent({
       confettiReward,
       finished,
       itemId,
+      itemkind
     };
   },
 });

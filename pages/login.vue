@@ -5,7 +5,13 @@
         <v-card :class="['pa-6', { shake: animated }]">
           <img class="is-fullwidth" src="~/assets/images/logo.png" />
           <div class="mb-3">
-            <v-text-field v-model="email" class="pt-6" label="E-Mail Adresse" hide-details="auto" @keyup.enter="auth" />
+            <v-text-field
+              v-model="email"
+              class="pt-6"
+              label="E-Mail Adresse"
+              hide-details="auto"
+              @keyup.enter="auth"
+            />
           </div>
           <div class="mb-3">
             <v-text-field
@@ -17,9 +23,14 @@
             />
           </div>
           <v-btn color="primary" block depressed type="submit">Login</v-btn>
-          <nuxt-link to="/password_forgotten"><div align="center" class="mt-2">Passwort vergessen?</div></nuxt-link>
+          <div @click="emailAlreadyGiven()" align="center" class="mt-2 is-clickable">
+            Passwort vergessen?
+          </div>
+
           <nuxt-link to="/register"
-            ><div align="center" class="mt-6">Noch keinen Account? Jetzt registrieren!</div></nuxt-link
+            ><div align="center" class="mt-6">
+              Noch keinen Account? Jetzt registrieren!
+            </div></nuxt-link
           >
         </v-card>
       </v-form>
@@ -46,6 +57,20 @@ export default defineComponent({
     const privateApi = usePrivateApi();
     const userStore = useUserStore();
 
+    const emailAlreadyGiven = () => {
+      if (email.value?.length > 0) {
+        router.push({
+          path: "/password_forgotten",
+          query: { email: email.value },
+        });
+      } else {
+        return router.push({
+          path: "/password_forgotten",
+          query: null,
+        });
+      }
+    };
+
     const auth = async () => {
       loading.value = true;
       errors.value = "";
@@ -57,7 +82,10 @@ export default defineComponent({
         const jwt = result.data.jwt_token;
 
         localStorage.setItem("auth._token.jwt", jwt);
-        localStorage.setItem("smartwendelerland_gesundheitsplattform._remembered_email", email.value);
+        localStorage.setItem(
+          "smartwendelerland_gesundheitsplattform._remembered_email",
+          email.value
+        );
 
         // set user
         userStore.currentUser = result.data.user;
@@ -95,7 +123,9 @@ export default defineComponent({
     onMounted(() => {
       lastRoute.value = router.options.history.state.back as null;
       if (process.client) {
-        const rememberedEmail = localStorage.getItem("smartwendelerland_gesundheitsplattform._remembered_email");
+        const rememberedEmail = localStorage.getItem(
+          "smartwendelerland_gesundheitsplattform._remembered_email"
+        );
         if (rememberedEmail) {
           setTimeout(() => {
             email.value = rememberedEmail;
@@ -111,6 +141,7 @@ export default defineComponent({
       animated,
       errors,
       auth,
+      emailAlreadyGiven,
     };
   },
 });

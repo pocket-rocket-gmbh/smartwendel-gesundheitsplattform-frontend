@@ -168,6 +168,7 @@ const eventsCacheKey = computed(() => {
 const handleCreateEditClose = () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
+  dataTableRef?.value?.getItems();
   dataTableRef.value?.resetActiveItems();
   newEventFromCache.value = !!localStorage.getItem("events_new");
 };

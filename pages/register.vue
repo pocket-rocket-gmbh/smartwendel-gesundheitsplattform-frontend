@@ -121,9 +121,13 @@
           >
         </v-form>
         <div v-if="registerSuccessful" align="center">
-          <div>
-            Deine Registrierung war erfolgreich.<br />Wir haben Dir soeben eine E-Mail mit
-            weiteren Anweisungen und einem temporären Passwort geschickt.
+          <div class="d-flex flex-column align-center justify-center">
+            <span class="text-h5 font-weight-bold mb-10">
+              Vielen Dank für deine Registrierung!
+            </span>
+            <span class="text-h6">
+              Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+            </span>
           </div>
           <div class="mt-5">
             <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>

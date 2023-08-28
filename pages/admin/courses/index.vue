@@ -146,6 +146,7 @@ const itemPlaceholder = ref({
   phone: "",
   community: "",
   community_id: "",
+  course_outside_facility: false,
 });
 
 const openCreateEditDialog = (item: any) => {
@@ -170,6 +171,7 @@ const coursesCacheKey = computed(() => {
 const handleCreateEditClose = () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
+  dataTableRef?.value?.getItems();
   dataTableRef.value?.resetActiveItems();
   newCourseFromCache.value = !!localStorage.getItem("courses_new");
 };

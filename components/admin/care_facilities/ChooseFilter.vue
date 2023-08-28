@@ -4,10 +4,18 @@
     v-bind:model-value="filterSelected"
     :rules="[filterSelected || 'Erforderlich']"
   ></v-checkbox>
-  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable>
+  <v-alert
+    class="my-5"
+    v-if="!filterSelected && !loadingFilters"
+    type="info"
+    density="compact"
+    closable
+  >
     Bitte mindestens einen Filter auswählen
   </v-alert>
-  <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)">
+  <LoadingSpinner
+    v-if="loadingFilters && (!availableFilters || !availableFilters.length)"
+  >
     Filter werden geladen ...
   </LoadingSpinner>
   <div class="choose-facility-type" v-else>
@@ -32,23 +40,24 @@
       </template>
       <template #content>
         <div v-if="mainFilter.name === 'Dienstleistungsbereich'">
-            <v-alert type="info" color="grey" class="mt-2">
-              <div class="d-flex align-center filter-request">
-                <div class="py-1">
-                  <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
-                  </span>
-                  <span>
-                    <a
-                      class="is-white text-decoration-underline"
-                      :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
-                      >HIER</a
-                    >
-                  </span>
-                </div>
+          <v-alert type="info" color="grey" class="mt-2">
+            <div class="d-flex align-center filter-request">
+              <div class="py-1">
+                <span
+                  >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein
+                  Unternehmen nicht zu finden ist, kontaktiere uns bitte
+                </span>
+                <span>
+                  <a
+                    class="is-white text-decoration-underline"
+                    :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
+                    >HIER</a
+                  >
+                </span>
               </div>
-            </v-alert>
-          </div>
+            </div>
+          </v-alert>
+        </div>
         <div class="main-class">
           <div class="filter-options" v-for="option in mainFilter.next">
             <div
@@ -72,7 +81,9 @@
             </div>
           </div>
         </div>
-        <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
+        <LoadingSpinner v-if="loadingFilters"
+          >Leistung wird hinzugefügt...
+        </LoadingSpinner>
       </template>
     </CollapsibleItem>
   </div>
@@ -81,6 +92,7 @@
 <script setup lang="ts">
 import { ResultStatus } from "~/types/serverCallResult";
 import { FilterKind, FilterType } from "~/store/searchFilter";
+import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const props = defineProps<{
   preSetTags: string[];
@@ -99,6 +111,15 @@ type Filter = { id: string; name: string; next?: Filter[] };
 const selectedFilter = ref<Filter>();
 const availableFilters = ref<Filter[]>([]);
 
+const statusLoadingFilter = useStatusLoadingFilter();
+
+const loadingFilters = computed(() => {
+  if (props.filterType === "filter_facility") {
+    return statusLoadingFilter.categoryLoaded;
+  }
+  return statusLoadingFilter.servicesLoaded;
+});
+
 const flatFilterArray = (filterArray: Filter[]) => {
   if (!filterArray) return [];
   const flat: Filter[] = filterArray.reduce((prev, curr) => {
@@ -110,15 +131,15 @@ const flatFilterArray = (filterArray: Filter[]) => {
 
 const filterSelected = computed(() => {
   const flat = flatFilterArray(availableFilters.value);
-  const filterOfCategoryIsSet = flat.some((item) => !!props.preSetTags.find((tag) => tag === item.id));
+  const filterOfCategoryIsSet = flat.some(
+    (item) => !!props.preSetTags.find((tag) => tag === item.id)
+  );
   emit("areFiltersSet", filterOfCategoryIsSet, props.filterType);
   return filterOfCategoryIsSet;
 });
 
 const mainFilters = ref([]);
 const expandIds = ref<string[]>([]);
-
-const loadingFilters = ref(false);
 
 const newServiceName = ref("");
 
@@ -165,7 +186,9 @@ const getTagName = (mainFilter: Filter, filterId: string) => {
 };
 
 const enableAllTags = (filter: Filter) => {
-  const updatedTags = [...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)])];
+  const updatedTags = [
+    ...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)]),
+  ];
   emit("setTags", updatedTags);
 };
 
@@ -254,7 +277,10 @@ const handleCreateNewService = async (parentId: string, name: string) => {
   api.setBaseApi(usePrivateApi());
   api.setEndpoint(`tag_categories`);
 
-  const result = await api.createItem({ name, parent_id: parentId }, `Erfolgreich erstellt`);
+  const result = await api.createItem(
+    { name, parent_id: parentId },
+    `Erfolgreich erstellt`
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     newServiceName.value = "";
@@ -266,10 +292,17 @@ const handleCreateNewService = async (parentId: string, name: string) => {
 };
 
 const reloadFilters = async () => {
-  loadingFilters.value = true;
+  if (props.filterType === "filter_facility") {
+    statusLoadingFilter.categoryLoaded = true;
+  } else {
+    statusLoadingFilter.servicesLoaded = true;
+  }
+
   mainFilters.value = await getMainFilters(props.filterType, props.filterKind);
 
-  const nextFiltersPromises = mainFilters.value.map((mainFilter) => getFilterOptions(mainFilter.id));
+  const nextFiltersPromises = mainFilters.value.map((mainFilter) =>
+    getFilterOptions(mainFilter.id)
+  );
 
   const allNextFilters = await Promise.all(nextFiltersPromises);
   availableFilters.value = [];
@@ -277,7 +310,11 @@ const reloadFilters = async () => {
     availableFilters.value.push({ ...mainFilters.value[i], next: nextFilters });
   });
 
-  loadingFilters.value = false;
+  if (props.filterType === "filter_facility") {
+    statusLoadingFilter.categoryLoaded = false;
+  } else {
+    statusLoadingFilter.servicesLoaded = false;
+  }
 };
 
 const handleExpandToggle = (selectedId: string) => {

@@ -144,6 +144,7 @@ const cacheKey = computed(() => {
 const handleCreateEditClose = () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
+  dataTableRef?.value?.getItems();
   dataTableRef.value?.resetActiveItems();
   newNewsFromCache.value = !!localStorage.getItem("facilities_new");
 };
