@@ -1,7 +1,4 @@
-export function debounce<F extends (...params: any[]) => void>(
-  fn: F,
-  delay = 500
-) {
+export function debounce<F extends (...params: any[]) => void>(fn: F, delay = 500) {
   let timeoutID: number = null;
   return function (this: any, ...args: any[]) {
     clearTimeout(timeoutID);
@@ -23,19 +20,17 @@ export function areArraysEqual(arr1: any[], arr2: any[]): boolean {
   return true;
 }
 
-export function areObjectsEqual(
-  obj1: Record<string, any>,
-  obj2: Record<string, any>,
-  excludeKey?: string
-): boolean {
-  const keys1 = Object.keys(obj1).filter((item) => item !== excludeKey);
-  const keys2 = Object.keys(obj2).filter((item) => item !== excludeKey);
+export function areObjectsEqual(obj1: Record<string, any>, obj2: Record<string, any>, excludeKeys?: string[]): boolean {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
 
   if (keys1.length !== keys2.length) {
     return false;
   }
 
   for (const key of keys1) {
+    if (excludeKeys && excludeKeys.includes(key)) continue;
+    
     if (obj1[key] !== obj2[key]) {
       if (Array.isArray(obj1[key]) && Array.isArray(obj1[key])) {
         if (areArraysEqual(obj1[key], obj2[key])) {
@@ -43,7 +38,7 @@ export function areObjectsEqual(
         }
       }
       if (typeof obj1[key] === "object" && typeof obj2[key] === "object") {
-        if (areObjectsEqual(obj1[key], obj2[key], excludeKey)) {
+        if (areObjectsEqual(obj1[key], obj2[key], excludeKeys)) {
           continue;
         }
       }
