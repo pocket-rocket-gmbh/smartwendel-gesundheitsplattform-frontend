@@ -40,7 +40,7 @@
                   <img
                     src="~/assets/images/sub-footer/logo-footer-wnd.png"
                     class="is-clickable logo-footer"
-                    :class="[$device.isMobile ? 'mobile-height' : 'desktop-height']"
+                    :class="[$device?.isMobile ? 'mobile-height' : 'desktop-height']"
                   />
                 </a>
               </v-col>
