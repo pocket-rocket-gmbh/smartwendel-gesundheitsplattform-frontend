@@ -71,7 +71,7 @@ const getImagesFromGallery = () => {
     },
   })
     .then((response) => {
-      const imagesBasePath = `/assets/images/cover-images-gallery/${props.facilityKind}/`;
+      const imagesBasePath = `/images/cover-images-gallery/${props.facilityKind}/`;
       const imagePaths = response.data.value.map((image: string) => {
         return `${imagesBasePath}${image}`;
       });
@@ -84,7 +84,7 @@ const getImagesFromGallery = () => {
 };
 
 const logoimages = ref([logo1, logo2, logo3]);
-const coverImages = ref([]);
+const coverImages = ref<string[]>([]);
 
 const images = computed(() => {
   if (props.galleryKind === "logo") {
