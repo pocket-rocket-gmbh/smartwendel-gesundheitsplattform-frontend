@@ -428,7 +428,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   services: {
     label:
-      "5. Ordne deiner Veranstaltung passende Schlagwörter zu, um ihn besser auffindbar zu machen",
+      "5. Ordne deiner Veranstaltung passende Schlagwörter zu, um ihn besser auffindbar zu machen.",
     description: "Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
@@ -444,7 +444,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   website: {
     label:
-      "8.	Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können",
+      "8.	Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
     tooltip:
       "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Webseite",
@@ -458,14 +458,14 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   leader: {
-    label: "11.	Bitte gib hier den Namen des Veranstalters an *",
+    label: "11.	Bitte gib hier den Namen des Veranstalters an. *",
     tooltip:
       "Der Name des Veranstalters wird in deinem des Veranstaltungsprofil zu sehen sein.",
     description: "Name des Veranstalters *",
     props: ["name_instructor"],
   },
   address: {
-    label: "12. Findet die Veranstaltung außerhalb deiner Einrichtung statt?",
+    label: "12. Findet die Veranstaltung außerhalb deiner Einrichtung statt?.",
     tooltip: "",
     description: "Adresse",
     props: ["street", "zip", "community_id", "town"],
@@ -689,24 +689,6 @@ onMounted(async () => {
 </style>
 
 <style lang="css">
-.text-field .v-label {
-  font-size: 20px !important;
-}
-
-.text-field input,
-.text-field input {
-  padding-top: 10px !important;
-}
-
-.v-select .v-select__selection-text {
-  padding-top: 10px !important;
-}
-
-.v-textarea .v-field__input {
-  margin-top: 20px !important;
-  padding-top: 20px !important;
-}
-
 .dp__selection_preview {
   display: none;
 }

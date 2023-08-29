@@ -41,7 +41,7 @@ export default defineComponent({
     listApi.setBaseApi(usePublicApi());
 
     const goToEvents = () => {
-      router.push({ path: "/public/search/events" });
+      router.push({ path: "/public/search/courses" });
     };
 
     const getCoursesArticles = async () => {

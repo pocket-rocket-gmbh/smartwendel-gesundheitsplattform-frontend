@@ -8,7 +8,7 @@
               <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
             </a>
           </div>
-          <div class="align-center d-noe d-lg-flex mx-2">
+          <div class="align-center d-none d-lg-flex mx-2">
             <div
               class="categories-wrapper is-clickable d-flex"
               v-for="(category, index) in categories"
@@ -202,6 +202,13 @@
             @click.prevent="goTo('/public/search/events')"
           >
             Kurse
+          </a>
+          <a
+            href="/public/search/events"
+            class="is-clickable"
+            @click.prevent="goTo('/public/search/events')"
+          >
+            Veranstaltungen
           </a>
         </template>
       </div>

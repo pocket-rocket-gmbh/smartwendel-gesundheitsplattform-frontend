@@ -95,7 +95,7 @@ const router = useRouter();
 const fields = [
   {
     prop: "is_active",
-    text: "Aktiv",
+    text: "Offline/Online",
     endpoint: "care_facilities",
     type: "switch",
     tooltip: "Hiermit kannst du deinen Kurs/deine Veranstaltung aktivieren und deaktivieren",

@@ -466,7 +466,7 @@ const stepNames = [
 type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
-    label: "1. Hinterlege den Namen deiner Einrichtung *",
+    label: "1. Hinterlege den Namen deiner Einrichtung. *",
     description: "Name *",
     props: ["name"],
   },
@@ -503,7 +503,7 @@ const steps: CreateEditSteps<StepNames> = {
     checkHandler: isDescriptionEmpty,
   },
   category: {
-    label: "6. Bitte wähle deine Branche aus *",
+    label: "6. Bitte wähle deine Branche aus. *",
     description: "Branchenzugehörigkeit *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
@@ -804,24 +804,6 @@ onMounted(async () => {
 </style>
 
 <style lang="css">
-.text-field .v-label {
-  font-size: 15px !important;
-}
-
-.text-field input,
-.text-field input {
-  padding-top: 30px !important;
-}
-
-.v-select .v-select__selection-text {
-  padding-top: 30px !important;
-}
-
-.v-textarea .v-field__input {
-  margin-top: 20px !important;
-  padding-top: 20px !important;
-}
-
 .dp__selection_preview {
   display: none;
 }

@@ -70,7 +70,7 @@
               :item = slotProps.item
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
-              label="Cover Bild"
+              label="Titelbild"
               @setImage="setCoverBild"
               @delete-image="handleDeleteCover"
               :min-size="true"
@@ -224,9 +224,9 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name"],
   },
   photo: {
-    label: "2. Hier kannst du passende Bild zu deinem Beitrag hochladen. * ",
+    label: "2. Hier kannst du ein passendes Titelbild zu deinem Beitrag hochladen. * ",
     tooltip: "",
-    description: "Fotogalerie",
+    description: "Titelbild",
     props: ["image_url", "file"],
     justSome: true,
   },
@@ -255,7 +255,7 @@ const steps: CreateEditSteps<StepNames> = {
   }, */
   services: {
     label:
-      "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen",
+      "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen.",
     tooltip: "",
     description: "Schlagwörter",
     props: ["tag_category_ids"],
@@ -416,24 +416,6 @@ const goToField = (n: string) => {
 </style>
 
 <style lang="css">
-.text-field .v-label {
-  font-size: 20px !important;
-}
-
-.text-field input,
-.text-field input {
-  padding-top: 10px !important;
-}
-
-.v-select .v-select__selection-text {
-  padding-top: 10px !important;
-}
-
-.v-textarea .v-field__input {
-  margin-top: 20px !important;
-  padding-top: 20px !important;
-}
-
 .dp__selection_preview {
   display: none;
 }

@@ -525,7 +525,7 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   gallery: {
-    label: "3. Hier kannst du weitere Bilder hochladen",
+    label: "3. Hier kannst du weitere Bilder hochladen.",
     tooltip: "",
     description: "Fotogalerie",
     props: ["sanitized_images", "images"],
@@ -542,7 +542,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   category: {
     label:
-      "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu * ",
+      "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
     tooltip: "Mehrfachauswahl möglich.",
     description: "Branchenzugehörigkeit *",
     props: ["tag_category_ids"],
@@ -566,7 +566,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   certificates: {
     label:
-      "8.	Bitte lade das Zertifikat der Zentralen Prüfungsstelle Prävention (ZPP) hoch, wenn es sich um einen von der gesetzlichen Krankenkasse geförderten Präventionskurs handelt",
+      "8.	Bitte lade das Zertifikat der Zentralen Prüfungsstelle Prävention (ZPP) hoch, wenn es sich um einen von der gesetzlichen Krankenkasse geförderten Präventionskurs handelt.",
     tooltip:
       "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
     description: "Zertifikate",
@@ -574,7 +574,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   website: {
     label:
-      "9. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können",
+      "9. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
     tooltip:
       "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
@@ -589,14 +589,14 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   leader: {
-    label: "11.	Bitte gib hier den Namen der Kursleitung an *",
+    label: "11.	Bitte gib hier den Namen der Kursleitung an. *",
     tooltip:
       "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
     description: "Name der Kursleitung *",
     props: ["name_instructor"],
   },
   address: {
-    label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
+    label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?.",
     tooltip: "",
     description: "Adresse",
     props: ["street", "zip", "community_id", "town"],
@@ -818,24 +818,6 @@ onMounted(async () => {
 </style>
 
 <style lang="css">
-.text-field .v-label {
-  font-size: 20px !important;
-}
-
-.text-field input,
-.text-field input {
-  padding-top: 30px !important;
-}
-
-.v-select .v-select__selection-text {
-  padding-top: 30px !important;
-}
-
-.v-textarea .v-field__input {
-  margin-top: 20px !important;
-  padding-top: 20px !important;
-}
-
 .dp__selection_preview {
   display: none;
 }

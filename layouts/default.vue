@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <template v-if="loading"></template>
-    <PublicPasswordProtection v-else-if="!authenticated" />
+    <ClientOnly v-else-if="!authenticated">
+      <PublicPasswordProtection  />
+    </ClientOnly>
     <template v-else>
       <ClientOnly>
         <ClientSnackbar />

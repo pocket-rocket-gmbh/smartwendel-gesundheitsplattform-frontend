@@ -190,10 +190,4 @@ const deleteImage = () => {
 .img-container
   max-width: 300px
 
-.text-field .v-label
-  font-size: 20px!important
-
-.text-field input,
-.text-field input
-  padding-top: 10px!important
 </style>

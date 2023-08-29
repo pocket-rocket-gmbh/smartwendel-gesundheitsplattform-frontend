@@ -346,14 +346,6 @@ onMounted(() => {
 });
 </script>
 <style lang="sass">
-
-.text-field .v-label
-  font-size: 20px!important
-
-.text-field input,
-.text-field input
-  padding-top: 10px!important
-
 .close
   position: absolute
   top: -10px

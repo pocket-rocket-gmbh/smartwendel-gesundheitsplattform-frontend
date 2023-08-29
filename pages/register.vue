@@ -2,7 +2,26 @@
   <v-row class="my-15">
     <v-col sm="3" md="4" offset-sm="4">
       <v-card elevation="10" :class="['card', { shake: animated }]">
-        <img class="is-fullwidth" src="~/assets/images/logo.png" />
+        <div>
+          <div class="d-flex justify-center align-center">
+            <img src="~/assets/images/logo.png" width="300" />
+          </div>
+          <div class="mt-5 d-flex flex-column">
+            <span class="">
+              Du bist im Landkreis ansässiger Gesundheitsanbieter:in und möchtest dein
+              Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen?
+              Dann laden wir dich herzlich ein, dich zu registrieren!</span
+            >
+            <span class="mt-5">
+              Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und
+              in wenigen Schritten auf der Plattform darstellen und veröffentlichen.
+              Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
+              dein Angebot und steigerst deine Bekanntheit bei der einheimischen
+              Bevölkerung. Ganz gleich ob es um ein behördliches, gemeinnütziges,
+              ehrenamtliches oder gewerbliches Angebot handelt.
+            </span>
+          </div>
+        </div>
         <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
           <div class="my-5">
             <h2 class="mb-3">Meine Einrichtung</h2>
@@ -142,6 +161,7 @@
         </div>
       </v-card>
     </v-col>
+    
   </v-row>
 </template>
 
