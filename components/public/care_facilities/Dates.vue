@@ -5,7 +5,11 @@
   >
     <h2 class="is-primary is-uppercase">Termine</h2>
     <p>
-      <i>{{ careFacility.event_dates.length }} Termine gefunden</i>
+      <i
+        >{{ careFacility.event_dates.length }}
+        <span v-if="careFacility.event_dates.length === 1"> Termin gefunden </span>
+        <span v-else> Termine gefunden </span></i
+      >
     </p>
     <div class="flex-column">
       <div class="my-3">

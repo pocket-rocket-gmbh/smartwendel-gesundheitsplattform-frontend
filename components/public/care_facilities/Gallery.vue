@@ -2,7 +2,7 @@
   <div v-if="showingGallery">
     <div class="curtain" />
     <div class="img-gallery">
-      <img class="close is-clickable" src="~/assets/icons/icon-times.svg" height="20" @click="emitClose()" />
+      <img class="close-btn is-clickable" src="~/assets/icons/icon-times.svg" height="20" @click="emitClose()" />
       <v-carousel hide-delimiters progress="primary" show-arrows="hover">
         <v-carousel-item v-for="(image, index) in careFacility.sanitized_images" :key="index" :src="image?.url" cover />
       </v-carousel>

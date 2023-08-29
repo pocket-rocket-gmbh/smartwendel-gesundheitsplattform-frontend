@@ -15,12 +15,15 @@
       >
         <v-img
           :src="image"
+          :key="index"
           aspect-ratio="1"
           max-height="150px"
           max-width="200px"
+          :class="[{ 'is-selected' : index === selectedimage }]"
           class="is-clickable gallery-image"
-          @click="selectImage(image)"
+          @click="selectImage(index, image)"
         >
+        <div class="selected" v-if="index === selectedimage"><v-icon color="primary" size="60px">mdi-checkbox-marked-circle-outline</v-icon></div>
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
               <v-progress-circular
@@ -113,7 +116,9 @@ const fileToBase64 = (filePath: string) => {
   });
 };
 
-const selectImage = async (imagePath: string) => {
+const selectedimage = ref(null);
+const selectImage = async (index: number, imagePath: string) => {
+  selectedimage.value = index;
   const imageBlob = await fileToBase64(imagePath);
   setImage(imageBlob);
 };
@@ -130,6 +135,14 @@ onMounted(() => {
 @import "@/assets/sass/main.sass"
 
 .gallery-image:hover
+  opacity: 0.4
+
+.selected
+  position: absolute
+  left: 35%
+  top: 30%
+
+.is-selected
   opacity: 0.5
 
 .gallery-icon

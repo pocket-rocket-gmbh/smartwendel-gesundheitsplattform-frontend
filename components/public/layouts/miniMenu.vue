@@ -30,7 +30,7 @@
             <v-icon class="mr-2">mdi-cog</v-icon>
             Admin-Bereich
           </v-list-item>
-          <v-list-item class="is-clicable" @click="closeMenuAndRouteTo(`/terms_of_use`)">
+          <v-list-item class="is-clicable" @click="closeMenuAndRouteTo(`/rules_of_conduct`)">
             <v-icon class="mr-2">mdi-note-check-outline</v-icon>
             Nutzungsbedingungen
           </v-list-item>

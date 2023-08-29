@@ -1,5 +1,10 @@
 <template>
-  <div v-if="careFacility?.logo_url" :class="['image-area mt-5', { 'has-logo': careFacility.logo_url || careFacility.logo }]">
+  <div
+    :class="[
+      'image-area mt-5',
+      { 'has-logo': careFacility.logo_url || careFacility.logo },
+    ]"
+  >
     <v-row class="image-row">
       <v-col class="d-flex flex-wrap align-content-bottom justify-center">
         <img
@@ -9,8 +14,11 @@
           :src="careFacility.image_url || careFacility.file"
         />
       </v-col>
-
-      <v-col v-if="careFacility?.sanitized_images?.[0]" md="4" class="d-flex flex-wrap align-content-center justify-end">
+      <v-col
+        v-if="careFacility?.sanitized_images?.[0]"
+        md="4"
+        class="d-flex flex-wrap align-content-center justify-end"
+      >
         <v-row>
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
             <img class="image right-top" :src="careFacility?.sanitized_images?.[0].url" />
@@ -23,14 +31,18 @@
               v-if="careFacility?.sanitized_images?.[1]"
               :src="careFacility?.sanitized_images?.[1].url"
             />
-            <v-btn class="show-more" v-if="careFacility.sanitized_images.length > 0" @click="showGallery()">
+            <v-btn
+              class="show-more"
+              v-if="careFacility.sanitized_images.length > 0"
+              @click="showGallery()"
+            >
               alle Bilder zeigen</v-btn
             >
           </v-col>
         </v-row>
       </v-col>
     </v-row>
-    <div class="logo" v-if="careFacility.logo|| careFacility.logo_url">
+    <div class="logo" v-if="careFacility.logo || careFacility.logo_url">
       <img :src="careFacility.logo ? careFacility.logo : careFacility.logo_url" />
     </div>
   </div>
@@ -41,26 +53,19 @@
   />
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  props: {
-    careFacility: {
-      type: Object,
-      required: true,
-    },
-  },
-  setup() {
-    const showingGallery = ref(false);
-    const showGallery = () => {
-      showingGallery.value = true;
-    };
-
-    return {
-      showingGallery,
-      showGallery,
-    };
+<script lang="ts" setup>
+const props = defineProps({
+  careFacility: {
+    type: Object,
+    required: true,
   },
 });
+
+const showingGallery = ref(false);
+const showGallery = () => {
+  showingGallery.value = true;
+};
+const careFacility = ref(props.careFacility);
 </script>
 
 <style lang="sass" scoped>

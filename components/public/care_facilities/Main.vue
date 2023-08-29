@@ -7,7 +7,7 @@
           <v-icon size="x-large" class="pl-8" color="primary">mdi-check-decagram-outline</v-icon>
         </span>
       </v-col>
-      <v-col md="4" class="info-bar d-flex align-center" v-if="careFacility?.kind === 'news'">
+      <v-col class="info-bar d-flex align-center" v-if="careFacility?.kind === 'news'">
         <v-row>
           <v-col class="bar-content d-flex align-center">
             <div class="d-flex align-center bar-item">
