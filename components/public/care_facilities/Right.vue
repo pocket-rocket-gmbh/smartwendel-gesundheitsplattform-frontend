@@ -23,6 +23,11 @@
         </div>
       </div>
     </div>
+    <div v-if="careFacility.opening_hours.length > 0">
+      <div v-for="opening in careFacility.opening_hours" :key="opening.day">
+        <span class="mr-2 is-primary">{{ opening.day }}</span><span>{{ opening.hours }}</span>
+      </div>
+    </div>
     <div class="my-4" v-if="careFacility?.website">
       <v-btn
         append-icon="mdi-open-in-new"
