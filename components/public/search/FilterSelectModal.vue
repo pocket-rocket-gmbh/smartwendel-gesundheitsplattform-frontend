@@ -31,11 +31,7 @@
                     >
                       {{ subItem.title }}
                     </div>
-                    <div
-                      v-if="subItem.next.length && expandedItemIds.includes(subItem.id)"
-                      class="tag-select"
-                      v-for="tag in subItem.next"
-                    >
+                    <div v-if="subItem.next.length && expandedItemIds.includes(subItem.id)" class="tag-select" v-for="tag in subItem.next">
                       <v-divider></v-divider>
                       <v-checkbox
                         :class="{ selected: isSelected(tag.id) }"
@@ -82,51 +78,31 @@ type FilterResponse = {
   id: string;
   name: string;
   menu_order: number;
+  parent_id: string;
 };
 
-const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number) => {
-  api.setEndpoint(`tag_categories?parent_id=${filter.id}`);
-  const options = {
-    page: 1,
-    per_page: 999,
-    sort_by: "menu_order",
-    sort_order: "asc",
-    searchQuery: null as any,
-    concat: false,
-    filters: [] as any,
-  };
+const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number, allFilters: FilterResponse[]) => {
+  if (layer === 4) {
+    return;
+  }
 
   const filterItem: CollapsibleListItem = {
     id: filter.id,
     title: filter.name,
     menuOrder: filter.menu_order,
     layer,
-    // additionalData: layer === 0 && {
-    //   type: "api",
-    //   endpoint: `tag_categories/${filter.id}`,
-    //   path: "resource.kind",
-    // },
-    // canAddAdditionalData: layer === 0,
     next: [],
   };
 
   arrayToAdd.push(filterItem);
 
-  const response = await api.retrieveCollection(options);
-  if (response.status === ResultStatus.FAILED) {
-    console.error(response);
-    throw "Api failure";
-  }
-  const filterItems: FilterResponse[] = response?.data?.resources;
-  if (!filterItems) {
-    console.error("No filterItems!");
-    return false;
+  const childFilterItems: FilterResponse[] = allFilters.filter((item) => item.parent_id === filter.id);
+
+  if (!childFilterItems.length) {
+    return;
   }
 
-  const nextLayerWave: any[] = filterItems.map((filterItemFromResponse) =>
-    getItemsAndNext(filterItemFromResponse, filterItem.next || [], layer + 1)
-  );
-  return Promise.all(nextLayerWave);
+  childFilterItems.forEach((childFilterItem) => getItemsAndNext(childFilterItem, filterItem.next || [], layer + 1, allFilters));
 };
 
 const getItems = async () => {
@@ -156,13 +132,11 @@ const getItems = async () => {
   }
 
   const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
+  const allFilters = await getAllFilters();
 
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
-  const nextLayerWavePromisesService = serviceFilters.map((filter) =>
-    getItemsAndNext(filter, tmpItemsForServiceList, 0)
-  );
-  await Promise.all([...nextLayerWavePromisesService]);
+  serviceFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters));
 
   itemsForServiceList.value = [...tmpItemsForServiceList];
 };
