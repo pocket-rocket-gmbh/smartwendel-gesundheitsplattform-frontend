@@ -59,15 +59,11 @@
         @items-loaded="handleItemsLoaded"
       />
 
-      <v-alert
-        v-if="!user.isAdmin()"
-        type="info"
-        density="compact"
-        closable
-        class="my-2 is-half-width"
-      >
-        Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.
-      </v-alert>
+      <div class="px-5" v-if="setupFinished">
+        <v-icon>mdi-arrow-up</v-icon>
+        <span> Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span>
+      </div>
+      
 
       <AdminCareFacilitiesCreateEdit
         v-if="createEditDialogOpen"
@@ -120,9 +116,9 @@ const userLoginCount = computed(() => {
 });
 
 const handleSaved = async () => {
-  passwordChanged.value = true
-  dataTableRef?.value.getItems()
-  useUser().reloadUser()
+  passwordChanged.value = true;
+  dataTableRef?.value.getItems();
+  useUser().reloadUser();
 };
 
 const fields = [
@@ -192,11 +188,11 @@ const cacheKey = computed(() => {
 });
 
 const handleItemsLoaded = (items: any[]) => {
-  const firstItemId = items[0]?.id
+  const firstItemId = items[0]?.id;
   if (firstItemId && passwordChanged.value) {
-    itemId.value = firstItemId
-    createEditDialogOpen.value = true
-    passwordChanged.value = false
+    itemId.value = firstItemId;
+    createEditDialogOpen.value = true;
+    passwordChanged.value = false;
   }
 
   itemsExist.value = !!items.length;
