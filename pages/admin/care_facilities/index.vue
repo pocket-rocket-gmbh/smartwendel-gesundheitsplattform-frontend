@@ -59,7 +59,7 @@
         @items-loaded="handleItemsLoaded"
       />
 
-      <div class="px-5" v-if="setupFinished">
+      <div class="px-5" v-if="setupFinished && !itemStatus && !user.isAdmin()">
         <v-icon>mdi-arrow-up</v-icon>
         <span> Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span>
       </div>
@@ -187,7 +187,11 @@ const cacheKey = computed(() => {
   return `facilities_${itemId.value.replaceAll("-", "_")}`;
 });
 
+
+const itemStatus = ref(null);
+
 const handleItemsLoaded = (items: any[]) => {
+  itemStatus.value = items[0].is_active;
   const firstItemId = items[0]?.id;
   if (firstItemId && passwordChanged.value) {
     itemId.value = firstItemId;

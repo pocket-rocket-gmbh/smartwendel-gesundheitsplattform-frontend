@@ -9,7 +9,7 @@
     <v-row>
       <v-col
         class="d-flex child-flex"
-        cols="3"
+        cols="2"
         v-for="(image, index) in images"
         :key="index"
       >
@@ -18,7 +18,7 @@
           aspect-ratio="1"
           max-height="150px"
           max-width="200px"
-          class="bg-grey-lighten-2 is-clickable gallery-image"
+          class="is-clickable gallery-image"
           @click="selectImage(image)"
         >
           <template v-slot:placeholder>

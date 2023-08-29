@@ -29,7 +29,8 @@
           </v-btn> TODO: Testen/Fixen -->
           <div
             v-if="
-              !statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded
+              !statusLoadingFilter.categoryLoaded &&
+              !statusLoadingFilter.servicesLoaded
             "
           >
             <v-btn
@@ -54,8 +55,14 @@
             <LoadingSpinner />
           </div>
 
-          <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
-            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
+          <v-alert
+            v-if="showSaveHint"
+            type="info"
+            density="compact"
+            class="save-hint"
+          >
+            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren
+            gehen!
           </v-alert>
         </v-card-actions>
       </v-form>
@@ -222,7 +229,10 @@ const create = async () => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.createItem(item.value, `Erfolgreich erstellt`);
+  const result = await createUpdateApi.createItem(
+    item.value,
+    `Erfolgreich erstellt`
+  );
   adminStore.loading = false;
   loadingItem.value = false;
   if (result.status === ResultStatus.SUCCESSFUL) {
@@ -280,7 +290,6 @@ const create = async () => {
 };
 
 const save = async () => {
-  console.log(item.value);
   let endpoint = `${props.endpoint}/${props.itemId}`;
   if (props.overwriteUpdateItemEndpoint) {
     endpoint = props.overwriteUpdateItemEndpoint;
@@ -289,7 +298,10 @@ const save = async () => {
   createUpdateApi.setEndpoint(endpoint);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.updateItem(item.value, "Erfolgreich aktualisiert");
+  const result = await createUpdateApi.updateItem(
+    item.value,
+    "Erfolgreich aktualisiert"
+  );
   adminStore.loading = false;
   loadingItem.value = false;
   triggerSaveHintTimeout();
@@ -358,7 +370,9 @@ const emitClose = () => {
     return;
   }
 
-  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
+  const confirmed = confirm(
+    "Wenn Sie fortfahren, werden Ihre Änderungen verworfen."
+  );
   if (confirmed) {
     item.value = { ...props.itemPlaceholder };
     emit("close");
@@ -436,7 +450,8 @@ onMounted(async () => {
   watch(
     () => item.value,
     () => {
-      if (!areObjectsEqual(deepToRaw(item.value), initialItem)) {
+      if (!areObjectsEqual(deepToRaw(item.value), initialItem, "is_active")) {
+        console.count("item changed to true");
         itemHastChanged.value = true;
       }
       form.value?.validate();
