@@ -144,6 +144,7 @@ onMounted(() => {
 
 .is-selected
   opacity: 0.5
+  border: 5px solid $primary-color
 
 .gallery-icon
   position: absolute

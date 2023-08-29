@@ -6,7 +6,7 @@
           <div class="d-flex justify-center align-center">
             <img src="~/assets/images/logo.png" width="300" />
           </div>
-          <div class="mt-5 d-flex flex-column">
+          <div class="mt-5 d-flex flex-column" v-if="!registerSuccessful">
             <span class="">
               Du bist im Landkreis ansässiger Gesundheitsanbieter:in und möchtest dein
               Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen?
@@ -145,7 +145,7 @@
             >Registrieren</v-btn
           >
         </v-form>
-        <div v-if="registerSuccessful" align="center">
+        <div v-if="registerSuccessful" align="center" class="mt-5">
           <div class="d-flex flex-column align-center justify-center">
             <span class="text-h5 font-weight-bold mb-10">
               Vielen Dank für deine Registrierung!
