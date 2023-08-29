@@ -403,7 +403,6 @@
           </div>
           <v-divider class="my-10"></v-divider>
           <div id="address">
-            {{ slotProps.item.course_outside_facility }}
             <div class="my-2">
               <span class="text-h5 font-weight-bold">{{
                 steps["address"].label
