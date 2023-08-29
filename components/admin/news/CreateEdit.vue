@@ -134,7 +134,7 @@
               class="text-field"
               v-model="slotProps.item.name_instructor"
               hide-details="auto"
-              label="Name / Vorname des Kursleiters"
+              label="Vor und Nachname des Autors"
               :rules="[rules.required]"
               :error-messages="
                 useErrors().checkAndMapErrors('name', slotProps.errors)

@@ -7,9 +7,6 @@
         :filter-kind="'event'"
       />
       <div class="container">
-        <div class="filters" v-if="showSearchFilter">
-          <PublicSearchTheFilter :filterKind="'event'" />
-        </div>
         <div class="results">
           <PublicSearchTheFilteredCareFacilities />
         </div>

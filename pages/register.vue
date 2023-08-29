@@ -38,6 +38,7 @@
                 disabled
               />
               <v-select
+                :disabled="careFacilityCommunityId.length === 0"
                 hide-details="auto"
                 v-model="careFacilityTown"
                 :items="getTownsByCommunityId(careFacilityCommunityId)"

@@ -49,7 +49,7 @@
               variant="outlined"
               class="save-buttons"
               elevation="0"
-              @click="emitClose()"
+              @click="emitCloser()"
             >
               Später veröffentlichen
             </v-btn>
