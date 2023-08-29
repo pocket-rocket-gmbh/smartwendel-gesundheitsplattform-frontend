@@ -1,12 +1,5 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    :width="size"
-    transition="dialog-bottom-transition"
-    @click:outside="emitClose()"
-    persistent
-    v-if="!editUserProfile"
-  >
+  <v-dialog v-model="dialog" :width="size" transition="dialog-bottom-transition" @click:outside="emitClose()" persistent v-if="!editUserProfile">
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <SaveConfirmation
         :item="item"
@@ -27,42 +20,18 @@
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
-          <div
-            v-if="
-              !statusLoadingFilter.categoryLoaded &&
-              !statusLoadingFilter.servicesLoaded
-            "
-          >
-            <v-btn
-              color="blue darken-1"
-              variant="outlined"
-              dark
-              @click="handleCta()"
-              :loading="loadingItem"
-            >
+          <div v-if="!statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded">
+            <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
               {{ saveButtonText }}
             </v-btn>
-            <v-btn
-              v-if="isCachedItem"
-              @click="handleResetCache()"
-              color="orange darken-1"
-              variant="outlined"
-            >
-              Zurücksetzen
-            </v-btn>
+            <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn>
           </div>
           <div v-else>
             <LoadingSpinner />
           </div>
 
-          <v-alert
-            v-if="showSaveHint"
-            type="info"
-            density="compact"
-            class="save-hint"
-          >
-            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren
-            gehen!
+          <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
+            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
           </v-alert>
         </v-card-actions>
       </v-form>
@@ -194,12 +163,7 @@ const handleCta = async () => {
 
   if (!valid) {
     if (props.enableCache && props.cacheKey) {
-      if (
-        !areObjectsEqual(
-          deepToRaw(item.value),
-          deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder)
-        )
-      ) {
+      if (!areObjectsEqual(deepToRaw(item.value), deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder))) {
         localStorage.setItem(props.cacheKey, JSON.stringify(toRaw(item.value)));
         checkCachedItem();
       }
@@ -229,10 +193,7 @@ const create = async () => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.createItem(
-    item.value,
-    `Erfolgreich erstellt`
-  );
+  const result = await createUpdateApi.createItem(item.value, `Erfolgreich erstellt`);
   adminStore.loading = false;
   loadingItem.value = false;
   if (result.status === ResultStatus.SUCCESSFUL) {
@@ -254,13 +215,12 @@ const create = async () => {
     if (item.value.offlineLocations && item.value.offlineLocations.length) {
       createUpdateApi.setEndpoint(`locations/care_facility/${facilityId}`);
 
-      const facilityLocationCreationPromises = item.value.offlineLocations.map(
-        (location) =>
-          createUpdateApi.createItem({
-            careFacility_id: facilityId,
-            longitude: location.longitude,
-            latitude: location.latitude,
-          })
+      const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
+        createUpdateApi.createItem({
+          careFacility_id: facilityId,
+          longitude: location.longitude,
+          latitude: location.latitude,
+        })
       );
 
       await Promise.all(facilityLocationCreationPromises);
@@ -298,10 +258,7 @@ const save = async () => {
   createUpdateApi.setEndpoint(endpoint);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.updateItem(
-    item.value,
-    "Erfolgreich aktualisiert"
-  );
+  const result = await createUpdateApi.updateItem(item.value, "Erfolgreich aktualisiert");
   adminStore.loading = false;
   loadingItem.value = false;
   triggerSaveHintTimeout();
@@ -322,11 +279,7 @@ const save = async () => {
 };
 
 const checkCachedItem = () => {
-  isCachedItem.value = !!(
-    props.enableCache &&
-    props.cacheKey &&
-    localStorage.getItem(props.cacheKey)
-  );
+  isCachedItem.value = !!(props.enableCache && props.cacheKey && localStorage.getItem(props.cacheKey));
 };
 
 const handleResetCache = async () => {
@@ -370,9 +323,7 @@ const emitClose = () => {
     return;
   }
 
-  const confirmed = confirm(
-    "Wenn Sie fortfahren, werden Ihre Änderungen verworfen."
-  );
+  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
     item.value = { ...props.itemPlaceholder };
     emit("close");
@@ -392,31 +343,14 @@ watch(
     () => item.value?.town,
   ],
   (
-    [
-      newPhone,
-      newEmail,
-      newStreet,
-      newAdditionalAddressInfo,
-      newCommunityId,
-      newZip,
-      newTown,
-    ],
-    [
-      oldPhone,
-      oldEmail,
-      oldStreet,
-      oldAdditionalAddressInfo,
-      oldCommunityId,
-      oldZip,
-      oldTown,
-    ]
+    [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
+    [oldPhone, oldEmail, oldStreet, oldAdditionalAddressInfo, oldCommunityId, oldZip, oldTown]
   ) => {
     if (
       (oldPhone && newPhone !== oldPhone) ||
       (oldEmail && newEmail !== oldEmail) ||
       (oldStreet && newStreet !== oldStreet) ||
-      (oldAdditionalAddressInfo &&
-        newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
+      (oldAdditionalAddressInfo && newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
       (oldCommunityId && newCommunityId !== oldCommunityId) ||
       (oldZip && newZip !== oldZip) ||
       (oldTown && newTown !== oldTown)
@@ -426,10 +360,7 @@ watch(
   }
 );
 onMounted(async () => {
-  const cachedItem =
-    props.enableCache &&
-    props.cacheKey &&
-    JSON.parse(localStorage.getItem(props.cacheKey));
+  const cachedItem = props.enableCache && props.cacheKey && JSON.parse(localStorage.getItem(props.cacheKey));
   if (!cachedItem) {
     if (props.itemId) {
       await getItem();
@@ -450,7 +381,7 @@ onMounted(async () => {
   watch(
     () => item.value,
     () => {
-      if (!areObjectsEqual(deepToRaw(item.value), initialItem, "is_active")) {
+      if (!areObjectsEqual(deepToRaw(item.value), initialItem, ["is_active", "updated_at"])) {
         itemHastChanged.value = true;
       }
       form.value?.validate();

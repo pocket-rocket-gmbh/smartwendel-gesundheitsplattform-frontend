@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth";
+import { useFilterStore } from "~/store/searchFilter";
 import { useAppStore } from "~/store/app";
 import { useTooltipsStore } from "~~/store/tooltips";
 

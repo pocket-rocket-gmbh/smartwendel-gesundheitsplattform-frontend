@@ -10,8 +10,11 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { useFilterStore } from "~/store/searchFilter";
+
 const route = useRoute();
 const loading = ref(false);
+const filterStore = useFilterStore();
 
 const categoryId = computed(() => {
   return route.params.id as string;
@@ -87,6 +90,7 @@ onMounted(() => {
   getSubCategory();
   getSubCategories();
   getSubSubCategories();
+  filterStore.resetAllFilters();
 });
 </script>
 
