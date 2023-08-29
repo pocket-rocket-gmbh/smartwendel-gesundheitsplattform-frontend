@@ -11,6 +11,7 @@ export type CreateEditFacility = Partial<
     }[];
     additional_address_info: string;
     community_id?: string;
+    is_active?: boolean;
   }
 >;
 
@@ -22,7 +23,7 @@ export type CreateEditStep = {
   tooltip?: string;
   justSome?: boolean;
   specialFilter?: FilterType;
-  checkHandler?: (item: any) => boolean
+  checkHandler?: (item: any) => boolean;
 };
 export type CreateEditSteps<T extends string> = {
   [key in T]: CreateEditStep;

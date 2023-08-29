@@ -451,7 +451,6 @@ onMounted(async () => {
     () => item.value,
     () => {
       if (!areObjectsEqual(deepToRaw(item.value), initialItem, "is_active")) {
-        console.count("item changed to true");
         itemHastChanged.value = true;
       }
       form.value?.validate();

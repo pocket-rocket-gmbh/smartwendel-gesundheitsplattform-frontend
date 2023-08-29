@@ -215,7 +215,7 @@ const handleCreateEditClose = async () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
   dataTableRef.value?.resetActiveItems();
-  dataTableRef?.value?.getItems();
+  dataTableRef.value?.getItems();
   setupFinished.value = await useUser().setupFinished();
   newFacilityFromCache.value = !!localStorage.getItem("facilities_new");
 };
