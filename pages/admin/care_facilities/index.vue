@@ -33,7 +33,7 @@
               Neue Einrichtung <span v-if="newFacilityFromCache"> - weiter</span>
             </v-btn>
           </v-col>
-          <v-col>
+          <v-col v-if="user.isAdmin()">
             <v-text-field
               width="50"
               prepend-icon="mdi-magnify"
@@ -58,6 +58,16 @@
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
       />
+
+      <v-alert
+        v-if="!user.isAdmin()"
+        type="info"
+        density="compact"
+        closable
+        class="my-2 is-half-width"
+      >
+        Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.
+      </v-alert>
 
       <AdminCareFacilitiesCreateEdit
         v-if="createEditDialogOpen"
@@ -103,12 +113,14 @@ definePageMeta({
 const user = useUser();
 const router = useRouter();
 const loading = ref(false);
+const passwordChanged = ref(false);
 
 const userLoginCount = computed(() => {
   return user.loginCount();
 });
 
 const handleSaved = async () => {
+  passwordChanged.value = true
   dataTableRef?.value.getItems()
   useUser().reloadUser()
 };
@@ -180,6 +192,13 @@ const cacheKey = computed(() => {
 });
 
 const handleItemsLoaded = (items: any[]) => {
+  const firstItemId = items[0]?.id
+  if (firstItemId && passwordChanged.value) {
+    itemId.value = firstItemId
+    createEditDialogOpen.value = true
+    passwordChanged.value = false
+  }
+
   itemsExist.value = !!items.length;
 };
 

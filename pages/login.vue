@@ -95,7 +95,7 @@ export default defineComponent({
           // move to Dashboard
           if (
             lastRoute.value &&
-            lastRoute.value !== "/password_forgotten" &&
+            !lastRoute.value.includes("/password_forgotten") &&
             lastRoute.value !== "/password_reset" &&
             lastRoute.value !== "/register"
           ) {

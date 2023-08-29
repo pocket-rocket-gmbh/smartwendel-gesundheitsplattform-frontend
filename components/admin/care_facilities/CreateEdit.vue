@@ -378,17 +378,15 @@
               <span class="text-h5 font-weight-bold">{{
                 steps["openingHours"].label
               }}</span>
-              <v-textarea
-                placeholder="z.B. Montag - Freitag 8:00 - 16:00 Uhr"
-                class="text-field"
-                rows="4"
+ 
+              <v-text-field
+                v-for="day in slotProps.item.opening_hours" :key="day.day"
+                class="mb-2"
+                v-model="day.hours"
                 hide-details="auto"
-                v-model="slotProps.item.opening_hours"
-                label="Wochentag/e - Uhrzeit"
-                :error-messages="
-                  useErrors().checkAndMapErrors('opening_hours', slotProps.errors)
-                "
+                :label="day.day"
               />
+
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
