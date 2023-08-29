@@ -153,7 +153,7 @@ const getCareFacility = async () => {
   api.setEndpoint(`care_facilities/${props.itemId}`);
   loadingItem.value = true;
   await api.getItem();
-  emit("updateImages");
+  //emit("updateImages");
   loadingItem.value = false;
   item.value = api.item.value;
 };

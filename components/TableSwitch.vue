@@ -10,13 +10,7 @@
     :item-id="item.id"
     @close="sendNotificationDialogOpen = false"
   />
-  <v-switch
-    @click.stop
-    v-model="switchValue"
-    color="success"
-    hide-details
-    :disabled="disabled"
-  ></v-switch>
+  <v-switch @click.stop v-model="switchValue" color="success" hide-details :disabled="disabled"></v-switch>
 </template>
 <script lang="ts">
 import SendNotification from "@/components/SendNotification.vue";
@@ -61,6 +55,13 @@ export default defineComponent({
         sendNotificationDialogOpen.value = true;
       }
     });
+
+    watch(
+      () => props.item,
+      () => {
+        switchValue.value = props.item[props.fieldToSwitch];
+      }
+    );
 
     return {
       switchValue,

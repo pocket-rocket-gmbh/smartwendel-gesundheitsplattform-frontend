@@ -383,6 +383,7 @@
                 v-for="day in slotProps.item.opening_hours" :key="day.day"
                 class="mb-2"
                 v-model="day.hours"
+                :placeholder="day.placeholder"
                 hide-details="auto"
                 :label="day.day"
               />
