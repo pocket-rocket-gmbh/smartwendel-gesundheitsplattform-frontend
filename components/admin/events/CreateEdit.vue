@@ -413,7 +413,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   gallery: {
     label: "3. Hier kannst du weitere Bilder hochladen.",
-    description: "Galerie Fotos *",
+    description: "Galerie Fotos",
     props: ["sanitized_images", "images"],
     justSome: true,
   },
@@ -437,7 +437,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   date: {
     label:
-      "7. Bitte gib die Veranstaltungstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
+      "7. Bitte gib die Veranstaltungstermine und Uhrzeiten an. Findet deine Veranstaltung regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     description: "Veranstaltungsdatum *",
     props: ["event_dates"],
     tooltip: "Mehrfachauswahl möglich.",

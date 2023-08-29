@@ -4,11 +4,11 @@
       <v-app-bar-title>
         <div class="d-flex align-center">
           <div>
-            <a href="/" target="_blank">
+            <a href="/">
               <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
             </a>
           </div>
-          <div class="align-center d-none d-lg-flex mx-2">
+          <div class="align-center d-noe d-lg-flex mx-2">
             <div
               class="categories-wrapper is-clickable d-flex"
               v-for="(category, index) in categories"
@@ -172,7 +172,7 @@
         <v-divider></v-divider>
         <div>
           <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-          <a class="mr-6" href="/terms_of_use">Nutzungsbedingungen</a>
+          <a class="mr-6" href="/rules_of_conduct">Nutzungsbedingungen</a>
         </div>
         <v-divider></v-divider>
 

@@ -58,7 +58,7 @@
                 </a>
               </v-col>
               <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-                <a href="https://www.bmwsb.bund.de" target="_blank">
+                <a href="https://bmwsb.bund.de" target="_blank">
                   <img
                     src="~/assets/images/sub-footer/logo-bundesministerium.png"
                     class="is-clickable logo-footer"

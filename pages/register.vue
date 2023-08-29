@@ -107,7 +107,12 @@
                 <span> und den </span>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ props }">
-                    <a target="_blank" href="/terms_of_use" @click.stop v-bind="props">
+                    <a
+                      target="_blank"
+                      href="/rules_of_conduct"
+                      @click.stop
+                      v-bind="props"
+                    >
                       <u>Nutzungsbedingungen</u>
                     </a>
                   </template>
@@ -127,7 +132,8 @@
               Vielen Dank für deine Registrierung!
             </span>
             <span class="text-h6">
-              Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+              Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
+              temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
             </span>
           </div>
           <div class="mt-5">
