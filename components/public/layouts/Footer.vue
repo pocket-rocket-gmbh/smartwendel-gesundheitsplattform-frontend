@@ -81,8 +81,10 @@
             <div>
               <h2 class="mb-5">Landkreis Sankt Wendel</h2>
               <div class="footer-links">
-                <p class="has-text-white is-clickable">
-                  <router-link to="/contact">Kontakt</router-link>
+                <p class="is-clickable">
+                  <span>
+                    <a :href="`mailto:smartcity@lkwnd.de?subject=kontakt`">kontakt</a>
+                  </span>
                 </p>
                 <p class="has-text-white is-clickable">
                   <router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link>
