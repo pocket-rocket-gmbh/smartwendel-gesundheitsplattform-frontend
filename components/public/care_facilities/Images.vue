@@ -1,5 +1,5 @@
 <template>
-  <div v-if="careFacility.logo_url" :class="['image-area mt-5', { 'has-logo': careFacility.logo_url || careFacility.logo }]">
+  <div v-if="careFacility?.logo_url" :class="['image-area mt-5', { 'has-logo': careFacility.logo_url || careFacility.logo }]">
     <v-row class="image-row">
       <v-col class="d-flex flex-wrap align-content-bottom justify-center">
         <img
