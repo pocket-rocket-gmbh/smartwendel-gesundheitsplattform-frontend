@@ -1,23 +1,7 @@
 <template>
-  <v-checkbox
-    v-show="false"
-    v-bind:model-value="filterSelected"
-    :rules="[filterSelected || 'Erforderlich']"
-  ></v-checkbox>
-  <v-alert
-    class="my-5"
-    v-if="!filterSelected && !loadingFilters"
-    type="info"
-    density="compact"
-    closable
-  >
-    Bitte mindestens einen Filter auswählen
-  </v-alert>
-  <LoadingSpinner
-    v-if="loadingFilters && (!availableFilters || !availableFilters.length)"
-  >
-    Filter werden geladen ...
-  </LoadingSpinner>
+  <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Erforderlich']"></v-checkbox>
+  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable> Bitte mindestens einen Filter auswählen </v-alert>
+  <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)"> Filter werden geladen ... </LoadingSpinner>
   <div class="choose-facility-type" v-else>
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
@@ -43,16 +27,9 @@
           <v-alert type="info" color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
-                <span
-                  >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein
-                  Unternehmen nicht zu finden ist, kontaktiere uns bitte
-                </span>
+                <span>Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
                 <span>
-                  <a
-                    class="is-white text-decoration-underline"
-                    :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
-                    >HIER</a
-                  >
+                  <a class="is-white text-decoration-underline" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</a>
                 </span>
               </div>
             </div>
@@ -60,11 +37,7 @@
         </div>
         <div class="main-class">
           <div class="filter-options" v-for="option in mainFilter.next">
-            <div
-              class="filter-tile"
-              :class="{ selected: preSetTags.includes(option.id) }"
-              @click.stop="handleSubFilterParentClick(mainFilter, option)"
-            >
+            <div class="filter-tile" :class="{ selected: preSetTags.includes(option.id) }" @click.stop="handleSubFilterParentClick(mainFilter, option)">
               {{ option.name }}
             </div>
             <div v-if="option.next?.length" class="options">
@@ -81,16 +54,13 @@
             </div>
           </div>
         </div>
-        <LoadingSpinner v-if="loadingFilters"
-          >Leistung wird hinzugefügt...
-        </LoadingSpinner>
+        <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
       </template>
     </CollapsibleItem>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ResultStatus } from "~/types/serverCallResult";
 import { FilterKind, FilterType } from "~/store/searchFilter";
 import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
@@ -106,7 +76,7 @@ const emit = defineEmits<{
   (event: "areFiltersSet", areFiltersSet: boolean, filterType: FilterType): void;
 }>();
 
-type Filter = { id: string; name: string; next?: Filter[] };
+type Filter = { id: string; name: string; parent_id?: string; next?: Filter[] };
 
 const selectedFilter = ref<Filter>();
 const availableFilters = ref<Filter[]>([]);
@@ -131,36 +101,21 @@ const flatFilterArray = (filterArray: Filter[]) => {
 
 const filterSelected = computed(() => {
   const flat = flatFilterArray(availableFilters.value);
-  const filterOfCategoryIsSet = flat.some(
-    (item) => !!props.preSetTags.find((tag) => tag === item.id)
-  );
+  const filterOfCategoryIsSet = flat.some((item) => !!props.preSetTags.find((tag) => tag === item.id));
   emit("areFiltersSet", filterOfCategoryIsSet, props.filterType);
   return filterOfCategoryIsSet;
 });
 
-const mainFilters = ref([]);
 const expandIds = ref<string[]>([]);
-
-const newServiceName = ref("");
 
 /**
  * Currently limited to max 2 layers more
  */
-const getFilterOptions = async (id: string) => {
-  const filters = await getFilters(id);
+const getFilterOptions = (parentId: string, allFilters: Filter[]) => {
+  const nextItems = allFilters.filter((item) => item.parent_id === parentId);
+  nextItems.forEach((nextItem) => (nextItem.next = allFilters.filter((item) => item.parent_id === nextItem.id)));
 
-  const subTagPromises = filters.map((filter) => {
-    return getFilters(filter.id);
-  });
-
-  const allSubTags = await Promise.all(subTagPromises);
-
-  allSubTags.forEach((subTags, i) => {
-    if (!subTags.length) return;
-    filters[i].next = subTags;
-  });
-
-  return filters;
+  return nextItems;
 };
 
 const filterHasSelected = (mainFilter: Filter) => {
@@ -186,9 +141,7 @@ const getTagName = (mainFilter: Filter, filterId: string) => {
 };
 
 const enableAllTags = (filter: Filter) => {
-  const updatedTags = [
-    ...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)]),
-  ];
+  const updatedTags = [...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)])];
   emit("setTags", updatedTags);
 };
 
@@ -255,9 +208,7 @@ const handleClick = (parent: Filter, current: Filter) => {
   if (!props.enableMultiSelect) {
     const optionsOfMainFilter = parent.next;
 
-    const alreadyInGroupIndex = props.preSetTags.findIndex((tagId) =>
-      optionsOfMainFilter.find((filter) => filter.id === tagId)
-    );
+    const alreadyInGroupIndex = props.preSetTags.findIndex((tagId) => optionsOfMainFilter.find((filter) => filter.id === tagId));
     if (alreadyInGroupIndex !== -1) {
       props.preSetTags.splice(alreadyInGroupIndex, 1);
     }
@@ -270,27 +221,6 @@ const isChecked = (option: Filter) => {
   return props.preSetTags?.includes(option.id);
 };
 
-const handleCreateNewService = async (parentId: string, name: string) => {
-  if (!name) return;
-
-  const api = useCollectionApi();
-  api.setBaseApi(usePrivateApi());
-  api.setEndpoint(`tag_categories`);
-
-  const result = await api.createItem(
-    { name, parent_id: parentId },
-    `Erfolgreich erstellt`
-  );
-
-  if (result.status === ResultStatus.SUCCESSFUL) {
-    newServiceName.value = "";
-    await reloadFilters();
-    emit("setTags", [...props.preSetTags, result.data.resource.id]);
-  } else {
-    console.error("ERROR");
-  }
-};
-
 const reloadFilters = async () => {
   if (props.filterType === "filter_facility") {
     statusLoadingFilter.categoryLoaded = true;
@@ -298,16 +228,14 @@ const reloadFilters = async () => {
     statusLoadingFilter.servicesLoaded = true;
   }
 
-  mainFilters.value = await getMainFilters(props.filterType, props.filterKind);
+  const mainFilters = await getMainFilters(props.filterType, props.filterKind);
+  const allFilters = (await getAllFilters()).filter((filter) => filter.filter_type === props.filterType && filter.kind === props.filterKind);
 
-  const nextFiltersPromises = mainFilters.value.map((mainFilter) =>
-    getFilterOptions(mainFilter.id)
-  );
+  const allNextFilters = mainFilters.map((mainFilter) => getFilterOptions(mainFilter.id, allFilters));
 
-  const allNextFilters = await Promise.all(nextFiltersPromises);
   availableFilters.value = [];
   allNextFilters.forEach((nextFilters, i) => {
-    availableFilters.value.push({ ...mainFilters.value[i], next: nextFilters });
+    availableFilters.value.push({ ...mainFilters[i], next: nextFilters });
   });
 
   if (props.filterType === "filter_facility") {

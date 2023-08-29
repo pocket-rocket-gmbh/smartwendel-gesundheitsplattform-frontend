@@ -176,24 +176,24 @@ export const useFilterStore = defineStore({
 
       const allResultsFromApi: Facility[] = api.items.value;
 
-      const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
-        api.setEndpoint(`care_facilities/${result.id}`);
-        return api.retrieveCollection();
-      });
+      // const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
+      //   api.setEndpoint(`care_facilities/${result.id}`);
+      //   return api.retrieveCollection();
+      // });
 
-      this.allResults = await Promise.all(enrichedPossibleResultsPromised).then((responses) => {
-        return responses
-          .map((response) =>
-            response.status !== ResultStatus.SUCCESSFUL ? null : (response.data.resource as Facility)
-          )
-          .filter(Boolean);
-      });
+      // this.allResults = await Promise.all(enrichedPossibleResultsPromised).then((responses) => {
+      //   return responses
+      //     .map((response) =>
+      //       response.status !== ResultStatus.SUCCESSFUL ? null : (response.data.resource as Facility)
+      //     )
+      //     .filter(Boolean);
+      // });
+
+      this.allResults = allResultsFromApi;
 
       const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
         try {
-          const { data } = await axios.get(
-            `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`
-          );
+          const { data } = await axios.get(`https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`);
 
           if (!data.length) {
             return null;
@@ -216,7 +216,9 @@ export const useFilterStore = defineStore({
           return getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
         });
 
-        const newLocationLatLongs = await Promise.all(newLocationLatLongsPromises);
+        const newLocationLatLongs = (await Promise.allSettled(newLocationLatLongsPromises))
+          .filter((item) => item.status === "fulfilled")
+          .map((item) => (item.status === "fulfilled" ? item.value : []));
         newLocationLatLongs.forEach((item, index) => {
           if (!item) return;
           this.allResults[index].latitude = item[0];

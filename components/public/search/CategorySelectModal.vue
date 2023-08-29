@@ -31,10 +31,7 @@
                 {{ filter.name }}
               </div>
               <div class="filter-options">
-                <label
-                  class="option"
-                  v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options"
-                >
+                <label class="option" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
                   <v-radio
                     :model-value="selectedFilter?.id === option.id"
                     @click.prevent="handleOptionSelect(option)"
@@ -75,7 +72,7 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string };
+type Filter = { id: string; name: string; parent_id?: string };
 type FilterOption = {
   parentId: string;
   options: Filter[];
@@ -119,9 +116,9 @@ const handleOptionSelect = (option: Filter) => {
 onMounted(async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
+  const allFilters = (await getAllFilters()).filter((filter) => filter.filter_type === "filter_facility" && filter.kind === props.filterKind);
 
-  const allOptionsPromises = mainFilters.value.map((filter) => getFilters(filter.id));
-  const allOptions = await Promise.all(allOptionsPromises);
+  const allOptions = mainFilters.value.map((filter) => allFilters.filter(item => item.parent_id === filter.id));
 
   allOptions.forEach((options, index) => {
     filterOptions.value.push({
