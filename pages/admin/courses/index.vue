@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h2 v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</h2>
-    <h2 v-else>Kurse und Veranstaltungen</h2>
+    <h2 v-if="useUser().isFacilityOwner()">Meine Kurse</h2>
+    <h2 v-else>Kurse</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Leg hier deine Veranstaltung oder deinen Kurs an. Veranstaltungen sind einmalige Ereignisse, die sich über
-      mehrere Tage verteilen können. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
+      >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen
+      und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">
@@ -19,18 +19,10 @@
                 itemId = null;
                 createEditDialogOpen = true;
               "
-              >Kurs anlegen</v-btn
+              :class="{ orange: newCourseFromCache }"
             >
-            <v-btn
-              elevation="0"
-              variant="outlined"
-              @click="
-                itemPlaceholder.kind = 'event';
-                itemId = null;
-                createEditDialogOpen = true;
-              "
-              >Veranstaltung anlegen</v-btn
-            >
+              Kurs anlegen<span v-if="newCourseFromCache"> - weiter</span>
+            </v-btn>
           </div>
         </v-col>
         <v-col>
@@ -39,39 +31,42 @@
             prepend-icon="mdi-magnify"
             v-model="facilitySearchTerm"
             hide-details="auto"
-            label="Kurse und Veranstaltungen durchsuchen"
+            label="Kurse durchsuchen"
           />
         </v-col>
       </v-row>
     </template>
     <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
-      du Kurse und Veranstaltungen sowie Beiträge anlegen.
+      du Kurse, Veranstaltungen sowie Beiträge anlegen.
     </v-alert>
 
     <DataTable
       ref="dataTableRef"
       :fields="fields"
-      endpoint="care_facilities?kind=event,course"
+      endpoint="care_facilities?kind=course"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
+      :cache-prefix="'courses'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
     />
 
-    <AdminCareFacilitiesCreateEdit
+    <AdminCoursesCreateEdit
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
-      @close="
-        createEditDialogOpen = false;
-        itemId = null;
-        dataTableRef?.resetActiveItems();
-      "
+      @close="handleCreateEditClose"
       endpoint="care_facilities"
-      :concept-name="itemPlaceholder.kind === 'course' ? 'Kurs' : 'Veranstaltung'"
+      :concept-name="'Kurs'"
+      :enableCache="true"
+      :cacheKey="coursesCacheKey"
+      :showPreviewButton="true"
+      @showPreview="handleShowPreview"
     />
+
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -88,6 +83,7 @@
 </template>
 <script lang="ts" setup>
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
+import { Facility } from "~/store/searchFilter";
 
 definePageMeta({
   layout: "admin",
@@ -95,20 +91,32 @@ definePageMeta({
 
 const user = useUser();
 const loading = ref(false);
+const router = useRouter();
 
 const fields = [
-  { prop: "is_active", text: "Aktiv", endpoint: "care_facilities", type: "switch", fieldToSwitch: "is_active" },
-  { prop: "name", text: "Titel", value: "name", type: "string" },
-  { prop: "user.firstname", text: "Erstellt von", value: "user.name", type: "pathIntoObject", condition: "admin" },
   {
-    prop: "kind",
-    text: "Art (Kurs oder Veranstaltung)",
+    prop: "is_active",
+    text: "Offline/Online",
     endpoint: "care_facilities",
-    value: "kind",
-    type: "enum",
-    enum_name: "facilitiesKind",
+    type: "switch",
+    tooltip: "Hiermit kannst du deinen Kurs/deine Veranstaltung aktivieren und deaktivieren",
+    fieldToSwitch: "is_active",
+  },
+  { prop: "name", text: "Titel", value: "name", type: "string" },
+  { value: "", type: "beinEdited"},
+  {
+    prop: "user.firstname",
+    text: "Erstellt von",
+    value: "user.name",
+    condition: "admin",
+    type: "button",
+    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
   },
 ];
+
+const previewItem = ref<Facility>();
+
+const newCourseFromCache = ref(false);
 
 const facilitySearchColums = ref(["name", "user.name", "kind"]);
 const facilitySearchTerm = ref("");
@@ -120,9 +128,9 @@ const confirmDeleteDialogOpen = ref(false);
 const itemId = ref(null);
 const setupFinished = ref(false);
 
-const itemPlaceholder = ref<any>({
+const itemPlaceholder = ref({
   name: "",
-  kind: "event",
+  kind: "course",
   status: "is_checked",
   is_active: false,
   description: "",
@@ -131,16 +139,48 @@ const itemPlaceholder = ref<any>({
   tag_ids: [],
   tag_category_ids: [],
   offlineDocuments: [],
+  email: "",
+  zip: "",
+  town: "",
+  street: "",
+  phone: "",
+  community: "",
+  community_id: "",
+  course_outside_facility: false,
 });
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const openCreateEditDialog = (item: any) => {
+  itemPlaceholder.value.kind = item.kind;
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
+};
+
+const coursesCacheKey = computed(() => {
+  if (!itemId.value) {
+    return `courses_new`;
+  }
+
+  return `courses_${itemId.value.replaceAll("-", "_")}`;
+});
+
+const handleCreateEditClose = () => {
+  createEditDialogOpen.value = false;
+  itemId.value = null;
+  dataTableRef?.value?.getItems();
+  dataTableRef.value?.resetActiveItems();
+  newCourseFromCache.value = !!localStorage.getItem("courses_new");
+};
+
+const handleShowPreview = (item: any) => {
+  previewItem.value = item;
+};
+const handlePreviewClose = () => {
+  previewItem.value = null;
 };
 
 onMounted(async () => {
@@ -155,13 +195,17 @@ onMounted(async () => {
     itemPlaceholder.value.phone = currentUserFacility?.phone;
     itemPlaceholder.value.community = currentUserFacility?.community;
     itemPlaceholder.value.community_id = currentUserFacility?.community_id;
-    itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
+    // itemPlaceholder.value.tag_category_ids = currentUserFacility?.tag_category_ids;
   }
 
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
+
+  newCourseFromCache.value = !!localStorage.getItem("courses_new");
 });
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"
+.orange
+  color: orange
 </style>

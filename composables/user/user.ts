@@ -1,4 +1,5 @@
 import { useUserStore } from "@/store/user";
+import { ResultStatus } from "@/types/serverCallResult";
 
 export function useUser() {
   const userStore = useUserStore();
@@ -9,6 +10,19 @@ export function useUser() {
   const loggedIn = (): Boolean => {
     return currentUser !== null;
   };
+
+  const loginCount = (): Number => {
+    return currentUser?.login_count || 0;
+  };
+  
+  const reloadUser = async () => {
+    const privateApi = usePrivateApi()
+    const response = await privateApi.call('get', '/users/me', null)
+    if (response.status === ResultStatus.SUCCESSFUL) {
+      userStore.currentUser = response.data.resource
+    }
+  }
+
 
   const isAdmin = (): Boolean => {
     if (currentUser) {
@@ -38,6 +52,14 @@ export function useUser() {
     return test;
   };
 
+  const facilityFinished = async () => {
+    if (isAdmin()) return true;
+
+    const currentUserFacility = await getCurrentUserFacilities();
+
+    return isCompleteFacility(currentUserFacility);
+  };
+
   const isFacilityOwner = (): Boolean => {
     if (currentUser) {
       return currentUser.role === "facility_owner";
@@ -59,5 +81,8 @@ export function useUser() {
     currentUser,
     logout,
     setupFinished,
+    facilityFinished,
+    loginCount,
+    reloadUser
   };
 }

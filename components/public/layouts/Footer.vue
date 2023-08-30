@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div class="wrapper has-bg-grey">
+    <div class="wrapper has-bg-grey pt-5">
       <div
         class="has-bg-grey py-5"
         v-if="!useUser().loggedIn() && currentRoute !== '/register'"
@@ -19,7 +19,7 @@
               color="grey"
               rounded="pill"
               size="x-large"
-              href="/login"
+              href="/register"
             >
               <span>Jetzt registrieren</span>
             </v-btn>
@@ -40,7 +40,7 @@
                   <img
                     src="~/assets/images/sub-footer/logo-footer-wnd.png"
                     class="is-clickable logo-footer"
-                    :class="[$device.isMobile ? 'mobile-height' : 'desktop-height']"
+                    :class="[$device?.isMobile ? 'mobile-height' : 'desktop-height']"
                   />
                 </a>
               </v-col>
@@ -58,7 +58,7 @@
                 </a>
               </v-col>
               <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-                <a href="https://www.bmwsb.bund.de" target="_blank">
+                <a href="https://bmwsb.bund.de" target="_blank">
                   <img
                     src="~/assets/images/sub-footer/logo-bundesministerium.png"
                     class="is-clickable logo-footer"
@@ -81,8 +81,10 @@
             <div>
               <h2 class="mb-5">Landkreis Sankt Wendel</h2>
               <div class="footer-links">
-                <p class="has-text-white is-clickable">
-                  <router-link to="/contact">Kontakt</router-link>
+                <p class="is-clickable">
+                  <span>
+                    <a :href="`mailto:smartcity@lkwnd.de?subject=kontakt`">Kontakt</a>
+                  </span>
                 </p>
                 <p class="has-text-white is-clickable">
                   <router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link>
@@ -94,49 +96,48 @@
                   <router-link to="/imprint">Impressum</router-link>
                 </p>
               </div>
-            </div>
-
-            <div class="socials mt-5">
-              <v-btn
-                href="https://www.facebook.com/Landkreis.StWendel/"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-facebook</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-instagram</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-youtube</v-icon>
-              </v-btn>
-              <v-btn
-                href="https://www.linkedin.com/showcase/smart-wendeler-land"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons"
-              >
-                <v-icon>mdi-linkedin</v-icon>
-              </v-btn>
+              <div class="socials mt-5">
+                <v-btn
+                  href="https://www.facebook.com/Landkreis.StWendel/"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-facebook</v-icon>
+                </v-btn>
+                <v-btn
+                  href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-instagram</v-icon>
+                </v-btn>
+                <v-btn
+                  href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-youtube</v-icon>
+                </v-btn>
+                <v-btn
+                  href="https://www.linkedin.com/showcase/smart-wendeler-land"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons"
+                >
+                  <v-icon>mdi-linkedin</v-icon>
+                </v-btn>
+              </div>
             </div>
           </v-col>
         </v-row>

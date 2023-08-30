@@ -2,13 +2,7 @@
   <LoadingSpinner class="d-flex justify-center mt-5" v-if="loading"> Laden... </LoadingSpinner>
   <div class="selection" v-else>
     <div v-for="(tag, index) in limitedTags" :key="tag.id">
-      <v-checkbox
-        v-if="!tag.subTags || !tag.subTags.length"
-        class="mb-n10"
-        :label="tag.name"
-        v-model="filterStore.currentTags"
-        :value="tag.id"
-      />
+      <v-checkbox v-if="!tag.subTags || !tag.subTags.length" class="mb-n10" :label="tag.name" v-model="filterStore.currentTags" :value="tag.id" />
       <div class="ml-2" v-else>
         <v-checkbox
           :density="'compact'"
@@ -75,9 +69,10 @@ const showMoreTags = () => {
 const getTags = async () => {
   loading.value = true;
   availableTags.value = await getFilters(props.filterId);
+  const allTags = await getAllFilters();
 
   for (const tag of availableTags.value) {
-    const subTags = await getFilters(tag.id);
+    const subTags = allTags.filter((tag) => tag.parentId === tag.id);
     if (!subTags.length) continue;
     tag.subTags = subTags;
   }

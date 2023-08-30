@@ -1,5 +1,5 @@
 <template>
-  <AdminFilterPage :filter-kind="'news'" name="Beitragsfilter" />
+  <AdminFilterPage :filter-kind="'course'" name="Kursfilter" />
 </template>
 
 <script setup lang="ts">

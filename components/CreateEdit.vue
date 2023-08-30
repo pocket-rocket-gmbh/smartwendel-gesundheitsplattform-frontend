@@ -1,26 +1,36 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    :width="size"
-    transition="dialog-bottom-transition"
-    @click:outside="emitClose()"
-    persistent
-    v-if="!editUserProfile"
-  >
+  <v-dialog v-model="dialog" :width="size" transition="dialog-bottom-transition" @click:outside="emitClose()" persistent v-if="!editUserProfile">
     <v-card :class="`dialog-${size}`" :height="`${height}`">
+      <SaveConfirmation
+        :item="item"
+        :facility-id="facilityId"
+        :open="confirmSaveDialogOpen"
+        @click:outside="confirmSaveDialogOpen = false"
+        @accepted="confirmSaveDialogOpen = false"
+        @close="handleConfirmClose()"
+      />
+
       <v-form ref="form">
         <v-card-title class="text-h5 has-bg-primary py-5 text-white">
           <span v-if="itemId">{{ conceptName }} bearbeiten</span>
-          <span v-else>{{ conceptName }} erstellen</span>
+          <span v-else>{{ conceptName }} erstellen </span>
         </v-card-title>
-
         <slot :item="item" :errors="errors"></slot>
-
         <v-card-actions class="card-actions">
           <v-btn @click="emitClose()"> Schließen </v-btn>
-          <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
-            Speichern
-          </v-btn>
+          <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
+            Vorschau anzeigen
+          </v-btn> TODO: Testen/Fixen -->
+          <div v-if="!statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded">
+            <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
+              {{ saveButtonText }}
+            </v-btn>
+            <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn>
+          </div>
+          <div v-else>
+            <LoadingSpinner />
+          </div>
+
           <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
             Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
           </v-alert>
@@ -40,11 +50,15 @@
 
 <script setup lang="ts">
 import { ResultStatus } from "@/types/serverCallResult";
+import { areObjectsEqual, deepToRaw } from "~/utils/global.utils";
 import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
 import { CreateEditFacility } from "~/types/facilities";
+import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
-const emit = defineEmits(["close", "hasChanged", "save"]);
+const statusLoadingFilter = useStatusLoadingFilter();
+
+const emit = defineEmits(["close", "hasChanged", "save", "showPreview"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -76,12 +90,25 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  enableCache: {
+    type: Boolean,
+    default: false,
+  },
+  cacheKey: {
+    type: String,
+  },
+  showPreviewButton: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+const confirmSaveDialogOpen = ref(false);
 const loadingItem = ref(false);
 const dialog = ref(true);
 const errors = ref([]);
 const item = ref<CreateEditFacility>({});
+const originalItem = ref<CreateEditFacility>({});
 const form = ref<VForm>();
 
 const snackbar = useSnackbar();
@@ -97,6 +124,22 @@ createUpdateApi.setBaseApi(usePrivateApi());
 
 const itemHastChanged = ref(false);
 
+const isCachedItem = ref(false);
+
+const saveButtonText = computed(() => {
+  if (!props.enableCache) return "Speichern";
+  const allValid = form.value?.isValid;
+  if (!allValid) {
+    return "Zwischenspeichern";
+  }
+  return "Speichern";
+});
+
+const handleConfirmClose = () => {
+  confirmSaveDialogOpen.value = false;
+  getItem();
+};
+
 const getItem = async () => {
   if (!props.itemId) return;
 
@@ -108,7 +151,10 @@ const getItem = async () => {
   showApi.setEndpoint(endpoint);
 
   loadingItem.value = true;
-  await showApi.getItem();
+  const itemResponse = await showApi.getItem();
+  if (itemResponse.status === ResultStatus.SUCCESSFUL) {
+    originalItem.value = { ...itemResponse.data.resource };
+  }
   loadingItem.value = false;
   item.value = showApi.item.value;
 };
@@ -117,6 +163,17 @@ const handleCta = async () => {
   const { valid } = await form.value.validate();
 
   if (!valid) {
+    if (props.enableCache && props.cacheKey) {
+      if (!areObjectsEqual(deepToRaw(item.value), deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder))) {
+        localStorage.setItem(props.cacheKey, JSON.stringify(toRaw(item.value)));
+        checkCachedItem();
+      }
+
+      snackbar.showInfo("Die Änderungen wurden zwischengespeichert");
+
+      itemHastChanged.value = false;
+      return;
+    }
     const formErrors = await form.value.errors;
     errors.value = formErrors.map((err) => err.errorMessages[0]);
     snackbar.showError("Speichern fehlgeschlagen! Es gibt ungültige Felder!");
@@ -126,40 +183,43 @@ const handleCta = async () => {
     save();
   } else {
     create();
+    confirmSaveDialogOpen.value = true;
   }
 };
-const setLogo = (image: string) => {
-  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
-    name: "logo",
-    value: image,
-  });
+
+const handleShowPreviewClicked = () => {
+  emit("showPreview", item.value);
 };
+
+const facilityId = ref("")
 
 const create = async () => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
   loadingItem.value = true;
   adminStore.loading = true;
   const result = await createUpdateApi.createItem(item.value, `Erfolgreich erstellt`);
+  confirmSaveDialogOpen.value = true;
   adminStore.loading = false;
   loadingItem.value = false;
   if (result.status === ResultStatus.SUCCESSFUL) {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
+    
+    facilityId.value = result.data.resource.id;
+    const newFacilityId = result.data.resource.id;
 
-    const facilityId = result.data.resource.id;
 
     loadingItem.value = true;
-    if (item.value.offlineImageFiles.length) {
+    if (item.value.offlineImageFiles?.length) {
       for (const offlineImageFile of item.value.offlineImageFiles) {
-        createUpdateApi.setEndpoint(`care_facilities/${facilityId}/images`);
+        createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/images`);
         const data = {
           file: offlineImageFile,
         };
         await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
       }
     }
-
     if (item.value.offlineLocations && item.value.offlineLocations.length) {
-      createUpdateApi.setEndpoint(`locations/care_facility/${facilityId}`);
+      createUpdateApi.setEndpoint(`locations/care_facility/${newFacilityId}`);
 
       const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
         createUpdateApi.createItem({
@@ -172,7 +232,7 @@ const create = async () => {
       await Promise.all(facilityLocationCreationPromises);
     }
     if (item.value.offlineDocuments && item.value.offlineDocuments.length) {
-      createUpdateApi.setEndpoint(`care_facilities/${facilityId}/documents`);
+      createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/documents`);
 
       const documentsPromises = item.value.offlineDocuments.map((document) =>
         createUpdateApi.createItem({
@@ -181,12 +241,11 @@ const create = async () => {
           tag: document.tag,
         })
       );
-
       await Promise.all(documentsPromises);
     }
-
-    loadingItem.value = false;
-    emit("close");
+    if (props.enableCache && props.cacheKey) {
+      localStorage.removeItem(props.cacheKey);
+    }
   } else {
     errors.value = result.data;
   }
@@ -210,8 +269,38 @@ const save = async () => {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
     itemHastChanged.value = false;
     emit("save");
+    if (item.value?.is_active === false) {
+      confirmSaveDialogOpen.value = true;
+    }
+    if (props.enableCache && props.cacheKey) {
+      localStorage.removeItem(props.cacheKey);
+    }
   } else {
     errors.value = result.data;
+  }
+};
+
+const checkCachedItem = () => {
+  isCachedItem.value = !!(props.enableCache && props.cacheKey && localStorage.getItem(props.cacheKey));
+};
+
+const handleResetCache = async () => {
+  if (!props.enableCache || !props.cacheKey) {
+    return;
+  }
+  const confirmed = confirm("Änderungen werden verworfen.");
+  if (confirmed) {
+    localStorage.removeItem(props.cacheKey);
+    checkCachedItem();
+    itemHastChanged.value = false;
+
+    if (props.itemId) {
+      await getItem();
+    }
+    if (props.itemPlaceholder && !item?.value?.id) {
+      item.value = { ...props.itemPlaceholder };
+    }
+    triggerSaveHintTimeout();
   }
 };
 
@@ -229,35 +318,16 @@ const triggerSaveHintTimeout = () => {
   }, 30 * 1000); // Nach einer halben Minute wird ein Hinweis zum Speichern angezeigt
 };
 
-onMounted(async () => {
-  if (props.itemId) {
-    await getItem();
-  }
-  if (props.itemPlaceholder && !item.value.id) {
-    item.value = { ...props.itemPlaceholder };
-  }
-
-  triggerSaveHintTimeout();
-
-  watch(
-    () => item.value,
-    () => {
-      itemHastChanged.value = true;
-    },
-    { deep: true }
-  );
-});
-
 const emitClose = () => {
   if (!itemHastChanged.value) {
     emit("close");
-    item.value = props.itemPlaceholder;
+    item.value = { ...props.itemPlaceholder };
     return;
   }
 
   const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
-    item.value = props.itemPlaceholder;
+    item.value = { ...props.itemPlaceholder };
     emit("close");
   }
 };
@@ -287,10 +357,40 @@ watch(
       (oldZip && newZip !== oldZip) ||
       (oldTown && newTown !== oldTown)
     ) {
-      emit("hasChanged");
+      checkCachedItem();
     }
   }
 );
+onMounted(async () => {
+  const cachedItem = props.enableCache && props.cacheKey && JSON.parse(localStorage.getItem(props.cacheKey));
+  if (!cachedItem) {
+    if (props.itemId) {
+      await getItem();
+    }
+    if (props.itemPlaceholder && !item.value.id) {
+      item.value = { ...props.itemPlaceholder };
+    }
+  } else {
+    item.value = cachedItem;
+    isCachedItem.value = true;
+  }
+
+  triggerSaveHintTimeout();
+  requestAnimationFrame(() => form.value?.validate());
+
+  const initialItem = deepToRaw(item.value);
+
+  watch(
+    () => item.value,
+    () => {
+      if (!areObjectsEqual(deepToRaw(item.value), initialItem, ["is_active", "updated_at"])) {
+        itemHastChanged.value = true;
+      }
+      form.value?.validate();
+    },
+    { deep: true }
+  );
+});
 </script>
 
 <style lang="scss">
@@ -299,6 +399,8 @@ watch(
   align-items: center;
   gap: 1rem;
   height: 61px;
+  position: sticky;
+  z-index: 10000;
 
   .save-hint {
     animation: fadeIn 200ms ease-in-out forwards;

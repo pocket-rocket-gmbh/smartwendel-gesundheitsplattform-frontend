@@ -6,37 +6,47 @@
         class="text-field"
         :disabled="item?.sanitized_images.length >= 6"
         hide-details="auto"
-        v-model="image"
+        v-model="images"
         label="Neues Bild wählen"
         filled
         prepend-icon="mdi-camera"
-        @change="handleFile()"
+        @change="handleFiles()"
         accept="image/*"
+        multiple
+        show-size
       />
       <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
       <div class="text-error" v-if="item?.sanitized_images.length >= 6">
         Es können maximal 6 Bilder hinzugefügt werden
       </div>
       <div v-if="errorFileSizeTooLarge" class="text-error mt-3">
-        Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.
+        Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht
+        überschreiten.
       </div>
     </div>
     <ImageCropper
       class="mb-5"
-      v-if="imgUrl"
-      :imgUrl="imgUrl"
+      v-if="currentCroppingImageUrl"
+      :imgUrl="currentCroppingImageUrl"
       cta="Bild speichern"
-      @close="
-        imgUrl = null;
-        image = {};
-      "
+      @close="handleRemoveImage"
       @crop="setImage"
     />
     <v-row v-if="itemId">
-      <v-col v-for="(image, index) in item?.sanitized_images" :key="index" md="2">
+      <v-col
+        v-for="(image, index) in item?.sanitized_images"
+        :key="index"
+        md="2"
+      >
         <v-card>
-          <v-img :lazy-src="image.url" :src="image.url" max-width="200" />
-          <div @click="deleteImage(image.signed_id)" class="text-error ml-1 mt-1 is-clickable">Bild löschen</div>
+          <v-img :lazy-src="image.url" :src="image.url" max-width="300" />
+          <v-btn
+            size="small"
+            width="100%"
+            color="red"
+            @click="deleteImage(image.signed_id)"
+            >Bild entfernen</v-btn
+          >
         </v-card>
       </v-col>
     </v-row>
@@ -44,7 +54,13 @@
       <v-col v-for="(image, index) in item?.offline_images" :key="index" md="2">
         <v-card>
           <v-img :lazy-src="image" :src="image" max-width="200" />
-          <div @click="deleteImageOffline(index)" class="text-error ml-1 mt-1 is-clickable">Bild löschen</div>
+          <v-btn
+            size="small"
+            width="100%"
+            color="red"
+            @click="deleteImageOffline(index)"
+            >Bild entfernen</v-btn
+          >
         </v-card>
       </v-col>
     </v-row>
@@ -53,7 +69,7 @@
 
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
-const emit = defineEmits(["offline"]);
+const emit = defineEmits(["offline", "updateImages"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -61,9 +77,10 @@ const props = defineProps({
   },
 });
 const loadingItem = ref(false);
-const imgUrl = ref(null);
 const errors = ref([]);
-const image = ref({});
+const images = ref<File[]>([]);
+const imageUrls = ref<string[]>([]);
+const currentCroppingImageUrl = ref("");
 const errorFileSizeTooLarge = ref(false);
 const item = ref({
   sanitized_images: [],
@@ -72,28 +89,61 @@ const item = ref({
 });
 
 const setImage = (image: any) => {
-  imgUrl.value = null;
   item.value.file = image;
   save();
 };
 
-const toBase64 = (file: any) =>
+const handleRemoveImage = () => {
+  const indexOfItemToRemove = imageUrls.value.findIndex(
+    (item) => item === currentCroppingImageUrl.value
+  );
+
+  if (indexOfItemToRemove === -1) {
+    images.value = [];
+    imageUrls.value = [];
+    currentCroppingImageUrl.value = "";
+    return;
+  }
+
+  images.value.splice(indexOfItemToRemove, 1);
+  imageUrls.value.splice(indexOfItemToRemove, 1);
+  setNextImageForCrop();
+};
+
+const toBase64 = (file: any): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    // @ts-expect-error typing
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
 
-const handleFile = async () => {
-  if (image && image.value[0] && image.value[0].size / 1000000 > 5) {
+const handleFiles = async () => {
+  if (!images.value?.length) return;
+
+  const validImages = images.value.filter((image) => image.size / 1000000 < 5);
+
+  if (validImages.length !== images.value.length) {
     errorFileSizeTooLarge.value = true;
-    image.value = {};
-    return;
-  } else if (image && image.value[0]) {
-    errorFileSizeTooLarge.value = false;
-    imgUrl.value = await toBase64(image.value[0]);
   }
+
+  const imageUrlPromises = validImages.map((image) => toBase64(image));
+  const imgUrlResults = await Promise.allSettled(imageUrlPromises);
+  imageUrls.value = imgUrlResults
+    .map((item) => (item.status === "fulfilled" ? item.value : ""))
+    .filter(Boolean);
+
+  setNextImageForCrop();
+};
+
+const setNextImageForCrop = () => {
+  if (!imageUrls.value.length) {
+    currentCroppingImageUrl.value = "";
+    return;
+  }
+
+  currentCroppingImageUrl.value = imageUrls.value.at(0);
 };
 
 const api = useCollectionApi();
@@ -103,6 +153,7 @@ const getCareFacility = async () => {
   api.setEndpoint(`care_facilities/${props.itemId}`);
   loadingItem.value = true;
   await api.getItem();
+  //emit("updateImages");
   loadingItem.value = false;
   item.value = api.item.value;
 };
@@ -115,12 +166,12 @@ const save = async () => {
       file: item.value.file,
     };
     const result = await api.createItem(data, "Bild erfolgreich hinzugefügt");
-    imgUrl.value = null;
+
+    handleRemoveImage();
 
     if (result.status === ResultStatus.SUCCESSFUL) {
       loadingItem.value = true;
       item.value.file = "";
-      image.value = {};
       getCareFacility();
       loadingItem.value = false;
     } else {
@@ -130,6 +181,7 @@ const save = async () => {
     }
   } else {
     item.value.offline_images.push(item.value.file);
+    handleRemoveImage();
     emit("offline", item.value.offline_images);
   }
 };
@@ -166,14 +218,6 @@ onMounted(() => {
 });
 </script>
 <style lang="sass">
-
-.text-field .v-label
-  font-size: 20px!important
-
-.text-field input,
-.text-field input
-  padding-top: 10px!important
-
 .close
   position: absolute
   top: -10px

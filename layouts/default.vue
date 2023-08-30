@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <template v-if="loading"></template>
-    <PublicPasswordProtection v-else-if="!authenticated" />
+    <ClientOnly v-else-if="!authenticated">
+      <PublicPasswordProtection  />
+    </ClientOnly>
     <template v-else>
       <ClientOnly>
         <ClientSnackbar />
@@ -18,6 +20,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "@/store/auth";
+import { useFilterStore } from "~/store/searchFilter";
 import { useAppStore } from "~/store/app";
 import { useTooltipsStore } from "~~/store/tooltips";
 

@@ -7,15 +7,10 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col class="align-end">
+        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field">
             <label class="label is-white">
-              <div class="search-term">
-                Suchbegriff
-                <v-chip v-if="filterStore.currentSearchTerm" closable @click:close="resetSearchTerm">
-                  {{ filterStore.currentSearchTerm }}
-                </v-chip>
-              </div>
+              <div class="search-term">Filter</div>
             </label>
             <FacilityFilterSelection
               v-model="filterStore.currentTags"
@@ -24,7 +19,21 @@
             />
           </div>
         </v-col>
-        <v-col class="align-end">
+        <v-col>
+          <div class="field">
+            <label class="label is-white">
+              <div class="search-term">Suchbegriff</div>
+            </label>
+            <PublicSearchField
+              v-model="filterStore.currentSearchTerm"
+              :filtered-items="filterStore.filteredResults"
+              :default-route-to="'/public/search'"
+              :default-styling="true"
+              @update:model-value="handleInput"
+            />
+          </div>
+        </v-col>
+        <v-col>
           <div class="field">
             <label class="label is-white">Gemeinde</label>
             <div class="select-wrapper">
@@ -84,6 +93,11 @@ const popoverWidth = ref(0);
 const updatePopoverWidth = () => {
   if (!contentWrapperRef.value) return;
   popoverWidth.value = contentWrapperRef.value.getBoundingClientRect().width;
+};
+
+const handleInput = () => {
+  filterStore.onlySearchInTitle = false;
+  filterStore.loadFilteredResults();
 };
 
 const startSearch = () => {

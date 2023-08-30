@@ -1,11 +1,31 @@
 <template>
   <div>
-    <h2>Mein Profil</h2>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
-      du Kurse und Veranstaltungen sowie Beiträge anlegen.
+    <h2>Mein Konto</h2>
+    <v-alert type="info" density="compact" closable class="mt-2">
+      Hier kannst du deine Daten vervollständigen und dein Passwort ändern.
     </v-alert>
-    <h2 class="mt-5">Bitte vervollständige deine Daten und ändere dein Passwort:</h2>
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
+      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
+      anlegen.
+    </v-alert>
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      color="yellow"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte vervollständige deine Daten und ändere dein Passwort
+    </v-alert>
+    <v-divider class="my-5"></v-divider>
     <div class="box my-15">
       <div class="main" v-if="item">
         <h3 class="mb-4">Persönliche Daten</h3>
@@ -23,7 +43,9 @@
               @save="saveUserData"
               class="my-3"
             />
-            <v-btn elevation="0" variant="outlined" @click="saveUserData()"> Persönliche Daten Speichern </v-btn>
+            <v-btn elevation="0" variant="outlined" @click="saveUserData()">
+              Persönliche Daten Speichern
+            </v-btn>
           </v-col>
           <v-col> </v-col>
         </v-row>
@@ -31,108 +53,51 @@
         <v-row>
           <v-col md="6">
             <h3 class="mb-4">Passwort ändern</h3>
-            <v-text-field v-model="password" type="password" label="Neues Passwort" />
-            <v-text-field v-model="password_confirmation" type="password" label="Passwort Bestätigung" />
-            <v-btn elevation="0" variant="outlined" @click="updatePassword()"> Passwort ändern </v-btn>
+            <v-text-field
+              v-model="password"
+              :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordVisible ? 'text' : 'password'"
+              :rules="[rules.required, rules.password]"
+              @click:append-inner="PasswordVisible = !PasswordVisible"
+              label="Neues Passwort"
+            />
+            <v-text-field
+              :append-inner-icon="PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordConfirmationVisible ? 'text' : 'password'"
+              v-model="password_confirmation"
+              label="Passwort Bestätigung"
+              :rules="[
+                password === password_confirmation || 'Passwörter stimmen nicht überein',
+                rules.required,
+                rules.password,
+              ]"
+            />
+            <v-btn
+              :disabled="password !== password_confirmation"
+              elevation="0"
+              variant="outlined"
+              class="text-success"
+              @click="updatePassword()"
+            >
+              Passwort ändern
+            </v-btn>
+            <div class="mt-3" v-if="currentUser?.password_changed_at">
+              <span
+                ><i
+                  >Letzte Änderung am:
+                  {{ useDatetime().parseDatetime(currentUser?.password_changed_at) }}</i
+                >
+              </span>
+            </div>
           </v-col>
         </v-row>
-        <v-divider class="my-5"></v-divider>
-        <div class="d-flex">
-          <v-btn elevation="0" class="mr-5" variant="outlined" color="primary" @click="goToFacility('care_facilities')">
-            Zu meiner Einrichtung
-          </v-btn>
-          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
-            Zu meinen Kursen
-          </v-btn>
-          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('courses_events')">
-            Zu meinen Veranstaltungen
-          </v-btn>
-          <v-btn elevation="0" class="mr-5" variant="outlined" @click="goToFacility('news_articles')">
-            Zu meinen Beiträgen
-          </v-btn>
-        </div>
-        <!--         <v-divider class="my-5"></v-divider>
-        <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
-          <h3 class="mb-4">Deine Einrichtungen:</h3>
-          <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'facility')" :key="facilities.id">
-            <v-row class="d-flex align-center">
-              <v-col md="6" class="d-flex my-5 has-bg-light-grey">
-                <div class="pr-5">
-                  <v-icon>mdi-home-city-outline</v-icon>
-                </div>
-                <div>
-                  {{ facilities.name }}
-                </div>
-              </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('care_facilities')">
-                Zur Einrichtung
-              </v-btn>
-            </v-row>
-          </div>
-        </div>
-        <v-divider class="my-5"></v-divider>
-        <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
-          <h3 class="mb-4">Deine Kurse:</h3>
-          <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'course')" :key="facilities.id">
-            <v-row class="d-flex align-center">
-              <v-col md="6" class="d-flex my-5 has-bg-light-grey">
-                <div class="pr-5">
-                  <v-icon>mdi-school-outline</v-icon>
-                </div>
-                <div>
-                  {{ facilities.name }}
-                </div>
-              </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('courses_events')">
-                Zum Kurs
-              </v-btn>
-            </v-row>
-          </div>
-        </div>
-        <v-divider class="my-5"></v-divider>
-        <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
-          <h3 class="mb-4">Deine Veranstaltungen:</h3>
-          <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'event')" :key="facilities.id">
-            <v-row class="d-flex align-center">
-              <v-col md="6" class="d-flex my-5 has-bg-light-grey">
-                <div class="pr-5">
-                  <v-icon>mdi-calendar-star-four-points</v-icon>
-                </div>
-                <div>
-                  {{ facilities.name }}
-                </div>
-              </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('courses_events')">
-                Zum Veranstaltung
-              </v-btn>
-            </v-row>
-          </div>
-        </div>
-        <v-divider class="my-5"></v-divider>
-        <div v-if="item && item.care_facilities && Array.isArray(item.care_facilities)">
-          <h3 class="mb-4">Deine Beiträge:</h3>
-          <div v-for="facilities in item.care_facilities.filter(facilities => facilities.kind === 'news')" :key="facilities.id">
-            <v-row class="d-flex align-center">
-              <v-col md="6" class="d-flex my-5 has-bg-light-grey">
-                <div class="pr-5">
-                  <v-icon>mdi-post-outline</v-icon>
-                </div>
-                <div>
-                  {{ facilities.name }}
-                </div>
-              </v-col>
-              <v-btn elevation="0" class="mx-5" variant="outlined" @click="goToFacility('news_articles')">
-                Zum Beitrag
-              </v-btn>
-            </v-row>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { rules } from "../../../data/validationRules";
 import { useUserStore } from "@/store/user";
 definePageMeta({
   layout: "admin",
@@ -158,6 +123,9 @@ const item = ref({
 
 const password = ref("");
 const password_confirmation = ref("");
+
+const PasswordVisible = ref(false);
+const PasswordConfirmationVisible = ref(false);
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());

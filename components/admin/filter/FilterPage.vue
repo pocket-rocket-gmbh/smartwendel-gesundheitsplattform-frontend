@@ -2,11 +2,6 @@
   <div>
     <h2>{{ name }}</h2>
     <!-- <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn> -->
-    <v-alert type="info" density="compact" closable class="mt-2"
-      >Filter erleichtern den Besuchern die Auffindbarkeit von Inhalten, Beispiele können zielgruppenspezifische Tags
-      wie z.B. nach Alter oder Geschlecht sein.</v-alert
-    >
-
     <!-- Einrichtungsfilter -->
     <CollapsibleListRec
       :items="itemsForFacilityList"
@@ -42,13 +37,7 @@
       :kind="filterKind"
     />
 
-    <DeleteItem
-      v-if="confirmDeleteDialogOpen"
-      @close="handleItemDeleted"
-      :item-id="itemId"
-      :endpoint="deleteEndpoint"
-      term="diesen Filter"
-    />
+    <DeleteItem v-if="confirmDeleteDialogOpen" @close="handleItemDeleted" :item-id="itemId" :endpoint="deleteEndpoint" term="diesen Filter" />
   </div>
 </template>
 
@@ -105,53 +94,31 @@ type FilterResponse = {
   name: string;
   menu_order: number;
   kind: FilterKind;
+  parent_id: string;
 };
 
-const getItemsAndNext = async (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number) => {
-  api.setEndpoint(`tag_categories?parent_id=${filter.id}`);
-  const options = {
-    page: 1,
-    per_page: 999,
-    sort_by: "menu_order",
-    sort_order: "asc",
-    searchQuery: null as any,
-    concat: false,
-    filters: [] as any,
-  };
+const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number, allFilters: FilterResponse[]) => {
+  if (layer === 4) {
+    return;
+  }
 
   const filterItem: CollapsibleListItem = {
     id: filter.id,
-    // title: `${filter.name} - ${filter.kind}`,
     title: filter.name,
     menuOrder: filter.menu_order,
     layer,
-    // additionalData: layer === 0 && {
-    //   type: "api",
-    //   endpoint: `tag_categories/${filter.id}`,
-    //   path: "resource.kind",
-    // },
-    // canAddAdditionalData: layer === 0,
-    // static: layer === 0,
     next: [],
   };
 
   arrayToAdd.push(filterItem);
 
-  const response = await api.retrieveCollection(options);
-  if (response.status === ResultStatus.FAILED) {
-    console.error(response);
-    throw "Api failure";
-  }
-  const filterItems: FilterResponse[] = response?.data?.resources;
-  if (!filterItems) {
-    console.error("No filterItems!");
-    return false;
+  const childFilterItems: FilterResponse[] = allFilters.filter((item) => item.parent_id === filter.id);
+
+  if (!childFilterItems.length) {
+    return;
   }
 
-  const nextLayerWave: any[] = filterItems.map((filterItemFromResponse) =>
-    getItemsAndNext(filterItemFromResponse, filterItem.next || [], layer + 1)
-  );
-  return Promise.all(nextLayerWave);
+  childFilterItems.forEach((childFilterItem) => getItemsAndNext(childFilterItem, filterItem.next || [], layer + 1, allFilters));
 };
 
 const getItems = async () => {
@@ -174,11 +141,7 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) =>
-    props.filterKind === "course" || props.filterKind === "event"
-      ? item.kind === "course" || item.kind === "event"
-      : props.filterKind === item.kind
-  );
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
   // const filters: any[] = result?.data?.resources;
   if (!filters) {
     console.error("No filters!");
@@ -191,13 +154,10 @@ const getItems = async () => {
   const tmpItemsForFacilityList: CollapsibleListItem[] = [];
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
-  const nextLayerWavePromisesFacility = facilityFilters.map((filter) =>
-    getItemsAndNext(filter, tmpItemsForFacilityList, 0)
-  );
-  const nextLayerWavePromisesService = serviceFilters.map((filter) =>
-    getItemsAndNext(filter, tmpItemsForServiceList, 0)
-  );
-  await Promise.all([...nextLayerWavePromisesFacility, ...nextLayerWavePromisesService]);
+  const allFilters = await getAllFilters();
+
+  facilityFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForFacilityList, 0, allFilters));
+  serviceFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters));
 
   const tags = await loadAllTags();
 
@@ -214,7 +174,7 @@ const getItems = async () => {
   tmpItemsForServiceList[0]?.next.push({
     id: "0",
     layer: 1,
-    title: "Leistungsangebote (branchenspezifisch)",
+    title: "Branchenspezifisches Leistungsangebot",
     menuOrder: 0,
     static: true,
     specialType: "tag",
@@ -241,22 +201,12 @@ const loadAllTags = async () => {
 
   // const tags: FilterTag[] = res.data.resources;
   const scope = filterKindToFilterScope(props.filterKind);
-  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>
-    scope === "course" || scope === "event" ? item.scope === "course" || item.scope === "event" : scope === item.scope
-  );
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => scope === item.scope);
 
   return tags;
 };
 
-const handleClick = async (
-  action: EmitAction,
-  itemIds: string[],
-  layer: number,
-  name: string,
-  kind: string,
-  specialType: string,
-  filterType: FilterType
-) => {
+const handleClick = async (action: EmitAction, itemIds: string[], layer: number, name: string, kind: string, specialType: string, filterType: FilterType) => {
   switch (action) {
     case "CREATE":
       return handleCreate(itemIds, layer, name, filterType, specialType);
@@ -281,13 +231,7 @@ const handleEdit = async (itemIds: string[], layer: number, name: string, kind: 
   }
 };
 
-const handleCreate = async (
-  itemIds: string[],
-  layer: number,
-  name: string,
-  filterType: FilterType,
-  specialType: string
-) => {
+const handleCreate = async (itemIds: string[], layer: number, name: string, filterType: FilterType, specialType: string) => {
   if (specialType === "tag") {
     api.setEndpoint(`tags`);
     const res = await api.createItem({
@@ -322,13 +266,7 @@ const handleDelete = async (itemIds: string[], layer: number, specialType: strin
   openDeleteDialog(itemIds[0]);
 };
 
-const handleMove = async (
-  itemsInFilter: CollapsibleListItem[],
-  layer: number,
-  startIndex: number,
-  endIndex: number,
-  filterType: FilterType
-) => {
+const handleMove = async (itemsInFilter: CollapsibleListItem[], layer: number, startIndex: number, endIndex: number, filterType: FilterType) => {
   /**
    * TODO: Move fix again
    */

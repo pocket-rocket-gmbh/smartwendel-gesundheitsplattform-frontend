@@ -2,13 +2,19 @@
   <div class="wrapper">
     <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
     <PublicLandingChooseCategory />
-    <p class="has-font-size-medium sub-title">
-      Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.
-    </p>
+    <p class="has-font-size-medium sub-title">Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.</p>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useFilterStore } from "~/store/searchFilter";
+
+const filterStore = useFilterStore();
+
+onMounted(() => {
+  filterStore.resetAllFilters();
+});
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";

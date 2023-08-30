@@ -10,17 +10,40 @@
       type="warning"
       :text="`Die Auflösung des zugeschnittenen Bildes ist zu gering (Mindestens ${minWidth}x${minHeight}px - Hier: ${croppedSize.width}x${croppedSize.height})`"
     ></v-alert>
+    <div class="my-5 justify-center align-center">
+      <v-row>
+        <v-col md="6" offset="5">
+          <v-btn class="mx-2" icon  @click="handleZoom(2)">
+            <v-icon>mdi-magnify-plus-outline</v-icon></v-btn
+          >
+          <v-btn icon class="mx-2" @click="handleZoom(0.8)"
+            ><v-icon>mdi-magnify-minus-outline</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
+
     <Cropper
+      ref="cropper"
       class="cropper"
       :src="imgUrl"
       :stencil-props="{
         aspectRatio: aspectRatio,
       }"
       @change="onChange"
+      :auto-zoom="true"
+      :imageRestriction="'none'"
+      :resizeImage="{ wheel: false }"
     />
+
     <v-card-actions>
       <v-btn @click="emitClose()"> Bild verwerfen </v-btn>
-      <v-btn color="blue darken-1" dark :disabled="selectedImageTooSmall || croppedImageTooSmall" @click="crop()">
+      <v-btn
+        color="blue darken-1"
+        dark
+        :disabled="selectedImageTooSmall || croppedImageTooSmall"
+        @click="crop()"
+      >
         {{ cta }}
       </v-btn>
     </v-card-actions>
@@ -39,6 +62,12 @@ type ImageSize = {
 type CropperUpdate = {
   canvas: HTMLCanvasElement;
   image: ImageSize;
+};
+
+const cropper = ref<typeof Cropper>();
+
+const handleZoom = (factor: number) => {
+  cropper.value.zoom(factor);
 };
 
 const props = defineProps({
@@ -61,7 +90,10 @@ const selectedImageTooSmall = computed(() => {
 
   if (!props.minSize) return false;
 
-  return originalSize.value.width < props.minWidth || originalSize.value.height < props.minHeight;
+  return (
+    originalSize.value.width < props.minWidth ||
+    originalSize.value.height < props.minHeight
+  );
 });
 
 const croppedImageTooSmall = computed(() => {
@@ -69,7 +101,9 @@ const croppedImageTooSmall = computed(() => {
 
   if (!props.minSize) return false;
 
-  return croppedSize.value.width < props.minWidth || croppedSize.value.height < props.minHeight;
+  return (
+    croppedSize.value.width < props.minWidth || croppedSize.value.height < props.minHeight
+  );
 });
 
 const onChange = ({ canvas, image: originalImage }: CropperUpdate) => {

@@ -100,8 +100,17 @@ const fields = ref([
     emit: "mailUser",
     tooltip: "E-Mail an Benutzer",
   },
+  {
+    prop: "",
+    text: "",
+    value: "mdi-email-outline",
+    type: "icon",
+    emit: "mailUser",
+    tooltip: "E-Mail an Benutzer",
+  },
 ]);
 
+const route = useRoute();
 const loading = ref(false);
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
@@ -117,16 +126,11 @@ const filter = ref({
 });
 const dataTableRef = ref();
 
-const facilitySearchColums = ref([
-  "firstname",
-  "lastname",
-  "last_seen",
-  "care_facilities",
-]);
+const facilitySearchColums = ref(["firstname", "lastname", "last_seen", "care_facilities"]);
 const facilitySearchTerm = ref("");
 
-const openCreateEditDialog = (id: string) => {
-  itemId.value = id;
+const openCreateEditDialog = (item: any) => {
+  itemId.value = item.id;
   createEditDialogOpen.value = true;
 };
 
@@ -134,10 +138,6 @@ const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
 };
-
-onMounted(() => {
-  getUsers();
-});
 
 const mailUser = async (id: String) => {
   const user = users.value.find((user) => user.id === id);
@@ -157,6 +157,16 @@ const getUsers = async () => {
   dataTableRef.value?.getItems();
   loading.value = false;
 };
+
+onMounted(async () => {
+  await getUsers();
+
+  const { userId } = route.query;
+
+  if (!userId) return;
+
+  openCreateEditDialog({ id: userId });
+});
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"

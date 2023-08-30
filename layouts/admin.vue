@@ -26,9 +26,7 @@
         </v-alert>
       </div>
       <v-list dense nav>
-        <v-list-item :to="appStore.dashboardBackLink || '/'" @click.prevent="routeBack">
-          <v-icon>mdi-arrow-left</v-icon> Zurück zur Website
-        </v-list-item>
+        <v-list-item :to="'/'"> <v-icon>mdi-arrow-left</v-icon> Zurück zur Website </v-list-item>
         <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
           <v-list-item link to="/admin/matomo" nuxt> <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken </v-list-item>
@@ -36,8 +34,7 @@
           <v-list-item link to="/admin" nuxt> Admin-Bereich (Change Log) </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
-          <v-list-item link to="/admin/filter/events" nuxt> Veranstaltungsfilter </v-list-item>
-          <v-list-item link to="/admin/filter/news" nuxt> Beitragsfilter </v-list-item>
+          <v-list-item link to="/admin/filter/courses" nuxt> Kursfilter </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
           <v-divider></v-divider>
@@ -52,15 +49,27 @@
           <span v-else>Einrichtungen</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
           link
-          to="/admin/courses_events"
+          to="/admin/courses"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          <span v-if="useUser().isFacilityOwner()">Meine Kurse und Veranstaltungen</span>
-          <span v-else>Kurse und Veranstaltungen</span>
+          <span v-if="useUser().isFacilityOwner()">Meine Kurse</span>
+          <span v-else>Kurse</span>
         </v-list-item>
         <v-list-item
+          :disabled="!setupFinished"
+          link
+          to="/admin/events"
+          nuxt
+          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
+        >
+          <span v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</span>
+          <span v-else>Veranstaltungen</span>
+        </v-list-item>
+        <v-list-item
+          :disabled="!setupFinished"
           link
           to="/admin/news_articles"
           nuxt
@@ -76,7 +85,7 @@
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
         >
-          <span>Mein Profil</span>
+          <span>Mein Konto</span>
         </v-list-item>
         <v-list-item
           link
@@ -112,23 +121,14 @@
 import { useAccessPrivileges } from "~/composables";
 import { useUser } from "~/composables";
 import { useAdminStore } from "~/store/admin";
-import { useAppStore } from "~/store/app";
 
 const user = useUser();
-const appStore = useAppStore();
-const router = useRouter();
 
 const adminStore = useAdminStore();
 const setupFinished = ref(false);
 
 const handleLogout = () => {
   user.logout();
-};
-
-const routeBack = () => {
-  router.push({ path: appStore.dashboardBackLink || "/" });
-
-  appStore.dashboardBackLink = "";
 };
 
 onMounted(async () => {

@@ -1,34 +1,50 @@
 <template>
   <div class="categories-wrapper">
-    <div class="text">
-      <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">
-        Pflege, Ärtze, <br />
-        Krankenhäuser und co.
-      </h2>
-      <p class="text-justify">
-        Über diese Suchfunktion findest du sicher schnell die passende Einrichtung und den richtigen Ansprechpartner.
-      </p>
-      <p class="text-justify mt-5">
-        Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher findest du unter mehr als 1.000 gelisteten Anbieten die
-        Leistung, nach der du suchst. Informierest du über die Angebote oder nimmst direkt Kontakt auf und vereinbarst
-        du persönliches Beratungsgespräch.
-      </p>
-      <div class="button my-5">
-        <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToSearch()">
-          <span> Alle Einrichtungen </span>
-        </v-btn>
-      </div>
-    </div>
-    <div class="icons">
-      <div v-for="(item, index) in items" :key="index" class="d-flex is-clickable d-flex icon">
-        <img class="image" :src="item.content.icon" />
-        <div class="d-flex align-center">
-          <div class="font-weight-bold d-flex align-center is-clickable">
-            <span class="is-dark-grey" v-html="item.content.heading"></span>
+    <v-row>
+      <v-col>
+        <div class="text">
+          <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">
+            Pflege, Ärtze, <br />
+            Krankenhäuser und co.
+          </h2>
+          <p class="text-justify">
+            Über diese Suchfunktion findest du sicher schnell die passende Einrichtung und
+            den richtigen Ansprechpartner.
+          </p>
+          <p class="text-justify mt-5">
+            Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher findest du unter mehr
+            als 1.000 gelisteten Anbieten die Leistung, nach der du suchst. Informierest
+            du über die Angebote oder nimmst direkt Kontakt auf und vereinbarst du
+            persönliches Beratungsgespräch.
+          </p>
+          <div class="button my-5">
+            <v-btn
+              variant="flat"
+              color="primary"
+              rounded="pill"
+              size="large"
+              @click="goToSearch()"
+            >
+              <span> Alle Einrichtungen </span>
+            </v-btn>
           </div>
         </div>
-      </div>
-    </div>
+      </v-col>
+      <v-col class="d-flex justify-center align-center">
+        <div class="icons">
+          <div v-for="(item, index) in items" :key="index" class="d-flex justify-start">
+            <div class="is-clickable d-flex icon py-3" @click="goToLink(item.link)">
+              <img class="image" :src="item.content.icon" />
+              <div class="d-flex align-center">
+                <div class="font-weight-bold d-flex align-center is-clickable">
+                  <span class="is-dark-grey" v-html="item.content.heading"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script lang="ts" setup>
@@ -45,41 +61,51 @@ const goToSearch = () => {
   router.push({ path: "/public/search/facilities" });
 };
 
+const goToLink = (item:string) => {
+  router.push({ path: `/public/search/facilities${item}` });
+};
+
 const items = [
   {
     content: {
       heading: "Ärztinnen & Ärzte",
       icon: icon1,
+      link: ""
     },
   },
   {
     content: {
       heading: "Fitnesseinrichtungen",
       icon: icon2,
+      link: ""
     },
   },
   {
     content: {
       heading: "Vereine",
       icon: icon3,
+      link: ""
     },
   },
   {
     content: {
       heading: "Apotheken",
       icon: icon4,
+      link: ""
     },
   },
   {
     content: {
       heading: "Pflegeeinrichtungen",
       icon: icon5,
+      link: ""
     },
   },
   {
     content: {
       heading: "Wohnheime",
       icon: icon6,
+      link: ""
     },
   },
 ];

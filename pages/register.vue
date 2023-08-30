@@ -1,54 +1,49 @@
 <template>
   <v-row class="my-15">
-    <v-col sm="3" md="4" offset-sm="4">
-      <v-card elevation="10" :class="['pa-6', {'shake' : animated}]">
-        <img class="is-fullwidth" src="~/assets/images/logo.png" />
-        <div v-if="!registerSuccessful" class="mt-3">
-          <div class="field">
-            <v-text-field
-              v-model="careFacilityName"
-              type="text"
-              label="Name der Einrichtung/ Unternehmen/Verband/Verein/Behörde *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-              hide-details="auto"
-            />
+    <v-col sm="3" md="8" offset-sm="2">
+      <v-card elevation="10" :class="['card', { shake: animated }]">
+        <div>
+          <div
+            class="d-flex justify-center align-center text-primary text-h2 font-weight-bold"
+            v-if="!registerSuccessful"
+          >
+            <span>Jetzt registrieren!</span>
           </div>
-          <div class="field">
-            <v-text-field
-              v-model="firstname"
-              type="text"
-              label="Vorname *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-              hide-details="auto"
-            />
+          <div class="mt-5 d-flex flex-column" v-if="!registerSuccessful">
+            <span class="">
+              Du bist im Landkreis ansässiger Gesundheitsanbieter:in und möchtest dein
+              Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen?
+              Dann laden wir dich herzlich ein, dich zu registrieren!</span
+            >
+            <span class="mt-5">
+              Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und
+              in wenigen Schritten auf der Plattform darstellen und veröffentlichen.
+              Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
+              dein Angebot und steigerst deine Bekanntheit bei der einheimischen
+              Bevölkerung. Ganz gleich ob es um ein behördliches, gemeinnütziges,
+              ehrenamtliches oder gewerbliches Angebot handelt.
+            </span>
+            <span class="mt-5">
+              Ganz gleich ob es um ein behördliches, gemeinnütziges, ehrenamtliches oder
+              gewerbliches Angebot handelt: „Auf der Gesundheits- und Pflegeplattform sind
+              alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
+              Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
+            </span>
           </div>
-          <div class="field">
-            <v-text-field
-              v-model="lastname"
-              type="text"
-              label="Nachname *"
-              :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
-              hide-details="auto"
-            />
-          </div>
-          <div class="field">
-            <v-text-field 
-              v-model="phone"
-              type="number"
-              label="Telefonnummer *"
-              hide-details="auto"
-              :error-messages="useErrors().checkAndMapErrors('phone', errors)"
-            />
-          </div>
-          <div class="field">
-            <v-text-field 
-              v-model="email"
-              type="email"
-              label="E-Mail Adresse *"
-              hide-details="auto"
-              :error-messages="useErrors().checkAndMapErrors('email', errors)"
-            />
-          </div>
+        </div>
+        <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
+          <div class="my-5">
+            <h2 class="mb-3">Meine Einrichtung</h2>
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityName"
+                type="text"
+                label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
+                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
             <div class="field">
               <v-select
                 hide-details="auto"
@@ -56,7 +51,7 @@
                 :items="communities"
                 item-title="name"
                 item-value="id"
-                label="Gemeinde"
+                label="Gemeinde *"
                 :rules="[rules.required]"
               />
             </div>
@@ -64,35 +59,74 @@
               <v-text-field
                 v-model="careFacilityZip"
                 hide-details="auto"
-                label="PLZ"
+                label="PLZ *"
                 :type="'number'"
                 :rules="[rules.required, rules.zip]"
-                :error-messages="
-                  useErrors().checkAndMapErrors('zip', errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('zip', errors)"
+                disabled
               />
               <v-select
+                :disabled="careFacilityCommunityId.length === 0"
                 hide-details="auto"
                 v-model="careFacilityTown"
                 :items="getTownsByCommunityId(careFacilityCommunityId)"
                 item-title="name"
                 item-value="name"
-                label="Ort"
+                label="Ort *"
                 :rules="[rules.required]"
               />
             </div>
-          <v-checkbox v-model="privacyAccepted">
+          </div>
+          <div class="my-5">
+            <h2 class="mb-3">Mein Benutzerkonto</h2>
+            <div class="field">
+              <v-text-field
+                v-model="firstname"
+                type="text"
+                label="Vorname *"
+                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="lastname"
+                type="text"
+                label="Nachname *"
+                :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="phone"
+                type="tel"
+                label="Telefonnummer *"
+                hide-details="auto"
+                :rules="[rules.required, rules.validateNumber]"
+                :error-messages="useErrors().checkAndMapErrors('phone', errors)"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="email"
+                type="email"
+                label="E-Mail Adresse *"
+                :rules="[rules.required, rules.email]"
+                hide-details="auto"
+                :error-messages="useErrors().checkAndMapErrors('email', errors)"
+              />
+            </div>
+          </div>
+          <v-checkbox v-model="privacyAccepted" :rules="[rules.required]">
             <template v-slot:label>
               <div>
                 Ich stimme der
                 <v-tooltip bottom>
                   <template v-slot:activator="{ props }">
-                    <a
-                      target="_blank"
-                      href="/privacy_policy"
-                      @click.stop
-                      v-bind="props"
-                    >
+                    <a target="_blank" href="/privacy_policy" @click.stop v-bind="props">
                       <u>Datenschutzerklärung</u>
                     </a>
                   </template>
@@ -103,7 +137,7 @@
                   <template v-slot:activator="{ props }">
                     <a
                       target="_blank"
-                      href="/terms_of_use"
+                      href="/rules_of_conduct"
                       @click.stop
                       v-bind="props"
                     >
@@ -116,48 +150,175 @@
               </div>
             </template>
           </v-checkbox>
-          <v-btn color="primary" block depressed @click="register" :disabled="!formValidated">Registrieren</v-btn>
+          <v-btn color="primary" class="mt-5" block depressed @click="register"
+            >Registrieren</v-btn
+          >
+        </v-form>
+        <div v-if="registerSuccessful" align="center" class="mt-5">
+          <div class="d-flex flex-column align-center justify-center">
+            <span class="text-h5 font-weight-bold mb-10">
+              Vielen Dank für deine Registrierung!
+            </span>
+            <span class="text-h6">
+              Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
+              temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+            </span>
+          </div>
+          <div class="mt-5">
+            <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>
+          </div>
         </div>
-        <div v-else align="center">
-          Deine Registrierung war erfolgreich.<br/>Wir haben Dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt.
-        </div>
-        <v-btn block depressed to="/login" class="mt-2">Jetzt anmelden</v-btn>
       </v-card>
     </v-col>
   </v-row>
+  <div
+    v-if="registerSuccessful"
+    class="d-flex flex-column align-center justify-center mt-10"
+  >
+    <span class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5"
+      >So geht es weiter:</span
+    >
+    <v-row no-gutters>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 1 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> anmelden </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-account-edit-outline</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere
+                zunächst dein Password.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 2 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> verifizieren </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-check-decagram-outline</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+               Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 3 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> ergänzen </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-plus-box-multiple-outline</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                in der Zwichenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e)
+                einstellen ("Meine Einrichtung").
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 4 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> veröffent<br />lichen </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-bullhorn-variant-outline</v-icon>
+        </div>
+        <div class="d-flex  text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für
+                alle Besucher:innen sichtbar veröffentlichen.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 5 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> vervoll<br />ständigen </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-newspaper-check</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                Vervollständige deinen Account und lege deine Kursangebote an, teile
+                Veranstaltungen oder verfasse Newsbeiträge.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ResultStatus, ServerCallResult } from '@/types/serverCallResult'
+import { ResultStatus, ServerCallResult } from "@/types/serverCallResult";
 import { rules } from "../data/validationRules";
-import axios from 'axios'
+import axios from "axios";
+import { VForm } from "vuetify/lib/components/index.mjs";
 
-const careFacilityName = ref('')
-const email = ref('')
-const careFacilityZip = ref('')
-const careFacilityTown = ref('')
-const careFacilityCommunityId = ref('')
-const firstname = ref('')
-const lastname = ref('')
-const phone = ref('')
-const loading = ref(false)
-const animated = ref(false)
-const errors = ref({})
-const registerSuccessful = ref(false)
-const privacyAccepted = ref(false)
+const careFacilityName = ref("");
+const email = ref("");
+const careFacilityZip = ref("");
+const careFacilityTown = ref("");
+const careFacilityCommunityId = ref("");
+const firstname = ref("");
+const lastname = ref("");
+const phone = ref("");
+const loading = ref(false);
+const animated = ref(false);
+const errors = ref({});
+const registerSuccessful = ref(false);
+const privacyAccepted = ref(false);
+const registerForm = ref<VForm>();
+const router = useRouter();
 
-const isValidEmail = (email:string) => {
-  const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+const isValidEmail = (email: string) => {
+  const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return re.test(email);
-}
+};
 
-const formValidated = computed(() => {
-  return careFacilityName.value.length > 0 && firstname.value.length > 0 && lastname.value.length > 0 && phone.value.length > 0 && isValidEmail(email.value) && privacyAccepted.value
-})
+// const formValidated = computed(() => {
+//   return registerForm.value?.isValid;
+// });
+
+const toLogin = () => {
+  router.push({ path: "/login" });
+};
 
 const register = async () => {
-  loading.value = true
-  errors.value = {}
+  const { valid } = await registerForm.value.validate();
+
+  if (!valid) return;
+
+  loading.value = true;
+  errors.value = {};
   const data = {
     email: email.value,
     firstname: firstname.value,
@@ -167,41 +328,42 @@ const register = async () => {
     care_facility_name: careFacilityName.value,
     care_facility_zip: careFacilityZip.value,
     care_facility_town: careFacilityTown.value,
-    care_facility_community_id: careFacilityCommunityId.value
-  }
-
-  const {data: result} = await axios.post<ServerCallResult>("/api/register_with_facility", {data});
-
-  if (result.status === ResultStatus.SUCCESSFUL) {
-    localStorage.setItem('health_platform._remembered_email', email.value)
-    registerSuccessful.value = true
-  } else {
-    errors.value = { errors: [{ field_name: 'email', code: 'register.failed' }] }
-    loading.value = false
-
-    // animate shake
-    animated.value = true
-    setTimeout(() => {
-      animated.value = false
-    }, 1000)
-  }
-}
-
-  const communitiesApi = useCollectionApi();
-  communitiesApi.setBaseApi(usePublicApi());
-  communitiesApi.setEndpoint(`communities`);
-  const communities = communitiesApi.items;
-
-  const getCommunities = async () => {
-    await communitiesApi.retrieveCollection();
+    care_facility_community_id: careFacilityCommunityId.value,
   };
 
-  const getTownsByCommunityId = (communityId: string) => {
-    const found = communities.value.find(
-      (community: any) => community.id === communityId
-    );
-     if (found) {
-      careFacilityZip.value = found.zip;
+  const { data: result } = await axios.post<ServerCallResult>(
+    "/api/register_with_facility",
+    { data }
+  );
+
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    localStorage.setItem("health_platform._remembered_email", email.value);
+    registerSuccessful.value = true;
+  } else {
+    errors.value = { errors: [{ field_name: "email", code: "register.failed" }] };
+    loading.value = false;
+
+    // animate shake
+    animated.value = true;
+    setTimeout(() => {
+      animated.value = false;
+    }, 1000);
+  }
+};
+
+const communitiesApi = useCollectionApi();
+communitiesApi.setBaseApi(usePublicApi());
+communitiesApi.setEndpoint(`communities`);
+const communities = communitiesApi.items;
+
+const getCommunities = async () => {
+  await communitiesApi.retrieveCollection();
+};
+
+const getTownsByCommunityId = (communityId: string) => {
+  const found = communities.value.find((community: any) => community.id === communityId);
+  if (found) {
+    careFacilityZip.value = found.zip;
     return found.towns;
   } else {
     [];
@@ -210,31 +372,59 @@ const register = async () => {
 
 onMounted(() => {
   getCommunities();
-  const rememberedEmail = localStorage.getItem('health_platform._remembered_email')
+  const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
   if (rememberedEmail) {
     setTimeout(() => {
-      email.value = rememberedEmail
-    }, 300)
+      email.value = rememberedEmail;
+    }, 300);
   }
-})
+
+  // registerForm.value?.validate()
+});
 </script>
 
 <style lang="css" scoped>
+.card {
+  padding: 1rem;
+}
+
+.text {
+  min-height: 150px;
+}
+.icon {
+  color: #58595e;
+}
+.chevron {
+  min-height: 50px;
+  color: #58595e;
+  background: #8ab61d;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 70px;
+  padding-right: 50px;
+  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+}
+
 .shake {
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: translate3d(0, 0, 0);
 }
 @keyframes shake {
-  10%, 90% {
+  10%,
+  90% {
     transform: translate3d(-1px, 0, 0);
   }
-  20%, 80% {
+  20%,
+  80% {
     transform: translate3d(2px, 0, 0);
   }
-  30%, 50%, 70% {
+  30%,
+  50%,
+  70% {
     transform: translate3d(-4px, 0, 0);
   }
-  40%, 60% {
+  40%,
+  60% {
     transform: translate3d(4px, 0, 0);
   }
 }

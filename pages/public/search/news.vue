@@ -7,12 +7,7 @@
         :filter-kind="'news'"
       />
       <div class="container">
-        <div class="filters" v-if="showSearchFilter">
-          <PublicSearchTheFilter :filterKind="'news'" />
-        </div>
-        <div class="results">
-          <PublicSearchTheFilteredCareFacilities />
-        </div>
+        <PublicSearchTheFilteredCareFacilities :doubled="true" />
       </div>
     </div>
   </ClientOnly>
@@ -53,18 +48,10 @@ onBeforeUnmount(() => {
 .container
   display: flex
   gap: 1rem
+  padding: 2rem 5rem
 
   @include md
     padding: 1rem
-
-  @include sm
-    padding: 0
-
-  .filters
-    flex: 1
-
-  .results
-    flex: 2
 
   .row
     max-width: 100%

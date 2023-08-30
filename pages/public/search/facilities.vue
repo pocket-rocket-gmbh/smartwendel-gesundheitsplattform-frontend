@@ -123,9 +123,6 @@ onBeforeUnmount(() => {
   @include md
     padding: 1rem
 
-  @include sm
-    padding: 0
-
   .filters
     flex: 1
 

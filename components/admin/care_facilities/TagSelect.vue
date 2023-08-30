@@ -1,8 +1,11 @@
 <template>
-  <CollapsibleItem class="tag-select" id="tag-select" :expand="expand" @expand-toggled="handleExpandToggled">
+  <CollapsibleItem class="tag-select mt-10" id="tag-select" :expand="expand" @expand-toggled="handleExpandToggled">
     <template #title>
       <div class="title">
-        <div>Leistungsangebote (branchenspezifisch)</div>
+        <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'news'">Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'event'">Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
         <div v-if="!expand" class="selected">
           <v-chip v-for="tag in preSetTags" :key="tag.id">
             {{ tag.name }}
@@ -12,17 +15,50 @@
     </template>
     <template #content>
       <div class="content">
-        <div class="content-title">
+        <div v-if="kind === 'facility'">
+          Hier hast du die Möglichkeit, dein individuelles Leistungsangebot mit Hilfe von Schlagwörtern zu beschreiben.
+        </div>
+        <div v-if="kind === 'course'">
+          Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern individuell zu beschreiben.
+        </div>
+        <div v-if="kind === 'event'">
+          Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern individuell zu beschreiben.
+        </div>
+        <div v-if="kind === 'news'">
+          Bitte hinterlege hier alle relevanten Schlagwörter, die den Inhalt deines Newsartikels/Beitrages
+          widerspiegeln.
+        </div>
+        <div class="content-title mt-5 d-flex align-center">
           <v-icon>mdi-tag-outline</v-icon>
-          <div><b>Schlagwort eingeben</b></div>
+          <div>
+            <div>
+              <b>Schlagwort eingeben</b>
+            </div>
+          </div>
           <v-tooltip location="top" width="300px">
             <template v-slot:activator="{ props }">
               <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
             </template>
-            <span
-              >Trage hier deine individuellen Leisungsangebote in Form von Schlagwörtern ein. Hiermit ermöglichst du den
-              Nutzer*innen eine effektive Suche auf der Webseite.</span
-            >
+            <span v-if="kind === 'facility'">
+              Trage Begriffe ein, die dein individuelles Angebot möglichst präzise beschreiben (z. B. „Kurzzeitpflege“,
+              „Betreutes Wohnen“ und „Demenz“, wenn es sich um eine Pflegeinrichtung oder „Yoga“, „Les Mills“ und
+              „Krafttraining“, wenn es sich um ein Fitnessstudio handelt). Auf diese Weise gelangen Besucherinnen und
+              Besucher zu deinem Profil, sobald sie nach den entsprechenden Schlagwörtern suchen.
+            </span>
+            <span v-if="kind === 'course'"
+              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“,
+              „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem
+              Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen.
+            </span>
+            <span v-if="kind === 'event'"
+              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben (z. B. „Yoga“,
+              „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise gelangen Besucherinnen und Besucher zu deinem
+              Kursprofil, sobald sie nach den entsprechenden Schlagwörtern suchen.
+            </span>
+            <span v-if="kind === 'news'">
+              Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie die entsprechenden
+              Schlagwörter suchen.
+            </span>
           </v-tooltip>
         </div>
         <div class="inputs">
@@ -147,9 +183,7 @@ const loadAllTags = async () => {
 
   // const tags = res.data.resources;
   const scope = filterKindToFilterScope(props.kind);
-  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) =>
-    scope === "course" || scope === "event" ? item.scope === "course" || item.scope === "event" : scope === item.scope
-  );
+  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => scope === item.scope);
 
   allTags.value = tags;
 };

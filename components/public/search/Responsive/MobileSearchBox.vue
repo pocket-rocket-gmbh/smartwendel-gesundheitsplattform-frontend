@@ -7,6 +7,22 @@
         </v-col>
       </v-row>
       <v-row>
+        <v-col>
+          <div class="field">
+            <label class="label is-white">
+              <div class="search-term">Suchbegriff</div>
+            </label>
+            <PublicSearchField
+              v-model="filterStore.currentSearchTerm"
+              :filtered-items="filterStore.filteredResults"
+              :default-route-to="'/public/search'"
+              :default-styling="true"
+              @update:model-value="handleInput"
+            />
+          </div>
+        </v-col>
+      </v-row>
+      <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
         <v-col class="align-end">
           <PublicSearchCategorySelectModal v-model="filterStore.currentTags" :filter-kind="filterKind" />
         </v-col>
@@ -57,6 +73,11 @@ const emit = defineEmits<{
 }>();
 
 const filterStore = useFilterStore();
+
+const handleInput = () => {
+  filterStore.onlySearchInTitle = false;
+  filterStore.loadFilteredResults();
+};
 
 const startSearch = () => {
   filterStore.loadAllResults();

@@ -32,6 +32,9 @@ export default defineNuxtConfig({
         { property: 'og:title', content: 'gesundesWND' },
         { property: 'og:description', content: 'Gesundheitsplattform' }
       ],
+      link: [
+        { rel: 'icon', type: "image/png", href: '/favicon.ico' }
+      ],
     }
   }
 })

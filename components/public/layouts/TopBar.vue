@@ -3,9 +3,17 @@
     <v-app-bar v-model="appStore.showTopbar" :elevation="2" class="hero-menu">
       <v-app-bar-title>
         <div class="d-flex align-center">
-          <img @click="handleResetLink()" class="is-clickable" src="~/assets/images/logo.png" width="200" />
+          <div>
+            <a href="/">
+              <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
+            </a>
+          </div>
           <div class="align-center d-none d-lg-flex mx-2">
-            <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
+            <div
+              class="categories-wrapper is-clickable d-flex"
+              v-for="(category, index) in categories"
+              :key="index"
+            >
               <div class="title mx-5">
                 <span class="is-clickable main" @click="setItemsAndGo(category, null)">
                   {{ category.name }}
@@ -39,8 +47,19 @@
               >
                 Anbieter
               </a>
-              <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')">
+              <a
+                href="/public/search/courses"
+                class="is-clickable mx-5"
+                @click.prevent="goTo('/public/search/courses')"
+              >
                 Kurse
+              </a>
+              <a
+                href="/public/search/events"
+                class="is-clickable mx-5"
+                @click.prevent="goTo('/public/search/events')"
+              >
+                Veranstaltungen
               </a>
             </div>
           </div>
@@ -80,7 +99,10 @@
           >
             Meine Einrichtung
           </a>
-          <PublicLayoutsMiniMenu :current-user="currentUser" :user-is-admin="userIsAdmin" />
+          <PublicLayoutsMiniMenu
+            :current-user="currentUser"
+            :user-is-admin="userIsAdmin"
+          />
         </div>
       </div>
       <div class="d-flex d-lg-none align-center" align="center">
@@ -98,10 +120,22 @@
             <div class="font-weight-light">Registriere dich!</div>
           </div>
         </div>
-        <v-btn v-if="!useUser().loggedIn()" color="primary" @click="goToLogin"> Einloggen </v-btn>
+        <v-btn v-if="!useUser().loggedIn()" color="primary" @click="goToLogin">
+          Einloggen
+        </v-btn>
         <div v-if="useUser().loggedIn() && currentUser" class="d-flex">
-          <img v-if="currentUser.image_url" :src="currentUser.image_url" class="is-rounded" height="60" />
-          <img v-if="!currentUser.image_url" src="~/assets/images/user-standard.png" class="is-rounded" height="60" />
+          <img
+            v-if="currentUser.image_url"
+            :src="currentUser.image_url"
+            class="is-rounded"
+            height="60"
+          />
+          <img
+            v-if="!currentUser.image_url"
+            src="~/assets/images/user-standard.png"
+            class="is-rounded"
+            height="60"
+          />
           <v-list-item v-if="currentUser">
             <v-list-item-title>{{ currentUser.name }}</v-list-item-title>
             <v-list-item-subtitle>{{ currentUser.role }}</v-list-item-subtitle>
@@ -126,7 +160,10 @@
           >
             Meine Einrichtung
           </a>
-          <div v-if="useUser().currentUser" @click="useUser().logout(), (drawer = !drawer), reload()">
+          <div
+            v-if="useUser().currentUser"
+            @click="useUser().logout(), (drawer = !drawer), reload()"
+          >
             <v-icon class="mr-2">mdi-logout</v-icon>
             <span>Logout</span>
           </div>
@@ -135,11 +172,15 @@
         <v-divider></v-divider>
         <div>
           <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-          <a class="mr-6" href="/terms_of_use">Nutzungsbedingungen</a>
+          <a class="mr-6" href="/rules_of_conduct">Nutzungsbedingungen</a>
         </div>
         <v-divider></v-divider>
 
-        <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
+        <div
+          class="categories-wrapper is-clickable d-flex"
+          v-for="(category, index) in categories"
+          :key="index"
+        >
           <div class="title">
             <span class="is-clickable main" @click="setItemsAndGo(category, null)">
               {{ category.name }}
@@ -148,11 +189,26 @@
         </div>
         <template v-if="!loading">
           <v-divider></v-divider>
-          <a href="/public/search/facilities" class="is-clickable" @click.prevent="goTo('/public/search/facilities')">
+          <a
+            href="/public/search/facilities"
+            class="is-clickable"
+            @click.prevent="goTo('/public/search/facilities')"
+          >
             Anbieter
           </a>
-          <a href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')">
+          <a
+            href="/public/search/events"
+            class="is-clickable"
+            @click.prevent="goTo('/public/search/events')"
+          >
             Kurse
+          </a>
+          <a
+            href="/public/search/events"
+            class="is-clickable"
+            @click.prevent="goTo('/public/search/events')"
+          >
+            Veranstaltungen
           </a>
         </template>
       </div>
@@ -215,14 +271,6 @@ const goToLogin = () => {
 
 const goTo = (path: string) => {
   router.push({ path });
-};
-
-const handleResetLink = () => {
-  if (router.currentRoute.value.path === "/") {
-    location.reload();
-  } else {
-    router.push({ path: "/" });
-  }
 };
 
 const currentRoute = computed(() => {
