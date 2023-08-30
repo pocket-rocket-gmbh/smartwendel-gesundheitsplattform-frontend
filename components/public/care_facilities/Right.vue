@@ -2,7 +2,6 @@
   <div class="box flex-column text-dark-grey font-weight-bold pa-5">
     <h2 class="is-primary is-uppercase mb-6">Kontakt und Infos</h2>
     <div v-if="careFacility?.phone" class="py-3">
-      {{ careFacility.id }}
       <span>
         <v-icon class="mr-2" color="primary">mdi-phone-outline</v-icon>
         <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
@@ -23,10 +22,10 @@
           <v-icon color="primary">mdi-map-marker-outline</v-icon>
           <span>{{ careFacility.street }}</span>
         </div>
-        <div>
+        <div v-if="careFacility?.additional_address_info">
           <v-icon></v-icon>
           <span>
-            {{ careFacility.additional_address_info }}
+            {{ careFacility?.additional_address_info }}
           </span>
         </div>
 
@@ -37,7 +36,13 @@
       </div>
     </div>
     <div v-if="careFacility?.name_instructor" class="py-4">
-      <h3 class="is-primary is-uppercase mb-1">Kursleitung</h3>
+      <h3 class="is-primary is-uppercase mb-1"><span v-if="careFacility.kind === 'course'">
+        Kursleitung
+        </span>
+        <span v-else>
+          Veranstalter
+        </span>
+        </h3>
       <span>
         {{ careFacility.name_instructor }}
       </span>
