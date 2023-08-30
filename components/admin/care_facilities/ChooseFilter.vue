@@ -229,7 +229,7 @@ const reloadFilters = async () => {
   }
 
   const mainFilters = await getMainFilters(props.filterType, props.filterKind);
-  const allFilters = (await getAllFilters()).filter((filter) => filter.filter_type === props.filterType && filter.kind === props.filterKind);
+  const allFilters = await getAllFilters();
 
   const allNextFilters = mainFilters.map((mainFilter) => getFilterOptions(mainFilter.id, allFilters));
 

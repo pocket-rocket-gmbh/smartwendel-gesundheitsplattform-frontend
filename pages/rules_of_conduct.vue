@@ -1,5 +1,5 @@
 <template>
-  <div class="rules-of-conduct has-text-white">
+  <div class="rules-of-conduct has-text-white ">
     <div class="WordSection1">
       <p class="MsoNormal">
         <b>Nutzungsbedingungen der Gesundheits- und Pflegeplattform des Smart Wendeler Landes für Anbieter:</b>
@@ -8,7 +8,7 @@
       <p class="MsoNormal"><b>Allgemeines</b></p>
 
       <p class="MsoNormal">
-        Der Landkreis Sankt Wendel, Mommstraße 21-31 8, 66606 St. Wendel betreibt die Online-Plattformgesundes-wnd.de.
+        Der Landkreis Sankt Wendel, Mommstraße 21-31 8, 66606 St. Wendel betreibt die Online-Plattform gesundes-wnd.de.
         Die Plattform ermöglicht es Anbieter- und Dienstleister:innen, sich über die Gesundheits- und Pflegeplattform in
         Form einer Detailseite öffentlich darzustellen. Gleichzeitig werden den Unternehmen die Möglichkeiten gegeben
         Beiträge zu Themen aus den Bereichen Gesundheit und Pflege einzustellen und auf ihre jeweiligen Kurse und
@@ -25,13 +25,13 @@
       <p class="MsoNormal"><b>Registrierung</b></p>
 
       <p class="MsoNormal">
-        Jede/Jeder Anbieter:inn aus dem Bereich Gesundheit und Pflege mit Sitz im Landkreis Sankt Wendel kann sich auf
+        Jede/Jeder Anbieter:in aus dem Bereich Gesundheit und Pflege mit Sitz im Landkreis Sankt Wendel kann sich auf
         gesundes-wnd.de registrieren. Die Registrierung ist über die plattformeigene Registrierung, möglich. Dabei ist
         ein Name der Einrichtung zu wählen, der auf der Plattform öffentlich sichtbar ist.
       </p>
 
       <p class="MsoNormal">
-        Für die Registrierung ist die Angabe einer E-Mail-Adresse, Vor- und Nachname, Telefonnummer, E-Mail-Adresse als
+        Für die Registrierung ist die Angabe einer E-Mail-Adresse, Vor- und Nachname, Telefonnummer, als
         auch gängige Angaben zur Adresse erforderlich. Nach Abschluss der Registrierung erhält die Anbieterin bzw. der
         Anbieter eine E-Mail an die zuvor angegebene E-Mail-Adresse mit einem Bestätigungslink, um das neu angelegte
         Nutzer:innenkonto zu bestätigen. Im gleichen Atemzug findet eine Verifizierung durch die entsprechenden
@@ -48,7 +48,7 @@
       <p class="MsoNormal"><b>Erstellen von Inhalten</b></p>
 
       <p class="MsoNormal">
-        Anbieter:innen haben die Möglichkeit, Ihre Einrichtung über die persönliche Detailseite vorzustellen und in Form
+        Anbieter:innen haben die Möglichkeit, ihre Einrichtung über die persönliche Detailseite vorzustellen und in Form
         einer Galerie Bilder hochzuladen. Außerdem haben die Anbieter:innen die Funktion Beiträge und Neuigkeiten zu
         aktuellen Themen aus den Bereichen Gesundheit, Prävention und Pflege einzustellen. Zudem ist es gestattet Kurse
         und Veranstaltungen im vorgesehenen Bereich zu bewerben und auf diese aufmerksam zu machen.
@@ -120,7 +120,7 @@
         Richtigkeit oder auf etwaige Rechtsverstöße. Der Betreiber wird konkreten Hinweisen auf problematische Inhalte
         und Daten jedoch unverzüglich nachgehen. Das Urheberrecht verbleibt bei den Anbieter:innen. Die Anbieter:innen
         räumen dem Landkreis Sankt Wendel das Recht ein, von Anbieter:innen eingestellte Beiträge (einschließlich
-        Informationen der Detailseite ) zum Zwecke des Betriebs der Plattform öffentlich zugänglich zu machen. Darüber
+        Informationen der Detailseite) zum Zwecke des Betriebs der Plattform öffentlich zugänglich zu machen. Darüber
         hinaus darf der Landkreis die Beiträge zum Zwecke der angemessenen Präsentation des Projekts gegenüber seinen
         bestehenden und am Projekt interessierten Kooperationspartnern nutzen und hierzu vorführen und öffentlich
         wiedergeben. Die vorgenannten Nutzungsrechte schließen das Recht ein, die Beiträge vollständig oder in
@@ -216,6 +216,7 @@
 .rules-of-conduct {
   padding: 1rem;
   margin-top: 2rem;
+  font-size: 3rem!important;
 
   @include md {
     margin-top: 0;

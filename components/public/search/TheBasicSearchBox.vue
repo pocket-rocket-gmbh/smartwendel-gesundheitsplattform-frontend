@@ -4,7 +4,12 @@
     v-bind="{ ...$props }"
     @toggle-map="emit('toggleMap')"
   />
-  <PublicSearchResponsiveDesktopSearchBox v-else v-bind="{ ...$props }" @toggle-map="emit('toggleMap')" />
+
+  <PublicSearchResponsiveDesktopSearchBox
+    v-else
+    v-bind="{ ...$props }"
+    @toggle-map="emit('toggleMap')"
+  />
 </template>
 <script setup lang="ts">
 import { useBreakpoints } from "~/composables/ui/breakPoints";

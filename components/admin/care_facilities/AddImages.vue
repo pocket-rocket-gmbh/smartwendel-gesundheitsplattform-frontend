@@ -39,7 +39,7 @@
         md="2"
       >
         <v-card>
-          <v-img :lazy-src="image.url" :src="image.url" max-width="200" />
+          <v-img :lazy-src="image.url" :src="image.url" max-width="300" />
           <v-btn
             size="small"
             width="100%"

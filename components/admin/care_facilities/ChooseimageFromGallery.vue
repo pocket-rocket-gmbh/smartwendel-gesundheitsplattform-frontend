@@ -41,6 +41,8 @@
 import logo1 from "@/assets/images/logo-gallery/icon_care.png";
 import logo2 from "@/assets/images/logo-gallery/icon_doctor.png";
 import logo3 from "@/assets/images/logo-gallery/icon_fitness.png";
+import logo4 from "@/assets/images/logo-gallery/icon_doctor2.png";
+import logo5 from "@/assets/images/logo-gallery/icon_care2.png";
 
 const emit = defineEmits(["setImage"]);
 const props = defineProps({
@@ -86,7 +88,7 @@ const getImagesFromGallery = () => {
     });
 };
 
-const logoimages = ref([logo1, logo2, logo3]);
+const logoimages = ref([logo1, logo2, logo3, logo4, logo5]);
 const coverImages = ref<string[]>([]);
 
 const images = computed(() => {

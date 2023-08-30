@@ -33,8 +33,8 @@
       <div>
         <i>Inhaltlich verantwortlich: {{ careFacility?.user?.name }} </i>
       </div>
-      <div v-if="careFacility?.street && careFacility?.zip && careFacility?.town">
-        <i> Adresse: {{ careFacility.street }}, {{ careFacility.zip }} {{ careFacility.town }} </i>
+      <div v-if="careFacility?.street && careFacility?.zip && careFacility?.town && careFacility?.additional_address_info">
+        <i> Adresse: {{ careFacility.street }}, {{ careFacility.zip }} {{ careFacility.additional_address_info }} {{ careFacility.town }} </i>
       </div>
     </div>
   </div>
@@ -57,7 +57,7 @@ h1 {
 }
 
 .main-wrapper {
-  margin: 5rem 0;
+  margin: 1rem 0;
   @include md {
     margin: 1rem 0;
   }

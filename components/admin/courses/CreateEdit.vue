@@ -410,8 +410,9 @@
               <v-checkbox
                 hide-details
                 density="compact"
+                :disabled="slotProps.item.course_outside_facility"
                 :model-value="slotProps.item.course_outside_facility"
-                @click="slotProps.item.course_outside_facility = !slotProps.item.course_outside_facility"
+                @click="setCourseOutsideFacility(slotProps.item)"
                 label="Ja"
               />
             </div>
@@ -492,6 +493,7 @@ import {
   CreateEditSteps,
 } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
+import { set } from "date-fns";
 
 const stepNames = [
   "name",
@@ -595,7 +597,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name_instructor"],
   },
   address: {
-    label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?.",
+    label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
     tooltip: "",
     description: "Adresse",
     props: ["street", "zip", "community_id", "town"],
@@ -607,6 +609,18 @@ const createEditRef = ref();
 
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
+
+const setCourseOutsideFacility = (item: CreateEditFacility) => {
+  console.log(item)
+  item.course_outside_facility = !item.course_outside_facility;
+  if (item?.course_outside_facility) {
+    item.street = "";
+    item.zip = "";
+    item.community_id = "";
+    item.town = "";
+    item.additional_address_info = "";
+  }
+};
 
 const textOptions = ref({
   debug: false,

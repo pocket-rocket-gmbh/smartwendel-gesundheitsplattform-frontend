@@ -22,7 +22,7 @@
           </div>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
         <v-col class="align-end">
           <PublicSearchCategorySelectModal v-model="filterStore.currentTags" :filter-kind="filterKind" />
         </v-col>
