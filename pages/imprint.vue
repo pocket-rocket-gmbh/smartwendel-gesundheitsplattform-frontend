@@ -79,7 +79,9 @@
       <p>Essener Straße 4</p>
       <p>66606 St. Wendel</p>
       <p>info(at)pocket-rocket.io</p>
-      <p>www.pocket-rocket.io</p>
+      <a href="https://pocket-rocket.io" target="_blank">
+        <p>www.pocket-rocket.io</p>
+      </a>
     </v-container>
   </div>
 </template>

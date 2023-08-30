@@ -26,41 +26,6 @@
       Bitte vervollständige deine Daten und ändere dein Passwort
     </v-alert>
     <v-divider class="my-5"></v-divider>
-    <div class="d-flex">
-      <v-btn
-        elevation="0"
-        class="mr-5"
-        variant="outlined"
-        color="primary"
-        @click="goToFacility('care_facilities')"
-      >
-        Zu meiner Einrichtung
-      </v-btn>
-      <v-btn
-        elevation="0"
-        class="mr-5"
-        variant="outlined"
-        @click="goToFacility('courses')"
-      >
-        Zu meinen Kursen
-      </v-btn>
-      <v-btn
-        elevation="0"
-        class="mr-5"
-        variant="outlined"
-        @click="goToFacility('events')"
-      >
-        Zu meinen Veranstaltungen
-      </v-btn>
-      <v-btn
-        elevation="0"
-        class="mr-5"
-        variant="outlined"
-        @click="goToFacility('news_articles')"
-      >
-        Zu meinen Beiträgen
-      </v-btn>
-    </div>
     <div class="box my-15">
       <div class="main" v-if="item">
         <h3 class="mb-4">Persönliche Daten</h3>

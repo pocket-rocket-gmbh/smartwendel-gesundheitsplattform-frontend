@@ -8,7 +8,7 @@
       </v-col>
       <v-col md="4" v-if="careFacility?.kind !== 'news'">
         <PublicCareFacilitiesRight :care-facility="careFacility" />
-        <div class="mt-5" v-if="careFacility?.kind === 'course'">
+        <div class="mt-5" v-if="careFacility?.kind === 'course', 'event'">
           <PublicCareFacilitiesDates :care-facility="careFacility" />
         </div>
         <div class="mt-5">
@@ -32,7 +32,18 @@ const careFacilityId = computed(() => {
 });
 
 const goBack = () => {
-  router.push({ path: "/public/search/facilities" });
+  if(careFacility.value.kind === "news") {
+    router.push({ path: "/public/search/news" });
+  }
+  if(careFacility.value.kind === "event") {
+    router.push({ path: "/public/search/events" });
+  }
+  if(careFacility.value.kind === "course") {
+    router.push({ path: "/public/search/courses" });
+  }
+  if(careFacility.value.kind === "facility") {
+    router.push({ path: "/public/search/facilities" });
+  }
 };
 
 const showApi = useCollectionApi();
@@ -49,6 +60,7 @@ const getCareFacility = async () => {
 
 onMounted(() => {
   getCareFacility();
+  console.log(careFacility)
 });
 </script>
 

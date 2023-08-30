@@ -37,6 +37,7 @@
         </div>
         <div v-else class="text-h5 pa-5 d-flex flex-column justify-center align-center">
           <span class="mb-5"><v-icon color="primary">mdi-check-outline</v-icon></span>
+          {{ $props.facilityId }}
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
           <span>Möchtest du {{ itemkind }} veröffentlichen?</span>
         </div>
@@ -79,6 +80,10 @@ export default defineComponent({
     open: Boolean,
     item: {
       type: Object,
+      required: true,
+    },
+    facilityId: {
+      type: String,
       required: true,
     },
   },
@@ -130,7 +135,11 @@ export default defineComponent({
     updateApi.setBaseApi(usePrivateApi());
 
     const save = async () => {
-      updateApi.setEndpoint(`care_facilities/${props.item.id}`);
+      if (props.facilityId) {
+        updateApi.setEndpoint(`care_facilities/${props.facilityId}`);
+      } else {
+        updateApi.setEndpoint(`care_facilities/${props.item.id}`);
+      }
       let data: any = {};
       data.is_active = true;
       await updateApi.updateItem(data, null);

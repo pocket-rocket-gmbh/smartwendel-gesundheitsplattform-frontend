@@ -1,10 +1,13 @@
 <template>
   <v-row class="my-15">
-    <v-col sm="3" md="4" offset-sm="4">
+    <v-col sm="3" md="8" offset-sm="2">
       <v-card elevation="10" :class="['card', { shake: animated }]">
         <div>
-          <div class="d-flex justify-center align-center">
-            <img src="~/assets/images/logo.png" width="300" />
+          <div
+            class="d-flex justify-center align-center text-primary text-h2 font-weight-bold"
+            v-if="!registerSuccessful"
+          >
+            <span>Jetzt registrieren!</span>
           </div>
           <div class="mt-5 d-flex flex-column" v-if="!registerSuccessful">
             <span class="">
@@ -19,6 +22,12 @@
               dein Angebot und steigerst deine Bekanntheit bei der einheimischen
               Bevölkerung. Ganz gleich ob es um ein behördliches, gemeinnütziges,
               ehrenamtliches oder gewerbliches Angebot handelt.
+            </span>
+            <span class="mt-5">
+              Ganz gleich ob es um ein behördliches, gemeinnütziges, ehrenamtliches oder
+              gewerbliches Angebot handelt: „Auf der Gesundheits- und Pflegeplattform sind
+              alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
+              Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
             </span>
           </div>
         </div>
@@ -161,8 +170,111 @@
         </div>
       </v-card>
     </v-col>
-    
   </v-row>
+  <div
+    v-if="registerSuccessful"
+    class="d-flex flex-column align-center justify-center mt-10"
+  >
+    <span class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5"
+      >So geht es weiter:</span
+    >
+    <v-row no-gutters>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 1 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> anmelden </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-account-edit-outline</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere
+                zunächst dein Password.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 2 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> verifizieren </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-check-decagram-outline</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+               Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 3 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> ergänzen </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-plus-box-multiple-outline</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                in der Zwichenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e)
+                einstellen ("Meine Einrichtung").
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 4 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> veröffent<br />lichen </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-bullhorn-variant-outline</v-icon>
+        </div>
+        <div class="d-flex  text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für
+                alle Besucher:innen sichtbar veröffentlichen.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex flex-column align-center justify-center">
+        <span class="text-primary font-weight-bold text-uppercase"> schritt 5 </span>
+        <div class="chevron text-center flex-grow-1 d-flex align-center">
+          <span class="font-weight-bold text-uppercase"> vervoll<br />ständigen </span>
+        </div>
+        <div class="mt-5 icon">
+          <v-icon size="x-large">mdi-newspaper-check</v-icon>
+        </div>
+        <div class="d-flex text-center mt-5 text">
+          <v-row>
+            <v-col md="6" offset="3">
+              <span class="text-primary">
+                Vervollständige deinen Account und lege deine Kursangebote an, teile
+                Veranstaltungen oder verfasse Newsbeiträge.
+              </span>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -274,6 +386,23 @@ onMounted(() => {
 <style lang="css" scoped>
 .card {
   padding: 1rem;
+}
+
+.text {
+  min-height: 150px;
+}
+.icon {
+  color: #58595e;
+}
+.chevron {
+  min-height: 50px;
+  color: #58595e;
+  background: #8ab61d;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 70px;
+  padding-right: 50px;
+  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
 }
 
 .shake {

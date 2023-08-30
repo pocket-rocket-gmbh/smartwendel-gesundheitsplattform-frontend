@@ -3,6 +3,7 @@
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <SaveConfirmation
         :item="item"
+        :facility-id="facilityId"
         :open="confirmSaveDialogOpen"
         @click:outside="confirmSaveDialogOpen = false"
         @accepted="confirmSaveDialogOpen = false"
@@ -182,6 +183,7 @@ const handleCta = async () => {
     save();
   } else {
     create();
+    confirmSaveDialogOpen.value = true;
   }
 };
 
@@ -189,31 +191,35 @@ const handleShowPreviewClicked = () => {
   emit("showPreview", item.value);
 };
 
+const facilityId = ref("")
+
 const create = async () => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
   loadingItem.value = true;
   adminStore.loading = true;
   const result = await createUpdateApi.createItem(item.value, `Erfolgreich erstellt`);
+  confirmSaveDialogOpen.value = true;
   adminStore.loading = false;
   loadingItem.value = false;
   if (result.status === ResultStatus.SUCCESSFUL) {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
+    
+    facilityId.value = result.data.resource.id;
+    const newFacilityId = result.data.resource.id;
 
-    const facilityId = result.data.resource.id;
 
     loadingItem.value = true;
     if (item.value.offlineImageFiles?.length) {
       for (const offlineImageFile of item.value.offlineImageFiles) {
-        createUpdateApi.setEndpoint(`care_facilities/${facilityId}/images`);
+        createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/images`);
         const data = {
           file: offlineImageFile,
         };
         await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
       }
     }
-
     if (item.value.offlineLocations && item.value.offlineLocations.length) {
-      createUpdateApi.setEndpoint(`locations/care_facility/${facilityId}`);
+      createUpdateApi.setEndpoint(`locations/care_facility/${newFacilityId}`);
 
       const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
         createUpdateApi.createItem({
@@ -226,7 +232,7 @@ const create = async () => {
       await Promise.all(facilityLocationCreationPromises);
     }
     if (item.value.offlineDocuments && item.value.offlineDocuments.length) {
-      createUpdateApi.setEndpoint(`care_facilities/${facilityId}/documents`);
+      createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/documents`);
 
       const documentsPromises = item.value.offlineDocuments.map((document) =>
         createUpdateApi.createItem({
@@ -235,12 +241,8 @@ const create = async () => {
           tag: document.tag,
         })
       );
-
       await Promise.all(documentsPromises);
     }
-
-    loadingItem.value = false;
-    emit("close");
     if (props.enableCache && props.cacheKey) {
       localStorage.removeItem(props.cacheKey);
     }

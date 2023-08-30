@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div class="wrapper has-bg-grey">
+    <div class="wrapper has-bg-grey pt-5">
       <div
         class="has-bg-grey py-5"
         v-if="!useUser().loggedIn() && currentRoute !== '/register'"
@@ -83,7 +83,7 @@
               <div class="footer-links">
                 <p class="is-clickable">
                   <span>
-                    <a :href="`mailto:smartcity@lkwnd.de?subject=kontakt`">kontakt</a>
+                    <a :href="`mailto:smartcity@lkwnd.de?subject=kontakt`">Kontakt</a>
                   </span>
                 </p>
                 <p class="has-text-white is-clickable">

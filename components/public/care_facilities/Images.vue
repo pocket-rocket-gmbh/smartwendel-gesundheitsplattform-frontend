@@ -33,7 +33,7 @@
             />
             <v-btn
               class="show-more"
-              v-if="careFacility.sanitized_images.length > 0"
+              v-if="careFacility.sanitized_images.length > 1"
               @click="showGallery()"
             >
               alle Bilder zeigen</v-btn

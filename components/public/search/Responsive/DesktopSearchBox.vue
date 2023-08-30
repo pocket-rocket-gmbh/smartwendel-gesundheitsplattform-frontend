@@ -7,6 +7,18 @@
         </v-col>
       </v-row>
       <v-row>
+        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
+          <div class="field">
+            <label class="label is-white">
+              <div class="search-term">Filter</div>
+            </label>
+            <FacilityFilterSelection
+              v-model="filterStore.currentTags"
+              :popover-width="popoverWidth"
+              :filter-kind="filterKind"
+            />
+          </div>
+        </v-col>
         <v-col>
           <div class="field">
             <label class="label is-white">
@@ -21,21 +33,7 @@
             />
           </div>
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="align-end">
-          <div class="field">
-            <label class="label is-white">
-              <div class="search-term">Filter</div>
-            </label>
-            <FacilityFilterSelection
-              v-model="filterStore.currentTags"
-              :popover-width="popoverWidth"
-              :filter-kind="filterKind"
-            />
-          </div>
-        </v-col>
-        <v-col class="align-end">
+        <v-col>
           <div class="field">
             <label class="label is-white">Gemeinde</label>
             <div class="select-wrapper">

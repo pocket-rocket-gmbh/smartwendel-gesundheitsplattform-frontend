@@ -8,7 +8,7 @@
         <v-table v-if="careFacility?.locations.length > 0">
           <thead>
             <tr>
-              <th>Addresse</th>
+              <th>Adresse</th>
               <th></th>
               <th></th>
             </tr>

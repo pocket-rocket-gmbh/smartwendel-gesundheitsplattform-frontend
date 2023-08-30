@@ -3,7 +3,7 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</h2>
     <h2 v-else>Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen
+      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen
       und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
     >
     <template v-if="setupFinished">

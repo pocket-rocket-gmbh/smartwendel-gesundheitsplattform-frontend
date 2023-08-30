@@ -100,6 +100,14 @@ const fields = ref([
     emit: "mailUser",
     tooltip: "E-Mail an Benutzer",
   },
+  {
+    prop: "",
+    text: "",
+    value: "mdi-email-outline",
+    type: "icon",
+    emit: "mailUser",
+    tooltip: "E-Mail an Benutzer",
+  },
 ]);
 
 const route = useRoute();

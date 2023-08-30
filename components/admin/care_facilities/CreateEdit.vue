@@ -24,7 +24,6 @@
             </div>
             <sspan class="text-error">* Erforderlich</sspan>
           </div>
-          
         </v-col>
         <v-col md="9">
           <div class="py-10">
@@ -65,7 +64,7 @@
             </div>
             <ChooseAndCropSingleImage
               kind="logo"
-              :item = slotProps.item
+              :item="slotProps.item"
               height="20"
               :pre-set-image-url="slotProps.item.logo_url"
               :temp-image="slotProps.item.logo"
@@ -91,7 +90,7 @@
             </div>
             <ChooseAndCropSingleImage
               kind="cover"
-              :item = slotProps.item
+              :item="slotProps.item"
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
               label="Titelbild"
@@ -224,7 +223,12 @@
           <div
             class="field"
             id="contact"
-            :class="[(adressChanged || editInformations) && user.currentUser.is_active_on_health_scope ? 'has-bg-light-red pa-5' : '']"
+            :class="[
+              (adressChanged || editInformations) &&
+              user.currentUser.is_active_on_health_scope
+                ? 'has-bg-light-red pa-5'
+                : '',
+            ]"
           >
             <span v-if="adressChanged && user.currentUser.is_active_on_health_scope">
               <v-alert type="warning" density="compact" class="mt-2"
@@ -378,16 +382,15 @@
               <span class="text-h5 font-weight-bold">{{
                 steps["openingHours"].label
               }}</span>
- 
               <v-text-field
-                v-for="day in slotProps.item.opening_hours" :key="day.day"
+                v-for="day in slotProps.item.opening_hours"
+                :key="day.day"
                 class="mb-2"
                 v-model="day.hours"
                 :placeholder="day.placeholder"
                 hide-details="auto"
                 :label="day.day"
               />
-
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
@@ -439,6 +442,13 @@
           </div>
         </v-col>
       </v-row>
+     <!--  <div class="missing" v-for="[key, step] in Object.entries(steps)">
+        <span
+          v-if="isFilled(slotProps, step) === false && step.description.includes('*')"
+        >
+          {{ step.description }}
+        </span>
+      </div> -->
     </v-card-text>
   </CreateEdit>
 </template>
@@ -611,7 +621,6 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
   if (!props) return;
 
   const slotPropsItem = slotProps.item;
-
   if (item.specialFilter) {
     if (item.specialFilter === "filter_facility") {
       return facilitiesFilterSet.value;
@@ -780,6 +789,12 @@ onMounted(async () => {
   max-width: 450px
   //please add hover effect
 
+.missing
+  position: sticky
+  z-index: 9999
+  top: 30px
+
+
 
 .fields
   max-width: 70vw
@@ -890,7 +905,6 @@ onMounted(async () => {
 }
 
 .ql-clean {
-  display: none!important;
+  display: none !important;
 }
-
 </style>
