@@ -25,7 +25,7 @@
     >
       Bitte vervollständige deine Daten und ändere dein Passwort
     </v-alert>
-    <v-divider class="my-5"></v-divider>
+    <v-divider class="my-10"></v-divider>
     <div class="box my-15">
       <div class="main" v-if="item">
         <h3 class="mb-4">Persönliche Daten</h3>
@@ -49,7 +49,7 @@
           </v-col>
           <v-col> </v-col>
         </v-row>
-        <v-divider class="my-5"></v-divider>
+        <v-divider class="my-10"></v-divider>
         <v-row>
           <v-col md="6">
             <h3 class="mb-4">Passwort ändern</h3>
@@ -71,6 +71,9 @@
                 rules.required,
                 rules.password,
               ]"
+              @click:append-inner="
+                PasswordConfirmationVisible = !PasswordConfirmationVisible
+              "
             />
             <v-btn
               :disabled="password !== password_confirmation"

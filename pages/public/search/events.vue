@@ -8,7 +8,7 @@
       />
       <div class="container">
         <div class="results">
-          <PublicSearchTheFilteredCareFacilities />
+          <PublicSearchTheFilteredCareFacilities :doubled="true"/>
         </div>
       </div>
     </div>

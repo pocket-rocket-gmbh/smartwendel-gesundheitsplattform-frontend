@@ -16,6 +16,7 @@
         <v-img
           :src="image"
           :key="index"
+          cover
           aspect-ratio="1"
           max-height="150px"
           max-width="200px"
@@ -23,7 +24,7 @@
           class="is-clickable gallery-image"
           @click="selectImage(index, image)"
         >
-        <div class="selected" v-if="index === selectedimage"><v-icon color="primary" size="60px">mdi-checkbox-marked-circle-outline</v-icon></div>
+        <div class="selected" v-if="index === selectedimage"><v-icon color="red" size="60px">mdi-checkbox-marked-circle-outline</v-icon></div>
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
               <v-progress-circular
@@ -156,7 +157,7 @@ onMounted(() => {
 
 .is-selected
   opacity: 0.5
-  border: 5px solid $primary-color
+  border: 5px solid green
 
 .gallery-icon
   position: absolute

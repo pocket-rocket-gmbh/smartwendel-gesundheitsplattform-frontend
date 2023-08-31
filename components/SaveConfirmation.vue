@@ -99,13 +99,13 @@ export default defineComponent({
 
     const itemkind = computed(() => {
       if (props.item.kind === "facility") {
-        return "deine Einrichtung";
+        return "Deine Einrichtung";
       } else if (props.item.kind === "course") {
-        return "dein Kurs";
+        return "Deinen Kurs";
       } else if (props.item.kind === "event") {
-        return "deine Veranstaltung";
+        return "Deine Veranstaltung";
       } else if(props.item.kind === "news") {
-        return "dein Beitrag";
+        return "Deinen Beitrag";
       }
     });
 

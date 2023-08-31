@@ -64,17 +64,13 @@
           >Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span
         >
       </div>
-
       <v-btn
-        v-if="
-          itemId &&
-          setupFinished &&
-          itemStatus &&
-          !user.isAdmin() &&
-          user.currentUser.is_active_on_health_scope
+        :disabled="
+        itemId && setupFinished && !itemStatus && !user.isAdmin()
         "
         elevation="0"
         variant="outlined"
+        class="mt-5"
         @click="useRouter().push({ path: `/public/care_facilities/${itemId}` })"
       >
         Zu Deiner Einrichtung

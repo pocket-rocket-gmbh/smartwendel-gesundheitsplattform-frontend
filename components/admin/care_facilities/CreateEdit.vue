@@ -321,7 +321,7 @@
                 hide-details="auto"
                 class="text-field"
                 v-model="slotProps.item.town"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished || !slotProps.item.zip"
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
@@ -415,6 +415,7 @@
               hide-details="auto"
               label="Link eintragen (z.B. www.meine-webseite.de)"
               :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
+              :rules="[rules.isUrl]"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -793,8 +794,6 @@ onMounted(async () => {
   position: sticky
   z-index: 9999
   top: 30px
-
-
 
 .fields
   max-width: 70vw

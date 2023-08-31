@@ -7,7 +7,7 @@
           <div v-for="item in filter.next" class="mt-5 filter-selections">
             <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
             <v-row no-gutters class="mt-3 fill-height mr-1">
-              <v-col cols="12" md="6" class="align-center column-items pr-1 pt-1" v-for="subItem in item.next" v-auto-animate>
+              <v-col cols="12" lg="6" md="12" class="align-center column-items pr-1 pt-1" v-for="subItem in item.next" v-auto-animate>
                 <div
                   class="filter-tile"
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"

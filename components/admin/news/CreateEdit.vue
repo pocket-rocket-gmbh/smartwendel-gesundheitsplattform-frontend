@@ -23,18 +23,16 @@
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst du deine News und Beiträge zu verschiedenen Themen
-                anlegen. Je mehr Angaben du machst, umso leichter können
-                Besucherinnen und Besucher deine Beiträge finden. Pflichtfelder
-                sind mit einem Sternchen versehen.</span
+                >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen.
+                Je mehr Angaben du machst, umso leichter können Besucherinnen und Besucher
+                deine Beiträge finden. Pflichtfelder sind mit einem Sternchen
+                versehen.</span
               >
             </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["name"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -42,9 +40,7 @@
               hide-details="auto"
               label="Überschrift"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
             <v-text-field
               class="text-field"
@@ -53,9 +49,23 @@
               hide-details="auto"
               label="Name"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
+          <div class="field" id="leader">
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["leader"].label
+              }}</span>
+            </div>
+            <v-text-field
+              class="text-field"
+              v-model="slotProps.item.name_instructor"
+              hide-details="auto"
+              label="Vor und Nachname des Autors"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -67,7 +77,7 @@
             </div>
             <ChooseAndCropSingleImage
               kind="cover"
-              :item = slotProps.item
+              :item="slotProps.item"
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
               label="Titelbild"
@@ -89,9 +99,7 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(
-                      slotProps.item.description
-                    ),
+                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
                   }"
                 >
                   <QuillEditor
@@ -113,9 +121,7 @@
                     v-show="false"
                     class="hidden-text-field"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description)
-                        ? ''
-                        : 'filled'
+                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -124,23 +130,6 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="leader">
-            <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["leader"].label
-              }}</span>
-            </div>
-            <v-text-field
-              class="text-field"
-              v-model="slotProps.item.name_instructor"
-              hide-details="auto"
-              label="Vor und Nachname des Autors"
-              :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
-            />
-          </div>
           <!--           <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-3">
@@ -208,14 +197,8 @@ import { CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
-const stepNames = [
-  "name",
-  "photo",
-  "description",
-  "leader",
-  "services",
-] as const;
-type StepNames = (typeof stepNames)[number];
+const stepNames = ["name", "photo", "description", "leader", "services"] as const;
+type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte gib hier den Titel deines Newsartikels/Beitrags an. *",
@@ -223,28 +206,27 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Name *",
     props: ["name"],
   },
+  leader: {
+    label:
+      "2.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
+    tooltip: "",
+    description: "Name der Autorin/des Autors *",
+    props: ["name_instructor"],
+  },
   photo: {
-    label: "2. Hier kannst du ein passendes Titelbild zu deinem Beitrag hochladen. * ",
+    label: "3. Hier kannst du ein passendes Titelbild zu deinem Beitrag hochladen. * ",
     tooltip: "",
     description: "Titelbild",
     props: ["image_url", "file"],
     justSome: true,
   },
   description: {
-    label:
-      "3. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
+    label: "4. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
     tooltip: "",
     description: "Beschreibungstext *",
     placeholder: "Inhalt des Beitrags",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
-  },
-  leader: {
-    label:
-      "4.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
-    tooltip: "",
-    description: "Name der Autorin/des Autors *",
-    props: ["name_instructor"],
   },
   /*   category: {
     label: "5. Weise deinen Beitrag gezielt einem Berufszweig / einer Sparte zu *",
@@ -498,7 +480,6 @@ const goToField = (n: string) => {
 }
 
 .ql-clean {
-  display: none!important;
+  display: none !important;
 }
-
 </style>

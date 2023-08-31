@@ -12,7 +12,7 @@
             </div>
           </label>
           <div class="field" v-bind="props">
-            <div class="input">{{ selectedFilter?.name || "Filter wählen" }}</div>
+            <div class="input">{{ selectedFilter?.name || "Kategorie wählen" }}</div>
           </div>
         </div>
       </template>

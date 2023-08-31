@@ -192,7 +192,7 @@
             <v-col md="6" offset="3">
               <span class="text-primary">
                 Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere
-                zunächst dein Password.
+                zunächst dein Passwort.
               </span>
             </v-col>
           </v-row>
