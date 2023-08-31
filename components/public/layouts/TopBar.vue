@@ -219,6 +219,7 @@
 <script setup lang="ts">
 import { useAppStore } from "@/store/app";
 import { useUserStore } from "@/store/user";
+import { useFilterStore } from "~/store/searchFilter";
 const currentUser = ref(null);
 const router = useRouter();
 const categories = ref([]);
@@ -229,6 +230,7 @@ const menu = ref(false);
 const appStore = useAppStore();
 const route = useRoute();
 const loading = ref(true);
+const filterStore = useFilterStore()
 
 const categoriesApi = useCollectionApi();
 categoriesApi.setBaseApi(usePublicApi());
@@ -270,6 +272,7 @@ const goToLogin = () => {
 };
 
 const goTo = (path: string) => {
+  filterStore.currentSearchTerm = "";
   router.push({ path });
 };
 
