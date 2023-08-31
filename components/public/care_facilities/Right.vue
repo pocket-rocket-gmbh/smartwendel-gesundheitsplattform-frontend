@@ -19,18 +19,18 @@
     >
       <div class="py-4">
         <div>
-          <v-icon color="primary">mdi-map-marker-outline</v-icon>
+          <v-icon class="mr-2" color="primary">mdi-map-marker-outline</v-icon>
           <span>{{ careFacility.street }}</span>
         </div>
         <div v-if="careFacility?.additional_address_info">
           <v-icon></v-icon>
-          <span>
+          <span class="mr-2">
             {{ careFacility?.additional_address_info }}
           </span>
         </div>
 
         <div>
-          <v-icon color="primary"></v-icon>
+          <v-icon class="mr-2" color="primary"></v-icon>
           <span>{{ careFacility.zip }} {{ careFacility.town }}</span>
         </div>
       </div>

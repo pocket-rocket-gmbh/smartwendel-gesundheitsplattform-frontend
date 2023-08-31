@@ -41,7 +41,7 @@
             <label class="label is-white">Gemeinde</label>
             <div class="select-wrapper">
               <select class="input select" v-model="filterStore.currentZip">
-                <option :value="null">Keine Auswahl</option>
+                <option :value="null">Gemeinde auswählen</option>
                 <option v-for="community in communities" :value="community.zip">
                   {{ community.name }}
                 </option>

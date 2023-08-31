@@ -4,22 +4,33 @@
       <img v-if="item.image_url" :src="item.image_url" />
       <img v-else :src="noImage" />
     </a>
-
     <div class="text">
       <template v-if="item.user">
         <div class="info">
-          <div class="align-center user-information" v-if="item.user.name">
-            <v-icon>mdi-account-outline</v-icon><span class="break-title">{{ item.user.name }}</span>
+          <div class="align-center user-information" v-if="item?.name_instructor">
+            <v-icon class="facility-name">mdi-account-outline</v-icon
+            ><span class="break-title">{{ item?.name_instructor }}</span>
           </div>
-          <div class="d-flex align-center is-clickable" v-if="item.user_care_facility?.name">
-            <a :href="`/public/care_facilities/${item.user_care_facility?.id}`" class="is-clickable d-flex">
-              <v-icon>mdi-home-outline</v-icon>
-              <span class="break-title" v-html="item.user_care_facility?.name"></span>
+          <div
+            class="d-flex align-center facility-name is-clickable"
+            v-if="item.user_care_facility?.name"
+          >
+            <a
+              :href="`/public/care_facilities/${item.user_care_facility?.id}`"
+              class="is-clickable d-flex"
+            >
+              <v-icon class="facility-name">mdi-home-outline</v-icon>
+              <span
+                class="break-title facility-name"
+                v-html="item.user_care_facility?.name"
+              ></span>
             </a>
           </div>
           <div class="d-flex align-center justify-end" v-if="item.created_at">
             <v-icon>mdi-calendar-outline</v-icon
-            ><span class="break-title">{{ useDatetime().parseDatetime(item.created_at) }}</span>
+            ><span class="break-title">{{
+              useDatetime().parseDatetime(item.created_at)
+            }}</span>
           </div>
         </div>
         <hr />
@@ -78,6 +89,10 @@ const handleResize = () => {
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";
 
+.facility-name {
+  color: #58595e;
+}
+
 $max-height: 240px;
 
 .content-box {
@@ -85,7 +100,8 @@ $max-height: 240px;
   width: 100%;
   height: $max-height;
   border-radius: 2rem;
-  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+    0 1px 8px 0 rgba(0, 0, 0, 0.12);
   overflow: hidden;
   display: flex;
 

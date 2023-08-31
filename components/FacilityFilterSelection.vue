@@ -1,7 +1,7 @@
 <template>
   <div class="popover" ref="popoverParentRef" v-auto-animate>
     <div class="input" @click="showPopover = !showPopover">
-      {{ selectedFilter?.name || "Filter wählen" }}
+      {{ selectedFilter?.name || "Kategorie wählen" }}
 
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
