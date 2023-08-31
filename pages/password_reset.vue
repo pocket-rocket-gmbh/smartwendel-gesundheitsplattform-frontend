@@ -41,6 +41,7 @@ const userId = ref(null);
 const success = ref(false);
 const error = ref(false);
 const router = useRouter();
+const snackbar = useSnackbar();
 
 const buttonDisabled = computed(() => {
   return !(
@@ -71,6 +72,7 @@ const updatePassword = async () => {
   };
   const result = await publicApi.call("put", `/users/update-password/${passwordToken.value}`, data);
   if (result.status === ResultStatus.SUCCESSFUL) {
+    snackbar.showSuccess("Passwort erfolgreich geändert");
     success.value = true;
     router.push("/login");
   } else {

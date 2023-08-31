@@ -24,17 +24,15 @@
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn
-                möglich alle Felder sorgfältig aus. Pflichtfelder sind mit einem
-                Sternchen versehen.</span
+                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn möglich alle
+                Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen
+                versehen.</span
               >
             </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["name"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -42,9 +40,7 @@
               hide-details="auto"
               label="Name"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -65,7 +61,7 @@
             </div>
             <ChooseAndCropSingleImage
               kind="cover"
-              :item = slotProps.item
+              :item="slotProps.item"
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
               label="Cover Bild"
@@ -100,9 +96,7 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(
-                      slotProps.item.description
-                    ),
+                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
                   }"
                 >
                   <QuillEditor
@@ -124,9 +118,7 @@
                     v-show="false"
                     class="hidden-text-field"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description)
-                        ? ''
-                        : 'filled'
+                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -212,9 +204,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="date">
             <div class="my-2">
-              <span class="text-h5 mr-2 font-weight-bold">{{
-                steps["date"].label
-              }}</span>
+              <span class="text-h5 mr-2 font-weight-bold">{{ steps["date"].label }}</span>
             </div>
             <div class="mb-15">
               <v-row>
@@ -269,9 +259,7 @@
                           <v-btn
                             icon="mdi-delete"
                             variant="text"
-                            @click="
-                              deleteDate(index, slotProps.item.event_dates)
-                            "
+                            @click="deleteDate(index, slotProps.item.event_dates)"
                           ></v-btn>
                         </td>
                       </tr>
@@ -297,8 +285,7 @@
                 <span>{{ steps["certificates"].tooltip }}</span>
               </v-tooltip>
             </div>
-            <div
-              class="field my-5">
+            <div class="field my-5">
               <AdminCareFacilitiesAddFiles
                 :item-id="slotProps.item.id"
                 tag-name="insurance"
@@ -310,7 +297,12 @@
                 @document-deleted="reloadItem"
               />
               <div class="d-flex align-center">
-                <span v-if="useUser().isAdmin()">
+                <span
+                  v-if="
+                    slotProps.item.billable_through_health_insurance &&
+                    useUser().isAdmin()
+                  "
+                >
                   <v-icon color="primary">mdi-check-decagram-outline</v-icon>
                 </span>
                 <v-checkbox
@@ -318,15 +310,13 @@
                     slotProps.item.billable_through_health_insurance &&
                     useUser().isAdmin()
                   "
-                  :model-value="
-                    slotProps.item.billable_through_health_insurance_approved
-                  "
+                  :model-value="slotProps.item.billable_through_health_insurance_approved"
                   hide-details
                   density="compact"
                   label="Bitte prüfe, ob das Zertifikat gültig ist. Wenn ja, bestätige es hier."
                   @click="
-                    slotProps.item.billable_through_health_insurance_approved =
-                      !slotProps.item.billable_through_health_insurance_approved
+                    slotProps.item.billable_through_health_insurance_approved = !slotProps
+                      .item.billable_through_health_insurance_approved
                   "
                 />
               </div>
@@ -346,9 +336,7 @@
               v-model="slotProps.item.website"
               hide-details="auto"
               label="Link eintragen (z.B. www.meine-webseite.de)"
-              :error-messages="
-                useErrors().checkAndMapErrors('link', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
             />
           </div>
 
@@ -396,17 +384,13 @@
               hide-details="auto"
               label="Name / Vorname des Kursleiters"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
           <div id="address">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["address"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["address"].label }}</span>
               <v-checkbox
                 hide-details
                 density="compact"
@@ -416,7 +400,65 @@
                 label="Ja"
               />
             </div>
-            
+            <div v-if="!slotProps.item.course_outside_facility">
+              <div class="field">
+                <v-text-field
+                  disabled
+                  class="text-field"
+                  v-model="slotProps.item.street"
+                  hide-details="auto"
+                  label="Straße und Nummer"
+                  :rules="[rules.counterStreet]"
+                  :error-messages="
+                    useErrors().checkAndMapErrors('street', slotProps.errors)
+                  "
+                />
+              </div>
+              <div class="field">
+                <v-text-field
+                  disabled
+                  class="text-field"
+                  v-model="slotProps.item.additional_address_info"
+                  hide-details="auto"
+                  label="Adresszusatz"
+                />
+              </div>
+              <div class="field">
+                <v-select
+                  disabled
+                  hide-details="auto"
+                  class="text-field"
+                  v-model="slotProps.item.community_id"
+                  :items="communities"
+                  item-title="name"
+                  item-value="id"
+                  label="Gemeinde"
+                />
+              </div>
+              <div class="field split">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.zip"
+                  hide-details="auto"
+                  label="PLZ"
+                  :type="'number'"
+                  disabled
+                  :rules="[rules.required, rules.zip]"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+                <v-select
+                  hide-details="auto"
+                  class="text-field"
+                  disabled
+                  v-model="slotProps.item.town"
+                  :items="getTownsByCommunityId(slotProps.item.community_id)"
+                  item-title="name"
+                  item-value="name"
+                  label="Ort"
+                />
+              </div>
+            </div>
+
             <div v-if="slotProps.item.course_outside_facility">
               <div class="field">
                 <v-text-field
@@ -458,9 +500,7 @@
                   :type="'number'"
                   disabled
                   :rules="[rules.required, rules.zip]"
-                  :error-messages="
-                    useErrors().checkAndMapErrors('zip', slotProps.errors)
-                  "
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
                 <v-select
                   hide-details="auto"
@@ -487,11 +527,7 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
 import { FilterType } from "~/store/searchFilter";
-import {
-  CreateEditFacility,
-  CreateEditStep,
-  CreateEditSteps,
-} from "~/types/facilities";
+import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 import { set } from "date-fns";
 
@@ -509,7 +545,7 @@ const stepNames = [
   "leader",
   "address",
 ] as const;
-type StepNames = (typeof stepNames)[number];
+type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deines Kurses ein. *",
@@ -532,8 +568,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["sanitized_images", "images"],
   },
   description: {
-    label:
-      "4. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
+    label: "4. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
     tooltip: "",
     description: "Beschreibungstext *",
     placeholder:
@@ -542,16 +577,14 @@ const steps: CreateEditSteps<StepNames> = {
     checkHandler: isDescriptionEmpty,
   },
   category: {
-    label:
-      "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
+    label: "5. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
     tooltip: "Mehrfachauswahl möglich.",
     description: "Branchenzugehörigkeit *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
   services: {
-    label:
-      "6. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
+    label: "6. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
       "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
     description: "Leistungen und Schlagwörter *",
@@ -576,8 +609,7 @@ const steps: CreateEditSteps<StepNames> = {
   website: {
     label:
       "9. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
-    tooltip:
-      "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
+    tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
     props: ["website"],
   },
@@ -591,8 +623,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   leader: {
     label: "11.	Bitte gib hier den Namen der Kursleitung an. *",
-    tooltip:
-      "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
     description: "Name der Kursleitung *",
     props: ["name_instructor"],
   },
@@ -611,7 +642,6 @@ const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
 
 const setCourseOutsideFacility = (item: CreateEditFacility) => {
-  console.log(item)
   item.course_outside_facility = !item.course_outside_facility;
   if (item?.course_outside_facility) {
     item.street = "";
@@ -781,9 +811,7 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find(
-    (community: any) => community.id === communityId
-  );
+  const found = communities.value.find((community: any) => community.id === communityId);
 
   if (found) {
     useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
@@ -917,7 +945,6 @@ onMounted(async () => {
 }
 
 .ql-clean {
-  display: none!important;
+  display: none !important;
 }
-
 </style>

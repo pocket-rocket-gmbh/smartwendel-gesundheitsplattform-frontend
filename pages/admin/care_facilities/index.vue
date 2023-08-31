@@ -58,21 +58,27 @@
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
       />
-
-      <div class="px-5" v-if="setupFinished && !itemStatus && !user.isAdmin()">
+      <div class="px-5" v-if="itemId && setupFinished && !itemStatus && !user.isAdmin()">
         <v-icon>mdi-arrow-up</v-icon>
-        <span>Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span>
+        <span
+          >Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span
+        >
       </div>
 
       <v-btn
-        v-if="itemId && setupFinished && itemStatus && !user.isAdmin() && user.currentUser.is_active_on_health_scope"
+        v-if="
+          itemId &&
+          setupFinished &&
+          itemStatus &&
+          !user.isAdmin() &&
+          user.currentUser.is_active_on_health_scope
+        "
         elevation="0"
         variant="outlined"
         @click="useRouter().push({ path: `/public/care_facilities/${itemId}` })"
       >
         Zu Deiner Einrichtung
       </v-btn>
-      
 
       <AdminCareFacilitiesCreateEdit
         v-if="createEditDialogOpen"
@@ -173,6 +179,15 @@ const originalItemPlaceholder = ref({
   offlineImage: null,
   offlineLocations: [],
   offlineDocuments: [],
+  opening_hours: [
+    { day: "Montag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
+    { day: "Dienstag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
+    { day: "Mittwoch", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
+    { day: "Donnerstag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
+    { day: "Freitag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
+    { day: "Samstag", placeholder: "z.B. geschlossen", hours: "" },
+    { day: "Sonntag", placeholder: "z.B. geschlossen", hours: "" },
+  ],
 });
 const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
 
@@ -196,11 +211,10 @@ const cacheKey = computed(() => {
   return `facilities_${itemId.value.replaceAll("-", "_")}`;
 });
 
-
 const itemStatus = ref(null);
 
 const handleItemsLoaded = (items: any[]) => {
-  itemStatus.value = items[0].is_active;
+  itemStatus.value = items[0]?.is_active;
   const firstItemId = items[0]?.id;
   itemId.value = firstItemId;
   if (firstItemId && passwordChanged.value) {

@@ -38,11 +38,21 @@
   </div>
 </template>
 <script lang="ts" setup>
-import logo1 from "@/assets/images/logo-gallery/icon_care.png";
-import logo2 from "@/assets/images/logo-gallery/icon_doctor.png";
-import logo3 from "@/assets/images/logo-gallery/icon_fitness.png";
-import logo4 from "@/assets/images/logo-gallery/icon_doctor2.png";
-import logo5 from "@/assets/images/logo-gallery/icon_care2.png";
+import logo1 from "@/assets/images/logo-gallery/logo_doctor.png";
+import logo2 from "@/assets/images/logo-gallery/logo_association.png";
+import logo3 from "@/assets/images/logo-gallery/logo_authority.png";
+import logo4 from "@/assets/images/logo-gallery/logo_care.png";
+import logo5 from "@/assets/images/logo-gallery/logo_clinic.png";
+import logo6 from "@/assets/images/logo-gallery/logo_massage.png";
+import logo7 from "@/assets/images/logo-gallery/logo_midwife.png";
+import logo8 from "@/assets/images/logo-gallery/logo_optician.png";
+import logo9 from "@/assets/images/logo-gallery/logo_pharmacy.png";
+import logo10 from "@/assets/images/logo-gallery/logo_sport_1.png";
+import logo11 from "@/assets/images/logo-gallery/logo_sport_2.png";
+import logo12 from "@/assets/images/logo-gallery/logo_store.png";
+import logo13 from "@/assets/images/logo-gallery/logo_therapy_1.png";
+import logo14 from "@/assets/images/logo-gallery/logo_therapy_2.png";
+import logo15 from "@/assets/images/logo-gallery/logo_consulting.png";
 
 const emit = defineEmits(["setImage"]);
 const props = defineProps({
@@ -88,7 +98,7 @@ const getImagesFromGallery = () => {
     });
 };
 
-const logoimages = ref([logo1, logo2, logo3, logo4, logo5]);
+const logoimages = ref([logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo10, logo11, logo12, logo13, logo14, logo15]);
 const coverImages = ref<string[]>([]);
 
 const images = computed(() => {
