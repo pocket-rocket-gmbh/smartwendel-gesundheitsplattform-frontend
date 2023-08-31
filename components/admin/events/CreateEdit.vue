@@ -404,7 +404,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name"],
   },
   photo: {
-    label: "2. Bitte lade hier ein Titelbild hoch.  *",
+    label: "2. Bitte lade hier ein Titelbild hoch. *",
     description: "Foto",
     props: ["image_url", "file"],
     tooltip:
@@ -452,7 +452,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   documents: {
     label:
-      "9.	Hier kannst du weitere Dokumente (z. B. Anmeldungsformular) zu deinen Angeboten hochladen. ",
+      "9.	Hier kannst du weitere Dokumente (z. B. Anmeldungsformular) zu deinen Angeboten hochladen.",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
@@ -465,7 +465,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name_instructor"],
   },
   address: {
-    label: "12. Findet die Veranstaltung außerhalb deiner Einrichtung statt?.",
+    label: "12. Findet die Veranstaltung außerhalb deiner Einrichtung statt?",
     tooltip: "",
     description: "Adresse",
     props: ["street", "zip", "community_id", "town"],

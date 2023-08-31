@@ -25,6 +25,7 @@
           <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
             <a :href="`/public/care_facilities/${$props.item.id}`" target="_blank"
               ><v-btn
+              v-if="item.id"
                 variant="outlined"
                 class="save-buttons"
                 color="success"
@@ -37,7 +38,6 @@
         </div>
         <div v-else class="text-h5 pa-5 d-flex flex-column justify-center align-center">
           <span class="mb-5"><v-icon color="primary">mdi-check-outline</v-icon></span>
-          {{ $props.facilityId }}
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
           <span>Möchtest du {{ itemkind }} veröffentlichen?</span>
         </div>

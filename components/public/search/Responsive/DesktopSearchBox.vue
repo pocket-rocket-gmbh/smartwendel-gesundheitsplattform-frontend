@@ -10,7 +10,10 @@
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field">
             <label class="label is-white">
-              <div class="search-term">Filter</div>
+              <div class="search-term">
+                <span v-if="filterKind === 'facility'">Kategorie </span>
+                <span v-else>Kategorie</span>
+              </div>
             </label>
             <FacilityFilterSelection
               v-model="filterStore.currentTags"
@@ -39,12 +42,23 @@
             <div class="select-wrapper">
               <select class="input select" v-model="filterStore.currentZip">
                 <option :value="null">Keine Auswahl</option>
-                <option v-for="community in communities" :value="community.zip">{{ community.name }}</option>
+                <option v-for="community in communities" :value="community.zip">
+                  {{ community.name }}
+                </option>
               </select>
             </div>
           </div>
         </v-col>
         <v-col class="align-end field">
+          <v-btn
+            class="ml-3 bordered"
+            variant="flat"
+            rounded="pill"
+            color="white"
+            @click="startSearch"
+          >
+            Suche starten
+          </v-btn>
           <v-btn
             class="mx-3 bordered"
             variant="outlined"
@@ -54,14 +68,16 @@
           >
             Auswahl zurücksetzen
           </v-btn>
-          <v-btn class="ml-3 bordered" variant="flat" rounded="pill" color="white" @click="startSearch">
-            Suche starten
-          </v-btn>
         </v-col>
       </v-row>
       <v-row class="bottom-actions" v-if="mapControls">
         <v-col class="center">
-          <v-btn variant="outlined" rounded="pill" color="white" @click="emit('toggleMap')">
+          <v-btn
+            variant="outlined"
+            rounded="pill"
+            color="white"
+            @click="emit('toggleMap')"
+          >
             <span v-if="showMap"> Listenansicht </span>
             <span v-if="!showMap"> Karte einblenden </span>
           </v-btn>

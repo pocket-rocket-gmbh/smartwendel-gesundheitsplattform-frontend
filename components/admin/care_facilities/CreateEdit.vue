@@ -563,7 +563,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "12.	Hier kannst du Dokumente zu deiner Einrichtung/deinem Unternehmen hochladen.",
     tooltip:
-      "Dokumente können z. B. dein aktueller Kursplan, eine Unternehmenspräsentation oder Anmeldebögen sein. ",
+      "Dokumente können z. B. dein aktueller Kursplan, eine Unternehmenspräsentation oder Anmeldebögen sein.",
     description: "Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
