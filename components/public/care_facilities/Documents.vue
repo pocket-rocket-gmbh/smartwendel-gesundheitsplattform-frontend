@@ -13,7 +13,7 @@
             >
         </v-btn>
         <i>{{ document.name.replace('-documents', '.pdf') }}</i>
-        <v-divider class="my-5"></v-divider>
+        <v-divider class="my-10"></v-divider>
       </div>
     </div>
   </div>

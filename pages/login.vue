@@ -132,6 +132,8 @@ export default defineComponent({
           }, 300);
         }
       }
+      if(lastRoute.value.includes("/password_reset")) {
+        lastRoute.value = "/" }
     });
 
     return {
@@ -142,6 +144,7 @@ export default defineComponent({
       errors,
       auth,
       emailAlreadyGiven,
+      lastRoute
     };
   },
 });

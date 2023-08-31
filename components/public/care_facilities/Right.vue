@@ -19,18 +19,18 @@
     >
       <div class="py-4">
         <div>
-          <v-icon color="primary">mdi-map-marker-outline</v-icon>
+          <v-icon class="mr-2" color="primary">mdi-map-marker-outline</v-icon>
           <span>{{ careFacility.street }}</span>
         </div>
         <div v-if="careFacility?.additional_address_info">
           <v-icon></v-icon>
-          <span>
+          <span class="mr-2">
             {{ careFacility?.additional_address_info }}
           </span>
         </div>
 
         <div>
-          <v-icon color="primary"></v-icon>
+          <v-icon class="mr-2" color="primary"></v-icon>
           <span>{{ careFacility.zip }} {{ careFacility.town }}</span>
         </div>
       </div>
@@ -50,7 +50,7 @@
     <div class="mt-3" v-if="careFacility?.kind === 'facility'">
       <v-table density="compact">
         <tbody>
-          <h3 class="is-primary is-uppercase mb-1">Offnungszeiten</h3>
+          <h3 class="is-primary is-uppercase mb-1">Öffnungszeiten</h3>
           <tr v-for="opening in careFacility.opening_hours" :key="opening.day">
             <td class="py-3 is-primary">{{ opening.day }}</td>
             <td class="py-3" v-if="opening.hours.length">

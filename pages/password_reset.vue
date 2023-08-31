@@ -6,21 +6,49 @@
         <div v-if="userId">
           <div v-if="success" align="center">
             <div class="mb-2">Das Passwort wurde erfolgreich geändert</div>
-            <v-btn class="button is-primary-gradient mb-3" @click="useRouter().push('login')"> Zum Login </v-btn>
+            <v-btn
+              class="button is-primary-gradient mb-3"
+              @click="useRouter().push('login')"
+            >
+              Zum Login
+            </v-btn>
           </div>
           <div v-else>
-            <div class="mb-2 mt-2">Bitte ändere Dein Passwort</div>
-            <v-text-field v-model="password" type="password" label="Neues Passwort" />
-            <v-text-field v-model="password_confirmation" type="password" label="Passwort Bestätigung" />
-            <v-btn class="button is-primary-gradient mb-3" :disabled="buttonDisabled" @click="updatePassword()">
+            <h3 class="mb-4">Bitte ändere Dein Passwort</h3>
+            <v-text-field
+              v-model="password"
+              :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordVisible ? 'text' : 'password'"
+              :rules="[rules.required, rules.password]"
+              @click:append-inner="PasswordVisible = !PasswordVisible"
+              label="Neues Passwort"
+            />
+            <v-text-field
+              :append-inner-icon="PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordConfirmationVisible ? 'text' : 'password'"
+              v-model="password_confirmation"
+              label="Passwort Bestätigung"
+              :rules="[
+                password === password_confirmation || 'Passwörter stimmen nicht überein',
+                rules.required,
+                rules.password,
+              ]"
+              @click:append-inner="
+                PasswordConfirmationVisible = !PasswordConfirmationVisible
+              "
+            />
+            <v-btn
+              :disabled="password !== password_confirmation"
+              elevation="0"
+              variant="outlined"
+              class="text-success"
+              @click="updatePassword()"
+            >
               Passwort ändern
             </v-btn>
-
-            <div class="mt-2" v-if="password.length < 5 || buttonDisabled">
-              Das Passwort muss mindestens 5 Zeichen lang sein. Beide Passwörter müssen übereinstimmen.
-            </div>
           </div>
         </div>
+
         <div v-else align="center" class="mt-3 mb-3">
           <i>Benutzer nicht gefunden oder Token ungültig.</i>
         </div>
@@ -31,6 +59,7 @@
 
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
+import { rules } from "../data/validationRules";
 
 const password = ref("");
 const password_confirmation = ref("");
@@ -41,21 +70,20 @@ const userId = ref(null);
 const success = ref(false);
 const error = ref(false);
 const router = useRouter();
+const snackbar = useSnackbar();
 
-const buttonDisabled = computed(() => {
-  return !(
-    password.value.length > 4 &&
-    password_confirmation.value.length > 4 &&
-    password.value === password_confirmation.value
-  );
-});
+const PasswordVisible = ref(false);
+const PasswordConfirmationVisible = ref(false);
 
 const passwordToken = computed(() => {
   return route.query.token;
 });
 
 const getUserByToken = async () => {
-  const result = await publicApi.call("get", `/users/find-by-token/${passwordToken.value}`);
+  const result = await publicApi.call(
+    "get",
+    `/users/find-by-token/${passwordToken.value}`
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     userId.value = result.data.user_id;
@@ -69,8 +97,13 @@ const updatePassword = async () => {
     password: password.value,
     password_confirmation: password_confirmation.value,
   };
-  const result = await publicApi.call("put", `/users/update-password/${passwordToken.value}`, data);
+  const result = await publicApi.call(
+    "put",
+    `/users/update-password/${passwordToken.value}`,
+    data
+  );
   if (result.status === ResultStatus.SUCCESSFUL) {
+    snackbar.showSuccess("Passwort erfolgreich geändert");
     success.value = true;
     router.push("/login");
   } else {

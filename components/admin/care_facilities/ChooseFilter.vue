@@ -23,7 +23,7 @@
         </div>
       </template>
       <template #content>
-        <div v-if="mainFilter.name === 'Dienstleistungsbereich'">
+        <div v-if="mainFilter.name === 'Dienstleistungsbereich'" class="mb-3">
           <v-alert type="info" color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">

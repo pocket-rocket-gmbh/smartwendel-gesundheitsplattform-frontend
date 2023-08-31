@@ -29,7 +29,7 @@
       <ClientOnly>
         <PublicTextTooltipWrap class="pr-5" :text="careFacility?.description" />
       </ClientOnly>
-      <v-divider class="my-5"></v-divider>
+      <v-divider class="my-10"></v-divider>
       <div>
         <i>Inhaltlich verantwortlich: {{ careFacility?.user?.name }} </i>
       </div>
