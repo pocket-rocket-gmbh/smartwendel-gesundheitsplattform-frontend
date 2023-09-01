@@ -287,29 +287,29 @@
                       </tr>
                     </tbody>
                   </v-table>
-<!--                   <div class="d-flex justify-center mt-2">
+                  <div class="d-flex justify-center mt-2">
                     <v-btn
                       color="error"
                       size="large"
                       class="px-5"
                       :deleteAll="true"
-                      @click="deleteDate(slotProps.item.event_dates, null)"
+                      @click="deleteAllDates(slotProps.item)"
                       >Alle termine löschen
                     </v-btn>
-                  </div> -->
+                  </div>
                 </v-col>
               </v-row>
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="certificates">
-            <div class="my-2 d-flex align-center">
+            <div class="my-2 d-flex">
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["certificates"].label
               }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
+                  <v-icon class="is-clickable mr-15 mt-1" v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
@@ -691,6 +691,13 @@ const deleteDate = (index: number, dates: string[]) => {
   }
 };
 
+const deleteAllDates = (item: any) => {
+  const confirmed = confirm("Sicher dass du Alle Termine löschen möchtest?");
+  if (confirmed) {
+    item.event_dates = [];
+  }
+};
+
 const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   if (filterType === "filter_facility") {
     facilitiesFilterSet.value = isSet;
@@ -951,5 +958,9 @@ onMounted(async () => {
 
 .ql-clean {
   display: none !important;
+}
+
+.dp--overlay-absolute {
+  z-index: 9999 !important;
 }
 </style>

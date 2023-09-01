@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
-const emit = defineEmits(["offline", "updateImages"]);
+const emit = defineEmits(["offline", "updateImages",]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -142,7 +142,6 @@ const setNextImageForCrop = () => {
     currentCroppingImageUrl.value = "";
     return;
   }
-
   currentCroppingImageUrl.value = imageUrls.value.at(0);
 };
 

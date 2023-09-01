@@ -240,6 +240,16 @@
                       </tr>
                     </tbody>
                   </v-table>
+                  <div class="d-flex justify-center mt-2">
+                    <v-btn
+                      color="error"
+                      size="large"
+                      class="px-5"
+                      :deleteAll="true"
+                      @click="deleteAllDates(slotProps.item)"
+                      >Alle termine löschen
+                    </v-btn>
+                  </div>
                 </v-col>
               </v-row>
             </div>
@@ -541,6 +551,13 @@ const deleteDate = (index: number, dates: string[]) => {
   }
 };
 
+const deleteAllDates = (item: any) => {
+  const confirmed = confirm("Sicher dass du Alle Termine löschen möchtest?");
+  if (confirmed) {
+    item.event_dates = [];
+  }
+};
+
 const communitiesApi = useCollectionApi();
 communitiesApi.setBaseApi(usePrivateApi());
 communitiesApi.setEndpoint(`communities`);
@@ -821,5 +838,9 @@ onMounted(async () => {
 
 .ql-clean {
   display: none !important;
+}
+
+.dp--overlay-absolute {
+  z-index: 9999 !important;
 }
 </style>
