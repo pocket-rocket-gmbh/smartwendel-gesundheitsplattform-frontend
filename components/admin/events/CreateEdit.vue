@@ -62,7 +62,7 @@
               class="text-field"
               v-model="slotProps.item.name_instructor"
               hide-details="auto"
-              label="Name / Vorname des Veranstalters"
+              label="Name des Veranstalters"
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
@@ -363,7 +363,7 @@
               </div>
               <div class="field">
                 <v-text-field
-                disabled
+                  disabled
                   class="text-field"
                   v-model="slotProps.item.additional_address_info"
                   hide-details="auto"
@@ -372,7 +372,7 @@
               </div>
               <div class="field">
                 <v-select
-                disabled
+                  disabled
                   hide-details="auto"
                   class="text-field"
                   v-model="slotProps.item.community_id"
@@ -394,7 +394,7 @@
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
                 <v-select
-                disabled
+                  disabled
                   hide-details="auto"
                   class="text-field"
                   v-model="slotProps.item.town"
@@ -443,7 +443,7 @@ const steps: CreateEditSteps<StepNames> = {
   leader: {
     label: "2.	Bitte gib hier den Namen des Veranstalters an. *",
     tooltip:
-      "Der Name des Veranstalters wird in deinem des Veranstaltungsprofil zu sehen sein.",
+      "Der Name des Veranstalters wird in deinem Veranstaltungsprofil zu sehen sein.",
     description: "Name des Veranstalters *",
     props: ["name_instructor"],
   },
@@ -452,7 +452,7 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Foto",
     props: ["image_url", "file"],
     tooltip:
-      "Das Titelbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
+      "Das Titelbild wird im Kopfbereich deiner Profilseite die Veranstaltung angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
     justSome: true,
   },
   gallery: {
@@ -463,7 +463,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   description: {
     label:
-      "5.	Bitte beschreibe die Inhalte deiner Veranstaltung so detailliert wie möglich. *",
+      "5.	Bitte beschreibe möglichst detailliert, worum es bei dieser Veranstaltung geht und was die Besucher:innen erwarten können. *",
     description: "Beschreibung *",
     placeholder:
       "Nutze dieses Feld, um die Inhalte und Ziele deiner Veranstaltung näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
@@ -472,30 +472,30 @@ const steps: CreateEditSteps<StepNames> = {
   },
   services: {
     label:
-      "6. Ordne deiner Veranstaltung passende Schlagwörter zu, um ihn besser auffindbar zu machen.",
+      "6. Bitte gib die Veranstaltungsinhalte in Form von prägnanten Schlagwörtern wieder.",
     description: "Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
     tooltip:
-      "Wähle alle für die Veranstaltung relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher deine Veranstaltung über die Suchfunktion der Webseite finden.",
+      "Auf diese Weise gelangen Besucherinnen und Besucher zu deiner Veranstaltungsseite, sobald sie nach den entsprechenden Schlagwörtern suchen",
   },
   date: {
     label:
-      "7. Bitte gib die Veranstaltungstermine und Uhrzeiten an. Findet deine Veranstaltung regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
+      "7. Bitte gib das Datum und die Uhrzeit deiner Veranstaltung an. Findet deine Veranstaltung regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     description: "Veranstaltungsdatum *",
     props: ["event_dates"],
     tooltip: "Mehrfachauswahl möglich.",
   },
   website: {
     label:
-      "8.	Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
+      "8. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten weiter informieren oder anmelden können.",
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Webseite",
     props: ["website"],
   },
   documents: {
     label:
-      "9.	Hier kannst du weitere Dokumente (z. B. Anmeldungsformular) zu deinen Angeboten hochladen.",
+      "9.	Hier kannst du weitere Dokumente (z. B. Anmeldungsformular, Flyer, Wegbeschreibung) zu deiner Veranstaltung hochladen.",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,

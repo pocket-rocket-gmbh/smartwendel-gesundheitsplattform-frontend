@@ -7,17 +7,14 @@
         <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
       </span>
     </div>
-    <div v-if="careFacility?.email" class="py-1">
+    <div v-if="careFacility?.email" class="py-3">
       <span>
         <v-icon class="mr-2" color="primary">mdi-email-outline</v-icon>
         <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
       </span>
     </div>
-    <div
-      v-if="careFacility?.street || careFacility?.zip || careFacility?.town"
-      class="py-1"
-    >
-      <div class="py-4">
+    <div v-if="careFacility?.street || careFacility?.zip || careFacility?.town">
+      <div class="py-3">
         <div>
           <v-icon class="mr-2" color="primary">mdi-map-marker-outline</v-icon>
           <span>{{ careFacility.street }}</span>
@@ -36,13 +33,10 @@
       </div>
     </div>
     <div v-if="careFacility?.name_instructor" class="py-4">
-      <h3 class="is-primary is-uppercase mb-1"><span v-if="careFacility.kind === 'course'">
-        Kursleitung
-        </span>
-        <span v-else>
-          Veranstalter
-        </span>
-        </h3>
+      <h3 class="is-primary is-uppercase mb-1">
+        <span v-if="careFacility.kind === 'course'"> Kursleitung </span>
+        <span v-else> Veranstalter </span>
+      </h3>
       <span>
         {{ careFacility.name_instructor }}
       </span>

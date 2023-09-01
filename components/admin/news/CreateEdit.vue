@@ -150,6 +150,14 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["services"].label
               }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>{{ steps["services"].tooltip }}</span>
+              </v-tooltip>
             </div>
             <!--             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
@@ -214,7 +222,8 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["name_instructor"],
   },
   photo: {
-    label: "3. Hier kannst du ein passendes Titelbild zu deinem Beitrag hochladen. * ",
+    label:
+      "3. Falls du kein Titelbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. * ",
     tooltip: "",
     description: "Titelbild",
     props: ["image_url", "file"],
@@ -237,8 +246,9 @@ const steps: CreateEditSteps<StepNames> = {
   }, */
   services: {
     label:
-      "5. Ordne deinem Beitrag passende Schlagwörter zu, um ihn besser auffindbar zu machen.",
-    tooltip: "",
+      "5. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder.",
+    tooltip:
+      "Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Newsbeitrag sobald sie nach den entsprechenden Schlagwörtern suchen",
     description: "Schlagwörter",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",

@@ -6,10 +6,10 @@
     @expand-toggled="handleExpandToggled"
   >
     <template #title>
-      <div class="title">
+      <div class="title text-h6">
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
-        <div v-if="kind === 'news'">Branchenspezifisches Leistungsangebot</div>
-        <div v-if="kind === 'event'">Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'news'">Stich- und Schlagwörter zum Newsbeitrag</div>
+        <div v-if="kind === 'event'">Veranstaltungsangebot</div>
         <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
         <div v-if="!expand" class="selected">
           <v-chip v-for="tag in preSetTags" :key="tag.id">
@@ -29,12 +29,8 @@
           individuell zu beschreiben.
         </div>
         <div v-if="kind === 'event'">
-          Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern
+          Hier hast du die Möglichkeit, deine Veranstaltung mit Hilfe von Schlagwörtern
           individuell zu beschreiben.
-        </div>
-        <div v-if="kind === 'news'">
-          Bitte hinterlege hier alle relevanten Schlagwörter, die den Inhalt deines
-          Newsartikels/Beitrages widerspiegeln.
         </div>
         <div class="content-title mt-5 d-flex align-center">
           <v-icon>mdi-tag-outline</v-icon>
@@ -62,10 +58,7 @@
               den entsprechenden Schlagwörtern suchen.
             </span>
             <span v-if="kind === 'event'"
-              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben
-              (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise
-              gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach
-              den entsprechenden Schlagwörtern suchen.
+              >„Überlege dir, welche Begriffe den Inhalt deiner Veranstaltung am treffendsten wiedergeben. Trage bspw. den Titel  „Fit in der Region“, die Ziele („Gesundheit fördern“) und die Angebote („Gesundheits-Checks“)  deiner Veranstaltung ein.
             </span>
             <span v-if="kind === 'news'">
               Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie
@@ -87,7 +80,7 @@
             :hide-no-data="false"
             :items="allTagsWithoutSelected"
             hide-selected
-            label="Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie"
+            :label="placeHolder"
             persistent-hint
             small-chips
             :return-object="true"
@@ -156,6 +149,18 @@ const currentTagSearch = ref("");
 const handleExpandToggled = () => {
   emit("toggleExpand");
 };
+
+const placeHolder = computed(() => {
+      if (props.kind === "facility") {
+        return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
+      } else if (props.kind === "course") {
+        return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
+      } else if (props.kind === "event") {
+        return "Bsp: Titel, Ziel und Angebote deiner Veranstaltung";
+      } else if(props.kind === "news") {
+        return "Bsp: Demenz, Mentale Gesundheit, Ernährung im Alter";
+      }
+    });
 
 const allTagsWithoutSelected = computed(() => {
   if (currentTagSearch.value.length > 2) {

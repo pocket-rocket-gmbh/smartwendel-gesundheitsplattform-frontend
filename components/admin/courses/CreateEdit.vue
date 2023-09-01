@@ -62,7 +62,7 @@
               class="text-field"
               v-model="slotProps.item.name_instructor"
               hide-details="auto"
-              label="Name / Vorname der Kursleitung"
+              label="Name der Kursleitung"
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
@@ -87,7 +87,7 @@
               :item="slotProps.item"
               :pre-set-image-url="slotProps.item.image_url"
               :temp-image="slotProps.item.file"
-              label="Cover Bild"
+              label="Titelbild"
               @setImage="setCoverBild"
               @delete-image="handleDeleteCover"
               :min-size="true"
@@ -287,6 +287,16 @@
                       </tr>
                     </tbody>
                   </v-table>
+<!--                   <div class="d-flex justify-center mt-2">
+                    <v-btn
+                      color="error"
+                      size="large"
+                      class="px-5"
+                      :deleteAll="true"
+                      @click="deleteDate(slotProps.item.event_dates, null)"
+                      >Alle termine löschen
+                    </v-btn>
+                  </div> -->
                 </v-col>
               </v-row>
             </div>
