@@ -11,7 +11,7 @@
           </div>
           <div class="mt-5 d-flex flex-column" v-if="!registerSuccessful">
             <span class="">
-              Du bist im Landkreis ansässiger Gesundheitsanbieter:in und möchtest dein
+              Du bist im Landkreis ansässige(r) Gesundheitsanbieter:in und möchtest dein
               Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen?
               Dann laden wir dich herzlich ein, dich zu registrieren!</span
             >
@@ -20,8 +20,7 @@
               in wenigen Schritten auf der Plattform darstellen und veröffentlichen.
               Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
               dein Angebot und steigerst deine Bekanntheit bei der einheimischen
-              Bevölkerung. Ganz gleich ob es um ein behördliches, gemeinnütziges,
-              ehrenamtliches oder gewerbliches Angebot handelt.
+              Bevölkerung.
             </span>
             <span class="mt-5">
               Ganz gleich ob es um ein behördliches, gemeinnütziges, ehrenamtliches oder

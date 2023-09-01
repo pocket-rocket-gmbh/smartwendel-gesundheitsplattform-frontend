@@ -1,5 +1,5 @@
 <template>
-  <div class="text-wrap break-text" v-html="tooltipFeature" />
+  <div class="text-wrap" v-html="tooltipFeature" />
 </template>
 
 <script lang="ts">

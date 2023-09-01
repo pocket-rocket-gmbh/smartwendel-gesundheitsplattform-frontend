@@ -114,6 +114,7 @@
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
             </div>
+            {{ slotProps.item }}
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
               @offline="(file) => setOfflineImage(file)"
@@ -572,7 +573,6 @@ const steps: CreateEditSteps<StepNames> = {
 };
 
 const user = useUser();
-
 const expandTagSelect = ref(true);
 const createEditRef = ref();
 
