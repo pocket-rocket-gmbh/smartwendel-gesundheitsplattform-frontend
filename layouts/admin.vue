@@ -11,7 +11,7 @@
         <v-list-item-subtitle> Smart Wendeler Land </v-list-item-subtitle>
       </v-list-item>
       <v-divider></v-divider>
-      <div v-if="!user.currentUser.is_active_on_health_scope" class="d-flex align-center">
+      <div v-if="!user?.currentUser?.is_active_on_health_scope" class="d-flex align-center">
         <v-alert type="info" density="compact" color="grey">
           Du bist zur Zeit in Prüfung und nicht freigegeben.
           <v-tooltip location="top" width="200">
