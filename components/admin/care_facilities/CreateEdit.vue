@@ -114,9 +114,9 @@
                 <span>{{ steps["photo"].tooltip }}</span>
               </v-tooltip>
             </div>
-            {{ slotProps.item }}
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
+              :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
               @update-images="reloadItem"
             />
