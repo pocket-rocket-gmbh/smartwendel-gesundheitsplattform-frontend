@@ -1,6 +1,6 @@
 <template>
   <v-row class="my-15">
-    <v-col sm="3" md="8" offset-sm="2">
+    <v-col sm="3" md="8" xl="4" offset-xl="4" offset-md="2" offset-sm="2">
       <v-card elevation="10" :class="['card', { shake: animated }]">
         <div>
           <div
@@ -153,9 +153,9 @@
             >Registrieren</v-btn
           >
         </v-form>
-        <div v-if="registerSuccessful" align="center" class="mt-5">
+        <div align="center" class="mt-5" v-if="registerSuccessful">
           <div class="d-flex flex-column align-center justify-center">
-            <span class="text-h5 font-weight-bold mb-10">
+            <span class="text-h2 text-primary font-weight-bold mb-10">
               Vielen Dank für deine Registrierung!
             </span>
             <span class="text-h6">
@@ -171,106 +171,37 @@
     </v-col>
   </v-row>
   <div
-    v-if="registerSuccessful"
     class="d-flex flex-column align-center justify-center mt-10"
+    v-if="registerSuccessful"
   >
     <span class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5"
       >So geht es weiter:</span
     >
     <v-row no-gutters>
-      <v-col class="d-flex flex-column align-center justify-center">
-        <span class="text-primary font-weight-bold text-uppercase"> schritt 1 </span>
-        <div class="chevron text-center flex-grow-1 d-flex align-center">
-          <span class="font-weight-bold text-uppercase"> anmelden </span>
-        </div>
-        <div class="mt-5 icon">
-          <v-icon size="x-large">mdi-account-edit-outline</v-icon>
-        </div>
-        <div class="d-flex text-center mt-5 text">
-          <v-row>
-            <v-col md="6" offset="3">
-              <span class="text-primary">
-                Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere
-                zunächst dein Passwort.
-              </span>
-            </v-col>
-          </v-row>
-        </div>
-      </v-col>
-      <v-col class="d-flex flex-column align-center justify-center">
-        <span class="text-primary font-weight-bold text-uppercase"> schritt 2 </span>
-        <div class="chevron text-center flex-grow-1 d-flex align-center">
-          <span class="font-weight-bold text-uppercase"> verifizieren </span>
-        </div>
-        <div class="mt-5 icon">
-          <v-icon size="x-large">mdi-check-decagram-outline</v-icon>
-        </div>
-        <div class="d-flex text-center mt-5 text">
-          <v-row>
-            <v-col md="6" offset="3">
-              <span class="text-primary">
-               Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.
-              </span>
-            </v-col>
-          </v-row>
-        </div>
-      </v-col>
-      <v-col class="d-flex flex-column align-center justify-center">
-        <span class="text-primary font-weight-bold text-uppercase"> schritt 3 </span>
-        <div class="chevron text-center flex-grow-1 d-flex align-center">
-          <span class="font-weight-bold text-uppercase"> ergänzen </span>
-        </div>
-        <div class="mt-5 icon">
-          <v-icon size="x-large">mdi-plus-box-multiple-outline</v-icon>
-        </div>
-        <div class="d-flex text-center mt-5 text">
-          <v-row>
-            <v-col md="6" offset="3">
-              <span class="text-primary">
-                in der Zwichenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e)
-                einstellen ("Meine Einrichtung").
-              </span>
-            </v-col>
-          </v-row>
-        </div>
-      </v-col>
-      <v-col class="d-flex flex-column align-center justify-center">
-        <span class="text-primary font-weight-bold text-uppercase"> schritt 4 </span>
-        <div class="chevron text-center flex-grow-1 d-flex align-center">
-          <span class="font-weight-bold text-uppercase"> veröffent<br />lichen </span>
-        </div>
-        <div class="mt-5 icon">
-          <v-icon size="x-large">mdi-bullhorn-variant-outline</v-icon>
-        </div>
-        <div class="d-flex  text-center mt-5 text">
-          <v-row>
-            <v-col md="6" offset="3">
-              <span class="text-primary">
-                Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für
-                alle Besucher:innen sichtbar veröffentlichen.
-              </span>
-            </v-col>
-          </v-row>
-        </div>
-      </v-col>
-      <v-col class="d-flex flex-column align-center justify-center">
-        <span class="text-primary font-weight-bold text-uppercase"> schritt 5 </span>
-        <div class="chevron text-center flex-grow-1 d-flex align-center">
-          <span class="font-weight-bold text-uppercase"> vervoll<br />ständigen </span>
-        </div>
-        <div class="mt-5 icon">
-          <v-icon size="x-large">mdi-newspaper-check</v-icon>
-        </div>
-        <div class="d-flex text-center mt-5 text">
-          <v-row>
-            <v-col md="6" offset="3">
-              <span class="text-primary">
-                Vervollständige deinen Account und lege deine Kursangebote an, teile
-                Veranstaltungen oder verfasse Newsbeiträge.
-              </span>
-            </v-col>
-          </v-row>
-        </div>
+      <v-col v-for="step in steps" class="d-flex flex-grow-1 align-center justify-center">
+        <v-card
+          class="d-flex flex-grow-1 flex-column align-center justify-center"
+          max-width="200"
+          elevation="0"
+        >
+          <v-card-item>
+            <div class="d-flex flex-column flex-grow-1">
+              <div
+                class="d-flex align-center justify-center flex-grow-1 bg-primary background-icon"
+              >
+                <img :src="step.icon" />
+              </div>
+              <div
+                class="d-flex align-center justify-center text-center text background-text"
+              >
+                {{ step.description }}
+              </div>
+            </div>
+          </v-card-item>
+        </v-card>
+        <span v-if="step.next" class="register">
+          <img :src="arrow" />
+        </span>
       </v-col>
     </v-row>
   </div>
@@ -281,6 +212,14 @@ import { ResultStatus, ServerCallResult } from "@/types/serverCallResult";
 import { rules } from "../data/validationRules";
 import axios from "axios";
 import { VForm } from "vuetify/lib/components/index.mjs";
+
+import LogoStep1 from "@/assets/icons/registerIcons/icon_step1.png";
+import LogoStep2 from "@/assets/icons/registerIcons/icon_step2.png";
+import LogoStep3 from "@/assets/icons/registerIcons/icon_step3.png";
+import LogoStep4 from "@/assets/icons/registerIcons/icon_step4.png";
+import LogoStep5 from "@/assets/icons/registerIcons/icon_step5.png";
+
+import arrow from "@/assets/icons/registerIcons/arrow.png";
 
 const careFacilityName = ref("");
 const email = ref("");
@@ -297,15 +236,40 @@ const registerSuccessful = ref(false);
 const privacyAccepted = ref(false);
 const registerForm = ref<VForm>();
 const router = useRouter();
+const icons = ref([LogoStep1, LogoStep2, LogoStep3, LogoStep4, LogoStep5]);
 
-const isValidEmail = (email: string) => {
-  const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return re.test(email);
+const steps = {
+  step1: {
+    description:
+      "Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere zunächst dein Passwort.",
+    icon: LogoStep1,
+    next: true,
+  },
+  step2: {
+    description:
+      "Wir verifizieren deine Anmeldung zu den üblichen Geschäfts-zeiten von Montag bis Freitag.",
+    icon: LogoStep2,
+    next: true,
+  },
+  step3: {
+    description:
+      "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”)",
+    icon: LogoStep3,
+    next: true,
+  },
+  step4: {
+    description:
+      "Sobald alle Pflicht-angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen",
+    icon: LogoStep4,
+    next: true,
+  },
+  step5: {
+    description:
+      "Vervollständige deinen Account und lege deine Kursangebote an, teile Veranstaltungen oder verfasse Newsbeiträge.",
+    icon: LogoStep5,
+    next: false,
+  },
 };
-
-// const formValidated = computed(() => {
-//   return registerForm.value?.isValid;
-// });
 
 const toLogin = () => {
   router.push({ path: "/login" });
@@ -387,21 +351,22 @@ onMounted(() => {
   padding: 1rem;
 }
 
+.register {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
 .text {
   min-height: 150px;
 }
-.icon {
-  color: #58595e;
+
+.background-text {
+  background-color: #f5f5f5;
 }
-.chevron {
-  min-height: 50px;
-  color: #58595e;
-  background: #8ab61d;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 70px;
-  padding-right: 50px;
-  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+
+.background-icon {
+  padding: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .shake {
