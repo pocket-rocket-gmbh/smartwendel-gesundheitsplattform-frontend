@@ -2,19 +2,10 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-alert
-      v-if="!setupFinished && !loading"
-      type="info"
-      density="compact"
-      closable
-      class="my-2"
-    >
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="my-2">
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
-    <ChangePassword
-      :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
-      @changed="handleSaved()"
-    />
+    <ChangePassword :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at" @changed="handleSaved()" />
     <div>
       <div>
         <v-row align="center">
@@ -34,13 +25,7 @@
             </v-btn>
           </v-col>
           <v-col v-if="user.isAdmin()">
-            <v-text-field
-              width="50"
-              prepend-icon="mdi-magnify"
-              v-model="facilitySearchTerm"
-              hide-details="auto"
-              label="Einrichtungen durchsuchen"
-            />
+            <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Einrichtungen durchsuchen" />
           </v-col>
         </v-row>
       </div>
@@ -57,17 +42,14 @@
         @openAddImagesDialog="openAddImagesDialog"
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
+        @item-updated="handleItemUpdated"
       />
       <div class="px-5" v-if="itemId && setupFinished && !itemStatus && !user.isAdmin()">
         <v-icon>mdi-arrow-up</v-icon>
-        <span
-          >Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span
-        >
+        <span>Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span>
       </div>
       <v-btn
-        :disabled="
-        itemId && setupFinished && !itemStatus && !user.isAdmin()
-        "
+        :disabled="itemId && setupFinished && !itemStatus && !user.isAdmin()"
         elevation="0"
         variant="outlined"
         class="mt-5"
@@ -89,11 +71,7 @@
         @showPreview="handleShowPreview"
       />
 
-      <AdminPreviewDummyPage
-        v-if="previewItem"
-        :item="previewItem"
-        @close="handlePreviewClose"
-      />
+      <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
       <DeleteItem
         v-if="confirmDeleteDialogOpen"
         @close="
@@ -141,8 +119,7 @@ const fields = [
     tooltip: "Hiermit kannst du deine Einrichtung aktivieren und deaktivieren",
     fieldToSwitch: "is_active",
     disabledCondition: isCompleteFacility,
-    disabledTooltip:
-      "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button aktiv schalten",
+    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button aktiv schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "isCompleteFacility" },
@@ -154,8 +131,7 @@ const fields = [
     value: "user.name",
     condition: "admin",
     type: "button",
-    action: (item: any) =>
-      router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
   },
 ];
 const dataTableRef = ref();
@@ -208,6 +184,11 @@ const cacheKey = computed(() => {
 });
 
 const itemStatus = ref(null);
+
+const handleItemUpdated = async (item: any) => {
+  setupFinished.value = await useUser().setupFinished();
+  itemStatus.value = item?.is_active;
+};
 
 const handleItemsLoaded = (items: any[]) => {
   itemStatus.value = items[0]?.is_active;
