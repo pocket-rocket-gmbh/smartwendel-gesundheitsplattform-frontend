@@ -74,11 +74,7 @@
       <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
       <DeleteItem
         v-if="confirmDeleteDialogOpen"
-        @close="
-          itemId = null;
-          confirmDeleteDialogOpen = false;
-          dataTableRef?.resetActiveItems();
-        "
+        @close="handleDeleteDialogClose"
         :item-id="itemId"
         endpoint="care_facilities"
         term="diese Einrichtung"
@@ -203,13 +199,21 @@ const handleItemsLoaded = (items: any[]) => {
   itemsExist.value = !!items.length;
 };
 
+const handleDeleteDialogClose = () => {
+  itemId.value = null;
+  confirmDeleteDialogOpen.value = false;
+  dataTableRef.value?.resetActiveItems();
+  useNuxtApp().$bus.$emit("facilityUpdate")
+}
+
 const handleCreateEditClose = async () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
-  dataTableRef.value?.resetActiveItems();
-  dataTableRef.value?.getItems();
+  await dataTableRef.value?.resetActiveItems();
+  await dataTableRef.value?.getItems();
   setupFinished.value = await useUser().setupFinished();
   newFacilityFromCache.value = !!localStorage.getItem("facilities_new");
+  useNuxtApp().$bus.$emit("facilityUpdate");
 };
 
 const openCreateEditDialog = (item: any) => {
