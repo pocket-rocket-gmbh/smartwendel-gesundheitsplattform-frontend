@@ -91,7 +91,7 @@ const fields = [
     text: "Offline/Online",
     endpoint: "care_facilities",
     type: "switch",
-    tooltip: "Hiermit kannst du deinen Beitrag aktivieren und deaktivieren",
+    tooltip: "Hiermit kannst du deinen Beitrag Online oder Offline schalten",
     fieldToSwitch: "is_active",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
