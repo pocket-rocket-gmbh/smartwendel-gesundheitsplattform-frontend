@@ -19,8 +19,8 @@
               <v-icon class="is-clickable" v-bind="props">mdi-information-outline</v-icon>
             </template>
             <span>
-              Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner Einrichtung. Nach erfolgreichem
-              Abschluss wirst du freigeschaltet. Du kannst weiterhin deine Inhalte pflegen.
+              Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner Einrichtung. Nach erfolgreichem Abschluss wirst du freigeschaltet. Du
+              kannst weiterhin deine Inhalte pflegen.
             </span>
           </v-tooltip>
         </v-alert>
@@ -39,32 +39,15 @@
           <v-list-item link to="/admin/categories" nuxt> Bereiche und Kategorien </v-list-item>
           <v-divider></v-divider>
         </template>
-        <v-list-item
-          link
-          to="/admin/care_facilities"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-        >
+        <v-list-item link to="/admin/care_facilities" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           <span v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
           <span v-else>Einrichtungen</span>
         </v-list-item>
-        <v-list-item
-          :disabled="!setupFinished"
-          link
-          to="/admin/courses"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-        >
+        <v-list-item :disabled="!setupFinished" link to="/admin/courses" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           <span v-if="useUser().isFacilityOwner()">Meine Kurse</span>
           <span v-else>Kurse</span>
         </v-list-item>
-        <v-list-item
-          :disabled="!setupFinished"
-          link
-          to="/admin/events"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-        >
+        <v-list-item :disabled="!setupFinished" link to="/admin/events" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           <span v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</span>
           <span v-else>Veranstaltungen</span>
         </v-list-item>
@@ -79,25 +62,11 @@
           <span v-else>Beiträge</span>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item
-          link
-          to="/admin/user_profile"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-        >
+        <v-list-item link to="/admin/user_profile" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
           <span>Mein Konto</span>
         </v-list-item>
-        <v-list-item
-          link
-          to="/admin/tooltips"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')"
-        >
-          Tooltips
-        </v-list-item>
-        <v-list-item link to="/admin/users" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')">
-          Benutzer
-        </v-list-item>
+        <v-list-item link to="/admin/tooltips" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')"> Tooltips </v-list-item>
+        <v-list-item link to="/admin/users" nuxt v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')"> Benutzer </v-list-item>
         <v-list-item @click="handleLogout"> <v-icon>mdi-logout</v-icon> Logout </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -131,10 +100,18 @@ const handleLogout = () => {
   user.logout();
 };
 
-onMounted(async () => {
+const checkSetupFinished = async () => {
   adminStore.loading = true;
   setupFinished.value = await user.setupFinished();
   adminStore.loading = false;
+};
+
+onMounted(async () => {
+  await checkSetupFinished();
+
+  useNuxtApp().$bus.$on("facilityUpdate", async () => {
+    await checkSetupFinished();
+  });
 });
 </script>
 

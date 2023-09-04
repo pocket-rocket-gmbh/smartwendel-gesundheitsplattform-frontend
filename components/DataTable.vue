@@ -5,11 +5,7 @@
         <th
           v-for="field in fields"
           :key="field.text"
-          :width="[
-            field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch'
-              ? '30px'
-              : field.width,
-          ]"
+          :width="[field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch' ? '30px' : field.width]"
           :class="{ 'is-clickable': field.prop }"
           @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
@@ -23,11 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        v-for="(item, indexMain) in filteredItems"
-        :key="item.id"
-        :class="[item === activeItems ? 'activeItems' : '', { cached: isCached(item.id) }]"
-      >
+      <tr v-for="(item, indexMain) in filteredItems" :key="item.id" :class="[item === activeItems ? 'activeItems' : '', { cached: isCached(item.id) }]">
         <td
           v-for="(field, index) in fields"
           :key="index"
@@ -37,12 +29,8 @@
           :width="field.width"
         >
           <span v-if="field.type === 'projectTimeRange'">{{ useDatetime().getProjectTimeRangeString(item) }}</span>
-          <span v-if="field.type === 'datetime' && item[field.value]">{{
-            useDatetime().parseDatetime(item[field.value])
-          }}</span>
-          <span v-else-if="field.type === 'currency' && item[field.value]">{{
-            useCurrency().getCurrencyFromNumber(item[field.value])
-          }}</span>
+          <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
+          <span v-else-if="field.type === 'currency' && item[field.value]">{{ useCurrency().getCurrencyFromNumber(item[field.value]) }}</span>
           <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
@@ -61,7 +49,7 @@
             </template>
             <span>Nach unten</span>
           </v-tooltip>
-      
+
           <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{ field.value }}</v-icon>
           <span v-else-if="item[field.value] && field.type === 'association_name'">{{ item[field.value].name }}</span>
           <span v-else-if="item[field.value] && field.type === 'associations_name'">
@@ -82,6 +70,7 @@
                     :notification-pre-filled-text="field.notificationPreFilledText"
                     :notification-cta-link="field.notificationCtaLink"
                     :disabled="field?.disabledCondition?.(item)"
+                    @toggled="handleToggled(item)"
                   />
                 </div>
               </template>
@@ -125,7 +114,7 @@
           <span v-else-if="field.type === 'isCompleteFacility'">
             <span class="text-warning" v-if="isCompleteFacility(item)">
               <v-icon class="mr-2">mdi-alert</v-icon>
-            <i>Nicht alle Pflichtfelder ausgefüllt</i>
+              <i>Nicht alle Pflichtfelder ausgefüllt</i>
             </span>
           </span>
           <span v-else-if="field.type === 'button' && field.action">
@@ -168,7 +157,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded"]);
+const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded", "itemUpdated"]);
 
 const sortOrder = ref(props.defaultSortOrder);
 const sortBy = ref(props.defaultSortBy);
@@ -184,9 +173,7 @@ const isCached = (itemId: string) => {
   if (!props.cachePrefix.includes(",")) {
     return localStorage.getItem(`${props.cachePrefix}_${itemId.replaceAll("-", "_")}`);
   }
-  return props.cachePrefix
-    .split(",")
-    .some((prefix) => localStorage.getItem(`${prefix}_${itemId.replaceAll("-", "_")}`));
+  return props.cachePrefix.split(",").some((prefix) => localStorage.getItem(`${prefix}_${itemId.replaceAll("-", "_")}`));
 };
 
 const emitopenDeleteDialog = (itemId: any) => {
@@ -265,6 +252,10 @@ const filteredItems = computed(() => {
   });
   return itemsFiltered;
 });
+
+const handleToggled = async (item: any) => {
+  emit("itemUpdated", item);
+};
 
 const getItems = async () => {
   loading.value = true;
