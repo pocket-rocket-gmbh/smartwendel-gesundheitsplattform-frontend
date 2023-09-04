@@ -101,6 +101,7 @@
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
+              :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
               @update-images="reloadItem"
             />
