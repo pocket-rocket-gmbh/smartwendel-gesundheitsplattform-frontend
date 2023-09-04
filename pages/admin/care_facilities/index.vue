@@ -44,16 +44,16 @@
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
       />
-      <div class="px-5" v-if="itemId && setupFinished && !itemStatus && !user.isAdmin()">
+      <div class="px-5" v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin()">
         <v-icon>mdi-arrow-up</v-icon>
         <span>Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span>
       </div>
       <v-btn
-        :disabled="itemId && setupFinished && !itemStatus && !user.isAdmin()"
+        :disabled="facilityId && setupFinished && !itemStatus && !user.isAdmin()"
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="useRouter().push({ path: `/public/care_facilities/${itemId}` })"
+        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
       >
         Zu Deiner Einrichtung
       </v-btn>
@@ -167,6 +167,7 @@ const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
 const addImagesDialogOpen = ref(false);
 const addFilesDialogOpen = ref(false);
+const facilityId = ref(null);
 const itemId = ref(null);
 const previewItem = ref<Facility>();
 
@@ -193,7 +194,7 @@ const handleItemUpdated = async (item: any) => {
 const handleItemsLoaded = (items: any[]) => {
   itemStatus.value = items[0]?.is_active;
   const firstItemId = items[0]?.id;
-  itemId.value = firstItemId;
+  facilityId.value = firstItemId;
   if (firstItemId && passwordChanged.value) {
     createEditDialogOpen.value = true;
     passwordChanged.value = false;
