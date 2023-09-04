@@ -1,7 +1,7 @@
 export const rules = {
   required: (value: string) => !!value || "Erforderlich.",
-  counter: (value: string) => value.length <= 20 || "Maximal 20 Zeichen",
-  counterStreet: (value: string) => value.length <= 60 || "Maximal 60 Zeichen",
+  counter: (value: string) => value?.length <= 20 || "Maximal 20 Zeichen",
+  counterStreet: (value: string) => value?.length <= 60 || "Maximal 60 Zeichen",
   zip: (value: string) => value.length === 5 || "Maximal 5 Zeichen",
   email: (value: string) => {
     const pattern =
@@ -12,7 +12,7 @@ export const rules = {
     const pattern = /^[0-9]+$/;
     return pattern.test(value) || "Ungültige Eingabe. Nur Zahlen sind erlaubt.";
   },
-  length: (value: string) => !value || value.length < 1000 || "Die Beschreibung darf höchstens 1000 Zeichen lang sein.",
+  length: (value: string) => !value || value?.length < 1000 || "Die Beschreibung darf höchstens 1000 Zeichen lang sein.",
   password: (value: string) => !value || value.length >= 6 || "Das Passwort muss mindestens 6 Zeichen haben.",
   fileRequired: (v: File) => (v && v.size > 0) || "Erforderlich",
   isUrl: (url: string) => {

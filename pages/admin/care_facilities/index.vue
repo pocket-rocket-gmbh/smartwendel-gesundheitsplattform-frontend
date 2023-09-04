@@ -49,6 +49,7 @@
         <span>Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span>
       </div>
       <v-btn
+        v-if="!user.isAdmin()"
         :disabled="facilityId && setupFinished && !itemStatus && !user.isAdmin()"
         elevation="0"
         variant="outlined"

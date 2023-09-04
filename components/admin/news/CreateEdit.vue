@@ -144,7 +144,6 @@
               @are-filters-set="setFiltersSet"
             />
           </div> -->
-          <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
               <span class="text-h5 font-weight-bold mr-3">{{
@@ -246,12 +245,13 @@ const steps: CreateEditSteps<StepNames> = {
   }, */
   services: {
     label:
-      "5. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder.",
+      "5. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder. *",
     tooltip:
       "Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Newsbeitrag sobald sie nach den entsprechenden Schlagwörtern suchen",
-    description: "Schlagwörter",
+    description: "Schlagwörter *",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
+    justSome: true,
   },
 };
 

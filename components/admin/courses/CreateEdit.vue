@@ -260,6 +260,7 @@
                         <th class="text-left">Löschen</th>
                       </tr>
                     </thead>
+                   
                     <tbody>
                       <tr
                         v-for="(date, index) in slotProps.item.event_dates"
@@ -578,6 +579,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Fotogalerie",
     props: ["sanitized_images", "images"],
+    justSome: true,
   },
   description: {
     label: "5. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
@@ -609,6 +611,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Kursdaten *",
     props: ["event_dates"],
+    justSome: true,
   },
   certificates: {
     label:
@@ -734,7 +737,6 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     });
     return result;
   }
-
   const result = props.every((prop) => {
     return slotPropsItem[prop] && slotPropsItem[prop].length;
   });
@@ -797,8 +799,6 @@ const handleDocumentsOffline = (
 
 const reloadItem = () => {
   if (!createEditRef.value) return;
-
-  console.log("Get item");
   createEditRef.value.getItem();
 };
 
