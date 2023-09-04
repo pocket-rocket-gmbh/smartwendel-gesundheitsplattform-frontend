@@ -248,10 +248,8 @@ const steps: CreateEditSteps<StepNames> = {
       "5. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder. *",
     tooltip:
       "Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Newsbeitrag sobald sie nach den entsprechenden Schlagwörtern suchen",
-    description: "Schlagwörter *",
-    props: ["tag_category_ids"],
-    specialFilter: "filter_service",
-    justSome: true,
+    description: "Schlagwörter",
+    props: ["tags"],
   },
 };
 
