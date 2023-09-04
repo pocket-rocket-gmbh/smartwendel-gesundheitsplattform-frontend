@@ -250,8 +250,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip:
       "Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Newsbeitrag sobald sie nach den entsprechenden Schlagwörtern suchen",
     description: "Schlagwörter",
-    props: ["tag_category_ids"],
-    specialFilter: "filter_service",
+    props: ["tags"],
   },
 };
 

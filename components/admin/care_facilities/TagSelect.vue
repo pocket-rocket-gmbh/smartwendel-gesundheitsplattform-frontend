@@ -1,4 +1,5 @@
 <template>
+  <v-checkbox v-show="false" v-bind:model-value="!!preSetTags.length" :rules="[!!preSetTags.length || 'Erforderlich']"></v-checkbox>
   <CollapsibleItem
     class="tag-select mt-10"
     id="tag-select"
