@@ -16,10 +16,11 @@
           <div class="mb-3">
             <v-text-field
               v-model="password"
-              type="password"
               label="Passwort"
+              :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordVisible ? 'text' : 'password'"
+              @click:append-inner="PasswordVisible = !PasswordVisible"
               :error-messages="useErrors().mappedErrorCode(errors)"
-              hide-details="auto"
             />
           </div>
           <v-btn color="primary" block depressed type="submit">Login</v-btn>
@@ -56,6 +57,7 @@ export default defineComponent({
     const router = useRouter();
     const privateApi = usePrivateApi();
     const userStore = useUserStore();
+    const PasswordVisible = ref(false);
 
     const emailAlreadyGiven = () => {
       if (email.value?.length > 0) {
@@ -144,7 +146,8 @@ export default defineComponent({
       errors,
       auth,
       emailAlreadyGiven,
-      lastRoute
+      lastRoute,
+      PasswordVisible
     };
   },
 });
