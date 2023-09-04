@@ -1,12 +1,14 @@
 <template>
+  <v-checkbox v-show="false" v-bind:model-value="!!preSetTags.length" :rules="[!!preSetTags.length || 'Erforderlich']"></v-checkbox>
   <CollapsibleItem
     class="tag-select mt-10"
     id="tag-select"
     :expand="expand"
     @expand-toggled="handleExpandToggled"
+    
   >
     <template #title>
-      <div class="title text-h6">
+      <div class="title" :class="[handleExpandToggled ? 'text-h5' : 'text-h6']">
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
         <div v-if="kind === 'news'">Stich- und Schlagwörter zum Newsbeitrag</div>
         <div v-if="kind === 'event'">Veranstaltungsangebot</div>
@@ -19,7 +21,7 @@
       </div>
     </template>
     <template #content>
-      <div class="content">
+      <div class="content text-h6">
         <div v-if="kind === 'facility'">
           Hier hast du die Möglichkeit, dein individuelles Leistungsangebot mit Hilfe von
           Schlagwörtern zu beschreiben.

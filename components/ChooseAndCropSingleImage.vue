@@ -25,7 +25,12 @@
       </v-btn>
     </v-col>
   </v-row>
-  <AdminCareFacilitiesChooseimageFromGallery v-if="openPhotoGallery && kind === 'logo'" :item="item" gallery-kind="logo" @setImage="setLogo" />
+  <AdminCareFacilitiesChooseimageFromGallery
+    v-if="openPhotoGallery && kind === 'logo'"
+    :item="item"
+    gallery-kind="logo"
+    @setImage="setLogo"
+  />
   <AdminCareFacilitiesChooseimageFromGallery
     v-if="openPhotoGallery && kind === 'cover'"
     :facility-kind="item.kind"
@@ -47,8 +52,13 @@
       :rules="[isImageSet()]"
       accept="image/*"
     />
-    <div class="text-caption" v-if="!openPhotoGallery && openImageupload">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
-    <div v-if="errorFileSizeTooLarge && openPhotoGallery" class="text-caption text-error mt-3 mb-2">
+    <div class="text-caption" v-if="!openPhotoGallery && openImageupload">
+      * Maximal 5 MB, PNG/JPG/JPEG erlaubt
+    </div>
+    <div
+      v-if="errorFileSizeTooLarge && openPhotoGallery"
+      class="text-caption text-error mt-3 mb-2"
+    >
       Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.
     </div>
   </div>
@@ -78,7 +88,9 @@
             <v-img v-else-if="preSetImageUrl" :src="preSetImageUrl" max-width="200" />
           </div>
           <div class="d-flex align-center">
-            <v-btn size="small" width="100%" color="red" @click="deleteImage">Bild entfernen</v-btn>
+            <v-btn size="small" width="100%" color="red" @click="deleteImage"
+              >Bild entfernen</v-btn
+            >
           </div>
         </v-card>
       </v-col>
@@ -189,5 +201,4 @@ const deleteImage = () => {
 <style lang="sass" scoped>
 .img-container
   max-width: 300px
-
 </style>

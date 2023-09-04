@@ -22,7 +22,7 @@
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
           <div v-if="!statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded">
-            <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
+            <v-btn v-if="!recentlyCreated" color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
               {{ saveButtonText }}
             </v-btn>
             <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn>
@@ -135,9 +135,13 @@ const saveButtonText = computed(() => {
   return "Speichern";
 });
 
+const recentlyCreated = ref(false);
+
 const handleConfirmClose = () => {
   confirmSaveDialogOpen.value = false;
   getItem();
+  loadingItem.value = false;
+  recentlyCreated.value = true;
 };
 
 const getItem = async () => {
@@ -203,6 +207,7 @@ const create = async () => {
   loadingItem.value = false;
   if (result.status === ResultStatus.SUCCESSFUL) {
     useNuxtApp().$bus.$emit("triggerGetItems", null);
+    itemHastChanged.value = false;
     
     facilityId.value = result.data.resource.id;
     const newFacilityId = result.data.resource.id;

@@ -46,9 +46,10 @@
       />
       <div class="px-5" v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin()">
         <v-icon>mdi-arrow-up</v-icon>
-        <span>Denke daran, deine Einrichtung aktiv zu schalten, wenn du fertig bist.</span>
+        <span>Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span>
       </div>
       <v-btn
+        v-if="!user.isAdmin()"
         :disabled="facilityId && setupFinished && !itemStatus && !user.isAdmin()"
         elevation="0"
         variant="outlined"
@@ -112,10 +113,10 @@ const fields = [
     text: "Offline/Online",
     endpoint: "care_facilities",
     type: "switch",
-    tooltip: "Hiermit kannst du deine Einrichtung aktivieren und deaktivieren",
+    tooltip: "Hiermit kannst du deine Einrichtung Online oder Offline schalten",
     fieldToSwitch: "is_active",
     disabledCondition: isCompleteFacility,
-    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button aktiv schalten",
+    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "isCompleteFacility" },
