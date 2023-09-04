@@ -118,7 +118,7 @@
               :item-id="slotProps.item.id"
               :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
-              @update-images="reloadItem"
+              @update-images="reloadItem()"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -322,7 +322,10 @@
                 hide-details="auto"
                 class="text-field"
                 v-model="slotProps.item.town"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished || !slotProps.item.zip"
+                :disabled="
+                  (!useUser().isAdmin() && !editInformations && setupFinished) ||
+                  !slotProps.item.zip
+                "
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
@@ -434,6 +437,7 @@
                 <span>{{ steps["documents"].tooltip }}</span>
               </v-tooltip>
             </div>
+            <v-divider class="my-10"></v-divider>
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
               tag-name="documents"
@@ -442,9 +446,33 @@
               @document-deleted="reloadItem"
             />
           </div>
+          <div class="field" id="responsible">
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["responsible"].label
+              }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>{{ steps["responsible"].tooltip }}</span>
+              </v-tooltip>
+            </div>
+            <v-text-field
+              class="text-field"
+              v-model="slotProps.item.name_responsible_person"
+              hide-details="auto"
+              label="Vor- und Nachname"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
         </v-col>
       </v-row>
-     <!--  <div class="missing" v-for="[key, step] in Object.entries(steps)">
+      <!--  <div class="missing" v-for="[key, step] in Object.entries(steps)">
         <span
           v-if="isFilled(slotProps, step) === false && step.description.includes('*')"
         >
@@ -474,6 +502,7 @@ const stepNames = [
   "openingHours",
   "website",
   "documents",
+  "responsible",
 ] as const;
 type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
@@ -503,7 +532,8 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Fotogalerie",
     tooltip:
       "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
-    props: ["sanitized_images", "images"],
+    props: ["sanitized_images", "images", "offline_images", "offlineImages", "file"],
+    justSome: true,
   },
   description: {
     label:
@@ -569,6 +599,13 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
+  },
+  responsible: {
+    label:
+      "13.	Bitte gib hier die/den inhaltlich Verantwortliche/n für die Profilinformationen dieser Einrichtung an. *",
+    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    description: "Verantwortliche *",
+    props: ["name_responsible_person"],
   },
 };
 

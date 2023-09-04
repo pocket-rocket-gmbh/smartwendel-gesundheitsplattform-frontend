@@ -104,7 +104,7 @@
               :item-id="slotProps.item.id"
               :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
-              @update-images="reloadItem"
+              @update-images="reloadItem()"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -221,6 +221,11 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
+          <v-checkbox
+            v-show="false"
+            v-bind:model-value="!!slotProps.item?.event_dates?.length"
+            :rules="[!!slotProps.item?.event_dates?.length || 'Erforderlich']"
+          ></v-checkbox>
           <div class="field" id="date">
             <div class="my-2">
               <span class="text-h5 mr-2 font-weight-bold">{{ steps["date"].label }}</span>
@@ -522,6 +527,30 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
+          <div class="field" id="responsible">
+            <div class="my-2 d-flex align-center">
+              <span class="text-h5 font-weight-bold mr-3">{{
+                steps["responsible"].label
+              }}</span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>{{ steps["responsible"].tooltip }}</span>
+              </v-tooltip>
+            </div>
+            <v-text-field
+              class="text-field"
+              v-model="slotProps.item.name_responsible_person"
+              hide-details="auto"
+              label="Vor- und Nachname"
+              :rules="[rules.required]"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
         </v-col>
       </v-row>
     </v-card-text>
@@ -550,6 +579,7 @@ const stepNames = [
   "date",
   "leader",
   "address",
+  "responsible",
 ] as const;
 type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
@@ -577,7 +607,8 @@ const steps: CreateEditSteps<StepNames> = {
     label: "4. Hier kannst du weitere Bilder hochladen.",
     tooltip: "",
     description: "Fotogalerie",
-    props: ["sanitized_images", "images"],
+    props: ["sanitized_images", "images", "offline_images", "offlineImages", "file"],
+    justSome: true,
   },
   description: {
     label: "5. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
@@ -609,6 +640,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Kursdaten *",
     props: ["event_dates"],
+    justSome: true,
   },
   certificates: {
     label:
@@ -638,6 +670,13 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Adresse",
     props: ["street", "zip", "community_id", "town"],
+  },
+  responsible: {
+    label:
+      "13.	Bitte gib hier die/den inhaltlich Verantwortliche/n  für die Kursinformationen an. *",
+    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    description: "Verantwortliche *",
+    props: ["name_responsible_person"],
   },
 };
 
@@ -734,7 +773,6 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     });
     return result;
   }
-
   const result = props.every((prop) => {
     return slotPropsItem[prop] && slotPropsItem[prop].length;
   });
@@ -797,8 +835,6 @@ const handleDocumentsOffline = (
 
 const reloadItem = () => {
   if (!createEditRef.value) return;
-
-  console.log("Get item");
   createEditRef.value.getItem();
 };
 

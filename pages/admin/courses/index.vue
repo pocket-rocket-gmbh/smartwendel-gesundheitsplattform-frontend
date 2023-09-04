@@ -99,7 +99,7 @@ const fields = [
     text: "Offline/Online",
     endpoint: "care_facilities",
     type: "switch",
-    tooltip: "Hiermit kannst du deinen Kurs/deine Veranstaltung aktivieren und deaktivieren",
+    tooltip: "Hiermit kannst du deinen Kurs Online oder Offline schalten",
     fieldToSwitch: "is_active",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
