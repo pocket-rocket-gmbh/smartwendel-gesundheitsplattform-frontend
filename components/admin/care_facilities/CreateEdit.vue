@@ -532,7 +532,7 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Fotogalerie",
     tooltip:
       "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
-    props: ["sanitized_images", "images", "offline_images", "offlineImages", "file"],
+    props: ["sanitized_images", "images", "offline_images", "offlineImages"],
     justSome: true,
   },
   description: {

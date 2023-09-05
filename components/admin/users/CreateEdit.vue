@@ -68,7 +68,6 @@ const user = useUser();
 
 const allRoles = [
   { name: "Einrichtung", id: "facility_owner" },
-  { name: "Standard Benutzer", id: "user" },
   { name: "Administrator", id: "admin", condition: "admin" },
   { name: "Super Administrator", id: "care_facility_admin", condition: "care_facility_admin" },
 ];

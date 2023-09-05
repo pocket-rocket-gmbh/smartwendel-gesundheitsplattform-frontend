@@ -607,7 +607,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "4. Hier kannst du weitere Bilder hochladen.",
     tooltip: "",
     description: "Fotogalerie",
-    props: ["sanitized_images", "images", "offline_images", "offlineImages", "file"],
+    props: ["sanitized_images", "images", "offline_images", "offlineImages"],
     justSome: true,
   },
   description: {
