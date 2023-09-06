@@ -16,8 +16,8 @@
         show-size
       />
       <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
-      <div class="text-error" v-if="item?.sanitized_images.length >= 6">Es können maximal 6 Bilder hinzugefügt werden</div>
-      <div v-if="errorFileSizeTooLarge" class="text-error mt-3">Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.</div>
+      <v-alert v-if="item?.sanitized_images.length >= 6" class="my-5" type="error">Es können maximal 6 Bilder hinzugefügt werden.</v-alert>
+      <v-alert v-if="errorFileSizeTooLarge" class="my-5" type="error">Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.</v-alert>
     </div>
     <ImageCropper
       class="mb-5"
@@ -101,6 +101,9 @@ const toBase64 = (file: any): Promise<string> =>
 
 const handleFiles = async () => {
   if (!images.value?.length) return;
+  if(errorFileSizeTooLarge.value === true) {
+    errorFileSizeTooLarge.value = false;
+  }
 
   const validImages = images.value.filter((image) => image.size / 1000000 < 5);
 
@@ -130,7 +133,7 @@ const getCareFacility = async () => {
   api.setEndpoint(`care_facilities/${props.itemId}`);
   loadingItem.value = true;
   await api.getItem();
-  emit("updateImages");
+  emit("updateImages", api.item.value.sanitized_images);
   loadingItem.value = false;
   item.value = api.item.value;
 };

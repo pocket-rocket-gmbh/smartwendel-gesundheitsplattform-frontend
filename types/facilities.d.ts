@@ -9,6 +9,7 @@ export type CreateEditFacility = Partial<
       documentname: string;
       tag: "documents" | "insurance";
     }[];
+    sanitized_documents: string[];
     additional_address_info: string;
     community_id?: string;
     is_active?: boolean;

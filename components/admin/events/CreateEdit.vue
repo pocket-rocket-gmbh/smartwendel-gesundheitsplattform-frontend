@@ -103,7 +103,7 @@
               :item-id="slotProps.item.id"
               :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
-              @update-images="reloadItem()"
+              @update-images="setGalleryImage"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -292,7 +292,8 @@
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
-              @document-deleted="reloadItem"
+              @updated-files="updatedFiles"
+              @document-deleted="updatedFiles(null)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -499,7 +500,13 @@ const steps: CreateEditSteps<StepNames> = {
   gallery: {
     label: "4. Hier kannst du weitere Bilder hochladen.",
     description: "Galerie Fotos",
-    props: ["sanitized_images", "images"],
+    props: [
+      "sanitized_images",
+      "images",
+      "offline_images",
+      "offlineImages",
+      "offlineImageFiles",
+    ],
     justSome: true,
   },
   description: {
@@ -549,7 +556,7 @@ const steps: CreateEditSteps<StepNames> = {
   responsible: {
     label:
       "11. Bitte gib hier die/den inhaltlich Verantwortliche/n  für die Veranstaltungsinformationen an. *",
-    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    tooltip: "Der Name wird in deinem Veranstaltungsprofil zu sehen sein.",
     description: "Verantwortliche *",
     props: ["name_responsible_person"],
   },
@@ -703,6 +710,20 @@ const setTagIds = (tags: any) => {
 const setCoverBild = (image: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
+    value: image,
+  });
+};
+
+const updatedFiles = (docs: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_documents",
+    value: docs,
+  });
+};
+
+const setGalleryImage = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_images",
     value: image,
   });
 };
