@@ -31,7 +31,7 @@
       </ClientOnly>
       <v-divider class="my-10"></v-divider>
       <div>
-        <i>Inhaltlich verantwortlich: {{ careFacility?.user?.name }} </i>
+        <i>Inhaltlich verantwortlich: {{ careFacility?.name_responsible_person }} </i>
       </div>
       <div v-if="careFacility?.street && careFacility?.zip && careFacility?.town && careFacility?.additional_address_info">
         <i> Adresse: {{ careFacility.street }}, {{ careFacility.zip }} {{ careFacility.additional_address_info }} {{ careFacility.town }} </i>

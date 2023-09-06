@@ -365,7 +365,7 @@
               </div>
               <div v-if="!slotProps.item.street || !slotProps.item.town">
                 <div class="mt-3">
-                  <v-alert type="info">Adresse bitte vollständigen</v-alert>
+                  <v-alert type="info">Adresse bitte vervollständigen.</v-alert>
                 </div>
               </div>
               <div v-else-if="!isValidAddress && isValidAddress !== null">
