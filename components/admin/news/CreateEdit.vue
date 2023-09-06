@@ -284,7 +284,7 @@ const steps: CreateEditSteps<StepNames> = {
   responsible: {
     label:
       "6.Bitte gib hier die/den inhaltlich Verantwortliche/n  für den Beitrag an. *",
-    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    tooltip: "Der wird in deinem Beitragsprofil zu sehen sein.",
     description: "Verantwortliche *",
     props: ["name_responsible_person"],
   },

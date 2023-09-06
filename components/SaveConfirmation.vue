@@ -21,11 +21,10 @@
             <span class="mb-5 text-h5"> Vielen Dank! </span>
             <span>{{ itemkind }} wurde online geschaltet! </span>
           </div>
-
           <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
-            <a :href="`/public/care_facilities/${$props.item.id}`" target="_blank"
+            <a :href="linkToFacility" target="_blank"
               ><v-btn
-              v-if="item.id"
+                v-if="facilityId || item.id"
                 variant="outlined"
                 class="save-buttons"
                 color="success"
@@ -39,12 +38,17 @@
         <div v-else class="text-h5 pa-5 d-flex flex-column justify-center align-center">
           <span class="mb-5"><v-icon color="primary">mdi-check-outline</v-icon></span>
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
-          <span>Möchtest du {{ itemkind }} veröffentlichen?</span>
+          <span v-if="user.is_active_on_health_scope"
+            >Möchtest du {{ itemkind }} veröffentlichen?</span
+          >
         </div>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions v-if="!finished">
-        <v-row no-gutters>
+        <v-row
+          no-gutters
+          v-if="(user.is_active_on_health_scope && item.id) || facilityId"
+        >
           <v-col md="6" class="d-flex justify-start">
             <v-btn
               variant="outlined"
@@ -64,6 +68,18 @@
               @click="emitAccept(), confettiReward()"
             >
               Jetzt veröffentlichen
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row no-gutters v-else>
+          <v-col class="d-flex justify-center">
+            <v-btn
+              variant="outlined"
+              class="save-buttons"
+              elevation="0"
+              @click="emitCloser()"
+            >
+              Schliessen
             </v-btn>
           </v-col>
         </v-row>
@@ -104,7 +120,7 @@ export default defineComponent({
         return "Deinen Kurs";
       } else if (props.item.kind === "event") {
         return "Deine Veranstaltung";
-      } else if(props.item.kind === "news") {
+      } else if (props.item.kind === "news") {
         return "Deinen Beitrag";
       }
     });
@@ -145,6 +161,26 @@ export default defineComponent({
       await updateApi.updateItem(data, null);
     };
 
+    const setupFinished = ref(false);
+
+    const linkToFacility = computed(() => {
+      if (props.item.id) {
+        return `/public/care_facilities/${props.item.id}`;
+      }
+      if (props.facilityId) {
+        return `/public/care_facilities/${props.facilityId}`;
+      }
+      if (itemId) {
+        return `/public/care_facilities/${itemId}`;
+      }
+    });
+
+    const user = useUser().currentUser;
+
+    onMounted(async () => {
+      setupFinished.value = await useUser().setupFinished();
+    });
+
     return {
       emitClose,
       emitCloser,
@@ -153,7 +189,10 @@ export default defineComponent({
       confettiReward,
       finished,
       itemId,
-      itemkind
+      itemkind,
+      setupFinished,
+      user,
+      linkToFacility,
     };
   },
 });

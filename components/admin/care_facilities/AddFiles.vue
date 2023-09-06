@@ -53,6 +53,7 @@
     <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
 
     <v-list class="mt-5" v-if="tagName === 'insurance'">
+      
       <template v-if="itemId">
         <v-list-item
           v-for="document in item.sanitized_documents.filter((doc) => doc.tag === 'insurance')"
@@ -60,6 +61,7 @@
           :title="document.title"
           item-props
         >
+        
           <template v-slot:prepend>
             <v-btn
               class="mx-3"
@@ -71,6 +73,7 @@
               icon="mdi-file-pdf-box"
             >
             </v-btn>
+            
           </template>
           <i>{{ document.name.replace("-insurance", ".pdf") }}</i>
           <v-divider></v-divider>
@@ -82,6 +85,7 @@
             <v-icon>mdi-alert-outline</v-icon>
             <i>Datei wird überprüft</i>
           </span>
+         
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteFile(document.signed_id)"></v-btn>
           </template>
@@ -107,6 +111,14 @@
             </v-btn>
           </template>
           <v-divider></v-divider>
+          <span v-if="documentAcepted" class="d-flex align-center text-primary">
+            <v-icon>mdi-check-decagram-outline</v-icon>
+            <i>Genehmigt</i>
+          </span>
+          <span v-else class="d-flex align-center text-warning">
+            <v-icon>mdi-alert-outline</v-icon>
+            <i>Datei wird überprüft</i>
+          </span>
           <template v-slot:append>
             <v-btn icon="mdi-delete" variant="text" @click="deleteOfflineFile('insurance', index)"></v-btn>
           </template>
@@ -176,6 +188,7 @@ import { CreateEditFacility } from "~/types/facilities";
 const emit = defineEmits<{
   (event: "offline", docs: CreateEditFacility["offlineDocuments"]): void;
   (event: "documentDeleted"): void;
+  (event: "updatedFiles", docs: CreateEditFacility["sanitized_documents"]): void;
 }>();
 
 const props = defineProps<{
@@ -243,6 +256,7 @@ const getCareFacility = async () => {
   api.setEndpoint(`care_facilities/${props.itemId}`);
   loadingItem.value = true;
   await api.getItem();
+  emit("updatedFiles", api.item.value.sanitized_documents);
   loadingItem.value = false;
   item.value = api.item.value;
 };
