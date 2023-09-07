@@ -38,6 +38,7 @@
               <v-select
                 hide-details="auto"
                 v-model="town"
+                :disabled="!zip"
                 :items="townsByCommunityId"
                 item-title="name"
                 item-value="name"

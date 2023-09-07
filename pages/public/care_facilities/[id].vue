@@ -60,7 +60,6 @@ const getCareFacility = async () => {
 
 onMounted(() => {
   getCareFacility();
-  console.log(careFacility)
 });
 </script>
 

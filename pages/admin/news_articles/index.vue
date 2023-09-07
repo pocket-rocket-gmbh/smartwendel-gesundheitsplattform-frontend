@@ -93,6 +93,17 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deinen Beitrag Online oder Offline schalten",
     fieldToSwitch: "is_active",
+    disabledConditions: (item: any) => {
+      const res = [
+        () => {
+          return !useUser().currentUser?.is_active_on_health_scope;
+        },
+      ].some((condition) => {
+        const resCond = condition();
+        return resCond;
+      });
+      return res;
+    },
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { value: "", type: "beinEdited"},

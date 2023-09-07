@@ -104,7 +104,7 @@
               :item-id="slotProps.item.id"
               :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
-              @update-images="reloadItem()"
+              @update-images="setGalleryImage"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -251,6 +251,7 @@
                     selectText="Hinzufügen"
                     input-class-name="dp-custom-input"
                     :clearable="false"
+                    :update:model-value="handleEventDatesChanged(slotProps.item)"
                   />
                   <span v-if="!slotProps.item.event_dates?.length" class="required">
                     * Erforderlich
@@ -331,7 +332,9 @@
                 "
                 :offline-documents="slotProps.item.offlineDocuments"
                 @offline="handleDocumentsOffline"
-                @document-deleted="reloadItem"
+                @updated-files="updatedFiles"
+                @document-deleted="updatedFiles(null)"
+                @are-documents-set="setDocumentsIsSet"
               />
               <div class="d-flex align-center">
                 <span
@@ -396,7 +399,9 @@
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
-              @document-deleted="reloadItem"
+              @updated-files="updatedFiles"
+              @document-deleted="updatedFiles(null)"
+              @are-documents-set="setDocumentsIsSet"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -532,14 +537,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["responsible"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <v-text-field
               class="text-field"
@@ -607,7 +604,13 @@ const steps: CreateEditSteps<StepNames> = {
     label: "4. Hier kannst du weitere Bilder hochladen.",
     tooltip: "",
     description: "Fotogalerie",
-    props: ["sanitized_images", "images", "offline_images", "offlineImages", "file"],
+    props: [
+      "sanitized_images",
+      "images",
+      "offline_images",
+      "offlineImages",
+      "offlineImageFiles",
+    ],
     justSome: true,
   },
   description: {
@@ -648,7 +651,8 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip:
       "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
     description: "Zertifikate",
-    props: ["billable_through_health_insurance"],
+    props: ["sanitized_documents", "offlineDocuments"],
+    specialFilter: "certificate",
   },
   website: {
     label:
@@ -656,6 +660,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
     props: ["website"],
+    specialFilter: "certificate",
   },
   documents: {
     label:
@@ -663,7 +668,6 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
-    justSome: true,
   },
   address: {
     label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
@@ -674,8 +678,8 @@ const steps: CreateEditSteps<StepNames> = {
   responsible: {
     label:
       "13.	Bitte gib hier die/den inhaltlich Verantwortliche/n  für die Kursinformationen an. *",
-    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
-    description: "Verantwortliche *",
+    tooltip: "Der Name wird in deinem Kursprofil zu sehen sein.",
+    description: "Verantwortliche Person *",
     props: ["name_responsible_person"],
   },
 };
@@ -738,11 +742,42 @@ const deleteAllDates = (item: any) => {
   }
 };
 
+const allTimesAreEqual = (event_dates: string[]) => {
+  let previousTime = event_dates[0].split(" ")[1];
+  for (let i = 0; i < event_dates.length; i++) {
+    const currentTime = event_dates[i].split(" ")[1];
+    if (currentTime !== previousTime) {
+      return false;
+    }
+    previousTime = currentTime;
+  }
+  return true;
+};
+
+const handleEventDatesChanged = (item: { event_dates: string[] }) => {
+  if (!item?.event_dates?.length) return;
+  if (allTimesAreEqual(item.event_dates)) {
+    return;
+  }
+  const correctTime = item.event_dates.at(-1).split(" ")[1];
+  item.event_dates = item.event_dates.map(
+    (date) => date.split(" ")[0] + " " + correctTime
+  );
+};
+
 const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   if (filterType === "filter_facility") {
     facilitiesFilterSet.value = isSet;
   } else if (filterType === "filter_service") {
     servicesFilterSet.value = isSet;
+  }
+};
+
+const setDocumentsIsSet = (type: string) => {
+  if (type === "documents") {
+    console.log(type)
+  } else if (type === "insurance") {
+    console.log(type)
   }
 };
 
@@ -757,6 +792,22 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       return facilitiesFilterSet.value;
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
+    }
+  }
+
+  if (item.specialFilter) {
+    if (item.specialFilter === "certificate") {
+      const found = slotPropsItem.sanitized_documents?.find(
+        (doc: any) => doc.tag === "insurance"
+      );
+      const found2 = slotPropsItem.sanitized_documents?.find(
+        (doc: any) => doc.tag === "documents"
+      );
+      if (found) {
+        return true;
+      } if (found2) {
+        return false;
+      }
     }
   }
 
@@ -821,6 +872,20 @@ const setOfflineImage = (images: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "offlineImageFiles",
     value: images,
+  });
+};
+
+const setGalleryImage = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_images",
+    value: image,
+  });
+};
+
+const updatedFiles = (docs: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_documents",
+    value: docs,
   });
 };
 
@@ -999,5 +1064,15 @@ onMounted(async () => {
 
 .dp--overlay-absolute {
   z-index: 9999 !important;
+}
+
+.ql-snow .ql-tooltip {
+  z-index: 9999 !important;
+}
+.ql-snow .ql-tooltip::before {
+  content: "Link hinzufügen" !important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  content: "Speichern" !important;
 }
 </style>

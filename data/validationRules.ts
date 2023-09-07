@@ -10,7 +10,7 @@ export const rules = {
   },
   validateNumber: (value: string) => {
     const pattern = /^[0-9]+$/;
-    return pattern.test(value) || "Ungültige Eingabe. Nur Zahlen sind erlaubt.";
+    return pattern.test(value) || "Ungültige Eingabe. Keine Sonder- oder Leerzeichen eingeben";
   },
   length: (value: string) => !value || value?.length < 1000 || "Die Beschreibung darf höchstens 1000 Zeichen lang sein.",
   password: (value: string) => !value || value.length >= 6 || "Das Passwort muss mindestens 6 Zeichen haben.",

@@ -191,30 +191,6 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="responsible">
-            <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
-                steps["responsible"].label
-              }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["responsible"].tooltip }}</span>
-              </v-tooltip>
-            </div>
-            <v-text-field
-              class="text-field"
-              v-model="slotProps.item.name_responsible_person"
-              hide-details="auto"
-              label="Vor- und Nachname"
-              :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
-            />
-          </div>
-          <v-divider class="my-10"></v-divider>
         </v-col>
       </v-row>
     </v-card-text>
@@ -233,7 +209,6 @@ const stepNames = [
   "description",
   "leader",
   "services",
-  "responsible",
 ] as const;
 type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
@@ -280,13 +255,6 @@ const steps: CreateEditSteps<StepNames> = {
       "Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Newsbeitrag sobald sie nach den entsprechenden Schlagwörtern suchen",
     description: "Schlagwörter *",
     props: ["tags"],
-  },
-  responsible: {
-    label:
-      "6.Bitte gib hier die/den inhaltlich Verantwortliche/n  für den Beitrag an. *",
-    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
-    description: "Verantwortliche *",
-    props: ["name_responsible_person"],
   },
 };
 
@@ -526,5 +494,15 @@ const goToField = (n: string) => {
 
 .ql-clean {
   display: none !important;
+}
+
+.ql-snow .ql-tooltip {
+  z-index: 9999 !important;
+}
+.ql-snow .ql-tooltip::before {
+  content: "Link hinzufügen"!important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  content: "Speichern"!important;
 }
 </style>

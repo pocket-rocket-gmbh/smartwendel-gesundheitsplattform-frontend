@@ -2,10 +2,19 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="my-2">
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="my-2"
+    >
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
-    <ChangePassword :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at" @changed="handleSaved()" />
+    <ChangePassword
+      :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
+      @changed="handleSaved()"
+    />
     <div>
       <div>
         <v-row align="center">
@@ -17,15 +26,24 @@
               @click="
                 itemId = null;
                 createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
+                itemPlaceholder = JSON.parse(
+                  JSON.stringify(originalItemPlaceholder)
+                );
               "
               :class="{ orange: newFacilityFromCache }"
             >
-              Neue Einrichtung <span v-if="newFacilityFromCache"> - weiter</span>
+              Neue Einrichtung
+              <span v-if="newFacilityFromCache"> - weiter</span>
             </v-btn>
           </v-col>
           <v-col v-if="user.isAdmin()">
-            <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Einrichtungen durchsuchen" />
+            <v-text-field
+              width="50"
+              prepend-icon="mdi-magnify"
+              v-model="facilitySearchTerm"
+              hide-details="auto"
+              label="Einrichtungen durchsuchen"
+            />
           </v-col>
         </v-row>
       </div>
@@ -44,17 +62,28 @@
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
       />
-      <div class="px-5" v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin()">
+
+      <div
+        class="px-5"
+        v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin()"
+      >
         <v-icon>mdi-arrow-up</v-icon>
-        <span>Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span>
+        <span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der
+          Webseite.</span
+        >
       </div>
       <v-btn
-        v-if="!user.isAdmin()"
-        :disabled="facilityId && setupFinished && !itemStatus && !user.isAdmin()"
+        v-if="
+          facilityId && !user.isAdmin()
+        "
+        :disabled="setupFinished && !itemStatus"
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
+        @click="
+          useRouter().push({ path: `/public/care_facilities/${facilityId}` })
+        "
       >
         Zu Deiner Einrichtung
       </v-btn>
@@ -72,7 +101,11 @@
         @showPreview="handleShowPreview"
       />
 
-      <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
+      <AdminPreviewDummyPage
+        v-if="previewItem"
+        :item="previewItem"
+        @close="handlePreviewClose"
+      />
       <DeleteItem
         v-if="confirmDeleteDialogOpen"
         @close="handleDeleteDialogClose"
@@ -87,6 +120,7 @@
 <script lang="ts" setup>
 import { isCompleteFacility } from "~/utils/facility.utils";
 import { Facility } from "~/store/searchFilter";
+import { set } from "date-fns";
 
 definePageMeta({
   layout: "admin",
@@ -115,8 +149,20 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deine Einrichtung Online oder Offline schalten",
     fieldToSwitch: "is_active",
-    disabledCondition: isCompleteFacility,
-    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
+    disabledConditions: (item: any) => {
+      const res = [
+        isCompleteFacility,
+        () => {
+          return !useUser().currentUser?.is_active_on_health_scope;
+        },
+      ].some((condition) => {
+        const resCond = condition(item);
+        return resCond;
+      });
+      return res;
+    },
+    disabledTooltip:
+      "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "isCompleteFacility" },
@@ -128,7 +174,8 @@ const fields = [
     value: "user.name",
     condition: "admin",
     type: "button",
-    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+    action: (item: any) =>
+      router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
   },
 ];
 const dataTableRef = ref();
@@ -149,16 +196,38 @@ const originalItemPlaceholder = ref({
   offlineLocations: [],
   offlineDocuments: [],
   opening_hours: [
-    { day: "Montag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
-    { day: "Dienstag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
-    { day: "Mittwoch", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
-    { day: "Donnerstag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
-    { day: "Freitag", placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00", hours: "" },
+    {
+      day: "Montag",
+      placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00",
+      hours: "",
+    },
+    {
+      day: "Dienstag",
+      placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00",
+      hours: "",
+    },
+    {
+      day: "Mittwoch",
+      placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00",
+      hours: "",
+    },
+    {
+      day: "Donnerstag",
+      placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00",
+      hours: "",
+    },
+    {
+      day: "Freitag",
+      placeholder: "z.B. 08:00 - 12:00 und 13:00 - 17:00",
+      hours: "",
+    },
     { day: "Samstag", placeholder: "z.B. geschlossen", hours: "" },
     { day: "Sonntag", placeholder: "z.B. geschlossen", hours: "" },
   ],
 });
-const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
+const itemPlaceholder = ref(
+  JSON.parse(JSON.stringify(originalItemPlaceholder.value))
+);
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
@@ -193,8 +262,9 @@ const handleItemsLoaded = (items: any[]) => {
   const firstItemId = items[0]?.id;
   facilityId.value = firstItemId;
   if (firstItemId && passwordChanged.value) {
-    createEditDialogOpen.value = true;
+    itemId.value = firstItemId
     passwordChanged.value = false;
+    createEditDialogOpen.value = true;
   }
 
   itemsExist.value = !!items.length;
@@ -204,8 +274,8 @@ const handleDeleteDialogClose = () => {
   itemId.value = null;
   confirmDeleteDialogOpen.value = false;
   dataTableRef.value?.resetActiveItems();
-  useNuxtApp().$bus.$emit("facilityUpdate")
-}
+  useNuxtApp().$bus.$emit("facilityUpdate");
+};
 
 const handleCreateEditClose = async () => {
   createEditDialogOpen.value = false;

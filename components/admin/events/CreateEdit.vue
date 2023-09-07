@@ -103,7 +103,7 @@
               :item-id="slotProps.item.id"
               :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
-              @update-images="reloadItem()"
+              @update-images="setGalleryImage"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -292,7 +292,8 @@
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
-              @document-deleted="reloadItem"
+              @updated-files="updatedFiles"
+              @document-deleted="updatedFiles(null)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -428,14 +429,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["responsible"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <v-text-field
               class="text-field"
@@ -499,7 +492,13 @@ const steps: CreateEditSteps<StepNames> = {
   gallery: {
     label: "4. Hier kannst du weitere Bilder hochladen.",
     description: "Galerie Fotos",
-    props: ["sanitized_images", "images"],
+    props: [
+      "sanitized_images",
+      "images",
+      "offline_images",
+      "offlineImages",
+      "offlineImageFiles",
+    ],
     justSome: true,
   },
   description: {
@@ -549,8 +548,8 @@ const steps: CreateEditSteps<StepNames> = {
   responsible: {
     label:
       "11. Bitte gib hier die/den inhaltlich Verantwortliche/n  für die Veranstaltungsinformationen an. *",
-    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
-    description: "Verantwortliche *",
+    tooltip: "Der Name wird in deinem Veranstaltungsprofil zu sehen sein.",
+    description: "Verantwortliche Person *",
     props: ["name_responsible_person"],
   },
 };
@@ -707,6 +706,20 @@ const setCoverBild = (image: any) => {
   });
 };
 
+const updatedFiles = (docs: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_documents",
+    value: docs,
+  });
+};
+
+const setGalleryImage = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_images",
+    value: image,
+  });
+};
+
 const handleDeleteCover = () => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
@@ -736,8 +749,6 @@ const handleDocumentsOffline = (
 
 const reloadItem = () => {
   if (!createEditRef.value) return;
-
-  console.log("Get item");
   createEditRef.value.getItem();
 };
 
@@ -879,5 +890,15 @@ onMounted(async () => {
 
 .dp--overlay-absolute {
   z-index: 9999 !important;
+}
+
+.ql-snow .ql-tooltip {
+  z-index: 9999 !important;
+}
+.ql-snow .ql-tooltip::before {
+  content: "Link hinzufügen"!important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  content: "Speichern"!important;
 }
 </style>

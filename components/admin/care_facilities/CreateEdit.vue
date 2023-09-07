@@ -105,20 +105,12 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["gallery"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["photo"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
               :offline-images="slotProps.item.offlineImageFiles"
               @offline="(file) => setOfflineImage(file)"
-              @update-images="reloadItem()"
+              @update-images="setGalleryImage"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -283,6 +275,7 @@
                 :error-messages="
                   useErrors().checkAndMapErrors('street', slotProps.errors)
                 "
+                @input="checkValidAddress(slotProps.item)"
               />
             </div>
             <div class="field">
@@ -331,6 +324,7 @@
                 item-value="name"
                 label="Ort *"
                 :rules="[rules.required]"
+                @update:model-value="checkValidAddress(slotProps.item)"
               />
             </div>
             <div class="field">
@@ -355,6 +349,36 @@
                 :rules="[rules.required, rules.email]"
                 :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
+            </div>
+            <div v-if="!setupFinished || editInformations">
+              <div class="d-flex mt-5">
+                <span class="text-h6 font-weight-bold">Adresse überprüfen</span>
+                <LoadingSpinner v-if="loadingAdress" />
+              </div>
+              <div v-if="!slotProps.item.street || !slotProps.item.town">
+                <div class="mt-3">
+                  <v-alert type="info">Adresse bitte vervollständigen.</v-alert>
+                </div>
+              </div>
+              <div v-else-if="!isValidAddress && isValidAddress !== null">
+                <div class="mt-3">
+                  <v-alert type="error"
+                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr., Gemeinde und
+                    Ort</v-alert
+                  >
+                </div>
+              </div>
+              <div v-if="isValidAddress === null && editInformations">
+                <v-alert type="info"> Neue Adresse bitte eingeben.</v-alert>
+              </div>
+              <div v-if="isValidAddress">
+                <div class="mt-3">
+                  <v-alert type="success">
+                    Deine Adresse wurde erfolgreich überprüft. Diese wird auf der Webseite
+                    angezeigt.</v-alert
+                  >
+                </div>
+              </div>
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
@@ -438,12 +462,14 @@
               </v-tooltip>
             </div>
             <v-divider class="my-10"></v-divider>
+
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
               tag-name="documents"
               :offline-documents="slotProps.item.offlineDocuments"
               @offline="handleDocumentsOffline"
-              @document-deleted="reloadItem"
+              @updated-files="updatedFiles"
+              @document-deleted="updatedFiles(null)"
             />
           </div>
           <div class="field" id="responsible">
@@ -451,14 +477,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["responsible"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <v-text-field
               class="text-field"
@@ -488,6 +506,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
+import axios from "axios";
 
 const stepNames = [
   "name",
@@ -530,9 +549,14 @@ const steps: CreateEditSteps<StepNames> = {
   gallery: {
     label: "4.	Hier kannst du weitere Bilder hochladen.",
     description: "Fotogalerie",
-    tooltip:
-      "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
-    props: ["sanitized_images", "images", "offline_images", "offlineImages", "file"],
+    tooltip: "",
+    props: [
+      "sanitized_images",
+      "images",
+      "offline_images",
+      "offlineImages",
+      "offlineImageFiles",
+    ],
     justSome: true,
   },
   description: {
@@ -603,8 +627,8 @@ const steps: CreateEditSteps<StepNames> = {
   responsible: {
     label:
       "13.	Bitte gib hier die/den inhaltlich Verantwortliche/n für die Profilinformationen dieser Einrichtung an. *",
-    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
-    description: "Verantwortliche *",
+    tooltip: "Der Name wird in deinem Einrichtungsprofil zu sehen sein.",
+    description: "Verantwortliche Person *",
     props: ["name_responsible_person"],
   },
 };
@@ -687,6 +711,41 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
   return result;
 };
 
+const loadingAdress = ref(false);
+const checkValidAddress = async (slotProps: any) => {
+  const zip = slotProps?.zip;
+  const street = slotProps?.street;
+  const town = slotProps?.town;
+  if (!!zip && !!street && !!town) {
+    try {
+      await getLatLngFromAddress(zip, street, town);
+      loadingAdress.value = false;
+    } catch (error) {}
+  }
+};
+
+const isValidAddress = ref(null);
+
+const getLatLngFromAddress = async (zipCode: string, street: string, town: string) => {
+  try {
+    loadingAdress.value = true;
+    const { data } = await axios.get(
+      `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE&city=${town}`
+    );
+    if (!data.length) {
+      isValidAddress.value = false;
+    } else {
+      isValidAddress.value = true;
+    }
+    loadingAdress.value = false;
+    const bestResult = data[0];
+    return [bestResult?.lat, bestResult?.lon];
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
 const setTagCategoryIds = (tags: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "tag_category_ids",
@@ -725,12 +784,34 @@ const handleDeleteLogo = () => {
   });
 };
 
+const updatedFiles = (docs: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_documents",
+    value: docs,
+  });
+};
+
+const setGalleryImage = (image: any) => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_images",
+    value: image,
+  });
+};
+
+const handleDeleteGalleryImage = () => {
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "sanitized_images",
+    value: null,
+  });
+};
+
 const setCoverBild = (image: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
     value: image,
   });
 };
+
 const handleDeleteCover = () => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "file",
@@ -817,6 +898,7 @@ const getTownsByCommunityId = (communityId: string) => {
 onMounted(async () => {
   setupFinished.value = await useUser().setupFinished();
   getCommunities();
+  checkValidAddress(null);
 });
 </script>
 
@@ -942,5 +1024,15 @@ onMounted(async () => {
 
 .ql-clean {
   display: none !important;
+}
+
+.ql-snow .ql-tooltip {
+  z-index: 9999 !important;
+}
+.ql-snow .ql-tooltip::before {
+  content: "Link hinzufügen" !important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  content: "Speichern" !important;
 }
 </style>
