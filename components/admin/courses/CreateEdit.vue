@@ -334,6 +334,7 @@
                 @offline="handleDocumentsOffline"
                 @updated-files="updatedFiles"
                 @document-deleted="updatedFiles(null)"
+                @are-documents-set="setDocumentsIsSet"
               />
               <div class="d-flex align-center">
                 <span
@@ -400,6 +401,7 @@
               @offline="handleDocumentsOffline"
               @updated-files="updatedFiles"
               @document-deleted="updatedFiles(null)"
+              @are-documents-set="setDocumentsIsSet"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -658,6 +660,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
     props: ["website"],
+    specialFilter: "certificate",
   },
   documents: {
     label:
@@ -665,7 +668,6 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
-    justSome: true,
   },
   address: {
     label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
@@ -753,7 +755,6 @@ const allTimesAreEqual = (event_dates: string[]) => {
 };
 
 const handleEventDatesChanged = (item: { event_dates: string[] }) => {
-  console.count("handleEventDatesChanged");
   if (!item?.event_dates?.length) return;
   if (allTimesAreEqual(item.event_dates)) {
     return;
@@ -769,6 +770,14 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
     facilitiesFilterSet.value = isSet;
   } else if (filterType === "filter_service") {
     servicesFilterSet.value = isSet;
+  }
+};
+
+const setDocumentsIsSet = (type: string) => {
+  if (type === "documents") {
+    console.log(type)
+  } else if (type === "insurance") {
+    console.log(type)
   }
 };
 
@@ -791,10 +800,13 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       const found = slotPropsItem.sanitized_documents?.find(
         (doc: any) => doc.tag === "insurance"
       );
+      const found2 = slotPropsItem.sanitized_documents?.find(
+        (doc: any) => doc.tag === "documents"
+      );
       if (found) {
-        return found;
-      } else {
-        return;
+        return true;
+      } if (found2) {
+        return false;
       }
     }
   }

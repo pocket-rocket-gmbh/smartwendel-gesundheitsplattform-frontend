@@ -189,6 +189,7 @@ const emit = defineEmits<{
   (event: "offline", docs: CreateEditFacility["offlineDocuments"]): void;
   (event: "documentDeleted"): void;
   (event: "updatedFiles", docs: CreateEditFacility["sanitized_documents"]): void;
+  (event: "areDocumentsSet", type: string): void;
 }>();
 
 const props = defineProps<{
@@ -273,6 +274,7 @@ const save = async () => {
     const result = await api.createItem(data, "Dokument erfolgreich hinzugefügt");
     fileUrl.value = null;
     if (result.status === ResultStatus.SUCCESSFUL) {
+      emit("areDocumentsSet", props.tagName);
       loadingItem.value = false;
       filename.value = "";
       tag.value = props.tagName;

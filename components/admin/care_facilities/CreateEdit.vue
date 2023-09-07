@@ -105,14 +105,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["gallery"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["photo"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
@@ -557,8 +549,7 @@ const steps: CreateEditSteps<StepNames> = {
   gallery: {
     label: "4.	Hier kannst du weitere Bilder hochladen.",
     description: "Fotogalerie",
-    tooltip:
-      "Mithilfe von Galeriebildern können Besucherinnen und Besucher einen ersten Eindruck deines Unternehmens/deiner Einrichtung erhalten.",
+    tooltip: "",
     props: [
       "sanitized_images",
       "images",
@@ -1039,9 +1030,9 @@ onMounted(async () => {
   z-index: 9999 !important;
 }
 .ql-snow .ql-tooltip::before {
-  content: "Link hinzufügen"!important;
+  content: "Link hinzufügen" !important;
 }
 .ql-snow .ql-tooltip.ql-editing a.ql-action::after {
-  content: "Speichern"!important;
+  content: "Speichern" !important;
 }
 </style>
