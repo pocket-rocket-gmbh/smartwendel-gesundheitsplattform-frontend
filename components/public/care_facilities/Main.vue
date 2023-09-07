@@ -4,14 +4,18 @@
       <v-col class="d-flex align-center">
         <h1 class="is-dark-grey">{{ careFacility?.name }}</h1>
         <span v-if="careFacility?.billable_through_health_insurance_approved">
-          <v-icon size="x-large" class="pl-8" color="primary">mdi-check-decagram-outline</v-icon>
+          <v-icon size="x-large" class="pl-8" color="primary"
+            >mdi-check-decagram-outline</v-icon
+          >
         </span>
       </v-col>
       <v-col class="info-bar d-flex align-center" v-if="careFacility?.kind === 'news'">
         <v-row>
           <v-col class="bar-content d-flex align-center">
             <div class="d-flex align-center bar-item">
-              <span class="pr-1"><v-icon color="primary">mdi-clock-time-three-outline</v-icon></span>
+              <span class="pr-1"
+                ><v-icon color="primary">mdi-clock-time-three-outline</v-icon></span
+              >
               <span>{{ useDatetime().parseDatetime(careFacility.created_at) }}</span>
             </div>
             <div class="bar-item">
@@ -22,19 +26,41 @@
         </v-row>
       </v-col>
     </v-row>
-    <span class="is-primary mr-2" v-if="careFacility?.kind === 'news'" v-for="tags in careFacility.tag_categories">
+    <span
+      class="is-primary mr-2"
+      v-if="careFacility?.kind === 'news'"
+      v-for="tags in careFacility.tag_categories"
+    >
       <span>{{ tags.name }}</span>
     </span>
     <div class="mt-4">
       <ClientOnly>
-        <PublicTextTooltipWrap class="pr-5" :text="careFacility?.description" />
+        <PublicTextTooltipWrap class="pr-5 description" :text="careFacility?.description" />
       </ClientOnly>
       <v-divider class="my-10"></v-divider>
       <div>
-        <i>Inhaltlich verantwortlich: {{ careFacility?.name_responsible_person }} </i>
+        <i
+          >Inhaltlich verantwortlich:
+          <span v-if="careFacility?.name_responsible_person">{{
+            careFacility?.name_responsible_person
+          }}</span>
+          <span v-else-if="careFacility?.name_instructor">{{
+            careFacility?.name_instructor
+          }}</span></i
+        >
       </div>
-      <div v-if="careFacility?.street && careFacility?.zip && careFacility?.town && careFacility?.additional_address_info">
-        <i> Adresse: {{ careFacility.street }}, {{ careFacility.zip }} {{ careFacility.additional_address_info }} {{ careFacility.town }} </i>
+      <div
+        v-if="
+          careFacility?.street &&
+          careFacility?.zip &&
+          careFacility?.town &&
+          careFacility?.additional_address_info
+        "
+      >
+        <i>
+          Adresse: {{ careFacility.street }}, {{ careFacility.zip }}
+          {{ careFacility.additional_address_info }} {{ careFacility.town }}
+        </i>
       </div>
     </div>
   </div>

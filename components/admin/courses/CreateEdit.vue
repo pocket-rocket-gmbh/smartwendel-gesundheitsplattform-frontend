@@ -251,6 +251,7 @@
                     selectText="Hinzufügen"
                     input-class-name="dp-custom-input"
                     :clearable="false"
+                    :update:model-value="handleEventDatesChanged(slotProps.item)"
                   />
                   <span v-if="!slotProps.item.event_dates?.length" class="required">
                     * Erforderlich
@@ -648,7 +649,8 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip:
       "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
     description: "Zertifikate",
-    props: ["billable_through_health_insurance"],
+    props: ["sanitized_documents", "offlineDocuments"],
+    specialFilter: "certificate",
   },
   website: {
     label:
@@ -738,6 +740,30 @@ const deleteAllDates = (item: any) => {
   }
 };
 
+const allTimesAreEqual = (event_dates: string[]) => {
+  let previousTime = event_dates[0].split(" ")[1];
+  for (let i = 0; i < event_dates.length; i++) {
+    const currentTime = event_dates[i].split(" ")[1];
+    if (currentTime !== previousTime) {
+      return false;
+    }
+    previousTime = currentTime;
+  }
+  return true;
+};
+
+const handleEventDatesChanged = (item: { event_dates: string[] }) => {
+  console.count("handleEventDatesChanged");
+  if (!item?.event_dates?.length) return;
+  if (allTimesAreEqual(item.event_dates)) {
+    return;
+  }
+  const correctTime = item.event_dates.at(-1).split(" ")[1];
+  item.event_dates = item.event_dates.map(
+    (date) => date.split(" ")[0] + " " + correctTime
+  );
+};
+
 const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   if (filterType === "filter_facility") {
     facilitiesFilterSet.value = isSet;
@@ -757,6 +783,19 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       return facilitiesFilterSet.value;
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
+    }
+  }
+
+  if (item.specialFilter) {
+    if (item.specialFilter === "certificate") {
+      const found = slotPropsItem.sanitized_documents?.find(
+        (doc: any) => doc.tag === "insurance"
+      );
+      if (found) {
+        return found;
+      } else {
+        return;
+      }
     }
   }
 
@@ -1013,5 +1052,15 @@ onMounted(async () => {
 
 .dp--overlay-absolute {
   z-index: 9999 !important;
+}
+
+.ql-snow .ql-tooltip {
+  z-index: 9999 !important;
+}
+.ql-snow .ql-tooltip::before {
+  content: "Link hinzufügen" !important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  content: "Speichern" !important;
 }
 </style>

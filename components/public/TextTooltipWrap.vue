@@ -97,7 +97,9 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-  .text-wrap
-    text-align: justify
-    display: inline-block
+.text-wrap
+  font-size: 1.3rem
+  text-align: justify
+  display: inline-block
+
 </style>

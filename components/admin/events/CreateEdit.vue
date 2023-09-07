@@ -549,7 +549,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "11. Bitte gib hier die/den inhaltlich Verantwortliche/n  für die Veranstaltungsinformationen an. *",
     tooltip: "Der Name wird in deinem Veranstaltungsprofil zu sehen sein.",
-    description: "Verantwortliche *",
+    description: "Verantwortliche Person*",
     props: ["name_responsible_person"],
   },
 };
@@ -749,8 +749,6 @@ const handleDocumentsOffline = (
 
 const reloadItem = () => {
   if (!createEditRef.value) return;
-
-  console.log("Get item");
   createEditRef.value.getItem();
 };
 
