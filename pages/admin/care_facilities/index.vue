@@ -262,8 +262,9 @@ const handleItemsLoaded = (items: any[]) => {
   const firstItemId = items[0]?.id;
   facilityId.value = firstItemId;
   if (firstItemId && passwordChanged.value) {
-    createEditDialogOpen.value = true;
+    itemId.value = firstItemId
     passwordChanged.value = false;
+    createEditDialogOpen.value = true;
   }
 
   itemsExist.value = !!items.length;

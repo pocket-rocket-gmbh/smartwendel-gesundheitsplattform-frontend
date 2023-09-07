@@ -495,4 +495,14 @@ const goToField = (n: string) => {
 .ql-clean {
   display: none !important;
 }
+
+.ql-snow .ql-tooltip {
+  z-index: 9999 !important;
+}
+.ql-snow .ql-tooltip::before {
+  content: "Link hinzufügen"!important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  content: "Speichern"!important;
+}
 </style>

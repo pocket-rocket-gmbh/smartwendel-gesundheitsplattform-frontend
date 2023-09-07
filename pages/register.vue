@@ -23,7 +23,7 @@
               Bevölkerung.
             </span>
             <span class="mt-5">
-              Ganz gleich ob sich es um ein behördliches, gemeinnütziges, ehrenamtliches oder
+              Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches oder
               gewerbliches Angebot handelt: Auf der Gesundheits- und Pflegeplattform sind
               alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
               Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
@@ -253,13 +253,13 @@ const steps = {
   },
   step3: {
     description:
-      "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”)",
+      "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”).",
     icon: LogoStep3,
     next: true,
   },
   step4: {
     description:
-      "Sobald alle Pflicht-angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen",
+      "Sobald alle Pflicht-angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
     icon: LogoStep4,
     next: true,
   },
