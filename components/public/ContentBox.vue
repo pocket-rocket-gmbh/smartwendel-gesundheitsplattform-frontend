@@ -160,11 +160,7 @@ $max-height: 240px;
     }
 
     .action {
-      font-size: 1.5rem;
-      color: black;
-      &:visited {
-        color: black;
-      }
+      font-size: 1.2rem;
     }
   }
 }
