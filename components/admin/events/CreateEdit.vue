@@ -429,14 +429,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["responsible"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <v-text-field
               class="text-field"
@@ -900,5 +892,15 @@ onMounted(async () => {
 
 .dp--overlay-absolute {
   z-index: 9999 !important;
+}
+
+.ql-snow .ql-tooltip {
+  z-index: 9999 !important;
+}
+.ql-snow .ql-tooltip::before {
+  content: "Link hinzufügen"!important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  content: "Speichern"!important;
 }
 </style>

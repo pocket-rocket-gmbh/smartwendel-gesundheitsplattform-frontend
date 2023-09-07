@@ -23,8 +23,8 @@
               Bevölkerung.
             </span>
             <span class="mt-5">
-              Ganz gleich ob es um ein behördliches, gemeinnütziges, ehrenamtliches oder
-              gewerbliches Angebot handelt: „Auf der Gesundheits- und Pflegeplattform sind
+              Ganz gleich ob sich es um ein behördliches, gemeinnütziges, ehrenamtliches oder
+              gewerbliches Angebot handelt: Auf der Gesundheits- und Pflegeplattform sind
               alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
               Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
             </span>
@@ -247,7 +247,7 @@ const steps = {
   },
   step2: {
     description:
-      "Wir verifizieren deine Anmeldung zu den üblichen Geschäfts-zeiten von Montag bis Freitag.",
+      "Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.",
     icon: LogoStep2,
     next: true,
   },
@@ -302,6 +302,7 @@ const register = async () => {
   if (result.status === ResultStatus.SUCCESSFUL) {
     localStorage.setItem("health_platform._remembered_email", email.value);
     registerSuccessful.value = true;
+    scrollToTop();
   } else {
     errors.value = { errors: [{ field_name: "email", code: "register.failed" }] };
     loading.value = false;
@@ -333,7 +334,12 @@ const getTownsByCommunityId = (communityId: string) => {
   }
 };
 
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 onMounted(() => {
+  scrollToTop();
   getCommunities();
   const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
   if (rememberedEmail) {

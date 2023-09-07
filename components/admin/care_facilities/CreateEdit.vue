@@ -485,14 +485,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["responsible"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <v-text-field
               class="text-field"
