@@ -21,6 +21,7 @@ export function areArraysEqual(arr1: any[], arr2: any[]): boolean {
 }
 
 export function areObjectsEqual(obj1: Record<string, any>, obj2: Record<string, any>, excludeKeys?: string[]): boolean {
+  if(!obj1 || !obj2) return false;
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
 

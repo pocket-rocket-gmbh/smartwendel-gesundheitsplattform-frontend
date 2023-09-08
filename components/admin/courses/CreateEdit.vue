@@ -411,7 +411,6 @@
               <v-checkbox
                 hide-details
                 density="compact"
-                :disabled="slotProps.item.course_outside_facility"
                 :model-value="slotProps.item.course_outside_facility"
                 @click="setCourseOutsideFacility(slotProps.item)"
                 label="Ja, der Kurs findet außerhalb meiner Einrichtung statt."
@@ -424,7 +423,7 @@
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
-                  :rules="[rules.counterStreet]"
+                  :rules="[rules.required, rules.counterStreet]"
                   :error-messages="
                     useErrors().checkAndMapErrors('street', slotProps.errors)
                   "
@@ -447,6 +446,7 @@
                   item-title="name"
                   item-value="id"
                   label="Gemeinde"
+                  :rules="[rules.required]"
                 />
               </div>
               <div class="field split">
@@ -469,6 +469,7 @@
                   item-title="name"
                   item-value="name"
                   label="Ort"
+                  :rules="[rules.required]"
                 />
               </div>
             </div>
@@ -480,7 +481,6 @@
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
-                  :rules="[rules.counterStreet]"
                   :error-messages="
                     useErrors().checkAndMapErrors('street', slotProps.errors)
                   "
@@ -515,7 +515,6 @@
                   label="PLZ"
                   :type="'number'"
                   disabled
-                  :rules="[rules.required, rules.zip]"
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
                 <v-select
@@ -625,7 +624,7 @@ const steps: CreateEditSteps<StepNames> = {
   category: {
     label: "6. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
     tooltip: "Mehrfachauswahl möglich.",
-    description: "Branchenzugehörigkeit *",
+    description: "Themenbereich *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
@@ -660,7 +659,6 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
     props: ["website"],
-    specialFilter: "certificate",
   },
   documents: {
     label:
@@ -668,11 +666,12 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
+    specialFilter: "documents",
   },
   address: {
     label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
     tooltip: "",
-    description: "Adresse",
+    description: "Adresse *",
     props: ["street", "zip", "community_id", "town"],
   },
   responsible: {
@@ -693,11 +692,11 @@ const servicesFilterSet = ref(false);
 const setCourseOutsideFacility = (item: CreateEditFacility) => {
   item.course_outside_facility = !item.course_outside_facility;
   if (item?.course_outside_facility) {
-    item.street = "";
-    item.zip = "";
-    item.community_id = "";
-    item.town = "";
-    item.additional_address_info = "";
+    item.street = item.street || "";
+    item.zip = item.zip || "";
+    item.community_id = item.community_id || "";
+    item.town = item.town || "";
+    item.additional_address_info = item.additional_address_info || "";
   }
 };
 
@@ -773,11 +772,14 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   }
 };
 
-const setDocumentsIsSet = (type: string) => {
+const documentIsSet = ref(false);
+const certificateIsSet = ref(false);
+
+const setDocumentsIsSet = (isSet:boolean, type: string) => {
   if (type === "documents") {
-    console.log(type)
+    documentIsSet.value = isSet;
   } else if (type === "insurance") {
-    console.log(type)
+    certificateIsSet.value = isSet;
   }
 };
 
@@ -792,22 +794,10 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       return facilitiesFilterSet.value;
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
-    }
-  }
-
-  if (item.specialFilter) {
-    if (item.specialFilter === "certificate") {
-      const found = slotPropsItem.sanitized_documents?.find(
-        (doc: any) => doc.tag === "insurance"
-      );
-      const found2 = slotPropsItem.sanitized_documents?.find(
-        (doc: any) => doc.tag === "documents"
-      );
-      if (found) {
-        return true;
-      } if (found2) {
-        return false;
-      }
+    } else if (item.specialFilter === "certificate") {
+      return certificateIsSet.value;
+    } else if (item.specialFilter === "documents") {
+      return documentIsSet.value;
     }
   }
 

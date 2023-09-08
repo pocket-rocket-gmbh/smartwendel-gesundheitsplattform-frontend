@@ -25,7 +25,7 @@
             <v-btn v-if="!recentlyCreated" color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
               {{ saveButtonText }}
             </v-btn>
-            <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn>
+           <!--  <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn> -->
           </div>
           <div v-else>
             <LoadingSpinner />

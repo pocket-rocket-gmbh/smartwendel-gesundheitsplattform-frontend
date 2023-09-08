@@ -6,7 +6,8 @@
         :disabled="
           tagName === 'insurance' &&
           (itemId
-            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >=
+              1
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         class="text-field file-input"
@@ -21,7 +22,8 @@
         :disabled="
           tagName === 'insurance' &&
           (itemId
-            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >=
+              1
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         hide-details="auto"
@@ -32,12 +34,15 @@
     <div class="errors">
       <div v-if="errorInvalidFileType">
         <span class="warning">
-          <v-alert type="error" density="compact" closable class="mt-2">nur (.pdf) Dateien sind erlaubt</v-alert>
+          <v-alert type="error" density="compact" closable class="mt-2"
+            >nur (.pdf) Dateien sind erlaubt</v-alert
+          >
         </span>
       </div>
       <div v-if="errorFileSizeTooLarge">
         <v-alert type="warning" density="compact" closable class="mt-2"
-          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 5 MB erlaubt</v-alert
+          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 5 MB
+          erlaubt</v-alert
         >
       </div>
     </div>
@@ -45,7 +50,10 @@
       class="mt-5"
       @click="save"
       v-if="!loadingItem"
-      :disabled="(filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge) || !fileUrl?.length"
+      :disabled="
+        (filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge) ||
+        !fileUrl?.length
+      "
     >
       Hinzufügen
     </v-btn>
@@ -53,15 +61,15 @@
     <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
 
     <v-list class="mt-5" v-if="tagName === 'insurance'">
-      
       <template v-if="itemId">
         <v-list-item
-          v-for="document in item.sanitized_documents.filter((doc) => doc.tag === 'insurance')"
+          v-for="document in item.sanitized_documents.filter(
+            (doc) => doc.tag === 'insurance'
+          )"
           :key="document.id"
           :title="document.title"
           item-props
         >
-        
           <template v-slot:prepend>
             <v-btn
               class="mx-3"
@@ -73,7 +81,6 @@
               icon="mdi-file-pdf-box"
             >
             </v-btn>
-            
           </template>
           <i>{{ document.name.replace("-insurance", ".pdf") }}</i>
           <v-divider></v-divider>
@@ -85,15 +92,21 @@
             <v-icon>mdi-alert-outline</v-icon>
             <i>Datei wird überprüft</i>
           </span>
-         
+
           <template v-slot:append>
-            <v-btn icon="mdi-delete" variant="text" @click="deleteFile(document.signed_id)"></v-btn>
+            <v-btn
+              icon="mdi-delete"
+              variant="text"
+              @click="deleteFile(document.signed_id)"
+            ></v-btn>
           </template>
         </v-list-item>
       </template>
       <template v-else>
         <v-list-item
-          v-for="(document, index) in offlineDocuments.filter((doc) => doc.tag === 'insurance')"
+          v-for="(document, index) in offlineDocuments.filter(
+            (doc) => doc.tag === 'insurance'
+          )"
           :key="index"
           :title="document.documentname"
           item-props
@@ -120,7 +133,11 @@
             <i>Datei wird überprüft</i>
           </span>
           <template v-slot:append>
-            <v-btn icon="mdi-delete" variant="text" @click="deleteOfflineFile('insurance', index)"></v-btn>
+            <v-btn
+              icon="mdi-delete"
+              variant="text"
+              @click="deleteOfflineFile('insurance', index)"
+            ></v-btn>
           </template>
         </v-list-item>
       </template>
@@ -128,7 +145,9 @@
     <v-list class="mt-5" v-else>
       <template v-if="itemId">
         <v-list-item
-          v-for="document in item.sanitized_documents.filter((doc) => doc.tag !== 'insurance')"
+          v-for="document in item.sanitized_documents.filter(
+            (doc) => doc.tag !== 'insurance'
+          )"
           :key="document.id"
           :title="document.title"
           item-props
@@ -148,13 +167,19 @@
           <i>{{ document.name.replace("-documents", ".pdf") }}</i>
           <v-divider></v-divider>
           <template v-slot:append>
-            <v-btn icon="mdi-delete" variant="text" @click="deleteFile(document.signed_id)"></v-btn>
+            <v-btn
+              icon="mdi-delete"
+              variant="text"
+              @click="deleteFile(document.signed_id)"
+            ></v-btn>
           </template>
         </v-list-item>
       </template>
       <template v-else>
         <v-list-item
-          v-for="(document, index) in offlineDocuments.filter((doc) => doc.tag !== 'insurance')"
+          v-for="(document, index) in offlineDocuments.filter(
+            (doc) => doc.tag !== 'insurance'
+          )"
           :key="index"
           :title="document.documentname"
           item-props
@@ -173,7 +198,11 @@
           </template>
           <v-divider></v-divider>
           <template v-slot:append>
-            <v-btn icon="mdi-delete" variant="text" @click="deleteOfflineFile('documents', index)"></v-btn>
+            <v-btn
+              icon="mdi-delete"
+              variant="text"
+              @click="deleteOfflineFile('documents', index)"
+            ></v-btn>
           </template>
         </v-list-item>
       </template>
@@ -189,7 +218,7 @@ const emit = defineEmits<{
   (event: "offline", docs: CreateEditFacility["offlineDocuments"]): void;
   (event: "documentDeleted"): void;
   (event: "updatedFiles", docs: CreateEditFacility["sanitized_documents"]): void;
-  (event: "areDocumentsSet", type: string): void;
+  (event: "areDocumentsSet", isSet: boolean, type: string): void;
 }>();
 
 const props = defineProps<{
@@ -257,9 +286,15 @@ const getCareFacility = async () => {
   api.setEndpoint(`care_facilities/${props.itemId}`);
   loadingItem.value = true;
   await api.getItem();
-  emit("updatedFiles", api.item.value.sanitized_documents);
+  emit("updatedFiles", api.item.value?.sanitized_documents);
   loadingItem.value = false;
   item.value = api.item.value;
+  console.log('uhuhu')
+  const typeSet = item.value?.sanitized_documents?.some(
+    (item) => item.tag === props.tagName
+  );
+  console.log('hahaha')
+  emit("areDocumentsSet", typeSet, props.tagName);
 };
 
 const save = async () => {
@@ -274,7 +309,6 @@ const save = async () => {
     const result = await api.createItem(data, "Dokument erfolgreich hinzugefügt");
     fileUrl.value = null;
     if (result.status === ResultStatus.SUCCESSFUL) {
-      emit("areDocumentsSet", props.tagName);
       loadingItem.value = false;
       filename.value = "";
       tag.value = props.tagName;

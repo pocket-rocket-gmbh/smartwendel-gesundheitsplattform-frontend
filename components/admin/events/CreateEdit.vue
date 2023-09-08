@@ -303,7 +303,6 @@
               <v-checkbox
                 hide-details
                 density="compact"
-                :disabled="slotProps.item.course_outside_facility"
                 :model-value="slotProps.item.course_outside_facility"
                 @click="setCourseOutsideFacility(slotProps.item)"
                 label="Ja, die Veranstaltung findet außerhalb meiner Einrichtung statt."
@@ -316,7 +315,7 @@
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
-                  :rules="[rules.counterStreet]"
+                  :rules="[rules.required, rules.counterStreet]"
                   :error-messages="
                     useErrors().checkAndMapErrors('street', slotProps.errors)
                   "
@@ -339,6 +338,7 @@
                   item-title="name"
                   item-value="id"
                   label="Gemeinde"
+                  :rules="[rules.required]"
                 />
               </div>
               <div class="field split">
@@ -361,6 +361,7 @@
                   item-title="name"
                   item-value="name"
                   label="Ort"
+                  :rules="[rules.required]"
                 />
               </div>
             </div>
@@ -542,7 +543,7 @@ const steps: CreateEditSteps<StepNames> = {
   address: {
     label: "10. Findet die Veranstaltung außerhalb deiner Einrichtung statt?",
     tooltip: "",
-    description: "Adresse",
+    description: "Adresse *",
     props: ["street", "zip", "community_id", "town"],
   },
   responsible: {
@@ -560,16 +561,14 @@ const createEditRef = ref();
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
 
-const courseHasAnotherAdress = ref(false);
-
 const setCourseOutsideFacility = (item: CreateEditFacility) => {
   item.course_outside_facility = !item.course_outside_facility;
   if (item?.course_outside_facility) {
-    item.street = "";
-    item.zip = "";
-    item.community_id = "";
-    item.town = "";
-    item.additional_address_info = "";
+    item.street = item.street || "";
+    item.zip = item.zip || "";
+    item.community_id = item.community_id || "";
+    item.town = item.town || "";
+    item.additional_address_info = item.additional_address_info || "";
   }
 };
 
