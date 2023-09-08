@@ -1,6 +1,6 @@
 <template>
   <v-row class="my-15">
-    <v-col sm="3" md="8" xl="4" offset-xl="4" offset-md="2" offset-sm="2">
+    <v-col sm="3" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="2">
       <v-card elevation="10" :class="['card', { shake: animated }]">
         <div>
           <div
@@ -177,8 +177,8 @@
     <span class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5"
       >So geht es weiter:</span
     >
-    <v-row no-gutters>
-      <v-col v-for="step in steps" class="d-flex flex-grow-1 align-center justify-center">
+    <v-row >
+      <v-col v-for="step in steps" gap="3" class="d-flex flex-grow-1 align-center justify-center">
         <v-card
           class="d-flex flex-grow-1 flex-column align-center justify-center"
           max-width="200"

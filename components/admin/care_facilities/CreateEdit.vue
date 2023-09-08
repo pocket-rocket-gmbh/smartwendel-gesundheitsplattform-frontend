@@ -368,7 +368,7 @@
                   >
                 </div>
               </div>
-              <div v-if="isValidAddress === null && editInformations">
+              <div class="mt-3" v-if="isValidAddress === null && editInformations">
                 <v-alert type="info"> Neue Adresse bitte eingeben.</v-alert>
               </div>
               <div v-if="isValidAddress">
