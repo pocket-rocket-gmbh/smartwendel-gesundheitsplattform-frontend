@@ -61,6 +61,7 @@
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
+        :disable-delete="true"
       />
 
       <div

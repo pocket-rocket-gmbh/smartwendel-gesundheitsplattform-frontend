@@ -24,13 +24,13 @@
         </div>
       </template>
       <template #content>
-        <div v-if="mainFilter.name === 'Tätigkeitsgebiet'" class="mb-3">
-          <v-alert type="info" color="grey" class="mt-2">
+        <div v-if="mainFilter.name === 'Tätigkeitsgebiet'" class="mb-3 d-flex align-center">
+          <v-alert color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
                 <span>Falls der passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
                 <span>
-                  <a class="is-white text-decoration-underline" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</a>
+                  <v-btn  color="primary" class="is-white" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</v-btn>
                 </span>
               </div>
             </div>

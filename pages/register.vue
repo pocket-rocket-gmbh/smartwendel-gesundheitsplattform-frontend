@@ -177,7 +177,7 @@
     <span class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5"
       >So geht es weiter:</span
     >
-    <v-row >
+    <v-row>
       <v-col v-for="step in steps" gap="3" class="d-flex flex-grow-1 align-center justify-center">
         <v-card
           class="d-flex flex-grow-1 flex-column align-center justify-center"

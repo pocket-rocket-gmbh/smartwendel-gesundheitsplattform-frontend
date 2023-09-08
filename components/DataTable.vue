@@ -207,7 +207,7 @@
             >mdi-pencil</v-icon
           >
         </td>
-        <td>
+        <td v-if="useUser().isAdmin() || !disableDelete">
           <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
             >mdi-delete</v-icon
           >
@@ -227,6 +227,7 @@ const router = useRouter();
 
 const props = withDefaults(
   defineProps<{
+    disableDelete: boolean;
     fields: any[];
     endpoint: string;
     disableEdit?: boolean;
