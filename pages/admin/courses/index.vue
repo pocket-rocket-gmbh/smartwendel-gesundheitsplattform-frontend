@@ -51,6 +51,7 @@
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
+      :disable-delete="false"
     />
 
     <AdminCoursesCreateEdit

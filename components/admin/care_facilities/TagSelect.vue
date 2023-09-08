@@ -1,23 +1,32 @@
 <template>
-  <v-checkbox v-if="kind !== 'facility' && kind !== 'course'" v-show="false" v-bind:model-value="!!preSetTags.length" :rules="[!!preSetTags.length || 'Erforderlich']"></v-checkbox>
+  <v-checkbox
+    v-if="kind !== 'facility' && kind !== 'course'"
+    v-show="false"
+    v-bind:model-value="!!preSetTags.length"
+    :rules="[!!preSetTags.length || 'Erforderlich']"
+  ></v-checkbox>
   <CollapsibleItem
     class="tag-select mt-10"
     id="tag-select"
     :expand="expand"
     @expand-toggled="handleExpandToggled"
-    
   >
     <template #title>
-      <div class="title" :class="[handleExpandToggled ? 'text-h5' : 'text-h6']">
+      <div
+        class="d-flex flex-column"
+        :class="[handleExpandToggled ? 'text-h5' : 'text-h6']"
+      >
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
         <div v-if="kind === 'news'">Stich- und Schlagwörter zum Newsbeitrag</div>
         <div v-if="kind === 'event'">Veranstaltungsangebot</div>
         <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
-        <div v-if="!expand" class="selected">
-          <v-chip v-for="tag in preSetTags" :key="tag.id">
-            {{ tag.name }}
-          </v-chip>
-        </div>
+      </div>
+
+      <div v-if="!expand" class="mt-3">
+        <span>Bereits ausgewählt:</span>
+        <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
+          {{ tag.name }}
+        </v-chip>
       </div>
     </template>
     <template #content>
@@ -33,6 +42,17 @@
         <div v-if="kind === 'event'">
           Hier hast du die Möglichkeit, deine Veranstaltung mit Hilfe von Schlagwörtern
           individuell zu beschreiben.
+        </div>
+        <div v-if="preSetTags?.length" class="tags my-6">
+          <span>Bereits ausgewählt:</span>
+          <v-chip
+            v-for="tag in preSetTags"
+            closable
+            @click:close="handleRemoveTag(tag)"
+            :key="tag.id"
+          >
+            {{ tag.name }}
+          </v-chip>
         </div>
         <div class="content-title mt-5 d-flex align-center">
           <v-icon>mdi-tag-outline</v-icon>
@@ -60,15 +80,20 @@
               den entsprechenden Schlagwörtern suchen.
             </span>
             <span v-if="kind === 'event'"
-              >„Überlege dir, welche Begriffe den Inhalt deiner Veranstaltung am treffendsten wiedergeben. Trage bspw. den Titel  „Fit in der Region“, die Ziele („Gesundheit fördern“) und die Angebote („Gesundheits-Checks“)  deiner Veranstaltung ein.
+              >„Überlege dir, welche Begriffe den Inhalt deiner Veranstaltung am
+              treffendsten wiedergeben. Trage bspw. den Titel „Fit in der Region“, die
+              Ziele („Gesundheit fördern“) und die Angebote („Gesundheits-Checks“) deiner
+              Veranstaltung ein.
             </span>
             <span v-if="kind === 'news'">
               Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie
               die entsprechenden Schlagwörter suchen.
             </span>
           </v-tooltip>
+
         </div>
-        <div class="inputs">
+       
+        <div class="inputs my-5">
           <!-- <v-combobox
             @click.stop
             hide-details="auto"
@@ -108,16 +133,6 @@
             Hinzufügen
           </v-btn>
         </div>
-        <div class="tags">
-          <v-chip
-            v-for="tag in preSetTags"
-            closable
-            @click:close="handleRemoveTag(tag)"
-            :key="tag.id"
-          >
-            {{ tag.name }}
-          </v-chip>
-        </div>
       </div>
     </template>
   </CollapsibleItem>
@@ -153,16 +168,16 @@ const handleExpandToggled = () => {
 };
 
 const placeHolder = computed(() => {
-      if (props.kind === "facility") {
-        return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
-      } else if (props.kind === "course") {
-        return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
-      } else if (props.kind === "event") {
-        return "Bsp: Titel, Ziel und Angebote deiner Veranstaltung";
-      } else if(props.kind === "news") {
-        return "Bsp: Demenz, Mentale Gesundheit, Ernährung im Alter";
-      }
-    });
+  if (props.kind === "facility") {
+    return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
+  } else if (props.kind === "course") {
+    return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
+  } else if (props.kind === "event") {
+    return "Bsp: Titel, Ziel und Angebote deiner Veranstaltung";
+  } else if (props.kind === "news") {
+    return "Bsp: Demenz, Mentale Gesundheit, Ernährung im Alter";
+  }
+});
 
 const allTagsWithoutSelected = computed(() => {
   if (currentTagSearch.value.length > 2) {

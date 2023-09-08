@@ -42,6 +42,7 @@
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       ref="dataTableRef"
+      :disable-delete="false"
     />
 
     <AdminNewsCreateEdit

@@ -142,6 +142,7 @@ const handleConfirmClose = () => {
   getItem();
   loadingItem.value = false;
   recentlyCreated.value = true;
+  emit("close");
 };
 
 const getItem = async () => {
