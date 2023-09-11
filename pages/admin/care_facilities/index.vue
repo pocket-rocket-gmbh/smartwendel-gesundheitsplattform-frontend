@@ -93,6 +93,7 @@
         :cacheKey="cacheKey"
         :showPreviewButton="true"
         @showPreview="handleShowPreview"
+        @update-items="handleUpdateItems"
       />
 
       <AdminPreviewDummyPage
@@ -322,6 +323,10 @@ const handleShowPreview = (item: any) => {
 const handlePreviewClose = () => {
   previewItem.value = null;
 };
+
+const handleUpdateItems = () => {
+  dataTableRef.value?.getItems();
+}
 
 onMounted(async () => {
   loading.value = true;

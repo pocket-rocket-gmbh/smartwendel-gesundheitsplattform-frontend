@@ -8,6 +8,7 @@
         @click:outside="confirmSaveDialogOpen = false"
         @accepted="confirmSaveDialogOpen = false"
         @close="handleConfirmClose()"
+        @update="handleUpdateItem"
       />
 
       <v-form ref="form">
@@ -58,7 +59,7 @@ import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const statusLoadingFilter = useStatusLoadingFilter();
 
-const emit = defineEmits(["close", "hasChanged", "save", "showPreview"]);
+const emit = defineEmits(["close", "hasChanged", "save", "showPreview", "updateItems"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -144,6 +145,10 @@ const handleConfirmClose = async () => {
   recentlyCreated.value = true;
   emit("close");
 };
+
+const handleUpdateItem = () => {
+  emit("updateItems");
+}
 
 const getItem = async () => {
   if (!props.itemId) return;
