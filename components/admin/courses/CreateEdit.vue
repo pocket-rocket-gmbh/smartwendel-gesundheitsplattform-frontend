@@ -560,6 +560,7 @@ import { de } from "date-fns/locale";
 import { FilterType } from "~/store/searchFilter";
 import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
+import { getCurrentUserFacilities } from "~/utils/filter.utils";
 import { set } from "date-fns";
 
 const stepNames = [
@@ -689,6 +690,8 @@ const createEditRef = ref();
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
 
+const currentUserFacility = await getCurrentUserFacilities();
+
 const setCourseOutsideFacility = (item: CreateEditFacility) => {
   item.course_outside_facility = !item.course_outside_facility;
   if (item?.course_outside_facility) {
@@ -697,9 +700,14 @@ const setCourseOutsideFacility = (item: CreateEditFacility) => {
     item.community_id = item.community_id || "";
     item.town = item.town || "";
     item.additional_address_info = item.additional_address_info || "";
+  } else {
+    item.street = currentUserFacility.street;
+    item.zip = currentUserFacility.zip;
+    item.community_id = currentUserFacility.community_id;
+    item.town = currentUserFacility.town;
+    item.additional_address_info = currentUserFacility.additional_address_info;
   }
 };
-
 const textOptions = ref({
   debug: false,
   theme: "snow",
