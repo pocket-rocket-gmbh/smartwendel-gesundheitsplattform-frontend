@@ -91,7 +91,7 @@
 <script lang="ts">
 import { useReward } from "vue-rewards";
 export default defineComponent({
-  emits: ["close", "accepted"],
+  emits: ["close", "accepted", "update"],
   props: {
     open: Boolean,
     item: {
@@ -159,6 +159,8 @@ export default defineComponent({
       let data: any = {};
       data.is_active = true;
       await updateApi.updateItem(data, null);
+
+      emit("update");
     };
 
     const setupFinished = ref(false);
