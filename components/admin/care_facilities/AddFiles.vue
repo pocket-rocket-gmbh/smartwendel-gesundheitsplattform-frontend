@@ -289,11 +289,9 @@ const getCareFacility = async () => {
   emit("updatedFiles", api.item.value?.sanitized_documents);
   loadingItem.value = false;
   item.value = api.item.value;
-  console.log('uhuhu')
   const typeSet = item.value?.sanitized_documents?.some(
     (item) => item.tag === props.tagName
   );
-  console.log('hahaha')
   emit("areDocumentsSet", typeSet, props.tagName);
 };
 
