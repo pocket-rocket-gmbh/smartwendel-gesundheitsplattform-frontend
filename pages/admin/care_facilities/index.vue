@@ -26,9 +26,7 @@
               @click="
                 itemId = null;
                 createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(
-                  JSON.stringify(originalItemPlaceholder)
-                );
+                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
               "
               :class="{ orange: newFacilityFromCache }"
             >
@@ -70,21 +68,16 @@
       >
         <v-icon>mdi-arrow-up</v-icon>
         <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der
-          Webseite.</span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
         >
       </div>
       <v-btn
-        v-if="
-          facilityId && !user.isAdmin()
-        "
+        v-if="facilityId && !user.isAdmin()"
         :disabled="setupFinished && !itemStatus"
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="
-          useRouter().push({ path: `/public/care_facilities/${facilityId}` })
-        "
+        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
       >
         Zu Deiner Einrichtung
       </v-btn>
@@ -176,8 +169,20 @@ const fields = [
     value: "user.name",
     condition: "admin",
     type: "button",
-    action: (item: any) =>
-      router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+    action: (item: any) => {
+      if (user?.currentUser?.role !== "facility_owner") {
+        router.push({ path: "/admin/users", query: { userId: item.user.id } });
+      }
+    },
+  },
+  {
+    text: "",
+    value: "mdi-eye",
+    type: "button",
+    tooltip: "Einrichtung anzehen",
+    action: (item: any) => {
+      goToFacility(item.id);
+    },
   },
 ];
 const dataTableRef = ref();
@@ -227,9 +232,7 @@ const originalItemPlaceholder = ref({
     { day: "Sonntag", placeholder: "z.B. geschlossen", hours: "" },
   ],
 });
-const itemPlaceholder = ref(
-  JSON.parse(JSON.stringify(originalItemPlaceholder.value))
-);
+const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
@@ -264,12 +267,13 @@ const handleItemsLoaded = (items: any[]) => {
   const firstItemId = items[0]?.id;
   facilityId.value = firstItemId;
   if (firstItemId && passwordChanged.value) {
-    itemId.value = firstItemId
+    itemId.value = firstItemId;
     passwordChanged.value = false;
     createEditDialogOpen.value = true;
   }
-
+  console.log(items[0]?.is_active);
   itemsExist.value = !!items.length;
+  handleItemUpdated(items[0]);
 };
 
 const handleDeleteDialogClose = () => {
@@ -307,6 +311,10 @@ const openAddImagesDialog = (id: string) => {
 const openAddFilesDialog = (id: string) => {
   itemId.value = id;
   addFilesDialogOpen.value = true;
+};
+
+const goToFacility = (id: string) => {
+  router.push({ path: `/public/care_facilities/${id}` });
 };
 
 const handleShowPreview = (item: any) => {

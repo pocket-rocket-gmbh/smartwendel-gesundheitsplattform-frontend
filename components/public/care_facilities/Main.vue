@@ -33,7 +33,7 @@
               ></span>
             </a>
           </div>
-            <div class="bar-item">
+            <div class="bar-item" v-if="careFacility?.name_instructor">
               <span class="px-1"><v-icon color="primary">mdi-account</v-icon></span>
               <span>{{ careFacility?.name_instructor }}</span>
             </div>

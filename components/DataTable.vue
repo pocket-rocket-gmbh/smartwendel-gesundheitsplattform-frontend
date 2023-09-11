@@ -196,9 +196,14 @@
             </span>
           </span>
           <span v-else-if="field.type === 'button' && field.action">
-            <button @click.stop="field.action(item)">
+            <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye'">
               {{ pathInto(item, field.value) }}
             </button>
+            <span v-if="field.value === 'mdi-eye'">
+              <v-icon class="is-clickable" @click="field.action(item)"
+                >mdi-eye</v-icon
+              >
+            </span>
           </span>
           <span v-else>{{ item[field.value] }}</span>
         </td>

@@ -82,7 +82,6 @@ createUpdateApi.setBaseApi(usePrivateApi());
 
 const getItem = async () => {
   showApi.setEndpoint(`users/${props.itemId}`);
-
   loadingItem.value = true;
   await showApi.getItem();
   loadingItem.value = false;

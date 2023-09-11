@@ -138,9 +138,9 @@ const saveButtonText = computed(() => {
 
 const recentlyCreated = ref(false);
 
-const handleConfirmClose = () => {
+const handleConfirmClose = async () => {
   confirmSaveDialogOpen.value = false;
-  getItem();
+  await getItem();
   loadingItem.value = false;
   recentlyCreated.value = true;
   emit("close");

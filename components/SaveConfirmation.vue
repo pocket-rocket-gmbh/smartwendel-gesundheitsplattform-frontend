@@ -117,7 +117,7 @@ export default defineComponent({
       if (props.item.kind === "facility") {
         return "Deine Einrichtung";
       } else if (props.item.kind === "course") {
-        return "Dein Kurs";
+        return "Deinen Kurs";
       } else if (props.item.kind === "event") {
         return "Deine Veranstaltung";
       } else if (props.item.kind === "news") {

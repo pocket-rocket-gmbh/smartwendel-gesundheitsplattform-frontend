@@ -2,9 +2,16 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Beiträge</h2>
     <h2 v-else>Beiträge</h2>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
-      du Kurse und Veranstaltungen sowie Beiträge anlegen.
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
+      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
+      anlegen.
     </v-alert>
 
     <v-row align="center">
@@ -58,7 +65,11 @@
       @showPreview="handleShowPreview"
     />
 
-    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
+    <AdminPreviewDummyPage
+      v-if="previewItem"
+      :item="previewItem"
+      @close="handlePreviewClose"
+    />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -107,7 +118,7 @@ const fields = [
     },
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
-  { value: "", type: "beinEdited"},
+  { value: "", type: "beinEdited" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",
@@ -115,7 +126,20 @@ const fields = [
     value: "user.name",
     condition: "admin",
     type: "button",
-    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+    action: (item: any) => {
+      if (user?.currentUser?.role !== "facility_owner") {
+        router.push({ path: "/admin/users", query: { userId: item.user.id } });
+      }
+    },
+  },
+  {
+    text: "",
+    value: "mdi-eye",
+    type: "button",
+    tooltip: "Einrichtung anzehen",
+    action: (item: any) => {
+      goToFacility(item.id);
+    },
   },
 ];
 
@@ -177,6 +201,11 @@ const handleShowPreview = (item: any) => {
 const handlePreviewClose = () => {
   previewItem.value = null;
 };
+
+const goToFacility = (id: string) => {
+  router.push({ path: `/public/care_facilities/${id}` });
+};
+
 
 onMounted(async () => {
   loading.value = true;

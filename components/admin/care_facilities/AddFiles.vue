@@ -318,7 +318,7 @@ const save = async () => {
     }
   }
 
-  emit("offline", [
+  handleEmitOffline([
     ...(props.offlineDocuments || []),
     {
       document: fileUrl.value,
@@ -326,12 +326,19 @@ const save = async () => {
       tag: props.tagName,
     },
   ]);
+ 
 
   fileUrl.value = null;
   filename.value = "";
   tag.value = props.tagName;
   file.value = {};
 };
+
+const handleEmitOffline = (docs:CreateEditFacility["offlineDocuments"]) => {
+  emit("offline", docs);
+  const typeSet = docs?.some((item) => item.tag === props.tagName);
+  emit("areDocumentsSet", typeSet, props.tagName);
+}
 
 const getUrlToDocument = (document: string) => {
   const byteCharacters = atob(document.split(";base64,")[1]);
@@ -374,7 +381,7 @@ const deleteOfflineFile = async (tag: typeof props.tagName, docIndex: number) =>
 
   relevantDocs.splice(docIndex, 1);
 
-  emit("offline", [...relevantDocs, ...otherDocs]);
+  handleEmitOffline([...relevantDocs, ...otherDocs]);
 };
 
 const handleMount = () => {
