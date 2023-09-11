@@ -40,6 +40,14 @@
         <a :href="buttonHref" class="title">{{ item.name }}</a>
         <div class="content break-text" v-html="item.description"></div>
       </div>
+      <div class=is-clickable @click="openContentModal()">
+        Mehr Lesen
+      </div>
+      <PublicCategoriesContentModal
+        :open="contentModalOpen"
+        :item="item"
+        v-if="contentModalOpen"
+    />
       <div class="action" v-if="buttonHref">
         <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
       </div>
@@ -53,6 +61,12 @@ const props = defineProps<{
   item: Facility;
   size?: number;
 }>();
+
+const contentModalOpen = ref(false);
+
+const openContentModal = () => {
+  contentModalOpen.value = !contentModalOpen.value;
+};
 
 const contentBoxRef = ref<HTMLDivElement>();
 const showImage = ref(true);
