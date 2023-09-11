@@ -73,14 +73,7 @@
         </v-row>
         <v-row no-gutters v-else>
           <v-col class="d-flex justify-center">
-            <v-btn
-              variant="outlined"
-              class="save-buttons"
-              elevation="0"
-              @click="emitCloser()"
-            >
-              Schliessen
-            </v-btn>
+            <LoadingSpinner />
           </v-col>
         </v-row>
       </v-card-actions>
@@ -89,6 +82,7 @@
 </template>
 
 <script lang="ts">
+import { Loading, LoadingSpinner } from "#build/components";
 import { useReward } from "vue-rewards";
 export default defineComponent({
   emits: ["close", "accepted", "update"],
@@ -150,7 +144,10 @@ export default defineComponent({
     const updateApi = useCollectionApi();
     updateApi.setBaseApi(usePrivateApi());
 
+    const loadingSpinner = ref(false);
+
     const save = async () => {
+      loadingSpinner.value = true;
       if (props.facilityId) {
         updateApi.setEndpoint(`care_facilities/${props.facilityId}`);
       } else {
@@ -161,6 +158,7 @@ export default defineComponent({
       await updateApi.updateItem(data, null);
 
       emit("update");
+      loadingSpinner.value = false;
     };
 
     const setupFinished = ref(false);
@@ -195,6 +193,7 @@ export default defineComponent({
       setupFinished,
       user,
       linkToFacility,
+      loadingSpinner,
     };
   },
 });

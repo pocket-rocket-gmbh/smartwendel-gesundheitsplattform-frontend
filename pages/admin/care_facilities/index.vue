@@ -271,7 +271,6 @@ const handleItemsLoaded = (items: any[]) => {
     passwordChanged.value = false;
     createEditDialogOpen.value = true;
   }
-  console.log(items[0]?.is_active);
   itemsExist.value = !!items.length;
   handleItemUpdated(items[0]);
 };

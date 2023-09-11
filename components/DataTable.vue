@@ -199,7 +199,7 @@
             <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye'">
               {{ pathInto(item, field.value) }}
             </button>
-            <span v-if="field.value === 'mdi-eye'">
+            <span v-if="field.value === 'mdi-eye' && item.is_active">
               <v-icon class="is-clickable" @click="field.action(item)"
                 >mdi-eye</v-icon
               >
