@@ -23,9 +23,9 @@
               Bevölkerung.
             </span>
             <span class="mt-5">
-              Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches oder
-              gewerbliches Angebot handelt: Auf der Gesundheits- und Pflegeplattform sind
-              alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
+              Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches
+              oder gewerbliches Angebot handelt: Auf der Gesundheits- und Pflegeplattform
+              sind alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
               Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
             </span>
           </div>
@@ -170,41 +170,46 @@
       </v-card>
     </v-col>
   </v-row>
-  <div
-    class="d-flex flex-column align-center justify-center mt-10"
+
+  <span
     v-if="registerSuccessful"
+    class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5 d-flex justify-center"
+    >So geht es weiter:</span
   >
-    <span class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5"
-      >So geht es weiter:</span
-    >
-    <v-row>
-      <v-col v-for="step in steps" gap="3" class="d-flex flex-grow-1 align-center justify-center">
-        <v-card
-          class="d-flex flex-grow-1 flex-column align-center justify-center"
-          max-width="200"
-          elevation="0"
+  <v-row v-if="registerSuccessful">
+    <v-col md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="2">
+      <v-row>
+        <v-col
+          v-for="step in steps"
+          class="d-flex align-center justify-center flex-grow-1"
         >
-          <v-card-item>
-            <div class="d-flex flex-column flex-grow-1">
-              <div
-                class="d-flex align-center justify-center flex-grow-1 bg-primary background-icon"
-              >
-                <img :src="step.icon" />
+          <v-card
+            class="d-flex flex-column align-center justify-center flex-grow-1"
+            elevation="0"
+          >
+            <v-card-item>
+              <div class="d-flex flex-column flex-grow-1">
+                <div
+                  class="d-flex align-center justify-center bg-primary background-icon"
+                >
+                  <img :src="step.icon" />
+                </div>
+
+                <div
+                  class="d-flex align-center justify-center flex-grow-1 text-center text background-text"
+                >
+                  {{ step.description }}
+                </div>
               </div>
-              <div
-                class="d-flex align-center justify-center text-center text background-text"
-              >
-                {{ step.description }}
-              </div>
-            </div>
-          </v-card-item>
-        </v-card>
-        <span v-if="step.next" class="register">
-          <img :src="arrow" />
-        </span>
-      </v-col>
-    </v-row>
-  </div>
+            </v-card-item>
+          </v-card>
+          <span v-if="step.next" class="register d-flex">
+            <img :src="arrow" />
+          </span>
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts" setup>
@@ -259,7 +264,7 @@ const steps = {
   },
   step4: {
     description:
-      "Sobald alle Pflicht-angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
+      "Sobald alle Pflicht angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
     icon: LogoStep4,
     next: true,
   },
@@ -362,7 +367,7 @@ onMounted(() => {
 }
 
 .text {
-  min-height: 150px;
+  min-height: 200px;
 }
 
 .background-text {

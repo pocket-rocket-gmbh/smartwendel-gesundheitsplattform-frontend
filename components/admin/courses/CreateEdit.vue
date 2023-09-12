@@ -708,11 +708,36 @@ const setCourseOutsideFacility = (item: CreateEditFacility) => {
     item.additional_address_info = currentUserFacility.additional_address_info;
   }
 };
+const formats = ref([
+  "background",
+  "code",
+  "italic",
+  "size",
+  "script",
+  "header",
+  "indent",
+  "list",
+  "align",
+  "direction",
+  //'link',
+  //'strike',
+  // 'underline',
+  // 'blockquote',
+  //'bold',
+  //'color',
+  //'font',
+  //'code-block',
+  //'formula'
+  // 'image'
+  // 'video'
+]);
+
 const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
   required: true,
+  formats: formats
 });
 
 const onQuillReady = (quill: any) => {

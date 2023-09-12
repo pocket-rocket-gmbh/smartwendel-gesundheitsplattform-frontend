@@ -37,7 +37,7 @@
         <v-row>
           <v-col class="d-flex flex-column justify-center aligin-center">
             <h3 class="mb-4">{{ item?.name }}</h3>
-            <div class="content break-text" v-html="item?.description"></div>
+            <div class="content" v-html="item?.description"></div>
           </v-col>
         </v-row>
       </v-card-text>

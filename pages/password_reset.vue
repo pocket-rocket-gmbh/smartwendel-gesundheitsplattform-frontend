@@ -39,12 +39,11 @@
             />
             <v-btn
               :disabled="password !== password_confirmation"
-              elevation="0"
-              variant="outlined"
-              class="text-success"
+              variant="flat"
+              color="primary"
               @click="updatePassword()"
             >
-              Passwort ändern
+              <span> Passwort ändern </span>
             </v-btn>
           </div>
         </div>

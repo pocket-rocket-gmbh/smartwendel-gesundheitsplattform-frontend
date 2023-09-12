@@ -163,6 +163,7 @@ const fields = [
   { value: "", type: "isCompleteFacility" },
   { value: "", type: "beinEdited" },
   { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
+  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",
     text: "Erstellt von",
