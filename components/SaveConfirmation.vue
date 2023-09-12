@@ -100,27 +100,23 @@ export default defineComponent({
       emit("close");
     };
 
+    const translations: {[key: string]: string} = {
+      facility: "Einrichtung",
+      course: "Kurs",
+      event: "Veranstaltung",
+      news: "Beitrag",
+    };
+
     const itemKindStep1 = computed(() => {
-      if (props.item.kind === "facility") {
-        return "deine Einrichtung";
-      } else if (props.item.kind === "course") {
-        return "deinen Kurs";
-      } else if (props.item.kind === "event") {
-        return "deine Veranstaltung";
-      } else if (props.item.kind === "news") {
-        return "deinen Beitrag";
-      }
+      const kind = props.item.kind;
+      const translation = translations[kind] || kind;
+      return `dein${kind === "news" ? "" : "e"} ${translation}`;
     });
+
     const itemKindStep2 = computed(() => {
-      if (props.item.kind === "facility") {
-        return "Deine Einrichtung";
-      } else if (props.item.kind === "course") {
-        return "Dein Kurs";
-      } else if (props.item.kind === "event") {
-        return "Deine Veranstaltung";
-      } else if (props.item.kind === "news") {
-        return "Dein Beitrag";
-      }
+      const kind = props.item.kind;
+      const translation = translations[kind] || kind;
+      return `Dein${kind === "news" ? "" : "e"} ${translation}`;
     });
 
     const itemId = props.item.id;

@@ -1,7 +1,7 @@
 <template>
-  <CreateEdit v-slot="slotProps" :size="800" :height="600">
+  <CreateEdit v-slot="slotProps" :size="800" :height="700">
     <v-card-text>
-      <div class="field">
+      <div class="field mt-5">
         <v-text-field
           v-model="slotProps.item.name"
           hide-details="auto"
@@ -10,9 +10,8 @@
         />
       </div>
     </v-card-text>
-
-    <div class="pa-4 pt-0">
-      <TextEditor v-model="slotProps.item.description" height="325px" />
+    <div class="pa-4 pt-0 mb-4">
+      <TextEditor v-model="slotProps.item.description" height="380px" />
     </div>
   </CreateEdit>
 </template>
