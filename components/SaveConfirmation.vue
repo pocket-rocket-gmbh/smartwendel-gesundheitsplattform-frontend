@@ -19,7 +19,7 @@
             class="text-h5 pa-10 d-flex flex-column align-center justify-center"
           >
             <span class="mb-5 text-h5"> Vielen Dank! </span>
-            <span>{{ itemkind }} wurde online geschaltet! </span>
+            <span>{{ itemKindStep2 }} wurde online geschaltet! </span>
           </div>
           <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
             <a :href="linkToFacility" target="_blank">
@@ -38,7 +38,7 @@
           <span class="mb-5"><v-icon color="primary">mdi-check-outline</v-icon></span>
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
           <span v-if="user.is_active_on_health_scope"
-            >Möchtest du {{ itemkind }} veröffentlichen?</span
+            >Möchtest du {{ itemKindStep1 }} veröffentlichen?</span
           >
         </div>
       </v-card-text>
@@ -100,15 +100,26 @@ export default defineComponent({
       emit("close");
     };
 
-    const itemkind = computed(() => {
+    const itemKindStep1 = computed(() => {
+      if (props.item.kind === "facility") {
+        return "deine Einrichtung";
+      } else if (props.item.kind === "course") {
+        return "deinen Kurs";
+      } else if (props.item.kind === "event") {
+        return "deine Veranstaltung";
+      } else if (props.item.kind === "news") {
+        return "deinen Beitrag";
+      }
+    });
+    const itemKindStep2 = computed(() => {
       if (props.item.kind === "facility") {
         return "Deine Einrichtung";
       } else if (props.item.kind === "course") {
-        return "Deinen Kurs";
+        return "Dein Kurs";
       } else if (props.item.kind === "event") {
         return "Deine Veranstaltung";
       } else if (props.item.kind === "news") {
-        return "Deinen Beitrag";
+        return "Dein Beitrag";
       }
     });
 
@@ -182,7 +193,8 @@ export default defineComponent({
       confettiReward,
       finished,
       itemId,
-      itemkind,
+      itemKindStep1,
+      itemKindStep2,
       setupFinished,
       user,
       linkToFacility,
