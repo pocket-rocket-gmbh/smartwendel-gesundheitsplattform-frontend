@@ -62,6 +62,7 @@
     />
 
     <AdminCoursesCreateEdit
+      scroll-strategy="none"
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
