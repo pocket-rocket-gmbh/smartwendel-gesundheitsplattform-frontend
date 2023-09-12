@@ -6,7 +6,7 @@ export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
-export type FilterType = "filter_facility" | "filter_service" | "certificate" | "documents";
+export type FilterType = "filter_facility" | "filter_service" | "certificate" | "documents" | "opening_hours";
 export type FilterTag = {
   id: string;
   menu_order: number;
