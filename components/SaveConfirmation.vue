@@ -22,17 +22,16 @@
             <span>{{ itemkind }} wurde online geschaltet! </span>
           </div>
           <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
-            <a :href="linkToFacility" target="_blank"
-              ><v-btn
+            <a :href="linkToFacility" target="_blank">
+              <v-btn
                 v-if="facilityId || item.id"
-                variant="outlined"
-                class="save-buttons"
-                color="success"
-                elevation="0"
+                variant="flat"
+                color="primary"
+                @click="emitAccept(), confettiReward()"
               >
                 <span> auf Webseite ansehen </span>
-              </v-btn></a
-            >
+              </v-btn>
+            </a>
           </div>
         </div>
         <div v-else class="text-h5 pa-5 d-flex flex-column justify-center align-center">
@@ -60,14 +59,8 @@
             </v-btn>
           </v-col>
           <v-col md="6" class="d-flex justify-end">
-            <v-btn
-              variant="outlined"
-              class="save-buttons"
-              color="success"
-              elevation="0"
-              @click="emitAccept(), confettiReward()"
-            >
-              Jetzt veröffentlichen
+            <v-btn variant="flat" color="primary" @click="emitAccept(), confettiReward()">
+              <span> Jetzt veröffentlichen </span>
             </v-btn>
           </v-col>
         </v-row>

@@ -26,6 +26,7 @@ export type User = {
 };
 
 export type Facility = {
+  [x: string]: any;
   id: string;
   name: string;
   description?: string;

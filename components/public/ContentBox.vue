@@ -38,16 +38,21 @@
 
       <div class="content-wrapper">
         <a :href="buttonHref" class="title">{{ item.name }}</a>
-        <div class="content break-text" v-html="item.description"></div>
+        <span class="content break-text" v-html="item.description"></span>
+        <span
+          v-if="item.description.length > 260"
+          class="is-clickable"
+          @click="openContentModal()"
+        >
+          <v-btn size="small" variant="text" class="read-more"> weiter lesen </v-btn>
+        </span>
       </div>
-      <div class=is-clickable @click="openContentModal()">
-        Mehr Lesen
-      </div>
+
       <PublicCategoriesContentModal
         :open="contentModalOpen"
         :item="item"
         v-if="contentModalOpen"
-    />
+      />
       <div class="action" v-if="buttonHref">
         <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
       </div>
@@ -178,4 +183,8 @@ $max-height: 240px;
     }
   }
 }
+.read-more {
+  opacity: 0.5;
+}
+
 </style>

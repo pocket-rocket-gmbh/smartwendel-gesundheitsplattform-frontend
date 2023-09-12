@@ -1,5 +1,5 @@
 <template>
-  <v-row class="mb-10 mt-5">
+  <v-row class="mb-10 mt-5" v-if="kind !== 'category'">
     <v-col md="2" class="d-flex align-center justify-start">
       <v-btn
         size="large"
@@ -40,8 +40,8 @@
   />
   <div class="field">
     <v-file-input
-      v-if="!openPhotoGallery && openImageupload"
-      class="text-field"
+      v-if="!openPhotoGallery && openImageupload || kind === 'category'"
+      class="text-field my-3"
       hide-details="auto"
       v-model="image"
       :label="`${labelText} ${tempImage || preSetImageUrl ? 'aktualisieren' : 'wählen'}`"
@@ -76,7 +76,7 @@
     @crop="setImage"
   />
   <template v-else-if="croppedImage || tempImage || preSetImageUrl">
-    <v-row>
+    <v-row class="my-1">
       <v-col md="1" class="d-flex align-center justify-center">
         <span>Bereits ausgewählt:</span>
       </v-col>

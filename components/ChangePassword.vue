@@ -26,7 +26,9 @@
               :type="PasswordConfirmationVisible ? 'text' : 'password'"
               v-model="password_confirmation"
               label="Passwort Bestätigung"
-              @click:append-inner="PasswordConfirmationVisible = !PasswordConfirmationVisible"
+              @click:append-inner="
+                PasswordConfirmationVisible = !PasswordConfirmationVisible
+              "
               :rules="[
                 password === password_confirmation || 'Passwörter stimmen nicht überein',
                 rules.required,
@@ -42,12 +44,11 @@
           <v-col class="d-flex justify-center">
             <v-btn
               :disabled="password !== password_confirmation"
-              elevation="0"
-              variant="outlined"
-              class="text-success"
+              variant="flat"
+              color="primary"
               @click="updatePassword()"
             >
-              Passwort ändern
+              <span> Passwort ändern </span>
             </v-btn>
           </v-col>
         </v-row>
