@@ -385,14 +385,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["documents"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["documents"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
@@ -411,7 +403,6 @@
               <v-checkbox
                 hide-details
                 density="compact"
-                :disabled="slotProps.item.course_outside_facility"
                 :model-value="slotProps.item.course_outside_facility"
                 @click="setCourseOutsideFacility(slotProps.item)"
                 label="Ja, der Kurs findet außerhalb meiner Einrichtung statt."
@@ -424,7 +415,7 @@
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
-                  :rules="[rules.counterStreet]"
+                  :rules="[rules.required, rules.counterStreet]"
                   :error-messages="
                     useErrors().checkAndMapErrors('street', slotProps.errors)
                   "
@@ -447,6 +438,7 @@
                   item-title="name"
                   item-value="id"
                   label="Gemeinde"
+                  :rules="[rules.required]"
                 />
               </div>
               <div class="field split">
@@ -469,6 +461,7 @@
                   item-title="name"
                   item-value="name"
                   label="Ort"
+                  :rules="[rules.required]"
                 />
               </div>
             </div>
@@ -480,7 +473,6 @@
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
-                  :rules="[rules.counterStreet]"
                   :error-messages="
                     useErrors().checkAndMapErrors('street', slotProps.errors)
                   "
@@ -515,7 +507,6 @@
                   label="PLZ"
                   :type="'number'"
                   disabled
-                  :rules="[rules.required, rules.zip]"
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
                 <v-select
@@ -561,6 +552,7 @@ import { de } from "date-fns/locale";
 import { FilterType } from "~/store/searchFilter";
 import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
+import { getCurrentUserFacilities } from "~/utils/filter.utils";
 import { set } from "date-fns";
 
 const stepNames = [
@@ -625,7 +617,7 @@ const steps: CreateEditSteps<StepNames> = {
   category: {
     label: "6. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
     tooltip: "Mehrfachauswahl möglich.",
-    description: "Branchenzugehörigkeit *",
+    description: "Themenbereich *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
@@ -660,7 +652,6 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
     props: ["website"],
-    specialFilter: "certificate",
   },
   documents: {
     label:
@@ -668,11 +659,12 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
+    specialFilter: "documents",
   },
   address: {
     label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
     tooltip: "",
-    description: "Adresse",
+    description: "Adresse *",
     props: ["street", "zip", "community_id", "town"],
   },
   responsible: {
@@ -690,22 +682,54 @@ const createEditRef = ref();
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
 
+const currentUserFacility = await getCurrentUserFacilities();
+
 const setCourseOutsideFacility = (item: CreateEditFacility) => {
   item.course_outside_facility = !item.course_outside_facility;
   if (item?.course_outside_facility) {
-    item.street = "";
-    item.zip = "";
-    item.community_id = "";
-    item.town = "";
-    item.additional_address_info = "";
+    item.street = item.street || "";
+    item.zip = item.zip || "";
+    item.community_id = item.community_id || "";
+    item.town = item.town || "";
+    item.additional_address_info = item.additional_address_info || "";
+  } else {
+    item.street = currentUserFacility.street;
+    item.zip = currentUserFacility.zip;
+    item.community_id = currentUserFacility.community_id;
+    item.town = currentUserFacility.town;
+    item.additional_address_info = currentUserFacility.additional_address_info;
   }
 };
+const formats = ref([
+  "background",
+  "code",
+  "italic",
+  "size",
+  "script",
+  "header",
+  "indent",
+  "list",
+  "align",
+  "direction",
+  //'link',
+  //'strike',
+  // 'underline',
+  // 'blockquote',
+  //'bold',
+  //'color',
+  //'font',
+  //'code-block',
+  //'formula'
+  // 'image'
+  // 'video'
+]);
 
 const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
   required: true,
+  formats: formats,
 });
 
 const onQuillReady = (quill: any) => {
@@ -773,11 +797,14 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   }
 };
 
-const setDocumentsIsSet = (type: string) => {
+const documentIsSet = ref(false);
+const certificateIsSet = ref(false);
+
+const setDocumentsIsSet = (isSet: boolean, type: string) => {
   if (type === "documents") {
-    console.log(type)
+    documentIsSet.value = isSet;
   } else if (type === "insurance") {
-    console.log(type)
+    certificateIsSet.value = isSet;
   }
 };
 
@@ -792,22 +819,10 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       return facilitiesFilterSet.value;
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
-    }
-  }
-
-  if (item.specialFilter) {
-    if (item.specialFilter === "certificate") {
-      const found = slotPropsItem.sanitized_documents?.find(
-        (doc: any) => doc.tag === "insurance"
-      );
-      const found2 = slotPropsItem.sanitized_documents?.find(
-        (doc: any) => doc.tag === "documents"
-      );
-      if (found) {
-        return true;
-      } if (found2) {
-        return false;
-      }
+    } else if (item.specialFilter === "certificate") {
+      return certificateIsSet.value;
+    } else if (item.specialFilter === "documents") {
+      return documentIsSet.value;
     }
   }
 

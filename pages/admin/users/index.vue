@@ -35,6 +35,7 @@
       @openDeleteDialog="openDeleteDialog"
       @mailUser="mailUser"
       ref="dataTableRef"
+      :disable-delete="false"
     />
 
     <AdminUsersCreateEdit

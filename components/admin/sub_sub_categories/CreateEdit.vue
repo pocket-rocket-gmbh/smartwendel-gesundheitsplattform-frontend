@@ -1,7 +1,7 @@
 <template>
-  <CreateEdit v-slot="slotProps" :size="900" :height="900">
-    <v-card-text>
-      <div class="field">
+  <CreateEdit v-slot="slotProps" :size="900" :height="800">
+    <v-card-text class="my-3 mt-5">
+      <div class="field mb-5">
         <v-text-field
           v-model="slotProps.item.name"
           hide-details="auto"
@@ -9,7 +9,7 @@
           :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
         />
       </div>
-      <div class="field">
+      <div class="field mb-5">
         <v-textarea
           v-model="slotProps.item.description"
           hide-details="auto"
@@ -18,18 +18,20 @@
           :error-messages="useErrors().checkAndMapErrors('Beschreibung', slotProps.errors)"
         />
       </div>
-      <div class="field">
+      <div class="field mb-5">
         <v-combobox v-model="slotProps.item.tags" chips multiple label="Tags" />
       </div>
       <ChooseAndCropSingleImage
+        :item="slotProps.item"
+        kind="category"
         :aspect-ratio="1 / 1"
-        class="field"
+        class="field mt-10"
         label="Bild"
         :pre-set-image-url="slotProps.item.image_url || slotProps.item.file"
         @setImage="setLogo"
       />
-      <div class="field" v-if="useUser().isAdmin()">
-        <div class="mt-1">
+      <div class="field mb-" v-if="useUser().isAdmin()">
+        <div>
           <v-select
             hide-details="auto"
             v-model="slotProps.item.url_kind"
@@ -47,7 +49,7 @@
         "/public/categories/95bd1f21-800a-47a6-bb0c-afba56f33619?sub_category_id=d41393e1-20f2-4fee-8872-c275201dd26d"
       </v-alert>
 
-      <div class="field mb-15">
+      <div class="field mb-5">
         <v-text-field
           v-if="slotProps.item.url_kind === 'external'"
           v-model="slotProps.item.url"

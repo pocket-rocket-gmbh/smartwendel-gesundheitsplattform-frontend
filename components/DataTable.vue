@@ -196,9 +196,14 @@
             </span>
           </span>
           <span v-else-if="field.type === 'button' && field.action">
-            <button @click.stop="field.action(item)">
+            <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye'">
               {{ pathInto(item, field.value) }}
             </button>
+            <span v-if="field.value === 'mdi-eye' && item.is_active">
+              <v-icon class="is-clickable" @click="field.action(item)"
+                >mdi-eye</v-icon
+              >
+            </span>
           </span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
@@ -207,7 +212,7 @@
             >mdi-pencil</v-icon
           >
         </td>
-        <td>
+        <td v-if="useUser().isAdmin() || !disableDelete">
           <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
             >mdi-delete</v-icon
           >
@@ -227,6 +232,7 @@ const router = useRouter();
 
 const props = withDefaults(
   defineProps<{
+    disableDelete: boolean;
     fields: any[];
     endpoint: string;
     disableEdit?: boolean;

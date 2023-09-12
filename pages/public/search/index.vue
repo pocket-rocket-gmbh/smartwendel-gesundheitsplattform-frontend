@@ -48,7 +48,7 @@ const filterStore = useFilterStore();
 const router = useRouter();
 
 const filteredKinds = computed(() => {
-  return filterStore.filteredResults.map((result) => result.kind);
+  return Array.from(new Set(filterStore.filteredResults.map((result) => result.kind)));
 });
 const goBack = () => {
   router.push({ path: "/" });

@@ -26,9 +26,7 @@
               @click="
                 itemId = null;
                 createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(
-                  JSON.stringify(originalItemPlaceholder)
-                );
+                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
               "
               :class="{ orange: newFacilityFromCache }"
             >
@@ -61,6 +59,7 @@
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
+        :disable-delete="true"
       />
 
       <div
@@ -69,26 +68,22 @@
       >
         <v-icon>mdi-arrow-up</v-icon>
         <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der
-          Webseite.</span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
         >
       </div>
       <v-btn
-        v-if="
-          facilityId && !user.isAdmin()
-        "
+        v-if="facilityId && !user.isAdmin()"
         :disabled="setupFinished && !itemStatus"
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="
-          useRouter().push({ path: `/public/care_facilities/${facilityId}` })
-        "
+        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
       >
         Zu Deiner Einrichtung
       </v-btn>
 
       <AdminCareFacilitiesCreateEdit
+        scroll-strategy="none"
         v-if="createEditDialogOpen"
         :item-id="itemId"
         :item-placeholder="itemPlaceholder"
@@ -99,6 +94,7 @@
         :cacheKey="cacheKey"
         :showPreviewButton="true"
         @showPreview="handleShowPreview"
+        @update-items="handleUpdateItems"
       />
 
       <AdminPreviewDummyPage
@@ -168,14 +164,27 @@ const fields = [
   { value: "", type: "isCompleteFacility" },
   { value: "", type: "beinEdited" },
   { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
+  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",
     text: "Erstellt von",
     value: "user.name",
     condition: "admin",
     type: "button",
-    action: (item: any) =>
-      router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
+    action: (item: any) => {
+      if (user?.currentUser?.role !== "facility_owner") {
+        router.push({ path: "/admin/users", query: { userId: item.user.id } });
+      }
+    },
+  },
+  {
+    text: "",
+    value: "mdi-eye",
+    type: "button",
+    tooltip: "Einrichtung anzehen",
+    action: (item: any) => {
+      goToFacility(item.id);
+    },
   },
 ];
 const dataTableRef = ref();
@@ -225,9 +234,7 @@ const originalItemPlaceholder = ref({
     { day: "Sonntag", placeholder: "z.B. geschlossen", hours: "" },
   ],
 });
-const itemPlaceholder = ref(
-  JSON.parse(JSON.stringify(originalItemPlaceholder.value))
-);
+const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
@@ -262,12 +269,12 @@ const handleItemsLoaded = (items: any[]) => {
   const firstItemId = items[0]?.id;
   facilityId.value = firstItemId;
   if (firstItemId && passwordChanged.value) {
-    itemId.value = firstItemId
+    itemId.value = firstItemId;
     passwordChanged.value = false;
     createEditDialogOpen.value = true;
   }
-
   itemsExist.value = !!items.length;
+  handleItemUpdated(items[0]);
 };
 
 const handleDeleteDialogClose = () => {
@@ -307,12 +314,20 @@ const openAddFilesDialog = (id: string) => {
   addFilesDialogOpen.value = true;
 };
 
+const goToFacility = (id: string) => {
+  router.push({ path: `/public/care_facilities/${id}` });
+};
+
 const handleShowPreview = (item: any) => {
   previewItem.value = item;
 };
 const handlePreviewClose = () => {
   previewItem.value = null;
 };
+
+const handleUpdateItems = () => {
+  dataTableRef.value?.getItems();
+}
 
 onMounted(async () => {
   loading.value = true;

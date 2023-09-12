@@ -3,8 +3,9 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</h2>
     <h2 v-else>Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen
-      und Besuchern auf der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
+      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben
+      sind, desto besser können dich Besucherinnen und Besuchern auf der
+      Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">
@@ -20,7 +21,8 @@
               "
               :class="{ orange: newEventFromCache }"
             >
-              Veranstaltung anlegen <span v-if="newEventFromCache"> - weiter</span>
+              Veranstaltung anlegen
+              <span v-if="newEventFromCache"> - weiter</span>
             </v-btn>
           </div>
         </v-col>
@@ -35,9 +37,16 @@
         </v-col>
       </v-row>
     </template>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst
-      du Kurse, Veranstaltungen sowie Beiträge anlegen.
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
+      wir dich freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie
+      Beiträge anlegen.
     </v-alert>
 
     <DataTable
@@ -50,9 +59,11 @@
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
+      :disable-delete="false"
     />
 
     <AdminEventsCreateEdit
+      scroll-strategy="none"
       v-if="createEditDialogOpen"
       :item-id="itemId"
       :item-placeholder="itemPlaceholder"
@@ -65,7 +76,11 @@
       @showPreview="handleShowPreview"
     />
 
-    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
+    <AdminPreviewDummyPage
+      v-if="previewItem"
+      :item="previewItem"
+      @close="handlePreviewClose"
+    />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -98,7 +113,8 @@ const fields = [
     text: "Offline/Online",
     endpoint: "care_facilities",
     type: "switch",
-    tooltip: "Hiermit kannst du deine Veranstaltung Online oder Offline schalten",
+    tooltip:
+      "Hiermit kannst du deine Veranstaltung Online oder Offline schalten",
     fieldToSwitch: "is_active",
     disabledConditions: (item: any) => {
       const res = [
@@ -113,14 +129,28 @@ const fields = [
     },
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
+  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",
     text: "Erstellt von",
     value: "user.name",
     condition: "admin",
     type: "button",
-    action: (item: any) => router.push({ path: "/admin/users", query: { userId: item?.user?.id } }),
-  }
+    action: (item: any) => {
+      if (user?.currentUser?.role !== "facility_owner") {
+        router.push({ path: "/admin/users", query: { userId: item.user.id } });
+      }
+    },
+  },
+  {
+    text: "",
+    value: "mdi-eye",
+    type: "button",
+    tooltip: "Einrichtung anzehen",
+    action: (item: any) => {
+      goToFacility(item.id);
+    },
+  },
 ];
 
 const previewItem = ref<Facility>();
@@ -191,11 +221,15 @@ const handlePreviewClose = () => {
   previewItem.value = null;
 };
 
+const goToFacility = (id: string) => {
+  router.push({ path: `/public/care_facilities/${id}` });
+};
+
+
 onMounted(async () => {
   loading.value = true;
   if (!user.isAdmin()) {
     const currentUserFacility = await getCurrentUserFacilities();
-
     itemPlaceholder.value.email = currentUserFacility?.email;
     itemPlaceholder.value.zip = currentUserFacility?.zip;
     itemPlaceholder.value.town = currentUserFacility?.town;

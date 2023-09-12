@@ -8,6 +8,7 @@
         @click:outside="confirmSaveDialogOpen = false"
         @accepted="confirmSaveDialogOpen = false"
         @close="handleConfirmClose()"
+        @update="handleUpdateItem"
       />
 
       <v-form ref="form">
@@ -25,7 +26,7 @@
             <v-btn v-if="!recentlyCreated" color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
               {{ saveButtonText }}
             </v-btn>
-            <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn>
+           <!--  <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn> -->
           </div>
           <div v-else>
             <LoadingSpinner />
@@ -58,7 +59,7 @@ import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const statusLoadingFilter = useStatusLoadingFilter();
 
-const emit = defineEmits(["close", "hasChanged", "save", "showPreview"]);
+const emit = defineEmits(["close", "hasChanged", "save", "showPreview", "updateItems"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -137,12 +138,17 @@ const saveButtonText = computed(() => {
 
 const recentlyCreated = ref(false);
 
-const handleConfirmClose = () => {
+const handleConfirmClose = async () => {
   confirmSaveDialogOpen.value = false;
-  getItem();
+  await getItem();
   loadingItem.value = false;
   recentlyCreated.value = true;
+  emit("close");
 };
+
+const handleUpdateItem = () => {
+  emit("updateItems");
+}
 
 const getItem = async () => {
   if (!props.itemId) return;

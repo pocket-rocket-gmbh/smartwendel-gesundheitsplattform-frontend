@@ -19,27 +19,26 @@
             class="text-h5 pa-10 d-flex flex-column align-center justify-center"
           >
             <span class="mb-5 text-h5"> Vielen Dank! </span>
-            <span>{{ itemkind }} wurde online geschaltet! </span>
+            <span>{{ itemKindStep2 }} wurde online geschaltet! </span>
           </div>
           <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
-            <a :href="linkToFacility" target="_blank"
-              ><v-btn
+            <a :href="linkToFacility" target="_blank">
+              <v-btn
                 v-if="facilityId || item.id"
-                variant="outlined"
-                class="save-buttons"
-                color="success"
-                elevation="0"
+                variant="flat"
+                color="primary"
+                @click="emitAccept(), confettiReward()"
               >
                 <span> auf Webseite ansehen </span>
-              </v-btn></a
-            >
+              </v-btn>
+            </a>
           </div>
         </div>
         <div v-else class="text-h5 pa-5 d-flex flex-column justify-center align-center">
           <span class="mb-5"><v-icon color="primary">mdi-check-outline</v-icon></span>
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
           <span v-if="user.is_active_on_health_scope"
-            >Möchtest du {{ itemkind }} veröffentlichen?</span
+            >Möchtest du {{ itemKindStep1 }} veröffentlichen?</span
           >
         </div>
       </v-card-text>
@@ -60,27 +59,14 @@
             </v-btn>
           </v-col>
           <v-col md="6" class="d-flex justify-end">
-            <v-btn
-              variant="outlined"
-              class="save-buttons"
-              color="success"
-              elevation="0"
-              @click="emitAccept(), confettiReward()"
-            >
-              Jetzt veröffentlichen
+            <v-btn variant="flat" color="primary" @click="emitAccept(), confettiReward()">
+              <span> Jetzt veröffentlichen </span>
             </v-btn>
           </v-col>
         </v-row>
         <v-row no-gutters v-else>
           <v-col class="d-flex justify-center">
-            <v-btn
-              variant="outlined"
-              class="save-buttons"
-              elevation="0"
-              @click="emitCloser()"
-            >
-              Schliessen
-            </v-btn>
+            <LoadingSpinner />
           </v-col>
         </v-row>
       </v-card-actions>
@@ -89,9 +75,10 @@
 </template>
 
 <script lang="ts">
+import { Loading, LoadingSpinner } from "#build/components";
 import { useReward } from "vue-rewards";
 export default defineComponent({
-  emits: ["close", "accepted"],
+  emits: ["close", "accepted", "update"],
   props: {
     open: Boolean,
     item: {
@@ -113,16 +100,23 @@ export default defineComponent({
       emit("close");
     };
 
-    const itemkind = computed(() => {
-      if (props.item.kind === "facility") {
-        return "Deine Einrichtung";
-      } else if (props.item.kind === "course") {
-        return "Dein Kurs";
-      } else if (props.item.kind === "event") {
-        return "Deine Veranstaltung";
-      } else if (props.item.kind === "news") {
-        return "Deinen Beitrag";
-      }
+    const translations: {[key: string]: string} = {
+      facility: "Einrichtung",
+      course: "Kurs",
+      event: "Veranstaltung",
+      news: "Beitrag",
+    };
+
+    const itemKindStep1 = computed(() => {
+      const kind = props.item.kind;
+      const translation = translations[kind] || kind;
+      return `dein${kind === "news" ? "" : "e"} ${translation}`;
+    });
+
+    const itemKindStep2 = computed(() => {
+      const kind = props.item.kind;
+      const translation = translations[kind] || kind;
+      return `Dein${kind === "news" ? "" : "e"} ${translation}`;
     });
 
     const itemId = props.item.id;
@@ -150,7 +144,10 @@ export default defineComponent({
     const updateApi = useCollectionApi();
     updateApi.setBaseApi(usePrivateApi());
 
+    const loadingSpinner = ref(false);
+
     const save = async () => {
+      loadingSpinner.value = true;
       if (props.facilityId) {
         updateApi.setEndpoint(`care_facilities/${props.facilityId}`);
       } else {
@@ -159,6 +156,9 @@ export default defineComponent({
       let data: any = {};
       data.is_active = true;
       await updateApi.updateItem(data, null);
+
+      emit("update");
+      loadingSpinner.value = false;
     };
 
     const setupFinished = ref(false);
@@ -189,10 +189,12 @@ export default defineComponent({
       confettiReward,
       finished,
       itemId,
-      itemkind,
+      itemKindStep1,
+      itemKindStep2,
       setupFinished,
       user,
       linkToFacility,
+      loadingSpinner,
     };
   },
 });

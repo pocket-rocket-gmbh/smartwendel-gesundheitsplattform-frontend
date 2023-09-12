@@ -368,7 +368,7 @@
                   >
                 </div>
               </div>
-              <div v-if="isValidAddress === null && editInformations">
+              <div class="mt-3" v-if="isValidAddress === null && editInformations">
                 <v-alert type="info"> Neue Adresse bitte eingeben.</v-alert>
               </div>
               <div v-if="isValidAddress">
@@ -606,6 +606,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["opening_hours"],
     tooltip:
       "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
+      specialFilter: "opening_hours"
   },
   website: {
     label:
@@ -640,11 +641,35 @@ const createEditRef = ref();
 const facilitiesFilterSet = ref(false);
 const servicesFilterSet = ref(false);
 
+const formats = ref([
+  "background",
+  "code",
+  "italic",
+  "size",
+  "script",
+  "header",
+  "indent",
+  "list",
+  "align",
+  "direction",
+  //'link',
+  //'strike',
+  // 'underline',
+  // 'blockquote',
+  //'bold',
+  //'color',
+  //'font',
+  //'code-block',
+  //'formula'
+  // 'image'
+  // 'video'
+]);
 const textOptions = ref({
   debug: false,
   theme: "snow",
   contentType: "html",
   required: true,
+  formats: formats,
 });
 
 const onQuillReady = (quill: any) => {
@@ -688,6 +713,8 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       return facilitiesFilterSet.value;
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
+    } else if(item.specialFilter === "opening_hours") {
+      return slotPropsItem.opening_hours.some((day: any) => day.hours.length > 0)
     }
   }
 

@@ -33,8 +33,16 @@
           <v-col>
             <v-text-field v-model="item.firstname" label="Vorname" />
             <v-text-field v-model="item.lastname" label="Nachname" />
-            <v-text-field v-model="item.phone" label="Telefonnummer*" />
-            <v-text-field v-model="item.email" label="E-Mail *" />
+            <v-text-field
+              v-model="item.phone"
+              :rules="[rules.required, rules.validateNumber]"
+              label="Telefonnummer*"
+            />
+            <v-text-field
+              v-model="item.email"
+              :rules="[rules.required, rules.email]"
+              label="E-Mail *"
+            />
             <h3 class="mb-4">Profilbild</h3>
             <PublicUsersProfileImage
               :preset-image-url="item.image_url"
@@ -77,12 +85,11 @@
             />
             <v-btn
               :disabled="password !== password_confirmation"
-              elevation="0"
-              variant="outlined"
-              class="text-success"
+              variant="flat"
+              color="primary"
               @click="updatePassword()"
             >
-              Passwort ändern
+              <span> Passwort ändern </span>
             </v-btn>
             <div class="mt-3" v-if="currentUser?.password_changed_at">
               <span
