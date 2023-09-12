@@ -606,6 +606,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["opening_hours"],
     tooltip:
       "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
+      specialFilter: "opening_hours"
   },
   website: {
     label:
@@ -712,6 +713,8 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       return facilitiesFilterSet.value;
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
+    } else if(item.specialFilter === "opening_hours") {
+      return slotPropsItem.opening_hours.some((day: any) => day.hours.length > 0)
     }
   }
 

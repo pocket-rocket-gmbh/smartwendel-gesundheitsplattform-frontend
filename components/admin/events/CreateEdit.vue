@@ -522,7 +522,7 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Foto",
     props: ["image_url", "file"],
     tooltip:
-      "Das Titelbild wird im Kopfbereich deiner Profilseite die Veranstaltung angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
+      "Das Titelbild wird im Kopfbereich deiner Profilseite die Veranstaltung angezeigt. Wähle hier am besten ein Bild, welches deine Veranstaltung gut repräsentiert",
     justSome: true,
   },
   gallery: {

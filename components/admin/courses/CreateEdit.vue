@@ -385,14 +385,6 @@
               <span class="text-h5 font-weight-bold mr-3">{{
                 steps["documents"].label
               }}</span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span>{{ steps["documents"].tooltip }}</span>
-              </v-tooltip>
             </div>
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
@@ -737,7 +729,7 @@ const textOptions = ref({
   theme: "snow",
   contentType: "html",
   required: true,
-  formats: formats
+  formats: formats,
 });
 
 const onQuillReady = (quill: any) => {
@@ -808,7 +800,7 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
 const documentIsSet = ref(false);
 const certificateIsSet = ref(false);
 
-const setDocumentsIsSet = (isSet:boolean, type: string) => {
+const setDocumentsIsSet = (isSet: boolean, type: string) => {
   if (type === "documents") {
     documentIsSet.value = isSet;
   } else if (type === "insurance") {
