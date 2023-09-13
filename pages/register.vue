@@ -3,30 +3,23 @@
     <v-col sm="3" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="2">
       <v-card elevation="10" :class="['card', { shake: animated }]">
         <div>
-          <div
-            class="d-flex justify-center align-center text-primary text-h2 font-weight-bold"
-            v-if="!registerSuccessful"
-          >
+          <div class="d-flex justify-center align-center text-primary text-h2 font-weight-bold" v-if="!registerSuccessful">
             <span>Jetzt registrieren!</span>
           </div>
           <div class="mt-5 d-flex flex-column" v-if="!registerSuccessful">
             <span class="">
-              Du bist im Landkreis ansässige(r) Gesundheitsanbieter:in und möchtest dein
-              Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen?
-              Dann laden wir dich herzlich ein, dich zu registrieren!</span
+              Du bist im Landkreis ansässige(r) Gesundheitsanbieter:in und möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
+              veröffentlichen? Dann laden wir dich herzlich ein, dich zu registrieren!</span
             >
             <span class="mt-5">
-              Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und
-              in wenigen Schritten auf der Plattform darstellen und veröffentlichen.
-              Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
-              dein Angebot und steigerst deine Bekanntheit bei der einheimischen
+              Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in wenigen Schritten auf der Plattform darstellen und veröffentlichen.
+              Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei der einheimischen
               Bevölkerung.
             </span>
             <span class="mt-5">
-              Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches
-              oder gewerbliches Angebot handelt: Auf der Gesundheits- und Pflegeplattform
-              sind alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
-              Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
+              Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches Angebot handelt: Auf der Gesundheits- und
+              Pflegeplattform sind alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung der Gesundheit der Landkreisbevölkerung
+              beitragen!
             </span>
           </div>
         </div>
@@ -123,44 +116,24 @@
             <template v-slot:label>
               <div>
                 Ich stimme der
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ props }">
-                    <a target="_blank" href="/privacy_policy" @click.stop v-bind="props">
-                      <u>Datenschutzerklärung</u>
-                    </a>
-                  </template>
-                  Datenschutzerklärung öffnen
-                </v-tooltip>
+                <a target="_blank" href="/privacy_policy" @click.stop>
+                  <u>Datenschutzerklärung</u>
+                </a>
                 <span> und den </span>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ props }">
-                    <a
-                      target="_blank"
-                      href="/rules_of_conduct"
-                      @click.stop
-                      v-bind="props"
-                    >
-                      <u>Nutzungsbedingungen</u>
-                    </a>
-                  </template>
-                  Nutzungsbedingungen öffnen
-                </v-tooltip>
+                <a target="_blank" href="/rules_of_conduct" @click.stop>
+                  <u>Nutzungsbedingungen</u>
+                </a>
                 zu
               </div>
             </template>
           </v-checkbox>
-          <v-btn color="primary" class="mt-5" block depressed @click="register"
-            >Registrieren</v-btn
-          >
+          <v-btn color="primary" class="mt-5" block depressed @click="register">Registrieren</v-btn>
         </v-form>
         <div align="center" class="mt-5" v-if="registerSuccessful">
           <div class="d-flex flex-column align-center justify-center">
-            <span class="text-h2 text-primary font-weight-bold mb-10">
-              Vielen Dank für deine Registrierung!
-            </span>
+            <span class="text-h2 text-primary font-weight-bold mb-10"> Vielen Dank für deine Registrierung! </span>
             <span class="text-h6">
-              Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
-              temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+              Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
             </span>
           </div>
           <div class="mt-5">
@@ -171,33 +144,19 @@
     </v-col>
   </v-row>
 
-  <span
-    v-if="registerSuccessful"
-    class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5 d-flex justify-center"
-    >So geht es weiter:</span
-  >
+  <span v-if="registerSuccessful" class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5 d-flex justify-center">So geht es weiter:</span>
   <v-row v-if="registerSuccessful">
     <v-col md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="2">
       <v-row>
-        <v-col
-          v-for="step in steps"
-          class="d-flex align-center justify-center flex-grow-1"
-        >
-          <v-card
-            class="d-flex flex-column align-center justify-center flex-grow-1"
-            elevation="0"
-          >
+        <v-col v-for="step in steps" class="d-flex align-center justify-center flex-grow-1">
+          <v-card class="d-flex flex-column align-center justify-center flex-grow-1" elevation="0">
             <v-card-item>
               <div class="d-flex flex-column flex-grow-1">
-                <div
-                  class="d-flex align-center justify-center bg-primary background-icon"
-                >
+                <div class="d-flex align-center justify-center bg-primary background-icon">
                   <img :src="step.icon" />
                 </div>
 
-                <div
-                  class="d-flex align-center justify-center flex-grow-1 text-center text background-text"
-                >
+                <div class="d-flex align-center justify-center flex-grow-1 text-center text background-text">
                   {{ step.description }}
                 </div>
               </div>
@@ -245,32 +204,27 @@ const icons = ref([LogoStep1, LogoStep2, LogoStep3, LogoStep4, LogoStep5]);
 
 const steps = {
   step1: {
-    description:
-      "Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere zunächst dein Passwort.",
+    description: "Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere zunächst dein Passwort.",
     icon: LogoStep1,
     next: true,
   },
   step2: {
-    description:
-      "Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.",
+    description: "Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.",
     icon: LogoStep2,
     next: true,
   },
   step3: {
-    description:
-      "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”).",
+    description: "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”).",
     icon: LogoStep3,
     next: true,
   },
   step4: {
-    description:
-      "Sobald alle Pflicht angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
+    description: "Sobald alle Pflicht angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
     icon: LogoStep4,
     next: true,
   },
   step5: {
-    description:
-      "Vervollständige deinen Account und lege deine Kursangebote an, teile Veranstaltungen oder verfasse Newsbeiträge.",
+    description: "Vervollständige deinen Account und lege deine Kursangebote an, teile Veranstaltungen oder verfasse Newsbeiträge.",
     icon: LogoStep5,
     next: false,
   },
@@ -299,10 +253,7 @@ const register = async () => {
     care_facility_community_id: careFacilityCommunityId.value,
   };
 
-  const { data: result } = await axios.post<ServerCallResult>(
-    "/api/register_with_facility",
-    { data }
-  );
+  const { data: result } = await axios.post<ServerCallResult>("/api/register_with_facility", { data });
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     localStorage.setItem("health_platform._remembered_email", email.value);
