@@ -42,7 +42,7 @@ import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
-const showMap = ref(!breakpoints.isMobile.value);
+const showMap = ref(true);
 
 watch(
   () => filterStore.filterSort,
@@ -109,6 +109,7 @@ onMounted(async () => {
   filterStore.currentKinds = ["facility"];
   filterStore.updateFromUrlQuery();
   filterStore.loadAllResults();
+  showMap.value = !breakpoints.isMobile.value;
 });
 
 onBeforeUnmount(() => {
