@@ -23,10 +23,17 @@
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
           <div v-if="!statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded">
-            <v-btn v-if="!recentlyCreated" color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
+            <v-btn
+              v-if="!recentlyCreated"
+              color="blue darken-1"
+              variant="outlined"
+              dark
+              @click="handleCta()"
+              :loading="loadingItem"
+              :disabled="requiredForDraft.length ? requiredForDraft.every(requiredItem => !item[requiredItem as string]) : false"
+            >
               {{ saveButtonText }}
             </v-btn>
-           <!--  <v-btn v-if="isCachedItem" @click="handleResetCache()" color="orange darken-1" variant="outlined"> Zurücksetzen </v-btn> -->
           </div>
           <div v-else>
             <LoadingSpinner />
@@ -91,12 +98,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  enableCache: {
+  enableDraft: {
     type: Boolean,
     default: false,
   },
-  cacheKey: {
-    type: String,
+  requiredForDraft: {
+    type: Array,
+    default: [],
   },
   showPreviewButton: {
     type: Boolean,
@@ -125,10 +133,8 @@ createUpdateApi.setBaseApi(usePrivateApi());
 
 const itemHastChanged = ref(false);
 
-const isCachedItem = ref(false);
-
 const saveButtonText = computed(() => {
-  if (!props.enableCache) return "Speichern";
+  if (!props.enableDraft) return "Speichern";
   const allValid = form.value?.isValid;
   if (!allValid) {
     return "Zwischenspeichern";
@@ -148,7 +154,7 @@ const handleConfirmClose = async () => {
 
 const handleUpdateItem = () => {
   emit("updateItems");
-}
+};
 
 const getItem = async () => {
   if (!props.itemId) return;
@@ -173,27 +179,23 @@ const handleCta = async () => {
   const { valid } = await form.value.validate();
 
   if (!valid) {
-    if (props.enableCache && props.cacheKey) {
-      if (!areObjectsEqual(deepToRaw(item.value), deepToRaw(props.itemId ? originalItem.value : props.itemPlaceholder))) {
-        localStorage.setItem(props.cacheKey, JSON.stringify(toRaw(item.value)));
-        checkCachedItem();
-      }
-
-      snackbar.showInfo("Die Änderungen wurden zwischengespeichert");
-
-      itemHastChanged.value = false;
+    if (!props.enableDraft) {
+      const formErrors = await form.value.errors;
+      errors.value = formErrors.map((err) => err.errorMessages[0]);
+      snackbar.showError("Speichern fehlgeschlagen! Es gibt ungültige Felder!");
       return;
     }
-    const formErrors = await form.value.errors;
-    errors.value = formErrors.map((err) => err.errorMessages[0]);
-    snackbar.showError("Speichern fehlgeschlagen! Es gibt ungültige Felder!");
-    return;
   }
+
+  const saveAsDraft = !valid && props.enableDraft;
+
   if (props.itemId) {
-    save();
+    save(saveAsDraft);
   } else {
-    create();
-    confirmSaveDialogOpen.value = true;
+    create(saveAsDraft);
+    if (!saveAsDraft) {
+      confirmSaveDialogOpen.value = true;
+    }
   }
 };
 
@@ -201,68 +203,68 @@ const handleShowPreviewClicked = () => {
   emit("showPreview", item.value);
 };
 
-const facilityId = ref("")
+const facilityId = ref("");
 
-const create = async () => {
+const create = async (saveAsDraft = false) => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.createItem(item.value, `Erfolgreich erstellt`);
-  confirmSaveDialogOpen.value = true;
+  const result = await createUpdateApi.createItem(item.value, `${saveAsDraft ? "Entwurf" : "Erfolgreich"} erstellt`);
+  if (!saveAsDraft) {
+    confirmSaveDialogOpen.value = true;
+  }
   adminStore.loading = false;
   loadingItem.value = false;
-  if (result.status === ResultStatus.SUCCESSFUL) {
-    useNuxtApp().$bus.$emit("triggerGetItems", null);
-    itemHastChanged.value = false;
-    
-    facilityId.value = result.data.resource.id;
-    const newFacilityId = result.data.resource.id;
-
-
-    loadingItem.value = true;
-    if (item.value.offlineImageFiles?.length) {
-      for (const offlineImageFile of item.value.offlineImageFiles) {
-        createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/images`);
-        const data = {
-          file: offlineImageFile,
-        };
-        await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
-      }
-    }
-    if (item.value.offlineLocations && item.value.offlineLocations.length) {
-      createUpdateApi.setEndpoint(`locations/care_facility/${newFacilityId}`);
-
-      const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
-        createUpdateApi.createItem({
-          careFacility_id: facilityId,
-          longitude: location.longitude,
-          latitude: location.latitude,
-        })
-      );
-
-      await Promise.all(facilityLocationCreationPromises);
-    }
-    if (item.value.offlineDocuments && item.value.offlineDocuments.length) {
-      createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/documents`);
-
-      const documentsPromises = item.value.offlineDocuments.map((document) =>
-        createUpdateApi.createItem({
-          document: document.document,
-          documentname: document.documentname,
-          tag: document.tag,
-        })
-      );
-      await Promise.all(documentsPromises);
-    }
-    if (props.enableCache && props.cacheKey) {
-      localStorage.removeItem(props.cacheKey);
-    }
-  } else {
+  if (result.status !== ResultStatus.SUCCESSFUL) {
     errors.value = result.data;
+    return;
   }
+
+  useNuxtApp().$bus.$emit("triggerGetItems", null);
+  itemHastChanged.value = false;
+
+  facilityId.value = result.data.resource.id;
+  const newFacilityId = result.data.resource.id;
+
+  loadingItem.value = true;
+  if (item.value.offlineImageFiles?.length) {
+    for (const offlineImageFile of item.value.offlineImageFiles) {
+      createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/images`);
+      const data = {
+        file: offlineImageFile,
+      };
+      await createUpdateApi.createItem(data, "Bild erfolgreich hinzugefügt");
+    }
+  }
+  if (item.value.offlineLocations && item.value.offlineLocations.length) {
+    createUpdateApi.setEndpoint(`locations/care_facility/${newFacilityId}`);
+
+    const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
+      createUpdateApi.createItem({
+        careFacility_id: facilityId,
+        longitude: location.longitude,
+        latitude: location.latitude,
+      })
+    );
+
+    await Promise.all(facilityLocationCreationPromises);
+  }
+  if (item.value.offlineDocuments && item.value.offlineDocuments.length) {
+    createUpdateApi.setEndpoint(`care_facilities/${newFacilityId}/documents`);
+
+    const documentsPromises = item.value.offlineDocuments.map((document) =>
+      createUpdateApi.createItem({
+        document: document.document,
+        documentname: document.documentname,
+        tag: document.tag,
+      })
+    );
+    await Promise.all(documentsPromises);
+  }
+  loadingItem.value = false;
 };
 
-const save = async () => {
+const save = async (saveAsDraft = false) => {
   let endpoint = `${props.endpoint}/${props.itemId}`;
   if (props.overwriteUpdateItemEndpoint) {
     endpoint = props.overwriteUpdateItemEndpoint;
@@ -271,52 +273,31 @@ const save = async () => {
   createUpdateApi.setEndpoint(endpoint);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.updateItem(item.value, "Erfolgreich aktualisiert");
+  const result = await createUpdateApi.updateItem(
+    {
+      ...item.value,
+      is_active: saveAsDraft ? false : item.value?.is_active,
+    },
+    `${saveAsDraft ? "Entwurf" : "Erfolgreich"} aktualisiert`
+  );
   adminStore.loading = false;
   loadingItem.value = false;
   triggerSaveHintTimeout();
 
-  if (result.status === ResultStatus.SUCCESSFUL) {
-    useNuxtApp().$bus.$emit("triggerGetItems", null);
-    itemHastChanged.value = false;
-    emit("save");
-    if (item.value?.is_active === false) {
-      confirmSaveDialogOpen.value = true;
-    }
-    if (props.enableCache && props.cacheKey) {
-      localStorage.removeItem(props.cacheKey);
-    }
-  } else {
+  if (result.status !== ResultStatus.SUCCESSFUL) {
     errors.value = result.data;
-  }
-};
-
-const checkCachedItem = () => {
-  isCachedItem.value = !!(props.enableCache && props.cacheKey && localStorage.getItem(props.cacheKey));
-};
-
-const handleResetCache = async () => {
-  if (!props.enableCache || !props.cacheKey) {
     return;
   }
-  const confirmed = confirm("Änderungen werden verworfen.");
-  if (confirmed) {
-    localStorage.removeItem(props.cacheKey);
-    checkCachedItem();
-    itemHastChanged.value = false;
 
-    if (props.itemId) {
-      await getItem();
-    }
-    if (props.itemPlaceholder && !item?.value?.id) {
-      item.value = { ...props.itemPlaceholder };
-    }
-    triggerSaveHintTimeout();
+  useNuxtApp().$bus.$emit("triggerGetItems", null);
+  itemHastChanged.value = false;
+  emit("save");
+  if (!saveAsDraft && item.value?.is_active === false) {
+    confirmSaveDialogOpen.value = true;
   }
 };
 
 useNuxtApp().$bus.$on("setPayloadFromSlotChild", (payload) => {
-  // @ts-expect-error any in payload
   item.value[payload.name] = payload.value;
 });
 
@@ -345,45 +326,39 @@ const emitClose = () => {
 
 defineExpose({ getItem });
 
-watch(
-  [
-    () => item.value?.phone,
-    () => item.value?.email,
-    () => item.value?.street,
-    () => item.value?.additional_address_info,
-    () => item.value?.community_id,
-    () => item.value?.zip,
-    () => item.value?.town,
-  ],
-  (
-    [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
-    [oldPhone, oldEmail, oldStreet, oldAdditionalAddressInfo, oldCommunityId, oldZip, oldTown]
-  ) => {
-    if (
-      (oldPhone && newPhone !== oldPhone) ||
-      (oldEmail && newEmail !== oldEmail) ||
-      (oldStreet && newStreet !== oldStreet) ||
-      (oldAdditionalAddressInfo && newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
-      (oldCommunityId && newCommunityId !== oldCommunityId) ||
-      (oldZip && newZip !== oldZip) ||
-      (oldTown && newTown !== oldTown)
-    ) {
-      checkCachedItem();
-    }
-  }
-);
+// watch(
+//   [
+//     () => item.value?.phone,
+//     () => item.value?.email,
+//     () => item.value?.street,
+//     () => item.value?.additional_address_info,
+//     () => item.value?.community_id,
+//     () => item.value?.zip,
+//     () => item.value?.town,
+//   ],
+//   (
+//     [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
+//     [oldPhone, oldEmail, oldStreet, oldAdditionalAddressInfo, oldCommunityId, oldZip, oldTown]
+//   ) => {
+//     if (
+//       (oldPhone && newPhone !== oldPhone) ||
+//       (oldEmail && newEmail !== oldEmail) ||
+//       (oldStreet && newStreet !== oldStreet) ||
+//       (oldAdditionalAddressInfo && newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
+//       (oldCommunityId && newCommunityId !== oldCommunityId) ||
+//       (oldZip && newZip !== oldZip) ||
+//       (oldTown && newTown !== oldTown)
+//     ) {
+//       checkCachedItem();
+//     }
+//   }
+// );
 onMounted(async () => {
-  const cachedItem = props.enableCache && props.cacheKey && JSON.parse(localStorage.getItem(props.cacheKey));
-  if (!cachedItem) {
-    if (props.itemId) {
-      await getItem();
-    }
-    if (props.itemPlaceholder && !item.value.id) {
-      item.value = { ...props.itemPlaceholder };
-    }
-  } else {
-    item.value = cachedItem;
-    isCachedItem.value = true;
+  if (props.itemId) {
+    await getItem();
+  }
+  if (props.itemPlaceholder && !item.value.id) {
+    item.value = { ...props.itemPlaceholder };
   }
 
   triggerSaveHintTimeout();
