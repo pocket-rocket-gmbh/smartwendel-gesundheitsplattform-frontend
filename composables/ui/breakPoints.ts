@@ -11,7 +11,9 @@ export enum BreakPoints {
 export const useBreakpoints = () => {
   const windowWidth = ref(window.innerWidth);
 
-  const onWidthChange = () => (windowWidth.value = window.innerWidth);
+  const onWidthChange = () => {
+    windowWidth.value = window.innerWidth;
+  };
 
   onMounted(() => window.addEventListener("resize", onWidthChange));
   onUnmounted(() => window.removeEventListener("resize", onWidthChange));

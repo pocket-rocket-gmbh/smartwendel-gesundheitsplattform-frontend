@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-profile-image-wrapper">
     <img :class="['is-rounded mr-2 bordered', size]" v-if="user.image_url" :src="user.image_url"  />
     <img class="is-rounded mr-2" src="@/assets/images/user-standard.png" v-else />
   </div>
@@ -22,6 +22,11 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
+.user-profile-image-wrapper
+  display: flex
+  align-items: center
+  justify-content: center
+
 .medium
   width: 42px
   height: 42px
