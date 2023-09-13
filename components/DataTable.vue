@@ -5,24 +5,13 @@
         <th
           v-for="field in fields"
           :key="field.text"
-          :width="[
-            field.type === 'move_up' ||
-            field.type === 'move_down' ||
-            field.type === 'icon' ||
-            field.type === 'switch'
-              ? '30px'
-              : field.width,
-          ]"
+          :width="[field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch' ? '30px' : field.width]"
           :class="{ 'is-clickable': field.prop }"
           @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
           <div class="table-head-item">
             {{ field.text }}
-            <div
-              v-if="sortBy === field.prop"
-              class="chevron"
-              :class="{ up: sortOrder === 'desc' }"
-            ></div>
+            <div v-if="sortBy === field.prop" class="chevron" :class="{ up: sortOrder === 'desc' }"></div>
           </div>
         </th>
         <th width="15px" v-if="!disableEdit"></th>
@@ -30,14 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        v-for="(item, indexMain) in filteredItems"
-        :key="item.id"
-        :class="[
-          item === activeItems ? 'activeItems' : '',
-          { cached: isCached(item.id) },
-        ]"
-      >
+      <tr v-for="(item, indexMain) in filteredItems" :key="item.id" :class="[item === activeItems ? 'activeItems' : '', { draft: isDraft(item) }]">
         <td
           v-for="(field, index) in fields"
           :key="index"
@@ -46,62 +28,32 @@
           @click="handleEmitParent(item, field, indexMain)"
           :width="field.width"
         >
-          <span v-if="field.type === 'projectTimeRange'">{{
-            useDatetime().getProjectTimeRangeString(item)
-          }}</span>
-          <span v-if="field.type === 'datetime' && item[field.value]">{{
-            useDatetime().parseDatetime(item[field.value])
-          }}</span>
-          <span v-else-if="field.type === 'currency' && item[field.value]">{{
-            useCurrency().getCurrencyFromNumber(item[field.value])
-          }}</span>
+          <span v-if="field.type === 'projectTimeRange'">{{ useDatetime().getProjectTimeRangeString(item) }}</span>
+          <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
+          <span v-else-if="field.type === 'currency' && item[field.value]">{{ useCurrency().getCurrencyFromNumber(item[field.value]) }}</span>
           <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">{{
-                field.value
-              }}</v-icon>
+              <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
             </template>
             <span v-if="field.tooltip">{{ field.tooltip }}</span>
           </v-tooltip>
-          <v-tooltip
-            top
-            v-else-if="field.type === 'move_up' && indexMain !== 0"
-          >
+          <v-tooltip top v-else-if="field.type === 'move_up' && indexMain !== 0">
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-arrow-up</v-icon>
             </template>
             <span>Nach oben</span>
           </v-tooltip>
-          <v-tooltip
-            top
-            v-else-if="
-              field.type === 'move_down' &&
-              indexMain !== filteredItems.length - 1
-            "
-          >
+          <v-tooltip top v-else-if="field.type === 'move_down' && indexMain !== filteredItems.length - 1">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props"
-                >mdi-arrow-down</v-icon
-              >
+              <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
             </template>
             <span>Nach unten</span>
           </v-tooltip>
 
-          <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{
-            field.value
-          }}</v-icon>
-          <span
-            v-else-if="item[field.value] && field.type === 'association_name'"
-            >{{ item[field.value].name }}</span
-          >
-          <span
-            v-else-if="item[field.value] && field.type === 'associations_name'"
-          >
-            <div
-              v-for="(subItem, index) in item[field.value]"
-              :key="index"
-              class="small"
-            >
+          <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{ field.value }}</v-icon>
+          <span v-else-if="item[field.value] && field.type === 'association_name'">{{ item[field.value].name }}</span>
+          <span v-else-if="item[field.value] && field.type === 'associations_name'">
+            <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">
               {{ subItem.name }}
             </div>
           </span>
@@ -116,23 +68,15 @@
                     :ask-notification="field.askNotification"
                     :notification-kind="field.notificationKind"
                     :notification-kind-explicit="field.notificationKindExplicit"
-                    :notification-pre-filled-headline="
-                      field.notificationPreFilledHeadline
-                    "
-                    :notification-pre-filled-text="
-                      field.notificationPreFilledText
-                    "
+                    :notification-pre-filled-headline="field.notificationPreFilledHeadline"
+                    :notification-pre-filled-text="field.notificationPreFilledText"
                     :notification-cta-link="field.notificationCtaLink"
                     :disabled="field?.disabledConditions?.(item)"
                     @toggled="handleToggled(item)"
                   />
                 </div>
               </template>
-              <span>{{
-                field?.disabledConditions?.(item)
-                  ? field.disabledTooltip
-                  : field.tooltip
-              }}</span>
+              <span>{{ field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip }}</span>
             </v-tooltip>
           </template>
 
@@ -142,43 +86,23 @@
             :enum-name="field.enum_name"
             :endpoint="field.endpoint"
             :fieldName="field.value"
-            :field-class="
-              useEnums().getClassName(field.enum_name, item[field.value])
-            "
+            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
             :disable-edit="!useUser().isAdmin()"
           />
-          <div
-            v-else-if="
-              item[field.value] && field.enum_name && field.type === 'enum'
-            "
-          >
-            <span
-              :class="
-                useEnums().getClassName(field.enum_name, item[field.value])
-              "
-            >
+          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
+            <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
-          <span v-else-if="field.type === 'array'">{{
-            item[field.value].join(", ")
-          }}</span>
-          <span v-else-if="field.type === 'pathIntoObject'">{{
-            pathInto(item, field.value)
-          }}</span>
+          <span v-else-if="field.type === 'array'">{{ item[field.value].join(", ") }}</span>
+          <span v-else-if="field.type === 'pathIntoObject'">{{ pathInto(item, field.value) }}</span>
           <span v-else-if="field.type === 'facilities'">
             <div v-if="Array.isArray(item[field.value])">
               <div v-for="facility in item[field.value]">
                 <v-row>
                   <v-col>
-                    <v-chip
-                      class="mx-2 mt-2"
-                      color="grey"
-                      v-if="facility.kind === 'facility'"
-                    >
-                      <v-icon v-if="facility.kind === 'facility'" class="mr-2"
-                        >mdi-home-city-outline</v-icon
-                      >
+                    <v-chip class="mx-2 mt-2" color="grey" v-if="facility.kind === 'facility'">
+                      <v-icon v-if="facility.kind === 'facility'" class="mr-2">mdi-home-city-outline</v-icon>
                       {{ facility.name }}
                     </v-chip>
                   </v-col>
@@ -187,7 +111,7 @@
             </div>
           </span>
           <span v-else-if="field.type === 'beinEdited'">
-            <span v-if="isCached(item.id)"><i>wird bearbeitet</i></span>
+            <span v-if="isDraft(item)"><i>wird bearbeitet</i></span>
           </span>
           <span v-else-if="field.type === 'isCompleteFacility'">
             <span class="text-warning" v-if="isCompleteFacility(item)">
@@ -200,22 +124,16 @@
               {{ pathInto(item, field.value) }}
             </button>
             <span v-if="field.value === 'mdi-eye' && item.is_active">
-              <v-icon class="is-clickable" @click="field.action(item)"
-                >mdi-eye</v-icon
-              >
+              <v-icon class="is-clickable" @click="field.action(item)">mdi-eye</v-icon>
             </span>
           </span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit">
-          <v-icon class="is-clickable" @click="emitParent(item, null)"
-            >mdi-pencil</v-icon
-          >
+          <v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon>
         </td>
         <td v-if="useUser().isAdmin() || !disableDelete">
-          <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
-            >mdi-delete</v-icon
-          >
+          <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)">mdi-delete</v-icon>
         </td>
       </tr>
     </tbody>
@@ -227,6 +145,7 @@ import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
+import { RequiredField } from "~/types/facilities";
 
 const router = useRouter();
 
@@ -241,7 +160,7 @@ const props = withDefaults(
     searchColumns?: string[];
     defaultSortBy?: string;
     defaultSortOrder?: string;
-    cachePrefix?: string;
+    draftRequired?: RequiredField[];
   }>(),
   {
     defaultSortBy: "created_at",
@@ -249,13 +168,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits([
-  "close",
-  "openCreateEditDialog",
-  "openDeleteDialog",
-  "itemsLoaded",
-  "itemUpdated",
-]);
+const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded", "itemUpdated"]);
 
 const sortOrder = ref(props.defaultSortOrder);
 const sortBy = ref(props.defaultSortBy);
@@ -266,18 +179,50 @@ const resetActiveItems = () => {
   activeItems.value = null;
 };
 
-const isCached = (itemId: string) => {
-  if (!props.cachePrefix) return false;
-  if (!props.cachePrefix.includes(",")) {
-    return localStorage.getItem(
-      `${props.cachePrefix}_${itemId.replaceAll("-", "_")}`
-    );
+const isFilled = (itemToCheck: any, requiredField: RequiredField) => {
+  const props: string[] = requiredField.props;
+  if (!props) return;
+
+  if (requiredField.specialFilter) {
+    if (requiredField.specialFilter === "filter_facility") {
+      // TODO: Filter korrekt
+      return true; //facilitiesFilterSet.value;
+    } else if (requiredField.specialFilter === "filter_service") {
+      // TODO: Filter korrekt
+      return true; // servicesFilterSet.value;
+    } else if (requiredField.specialFilter === "opening_hours") {
+      return itemToCheck.opening_hours.some((day: any) => day.hours.length > 0);
+    }
   }
-  return props.cachePrefix
-    .split(",")
-    .some((prefix) =>
-      localStorage.getItem(`${prefix}_${itemId.replaceAll("-", "_")}`)
-    );
+
+  if (requiredField.checkHandler) {
+    const result = props.every((prop) => {
+      return !requiredField.checkHandler(itemToCheck[prop]);
+    });
+    return result;
+  }
+
+  if (requiredField.justSome) {
+    const result = props.some((prop) => {
+      return itemToCheck[prop] && itemToCheck[prop].length;
+    });
+    return result;
+  }
+
+  const result = props.every((prop) => {
+    return itemToCheck[prop] && itemToCheck[prop].length;
+  });
+
+  return result;
+};
+
+const isDraft = (item: any) => {
+  if (!props.draftRequired) return false;
+
+  return !props.draftRequired.every((requiredField) => {
+    const isRequiredFieldFilled = isFilled(item, requiredField);
+    return isRequiredFieldFilled;
+  });
 };
 
 const emitopenDeleteDialog = (itemId: any) => {
@@ -322,8 +267,7 @@ api.setEndpoint(props.endpoint);
 const items = api.items;
 
 const filteredItems = computed(() => {
-  if (props.searchQuery === undefined || props.searchColumns === undefined)
-    return items.value;
+  if (props.searchQuery === undefined || props.searchColumns === undefined) return items.value;
 
   const itemsFiltered = items.value.filter((item) => {
     const some = props.searchColumns.some((columnProp) => {
@@ -349,9 +293,7 @@ const filteredItems = computed(() => {
         }
         if (Array.isArray(column)) {
           // TODO: Right now i only check for the 'name' field on my items, not all
-          return column.find((item) =>
-            item.name?.toUpperCase().includes(searchTerm)
-          );
+          return column.find((item) => item.name?.toUpperCase().includes(searchTerm));
         }
       }
     });
@@ -403,7 +345,7 @@ defineExpose({ resetActiveItems, getItems });
 </script>
 
 <style lang="sass">
-.cached
+.draft
   background: rgba(orange, 0.1)
 
 .small

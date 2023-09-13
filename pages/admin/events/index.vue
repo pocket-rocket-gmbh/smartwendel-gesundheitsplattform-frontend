@@ -3,9 +3,8 @@
     <h2 v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</h2>
     <h2 v-else>Veranstaltungen</h2>
     <v-alert type="info" density="compact" closable class="my-2"
-      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben
-      sind, desto besser können dich Besucherinnen und Besuchern auf der
-      Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
+      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen und Besuchern auf der Webseite
+      finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
     >
     <template v-if="setupFinished">
       <v-row align="center">
@@ -19,33 +18,18 @@
                 itemId = null;
                 createEditDialogOpen = true;
               "
-              :class="{ orange: newEventFromCache }"
             >
               Veranstaltung anlegen
-              <span v-if="newEventFromCache"> - weiter</span>
             </v-btn>
           </div>
         </v-col>
         <v-col>
-          <v-text-field
-            width="50"
-            prepend-icon="mdi-magnify"
-            v-model="facilitySearchTerm"
-            hide-details="auto"
-            label="Veranstaltungen durchsuchen"
-          />
+          <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Veranstaltungen durchsuchen" />
         </v-col>
       </v-row>
     </template>
-    <v-alert
-      v-if="!setupFinished && !loading"
-      type="info"
-      density="compact"
-      closable
-      class="mt-2"
-    >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
-      wir dich freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie
       Beiträge anlegen.
     </v-alert>
 
@@ -55,11 +39,11 @@
       endpoint="care_facilities?kind=event"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
-      :cache-prefix="'events'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="kind"
       :disable-delete="false"
+      :draft-required="draftRequiredFields"
     />
 
     <AdminEventsCreateEdit
@@ -70,17 +54,13 @@
       @close="handleCreateEditClose"
       endpoint="care_facilities"
       :concept-name="'Veranstaltung'"
-      :enableCache="true"
-      :cacheKey="eventsCacheKey"
+      :enableDraft="true"
+      :required-for-draft="['name']"
       :showPreviewButton="true"
       @showPreview="handleShowPreview"
     />
 
-    <AdminPreviewDummyPage
-      v-if="previewItem"
-      :item="previewItem"
-      @close="handlePreviewClose"
-    />
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -98,6 +78,8 @@
 <script lang="ts" setup>
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
 import { Facility } from "~/store/searchFilter";
+import { RequiredField } from "~/types/facilities";
+import { isCompleteEvent } from "~/utils/facility.utils";
 
 definePageMeta({
   layout: "admin",
@@ -113,20 +95,21 @@ const fields = [
     text: "Offline/Online",
     endpoint: "care_facilities",
     type: "switch",
-    tooltip:
-      "Hiermit kannst du deine Veranstaltung Online oder Offline schalten",
+    tooltip: "Hiermit kannst du deine Veranstaltung Online oder Offline schalten",
     fieldToSwitch: "is_active",
     disabledConditions: (item: any) => {
       const res = [
+        isCompleteEvent,
         () => {
           return !useUser().currentUser?.is_active_on_health_scope;
         },
       ].some((condition) => {
-        const resCond = condition();
+        const resCond = condition(item);
         return resCond;
       });
       return res;
     },
+    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Veranstaltung ausfüllen, danach kannst du deine Veranstaltung über den Button Online schalten",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
@@ -153,9 +136,32 @@ const fields = [
   },
 ];
 
-const previewItem = ref<Facility>();
+const draftRequiredFields: RequiredField[] = [
+  {
+    props: ["name"],
+  },
+  {
+    props: ["name_instructor"],
+  },
+  {
+    props: ["description"],
+    checkHandler: (description?: string) => !description || description === "<p><br></p>",
+  },
+  {
+    props: ["tags"],
+  },
+  {
+    props: ["event_dates"],
+  },
+  {
+    props: ["street", "zip", "community_id", "town"],
+  },
+  {
+    props: ["name_responsible_person"],
+  },
+];
 
-const newEventFromCache = ref(false);
+const previewItem = ref<Facility>();
 
 const facilitySearchColums = ref(["name", "user.name", "kind"]);
 const facilitySearchTerm = ref("");
@@ -198,20 +204,11 @@ const openDeleteDialog = (id: string) => {
   confirmDeleteDialogOpen.value = true;
 };
 
-const eventsCacheKey = computed(() => {
-  if (!itemId.value) {
-    return `events_new`;
-  }
-
-  return `events_${itemId.value.replaceAll("-", "_")}`;
-});
-
 const handleCreateEditClose = () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
   dataTableRef?.value?.getItems();
   dataTableRef.value?.resetActiveItems();
-  newEventFromCache.value = !!localStorage.getItem("events_new");
 };
 
 const handleShowPreview = (item: any) => {
@@ -224,7 +221,6 @@ const handlePreviewClose = () => {
 const goToFacility = (id: string) => {
   router.push({ path: `/public/care_facilities/${id}` });
 };
-
 
 onMounted(async () => {
   loading.value = true;
@@ -242,8 +238,6 @@ onMounted(async () => {
 
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
-
-  newEventFromCache.value = !!localStorage.getItem("events_new");
 });
 </script>
 <style lang="sass">
