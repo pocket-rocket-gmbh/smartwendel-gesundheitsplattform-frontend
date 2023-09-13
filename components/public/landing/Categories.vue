@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="icons">
-      <div v-for="(item, index) in items" :key="index" class="d-flex is-clickable d-flex icon" @click="goToLink(item.content.link)">
+      <div v-for="(item, index) in items" :key="index" class="d-flex is-clickable icon" @click="goToLink(item.content.link)">
         <img class="image" :src="item.content.icon" />
         <div class="d-flex align-center">
           <div class="font-weight-bold d-flex align-center is-clickable">
@@ -155,6 +155,8 @@ const items = [
       @include md {
         flex-direction: column;
         font-size: 18px;
+        flex: 1;
+        text-align: center;
       }
     }
   }
