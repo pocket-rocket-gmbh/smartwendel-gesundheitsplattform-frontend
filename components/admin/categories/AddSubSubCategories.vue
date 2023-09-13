@@ -41,6 +41,7 @@
       
       <DataTable
         :fields="fields"
+        :disable-delete="false"
         :endpoint="`categories/${categoryId}/sub_categories/${subCategoryId}`"
         overwrite-move-endpoint="categories"
         default-sort-order="asc"

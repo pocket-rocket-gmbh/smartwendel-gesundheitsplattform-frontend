@@ -11,11 +11,12 @@
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         class="text-field file-input"
-        hide-details="auto"
+        
         label="Datei auswählen"
         v-model="file"
         @change="handleFile"
         accept="application/pdf,application/vnd.ms-excel"
+        show-size
       />
       <v-text-field
         class="text-field"
@@ -26,7 +27,7 @@
               1
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
-        hide-details="auto"
+       
         label="Bezeichnung*"
         v-model="filename"
       />
@@ -326,7 +327,6 @@ const save = async () => {
       tag: props.tagName,
     },
   ]);
- 
 
   fileUrl.value = null;
   filename.value = "";
@@ -334,11 +334,11 @@ const save = async () => {
   file.value = {};
 };
 
-const handleEmitOffline = (docs:CreateEditFacility["offlineDocuments"]) => {
+const handleEmitOffline = (docs: CreateEditFacility["offlineDocuments"]) => {
   emit("offline", docs);
   const typeSet = docs?.some((item) => item.tag === props.tagName);
   emit("areDocumentsSet", typeSet, props.tagName);
-}
+};
 
 const getUrlToDocument = (document: string) => {
   const byteCharacters = atob(document.split(";base64,")[1]);

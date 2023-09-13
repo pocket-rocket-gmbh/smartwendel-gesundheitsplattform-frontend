@@ -90,7 +90,7 @@
       "
       :item-id="itemId"
       endpoint="care_facilities"
-      term="diesen Kurs oder Veranstaltung"
+      term="diesen Kurs"
     />
   </div>
 </template>

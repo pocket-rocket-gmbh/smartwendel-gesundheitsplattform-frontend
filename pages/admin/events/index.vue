@@ -91,7 +91,7 @@
       "
       :item-id="itemId"
       endpoint="care_facilities"
-      term="diesen Kurs oder Veranstaltung"
+      term="diese Veranstaltung"
     />
   </div>
 </template>
@@ -129,7 +129,12 @@ const fields = [
     },
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
-  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
+  {
+    prop: "created_at",
+    text: "Erstellt am",
+    value: "created_at",
+    type: "datetime",
+  },
   {
     prop: "user.firstname",
     text: "Erstellt von",
@@ -224,7 +229,6 @@ const handlePreviewClose = () => {
 const goToFacility = (id: string) => {
   router.push({ path: `/public/care_facilities/${id}` });
 };
-
 
 onMounted(async () => {
   loading.value = true;

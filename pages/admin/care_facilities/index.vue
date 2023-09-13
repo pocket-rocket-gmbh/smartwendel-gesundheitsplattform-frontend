@@ -64,7 +64,7 @@
 
       <div
         class="px-5"
-        v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin()"
+        v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope()"
       >
         <v-icon>mdi-arrow-up</v-icon>
         <span

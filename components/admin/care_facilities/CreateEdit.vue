@@ -22,7 +22,7 @@
             >
               <span>{{ step.description }}</span>
             </div>
-            <sspan class="text-error">* Erforderlich</sspan>
+            <sspan class="text-error d-flex justify-end">* Erforderlich</sspan>
           </div>
         </v-col>
         <v-col md="9">
