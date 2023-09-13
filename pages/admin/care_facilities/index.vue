@@ -2,10 +2,19 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="my-2">
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="my-2"
+    >
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
-    <ChangePassword :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at" @changed="handleSaved()" />
+    <ChangePassword
+      :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
+      @changed="handleSaved()"
+    />
     <div>
       <div>
         <v-row align="center">
@@ -24,7 +33,13 @@
             </v-btn>
           </v-col>
           <v-col v-if="user.isAdmin()">
-            <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Einrichtungen durchsuchen" />
+            <v-text-field
+              width="50"
+              prepend-icon="mdi-magnify"
+              v-model="facilitySearchTerm"
+              hide-details="auto"
+              label="Einrichtungen durchsuchen"
+            />
           </v-col>
         </v-row>
       </div>
@@ -47,14 +62,22 @@
 
       <div
         class="px-5"
-        v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope()"
+        v-if="
+          facilityId &&
+          setupFinished &&
+          !itemStatus &&
+          !user.isAdmin() &&
+          useUser().statusOnHealthScope()
+        "
       >
         <v-icon>mdi-arrow-up</v-icon>
-        <span>Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span>
+        <span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
+        >
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
-        :disabled="setupFinished && !itemStatus"
+        :disabled="(setupFinished && !itemStatus) || !useUser().statusOnHealthScope()"
         elevation="0"
         variant="outlined"
         class="mt-5"
@@ -79,8 +102,18 @@
         @created="handleCreated"
       />
 
-      <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
-      <DeleteItem v-if="confirmDeleteDialogOpen" @close="handleDeleteDialogClose" :item-id="itemId" endpoint="care_facilities" term="diese Einrichtung" />
+      <AdminPreviewDummyPage
+        v-if="previewItem"
+        :item="previewItem"
+        @close="handlePreviewClose"
+      />
+      <DeleteItem
+        v-if="confirmDeleteDialogOpen"
+        @close="handleDeleteDialogClose"
+        :item-id="itemId"
+        endpoint="care_facilities"
+        term="diese Einrichtung"
+      />
     </div>
   </div>
 </template>
@@ -129,7 +162,8 @@ const fields = [
       });
       return res;
     },
-    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
+    disabledTooltip:
+      "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
@@ -283,6 +317,7 @@ const handleCreateEditClose = async () => {
   await dataTableRef.value?.resetActiveItems();
   await dataTableRef.value?.getItems();
   setupFinished.value = await useUser().setupFinished();
+  useUser().reloadUser();
   useNuxtApp().$bus.$emit("facilityUpdate");
 };
 

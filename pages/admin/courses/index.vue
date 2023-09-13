@@ -60,6 +60,7 @@
       :showPreviewButton="true"
       @showPreview="handleShowPreview"
       @created="handleCreated"
+      @update-items="handleUpdateItems"
     />
 
     <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
@@ -238,6 +239,10 @@ const goToFacility = (id: string) => {
 
 const handleCreated = (createdItemId: string) => {
   itemId.value = createdItemId;
+};
+
+const handleUpdateItems = () => {
+  dataTableRef.value?.getItems();
 };
 
 onMounted(async () => {

@@ -1,6 +1,6 @@
 <template>
   <CreateEdit v-slot="slotProps" @has-changed="adressChanged = true" size="100wh" ref="createEditRef">
-    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-15">
+    <v-card-text v-if="slotProps.item && Object.entries(slotProps.item).length" class="mb-10">
       <v-row>
         <v-col md="3">
           <div class="mt-10 mx-5 menu-boxes">
@@ -196,7 +196,7 @@
                 </template>
                 <span>{{ steps["contact"].tooltip }}</span>
               </v-tooltip>
-              <div v-if="setupFinished && !useUser().isAdmin()">
+              <div v-if="setupFinished && !useUser().isAdmin() && useUser().statusOnHealthScope()">
                 <span v-if="editInformations">
                   <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
                 </span>
@@ -221,7 +221,7 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.street"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished && useUser().statusOnHealthScope()"
                 hide-details="auto"
                 label="Straße und Nummer *"
                 :rules="[rules.required, rules.counterStreet]"
@@ -233,7 +233,7 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.additional_address_info"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished && useUser().statusOnHealthScope()"
                 hide-details="auto"
                 label="Adresszusatz"
               />
@@ -243,7 +243,7 @@
                 hide-details="auto"
                 class="text-field"
                 v-model="slotProps.item.community_id"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished && useUser().statusOnHealthScope()"
                 :items="communities"
                 item-title="name"
                 item-value="id"
@@ -266,7 +266,7 @@
                 hide-details="auto"
                 class="text-field"
                 v-model="slotProps.item.town"
-                :disabled="(!useUser().isAdmin() && !editInformations && setupFinished) || !slotProps.item.zip"
+                :disabled="(!useUser().isAdmin() && !editInformations && setupFinished && useUser().statusOnHealthScope()) || !slotProps.item.zip "
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
@@ -279,7 +279,7 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.phone"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished && useUser().statusOnHealthScope()"
                 hide-details="auto"
                 label="Telefonnummer * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
                 :rules="[rules.required, rules.validateNumber]"
@@ -291,7 +291,7 @@
               <v-text-field
                 class="text-field"
                 v-model="slotProps.item.email"
-                :disabled="!useUser().isAdmin() && !editInformations && setupFinished"
+                :disabled="!useUser().isAdmin() && !editInformations && setupFinished && useUser().statusOnHealthScope()"
                 hide-details="auto"
                 label="E-Mail * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
                 :rules="[rules.required, rules.email]"
@@ -413,7 +413,7 @@
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
-          <v-divider class="my-10"></v-divider>
+          <v-divider class="my-5"></v-divider>
         </v-col>
       </v-row>
       <!--  <div class="missing" v-for="[key, step] in Object.entries(steps)">

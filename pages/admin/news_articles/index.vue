@@ -50,6 +50,7 @@
       :showPreviewButton="true"
       @showPreview="handleShowPreview"
       @created="handleCreated"
+      @update-items="handleUpdateItems"
     />
 
     <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
@@ -185,6 +186,10 @@ const openCreateEditDialog = (item: any) => {
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
+};
+
+const handleUpdateItems = () => {
+  dataTableRef.value?.getItems();
 };
 
 const handleShowPreview = (item: any) => {

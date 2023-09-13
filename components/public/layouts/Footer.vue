@@ -76,6 +76,13 @@
                 </a>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col>
+                <div class="disclaimer">
+                  Zur besseren Lesbarkeit wird auf der Gesundheits- und Pflegeplattform das generische Maskulinum verwendet. Die auf dieser Webseite verwendeten Personenbezeichnungen sprechen – sofern nicht anders kenntlich gemacht – alle Geschlechter an. Weibliche und anderweitige Geschlechteridentitäten werden dabei ausdrücklich mit berücksichtigt.
+                </div>
+              </v-col>
+            </v-row>
           </v-col>
           <v-col class="links d-flex align-center">
             <div>
@@ -221,4 +228,5 @@ const currentRoute = computed(() => {
       @include md
         display: flex
         justify-content: space-between
+
 </style>

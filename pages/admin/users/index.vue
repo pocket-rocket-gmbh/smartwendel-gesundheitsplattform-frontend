@@ -1,7 +1,21 @@
 <template>
   <div>
-    <h2>Benutzer</h2>
     <div>
+      <v-row>
+        <v-col md="3">
+          <h2>Benutzer</h2>
+        </v-col>
+        <v-col class="d-flex justify-end align-center">
+          <div class="d-flex align-center mx-3">
+            <v-icon size="x-small" color="success">mdi-circle</v-icon>
+            <span class="pl-1">Einrichtung online</span>
+          </div>
+          <div class="d-flex align-center mx-3">
+            <v-icon size="x-small" color="error">mdi-circle</v-icon>
+            <span class="pl-1">Einrichtung nicht online</span>
+          </div>
+        </v-col>
+      </v-row>
       <v-row align="center">
         <v-col md="3">
           <v-btn
@@ -101,14 +115,6 @@ const fields = ref([
     emit: "mailUser",
     tooltip: "E-Mail an Benutzer",
   },
-  {
-    prop: "",
-    text: "",
-    value: "mdi-email-outline",
-    type: "icon",
-    emit: "mailUser",
-    tooltip: "E-Mail an Benutzer",
-  },
 ]);
 
 const route = useRoute();
@@ -127,7 +133,12 @@ const filter = ref({
 });
 const dataTableRef = ref();
 
-const facilitySearchColums = ref(["firstname", "lastname", "last_seen", "care_facilities"]);
+const facilitySearchColums = ref([
+  "firstname",
+  "lastname",
+  "last_seen",
+  "care_facilities",
+]);
 const facilitySearchTerm = ref("");
 
 const openCreateEditDialog = (item: any) => {

@@ -59,6 +59,7 @@
       :showPreviewButton="true"
       @showPreview="handleShowPreview"
       @created="handleCreated"
+      @update-items="handleUpdateItems"
     />
 
     <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
@@ -223,6 +224,10 @@ const handleShowPreview = (item: any) => {
 };
 const handlePreviewClose = () => {
   previewItem.value = null;
+};
+
+const handleUpdateItems = () => {
+  dataTableRef.value?.getItems();
 };
 
 const goToFacility = (id: string) => {
