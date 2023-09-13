@@ -3,14 +3,7 @@
     <div class="category-input is-dark-grey" :class="[defaultStyling ? 'default' : 'styled']">
       <form @submit.prevent="routeToResults()">
         <div class="input-wrapper" :class="[defaultStyling ? 'field' : '']">
-          <input
-            type="text"
-            :value="modelValue"
-            class="input"
-            placeholder="Suchbegriff eingeben"
-            @input="handleInput"
-            @click="showPopover = true"
-          />
+          <input type="text" :value="modelValue" class="input" placeholder="Suchbegriff eingeben" @input="handleInput" @click="showPopover = true" />
           <img
             class="icon"
             :src="searchIcon"
@@ -22,12 +15,7 @@
         </div>
       </form>
 
-      <div
-        v-show="modelValue && showPopover"
-        class="search-results-popover"
-        :class="[defaultStyling ? 'default' : 'styled']"
-        ref="popoverParentRef"
-      >
+      <div v-show="modelValue && showPopover" class="search-results-popover" :class="[defaultStyling ? 'default' : 'styled']" ref="popoverParentRef">
         <div class="wrapper">
           <div v-if="loading" class="result">
             <LoadingSpinner :style="'inline'">Suchergebnisse werden geladen...</LoadingSpinner>
@@ -182,6 +170,10 @@ const handleInput = (e: Event) => {
       align-items: center;
       padding: 0 8px;
 
+      @include md {
+        width: 100%;
+      }
+
       form {
         flex: 1;
 
@@ -293,8 +285,5 @@ const handleInput = (e: Event) => {
       width: 100%;
     }
   }
-}
-.v-input__icon.v-input__icon--append-outer i {
-  font-size: 48px;
 }
 </style>

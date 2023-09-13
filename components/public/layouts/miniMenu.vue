@@ -8,7 +8,7 @@
         <div class="account-button"
           v-bind="props"
         >
-          <p class="mx-5 menu-list">Mein Account</p>
+          <!-- <p class="mx-5 menu-list">Mein Account</p> -->
           <div v-if="currentUser">
             <UserProfile
               :user="currentUser"

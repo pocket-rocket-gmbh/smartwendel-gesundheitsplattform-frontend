@@ -3,17 +3,13 @@
     <v-app-bar v-model="appStore.showTopbar" :elevation="2" class="hero-menu">
       <v-app-bar-title>
         <div class="d-flex align-center">
-          <div>
-            <a href="/">
+          <div class="d-flex align-center">
+            <a href="/" class="d-flex align-center">
               <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
             </a>
           </div>
-          <div class="align-center d-none d-lg-flex mx-2">
-            <div
-              class="categories-wrapper is-clickable d-flex"
-              v-for="(category, index) in categories"
-              :key="index"
-            >
+          <div v-if="breakPoints.width.value >= 1400" class="align-center d-flex mx-2">
+            <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
               <div class="title mx-5">
                 <span class="is-clickable main" @click="setItemsAndGo(category, null)">
                   {{ category.name }}
@@ -22,11 +18,7 @@
               <div class="content">
                 <v-list>
                   <v-list-item>
-                    <div
-                      v-for="(sub_category, index) in subCategories[category.id]"
-                      :key="sub_category.id"
-                      @click="setItemsAndGo(category, sub_category)"
-                    >
+                    <div v-for="(sub_category, index) in subCategories[category.id]" :key="sub_category.id" @click="setItemsAndGo(category, sub_category)">
                       <div class="list-item main">
                         <div>
                           <span class="is-clickable">
@@ -40,36 +32,15 @@
               </div>
             </div>
             <div v-if="!loading">
-              <a
-                href="/public/search/facilities"
-                class="is-clickable mx-5"
-                @click.prevent="goTo('/public/search/facilities')"
-              >
-                Anbieter
-              </a>
-              <a
-                href="/public/search/courses"
-                class="is-clickable mx-5"
-                @click.prevent="goTo('/public/search/courses')"
-              >
-                Kurse
-              </a>
-              <a
-                href="/public/search/events"
-                class="is-clickable mx-5"
-                @click.prevent="goTo('/public/search/events')"
-              >
-                Veranstaltungen
-              </a>
+              <a href="/public/search/facilities" class="is-clickable mx-5" @click.prevent="goTo('/public/search/facilities')"> Anbieter </a>
+              <a href="/public/search/courses" class="is-clickable mx-5" @click.prevent="goTo('/public/search/courses')"> Kurse </a>
+              <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </a>
             </div>
           </div>
         </div>
       </v-app-bar-title>
-      <div class="align-center d-none d-lg-flex" v-if="!loading">
-        <div
-          class="has-bg-primary mr-5 text-white offer py-1"
-          v-if="!useUser().loggedIn() && currentRoute !== '/register'"
-        >
+      <div class="align-center d-flex" v-if="breakPoints.width.value >= 1400 && !loading">
+        <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
           <v-row class="mx-1 text-center">
             <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
               <div class="font-weight-bold">Dein Angebot fehlt?</div>
@@ -83,14 +54,7 @@
           </v-btn>
         </div>
         <div class="d-flex align-center">
-          <a
-            class="mx-3 menu-list pointer"
-            v-if="useUser().isAdmin()"
-            href="/admin"
-            @click.prevent="saveCurrentUrlAndRoute('/admin')"
-          >
-            Admin-Bereich
-          </a>
+          <a class="mx-3 menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </a>
           <a
             class="mx-3 menu-list pointer"
             v-else-if="useUser().isFacilityOwner()"
@@ -99,43 +63,25 @@
           >
             Meine Einrichtung
           </a>
-          <PublicLayoutsMiniMenu
-            :current-user="currentUser"
-            :user-is-admin="userIsAdmin"
-          />
+          <PublicLayoutsMiniMenu :current-user="currentUser" :user-is-admin="userIsAdmin" />
         </div>
       </div>
-      <div class="d-flex d-lg-none align-center" align="center">
+      <div v-if="breakPoints.width.value < 1400" class="d-flex align-center" align="center">
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </div>
     </v-app-bar>
-    <v-navigation-drawer class="d-flex d-lg-none" v-model="drawer" fixed temporary>
+    <v-navigation-drawer class="d-flex" v-model="drawer" fixed temporary>
       <div class="navigation-drawer-content">
-        <div
-          class="has-bg-primary text-white offer d-flex align-center justify-center py-2"
-          v-if="!useUser().loggedIn() && currentRoute !== '/register'"
-        >
+        <div class="has-bg-primary text-white offer d-flex align-center justify-center py-2" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
           <div @click="goToRegister()">
             <div class="font-weight-bold">Dein Angebot fehlt?</div>
             <div class="font-weight-light">Registriere dich!</div>
           </div>
         </div>
-        <v-btn v-if="!useUser().loggedIn()" color="primary" @click="goToLogin">
-          Einloggen
-        </v-btn>
+        <v-btn v-if="!useUser().loggedIn()" color="primary" @click="goToLogin"> Einloggen </v-btn>
         <div v-if="useUser().loggedIn() && currentUser" class="d-flex">
-          <img
-            v-if="currentUser.image_url"
-            :src="currentUser.image_url"
-            class="is-rounded"
-            height="60"
-          />
-          <img
-            v-if="!currentUser.image_url"
-            src="~/assets/images/user-standard.png"
-            class="is-rounded"
-            height="60"
-          />
+          <img v-if="currentUser.image_url" :src="currentUser.image_url" class="is-rounded" height="60" />
+          <img v-if="!currentUser.image_url" src="~/assets/images/user-standard.png" class="is-rounded" height="60" />
           <v-list-item v-if="currentUser">
             <v-list-item-title>{{ currentUser.name }}</v-list-item-title>
             <v-list-item-subtitle>{{ currentUser.role }}</v-list-item-subtitle>
@@ -143,12 +89,7 @@
           </v-list-item>
         </div>
         <div class="logged-in-actions">
-          <a
-            class="menu-list pointer"
-            v-if="useUser().isAdmin()"
-            href="/admin"
-            @click.prevent="saveCurrentUrlAndRoute('/admin')"
-          >
+          <a class="menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')">
             <v-icon class="mr-2">mdi-cog</v-icon>
             <span>Admin-Bereich</span>
           </a>
@@ -160,10 +101,7 @@
           >
             Meine Einrichtung
           </a>
-          <div
-            v-if="useUser().currentUser"
-            @click="useUser().logout(), (drawer = !drawer), reload()"
-          >
+          <div v-if="useUser().currentUser" @click="useUser().logout(), (drawer = !drawer), reload()">
             <v-icon class="mr-2">mdi-logout</v-icon>
             <span>Logout</span>
           </div>
@@ -176,11 +114,7 @@
         </div>
         <v-divider></v-divider>
 
-        <div
-          class="categories-wrapper is-clickable d-flex"
-          v-for="(category, index) in categories"
-          :key="index"
-        >
+        <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
           <div class="title">
             <span class="is-clickable main" @click="setItemsAndGo(category, null)">
               {{ category.name }}
@@ -189,27 +123,9 @@
         </div>
         <template v-if="!loading">
           <v-divider></v-divider>
-          <a
-            href="/public/search/facilities"
-            class="is-clickable"
-            @click.prevent="goTo('/public/search/facilities')"
-          >
-            Anbieter
-          </a>
-          <a
-            href="/public/search/events"
-            class="is-clickable"
-            @click.prevent="goTo('/public/search/events')"
-          >
-            Kurse
-          </a>
-          <a
-            href="/public/search/events"
-            class="is-clickable"
-            @click.prevent="goTo('/public/search/events')"
-          >
-            Veranstaltungen
-          </a>
+          <a href="/public/search/facilities" class="is-clickable" @click.prevent="goTo('/public/search/facilities')"> Anbieter </a>
+          <a href="/public/search/courses" class="is-clickable" @click.prevent="goTo('/public/search/courses')"> Kurse </a>
+          <a href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </a>
         </template>
       </div>
     </v-navigation-drawer>
@@ -220,6 +136,7 @@
 import { useAppStore } from "@/store/app";
 import { useUserStore } from "@/store/user";
 import { useFilterStore } from "~/store/searchFilter";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
 const currentUser = ref(null);
 const router = useRouter();
 const categories = ref([]);
@@ -230,7 +147,8 @@ const menu = ref(false);
 const appStore = useAppStore();
 const route = useRoute();
 const loading = ref(true);
-const filterStore = useFilterStore()
+const filterStore = useFilterStore();
+const breakPoints = useBreakpoints();
 
 const categoriesApi = useCollectionApi();
 categoriesApi.setBaseApi(usePublicApi());
@@ -304,11 +222,7 @@ const setItemsAndGo = (category: any, sub_category: any) => {
 
 const userIsAdmin = computed(() => {
   if (currentUser.value) {
-    return (
-      currentUser.value.role === "root" ||
-      currentUser.value.role === "admin" ||
-      currentUser.value.role === "care_facility_admin"
-    );
+    return currentUser.value.role === "root" || currentUser.value.role === "admin" || currentUser.value.role === "care_facility_admin";
   }
   return false;
 });
