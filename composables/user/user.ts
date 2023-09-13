@@ -36,6 +36,13 @@ export function useUser() {
     }
   };
 
+  const statusOnHealthScope = (): Boolean => {
+    if (currentUser) {
+      return currentUser.is_active_on_health_scope
+     
+    }
+  };
+
   const setupFinished = async () => {
     if (isAdmin()) return true;
 
@@ -83,6 +90,7 @@ export function useUser() {
     setupFinished,
     facilityFinished,
     loginCount,
-    reloadUser
+    reloadUser,
+    statusOnHealthScope
   };
 }

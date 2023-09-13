@@ -76,10 +76,16 @@
                   />
                 </div>
               </template>
-              <span>{{ field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip }}</span>
+              <span v-if="useUser().statusOnHealthScope()">{{
+                field?.disabledConditions?.(item)
+                  ? field.disabledTooltip
+                  : field.tooltip
+              }}</span>
+              <span v-else>
+                Es ist noch nicht möglich, den Status zu ändern, da dein Benutzer noch in Prüfung ist
+              </span>
             </v-tooltip>
           </template>
-
           <TableDropdown
             v-else-if="field.type === 'enumDropdown'"
             :item="item"

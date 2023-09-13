@@ -84,7 +84,7 @@
               "
             />
             <v-btn
-              :disabled="password !== password_confirmation"
+              :disabled="!password.length || !password_confirmation.length || password !== password_confirmation"
               variant="flat"
               color="primary"
               @click="updatePassword()"
