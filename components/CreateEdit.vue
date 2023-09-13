@@ -66,7 +66,7 @@ import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const statusLoadingFilter = useStatusLoadingFilter();
 
-const emit = defineEmits(["close", "hasChanged", "save", "showPreview", "updateItems"]);
+const emit = defineEmits(["close", "hasChanged", "save", "showPreview", "updateItems", "created"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -262,6 +262,7 @@ const create = async (saveAsDraft = false) => {
     await Promise.all(documentsPromises);
   }
   loadingItem.value = false;
+  emit("created", newFacilityId);
 };
 
 const save = async (saveAsDraft = false) => {
