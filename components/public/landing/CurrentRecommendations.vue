@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gradient py-10">
+  <div class="wrapper bg-gradient">
     <div class="d-flex align-center justify-center is-uppercase">
       <h2 class="text-white">Wir zeigen dir, was du für deinen Gesundheitszustand und dein Wohlbefinden tun kannst.</h2>
     </div>
@@ -83,18 +83,30 @@ const items = [
     cursor: pointer;
   }
 }
-.recommendations-wrapper {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  font-size: 22px;
+
+.wrapper {
+  padding: 5rem;
 
   @include md {
-    grid-template-columns: repeat(3, 1fr);
-    font-size: 18px;
+    padding: 1rem;
   }
+}
 
-  @include sm {
-    grid-template-columns: 1fr 1fr;
-  }
+.recommendations-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  // display: grid;
+  // grid-template-columns: repeat(5, 1fr);
+  // font-size: 22px;
+
+  // @include md {
+  //   grid-template-columns: repeat(3, 1fr);
+  //   font-size: 18px;
+  // }
+
+  // @include sm {
+  //   grid-template-columns: 1fr 1fr;
+  // }
 }
 </style>

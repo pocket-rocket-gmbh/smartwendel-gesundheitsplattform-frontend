@@ -11,17 +11,11 @@
     </div>
     <template v-if="filterStore.filteredResults.length > 0">
       <div v-if="!filterStore.currentKinds.includes('facility')" class="boxes" :class="{ doubled }">
-        <PublicContentBox
-          :size="12"
-          class=""
-          v-for="category in filterStore.filteredResults"
-          :key="category.id"
-          :item="category"
-        />
+        <PublicContentBox :size="12" class="" v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
       </div>
       <div v-else class="boxes">
         <div class="item" v-for="careFacility in filterStore.filteredResults" :key="careFacility.id">
-          <v-row>
+          <v-row class="item-row">
             <v-col md="8">
               <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
                 <a :href="`/public/care_facilities/${careFacility.id}`">{{ careFacility.name }}</a>
@@ -30,9 +24,7 @@
                 <v-col>
                   <div class="text-dark-grey mt-4">
                     <div v-if="careFacility.street">{{ careFacility.street }}</div>
-                    <div v-if="careFacility.zip || careFacility.town">
-                      {{ careFacility.zip }} {{ careFacility.town }}
-                    </div>
+                    <div v-if="careFacility.zip || careFacility.town">{{ careFacility.zip }} {{ careFacility.town }}</div>
                     <!-- <div v-if="careFacility.community">{{ careFacility.community }}</div> -->
                   </div>
                 </v-col>
@@ -63,14 +55,8 @@
                 </v-btn>
               </div>
             </v-col>
-            <v-col align="right">
-              <v-btn
-                variant="flat"
-                color="primary"
-                rounded="pill"
-                size="large"
-                :href="`/public/care_facilities/${careFacility.id}`"
-              >
+            <v-col align="right" class="action">
+              <v-btn variant="flat" color="primary" rounded="pill" size="large" :href="`/public/care_facilities/${careFacility.id}`">
                 <span> Details ansehen </span>
               </v-btn>
             </v-col>
@@ -90,17 +76,24 @@ import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
 const props = defineProps<{
   doubled?: boolean;
 }>();
+const emit = defineEmits<{
+  (event: "showOnMap"): void;
+}>();
 
 const filterStore = useFilterStore();
 
 const showCareFacilityInMap = async (careFacilityId: string) => {
-  filterStore.mapFilter = careFacilityId;
-  filterStore.loadFilteredResults();
-  filterStore.mapFilter = null;
+  emit("showOnMap");
   window.scrollTo({
     behavior: "smooth",
     top: 0,
   });
+
+  setTimeout(() => {
+    filterStore.mapFilter = careFacilityId;
+    filterStore.loadFilteredResults();
+    filterStore.mapFilter = null;
+  }, 100);
 };
 
 const toggleFilterSort = () => {
@@ -116,6 +109,14 @@ const toggleFilterSort = () => {
   border-radius: 20px
   padding: 20px
   margin-bottom: 1rem
+
+  .item-row
+    @include md
+      flex-direction: column
+      .action
+        flex: 1
+        a
+          width: 100%
 
   @include md
    margin-bottom: 0
@@ -151,8 +152,8 @@ const toggleFilterSort = () => {
     display: grid
     grid-template-columns: 1fr 1fr
 
-  @include md
-    display: flex
-    flex-direction: column
-    // gap: 0.5rem
+    @include md
+      display: flex
+      flex-direction: column
+      // gap: 0.5rem
 </style>

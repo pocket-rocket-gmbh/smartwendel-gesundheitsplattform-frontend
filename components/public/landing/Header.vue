@@ -30,6 +30,14 @@ onMounted(() => {
 
   @include md {
     padding: 1rem;
+    padding-top: 5rem;
+    width: 100%;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  @include sm {
+    padding: 1rem;
     width: 100%;
     justify-content: flex-start;
   }

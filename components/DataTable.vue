@@ -408,7 +408,7 @@ defineExpose({ resetActiveItems, getItems });
   background: rgba(orange, 0.1)
 
 .small
-  font-size: 8px
+  font-size: 0.5em
 
 .dropdown
   position: absolute

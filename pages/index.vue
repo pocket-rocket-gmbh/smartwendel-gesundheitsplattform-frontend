@@ -4,11 +4,11 @@
       <PublicLandingHeader />
     </div>
     <PublicLandingCurrentNotes />
-    <div class="divider ma-10"></div>
+    <div class="divider"></div>
     <PublicLandingCategories />
     <PublicLandingCurrentRecommendations />
     <PublicLandingCurrentEvents />
-    <div class="divider ma-10"></div>
+    <div class="divider"></div>
     <PublicLandingHelplinks />
   </div>
 </template>
@@ -29,6 +29,18 @@
 
   @include sm {
     background-position: center;
+  }
+
+  @include md {
+    background-position: left;
+  }
+}
+
+.divider {
+  margin: 5rem;
+
+  @include md {
+    margin: 1rem;
   }
 }
 

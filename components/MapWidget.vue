@@ -366,7 +366,7 @@ div.clustericon {
   background-color: #007344;
   padding-top: 2px;
   text-align: center;
-  font-size: 24px;
+  font-size: 1.5em;
   border-radius: 25px;
   color: white;
 }
