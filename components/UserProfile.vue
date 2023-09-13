@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile-image-wrapper">
-    <img :class="['is-rounded mr-2 bordered', size]" v-if="user.image_url" :src="user.image_url"  />
-    <img class="is-rounded mr-2" src="@/assets/images/user-standard.png" v-else />
+    <img :class="[' bordered', size]" v-if="user.image_url" :src="user.image_url"  />
+    <img class="" src="@/assets/images/user-standard.png" v-else />
   </div>
 </template>
 

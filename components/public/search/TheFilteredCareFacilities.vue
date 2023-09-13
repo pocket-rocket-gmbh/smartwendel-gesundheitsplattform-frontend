@@ -15,7 +15,7 @@
       </div>
       <div v-else class="boxes">
         <div class="item" v-for="careFacility in filterStore.filteredResults" :key="careFacility.id">
-          <v-row>
+          <v-row class="item-row">
             <v-col md="8">
               <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
                 <a :href="`/public/care_facilities/${careFacility.id}`">{{ careFacility.name }}</a>
@@ -55,7 +55,7 @@
                 </v-btn>
               </div>
             </v-col>
-            <v-col align="right">
+            <v-col align="right" class="action">
               <v-btn variant="flat" color="primary" rounded="pill" size="large" :href="`/public/care_facilities/${careFacility.id}`">
                 <span> Details ansehen </span>
               </v-btn>
@@ -109,6 +109,14 @@ const toggleFilterSort = () => {
   border-radius: 20px
   padding: 20px
   margin-bottom: 1rem
+
+  .item-row
+    @include md
+      flex-direction: column
+      .action
+        flex: 1
+        a
+          width: 100%
 
   @include md
    margin-bottom: 0

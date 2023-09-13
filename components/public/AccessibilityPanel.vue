@@ -33,9 +33,9 @@
   opacity: .7
 
 .increase-size
-  font-size: 25px
+  font-size: 1.5em
 
 .decrease-size
-  font-size: 25px
+  font-size: 1.5em
 
 </style>
