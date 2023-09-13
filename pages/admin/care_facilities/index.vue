@@ -131,7 +131,6 @@ const fields = [
     disabledTooltip: "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
-  { value: "", type: "isCompleteFacility" },
   { value: "", type: "beinEdited" },
   { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
