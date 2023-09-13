@@ -31,7 +31,7 @@
         <v-col class="align-end">
           <PublicSearchCommunitySelectModal />
         </v-col>
-        <v-col class="align-end">
+        <v-col class="align-end" v-if="filterKind !== 'event' && filterKind !== 'news'">
           <PublicSearchFilterSelectModal :filter-kind="filterKind" />
         </v-col>
       </v-row>

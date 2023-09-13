@@ -28,7 +28,7 @@
             />
           </div>
 
-          <div class="facilities"><PublicSearchTheFilteredCareFacilities /></div>
+          <div class="facilities"><PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" /></div>
         </div>
       </div>
     </div>
@@ -91,6 +91,10 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
       });
     });
   }
+};
+
+const handleShowOnMap = () => {
+  showMap.value = true;
 };
 
 const updateLocations = () => {

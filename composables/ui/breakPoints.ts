@@ -9,26 +9,29 @@ export enum BreakPoints {
 }
 
 export const useBreakpoints = () => {
-  const windowWidth = ref(window.innerWidth);
+  const width = ref(0);
+  const type = ref("md");
+  const isMobile = ref(false);
 
-  const onWidthChange = () => {
-    windowWidth.value = window.innerWidth;
+  const getType = () => {
+    if (width.value < BreakPoints.xs) return "xs";
+    if (width.value >= BreakPoints.xs && width.value < BreakPoints.sm) return "sm";
+    if (width.value >= BreakPoints.sm && width.value < BreakPoints.md) return "md";
+    if (width.value >= BreakPoints.md && width.value < BreakPoints.lg) return "lg";
+    return "xl";
   };
 
-  onMounted(() => window.addEventListener("resize", onWidthChange));
-  onUnmounted(() => window.removeEventListener("resize", onWidthChange));
+  function handler() {
+    width.value = window.innerWidth;
+    type.value = getType();
+    isMobile.value = width.value < BreakPoints.md;
+  }
 
-  const type = computed(() => {
-    if (windowWidth.value < BreakPoints.xs) return "xs";
-    if (windowWidth.value >= BreakPoints.xs && windowWidth.value < BreakPoints.sm) return "sm";
-    if (windowWidth.value >= BreakPoints.sm && windowWidth.value < BreakPoints.md) return "md";
-    if (windowWidth.value >= BreakPoints.md && windowWidth.value < BreakPoints.lg) return "lg";
-    return "xl";
+  onMounted(() => {
+    window.addEventListener("resize", handler);
+    handler();
   });
-
-  const width = computed(() => windowWidth.value);
-
-  const isMobile = computed(() => width.value < BreakPoints.md);
+  onUnmounted(() => window.removeEventListener("resize", handler));
 
   return { width, type, isMobile };
 };
