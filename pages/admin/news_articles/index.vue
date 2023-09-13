@@ -49,6 +49,7 @@
       :required-for-draft="['name']"
       :showPreviewButton="true"
       @showPreview="handleShowPreview"
+      @created="handleCreated"
     />
 
     <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
@@ -195,6 +196,10 @@ const handlePreviewClose = () => {
 
 const goToFacility = (id: string) => {
   router.push({ path: `/public/care_facilities/${id}` });
+};
+
+const handleCreated = (createdItemId: string) => {
+  itemId.value = createdItemId;
 };
 
 onMounted(async () => {
