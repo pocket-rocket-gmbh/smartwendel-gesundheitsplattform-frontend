@@ -36,7 +36,7 @@ export function useUser() {
     }
   };
 
-  const statusOnHealthScope = (): Boolean => {
+  const statusOnHealthScope = (): boolean => {
     if (currentUser) {
       return currentUser.is_active_on_health_scope
      

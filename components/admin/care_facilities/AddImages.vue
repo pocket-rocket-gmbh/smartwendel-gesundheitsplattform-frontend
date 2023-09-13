@@ -38,7 +38,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-else class="my-1">
+    <v-row v-else-if="item?.offline_images.length" class="my-1">
       <v-col md="1" class="d-flex align-center justify-center">
         <span>Bereits ausgewählt:</span>
       </v-col>

@@ -191,7 +191,7 @@
               @set-tags="setTagIds"
             />
           </div>
-          <v-divider class="my-10"></v-divider>
+          <v-divider class="my-5"></v-divider>
         </v-col>
       </v-row>
     </v-card-text>

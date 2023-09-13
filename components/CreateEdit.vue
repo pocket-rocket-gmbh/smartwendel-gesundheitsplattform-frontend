@@ -1,5 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" :width="size" transition="dialog-bottom-transition" @click:outside="emitClose()" persistent v-if="!editUserProfile">
+  <v-dialog
+    v-model="dialog"
+    :width="size"
+    transition="dialog-bottom-transition"
+    @click:outside="emitClose()"
+    persistent
+    v-if="!editUserProfile"
+  >
+    <Loading v-if="loadingItem" />
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <SaveConfirmation
         :item="item"
@@ -9,6 +17,7 @@
         @accepted="confirmSaveDialogOpen = false"
         @close="handleConfirmClose()"
         @update="handleUpdateItem"
+        v-if="useUser().statusOnHealthScope()"
       />
 
       <v-form ref="form">
@@ -22,7 +31,11 @@
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
-          <div v-if="!statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded">
+          <div
+            v-if="
+              !statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded
+            "
+          >
             <v-btn
               v-if="!recentlyCreated"
               color="blue darken-1"
@@ -66,7 +79,14 @@ import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const statusLoadingFilter = useStatusLoadingFilter();
 
-const emit = defineEmits(["close", "hasChanged", "save", "showPreview", "updateItems", "created"]);
+const emit = defineEmits([
+  "close",
+  "hasChanged",
+  "save",
+  "showPreview",
+  "updateItems",
+  "created",
+]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -209,7 +229,10 @@ const create = async (saveAsDraft = false) => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.createItem(item.value, `${saveAsDraft ? "Entwurf" : "Erfolgreich"} erstellt`);
+  const result = await createUpdateApi.createItem(
+    item.value,
+    `${saveAsDraft ? "Entwurf" : "Erfolgreich"} erstellt`
+  );
   if (!saveAsDraft) {
     confirmSaveDialogOpen.value = true;
   }
@@ -327,33 +350,50 @@ const emitClose = () => {
 
 defineExpose({ getItem });
 
-// watch(
-//   [
-//     () => item.value?.phone,
-//     () => item.value?.email,
-//     () => item.value?.street,
-//     () => item.value?.additional_address_info,
-//     () => item.value?.community_id,
-//     () => item.value?.zip,
-//     () => item.value?.town,
-//   ],
-//   (
-//     [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
-//     [oldPhone, oldEmail, oldStreet, oldAdditionalAddressInfo, oldCommunityId, oldZip, oldTown]
-//   ) => {
-//     if (
-//       (oldPhone && newPhone !== oldPhone) ||
-//       (oldEmail && newEmail !== oldEmail) ||
-//       (oldStreet && newStreet !== oldStreet) ||
-//       (oldAdditionalAddressInfo && newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
-//       (oldCommunityId && newCommunityId !== oldCommunityId) ||
-//       (oldZip && newZip !== oldZip) ||
-//       (oldTown && newTown !== oldTown)
-//     ) {
-//       checkCachedItem();
-//     }
-//   }
-// );
+watch(
+  [
+    () => item.value?.phone,
+    () => item.value?.email,
+    () => item.value?.street,
+    () => item.value?.additional_address_info,
+    () => item.value?.community_id,
+    () => item.value?.zip,
+    () => item.value?.town,
+  ],
+  (
+    [
+      newPhone,
+      newEmail,
+      newStreet,
+      newAdditionalAddressInfo,
+      newCommunityId,
+      newZip,
+      newTown,
+    ],
+    [
+      oldPhone,
+      oldEmail,
+      oldStreet,
+      oldAdditionalAddressInfo,
+      oldCommunityId,
+      oldZip,
+      oldTown,
+    ]
+  ) => {
+    if (
+      (oldPhone && newPhone !== oldPhone) ||
+      (oldEmail && newEmail !== oldEmail) ||
+      (oldStreet && newStreet !== oldStreet) ||
+      (oldAdditionalAddressInfo &&
+        newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
+      (oldCommunityId && newCommunityId !== oldCommunityId) ||
+      (oldZip && newZip !== oldZip) ||
+      (oldTown && newTown !== oldTown)
+    ) {
+      emit("hasChanged", true);
+    }
+  }
+);
 onMounted(async () => {
   if (props.itemId) {
     await getItem();
@@ -370,7 +410,9 @@ onMounted(async () => {
   watch(
     () => item.value,
     () => {
-      if (!areObjectsEqual(deepToRaw(item.value), initialItem, ["is_active", "updated_at"])) {
+      if (
+        !areObjectsEqual(deepToRaw(item.value), initialItem, ["is_active", "updated_at"])
+      ) {
         itemHastChanged.value = true;
       }
       form.value?.validate();
