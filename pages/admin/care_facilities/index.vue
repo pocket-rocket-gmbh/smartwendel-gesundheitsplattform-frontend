@@ -2,19 +2,10 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
     <h2 v-else>Einrichtungen</h2>
-    <v-alert
-      v-if="!setupFinished && !loading"
-      type="info"
-      density="compact"
-      closable
-      class="my-2"
-    >
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="my-2">
       Bitte vervollständige die Daten zu deiner Einrichtung
     </v-alert>
-    <ChangePassword
-      :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
-      @changed="handleSaved()"
-    />
+    <ChangePassword :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at" @changed="handleSaved()" />
     <div>
       <div>
         <v-row align="center">
@@ -28,20 +19,12 @@
                 createEditDialogOpen = true;
                 itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
               "
-              :class="{ orange: newFacilityFromCache }"
             >
               Neue Einrichtung
-              <span v-if="newFacilityFromCache"> - weiter</span>
             </v-btn>
           </v-col>
           <v-col v-if="user.isAdmin()">
-            <v-text-field
-              width="50"
-              prepend-icon="mdi-magnify"
-              v-model="facilitySearchTerm"
-              hide-details="auto"
-              label="Einrichtungen durchsuchen"
-            />
+            <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Einrichtungen durchsuchen" />
           </v-col>
         </v-row>
       </div>
@@ -51,7 +34,6 @@
         :fields="fields"
         :search-query="facilitySearchTerm"
         :search-columns="facilitySearchColums"
-        :cache-prefix="'facilities'"
         endpoint="care_facilities?kind=facility"
         @openCreateEditDialog="openCreateEditDialog"
         @openDeleteDialog="openDeleteDialog"
@@ -60,6 +42,7 @@
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
         :disable-delete="true"
+        :draft-required="draftRequiredFields"
       />
 
       <div
@@ -67,9 +50,7 @@
         v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope()"
       >
         <v-icon>mdi-arrow-up</v-icon>
-        <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
-        >
+        <span>Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span>
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
@@ -90,25 +71,15 @@
         @close="handleCreateEditClose"
         endpoint="care_facilities"
         concept-name="Einrichtung"
-        :enableCache="true"
-        :cacheKey="cacheKey"
+        :enableDraft="true"
+        :required-for-draft="['name']"
         :showPreviewButton="true"
         @showPreview="handleShowPreview"
         @update-items="handleUpdateItems"
       />
 
-      <AdminPreviewDummyPage
-        v-if="previewItem"
-        :item="previewItem"
-        @close="handlePreviewClose"
-      />
-      <DeleteItem
-        v-if="confirmDeleteDialogOpen"
-        @close="handleDeleteDialogClose"
-        :item-id="itemId"
-        endpoint="care_facilities"
-        term="diese Einrichtung"
-      />
+      <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
+      <DeleteItem v-if="confirmDeleteDialogOpen" @close="handleDeleteDialogClose" :item-id="itemId" endpoint="care_facilities" term="diese Einrichtung" />
     </div>
   </div>
 </template>
@@ -116,7 +87,7 @@
 <script lang="ts" setup>
 import { isCompleteFacility } from "~/utils/facility.utils";
 import { Facility } from "~/store/searchFilter";
-import { set } from "date-fns";
+import { RequiredField } from "types/facilities";
 
 definePageMeta({
   layout: "admin",
@@ -157,8 +128,7 @@ const fields = [
       });
       return res;
     },
-    disabledTooltip:
-      "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
+    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "isCompleteFacility" },
@@ -187,6 +157,39 @@ const fields = [
     },
   },
 ];
+
+const draftRequiredFields: RequiredField[] = [
+  {
+    props: ["name"],
+  },
+  {
+    props: ["logo_url", "logo"],
+    justSome: true,
+  },
+  {
+    props: ["image_url", "file"],
+    justSome: true,
+  },
+  {
+    props: ["description"],
+    checkHandler: (description?: string) => !description || description === "<p><br></p>",
+  },
+  {
+    props: ["tag_category_ids"],
+    specialFilter: "filter_facility",
+  },
+  {
+    props: ["tag_category_ids"],
+    specialFilter: "filter_service",
+  },
+  {
+    props: ["street", "zip", "community_id", "town", "email", "phone"],
+  },
+  {
+    props: ["name_responsible_person"],
+  },
+];
+
 const dataTableRef = ref();
 const itemsExist = ref(false);
 const setupFinished = ref(false);
@@ -247,16 +250,6 @@ const previewItem = ref<Facility>();
 const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
 
-const newFacilityFromCache = ref(false);
-
-const cacheKey = computed(() => {
-  if (!itemId.value) {
-    return `facilities_new`;
-  }
-
-  return `facilities_${itemId.value.replaceAll("-", "_")}`;
-});
-
 const itemStatus = ref(null);
 
 const handleItemUpdated = async (item: any) => {
@@ -290,7 +283,6 @@ const handleCreateEditClose = async () => {
   await dataTableRef.value?.resetActiveItems();
   await dataTableRef.value?.getItems();
   setupFinished.value = await useUser().setupFinished();
-  newFacilityFromCache.value = !!localStorage.getItem("facilities_new");
   useNuxtApp().$bus.$emit("facilityUpdate");
 };
 
@@ -327,14 +319,12 @@ const handlePreviewClose = () => {
 
 const handleUpdateItems = () => {
   dataTableRef.value?.getItems();
-}
+};
 
 onMounted(async () => {
   loading.value = true;
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
-
-  newFacilityFromCache.value = !!localStorage.getItem("facilities_new");
 });
 </script>
 <style lang="sass">

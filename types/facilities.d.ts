@@ -30,3 +30,10 @@ export type CreateEditStep = {
 export type CreateEditSteps<T extends string> = {
   [key in T]: CreateEditStep;
 };
+
+export type RequiredField = {
+  props: string[];
+  justSome?: boolean;
+  specialFilter?: FilterType;
+  checkHandler?: (item: any) => boolean;
+};
