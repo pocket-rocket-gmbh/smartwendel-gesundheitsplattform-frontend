@@ -117,13 +117,7 @@
             </div>
           </span>
           <span v-else-if="field.type === 'beinEdited'">
-            <span v-if="isDraft(item)"><i>wird bearbeitet</i></span>
-          </span>
-          <span v-else-if="field.type === 'isCompleteFacility'">
-            <span class="text-warning" v-if="isCompleteFacility(item)">
-              <v-icon class="mr-2">mdi-alert</v-icon>
-              <i>Nicht alle Pflichtfelder ausgefüllt</i>
-            </span>
+            <span v-if="isDraft(item)"><i>in bearbeitung</i></span>
           </span>
           <span v-else-if="field.type === 'button' && field.action">
             <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye'">
