@@ -45,7 +45,10 @@
         :draft-required="draftRequiredFields"
       />
 
-      <div class="px-5" v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin()">
+      <div
+        class="px-5"
+        v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope()"
+      >
         <v-icon>mdi-arrow-up</v-icon>
         <span>Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span>
       </div>

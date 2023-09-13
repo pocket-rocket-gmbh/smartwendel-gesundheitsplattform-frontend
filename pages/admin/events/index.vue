@@ -72,7 +72,7 @@
       "
       :item-id="itemId"
       endpoint="care_facilities"
-      term="diesen Kurs oder Veranstaltung"
+      term="diese Veranstaltung"
     />
   </div>
 </template>
@@ -113,7 +113,12 @@ const fields = [
     disabledTooltip: "Bitte alle Pflichtfelder zu deiner Veranstaltung ausfüllen, danach kannst du deine Veranstaltung über den Button Online schalten",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
-  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
+  {
+    prop: "created_at",
+    text: "Erstellt am",
+    value: "created_at",
+    type: "datetime",
+  },
   {
     prop: "user.firstname",
     text: "Erstellt von",

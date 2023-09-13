@@ -1,9 +1,6 @@
 <template>
   <v-app>
     <template v-if="loading"></template>
-    <ClientOnly v-else-if="!authenticated">
-      <PublicPasswordProtection  />
-    </ClientOnly>
     <template v-else>
       <ClientOnly>
         <ClientSnackbar />
@@ -19,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "@/store/auth";
+// import { useAuthStore } from "@/store/auth";
 import { useFilterStore } from "~/store/searchFilter";
 import { useAppStore } from "~/store/app";
 import { useTooltipsStore } from "~~/store/tooltips";
@@ -57,25 +54,25 @@ const handleTouchEnd = (e: TouchEvent) => {
 
 onMounted(async () => {
   loading.value = true;
-  const auth = localStorage.getItem("smartwendel_gesundheitsplattform_authenticated");
+  // const auth = localStorage.getItem("smartwendel_gesundheitsplattform_authenticated");
   getTooltips();
 
-  if (auth && auth === "true") {
-    useAuthStore().$patch({
-      authenticated: true,
-    });
-  }
+  // if (auth && auth === "true") {
+  //   useAuthStore().$patch({
+  //     authenticated: true,
+  //   });
+  // }
 
   document.addEventListener("wheel", handleScroll);
   document.addEventListener("touchstart", handleTouchStart);
   document.addEventListener("touchmove", handleTouchMove);
   document.addEventListener("touchend", handleTouchEnd);
 
-  if (auth && auth === "true") {
-    useAuthStore().$patch({
-      authenticated: true,
-    });
-  }
+  // if (auth && auth === "true") {
+  //   useAuthStore().$patch({
+  //     authenticated: true,
+  //   });
+  // }
 
   if (!tooltipsStore.tooltips) {
     await api.retrieveCollection();
@@ -92,9 +89,9 @@ onUnmounted(() => {
   document.removeEventListener("touchend", handleTouchEnd);
 });
 
-const authenticated = computed(() => {
-  return useAuthStore().authenticated;
-});
+// const authenticated = computed(() => {
+//   return useAuthStore().authenticated;
+// });
 </script>
 
 <style lang="scss">
