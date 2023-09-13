@@ -44,6 +44,11 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions v-if="!finished">
+        <v-row no-gutters v-if="!item.id && !facilityId">
+          <v-col class="d-flex justify-center">
+            <LoadingSpinner />
+          </v-col>
+        </v-row>
         <v-row
           no-gutters
           v-if="user.is_active_on_health_scope && (item.id || facilityId)"
@@ -79,11 +84,6 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row no-gutters v-else>
-          <v-col class="d-flex justify-center">
-            <LoadingSpinner />
-          </v-col>
-        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -113,13 +113,6 @@ export default defineComponent({
 
     const emitCloser = async () => {
       emit("close");
-    };
-
-    const translations: { [key: string]: string } = {
-      facility: "Einrichtung",
-      course: "Kurs",
-      event: "Veranstaltung",
-      news: "Beitrag",
     };
 
     const itemKindStep1 = computed(() => {

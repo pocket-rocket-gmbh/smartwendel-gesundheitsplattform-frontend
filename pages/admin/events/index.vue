@@ -113,6 +113,7 @@ const fields = [
     disabledTooltip: "Bitte alle Pflichtfelder zu deiner Veranstaltung ausfüllen, danach kannst du deine Veranstaltung über den Button Online schalten",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
+  { value: "", type: "beinEdited" },
   {
     prop: "created_at",
     text: "Erstellt am",
