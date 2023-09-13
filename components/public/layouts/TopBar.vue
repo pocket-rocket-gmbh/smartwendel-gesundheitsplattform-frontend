@@ -124,7 +124,7 @@
         <template v-if="!loading">
           <v-divider></v-divider>
           <a href="/public/search/facilities" class="is-clickable" @click.prevent="goTo('/public/search/facilities')"> Anbieter </a>
-          <a href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')"> Kurse </a>
+          <a href="/public/search/courses" class="is-clickable" @click.prevent="goTo('/public/search/courses')"> Kurse </a>
           <a href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </a>
         </template>
       </div>
