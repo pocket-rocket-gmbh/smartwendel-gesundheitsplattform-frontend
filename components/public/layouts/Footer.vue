@@ -1,13 +1,13 @@
 <template>
   <ClientOnly>
-    <div class="wrapper has-bg-grey pt-5">
-      <div class="has-bg-grey py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
-        <v-row class="align-center register-hint">
-          <v-col md="8" class="flex-column justify-start text-h3 is-dark-grey font-weight-bold">
+    <div class="wrapper pt-5">
+      <div class="py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
+        <v-row class="has-bg-grey register-hint">
+          <v-col md="8" class="flex-column justify-start text-h4 has-bg-grey is-dark-grey font-weight-bold">
             <div>Dein Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
-          <v-col class="d-flex justify-center register-button">
+          <v-col class="d-flex justify-start register-button align-end ml-15">
             <v-btn variant="flat" color="grey" rounded="pill" size="x-large" href="/register">
               <span>Jetzt registrieren</span>
             </v-btn>
@@ -16,7 +16,7 @@
       </div>
       <v-divider v-if="!useUser().loggedIn() && currentRoute !== '/register'" class="py-5" thickness="2"></v-divider>
       <div class="footer-content">
-        <v-row class="footer-content-row align-center">
+        <v-row class="footer-content-row pa-0 ma-0 align-center">
           <v-col md="8">
             <v-row class="align-center bg-white">
               <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
@@ -58,28 +58,29 @@
             </v-row>
             <v-row>
               <v-col>
-                <div class="disclaimer">
+                <div class="disclaimer mt-5">
                   Zur besseren Lesbarkeit wird auf der Gesundheits- und Pflegeplattform das generische Maskulinum verwendet. Die auf dieser Webseite verwendeten Personenbezeichnungen sprechen – sofern nicht anders kenntlich gemacht – alle Geschlechter an. Weibliche und anderweitige Geschlechteridentitäten werden dabei ausdrücklich mit berücksichtigt.
                 </div>
               </v-col>
             </v-row>
           </v-col>
           <v-col class="links d-flex">
-            <h2 class="mb-5">Landkreis Sankt Wendel</h2>
+            <div class="ml-15">
+              <h2>Landkreis Sankt Wendel</h2>
             <div class="footer-links">
               <p class="is-clickable">
-                <span>
-                  <a :href="`mailto:smartcity@lkwnd.de?subject=kontakt`">Kontakt</a>
+                <span >
+                  <a class="is-dark-grey" :href="`mailto:smartcity@lkwnd.de?subject=kontakt`">Kontakt</a>
                 </span>
               </p>
-              <p class="has-text-white is-clickable">
-                <router-link to="/rules_of_conduct">Nutzungsbedingungen</router-link>
+              <p class="is-clickable">
+                <router-link class="is-dark-grey" to="/rules_of_conduct">Nutzungsbedingungen</router-link>
               </p>
               <p class="has-text-white is-clickable">
-                <router-link to="/privacy_policy">Datenschutzerklärung</router-link>
+                <router-link class="is-dark-grey" to="/privacy_policy">Datenschutzerklärung</router-link>
               </p>
               <p class="has-text-white is-clickable">
-                <router-link to="/imprint">Impressum</router-link>
+                <router-link class="is-dark-grey" to="/imprint">Impressum</router-link>
               </p>
             </div>
             <div class="socials mt-5">
@@ -110,6 +111,8 @@
                 <v-icon>mdi-linkedin</v-icon>
               </v-btn>
             </div>
+            </div>
+
           </v-col>
         </v-row>
       </div>
@@ -163,8 +166,9 @@ const currentRoute = computed(() => {
   line-height: 1.8rem
 
 .wrapper
-  margin-top: 5rem
-  padding: 0 5rem
+  background-color: $light-grey
+  margin: 5rem 0 0rem 0
+  padding: 0 5rem 2rem
   @include md
     padding: 0 1rem
 

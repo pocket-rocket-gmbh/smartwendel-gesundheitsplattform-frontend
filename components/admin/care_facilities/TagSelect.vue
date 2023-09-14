@@ -23,7 +23,7 @@
       </div>
 
       <div v-if="!expand" class="mt-3">
-        <span>Bereits ausgewählt:</span>
+        <span v-if="preSetTags.length">Bereits ausgewählt:</span>
         <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
           {{ tag.name }}
         </v-chip>
@@ -44,7 +44,7 @@
           individuell zu beschreiben.
         </div>
         <div v-if="preSetTags?.length" class="tags my-6">
-          <span>Bereits ausgewählt:</span>
+          <span class="font-weight-bold">Bereits ausgewählt:</span>
           <v-chip
             v-for="tag in preSetTags"
             closable
@@ -54,11 +54,11 @@
             {{ tag.name }}
           </v-chip>
         </div>
-        <div class="content-title mt-5 d-flex align-center">
+<!--         <div class="content-title mt-5 d-flex align-center">
           <v-icon>mdi-tag-outline</v-icon>
           <div>
             <div>
-              <b>Schlagwort eingeben</b>
+              <spa>Schlagwort eingeben</spa>
             </div>
           </div>
           <v-tooltip location="top" width="300px">
@@ -91,7 +91,7 @@
             </span>
           </v-tooltip>
 
-        </div>
+        </div> -->
        
         <div class="inputs my-5">
           <!-- <v-combobox
@@ -115,6 +115,7 @@
             :item-value="'id'"
             hide-details="auto"
             v-on:keyup.enter="handleAddTag"
+            menu-icon=""
           >
             <template v-slot:no-data>
               <v-list-item>
@@ -298,4 +299,5 @@ onMounted(async () => {
     border-radius: 0.25rem;
   }
 }
+
 </style>

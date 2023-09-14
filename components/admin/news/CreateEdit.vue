@@ -43,15 +43,6 @@
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
-            <v-text-field
-              class="text-field"
-              v-if="slotProps.item.kind !== 'news'"
-              v-model="slotProps.item.name"
-              hide-details="auto"
-              label="Name"
-              :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
-            />
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="leader">
@@ -62,7 +53,7 @@
             </div>
             <v-text-field
               class="text-field"
-              v-model="slotProps.item.name_instructor"
+              v-model="slotProps.item.name_responsible_person"
               hide-details="auto"
               label="Vor und Nachname des Autors"
               :rules="[rules.required]"
@@ -224,7 +215,7 @@ const steps: CreateEditSteps<StepNames> = {
       "2.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
     tooltip: "",
     description: "Name der Autorin/des Autors *",
-    props: ["name_instructor"],
+    props: ["name_responsible_person"],
   },
   photo: {
     label:
@@ -516,6 +507,7 @@ const goToField = (n: string) => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
+  line-height: 1.2!important;
 }
 
 .ql-clean {

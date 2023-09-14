@@ -220,12 +220,6 @@
                     input-class-name="dp-custom-input"
                     :clearable="false"
                   />
-                  <span
-                    v-if="!slotProps.item.event_dates?.length"
-                    class="required"
-                  >
-                    * Erforderlich
-                  </span>
                 </v-col>
                 <v-col md="7" v-if="slotProps.item.event_dates?.length">
                   <v-table density="compact" fixed-header height="400px">
@@ -872,17 +866,14 @@ onMounted(async () => {
   display: none;
 }
 
-.dp__action_buttons {
-  justify-content: center;
-  margin-right: auto;
-  padding: 10px;
-}
-
 .dp__action_button {
-  padding-left: 10px;
+  margin-top: 30px;
   height: 50px;
-  padding-right: 10px;
+  width: 200px!important;
   background-color: #8ab61d;
+  justify-content: center;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .dp__action_button:hover {
@@ -890,11 +881,12 @@ onMounted(async () => {
 }
 
 .dp__instance_calendar .dp__button {
-  background-color: #8ab61d;
-  color: white;
+  background-color: #d3d3d3;
+  color: #8ab61d;
   height: 3rem;
   font-weight: bold;
 }
+
 .dp__button::after {
   content: "Uhrzeit auswählen";
   margin-left: 0.25rem;
@@ -951,6 +943,7 @@ onMounted(async () => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
+  line-height: 1.2!important;
 }
 
 .ql-clean {

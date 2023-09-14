@@ -131,6 +131,15 @@ const fields = [
   },
   {
     text: "",
+    value: "mdi-check-decagram",
+    type: "button",
+    tooltip: "Kurse wurde verifiziert",
+    action: (item: any) => {
+      goToFacility(item.id);
+    },
+  },
+  {
+    text: "",
     value: "mdi-eye",
     type: "button",
     tooltip: "Einrichtung anzehen",

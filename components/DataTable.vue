@@ -161,14 +161,17 @@
             </div>
           </span>
           <span v-else-if="field.type === 'beinEdited'">
-            <span v-if="isDraft(item)"><i>in bearbeitung</i></span>
+            <span v-if="isDraft(item)"><i>in Bearbeitung</i></span>
           </span>
           <span v-else-if="field.type === 'button' && field.action">
-            <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye'">
+            <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'">
               {{ pathInto(item, field.value) }}
             </button>
             <span v-if="field.value === 'mdi-eye' && item.is_active && useUser().statusOnHealthScope()">
               <v-icon class="is-clickable" @click="field.action(item)">mdi-eye</v-icon>
+            </span>
+            <span v-if="field.value === 'mdi-check-decagram' && item.billable_through_health_insurance_approved && useUser().statusOnHealthScope()">
+              <v-icon class="is-clickable" color="primary" @click="field.action(item)">mdi-check-decagram</v-icon>
             </span>
             <span v-else>
               <v-icon></v-icon>

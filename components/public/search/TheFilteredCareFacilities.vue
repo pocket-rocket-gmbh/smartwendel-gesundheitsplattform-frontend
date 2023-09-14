@@ -18,7 +18,7 @@
           <v-row class="item-row">
             <v-col md="8">
               <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
-                <a :href="`/public/care_facilities/${careFacility.id}`">{{ careFacility.name }}</a>
+                <a class="is-dark-grey" :href="`/public/care_facilities/${careFacility.id}`">{{ careFacility.name }}</a>
               </div>
               <v-row>
                 <v-col>

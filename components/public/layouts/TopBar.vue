@@ -122,7 +122,6 @@
           </div>
         </div>
         <template v-if="!loading" class="main">
-          
           <span href="/public/search/facilities" class="is-clickable" @click.prevent="goTo('/public/search/facilities')"> Anbieter </span>
           <span href="/public/search/courses" class="is-clickable" @click.prevent="goTo('/public/search/courses')"> Kurse </span>
           <span href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </span>
@@ -143,7 +142,6 @@ const categories = ref([]);
 const subCategories = ref<any>({});
 const sub_categoryId = ref({});
 const drawer = ref(false);
-const menu = ref(false);
 const appStore = useAppStore();
 const route = useRoute();
 const loading = ref(true);

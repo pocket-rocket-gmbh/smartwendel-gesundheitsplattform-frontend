@@ -1,12 +1,30 @@
 <template>
   <v-container class="facility-wrapper limited offset" v-if="!loading">
     <v-btn prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
-    <PublicCareFacilitiesImages :care-facility="careFacility" />
-    <v-row class="row">
+    <v-row>
+      <v-col>
+        <PublicCareFacilitiesImages :care-facility="careFacility" />
+        <v-row>
+          <v-col>
+            <PublicCareFacilitiesMain :care-facility="careFacility" v-if="careFacility.sanitized_images.length === 0 "/>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col  class="mt-5" md="4" v-if="careFacility?.kind !== 'news' && careFacility.sanitized_images.length === 0 ">
+        <PublicCareFacilitiesRight :care-facility="careFacility" />
+        <div class="mt-5" v-if="careFacility?.kind === 'course', 'event'">
+          <PublicCareFacilitiesDates :care-facility="careFacility" />
+        </div>
+        <div class="mt-5">
+          <PublicCareFacilitiesDocuments :care-facility="careFacility" />
+        </div>
+      </v-col>
+    </v-row>
+    <v-row class="row" v-if="careFacility.sanitized_images.length > 0 ">
       <v-col class="column">
         <PublicCareFacilitiesMain :care-facility="careFacility" />
       </v-col>
-      <v-col md="4" v-if="careFacility?.kind !== 'news'">
+      <v-col md="4" v-if="careFacility?.kind !== 'news' && careFacility.sanitized_images.length > 0 ">
         <PublicCareFacilitiesRight :care-facility="careFacility" />
         <div class="mt-5" v-if="careFacility?.kind === 'course', 'event'">
           <PublicCareFacilitiesDates :care-facility="careFacility" />

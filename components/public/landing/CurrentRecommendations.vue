@@ -1,10 +1,16 @@
 <template>
   <div class="wrapper bg-gradient">
-    <div class="d-flex align-center justify-center is-uppercase">
-      <h2 class="text-white">Wir zeigen dir, was du für deinen Gesundheitszustand und dein Wohlbefinden tun kannst.</h2>
+    <div class="d-flex align-center justify-center">
+      <h2 class="text-white text-h4">
+        Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun
+        kannst.
+      </h2>
     </div>
-    <div class="d-flex align-center justify-center text-white is-uppercase my-5">
-      <h3>Bitte Bereich auswählen:</h3>
+    <div class="d-flex align-center justify-center text-white my-3">
+      <h3>
+        Wähle einfach einen Themenbereich aus und finde gesundheitsförderliche und
+        präventive Angebote für dich
+      </h3>
     </div>
     <div class="recommendations-wrapper">
       <div
@@ -12,12 +18,12 @@
         v-for="(item, index) in items"
         :key="index"
       >
-        <img class="is-clickable icons" :src="item.content.image" width="120" />
-        <div class="font-weight-bold">
-          <a :href="item.content.link" target="_blank" class="is-white is-clickable">
+        <a :href="item.content.link" class="is-white is-clickable">
+          <img class="is-clickable icons" :src="item.content.image" width="120" />
+          <div class="font-weight-bold">
             {{ item.content.heading }}
-          </a>
-        </div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -34,35 +40,36 @@ const items = [
     content: {
       heading: "Sport und Bewegung",
       image: image1,
-      link: "www.google.com",
+      link:
+        "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=9b3ed77f-d337-4064-a935-a9e41d6d99a5",
     },
   },
   {
     content: {
       heading: "Ernährung",
       image: image2,
-      link: "",
+      link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=c88b0ce6-e51d-435f-8689-ed4bb193fab1",
     },
   },
   {
     content: {
       heading: "Mentale Gesundheit",
       image: image3,
-      link: "",
+      link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=0c2cf2d5-2834-45d6-a912-957a1f8e5153",
     },
   },
   {
     content: {
       heading: "Gesundheitskurse",
       image: image4,
-      link: "",
+      link: "/public/search/courses",
     },
   },
   {
     content: {
       heading: "Freizeitgestaltung",
       image: image5,
-      link: "",
+      link: "https://www.sankt-wendeler-land.de/aktiv",
     },
   },
 ];
@@ -85,7 +92,7 @@ const items = [
 }
 
 .wrapper {
-  padding: 5rem;
+  padding: 2rem 5rem;
 
   @include md {
     padding: 1rem;
