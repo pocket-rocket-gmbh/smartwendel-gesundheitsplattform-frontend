@@ -31,7 +31,7 @@
                 </v-list>
               </div>
             </div>
-            <div v-if="!loading">
+            <div v-if="!loading" class="main">
               <span href="/public/search/facilities" class="is-clickable mx-5" @click.prevent="goTo('/public/search/facilities')"> Anbieter </span>
               <span href="/public/search/courses" class="is-clickable mx-5" @click.prevent="goTo('/public/search/courses')"> Kurse </span>
               <span href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </span>
