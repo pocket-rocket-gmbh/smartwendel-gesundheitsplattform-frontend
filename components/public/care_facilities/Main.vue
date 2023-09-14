@@ -60,9 +60,7 @@
           <span v-if="careFacility?.name_responsible_person">{{
             careFacility?.name_responsible_person
           }}</span>
-          <span v-else-if="careFacility?.name_instructor">{{
-            careFacility?.name_instructor
-          }}</span></i
+          </i
         >
       </div>
       <div

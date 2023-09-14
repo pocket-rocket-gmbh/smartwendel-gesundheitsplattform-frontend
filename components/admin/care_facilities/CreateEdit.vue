@@ -950,6 +950,7 @@ onMounted(async () => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
+  line-height: 1.2!important;
 }
 
 .ql-clean {

@@ -13,12 +13,12 @@
     <div class="my-5 justify-center align-center">
       <v-row>
         <v-col md="6" offset="5">
-          <v-btn class="mx-2" icon  @click="handleZoom(2)">
-            <v-icon>mdi-magnify-plus-outline</v-icon></v-btn
-          >
           <v-btn icon class="mx-2" @click="handleZoom(0.8)"
             ><v-icon>mdi-magnify-minus-outline</v-icon>
           </v-btn>
+          <v-btn class="mx-2" icon  @click="handleZoom(2)">
+            <v-icon>mdi-magnify-plus-outline</v-icon></v-btn
+          >
         </v-col>
       </v-row>
     </div>

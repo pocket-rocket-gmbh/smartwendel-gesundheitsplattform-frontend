@@ -5,19 +5,35 @@
         Pflege, Ärtze, <br />
         Krankenhäuser und co.
       </h2>
-      <p class="text-justify">Über diese Suchfunktion findest du sicher schnell die passende Einrichtung und den richtigen Ansprechpartner.</p>
+      <p class="text-justify">
+        Über diese Suchfunktion findest du sicher schnell die passende Einrichtung und den
+        richtigen Ansprechpartner.
+      </p>
       <p class="text-justify mt-5">
-        Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher findest du unter mehr als 1.000 gelisteten Anbieten die Leistung, nach der du suchst.
-        Informierest du über die Angebote oder nimmst direkt Kontakt auf und vereinbarst du persönliches Beratungsgespräch.
+        Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher findest du unter mehr als
+        1.000 gelisteten Anbieten die Leistung, nach der du suchst. Informierest du über
+        die Angebote oder nimmst direkt Kontakt auf und vereinbarst du persönliches
+        Beratungsgespräch.
       </p>
       <div class="button my-5">
-        <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToSearch()">
+        <v-btn
+          variant="flat"
+          color="primary"
+          rounded="pill"
+          size="large"
+          @click="goToSearch()"
+        >
           <span> Alle Einrichtungen </span>
         </v-btn>
       </div>
     </div>
     <div class="icons">
-      <div v-for="(item, index) in items" :key="index" class="d-flex is-clickable icon" @click="goToLink(item.content.link)">
+      <div
+        v-for="(item, index) in items"
+        :key="index"
+        class="d-flex is-clickable icon"
+        @click="goToLink(item.content.link)"
+      >
         <img class="image" :src="item.content.icon" />
         <div class="d-flex align-center">
           <div class="font-weight-bold d-flex align-center is-clickable">
@@ -29,12 +45,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import icon1 from "@/assets/images/categories/icon_doctor.svg";
-import icon2 from "@/assets/images/categories/icon_fitness.svg";
+
+import icon1 from "@/assets/images/categories/icon_fitness.svg";
+import icon2 from "@/assets/images/categories/icon_doctor.svg";
 import icon3 from "@/assets/images/categories/icon_clubs.svg";
-import icon4 from "@/assets/images/categories/icon_pharmacies.svg";
-import icon5 from "@/assets/images/categories/icon_caring.svg";
-import icon6 from "@/assets/images/categories/icon_house.svg";
+import icon4 from "@/assets/images/categories/icon_caring.svg";
+import icon5 from "@/assets/images/categories/icon_consulting.svg";
+import icon6 from "@/assets/images/categories/icon_medical.svg";
 
 const router = useRouter();
 
@@ -49,14 +66,14 @@ const goToLink = (item: string) => {
 const items = [
   {
     content: {
-      heading: "Ärztinnen & Ärzte",
+      heading: "Sportstätten",
       icon: icon1,
       link: "",
     },
   },
   {
     content: {
-      heading: "Fitnesseinrichtungen",
+      heading: "Ärztliche Versorgung",
       icon: icon2,
       link: "",
     },
@@ -70,21 +87,21 @@ const items = [
   },
   {
     content: {
-      heading: "Apotheken",
+      heading: "Plege",
       icon: icon4,
       link: "",
     },
   },
   {
     content: {
-      heading: "Pflegeeinrichtungen",
+      heading: "Beratung",
       icon: icon5,
       link: "",
     },
   },
   {
     content: {
-      heading: "Wohnheime",
+      heading: "Kliniken",
       icon: icon6,
       link: "",
     },
@@ -98,11 +115,12 @@ const items = [
 .categories-wrapper {
   margin: 5rem;
   display: flex;
-  gap: 1rem;
+  gap: 8rem;
 
   @include md {
     margin: 1rem;
     flex-direction: column;
+    gap: 1rem;
   }
 
   .text {
@@ -120,44 +138,37 @@ const items = [
   .icons {
     flex: 4;
     gap: 0.5rem;
-    // display: grid;
-    // grid-template-columns: 1fr 1fr 1fr;
-
-    // @include xl {
-    //   grid-template-columns: 1fr 1fr;
-    // }
-
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    &:nth-child(2n) {
-      flex-basis: 100%;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    gap: 0.5rem;
+    flex: calc(50% - 0.5rem);
+    box-sizing: border-box;
+
+    .image {
+      border-radius: 50%;
+      border: 1px solid black;
+      background-color: white;
+      transition: transform 0.5s ease-in-out;
+
+      &:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+      }
     }
+  }
 
+  @media (max-width: 768px) {
     .icon {
-      display: flex;
-      align-items: center;
-      font-size: 22px;
-      gap: 0.5rem;
-
-      .image {
-        border-radius: 50%;
-        border: 1px solid black;
-        background-color: white;
-        transition: transform 0.5s ease-in-out;
-
-        &:hover {
-          transform: scale(1.1);
-          cursor: pointer;
-        }
-      }
-
-      @include md {
-        flex-direction: column;
-        font-size: 18px;
-        flex: 1;
-        text-align: center;
-      }
+      flex: 100%;
+      padding-top: 30px;
+      text-align: center;
     }
   }
 }

@@ -24,15 +24,17 @@
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn möglich alle
-                Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen
-                versehen.</span
+                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn
+                möglich alle Felder sorgfältig aus. Pflichtfelder sind mit einem
+                Sternchen versehen.</span
               >
             </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="text-h5 font-weight-bold">{{
+                steps["name"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -40,7 +42,9 @@
               hide-details="auto"
               label="Name"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -64,7 +68,9 @@
               hide-details="auto"
               label="Name der Kursleitung"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -119,7 +125,9 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
+                    'empty-editor': isDescriptionEmpty(
+                      slotProps.item.description
+                    ),
                   }"
                 >
                   <QuillEditor
@@ -141,7 +149,9 @@
                     v-show="false"
                     class="hidden-text-field"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
+                      isDescriptionEmpty(slotProps.item.description)
+                        ? ''
+                        : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -228,7 +238,9 @@
           ></v-checkbox>
           <div class="field" id="date">
             <div class="my-2">
-              <span class="text-h5 mr-2 font-weight-bold">{{ steps["date"].label }}</span>
+              <span class="text-h5 mr-2 font-weight-bold">{{
+                steps["date"].label
+              }}</span>
             </div>
             <div class="mb-15">
               <v-row>
@@ -251,11 +263,10 @@
                     selectText="Hinzufügen"
                     input-class-name="dp-custom-input"
                     :clearable="false"
-                    :update:model-value="handleEventDatesChanged(slotProps.item)"
+                    :update:model-value="
+                      handleEventDatesChanged(slotProps.item)
+                    "
                   />
-                  <span v-if="!slotProps.item.event_dates?.length" class="required">
-                    * Erforderlich
-                  </span>
                 </v-col>
                 <v-col md="7" v-if="slotProps.item.event_dates?.length">
                   <v-table density="compact" fixed-header height="400px">
@@ -288,7 +299,9 @@
                           <v-btn
                             icon="mdi-delete"
                             variant="text"
-                            @click="deleteDate(index, slotProps.item.event_dates)"
+                            @click="
+                              deleteDate(index, slotProps.item.event_dates)
+                            "
                           ></v-btn>
                         </td>
                       </tr>
@@ -347,16 +360,17 @@
                 </span>
                 <v-checkbox
                   v-if="
-                    slotProps.item.billable_through_health_insurance &&
                     useUser().isAdmin()
                   "
-                  :model-value="slotProps.item.billable_through_health_insurance_approved"
+                  :model-value="
+                    slotProps.item.billable_through_health_insurance_approved
+                  "
                   hide-details
                   density="compact"
                   label="Bitte prüfe, ob das Zertifikat gültig ist. Wenn ja, bestätige es hier."
                   @click="
-                    slotProps.item.billable_through_health_insurance_approved = !slotProps
-                      .item.billable_through_health_insurance_approved
+                    slotProps.item.billable_through_health_insurance_approved =
+                      !slotProps.item.billable_through_health_insurance_approved
                   "
                 />
               </div>
@@ -375,7 +389,9 @@
               v-model="slotProps.item.website"
               hide-details="auto"
               label="Link eintragen (z.B. www.meine-webseite.de)"
-              :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('link', slotProps.errors)
+              "
               :rules="[rules.isUrl]"
             />
           </div>
@@ -399,7 +415,9 @@
           <v-divider class="my-10"></v-divider>
           <div id="address">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["address"].label }}</span>
+              <span class="text-h5 font-weight-bold">{{
+                steps["address"].label
+              }}</span>
               <v-checkbox
                 hide-details
                 density="compact"
@@ -450,7 +468,9 @@
                   :type="'number'"
                   disabled
                   :rules="[rules.required, rules.zip]"
-                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                  :error-messages="
+                    useErrors().checkAndMapErrors('zip', slotProps.errors)
+                  "
                 />
                 <v-select
                   :disabled="!slotProps.item.zip"
@@ -507,7 +527,9 @@
                   label="PLZ"
                   :type="'number'"
                   disabled
-                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                  :error-messages="
+                    useErrors().checkAndMapErrors('zip', slotProps.errors)
+                  "
                 />
                 <v-select
                   hide-details="auto"
@@ -535,7 +557,9 @@
               hide-details="auto"
               label="Vor- und Nachname"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
           <v-divider class="my-5"></v-divider>
@@ -550,7 +574,11 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
 import { FilterType } from "~/store/searchFilter";
-import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import {
+  CreateEditFacility,
+  CreateEditStep,
+  CreateEditSteps,
+} from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
 import { set } from "date-fns";
@@ -570,7 +598,7 @@ const stepNames = [
   "address",
   "responsible",
 ] as const;
-type StepNames = typeof stepNames[number];
+type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deines Kurses ein. *",
@@ -580,7 +608,8 @@ const steps: CreateEditSteps<StepNames> = {
   },
   leader: {
     label: "2.	Bitte gib hier den Namen der Kursleitung an. *",
-    tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
+    tooltip:
+      "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
     description: "Name der Kursleitung *",
     props: ["name_instructor"],
   },
@@ -606,7 +635,8 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   description: {
-    label: "5. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
+    label:
+      "5. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
     tooltip: "",
     description: "Beschreibungstext *",
     placeholder:
@@ -615,14 +645,16 @@ const steps: CreateEditSteps<StepNames> = {
     checkHandler: isDescriptionEmpty,
   },
   category: {
-    label: "6. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
+    label:
+      "6. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
     tooltip: "Mehrfachauswahl möglich.",
     description: "Themenbereich *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
   services: {
-    label: "7. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
+    label:
+      "7. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
       "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
     description: "Leistungen und Schlagwörter *",
@@ -649,7 +681,8 @@ const steps: CreateEditSteps<StepNames> = {
   website: {
     label:
       "10. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
-    tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
+    tooltip:
+      "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Link zur Webseite",
     props: ["website"],
   },
@@ -940,7 +973,9 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find((community: any) => community.id === communityId);
+  const found = communities.value.find(
+    (community: any) => community.id === communityId
+  );
 
   if (found) {
     useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
@@ -992,17 +1027,14 @@ onMounted(async () => {
   display: none;
 }
 
-.dp__action_buttons {
-  justify-content: center;
-  margin-right: auto;
-  padding: 20px;
-}
-
 .dp__action_button {
-  padding-left: 10px;
+  margin-top: 30px;
   height: 50px;
-  padding-right: 10px;
+  width: 200px !important;
   background-color: #8ab61d;
+  justify-content: center;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .dp__action_button:hover {
@@ -1010,8 +1042,8 @@ onMounted(async () => {
 }
 
 .dp__instance_calendar .dp__button {
-  background-color: #8ab61d;
-  color: white;
+  background-color: #d3d3d3;
+  color: #8ab61d;
   height: 3rem;
   font-weight: bold;
 }
@@ -1071,6 +1103,7 @@ onMounted(async () => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
+  line-height: 1.2 !important;
 }
 
 .ql-clean {

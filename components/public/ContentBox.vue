@@ -11,41 +11,45 @@
             <v-icon class="facility-name">mdi-account-outline</v-icon
             ><span class="break-title">{{ item?.name_instructor }}</span>
           </div>
-          <div
-            class="d-flex align-center facility-name is-clickable"
-            v-if="item.user_care_facility?.name"
-          >
-            <a
-              :href="`/public/care_facilities/${item.user_care_facility?.id}`"
-              class="is-clickable d-flex"
-            >
-              <v-icon class="facility-name">mdi-home-outline</v-icon>
-              <span
-                class="break-title facility-name"
-                v-html="item.user_care_facility?.name"
-              ></span>
-            </a>
-          </div>
+
           <div class="d-flex align-center justify-end" v-if="item.created_at">
             <v-icon>mdi-calendar-outline</v-icon
             ><span class="break-title">{{
               useDatetime().parseDatetime(item.created_at)
             }}</span>
           </div>
+          <div
+            class="d-flex align-center facility-name is-clickable"
+            v-if="item.user_care_facility?.name"
+          >
+            <v-btn
+              :href="`/public/care_facilities/${item.user_care_facility?.id}`"
+              variant="outlined"
+              rounded="pill"
+              size="small"
+            >
+              <span
+                class="break-title facility-name"
+                v-html="item.user_care_facility?.name"
+              ></span>
+            </v-btn>
+          </div>
         </div>
         <hr />
       </template>
-
       <div class="content-wrapper">
-        <a :href="buttonHref" class="title">{{ item.name }}</a>
+        <div class="d-flex justify-space-between align-center">
+          <span class="title is-clickable">{{ item.name }}</span>
+          <span
+            v-if="item.description.length > 260"
+            class="is-clickable"
+            @click="openContentModal()"
+          >
+            <v-btn size="small" variant="text" class="read-more"> weiter lesen </v-btn>
+          </span>
+        </div>
+
         <span class="content break-text" v-html="item.description"></span>
-        <span
-          v-if="item.description.length > 260"
-          class="is-clickable"
-          @click="openContentModal()"
-        >
-          <v-btn size="small" variant="text" class="read-more"> weiter lesen </v-btn>
-        </span>
       </div>
 
       <PublicCategoriesContentModal
@@ -54,7 +58,16 @@
         v-if="contentModalOpen"
       />
       <div class="action" v-if="buttonHref">
-        <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
+        <v-btn
+          :href="buttonHref"
+          :target="item.url ? '_blank' : ''"
+          variant="flat"
+          color="grey"
+          rounded="pill"
+          size="small"
+        >
+          Mehr anzeigen &gt;
+        </v-btn>
       </div>
     </div>
   </div>
@@ -183,8 +196,4 @@ $max-height: 240px;
     }
   }
 }
-.read-more {
-  opacity: 0.5;
-}
-
 </style>

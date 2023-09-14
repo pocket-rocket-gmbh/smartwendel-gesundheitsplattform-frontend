@@ -1,5 +1,5 @@
 <template>
-  <div class="has-text-white">
+  <div class="general-font-size">
     <v-container class="mt-10">
       <h1>
         Nutzungsbedingungen der Gesundheits- und Pflegeplattform des Smart Wendeler Landes
@@ -34,6 +34,7 @@
         über die plattformeigene Registrierung, möglich. Dabei ist ein Name der
         Einrichtung zu wählen, der auf der Plattform öffentlich sichtbar ist.
       </p>
+      <br />
       <p>
         Für die Registrierung ist die Angabe einer E-Mail-Adresse, Vor- und Nachname,
         Telefonnummer, als auch gängige Angaben zur Adresse erforderlich. Nach Abschluss
@@ -42,6 +43,7 @@
         Nutzer:innenkonto zu bestätigen. Im gleichen Atemzug findet eine Verifizierung
         durch die entsprechenden Plattformadministrator:innen statt.
       </p>
+      <br />
       <p>
         Mit der Registrierung erklären die Anbieter:innen, dass sie die
         Datenschutzbestimmungen gelesen haben und mit diesen einverstanden sind. Bei der
@@ -60,7 +62,7 @@
         gestattet Kurse und Veranstaltungen im vorgesehenen Bereich zu bewerben und auf
         diese aufmerksam zu machen.
       </p>
-
+      <br />
       <p>
         Der Betreiber ist jederzeit berechtigt, den Zugang zu einzelnen Inhalten zu
         sperren, z. B. wenn der Verdacht besteht, dass diese gegen geltendes Recht oder
@@ -92,7 +94,7 @@
         Nutzer:innen und Dritten, Pornografie, anstößige, sexistische oder obszöne
         Materialien und Ausdrucksweisen darstellen, betreffen oder beinhalten.
       </p>
-
+      <br />
       <p>
         Persönlichkeitsverletzend und deshalb nicht zulässig ist es zudem, die Anonymität
         anderer Nutzer aufzuheben oder Informationen von anderen Nutzern aus privaten
@@ -102,7 +104,7 @@
         Nutzer:innen geben könnten oder die sie von anderen Nutzer:innen ausschließlich in
         privaten Nachrichten, E-Mails oder Chats erhalten haben.
       </p>
-
+      <br />
       <p>
         Die Anbieter:innen verpflichten sich, jede Handlung zu unterlassen, die geeignet
         ist, die Funktionalität der Plattform zu beeinträchtigen, insbesondere die
@@ -111,7 +113,7 @@
         Zugangsbeschränkungen der Plattform zu umgehen, und/oder die Plattform zu
         verändern, zu modifizieren, weiterzuentwickeln oder weiterzuverbreiten.
       </p>
-
+      <br />
       <p>
         Urheberrechtlich geschützte Inhalte dürfen ohne Zustimmung der jeweiligen
         Rechtsinhaberin bzw. des jeweiligen Rechtsinhabers nur im Rahmen des anwendbaren
@@ -128,6 +130,7 @@
     <v-container>
       <h2>Nutzungsrechte</h2>
       <p>Erstellte Inhalte werden automatisch veröffentlicht.</p>
+      <br />
       <p>
         Der Betreiber prüft diese Inhalte und Daten vor Veröffentlichung nicht auf
         inhaltliche Angemessenheit, sachliche Richtigkeit oder auf etwaige Rechtsverstöße.
@@ -144,6 +147,7 @@
         eines einfachen, nicht-ausschließlichen Rechts unentgeltlich und unwiderruflich
         zur zeitlich, räumlich und inhaltlich unbeschränkten Nutzung eingeräumt.
       </p>
+      <br />
       <p>
         Soweit an der Plattform bzw. den hierauf durch den Betreiber oder deren
         Vertragspartner redaktionell bereitgestellten Inhalten Urheber- oder
@@ -160,6 +164,7 @@
         Autorin bzw. des jeweiligen Autors aus und geben nicht die Meinung des Betreibers
         wieder.
       </p>
+      <br />
       <p>
         Der Betreiber kann für die Inhalte der Anbieter:innen nicht verantwortlich gemacht
         werden.
@@ -172,6 +177,7 @@
         Anbieterin bzw. eines Anbieters von Dritten auf Unterlassung in Anspruch genommen
         wird oder wenn der Betreiber sonst von der Rechtsverletzung Kenntnis erlangt.
       </p>
+      <br />
       <p>
         Der Betreiber haftet für die Plattform vorbehaltlich der nachstehenden Regelungen
         nach den gesetzlichen Vorschriften. Der Betreiber haftet unbeschränkt bei Vorsatz
@@ -207,6 +213,7 @@
         Betreiber liegt ein wichtiger Grund insbesondere dann vor, wenn Anbieter:innen
         ihre Verpflichtungen aus diesem Nutzungsvertrag nachhaltig verletzen.
       </p>
+      <br />
       <p>
         Der Betrieb der Plattform kann jederzeit von dem Betreiber eingestellt werden.
       </p>
@@ -216,6 +223,7 @@
       <p>
         Auf diese Nutzungsbedingungen findet ausschließlich deutsches Recht Anwendung.
       </p>
+      <br />
       <p>
         Der Betreiber behält sich vor, diese Nutzungsbedingungen jederzeit zu ändern und
         die weitere Nutzung der Plattform von der Zustimmung zu den geänderten
@@ -226,7 +234,3 @@
     </v-container>
   </div>
 </template>
-
-<script lang="ts" setup></script>
-
-<style lang="sass" scoped></style>

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <v-row>
-      <v-col class="d-flex justify-center my-15">
+      <v-col class="d-flex justify-center my-5">
         <h2 class="is-uppercase">Du benötigst dringend Hilfe?</h2>
       </v-col>
     </v-row>

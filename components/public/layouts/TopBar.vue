@@ -21,7 +21,7 @@
                     <div v-for="(sub_category, index) in subCategories[category.id]" :key="sub_category.id" @click="setItemsAndGo(category, sub_category)">
                       <div class="list-item main">
                         <div>
-                          <span class="is-clickable">
+                          <span class="is-clickable main">
                             {{ sub_category.name }}
                           </span>
                         </div>
@@ -31,10 +31,10 @@
                 </v-list>
               </div>
             </div>
-            <div v-if="!loading">
-              <a href="/public/search/facilities" class="is-clickable mx-5" @click.prevent="goTo('/public/search/facilities')"> Anbieter </a>
-              <a href="/public/search/courses" class="is-clickable mx-5" @click.prevent="goTo('/public/search/courses')"> Kurse </a>
-              <a href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </a>
+            <div v-if="!loading" class="main">
+              <span href="/public/search/facilities" class="is-clickable mx-5" @click.prevent="goTo('/public/search/facilities')"> Anbieter </span>
+              <span href="/public/search/courses" class="is-clickable mx-5" @click.prevent="goTo('/public/search/courses')"> Kurse </span>
+              <span href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </span>
             </div>
           </div>
         </div>
@@ -53,16 +53,16 @@
             <v-icon size="x-large">mdi-account-circle-outline</v-icon>
           </v-btn>
         </div>
-        <div class="d-flex align-center">
-          <a class="mx-3 menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </a>
-          <a
+        <div class="d-flex align-center main">
+          <span class="mx-3 menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </span>
+          <span
             class="mx-3 menu-list pointer"
             v-else-if="useUser().isFacilityOwner()"
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
             Meine Einrichtung
-          </a>
+          </span>
           <PublicLayoutsMiniMenu :current-user="currentUser" :user-is-admin="userIsAdmin" />
         </div>
       </div>
@@ -89,18 +89,18 @@
           </v-list-item>
         </div>
         <div class="logged-in-actions">
-          <a class="menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')">
+          <span class="menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')">
             <v-icon class="mr-2">mdi-cog</v-icon>
             <span>Admin-Bereich</span>
-          </a>
-          <a
+          </span>
+          <span
             class="menu-list pointer"
             v-else-if="useUser().isFacilityOwner()"
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
             Meine Einrichtung
-          </a>
+          </span>
           <div v-if="useUser().currentUser" @click="useUser().logout(), (drawer = !drawer), reload()">
             <v-icon class="mr-2">mdi-logout</v-icon>
             <span>Logout</span>
@@ -110,7 +110,7 @@
         <v-divider></v-divider>
         <div>
           <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-          <a class="mr-6" href="/rules_of_conduct">Nutzungsbedingungen</a>
+          <span class="mr-6" href="/rules_of_conduct">Nutzungsbedingungen</span>
         </div>
         <v-divider></v-divider>
 
@@ -121,11 +121,10 @@
             </span>
           </div>
         </div>
-        <template v-if="!loading">
-          <v-divider></v-divider>
-          <a href="/public/search/facilities" class="is-clickable" @click.prevent="goTo('/public/search/facilities')"> Anbieter </a>
-          <a href="/public/search/courses" class="is-clickable" @click.prevent="goTo('/public/search/courses')"> Kurse </a>
-          <a href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </a>
+        <template v-if="!loading" class="main">
+          <span href="/public/search/facilities" class="is-clickable" @click.prevent="goTo('/public/search/facilities')"> Anbieter </span>
+          <span href="/public/search/courses" class="is-clickable" @click.prevent="goTo('/public/search/courses')"> Kurse </span>
+          <span href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </span>
         </template>
       </div>
     </v-navigation-drawer>
@@ -143,7 +142,6 @@ const categories = ref([]);
 const subCategories = ref<any>({});
 const sub_categoryId = ref({});
 const drawer = ref(false);
-const menu = ref(false);
 const appStore = useAppStore();
 const route = useRoute();
 const loading = ref(true);
