@@ -8,25 +8,27 @@
       </div>
     </div>
 
-    <div
-      class="popover-content"
-      :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }"
-      v-if="showPopover"
-      v-auto-animate
-    >
+    <div class="popover-content" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id">
           <div class="filter-name">
             {{ filter.name }}
           </div>
           <div class="filter-options">
-            <label
-              class="option"
-              v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options"
-            >
+            <label class="option" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
               <v-radio
+                v-if="!useUser().isAdmin()"
                 :model-value="selectedFilter?.id === option.id"
                 @click.prevent="handleOptionSelect(option)"
+                hide-details
+                density="compact"
+                :label="option.name"
+                color="#8AB61D"
+              />
+              <v-checkbox
+                v-else
+                :model-value="modelValue.includes(option.id)"
+                @click.prevent="handleOptionSelect(option, true)"
                 hide-details
                 density="compact"
                 :label="option.name"
@@ -43,7 +45,7 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { FilterKind } from "store/searchFilter";
+import { FilterKind } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];
@@ -82,7 +84,20 @@ const filterOptions = ref<FilterOption[]>([]);
 
 const loadingFilters = ref(false);
 
-const handleOptionSelect = (option: Filter) => {
+const handleOptionSelect = (option: Filter, multiple?: boolean) => {
+  if (multiple) {
+    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+
+    if (indexOfAlreadySetFilter !== -1) {
+      props.modelValue.splice(indexOfAlreadySetFilter, 1);
+    } else {
+      props.modelValue.push(option.id);
+    }
+
+    emit("update:modelValue", props.modelValue);
+    return;
+  }
+
   if (selectedFilter.value && selectedFilter.value.id !== option.id) {
     const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
 
@@ -107,9 +122,9 @@ const handleOptionSelect = (option: Filter) => {
 onMounted(async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
-  const allFilters = await getAllFilters()
+  const allFilters = await getAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) => allFilters.filter(item => item.parent_id === filter.id));
+  const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
 
   allOptions.forEach((options, index) => {
     filterOptions.value.push({
@@ -168,8 +183,7 @@ onMounted(async () => {
 
   .popover-content {
     background-color: white;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     padding: 1rem;
     position: absolute;
     left: 0;
