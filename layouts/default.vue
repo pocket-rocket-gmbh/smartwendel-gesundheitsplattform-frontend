@@ -10,7 +10,7 @@
         <slot />
       </v-main>
       <PublicLayoutsFooter />
-      <PublicLoginPanel v-if="!useUser().loggedIn()" />
+      <!-- <PublicLoginPanel v-if="!useUser().loggedIn()" /> -->
     </template>
   </v-app>
 </template>
