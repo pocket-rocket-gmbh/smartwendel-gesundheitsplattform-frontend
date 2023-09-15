@@ -76,10 +76,10 @@
               <p class="is-clickable">
                 <router-link class="is-dark-grey" to="/rules_of_conduct">Nutzungsbedingungen</router-link>
               </p>
-              <p class="has-text-white is-clickable">
+              <p class="is-clickable">
                 <router-link class="is-dark-grey" to="/privacy_policy">Datenschutzerklärung</router-link>
               </p>
-              <p class="has-text-white is-clickable">
+              <p class="is-clickable">
                 <router-link class="is-dark-grey" to="/imprint">Impressum</router-link>
               </p>
             </div>
