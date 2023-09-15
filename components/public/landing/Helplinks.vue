@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <v-row>
-      <v-col class="d-flex justify-center my-5">
+      <v-col class="d-flex justify-center my-3">
         <h2 class="is-uppercase">Du benötigst dringend Hilfe?</h2>
       </v-col>
     </v-row>
@@ -11,17 +11,32 @@
           <div class="icons d-flex justify-center align-center">
             <img :src="item.content.image" min-width="50" max-width="50" />
           </div>
-          <h3 class="is-dark-grey my-5 font-weight-bold">
-            {{ item.content.heading }}
-          </h3>
-          <div class="my-5 is-dark-grey">
-            {{ item.content.description }}
+          <div class="items-column">
+            <div class="is-dark-grey my-5 font-weight-bold text-h5">
+              {{ item.content.heading }}
+            </div>
+
+            <div class="my-5 is-dark-grey general-font-size">
+              {{ item.content.description }}
+            </div>
           </div>
-          <div>
-            <a :href="item.content.linkText" target="_blank" class="is-red is-clickable">
-              {{ item.content.linkText }}
-            </a>
-          </div>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col
+        v-for="(item, index) in items"
+        :key="index"
+        class="justify-center text-center align-center"
+      >
+        <div class="general-font-size">
+          <a
+            :href="item.content.linkText"
+            target="_blank"
+            class="is-red is-clickable"
+          >
+            {{ item.content.linkText }}
+          </a>
         </div>
       </v-col>
     </v-row>
@@ -81,4 +96,7 @@ export default defineComponent({
   margin: 0 5rem
   @include md
     margin: 0 1rem
+
+.items-column
+  margin: 0 2.5rem
 </style>
