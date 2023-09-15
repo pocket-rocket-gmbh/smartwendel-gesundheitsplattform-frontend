@@ -5,8 +5,8 @@
       <span class="hits">{{ filterStore.filteredResults.length }} Treffer</span>
       <div class="sort-order is-clickable d-flex align-center" @click="toggleFilterSort">
         <span>{{ filterStore.filterSort }}</span>
-        <v-icon v-show="filterStore.filterSort === 'Absteigend'">mdi-chevron-down</v-icon>
-        <v-icon v-show="filterStore.filterSort === 'Aufsteigend'">mdi-chevron-up</v-icon>
+        <v-icon v-show="filterStore.filterSort === 'A-Z'">mdi-chevron-down</v-icon>
+        <v-icon v-show="filterStore.filterSort === 'Z-A'">mdi-chevron-up</v-icon>
       </div>
     </div>
     <template v-if="filterStore.filteredResults.length > 0">
