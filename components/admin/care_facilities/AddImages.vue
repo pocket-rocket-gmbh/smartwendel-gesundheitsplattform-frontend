@@ -15,7 +15,7 @@
         multiple
         show-size
       />
-      <div class="text-caption">* Maximal 5 MB, PNG/JPG/JPEG erlaubt</div>
+      <div class="text-caption">* Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt</div>
       <v-alert v-if="item?.sanitized_images?.length >= 6 || item?.offline_images?.length >= 6" class="my-5" type="error">Es können maximal 6 Bilder hinzugefügt werden.</v-alert>
       <v-alert v-if="errorFileSizeTooLarge" class="my-5" type="error">Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.</v-alert>
     </div>
