@@ -640,7 +640,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Beschreibungstext *",
     placeholder:
-      "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
+      "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen des Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
@@ -656,7 +656,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "7. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
-      "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucherinnen und Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
+      "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
     description: "Leistungen und Schlagwörter *",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
@@ -702,7 +702,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   responsible: {
     label:
-      "13.	Bitte gib hier die/den inhaltlich Verantwortliche/n  für die Kursinformationen an. *",
+      "13.	Bitte gib hier den inhaltlich Verantwortlichen für die Kursinformationen an. *",
     tooltip: "Der Name wird in deinem Kursprofil zu sehen sein.",
     description: "Verantwortliche Person *",
     props: ["name_responsible_person"],

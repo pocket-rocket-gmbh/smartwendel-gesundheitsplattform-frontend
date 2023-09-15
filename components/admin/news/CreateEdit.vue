@@ -25,7 +25,7 @@
             <div>
               <span class="text-h6"
                 >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen.
-                Je mehr Angaben du machst, umso leichter können Besucherinnen und Besucher
+                Je mehr Angaben du machst, umso leichter können Besucher
                 deine Beiträge finden. Pflichtfelder sind mit einem Sternchen
                 versehen.</span
               >
@@ -244,7 +244,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "5. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder. *",
     tooltip:
-      "Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Newsbeitrag sobald sie nach den entsprechenden Schlagwörtern suchen",
+      "Auf diese Weise gelangen Besucher zu deinem Newsbeitrag, sobald sie nach den entsprechenden Schlagwörtern suchen",
     description: "Schlagwörter *",
     props: ["tags"],
   },
