@@ -1,6 +1,7 @@
 export const rules = {
   required: (value: string) => !!value || "Erforderlich.",
   counter: (value: string) => value?.length <= 20 || "Maximal 20 Zeichen",
+  phoneCounter: (value: string) => value?.length <= 15 || "Maximal 15 Zeichen",
   counterStreet: (value: string) => value?.length <= 60 || "Maximal 60 Zeichen",
   zip: (value: string) => value.length === 5 || "Maximal 5 Zeichen",
   email: (value: string) => {
