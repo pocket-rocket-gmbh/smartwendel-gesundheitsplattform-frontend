@@ -142,7 +142,7 @@
       </div>
     </div>
 
-    <span v-if="registerSuccessful" class="text-h3 is-dark-grey font-weight-bold d-flex justify-center">So geht es weiter:</span>
+    <span v-if="registerSuccessful" class="text-h2 is-dark-grey font-weight-bold d-flex justify-center">So geht es weiter:</span>
     <div v-if="registerSuccessful" class="steps-wrapper">
       <template v-for="step in steps">
         <div class="item" elevation="0">
