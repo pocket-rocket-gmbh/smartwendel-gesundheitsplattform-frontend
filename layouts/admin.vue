@@ -29,7 +29,7 @@
         <template v-if="useUser().isAdmin()">
           <v-list-item link to="/admin/matomo" nuxt> <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin" nuxt> Admin-Bereich (Change Log) </v-list-item>
+          <v-list-item link to="/admin" nuxt> Admin-Bereich </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
           <v-list-item link to="/admin/filter/courses" nuxt> Kursfilter </v-list-item>
