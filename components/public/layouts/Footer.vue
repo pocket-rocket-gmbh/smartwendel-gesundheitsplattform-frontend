@@ -16,7 +16,7 @@
       </div>
       <v-divider v-if="!useUser().loggedIn() && currentRoute !== '/register'" class="py-5" thickness="2"></v-divider>
       <div class="footer-content">
-        <v-row class="footer-content-row pa-0 ma-0 align-center">
+        <v-row class="footer-content-row pa-0 ma-0">
           <v-col md="8">
             <v-row class="align-center bg-white">
               <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
@@ -64,7 +64,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col class="links d-flex">
+          <v-col class="links d-flex ma-0 pt-0 align-start">
             <div class="ml-15">
               <h2>Landkreis Sankt Wendel</h2>
             <div class="footer-links">
