@@ -245,6 +245,9 @@
             <div class="mb-15">
               <v-row>
                 <v-col md="4" class="d-flex flex-column">
+                  <div class="my-5">
+                    <span class="text-h5 mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
+                  </div>
                   <Datepicker
                     inline
                     multi-dates
@@ -268,8 +271,8 @@
                     "
                   />
                 </v-col>
-                <v-col md="7" v-if="slotProps.item.event_dates?.length">
-                  <v-table density="compact" fixed-header height="400px">
+                <v-col md="7" v-if="slotProps.item.event_dates?.length" class="my-8">
+                  <v-table density="compact" fixed-header height="440px">
                     <thead>
                       <tr>
                         <th></th>
@@ -319,6 +322,20 @@
                   </div>
                 </v-col>
               </v-row>
+              <div class="mt-5">
+                <span class="text-h5 mr-2 font-weight-bold"> Dauer: </span>
+              </div>
+              <div class="field split mt-5">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.event_duration"
+                  hide-details="auto"
+                  label="Kursdauer (in Minuten)"
+                  placeholder="z.B. 60"
+                  :rules="[rules.required, rules.validateEventDuration]"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+              </div>
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
@@ -663,11 +680,10 @@ const steps: CreateEditSteps<StepNames> = {
   },
   date: {
     label:
-      "8.	Bitte gib die Kurstermine und Uhrzeiten an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
+      "8.	Bitte gib die Kurstermine, Uhrzeiten und Dauer an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     tooltip: "",
     description: "Kursdaten *",
-    props: ["event_dates"],
-    justSome: true,
+    props: ["event_dates", "event_duration"],
   },
   certificates: {
     label:
