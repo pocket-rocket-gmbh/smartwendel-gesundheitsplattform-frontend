@@ -25,8 +25,8 @@
             <div>
               <span class="text-h6"
                 >Hier kannst du deine Kurse anlegen. Je spezifischer deine
-                Angaben sind, desto besser können dich Besucherinnen und
-                Besuchern auf der Webseite finden. Pflichtfelder sind mit einem
+                Angaben sind, desto besser können dich
+                Besucher auf der Webseite finden. Pflichtfelder sind mit einem
                 Sternchen versehen.</span
               >
             </div>
@@ -533,10 +533,10 @@ const steps: CreateEditSteps<StepNames> = {
   },
   description: {
     label:
-      "5.	Bitte beschreibe möglichst detailliert, worum es bei dieser Veranstaltung geht und was die Besucher:innen erwarten können. *",
+      "5.	Bitte beschreibe möglichst detailliert, worum es bei dieser Veranstaltung geht und was die Besucher erwarten können. *",
     description: "Beschreibung *",
     placeholder:
-      "Nutze dieses Feld, um die Inhalte und Ziele deiner Veranstaltung näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen der/des Kursleiterin/Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucherinnen und Besucher deinen Kurs über die Suche finden.",
+      "Nutze dieses Feld, um die Inhalte und Ziele deiner Veranstaltung näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen des Veranstalters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
@@ -546,7 +546,7 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Schlagwörter *",
     props: ["tags"],
     tooltip:
-      "Auf diese Weise gelangen Besucherinnen und Besucher zu deiner Veranstaltungsseite, sobald sie nach den entsprechenden Schlagwörtern suchen",
+      "Auf diese Weise gelangen Besucher zu deiner Veranstaltungsseite, sobald sie nach den entsprechenden Schlagwörtern suchen",
   },
   date: {
     label:
@@ -578,7 +578,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   responsible: {
     label:
-      "11. Bitte gib hier die/den inhaltlich Verantwortliche/n  für die Veranstaltungsinformationen an. *",
+      "11. Bitte gib hier den inhaltlich Verantwortlichen für die Veranstaltungsinformationen an. *",
     tooltip: "Der Name wird in deinem Veranstaltungsprofil zu sehen sein.",
     description: "Verantwortliche Person *",
     props: ["name_responsible_person"],

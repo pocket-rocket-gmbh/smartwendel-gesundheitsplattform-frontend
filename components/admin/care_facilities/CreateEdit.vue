@@ -21,7 +21,7 @@
           <div class="py-10">
             <span class="text-h6"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein spezifisches Leistungsangebot in einem eigenen Profil darstellen und
-              veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer deine Angaben sind, desto besser können dich Besucherinnen und Besucher
+              veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer deine Angaben sind, desto besser können dich Besucher
               der Webseite finden. Pflichtfelder sind mit einem Sternchen versehen.</span
             >
           </div>
@@ -483,7 +483,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "5. Bitte beschreibe deine Einrichtung/dein Unternehmen und das damit verbundene Leistungsangebot ausführlich. *",
     description: "Beschreibungstext *",
     placeholder:
-      "Nutze dieses Feld, um deine Einrichtung/dein Unternehmen ausführlich zu präsentieren. Hier kannst du bspw. Informationen zu deinem individuellen Leistungsangebot, deinem Standort, den wichtigsten Ansprechpartnerinnen und Ansprechpartnern, Links zu deinen Sozialen Medien und weitere Informationen, die du den Nutzerinnen und Nutzern mitgeben möchtest hinterlegen. Je detaillierter die Beschreibung, desto einfacher können dich Besucherinnen und Besucher über das Suchfeld der Startseite finden.",
+      "Nutze dieses Feld, um deine Einrichtung/dein Unternehmen ausführlich zu präsentieren. Hier kannst du bspw. Informationen zu deinem individuellen Leistungsangebot, deinem Standort, den wichtigsten Ansprechpartnern, Links zu deinen Sozialen Medien und weitere Informationen, die du den Nutzern mitgeben möchtest hinterlegen. Je detaillierter die Beschreibung, desto einfacher können dich Besucher über das Suchfeld der Startseite finden.",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
   },
@@ -497,7 +497,7 @@ const steps: CreateEditSteps<StepNames> = {
   services: {
     label: "7. Bitte ordne deiner Einrichtung/deinem Unternehmen passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
-      "Wähle alle für dich relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, umso leichter können dich Besucherinnen und Besucher im Rahmen einer benutzerdefinierten Suche finden. ",
+      "Wähle alle für dich relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, umso leichter können dich Besucher im Rahmen einer benutzerdefinierten Suche finden. ",
     description: "Leistungen und Schlagwörter *",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
@@ -536,7 +536,7 @@ const steps: CreateEditSteps<StepNames> = {
     justSome: true,
   },
   responsible: {
-    label: "13.	Bitte gib hier die/den inhaltlich Verantwortliche/n für die Profilinformationen dieser Einrichtung an. *",
+    label: "13.	Bitte gib hier den inhaltlich Verantwortlichen für die Profilinformationen dieser Einrichtung an. *",
     tooltip: "Der Name wird in deinem Einrichtungsprofil zu sehen sein.",
     description: "Verantwortliche Person *",
     props: ["name_responsible_person"],

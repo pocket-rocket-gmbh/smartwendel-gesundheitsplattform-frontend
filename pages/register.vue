@@ -7,7 +7,7 @@
         </div>
         <div class="mt-5 d-flex flex-column general-font-size" v-if="!registerSuccessful">
           <span class="">
-            Du bist im Landkreis ansässige(r) Gesundheitsanbieter:in und möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
+            Du bist im Landkreis ansässiger Gesundheitsanbieter und möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
             veröffentlichen? Dann laden wir dich herzlich ein, dich zu registrieren!</span
           >
           <span class="mt-5">

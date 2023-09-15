@@ -11,8 +11,8 @@
       </p>
       <p class="text-justify mt-5">
         Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher findest du unter mehr als
-        1.000 gelisteten Anbieten die Leistung, nach der du suchst. Informierest du über
-        die Angebote oder nimmst direkt Kontakt auf und vereinbarst du persönliches
+        1.000 gelisteten Anbietern die Leistung, nach der du suchst. Du informierest dich über
+        die Angebote oder nimmst direkt Kontakt auf und vereinbarst ein persönliches
         Beratungsgespräch.
       </p>
       <div class="button my-5">
