@@ -57,8 +57,8 @@ const goBack = () => {
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
   if (kind === "facility") return "Zu den Einrichtungen";
   if (kind === "news") return "Zu den Beiträgen";
-  if (kind === "event" || kind === "course") return "Zu den Kursen";
-  if (kind === "course") return "Zu den Veranstaltungen";
+  if (kind === "event" || kind === "course") return "Zu den Veranstaltungen";
+  if (kind === "course") return "Zu den Kursen";
 };
 
 const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
