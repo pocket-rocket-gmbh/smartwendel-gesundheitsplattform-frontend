@@ -53,7 +53,7 @@
       accept="image/*"
     />
     <div class="text-caption" v-if="!openPhotoGallery && openImageupload">
-      * Maximal 5 MB, PNG/JPG/JPEG erlaubt
+      * Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt
     </div>
     <div
       v-if="errorFileSizeTooLarge && openPhotoGallery"
