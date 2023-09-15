@@ -2,7 +2,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 import { ResultStatus } from "~/types/serverCallResult";
 
-export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
+export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
@@ -72,7 +72,7 @@ const initialFilterState: Filter = {
   currentSearchTerm: "",
   currentTags: [],
   currentZip: null,
-  filterSort: "Absteigend",
+  filterSort: "A-Z",
   loading: false,
   mapFilter: null,
   currentKinds: [],
@@ -196,7 +196,7 @@ export const useFilterStore = defineStore({
         page: 1,
         per_page: 25,
         sort_by: "created_at",
-        sort_order: this.filterSort == "Aufsteigend" ? "ASC" : "DESC",
+        sort_order: this.filterSort == "Z-A" ? "ASC" : "DESC",
         searchQuery: null as any,
         concat: false,
         filters,
@@ -296,13 +296,13 @@ export const useFilterStore = defineStore({
       this.filteredResults = filteredResults;
     },
     toggleSort() {
-      this.filterSort = this.filterSort === "Absteigend" ? "Aufsteigend" : "Absteigend";
+      this.filterSort = this.filterSort === "A-Z" ? "Z-A" : "A-Z";
     },
     resetAllFilters() {
       this.currentSearchTerm = "";
       this.currentTags = [];
       this.currentZip = null;
-      this.filterSort = "Absteigend";
+      this.filterSort = "A-Z";
       this.loading = false;
       this.mapFilter = null;
       this.currentKinds = [];
