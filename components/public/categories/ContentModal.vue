@@ -4,6 +4,7 @@
     v-model="opened"
     transition="dialog-bottom-transition"
     class="mt-10"
+    scrollable
   >
     <img
       class="close-btn is-clickable"
