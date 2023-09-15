@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
-          <div class="field">
+          <div class="field general-font-size">
             <label class="label is-white">
               <div class="search-term">
                 <span v-if="filterKind === 'facility'">Kategorie </span>
@@ -23,7 +23,7 @@
           </div>
         </v-col>
         <v-col>
-          <div class="field">
+          <div class="field general-font-size">
             <label class="label is-white">
               <div class="search-term">Suchbegriff</div>
             </label>
@@ -37,7 +37,7 @@
           </div>
         </v-col>
         <v-col>
-          <div class="field">
+          <div class="field general-font-size">
             <label class="label is-white">Gemeinde</label>
             <div class="select-wrapper">
               <select class="input select" v-model="filterStore.currentZip">

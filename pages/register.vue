@@ -96,7 +96,7 @@
               type="tel"
               label="Telefonnummer *"
               hide-details="auto"
-              :rules="[rules.required, rules.validateNumber]"
+              :rules="[rules.required, rules.validateNumber, rules.phoneCounter]"
               :error-messages="useErrors().checkAndMapErrors('phone', errors)"
             />
           </div>
@@ -131,7 +131,7 @@
       </v-form>
       <div align="center" class="mt-5" v-if="registerSuccessful">
         <div class="d-flex flex-column align-center justify-center">
-          <span class="text-h2 text-primary font-weight-bold mb-10"> Vielen Dank für deine Registrierung! </span>
+          <span class="text-h2 text-primary font-weight-bold mb-10 general-font-size"> Vielen Dank für deine Registrierung! </span>
           <span class="general-font-size">
             Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
           </span>
@@ -142,7 +142,7 @@
       </div>
     </div>
 
-    <span v-if="registerSuccessful" class="text-h3 is-dark-grey font-weight-bold text-uppercase d-flex justify-center">So geht es weiter:</span>
+    <span v-if="registerSuccessful" class="text-h3 is-dark-grey font-weight-bold d-flex justify-center">So geht es weiter:</span>
     <div v-if="registerSuccessful" class="steps-wrapper">
       <template v-for="step in steps">
         <div class="item" elevation="0">
@@ -150,7 +150,7 @@
             <img :src="step.icon" />
           </div>
 
-          <div class="text background-text general-font-size">
+          <div class="text background-text general-font-size text-center">
             {{ step.description }}
           </div>
         </div>

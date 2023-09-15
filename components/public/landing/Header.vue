@@ -2,7 +2,7 @@
   <div class="wrapper">
     <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
     <PublicLandingChooseCategory />
-    <p class="has-font-size-medium sub-title">Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.</p>
+    <p class="general-font-size sub-title">Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.</p>
   </div>
 </template>
 

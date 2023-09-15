@@ -49,7 +49,7 @@
           </span>
         </div>
 
-        <span class="content break-text" v-html="item.description"></span>
+        <span class="content break-text general-font-size" v-html="item.description"></span>
       </div>
 
       <PublicCategoriesContentModal
