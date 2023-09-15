@@ -13,6 +13,10 @@ export const rules = {
     const pattern = /^[0-9]+$/;
     return pattern.test(value) || "Ungültige Eingabe. Keine Sonder- oder Leerzeichen eingeben";
   },
+  validateEventDuration: (value: string) => {
+    const pattern = /^[0-9]+$/;
+    return pattern.test(value) || "Ungültige Eingabe. Außschließlich Zahlen eingeben";
+  },
   length: (value: string) => !value || value?.length < 1000 || "Die Beschreibung darf höchstens 1000 Zeichen lang sein.",
   password: (value: string) => !value || value.length >= 6 || "Das Passwort muss mindestens 6 Zeichen haben.",
   fileRequired: (v: File) => (v && v.size > 0) || "Erforderlich",

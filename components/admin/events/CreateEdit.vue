@@ -24,18 +24,15 @@
           <div class="py-10">
             <div>
               <span class="text-h6"
-                >Hier kannst du deine Kurse anlegen. Je spezifischer deine
-                Angaben sind, desto besser können dich
-                Besucher auf der Webseite finden. Pflichtfelder sind mit einem
-                Sternchen versehen.</span
+                >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind,
+                desto besser können dich Besucher auf der Webseite finden. Pflichtfelder
+                sind mit einem Sternchen versehen.</span
               >
             </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["name"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
               class="text-field"
@@ -43,9 +40,7 @@
               hide-details="auto"
               label="Name"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -69,9 +64,7 @@
               hide-details="auto"
               label="Name des Veranstalters"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -104,9 +97,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["gallery"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["gallery"].label }}</span>
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
@@ -128,9 +119,7 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(
-                      slotProps.item.description
-                    ),
+                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
                   }"
                 >
                   <QuillEditor
@@ -152,9 +141,7 @@
                     v-show="false"
                     class="hidden-text-field"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description)
-                        ? ''
-                        : 'filled'
+                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -194,13 +181,15 @@
           ></v-checkbox>
           <div class="field" id="date">
             <div class="my-2">
-              <span class="text-h5 mr-2 font-weight-bold">{{
-                steps["date"].label
-              }}</span>
+              <span class="text-h5 mr-2 font-weight-bold">{{ steps["date"].label }}</span>
             </div>
             <div class="mb-15">
               <v-row>
                 <v-col md="4" class="d-flex flex-column">
+                  <div class="my-5">
+                    <span class="text-h5 mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
+                  </div>
+
                   <Datepicker
                     inline
                     multi-dates
@@ -221,8 +210,8 @@
                     :clearable="false"
                   />
                 </v-col>
-                <v-col md="7" v-if="slotProps.item.event_dates?.length">
-                  <v-table density="compact" fixed-header height="400px">
+                <v-col md="7" v-if="slotProps.item.event_dates?.length" class="my-8">
+                  <v-table density="compact" fixed-header height="440px">
                     <thead>
                       <tr>
                         <th></th>
@@ -252,9 +241,7 @@
                           <v-btn
                             icon="mdi-delete"
                             variant="text"
-                            @click="
-                              deleteDate(index, slotProps.item.event_dates)
-                            "
+                            @click="deleteDate(index, slotProps.item.event_dates)"
                           ></v-btn>
                         </td>
                       </tr>
@@ -272,6 +259,20 @@
                   </div>
                 </v-col>
               </v-row>
+              <div class="mt-5">
+                <span class="text-h5 mr-2 font-weight-bold"> Dauer: </span>
+              </div>
+              <div class="field split mt-5">
+                <v-text-field
+                  class="text-field"
+                  v-model="slotProps.item.event_duration"
+                  hide-details="auto"
+                  label="Veranstaltungsdauer (in Stunden)"
+                  placeholder="z.B. 8"
+                  :rules="[rules.required, rules.validateEventDuration]"
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                />
+              </div>
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
@@ -288,9 +289,7 @@
               v-model="slotProps.item.website"
               hide-details="auto"
               label="Link eintragen (z.B. www.meine-webseite.de)"
-              :error-messages="
-                useErrors().checkAndMapErrors('link', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
               :rules="[rules.isUrl]"
             />
           </div>
@@ -315,9 +314,7 @@
           <v-divider class="my-10"></v-divider>
           <div id="address">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
-                steps["address"].label
-              }}</span>
+              <span class="text-h5 font-weight-bold">{{ steps["address"].label }}</span>
               <v-checkbox
                 hide-details
                 density="compact"
@@ -368,9 +365,7 @@
                   :type="'number'"
                   disabled
                   :rules="[rules.required, rules.zip]"
-                  :error-messages="
-                    useErrors().checkAndMapErrors('zip', slotProps.errors)
-                  "
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
                 <v-select
                   :disabled="!slotProps.item.zip"
@@ -429,9 +424,7 @@
                   label="PLZ"
                   :type="'number'"
                   :rules="[rules.required, rules.zip]"
-                  :error-messages="
-                    useErrors().checkAndMapErrors('zip', slotProps.errors)
-                  "
+                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
                 <v-select
                   disabled
@@ -459,9 +452,7 @@
               hide-details="auto"
               label="Vor- und Nachname"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
           <v-divider class="my-5"></v-divider>
@@ -477,11 +468,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
 import { FilterType } from "~/store/searchFilter";
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
-import {
-  CreateEditFacility,
-  CreateEditStep,
-  CreateEditSteps,
-} from "~/types/facilities";
+import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [
@@ -497,7 +484,7 @@ const stepNames = [
   "address",
   "responsible",
 ] as const;
-type StepNames = (typeof stepNames)[number];
+type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deiner Veranstaltung ein. *",
@@ -550,16 +537,15 @@ const steps: CreateEditSteps<StepNames> = {
   },
   date: {
     label:
-      "7. Bitte gib das Datum und die Uhrzeit deiner Veranstaltung an. Findet deine Veranstaltung regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
+      "7. Bitte gib das Datum, die Uhrzeit und die Dauer deiner Veranstaltung an. Findet deine Veranstaltung regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     description: "Veranstaltungsdatum *",
-    props: ["event_dates"],
+    props: ["event_dates", "event_duration"],
     tooltip: "Mehrfachauswahl möglich.",
   },
   website: {
     label:
       "8. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten weiter informieren oder anmelden können.",
-    tooltip:
-      "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
+    tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
     description: "Webseite",
     props: ["website"],
   },
@@ -638,7 +624,7 @@ const textOptions = ref({
   theme: "snow",
   contentType: "html",
   required: true,
-  formats: formats
+  formats: formats,
 });
 
 const deleteDate = (index: number, dates: string[]) => {
@@ -665,9 +651,7 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find(
-    (community: any) => community.id === communityId
-  );
+  const found = communities.value.find((community: any) => community.id === communityId);
 
   if (found) {
     useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
@@ -869,7 +853,7 @@ onMounted(async () => {
 .dp__action_button {
   margin-top: 30px;
   height: 50px;
-  width: 200px!important;
+  width: 200px !important;
   background-color: #8ab61d;
   justify-content: center;
   font-weight: bold;
@@ -943,7 +927,7 @@ onMounted(async () => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
-  line-height: 1.2!important;
+  line-height: 1.2 !important;
 }
 
 .ql-clean {

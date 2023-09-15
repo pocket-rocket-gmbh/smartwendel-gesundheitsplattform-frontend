@@ -1,6 +1,6 @@
 <template>
   <div
-    class="box flex-column text-dark-grey font-weight-bold pa-5"
+    class="box flex-column text-dark-grey font-weight-bold pa-3"
     v-if="careFacility.event_dates.length"
   >
     <h2 class="is-primary is-uppercase">Termine</h2>
@@ -18,14 +18,17 @@
             <tr>
               <th class="text-center">Datum</th>
               <th class="text-center">Uhrzeit</th>
+              <th class="text-center">Dauer</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="date in careFacility.event_dates">
-              <td class="py-3 text-center">{{ date.slice(0, 10) }}</td>
-              <td class="py-3 text-center">
+              <td class="py-0 text-center">{{ date.slice(0, 10) }}</td>
+              <td class="py-0 text-center">
                 {{ date.slice(Math.max(date.length - 5, 1)) }} Uhr
               </td>
+              <td v-if="careFacility?.kind === 'event'">{{ careFacility.event_duration }} Std.</td>
+              <td class="text-center" v-else>{{ careFacility.event_duration }} Min.</td>
             </tr>
           </tbody>
         </v-table>
