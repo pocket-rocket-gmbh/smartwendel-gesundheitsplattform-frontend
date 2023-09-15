@@ -1,6 +1,6 @@
 <template>
   <div class="categories-wrapper">
-    <div class="text">
+    <div class="text general-font-size">
       <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">
         Pflege, Ärtze, <br />
         Krankenhäuser und co.
@@ -37,7 +37,7 @@
         <img class="image" :src="item.content.icon" />
         <div class="d-flex align-center">
           <div class="font-weight-bold d-flex align-center is-clickable">
-            <span class="is-dark-grey" v-html="item.content.heading"></span>
+            <span class="is-dark-grey general-font-size" v-html="item.content.heading"></span>
           </div>
         </div>
       </div>
@@ -146,7 +146,6 @@ const items = [
   .icon {
     display: flex;
     align-items: center;
-    font-size: 22px;
     gap: 0.5rem;
     flex: calc(50% - 0.5rem);
     box-sizing: border-box;

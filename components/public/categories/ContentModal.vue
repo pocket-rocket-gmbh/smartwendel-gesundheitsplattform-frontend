@@ -1,9 +1,10 @@
 <template>
   <v-dialog
     width="900"
+    height="600"
     v-model="opened"
     transition="dialog-bottom-transition"
-    class="mt-10"
+    class="mt-10 general-font-size"
     scrollable
   >
     <img

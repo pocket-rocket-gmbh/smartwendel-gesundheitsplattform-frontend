@@ -1,6 +1,6 @@
 <template>
   <Loading v-if="filterStore.loading" />
-  <div class="entries" v-if="!(!filterStore.loading && !filterStore.filteredResults.length)">
+  <div class="entries general-font-size" v-if="!(!filterStore.loading && !filterStore.filteredResults.length)">
     <div class="d-flex actions">
       <span class="hits">{{ filterStore.filteredResults.length }} Treffer</span>
       <div class="sort-order is-clickable d-flex align-center" @click="toggleFilterSort">

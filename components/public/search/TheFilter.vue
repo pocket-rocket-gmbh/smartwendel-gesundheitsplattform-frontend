@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="is-dark-grey is-uppercase mb-4">Suche filtern</h2>
+    <h2 class="is-dark-grey is-uppercase">Suche filtern</h2>
     <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
       <div class="filter-tiles">
         <div v-for="filter in itemsForServiceList" class="filter-group">
@@ -13,7 +13,7 @@
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
                 >
-                  <span class="word-break">
+                  <span class="word-break general-font-size">
                     {{ subItem.title }}
                   </span>
                 </div>

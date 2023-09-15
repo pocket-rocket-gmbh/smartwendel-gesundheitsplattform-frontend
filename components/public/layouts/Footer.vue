@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div class="wrapper pt-5">
+    <div class="wrapper pt-5 general-font-size">
       <div class="py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
         <v-row class="has-bg-grey register-hint">
           <v-col md="8" class="flex-column justify-start text-h4 has-bg-grey is-dark-grey font-weight-bold">
