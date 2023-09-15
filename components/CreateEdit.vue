@@ -17,7 +17,6 @@
         @accepted="confirmSaveDialogOpen = false"
         @close="handleConfirmClose()"
         @update="handleUpdateItem"
-        v-if="useUser().statusOnHealthScope()"
       />
 
       <v-form ref="form">
