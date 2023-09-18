@@ -42,7 +42,7 @@
       </div>
       <div v-if="errorFileSizeTooLarge">
         <v-alert type="warning" density="compact" closable class="mt-2"
-          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 5 MB
+          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 10 MB
           erlaubt</v-alert
         >
       </div>
@@ -58,7 +58,7 @@
     >
       Hinzufügen
     </v-btn>
-    <div class="text-caption">* Maximal 5 MB, PDF erlaubt</div>
+    <div class="text-caption">* Maximal 10 MB, PDF erlaubt</div>
     <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
 
     <v-list class="mt-5" v-if="tagName === 'insurance'">
@@ -246,7 +246,7 @@ const item = ref({
 });
 
 const handleFile = async () => {
-  if (file.value && file.value[0] && file.value[0].size / 1000000 > 5) {
+  if (file.value && file.value[0] && file.value[0].size / 1000000 > 10) {
     errorFileSizeTooLarge.value = true;
     file.value = {};
     return;
