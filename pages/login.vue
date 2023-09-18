@@ -20,11 +20,15 @@
               :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
               :type="PasswordVisible ? 'text' : 'password'"
               @click:append-inner="PasswordVisible = !PasswordVisible"
-              :error-messages="useErrors().mappedErrorCode(errors)"
+              :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
           <v-btn color="primary" block depressed type="submit">Login</v-btn>
-          <div @click="emailAlreadyGiven()" align="center" class="mt-2 is-clickable">
+          <div
+            @click="emailAlreadyGiven()"
+            align="center"
+            class="mt-2 is-clickable"
+          >
             Passwort vergessen?
           </div>
 
@@ -51,7 +55,7 @@ export default defineComponent({
     const password = ref("");
     const loading = ref(false);
     const animated = ref(false);
-    const errors = ref("");
+    const errors = ref({});
     const lastRoute = ref(null);
 
     const router = useRouter();
@@ -78,7 +82,10 @@ export default defineComponent({
       errors.value = "";
       const data = { email: email.value, password: password.value };
 
-      const { data: result } = await axios.post<ServerCallResult>("/api/login", { data });
+      const { data: result } = await axios.post<ServerCallResult>(
+        "/api/login",
+        { data }
+      );
 
       if (result.status === ResultStatus.SUCCESSFUL) {
         const jwt = result.data.jwt_token;
@@ -111,9 +118,10 @@ export default defineComponent({
           }
         }
       } else {
-        errors.value = result?.data;
         loading.value = false;
-
+        errors.value = {
+          errors: [{ field_name: "email", code: "ERR_BAD_REQUEST" }],
+        };
         // animate shake
         animated.value = true;
         setTimeout(() => {
@@ -134,8 +142,9 @@ export default defineComponent({
           }, 300);
         }
       }
-      if(lastRoute.value.includes("/password_reset")) {
-        lastRoute.value = "/" }
+      if (lastRoute.value.includes("/password_reset")) {
+        lastRoute.value = "/";
+      }
     });
 
     return {
@@ -147,7 +156,7 @@ export default defineComponent({
       auth,
       emailAlreadyGiven,
       lastRoute,
-      PasswordVisible
+      PasswordVisible,
     };
   },
 });
