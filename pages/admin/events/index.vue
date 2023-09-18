@@ -111,7 +111,7 @@ const fields = [
       });
       return res;
     },
-    disabledTooltip: "Bitte alle Pflichtfelder zu deiner Veranstaltung ausfüllen, danach kannst du deine Veranstaltung über den Button Online schalten",
+    disabledTooltip: "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { value: "", type: "beinEdited" },

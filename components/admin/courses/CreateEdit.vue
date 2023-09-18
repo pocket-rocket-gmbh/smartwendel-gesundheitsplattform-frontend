@@ -1047,7 +1047,7 @@ onMounted(async () => {
   margin-top: 30px;
   height: 50px;
   width: 200px !important;
-  background-color: #8ab61d;
+  background-color: #8ab61d!important;
   justify-content: center;
   font-weight: bold;
   text-transform: uppercase;
@@ -1058,8 +1058,8 @@ onMounted(async () => {
 }
 
 .dp__instance_calendar .dp__button {
-  background-color: #d3d3d3;
-  color: #8ab61d;
+  background-color: #8ab61d;;
+  color: white;
   height: 3rem;
   font-weight: bold;
 }

@@ -48,7 +48,7 @@
         <v-col class="center">
           <v-btn variant="outlined" rounded="pill" color="white" @click="emit('toggleMap')">
             <span v-if="showMap"> Listenansicht </span>
-            <span v-if="!showMap"> Karte einblenden </span>
+            <span v-if="!showMap"> Kartenansicht </span>
           </v-btn>
         </v-col>
       </v-row>

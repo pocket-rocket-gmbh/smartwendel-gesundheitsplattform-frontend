@@ -83,7 +83,7 @@
         class="mt-5"
         @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
       >
-        Zu Deiner Einrichtung
+        Zur Online-Ansicht deiner Einrichtung
       </v-btn>
 
       <AdminCareFacilitiesCreateEdit
@@ -163,7 +163,7 @@ const fields = [
       return res;
     },
     disabledTooltip:
-      "Bitte alle Pflichtfelder zu deiner Einrichtung ausfüllen, danach kannst du deine Einrichtung über den Button Online schalten",
+      "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
@@ -309,6 +309,7 @@ const handleDeleteDialogClose = () => {
   confirmDeleteDialogOpen.value = false;
   dataTableRef.value?.resetActiveItems();
   useNuxtApp().$bus.$emit("facilityUpdate");
+  handleUpdateItems();
 };
 
 const handleCreateEditClose = async () => {

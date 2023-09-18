@@ -161,7 +161,7 @@
             </div>
           </span>
           <span v-else-if="field.type === 'beinEdited'">
-            <span v-if="isDraft(item)"><i>in Bearbeitung</i></span>
+            <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
           <span v-else-if="field.type === 'button' && field.action">
             <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'">
