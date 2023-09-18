@@ -3,8 +3,8 @@
     <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')">
       <v-col cols="12" md="10" class="d-flex is-dark-grey justify-center">
         <div>
-          <h2 class="is-uppercase mt-5">{{ subCategory?.name }}</h2>
-          <span class="my-5" v-html="subCategory?.description"></span>
+          <h2 class="is-uppercase mt-5 ">{{ subCategory?.name }}</h2>
+          <span class="my-5 text-wrap" v-html="subCategory?.description"></span>
         </div>
       </v-col>
     </v-row>
@@ -118,4 +118,10 @@ const getSubSubCategories = async () => {
     }
   }
 }
+
+.text-wrap {
+  text-align: justify;
+  display: inline-block;
+}
+
 </style>
