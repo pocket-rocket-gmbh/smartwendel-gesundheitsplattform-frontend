@@ -108,12 +108,12 @@
                   />
                 </div>
               </template>
-              <span v-if="useUser().statusOnHealthScope()">{{
+              <div v-if="useUser().statusOnHealthScope()" class="tooltip">{{
                 field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip
-              }}</span>
-              <span v-else>
+              }}</div>
+              <div v-else class="tooltip">
                 Durch die Prüfung deiner Userdaten durch einen Administrator, werden zur Zeit deine Beiträge/Kurse/Veranstaltungen nicht auf der Gesundheitsplattform angezeigt.
-              </span>
+              </div>
             </v-tooltip>
           </template>
           <TableDropdown
@@ -437,4 +437,7 @@ defineExpose({ resetActiveItems, getItems });
 
 .disabled
   cursor: not-allowed !important
+
+.tooltip
+  max-width: 400px
 </style>
