@@ -82,6 +82,9 @@
             <span v-if="!showMap"> Kartenansicht </span>
           </v-btn>
         </v-col>
+        <v-col class="d-flex justify-end align-center general-font-size mx-3">
+          <span class="text-white font-weight-bold">{{ filterStore.filteredResults.length }} Treffer</span>
+        </v-col>
       </v-row>
     </div>
   </div>

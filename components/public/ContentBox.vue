@@ -7,25 +7,16 @@
     <div class="text">
       <template v-if="item.user">
         <div class="info">
-          <div class="align-center user-information" v-if="item?.name_instructor">
-            <v-icon class="facility-name">mdi-account-outline</v-icon
-            ><span class="break-title">{{ item?.name_instructor }}</span>
-          </div>
-
-          <div class="d-flex align-center justify-end" v-if="item.created_at">
-            <v-icon>mdi-calendar-outline</v-icon
-            ><span class="break-title">{{
-              useDatetime().parseDatetime(item.created_at)
-            }}</span>
-          </div>
           <div
             class="d-flex align-center facility-name is-clickable"
-            v-if="item.user_care_facility?.name"
+            v-if="item.user_care_facility?.name && item.kind !== 'facility'"
           >
+            <span>
+              <img :src="facilityIcon" />
+            </span>
             <v-btn
               :href="`/public/care_facilities/${item.user_care_facility?.id}`"
-              variant="outlined"
-              rounded="pill"
+              variant="text"
               size="small"
             >
               <span
@@ -33,6 +24,12 @@
                 v-html="item.user_care_facility?.name"
               ></span>
             </v-btn>
+          </div>
+          <div class="d-flex align-center justify-end" v-if="item.created_at">
+            <v-icon>mdi-calendar-outline</v-icon
+            ><span class="break-title">{{
+              useDatetime().parseDatetime(item.created_at)
+            }}</span>
           </div>
         </div>
         <hr />
@@ -48,8 +45,10 @@
             <v-btn size="small" variant="text" class="read-more"> weiter lesen </v-btn>
           </span>
         </div>
-
-        <span class="content break-text general-font-size" v-html="item.description"></span>
+        <span
+          class="content break-text general-font-size"
+          v-html="item.description"
+        ></span>
       </div>
 
       <PublicCategoriesContentModal
@@ -62,11 +61,11 @@
           :href="buttonHref"
           :target="item.url ? '_blank' : ''"
           variant="flat"
-          color="grey"
+          color="primary"
           rounded="pill"
-          size="small"
         >
-          Mehr anzeigen &gt;
+          <span v-if="item.kind">{{ buttonText }}</span>
+          <span v-else> Mehr anzeigen</span>
         </v-btn>
       </div>
     </div>
@@ -75,6 +74,7 @@
 <script lang="ts" setup>
 import { Facility } from "~/store/searchFilter";
 import noImage from "@/assets/images/no-image.svg";
+import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 const props = defineProps<{
   item: Facility;
   size?: number;
@@ -110,6 +110,16 @@ const buttonHref = computed(() => {
   }
 
   return null;
+});
+
+const buttonText = computed(() => {
+  if (!props.item) return null;
+  if (props.item.kind) {
+    if (props.item.kind === "course") return "Zum Kurs";
+    if (props.item.kind === "event") return "Zur Veranstaltung";
+    if (props.item.kind === "news") return "Zum Beitrag";
+    if (props.item.kind === "facility") return "Zur Einrichtung";
+  }
 });
 
 const handleResize = () => {

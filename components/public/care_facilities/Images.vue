@@ -2,16 +2,16 @@
   <div
     :class="[
       'image-area mt-5',
-      { 'has-logo': careFacility.logo_url || careFacility.logo },
+      { 'has-logo': careFacility?.logo_url || careFacility?.logo },
     ]"
   >
     <v-row class="image-row">
-      <v-col class="d-flex flex-wrap align-content-bottom justify-center">
+      <v-col class="d-flex flex-wrap align-content-bottom" :md="careFacility?.sanitized_images?.length === 0 ? '8' : ''">
         <img
           class="image"
           :class="[careFacility?.sanitized_images?.[0] ? 'left' : '']"
-          v-if="careFacility.image_url || careFacility.file"
-          :src="careFacility.image_url || careFacility.file"
+          v-if="careFacility?.image_url || careFacility?.file"
+          :src="careFacility?.image_url || careFacility?.file"
         />
       </v-col>
       <v-col
@@ -42,8 +42,8 @@
         </v-row>
       </v-col>
     </v-row>
-    <div class="logo" v-if="careFacility.logo || careFacility.logo_url">
-      <img :src="careFacility.logo ? careFacility.logo : careFacility.logo_url" />
+    <div class="logo" v-if="careFacility?.logo || careFacility?.logo_url">
+      <img :src="careFacility?.logo ? careFacility?.logo : careFacility?.logo_url" />
     </div>
   </div>
   <PublicCareFacilitiesGallery
