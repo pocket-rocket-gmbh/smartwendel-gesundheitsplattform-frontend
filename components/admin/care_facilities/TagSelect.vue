@@ -13,15 +13,45 @@
   >
     <template #title>
       <div
-        class="d-flex flex-column"
+        class="d-flex align-center"
         :class="[handleExpandToggled ? 'text-h5' : 'text-h6']"
       >
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
         <div v-if="kind === 'news'">Stich- und Schlagwörter zum Newsbeitrag</div>
         <div v-if="kind === 'event'">Veranstaltungsangebot</div>
         <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
+        <div class="has-font-size-small-medium ml-3">
+          <v-tooltip location="top" width="300px">
+            <template v-slot:activator="{ props }">
+              <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
+            </template>
+            <span v-if="kind === 'facility'">
+              Trage Begriffe ein, die dein individuelles Angebot möglichst präzise
+              beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“ und „Demenz“, wenn
+              es sich um eine Pflegeinrichtung oder „Yoga“, „Les Mills“ und
+              „Krafttraining“, wenn es sich um ein Fitnessstudio handelt). Auf diese Weise
+              gelangen Besucherinnen und Besucher zu deinem Profil, sobald sie nach den
+              entsprechenden Schlagwörtern suchen.
+            </span>
+            <span v-if="kind === 'course'"
+              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben
+              (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise
+              gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach
+              den entsprechenden Schlagwörtern suchen.
+            </span>
+            <span v-if="kind === 'event'"
+              >„Überlege dir, welche Begriffe den Inhalt deiner Veranstaltung am
+              treffendsten wiedergeben. Trage bspw. den Titel „Fit in der Region“, die
+              Ziele („Gesundheit fördern“) und die Angebote („Gesundheits-Checks“) deiner
+              Veranstaltung ein.
+            </span>
+            <span v-if="kind === 'news'">
+              Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie
+              die entsprechenden Schlagwörter suchen.
+            </span>
+          </v-tooltip>
+        </div>
       </div>
-
       <div v-if="!expand" class="mt-3">
         <span v-if="preSetTags.length">Bereits ausgewählt:</span>
         <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
@@ -54,53 +84,7 @@
             {{ tag.name }}
           </v-chip>
         </div>
-<!--         <div class="content-title mt-5 d-flex align-center">
-          <v-icon>mdi-tag-outline</v-icon>
-          <div>
-            <div>
-              <spa>Schlagwort eingeben</spa>
-            </div>
-          </div>
-          <v-tooltip location="top" width="300px">
-            <template v-slot:activator="{ props }">
-              <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
-            </template>
-            <span v-if="kind === 'facility'">
-              Trage Begriffe ein, die dein individuelles Angebot möglichst präzise
-              beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“ und „Demenz“, wenn
-              es sich um eine Pflegeinrichtung oder „Yoga“, „Les Mills“ und
-              „Krafttraining“, wenn es sich um ein Fitnessstudio handelt). Auf diese Weise
-              gelangen Besucherinnen und Besucher zu deinem Profil, sobald sie nach den
-              entsprechenden Schlagwörtern suchen.
-            </span>
-            <span v-if="kind === 'course'"
-              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben
-              (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise
-              gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach
-              den entsprechenden Schlagwörtern suchen.
-            </span>
-            <span v-if="kind === 'event'"
-              >„Überlege dir, welche Begriffe den Inhalt deiner Veranstaltung am
-              treffendsten wiedergeben. Trage bspw. den Titel „Fit in der Region“, die
-              Ziele („Gesundheit fördern“) und die Angebote („Gesundheits-Checks“) deiner
-              Veranstaltung ein.
-            </span>
-            <span v-if="kind === 'news'">
-              Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie
-              die entsprechenden Schlagwörter suchen.
-            </span>
-          </v-tooltip>
-
-        </div> -->
-       
         <div class="inputs my-5">
-          <!-- <v-combobox
-            @click.stop
-            hide-details="auto"
-            label="Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie"
-            :items="allTags"
-            v-model="currentTag"
-          ></v-combobox> -->
           <v-combobox
             v-model="currentTag"
             v-model:search="currentTagSearch"
@@ -299,5 +283,4 @@ onMounted(async () => {
     border-radius: 0.25rem;
   }
 }
-
 </style>
