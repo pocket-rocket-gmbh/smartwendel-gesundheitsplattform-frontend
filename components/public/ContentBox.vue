@@ -36,7 +36,9 @@
       </template>
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
-          <span class="title is-clickable">{{ item.name }}</span>
+          <a :href="`/public/care_facilities/${item.id}`">
+            <span class="title is-clickable">{{ item.name }}</span>
+          </a>
           <span
             v-if="item.description.length > 260"
             class="is-clickable"
