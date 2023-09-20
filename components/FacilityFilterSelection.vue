@@ -1,5 +1,5 @@
 <template>
-  <div class="popover" ref="popoverParentRef" v-auto-animate>
+  <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
     <div class="input" @click="showPopover = !showPopover">
       <div class="input-title">{{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || "Kategorie wählen" }}</div>
 
@@ -175,7 +175,6 @@ onMounted(async () => {
   width: 100%;
 
   .input {
-    height: 38px;
     cursor: pointer;
     display: flex;
     align-items: center;
