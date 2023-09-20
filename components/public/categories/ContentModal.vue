@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     width="900"
-    height="600"
+    height="500"
     v-model="opened"
     transition="dialog-bottom-transition"
     class="mt-10 general-font-size"
@@ -15,23 +15,6 @@
     />
     <v-card class="dialog">
       <v-card-text>
-        <v-row>
-          <v-col class="d-flex align-center justify-center">
-            <v-img
-              v-if="item?.image_url"
-              :src="item?.image_url"
-              contain
-              aspect-ratio="16/9"
-            />
-            <v-img
-              v-else
-              :src="noImage"
-              contain
-              aspect-ratio="1"
-              class="no-image"
-            />
-          </v-col>
-        </v-row>
         <v-row>
           <v-col class="d-flex flex-column justify-center aligin-center">
             <h3 class="mb-4">{{ item?.name }}</h3>
