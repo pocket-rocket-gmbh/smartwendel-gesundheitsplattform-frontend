@@ -87,7 +87,7 @@ const items = [
   },
   {
     content: {
-      heading: "Plege",
+      heading: "Pflege",
       icon: icon4,
       link: "",
     },
