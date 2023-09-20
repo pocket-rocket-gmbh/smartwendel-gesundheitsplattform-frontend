@@ -11,8 +11,7 @@
           <div class="field general-font-size">
             <label class="label is-white">
               <div class="search-term">
-                <span v-if="filterKind === 'facility'">Kategorie </span>
-                <span v-else>Kategorie</span>
+                <span>Kategorie </span>
               </div>
             </label>
             <FacilityFilterSelection
@@ -25,7 +24,9 @@
         <v-col>
           <div class="field general-font-size">
             <label class="label is-white">
-              <div class="search-term">Suchbegriff</div>
+              <div class="search-term">
+                <span>Suchbegriff</span>
+                </div>
             </label>
             <PublicSearchField
               v-model="filterStore.currentSearchTerm"
