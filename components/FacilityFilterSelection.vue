@@ -1,7 +1,7 @@
 <template>
   <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
     <div class="input" @click="showPopover = !showPopover">
-      <div class="input-title">{{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || "Kategorie wählen" }}</div>
+      <div class="input-title">{{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}</div>
 
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
@@ -53,6 +53,15 @@ const props = defineProps<{
   popoverWidth?: number;
 }>();
 
+
+const placeholderText = ref("");
+const setPlaceholderText = () => {
+  if (props.filterKind === "facility") {
+    placeholderText.value = "Branche wählen";
+  } else if (props.filterKind === "course") {
+    placeholderText.value = "Themengebiet wählen";
+  }
+};
 const emit = defineEmits<{
   (event: "update:modelValue", values: string[]): void;
 }>();
@@ -164,6 +173,7 @@ onMounted(async () => {
   }
 
   selectedFilter.value = foundFilters[0];
+  setPlaceholderText();
 });
 </script>
 
