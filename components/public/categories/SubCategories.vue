@@ -119,9 +119,4 @@ const getSubSubCategories = async () => {
   }
 }
 
-.text-wrap {
-  text-align: justify;
-  display: inline-block;
-}
-
 </style>

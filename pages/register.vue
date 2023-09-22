@@ -1,16 +1,36 @@
 <template>
   <div class="register-wrapper">
-    <div class="register-now elevation-10" :class="['card', { shake: animated }]">
+    <div
+      class="register-now elevation-10"
+      :class="['card', { shake: animated }]"
+    >
       <div>
-        <div class="d-flex justify-center align-center text-primary text-h2 font-weight-bold" v-if="!registerSuccessful">
+        <div
+          class="d-flex justify-center align-center text-primary text-h2 font-weight-bold"
+          v-if="!registerSuccessful"
+        >
           <span>Jetzt registrieren!</span>
         </div>
-        <div class="mt-5 d-flex flex-column general-font-size" v-if="!registerSuccessful">
+        <div
+          class="mt-5 d-flex flex-column general-font-size"
+          v-if="!registerSuccessful"
+        >
           <span class="">
-            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter und möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen? Dann laden wir dich herzlich zur Registrierung ein! Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in wenigen Schritten auf der Plattform darstellen und veröffentlichen. </span
-          >
+            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter
+            und möchtest dein Angebot auf einer unabhängigen und kostenfreien
+            Plattform veröffentlichen? Dann laden wir dich herzlich zur
+            Registrierung ein! Als Anbieter kannst du dich und deine
+            Gesundheitsleistung ganz einfach und in wenigen Schritten auf der
+            Plattform darstellen und veröffentlichen.
+          </span>
           <span class="mt-5">
-            Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei der einheimischen Bevölkerung. Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
+            Hierdurch erzielst du eine größere Reichweite sowie mehr
+            Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei
+            der einheimischen Bevölkerung. Ganz gleich ob es sich um ein
+            behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches
+            Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter
+            willkommen, deren Angebote zum Erhalt und zur Verbesserung der
+            Gesundheit der Landkreisbevölkerung beitragen!
           </span>
         </div>
       </div>
@@ -22,7 +42,9 @@
               v-model="careFacilityName"
               type="text"
               label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('firstname', errors)
+              "
               :rules="[rules.required]"
               hide-details="auto"
             />
@@ -61,13 +83,26 @@
           </div>
         </div>
         <div class="my-5">
-          <h2 class="mb-3">Mein Benutzerkonto</h2>
+          <div class="d-flex align-center">
+            <h2 class="mr-3">Mein Benutzerkonto</h2>
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <v-icon class="is-clickable mr-10" v-bind="props"
+                  >mdi-information-outline</v-icon
+                >
+              </template>
+              <span>Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern verwendet werden, trage bitte eine allg. E-Mail Adresse ein, auf die jeder Nutzer Zugriff hat</span>
+            </v-tooltip>
+          </div>
+
           <div class="field">
             <v-text-field
               v-model="firstname"
               type="text"
               label="Vorname *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('firstname', errors)
+              "
               :rules="[rules.required]"
               hide-details="auto"
             />
@@ -77,7 +112,9 @@
               v-model="lastname"
               type="text"
               label="Nachname *"
-              :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('lastname', errors)
+              "
               :rules="[rules.required]"
               hide-details="auto"
             />
@@ -88,7 +125,11 @@
               type="tel"
               label="Telefonnummer *"
               hide-details="auto"
-              :rules="[rules.required, rules.validateNumber, rules.phoneCounter]"
+              :rules="[
+                rules.required,
+                rules.validateNumber,
+                rules.phoneCounter,
+              ]"
               :error-messages="useErrors().checkAndMapErrors('phone', errors)"
             />
           </div>
@@ -103,7 +144,11 @@
             />
           </div>
         </div>
-        <v-checkbox v-model="privacyAccepted" :rules="[rules.required]" class="check">
+        <v-checkbox
+          v-model="privacyAccepted"
+          :rules="[rules.required]"
+          class="check"
+        >
           <template #label>
             <div>
               Ich stimme der
@@ -119,22 +164,35 @@
           </template>
         </v-checkbox>
 
-        <v-btn color="primary" class="mt-5" block depressed @click="register">Registrieren</v-btn>
+        <v-btn color="primary" class="mt-5" block depressed @click="register"
+          >Registrieren</v-btn
+        >
       </v-form>
       <div align="center" class="mt-5" v-if="registerSuccessful">
         <div class="d-flex flex-column align-center justify-center">
-          <span class="text-h2 text-primary font-weight-bold mb-10 general-font-size"> Vielen Dank für deine Registrierung! </span>
+          <span
+            class="text-h2 text-primary font-weight-bold mb-10 general-font-size"
+          >
+            Vielen Dank für deine Registrierung!
+          </span>
           <span class="general-font-size">
-            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
+            temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
           </span>
         </div>
         <div class="mt-5">
-          <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>
+          <v-btn color="primary" @click="toLogin" block depressed
+            >Jetzt anmelden</v-btn
+          >
         </div>
       </div>
     </div>
 
-    <span v-if="registerSuccessful" class="text-h2 is-dark-grey font-weight-bold d-flex justify-center">So geht es weiter:</span>
+    <span
+      v-if="registerSuccessful"
+      class="text-h2 is-dark-grey font-weight-bold d-flex justify-center"
+      >So geht es weiter:</span
+    >
     <div v-if="registerSuccessful" class="steps-wrapper">
       <template v-for="step in steps">
         <div class="item" elevation="0">
@@ -187,27 +245,32 @@ const icons = ref([LogoStep1, LogoStep2, LogoStep3, LogoStep4, LogoStep5]);
 
 const steps = {
   step1: {
-    description: "Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere zunächst dein Passwort.",
+    description:
+      "Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere zunächst dein Passwort.",
     icon: LogoStep1,
     next: true,
   },
   step2: {
-    description: "Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.",
+    description:
+      "Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.",
     icon: LogoStep2,
     next: true,
   },
   step3: {
-    description: "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”).",
+    description:
+      "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”).",
     icon: LogoStep3,
     next: true,
   },
   step4: {
-    description: "Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
+    description:
+      "Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
     icon: LogoStep4,
     next: true,
   },
   step5: {
-    description: "Vervollständige deinen Account und lege deine Kursangebote an, teile Veranstaltungen oder verfasse Newsbeiträge.",
+    description:
+      "Vervollständige deinen Account und lege deine Kursangebote an, teile Veranstaltungen oder verfasse Newsbeiträge.",
     icon: LogoStep5,
     next: false,
   },
@@ -236,14 +299,19 @@ const register = async () => {
     care_facility_community_id: careFacilityCommunityId.value,
   };
 
-  const { data: result } = await axios.post<ServerCallResult>("/api/register_with_facility", { data });
+  const { data: result } = await axios.post<ServerCallResult>(
+    "/api/register_with_facility",
+    { data }
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     localStorage.setItem("health_platform._remembered_email", email.value);
     registerSuccessful.value = true;
     scrollToTop();
   } else {
-    errors.value = { errors: [{ field_name: "email", code: "register.failed" }] };
+    errors.value = {
+      errors: [{ field_name: "email", code: "register.failed" }],
+    };
     loading.value = false;
 
     // animate shake
@@ -264,7 +332,9 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find((community: any) => community.id === communityId);
+  const found = communities.value.find(
+    (community: any) => community.id === communityId
+  );
   if (found) {
     careFacilityZip.value = found.zip;
     return found.towns;
@@ -280,7 +350,9 @@ const scrollToTop = () => {
 onMounted(() => {
   scrollToTop();
   getCommunities();
-  const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
+  const rememberedEmail = localStorage.getItem(
+    "health_platform._remembered_email"
+  );
   if (rememberedEmail) {
     setTimeout(() => {
       email.value = rememberedEmail;

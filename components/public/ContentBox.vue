@@ -48,7 +48,7 @@
           </span>
         </div>
         <span
-          class="content break-text general-font-size"
+          class="content break-text general-font-size text-wrap"
           v-html="item.description"
         ></span>
       </div>

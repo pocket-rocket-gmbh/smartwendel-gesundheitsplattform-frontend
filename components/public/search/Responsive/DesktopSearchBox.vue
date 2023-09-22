@@ -35,13 +35,6 @@
             </div>
           </div>
         </v-col>
-        <v-col
-          v-if="filterKind !== 'event'"
-          md="1"
-          class="d-flex justify-center align-center is-white general-font-size"
-        >
-          <div>Oder</div>
-        </v-col>
         <v-col>
           <div class="field general-font-size">
             <label class="label is-white">
@@ -140,7 +133,7 @@ const searchTitle = ref("");
 const setFilterTitle = () => {
   if (props.filterKind === "facility") {
     filterTitle.value = "Branche";
-    searchTitle.value = "Angebieter suchen";
+    searchTitle.value = "Anbieter suchen";
   }
   if (props.filterKind === "event") {
     filterTitle.value = "Suche nach Veranstaltungen";
