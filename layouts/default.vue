@@ -70,6 +70,10 @@ onUnmounted(() => {
   document.removeEventListener("touchmove", handleTouchMove);
   document.removeEventListener("touchend", handleTouchEnd);
 });
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 </script>
 
 <style lang="scss">
