@@ -11,11 +11,12 @@
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         class="text-field file-input"
-        hide-details="auto"
+        
         label="Datei auswählen"
         v-model="file"
         @change="handleFile"
         accept="application/pdf,application/vnd.ms-excel"
+        show-size
       />
       <v-text-field
         class="text-field"
@@ -26,7 +27,7 @@
               1
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
-        hide-details="auto"
+       
         label="Bezeichnung*"
         v-model="filename"
       />
@@ -41,7 +42,7 @@
       </div>
       <div v-if="errorFileSizeTooLarge">
         <v-alert type="warning" density="compact" closable class="mt-2"
-          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 5 MB
+          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 10 MB
           erlaubt</v-alert
         >
       </div>
@@ -57,7 +58,7 @@
     >
       Hinzufügen
     </v-btn>
-    <div class="text-caption">* Maximal 5 MB, PDF erlaubt</div>
+    <div class="text-caption">* Maximal 10 MB, PDF erlaubt</div>
     <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
 
     <v-list class="mt-5" v-if="tagName === 'insurance'">
@@ -245,7 +246,7 @@ const item = ref({
 });
 
 const handleFile = async () => {
-  if (file.value && file.value[0] && file.value[0].size / 1000000 > 5) {
+  if (file.value && file.value[0] && file.value[0].size / 1000000 > 10) {
     errorFileSizeTooLarge.value = true;
     file.value = {};
     return;
@@ -326,7 +327,6 @@ const save = async () => {
       tag: props.tagName,
     },
   ]);
- 
 
   fileUrl.value = null;
   filename.value = "";
@@ -334,11 +334,11 @@ const save = async () => {
   file.value = {};
 };
 
-const handleEmitOffline = (docs:CreateEditFacility["offlineDocuments"]) => {
+const handleEmitOffline = (docs: CreateEditFacility["offlineDocuments"]) => {
   emit("offline", docs);
   const typeSet = docs?.some((item) => item.tag === props.tagName);
   emit("areDocumentsSet", typeSet, props.tagName);
-}
+};
 
 const getUrlToDocument = (document: string) => {
   const byteCharacters = atob(document.split(";base64,")[1]);

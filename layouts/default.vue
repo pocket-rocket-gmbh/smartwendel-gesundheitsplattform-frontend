@@ -1,17 +1,13 @@
 <template>
   <v-app>
-    <template v-if="loading"></template>
-    <template v-else>
-      <ClientOnly>
-        <ClientSnackbar />
-      </ClientOnly>
-      <PublicLayoutsTopBar />
-      <v-main>
-        <slot />
-      </v-main>
-      <PublicLayoutsFooter />
-      <PublicLoginPanel v-if="!useUser().loggedIn()" />
-    </template>
+    <ClientOnly>
+      <ClientSnackbar />
+    </ClientOnly>
+    <PublicLayoutsTopBar />
+    <v-main>
+      <slot />
+    </v-main>
+    <PublicLayoutsFooter />
   </v-app>
 </template>
 
@@ -74,7 +70,6 @@ onUnmounted(() => {
   document.removeEventListener("touchmove", handleTouchMove);
   document.removeEventListener("touchend", handleTouchEnd);
 });
-
 </script>
 
 <style lang="scss">

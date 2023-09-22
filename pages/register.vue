@@ -1,215 +1,215 @@
 <template>
-  <v-row class="my-15">
-    <v-col sm="3" md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="2">
-      <v-card elevation="10" :class="['card', { shake: animated }]">
-        <div>
-          <div
-            class="d-flex justify-center align-center text-primary text-h2 font-weight-bold"
-            v-if="!registerSuccessful"
-          >
-            <span>Jetzt registrieren!</span>
-          </div>
-          <div class="mt-5 d-flex flex-column" v-if="!registerSuccessful">
-            <span class="">
-              Du bist im Landkreis ansässige(r) Gesundheitsanbieter:in und möchtest dein
-              Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen?
-              Dann laden wir dich herzlich ein, dich zu registrieren!</span
-            >
-            <span class="mt-5">
-              Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und
-              in wenigen Schritten auf der Plattform darstellen und veröffentlichen.
-              Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
-              dein Angebot und steigerst deine Bekanntheit bei der einheimischen
-              Bevölkerung.
-            </span>
-            <span class="mt-5">
-              Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches
-              oder gewerbliches Angebot handelt: Auf der Gesundheits- und Pflegeplattform
-              sind alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
-              Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
-            </span>
-          </div>
-        </div>
-        <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
-          <div class="my-5">
-            <h2 class="mb-3">Meine Einrichtung</h2>
-            <div class="field">
-              <v-text-field
-                v-model="careFacilityName"
-                type="text"
-                label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
-                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-                :rules="[rules.required]"
-                hide-details="auto"
-              />
-            </div>
-            <div class="field">
-              <v-select
-                hide-details="auto"
-                v-model="careFacilityCommunityId"
-                :items="communities"
-                item-title="name"
-                item-value="id"
-                label="Gemeinde *"
-                :rules="[rules.required]"
-              />
-            </div>
-            <div class="field split">
-              <v-text-field
-                v-model="careFacilityZip"
-                hide-details="auto"
-                label="PLZ *"
-                :type="'number'"
-                :rules="[rules.required, rules.zip]"
-                :error-messages="useErrors().checkAndMapErrors('zip', errors)"
-                disabled
-              />
-              <v-select
-                :disabled="careFacilityCommunityId.length === 0"
-                hide-details="auto"
-                v-model="careFacilityTown"
-                :items="getTownsByCommunityId(careFacilityCommunityId)"
-                item-title="name"
-                item-value="name"
-                label="Ort *"
-                :rules="[rules.required]"
-              />
-            </div>
-          </div>
-          <div class="my-5">
-            <h2 class="mb-3">Mein Benutzerkonto</h2>
-            <div class="field">
-              <v-text-field
-                v-model="firstname"
-                type="text"
-                label="Vorname *"
-                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-                :rules="[rules.required]"
-                hide-details="auto"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                v-model="lastname"
-                type="text"
-                label="Nachname *"
-                :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
-                :rules="[rules.required]"
-                hide-details="auto"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                v-model="phone"
-                type="tel"
-                label="Telefonnummer *"
-                hide-details="auto"
-                :rules="[rules.required, rules.validateNumber]"
-                :error-messages="useErrors().checkAndMapErrors('phone', errors)"
-              />
-            </div>
-            <div class="field">
-              <v-text-field
-                v-model="email"
-                type="email"
-                label="E-Mail Adresse *"
-                :rules="[rules.required, rules.email]"
-                hide-details="auto"
-                :error-messages="useErrors().checkAndMapErrors('email', errors)"
-              />
-            </div>
-          </div>
-          <v-checkbox v-model="privacyAccepted" :rules="[rules.required]">
-            <template v-slot:label>
-              <div>
-                Ich stimme der
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ props }">
-                    <a target="_blank" href="/privacy_policy" @click.stop v-bind="props">
-                      <u>Datenschutzerklärung</u>
-                    </a>
-                  </template>
-                  Datenschutzerklärung öffnen
-                </v-tooltip>
-                <span> und den </span>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ props }">
-                    <a
-                      target="_blank"
-                      href="/rules_of_conduct"
-                      @click.stop
-                      v-bind="props"
-                    >
-                      <u>Nutzungsbedingungen</u>
-                    </a>
-                  </template>
-                  Nutzungsbedingungen öffnen
-                </v-tooltip>
-                zu
-              </div>
-            </template>
-          </v-checkbox>
-          <v-btn color="primary" class="mt-5" block depressed @click="register"
-            >Registrieren</v-btn
-          >
-        </v-form>
-        <div align="center" class="mt-5" v-if="registerSuccessful">
-          <div class="d-flex flex-column align-center justify-center">
-            <span class="text-h2 text-primary font-weight-bold mb-10">
-              Vielen Dank für deine Registrierung!
-            </span>
-            <span class="text-h6">
-              Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
-              temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
-            </span>
-          </div>
-          <div class="mt-5">
-            <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>
-          </div>
-        </div>
-      </v-card>
-    </v-col>
-  </v-row>
-
-  <span
-    v-if="registerSuccessful"
-    class="text-h3 is-dark-grey font-weight-bold text-uppercase mb-5 d-flex justify-center"
-    >So geht es weiter:</span
-  >
-  <v-row v-if="registerSuccessful">
-    <v-col md="8" xl="8" offset-xl="2" offset-md="2" offset-sm="2">
-      <v-row>
-        <v-col
-          v-for="step in steps"
-          class="d-flex align-center justify-center flex-grow-1"
+  <div class="register-wrapper">
+    <div
+      class="register-now elevation-10"
+      :class="['card', { shake: animated }]"
+    >
+      <div>
+        <div
+          class="d-flex justify-center align-center text-primary text-h2 font-weight-bold"
+          v-if="!registerSuccessful"
         >
-          <v-card
-            class="d-flex flex-column align-center justify-center flex-grow-1"
-            elevation="0"
-          >
-            <v-card-item>
-              <div class="d-flex flex-column flex-grow-1">
-                <div
-                  class="d-flex align-center justify-center bg-primary background-icon"
-                >
-                  <img :src="step.icon" />
-                </div>
-
-                <div
-                  class="d-flex align-center justify-center flex-grow-1 text-center text background-text"
-                >
-                  {{ step.description }}
-                </div>
-              </div>
-            </v-card-item>
-          </v-card>
-          <span v-if="step.next" class="register d-flex">
-            <img :src="arrow" />
+          <span>Jetzt registrieren!</span>
+        </div>
+        <div
+          class="mt-5 d-flex flex-column general-font-size"
+          v-if="!registerSuccessful"
+        >
+          <span class="">
+            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter
+            und möchtest dein Angebot auf einer unabhängigen und kostenfreien
+            Plattform veröffentlichen? Dann laden wir dich herzlich zur
+            Registrierung ein! Als Anbieter kannst du dich und deine
+            Gesundheitsleistung ganz einfach und in wenigen Schritten auf der
+            Plattform darstellen und veröffentlichen.
           </span>
-        </v-col>
-      </v-row>
-    </v-col>
-  </v-row>
+          <span class="mt-5">
+            Hierdurch erzielst du eine größere Reichweite sowie mehr
+            Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei
+            der einheimischen Bevölkerung. Ganz gleich ob es sich um ein
+            behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches
+            Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter
+            willkommen, deren Angebote zum Erhalt und zur Verbesserung der
+            Gesundheit der Landkreisbevölkerung beitragen!
+          </span>
+        </div>
+      </div>
+      <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
+        <div class="my-5">
+          <h2 class="mb-3">Meine Einrichtung</h2>
+          <div class="field">
+            <v-text-field
+              v-model="careFacilityName"
+              type="text"
+              label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
+              :error-messages="
+                useErrors().checkAndMapErrors('firstname', errors)
+              "
+              :rules="[rules.required]"
+              hide-details="auto"
+            />
+          </div>
+          <div class="field">
+            <v-select
+              hide-details="auto"
+              v-model="careFacilityCommunityId"
+              :items="communities"
+              item-title="name"
+              item-value="id"
+              label="Gemeinde *"
+              :rules="[rules.required]"
+            />
+          </div>
+          <div class="field split">
+            <v-text-field
+              v-model="careFacilityZip"
+              hide-details="auto"
+              label="PLZ *"
+              :type="'number'"
+              :rules="[rules.required, rules.zip]"
+              :error-messages="useErrors().checkAndMapErrors('zip', errors)"
+              disabled
+            />
+            <v-select
+              :disabled="careFacilityCommunityId.length === 0"
+              hide-details="auto"
+              v-model="careFacilityTown"
+              :items="getTownsByCommunityId(careFacilityCommunityId)"
+              item-title="name"
+              item-value="name"
+              label="Ort *"
+              :rules="[rules.required]"
+            />
+          </div>
+        </div>
+        <div class="my-5">
+          <div class="d-flex align-center">
+            <h2 class="mr-3">Mein Benutzerkonto</h2>
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <v-icon class="is-clickable mr-10" v-bind="props"
+                  >mdi-information-outline</v-icon
+                >
+              </template>
+              <span>Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern verwendet werden, trage bitte eine allg. E-Mail Adresse ein, auf die jeder Nutzer Zugriff hat</span>
+            </v-tooltip>
+          </div>
+
+          <div class="field">
+            <v-text-field
+              v-model="firstname"
+              type="text"
+              label="Vorname *"
+              :error-messages="
+                useErrors().checkAndMapErrors('firstname', errors)
+              "
+              :rules="[rules.required]"
+              hide-details="auto"
+            />
+          </div>
+          <div class="field">
+            <v-text-field
+              v-model="lastname"
+              type="text"
+              label="Nachname *"
+              :error-messages="
+                useErrors().checkAndMapErrors('lastname', errors)
+              "
+              :rules="[rules.required]"
+              hide-details="auto"
+            />
+          </div>
+          <div class="field">
+            <v-text-field
+              v-model="phone"
+              type="tel"
+              label="Telefonnummer *"
+              hide-details="auto"
+              :rules="[
+                rules.required,
+                rules.validateNumber,
+                rules.phoneCounter,
+              ]"
+              :error-messages="useErrors().checkAndMapErrors('phone', errors)"
+            />
+          </div>
+          <div class="field">
+            <v-text-field
+              v-model="email"
+              type="email"
+              label="E-Mail Adresse *"
+              :rules="[rules.required, rules.email]"
+              hide-details="auto"
+              :error-messages="useErrors().checkAndMapErrors('email', errors)"
+            />
+          </div>
+        </div>
+        <v-checkbox
+          v-model="privacyAccepted"
+          :rules="[rules.required]"
+          class="check"
+        >
+          <template #label>
+            <div>
+              Ich stimme der
+              <a target="_blank" href="/privacy_policy" @click.stop>
+                <u>Datenschutzerklärung</u>
+              </a>
+              <span> und den </span>
+              <a target="_blank" href="/rules_of_conduct" @click.stop>
+                <u>Nutzungsbedingungen</u>
+              </a>
+              zu
+            </div>
+          </template>
+        </v-checkbox>
+
+        <v-btn color="primary" class="mt-5" block depressed @click="register"
+          >Registrieren</v-btn
+        >
+      </v-form>
+      <div align="center" class="mt-5" v-if="registerSuccessful">
+        <div class="d-flex flex-column align-center justify-center">
+          <span
+            class="text-h2 text-primary font-weight-bold mb-10 general-font-size"
+          >
+            Vielen Dank für deine Registrierung!
+          </span>
+          <span class="general-font-size">
+            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
+            temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+          </span>
+        </div>
+        <div class="mt-5">
+          <v-btn color="primary" @click="toLogin" block depressed
+            >Jetzt anmelden</v-btn
+          >
+        </div>
+      </div>
+    </div>
+
+    <span
+      v-if="registerSuccessful"
+      class="text-h2 is-dark-grey font-weight-bold d-flex justify-center"
+      >So geht es weiter:</span
+    >
+    <div v-if="registerSuccessful" class="steps-wrapper">
+      <template v-for="step in steps">
+        <div class="item" elevation="0">
+          <div class="background-icon">
+            <img :src="step.icon" />
+          </div>
+
+          <div class="text background-text general-font-size text-center">
+            {{ step.description }}
+          </div>
+        </div>
+        <span v-if="step.next" class="arrow register">
+          <img :src="arrow" />
+        </span>
+      </template>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -264,7 +264,7 @@ const steps = {
   },
   step4: {
     description:
-      "Sobald alle Pflicht angaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
+      "Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
     icon: LogoStep4,
     next: true,
   },
@@ -309,7 +309,9 @@ const register = async () => {
     registerSuccessful.value = true;
     scrollToTop();
   } else {
-    errors.value = { errors: [{ field_name: "email", code: "register.failed" }] };
+    errors.value = {
+      errors: [{ field_name: "email", code: "register.failed" }],
+    };
     loading.value = false;
 
     // animate shake
@@ -330,7 +332,9 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find((community: any) => community.id === communityId);
+  const found = communities.value.find(
+    (community: any) => community.id === communityId
+  );
   if (found) {
     careFacilityZip.value = found.zip;
     return found.towns;
@@ -346,7 +350,9 @@ const scrollToTop = () => {
 onMounted(() => {
   scrollToTop();
   getCommunities();
-  const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
+  const rememberedEmail = localStorage.getItem(
+    "health_platform._remembered_email"
+  );
   if (rememberedEmail) {
     setTimeout(() => {
       email.value = rememberedEmail;
@@ -357,50 +363,105 @@ onMounted(() => {
 });
 </script>
 
-<style lang="css" scoped>
-.card {
-  padding: 1rem;
-}
+<style lang="scss">
+@import "@/assets/sass/main.sass";
 
-.register {
-  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
+.register-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 5rem;
 
-.text {
-  min-height: 200px;
-}
-
-.background-text {
-  background-color: #f5f5f5;
-}
-
-.background-icon {
-  padding: 20px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-}
-
-.shake {
-  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-  transform: translate3d(0, 0, 0);
-}
-@keyframes shake {
-  10%,
-  90% {
-    transform: translate3d(-1px, 0, 0);
+  @include md {
+    padding: 0;
+    gap: 3rem;
   }
-  20%,
-  80% {
-    transform: translate3d(2px, 0, 0);
+
+  .register-now {
+    @include md {
+      box-shadow: none !important;
+    }
   }
-  30%,
-  50%,
-  70% {
-    transform: translate3d(-4px, 0, 0);
+
+  .register {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   }
-  40%,
-  60% {
-    transform: translate3d(4px, 0, 0);
+
+  .text {
+    min-height: 200px;
+  }
+
+  .shake {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+  }
+  @keyframes shake {
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0);
+    }
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+
+  .register-now {
+    background-color: white;
+    padding: 1rem;
+  }
+
+  .steps-wrapper {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+
+    @include md {
+      flex-direction: column;
+
+      .arrow {
+        rotate: 90deg;
+      }
+
+      .item {
+        align-self: stretch;
+      }
+    }
+
+    .item {
+      flex: 1;
+
+      .background-text {
+        background-color: #f5f5f5;
+        padding: 1rem;
+      }
+
+      .background-icon {
+        background-color: #8ab61d;
+        padding: 20px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .check .v-label {
+    padding-left: 1rem;
+    width: 100%;
   }
 }
 </style>

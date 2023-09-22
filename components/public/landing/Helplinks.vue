@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <v-row>
-      <v-col class="d-flex justify-center my-15">
+      <v-col class="d-flex justify-center my-3">
         <h2 class="is-uppercase">Du benötigst dringend Hilfe?</h2>
       </v-col>
     </v-row>
@@ -11,17 +11,32 @@
           <div class="icons d-flex justify-center align-center">
             <img :src="item.content.image" min-width="50" max-width="50" />
           </div>
-          <h3 class="is-dark-grey my-5 font-weight-bold">
-            {{ item.content.heading }}
-          </h3>
-          <div class="my-5 is-dark-grey">
-            {{ item.content.description }}
+          <div class="items-column">
+            <div class="is-dark-grey my-5 font-weight-bold text-h5">
+              {{ item.content.heading }}
+            </div>
+
+            <div class="my-5 is-dark-grey general-font-size">
+              {{ item.content.description }}
+            </div>
           </div>
-          <div>
-            <a :href="item.content.linkText" target="_blank" class="is-red is-clickable">
-              {{ item.content.linkText }}
-            </a>
-          </div>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col
+        v-for="(item, index) in items"
+        :key="index"
+        class="justify-center text-center align-center"
+      >
+        <div class="general-font-size">
+          <a
+            :href="item.content.linkText"
+            target="_blank"
+            class="is-red is-clickable"
+          >
+            {{ item.content.linkText }}
+          </a>
         </div>
       </v-col>
     </v-row>
@@ -37,34 +52,36 @@ export default defineComponent({
     const items = [
       {
         content: {
-          heading: "Erste Hilfe",
-          image: image1,
-          description:
-            "Du warst sicherlich schon mal in einer Situation, in der Du die Hilfe eines Mitmenschen benötigt hast. Hilf auch Du in Notfallsituationen. Weitere Informationen:",
-          linkText: "Anleitung",
-          link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/",
-        },
-      },
-      {
-        content: {
           heading: "Rettungsdienste",
           image: image3,
           description:
-            "Rufe den Rettungsdienst, wenn Du akut medizinische Hilfe benötigst. Egal ob es sich um die Folgen eines Unfalls handelt oder plötzliche starke gesundheitliche Beschwerden auftreten.",
+            "Wenn es eine akute Gefahr für das Leben gibt und es nicht ausgeschlossen werden kann, dass bleibende Schäden auftreten, sollte unverzüglich der Notruf gewählt werden.",
           linkText: "Notruf 112",
           link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/notruf-112/",
         },
       },
       {
         content: {
-          heading: "Apothekennotdienst",
+          heading: "Ärztlicher Bereitschaftsdienst",
           image: image2,
           description:
             "Es ist Wochenende und Du benötigst dringend Medikamente? Rufe sofort den Apothekennotdienst an und erfahre, welche Apotheke im Landkreis Sankt Wendel für Dich da ist.",
-          linkText: "Notruf 22833",
+          linkText: "Notruf 116 117",
           link: "https://www.google.com/search?q=Apothekennotdienst+LK+WND&oq=Apothekennotdienst+LK+WND&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQIRgKGKAB0gEHNjA1ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8",
         },
       },
+      {
+        content: {
+          heading: "Nummer gegen Kummer",
+          image: image1,
+          description:
+            'Die "Nummer gegen Kummer" ist eine Anlaufstelle für Kinder und Jugendliche, die mit Sorgen und Problemen zu kämpfen haben. Hier finden sie Unterstützung durch psychologisch geschulte Fachkräfte, die ihre Dienste anonym und kostenlos anbieten.',
+          linkText: "Notruf 116 123",
+          link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/",
+        },
+      },
+      
+      
     ];
 
     return {
@@ -81,4 +98,7 @@ export default defineComponent({
   margin: 0 5rem
   @include md
     margin: 0 1rem
+
+.items-column
+  margin: 0 2.5rem
 </style>

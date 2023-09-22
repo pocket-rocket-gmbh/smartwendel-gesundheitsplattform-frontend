@@ -10,7 +10,7 @@
         <v-col>
           <div class="field">
             <label class="label is-white">
-              <div class="search-term">Suchbegriff</div>
+              <div class="search-term">Anbieter suchen</div>
             </label>
             <PublicSearchField
               v-model="filterStore.currentSearchTerm"
@@ -18,6 +18,7 @@
               :default-route-to="'/public/search'"
               :default-styling="true"
               @update:model-value="handleInput"
+              kind="facilities"
             />
           </div>
         </v-col>
@@ -31,15 +32,13 @@
         <v-col class="align-end">
           <PublicSearchCommunitySelectModal />
         </v-col>
-        <v-col class="align-end">
+        <v-col class="align-end" v-if="filterKind !== 'event' && filterKind !== 'news'">
           <PublicSearchFilterSelectModal :filter-kind="filterKind" />
         </v-col>
       </v-row>
       <v-row class="buttons">
         <v-col class="field">
-          <v-btn variant="outlined" rounded="pill" color="white" @click="filterStore.clearSearch()">
-            Auswahl zurücksetzen
-          </v-btn>
+          <v-btn variant="outlined" rounded="pill" color="white" @click="filterStore.clearSearch()"> Auswahl zurücksetzen </v-btn>
         </v-col>
         <v-col class="field search-button">
           <v-btn variant="flat" rounded="pill" color="white" @click="startSearch"> Suche starten </v-btn>
@@ -48,9 +47,9 @@
 
       <v-row v-if="mapControls" class="bottom-actions">
         <v-col class="center">
-          <v-btn variant="outlined" size="large" rounded="pill" color="white" @click="emit('toggleMap')">
+          <v-btn variant="outlined" rounded="pill" color="white" @click="emit('toggleMap')">
             <span v-if="showMap"> Listenansicht </span>
-            <span v-if="!showMap"> Karte einblenden </span>
+            <span v-if="!showMap"> Kartenansicht </span>
           </v-btn>
         </v-col>
       </v-row>

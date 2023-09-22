@@ -13,54 +13,14 @@
   >
     <template #title>
       <div
-        class="d-flex flex-column"
+        class="d-flex align-center"
         :class="[handleExpandToggled ? 'text-h5' : 'text-h6']"
       >
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
         <div v-if="kind === 'news'">Stich- und Schlagwörter zum Newsbeitrag</div>
         <div v-if="kind === 'event'">Veranstaltungsangebot</div>
         <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
-      </div>
-
-      <div v-if="!expand" class="mt-3">
-        <span>Bereits ausgewählt:</span>
-        <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
-          {{ tag.name }}
-        </v-chip>
-      </div>
-    </template>
-    <template #content>
-      <div class="content text-h6">
-        <div v-if="kind === 'facility'">
-          Hier hast du die Möglichkeit, dein individuelles Leistungsangebot mit Hilfe von
-          Schlagwörtern zu beschreiben.
-        </div>
-        <div v-if="kind === 'course'">
-          Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern
-          individuell zu beschreiben.
-        </div>
-        <div v-if="kind === 'event'">
-          Hier hast du die Möglichkeit, deine Veranstaltung mit Hilfe von Schlagwörtern
-          individuell zu beschreiben.
-        </div>
-        <div v-if="preSetTags?.length" class="tags my-6">
-          <span>Bereits ausgewählt:</span>
-          <v-chip
-            v-for="tag in preSetTags"
-            closable
-            @click:close="handleRemoveTag(tag)"
-            :key="tag.id"
-          >
-            {{ tag.name }}
-          </v-chip>
-        </div>
-        <div class="content-title mt-5 d-flex align-center">
-          <v-icon>mdi-tag-outline</v-icon>
-          <div>
-            <div>
-              <b>Schlagwort eingeben</b>
-            </div>
-          </div>
+        <div class="has-font-size-small-medium ml-3">
           <v-tooltip location="top" width="300px">
             <template v-slot:activator="{ props }">
               <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
@@ -90,17 +50,40 @@
               die entsprechenden Schlagwörter suchen.
             </span>
           </v-tooltip>
-
         </div>
-       
+      </div>
+      <div v-if="!expand" class="mt-3">
+        <span v-if="preSetTags.length">Bereits ausgewählt:</span>
+        <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
+          {{ tag.name }}
+        </v-chip>
+      </div>
+    </template>
+    <template #content>
+      <div class="content text-h6">
+        <div v-if="kind === 'facility'">
+          Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches Angebot.
+        </div>
+        <div v-if="kind === 'course'">
+          Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern
+          individuell zu beschreiben.
+        </div>
+        <div v-if="kind === 'event'">
+          Hier hast du die Möglichkeit, deine Veranstaltung mit Hilfe von Schlagwörtern
+          individuell zu beschreiben.
+        </div>
+        <div v-if="preSetTags?.length" class="tags my-6">
+          <span class="font-weight-bold">Bereits ausgewählt:</span>
+          <v-chip
+            v-for="tag in preSetTags"
+            closable
+            @click:close="handleRemoveTag(tag)"
+            :key="tag.id"
+          >
+            {{ tag.name }}
+          </v-chip>
+        </div>
         <div class="inputs my-5">
-          <!-- <v-combobox
-            @click.stop
-            hide-details="auto"
-            label="Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie"
-            :items="allTags"
-            v-model="currentTag"
-          ></v-combobox> -->
           <v-combobox
             v-model="currentTag"
             v-model:search="currentTagSearch"
@@ -115,6 +98,7 @@
             :item-value="'id'"
             hide-details="auto"
             v-on:keyup.enter="handleAddTag"
+            menu-icon=""
           >
             <template v-slot:no-data>
               <v-list-item>

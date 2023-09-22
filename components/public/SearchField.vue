@@ -1,17 +1,21 @@
 <template>
   <div class="search-field">
-    <div class="category-input is-dark-grey" :class="[defaultStyling ? 'default' : 'styled']">
+    <div
+      class="category-input is-dark-grey"
+      :class="[defaultStyling ? 'default' : 'styled']"
+    >
       <form @submit.prevent="routeToResults()">
         <div class="input-wrapper" :class="[defaultStyling ? 'field' : '']">
           <input
             type="text"
             :value="modelValue"
             class="input"
-            placeholder="Suchbegriff eingeben"
+            :placeholder="placeholderText"
             @input="handleInput"
             @click="showPopover = true"
           />
           <img
+            v-if="!kind"
             class="icon"
             :src="searchIcon"
             @click="
@@ -30,7 +34,9 @@
       >
         <div class="wrapper">
           <div v-if="loading" class="result">
-            <LoadingSpinner :style="'inline'">Suchergebnisse werden geladen...</LoadingSpinner>
+            <LoadingSpinner :style="'inline'"
+              >Suchergebnisse werden geladen...</LoadingSpinner
+            >
           </div>
           <template v-else>
             <div
@@ -68,7 +74,10 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { default as coursesIcon, default as eventsIcon } from "~/assets/icons/facilityTypes/events.svg";
+import {
+  default as coursesIcon,
+  default as eventsIcon,
+} from "~/assets/icons/facilityTypes/events.svg";
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import newsIcon from "~/assets/icons/facilityTypes/news.svg";
 import searchIcon from "~/assets/icons/facilityTypes/search.svg";
@@ -80,6 +89,7 @@ const props = defineProps<{
   defaultStyling?: boolean;
   loading?: boolean;
   defaultRouteTo?: string;
+  kind?: string;
 }>();
 
 const emit = defineEmits<{
@@ -94,7 +104,21 @@ const trackSearch = () => {
   window._paq.push(["trackEvent", "Gesucht:", `${props.modelValue}`]);
 };
 
+const placeholderText = ref("");
+
+const setPlaceholderText = () => {
+  if (props.kind === "facility") {
+    placeholderText.value = "Name, Fachrichtung,…";
+  } else if (props.kind === 'event') {
+    placeholderText.value = "Name, Thema, Angebote,…";
+  } else if (props.kind === 'course') {
+    placeholderText.value = "Name, Kursinhalt,…";
+  } else {
+    placeholderText.value = "Suche nach Themen, Anbietern, Kursen,…";
+  }
+};
 const routeToResults = (result?: Facility) => {
+  if (props.kind) return;
   if (!result) {
     // router.push({ path: "/public/search" });
     if (props.defaultRouteTo) {
@@ -132,6 +156,10 @@ const getIconSourceFor = (kind?: FilterKind) => {
 const handleInput = (e: Event) => {
   emit("update:modelValue", (e.target as HTMLInputElement).value);
 };
+
+onMounted(() => {
+  setPlaceholderText();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -181,6 +209,10 @@ const handleInput = (e: Event) => {
       display: flex;
       align-items: center;
       padding: 0 8px;
+
+      @include md {
+        width: 100%;
+      }
 
       form {
         flex: 1;
@@ -293,8 +325,5 @@ const handleInput = (e: Event) => {
       width: 100%;
     }
   }
-}
-.v-input__icon.v-input__icon--append-outer i {
-  font-size: 48px;
 }
 </style>

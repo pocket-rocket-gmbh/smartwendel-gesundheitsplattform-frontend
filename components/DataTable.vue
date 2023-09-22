@@ -33,10 +33,7 @@
       <tr
         v-for="(item, indexMain) in filteredItems"
         :key="item.id"
-        :class="[
-          item === activeItems ? 'activeItems' : '',
-          { cached: isCached(item.id) },
-        ]"
+        :class="[item === activeItems ? 'activeItems' : '', { draft: isDraft(item) }]"
       >
         <td
           v-for="(field, index) in fields"
@@ -57,16 +54,11 @@
           }}</span>
           <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">{{
-                field.value
-              }}</v-icon>
+              <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
             </template>
             <span v-if="field.tooltip">{{ field.tooltip }}</span>
           </v-tooltip>
-          <v-tooltip
-            top
-            v-else-if="field.type === 'move_up' && indexMain !== 0"
-          >
+          <v-tooltip top v-else-if="field.type === 'move_up' && indexMain !== 0">
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-arrow-up</v-icon>
             </template>
@@ -75,14 +67,11 @@
           <v-tooltip
             top
             v-else-if="
-              field.type === 'move_down' &&
-              indexMain !== filteredItems.length - 1
+              field.type === 'move_down' && indexMain !== filteredItems.length - 1
             "
           >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props"
-                >mdi-arrow-down</v-icon
-              >
+              <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
             </template>
             <span>Nach unten</span>
           </v-tooltip>
@@ -90,18 +79,11 @@
           <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{
             field.value
           }}</v-icon>
-          <span
-            v-else-if="item[field.value] && field.type === 'association_name'"
-            >{{ item[field.value].name }}</span
-          >
-          <span
-            v-else-if="item[field.value] && field.type === 'associations_name'"
-          >
-            <div
-              v-for="(subItem, index) in item[field.value]"
-              :key="index"
-              class="small"
-            >
+          <span v-else-if="item[field.value] && field.type === 'association_name'">{{
+            item[field.value].name
+          }}</span>
+          <span v-else-if="item[field.value] && field.type === 'associations_name'">
+            <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">
               {{ subItem.name }}
             </div>
           </span>
@@ -119,44 +101,32 @@
                     :notification-pre-filled-headline="
                       field.notificationPreFilledHeadline
                     "
-                    :notification-pre-filled-text="
-                      field.notificationPreFilledText
-                    "
+                    :notification-pre-filled-text="field.notificationPreFilledText"
                     :notification-cta-link="field.notificationCtaLink"
                     :disabled="field?.disabledConditions?.(item)"
                     @toggled="handleToggled(item)"
                   />
                 </div>
               </template>
-              <span>{{
-                field?.disabledConditions?.(item)
-                  ? field.disabledTooltip
-                  : field.tooltip
-              }}</span>
+              <div v-if="useUser().statusOnHealthScope()" class="tooltip">{{
+                field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip
+              }}</div>
+              <div v-else class="tooltip">
+                Durch die Prüfung deiner Userdaten durch einen Administrator, werden zur Zeit deine Beiträge/Kurse/Veranstaltungen nicht auf der Gesundheitsplattform angezeigt.
+              </div>
             </v-tooltip>
           </template>
-
           <TableDropdown
             v-else-if="field.type === 'enumDropdown'"
             :item="item"
             :enum-name="field.enum_name"
             :endpoint="field.endpoint"
             :fieldName="field.value"
-            :field-class="
-              useEnums().getClassName(field.enum_name, item[field.value])
-            "
+            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
             :disable-edit="!useUser().isAdmin()"
           />
-          <div
-            v-else-if="
-              item[field.value] && field.enum_name && field.type === 'enum'
-            "
-          >
-            <span
-              :class="
-                useEnums().getClassName(field.enum_name, item[field.value])
-              "
-            >
+          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
+            <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
@@ -169,17 +139,21 @@
           <span v-else-if="field.type === 'facilities'">
             <div v-if="Array.isArray(item[field.value])">
               <div v-for="facility in item[field.value]">
-                <v-row>
+                <v-row v-if="facility.kind === 'facility'">
                   <v-col>
-                    <v-chip
-                      class="mx-2 mt-2"
-                      color="grey"
-                      v-if="facility.kind === 'facility'"
-                    >
+                    <v-chip class="mx-2 mt-2" color="grey">
                       <v-icon v-if="facility.kind === 'facility'" class="mr-2"
                         >mdi-home-city-outline</v-icon
                       >
-                      {{ facility.name }}
+                      <span class="pr-3">
+                        {{ facility.name }}
+                      </span>
+                      <div class="d-flex align-center">
+                        <v-icon v-if="!facility.is_active" size="x-small" color="error"
+                          >mdi-circle</v-icon
+                        >
+                        <v-icon v-if="facility.is_active" size="x-small" color="success">mdi-circle</v-icon>
+                      </div>
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -187,35 +161,34 @@
             </div>
           </span>
           <span v-else-if="field.type === 'beinEdited'">
-            <span v-if="isCached(item.id)"><i>wird bearbeitet</i></span>
-          </span>
-          <span v-else-if="field.type === 'isCompleteFacility'">
-            <span class="text-warning" v-if="isCompleteFacility(item)">
-              <v-icon class="mr-2">mdi-alert</v-icon>
-              <i>Nicht alle Pflichtfelder ausgefüllt</i>
-            </span>
+            <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
           <span v-else-if="field.type === 'button' && field.action">
-            <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye'">
+            <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'">
               {{ pathInto(item, field.value) }}
             </button>
-            <span v-if="field.value === 'mdi-eye' && item.is_active">
-              <v-icon class="is-clickable" @click="field.action(item)"
-                >mdi-eye</v-icon
-              >
+            <span v-if="field.value === 'mdi-eye' && item.is_active && useUser().statusOnHealthScope()">
+              <v-icon class="is-clickable" @click="field.action(item)">mdi-eye</v-icon>
+            </span>
+            <span v-if="field.value === 'mdi-check-decagram' && item.billable_through_health_insurance_approved && useUser().statusOnHealthScope()">
+              <v-icon class="is-clickable" color="primary" @click="field.action(item)">mdi-check-decagram</v-icon>
+            </span>
+            <span v-else>
+              <v-icon></v-icon>
             </span>
           </span>
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit">
-          <v-icon class="is-clickable" @click="emitParent(item, null)"
-            >mdi-pencil</v-icon
-          >
+          <v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon>
         </td>
         <td v-if="useUser().isAdmin() || !disableDelete">
           <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
             >mdi-delete</v-icon
           >
+        </td>
+        <td v-else>
+          <v-icon></v-icon>
         </td>
       </tr>
     </tbody>
@@ -227,6 +200,7 @@ import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
+import { RequiredField } from "~/types/facilities";
 
 const router = useRouter();
 
@@ -241,7 +215,7 @@ const props = withDefaults(
     searchColumns?: string[];
     defaultSortBy?: string;
     defaultSortOrder?: string;
-    cachePrefix?: string;
+    draftRequired?: RequiredField[];
   }>(),
   {
     defaultSortBy: "created_at",
@@ -254,7 +228,7 @@ const emit = defineEmits([
   "openCreateEditDialog",
   "openDeleteDialog",
   "itemsLoaded",
-  "itemUpdated",
+  "itemUpdated"
 ]);
 
 const sortOrder = ref(props.defaultSortOrder);
@@ -266,18 +240,50 @@ const resetActiveItems = () => {
   activeItems.value = null;
 };
 
-const isCached = (itemId: string) => {
-  if (!props.cachePrefix) return false;
-  if (!props.cachePrefix.includes(",")) {
-    return localStorage.getItem(
-      `${props.cachePrefix}_${itemId.replaceAll("-", "_")}`
-    );
+const isFilled = (itemToCheck: any, requiredField: RequiredField) => {
+  const props: string[] = requiredField.props;
+  if (!props) return;
+
+  if (requiredField.specialFilter) {
+    if (requiredField.specialFilter === "filter_facility") {
+      // TODO: Filter korrekt
+      return true; //facilitiesFilterSet.value;
+    } else if (requiredField.specialFilter === "filter_service") {
+      // TODO: Filter korrekt
+      return true; // servicesFilterSet.value;
+    } else if (requiredField.specialFilter === "opening_hours") {
+      return itemToCheck.opening_hours.some((day: any) => day.hours.length > 0);
+    }
   }
-  return props.cachePrefix
-    .split(",")
-    .some((prefix) =>
-      localStorage.getItem(`${prefix}_${itemId.replaceAll("-", "_")}`)
-    );
+
+  if (requiredField.checkHandler) {
+    const result = props.every((prop) => {
+      return !requiredField.checkHandler(itemToCheck[prop]);
+    });
+    return result;
+  }
+
+  if (requiredField.justSome) {
+    const result = props.some((prop) => {
+      return itemToCheck[prop] && itemToCheck[prop].length;
+    });
+    return result;
+  }
+
+  const result = props.every((prop) => {
+    return itemToCheck[prop] && itemToCheck[prop].length;
+  });
+
+  return result;
+};
+
+const isDraft = (item: any) => {
+  if (!props.draftRequired) return false;
+
+  return !props.draftRequired.every((requiredField) => {
+    const isRequiredFieldFilled = isFilled(item, requiredField);
+    return isRequiredFieldFilled;
+  });
 };
 
 const emitopenDeleteDialog = (itemId: any) => {
@@ -349,9 +355,7 @@ const filteredItems = computed(() => {
         }
         if (Array.isArray(column)) {
           // TODO: Right now i only check for the 'name' field on my items, not all
-          return column.find((item) =>
-            item.name?.toUpperCase().includes(searchTerm)
-          );
+          return column.find((item) => item.name?.toUpperCase().includes(searchTerm));
         }
       }
     });
@@ -403,11 +407,11 @@ defineExpose({ resetActiveItems, getItems });
 </script>
 
 <style lang="sass">
-.cached
+.draft
   background: rgba(orange, 0.1)
 
 .small
-  font-size: 8px
+  font-size: 0.5em
 
 .dropdown
   position: absolute
@@ -433,4 +437,7 @@ defineExpose({ resetActiveItems, getItems });
 
 .disabled
   cursor: not-allowed !important
+
+.tooltip
+  max-width: 400px
 </style>

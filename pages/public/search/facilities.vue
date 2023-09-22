@@ -3,7 +3,7 @@
     <div>
       <PublicSearchTheBasicSearchBox
         title="Anbietersuche"
-        sub-title="Deine Wunscheinrichtung auswählen"
+        sub-title="Finde den passenden Anbieter!"
         :map-controls="true"
         :show-map="showMap"
         @toggle-map="mapToogle"
@@ -28,7 +28,7 @@
             />
           </div>
 
-          <div class="facilities"><PublicSearchTheFilteredCareFacilities /></div>
+          <div class="facilities"><PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" /></div>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@ import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
-const showMap = ref(!breakpoints.isMobile.value);
+const showMap = ref(true);
 
 watch(
   () => filterStore.filterSort,
@@ -93,6 +93,10 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
   }
 };
 
+const handleShowOnMap = () => {
+  showMap.value = true;
+};
+
 const updateLocations = () => {
   getLocationsFromFacilies(filterStore.filteredResults);
 };
@@ -105,6 +109,7 @@ onMounted(async () => {
   filterStore.currentKinds = ["facility"];
   filterStore.updateFromUrlQuery();
   filterStore.loadAllResults();
+  showMap.value = !breakpoints.isMobile.value;
 });
 
 onBeforeUnmount(() => {

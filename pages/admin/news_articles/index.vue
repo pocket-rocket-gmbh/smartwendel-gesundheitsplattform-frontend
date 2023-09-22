@@ -2,16 +2,9 @@
   <div>
     <h2 v-if="useUser().isFacilityOwner()">Meine Beiträge</h2>
     <h2 v-else>Beiträge</h2>
-    <v-alert
-      v-if="!setupFinished && !loading"
-      type="info"
-      density="compact"
-      closable
-      class="mt-2"
-    >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
-      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
-      anlegen.
+    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie
+      Beiträge anlegen.
     </v-alert>
 
     <v-row align="center">
@@ -24,19 +17,12 @@
             itemId = null;
             createEditDialogOpen = true;
           "
-          :class="{ orange: newNewsFromCache }"
         >
-          Beitrag anlegen <span v-if="newNewsFromCache"> - weiter</span>
+          Beitrag anlegen
         </v-btn>
       </v-col>
       <v-col>
-        <v-text-field
-          width="50"
-          prepend-icon="mdi-magnify"
-          v-model="facilitySearchTerm"
-          hide-details="auto"
-          label="Beiträge durchsuchen"
-        />
+        <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Beiträge durchsuchen" />
       </v-col>
     </v-row>
 
@@ -45,11 +31,11 @@
       endpoint="care_facilities?kind=news"
       :search-query="facilitySearchTerm"
       :search-columns="facilitySearchColums"
-      :cache-prefix="'news'"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       ref="dataTableRef"
       :disable-delete="false"
+      :draft-required="draftRequiredFields"
     />
 
     <AdminNewsCreateEdit
@@ -59,17 +45,15 @@
       @close="handleCreateEditClose"
       endpoint="care_facilities"
       concept-name="Beiträge"
-      :enableCache="true"
-      :cacheKey="cacheKey"
+      :enableDraft="true"
+      :required-for-draft="['name']"
       :showPreviewButton="true"
       @showPreview="handleShowPreview"
+      @created="handleCreated"
+      @update-items="handleUpdateItems"
     />
 
-    <AdminPreviewDummyPage
-      v-if="previewItem"
-      :item="previewItem"
-      @close="handlePreviewClose"
-    />
+    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -85,7 +69,9 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { isCompleteNews } from "~/utils/facility.utils";
 import { Facility } from "~/store/searchFilter";
+import { RequiredField } from "~/types/facilities";
 
 definePageMeta({
   layout: "admin",
@@ -107,15 +93,17 @@ const fields = [
     fieldToSwitch: "is_active",
     disabledConditions: (item: any) => {
       const res = [
+        isCompleteNews,
         () => {
           return !useUser().currentUser?.is_active_on_health_scope;
         },
       ].some((condition) => {
-        const resCond = condition();
+        const resCond = condition(item);
         return resCond;
       });
       return res;
     },
+    disabledTooltip: "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
@@ -143,6 +131,22 @@ const fields = [
   },
 ];
 
+const draftRequiredFields: RequiredField[] = [
+  {
+    props: ["name"],
+  },
+  {
+    props: ["name_instructor"],
+  },
+  {
+    props: ["description"],
+    checkHandler: (description?: string) => !description || description === "<p><br></p>",
+  },
+  {
+    props: ["tags"],
+  },
+];
+
 const facilitySearchColums = ref(["name", "user.name", "created_at"]);
 const facilitySearchTerm = ref("");
 
@@ -167,22 +171,11 @@ const itemPlaceholder = ref<any>({
   file: "",
 });
 
-const newNewsFromCache = ref(false);
-
-const cacheKey = computed(() => {
-  if (!itemId.value) {
-    return `news_new`;
-  }
-
-  return `news_${itemId.value.replaceAll("-", "_")}`;
-});
-
 const handleCreateEditClose = () => {
   createEditDialogOpen.value = false;
   itemId.value = null;
   dataTableRef?.value?.getItems();
   dataTableRef.value?.resetActiveItems();
-  newNewsFromCache.value = !!localStorage.getItem("facilities_new");
 };
 
 const openCreateEditDialog = (item: any) => {
@@ -193,6 +186,10 @@ const openCreateEditDialog = (item: any) => {
 const openDeleteDialog = (id: string) => {
   itemId.value = id;
   confirmDeleteDialogOpen.value = true;
+};
+
+const handleUpdateItems = () => {
+  dataTableRef.value?.getItems();
 };
 
 const handleShowPreview = (item: any) => {
@@ -206,6 +203,9 @@ const goToFacility = (id: string) => {
   router.push({ path: `/public/care_facilities/${id}` });
 };
 
+const handleCreated = (createdItemId: string) => {
+  itemId.value = createdItemId;
+};
 
 onMounted(async () => {
   loading.value = true;
@@ -225,8 +225,6 @@ onMounted(async () => {
 
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
-
-  newNewsFromCache.value = !!localStorage.getItem("news_new");
 
   const currentUserRole = user.currentUser.role;
   // availableFields.forEach((field) => {

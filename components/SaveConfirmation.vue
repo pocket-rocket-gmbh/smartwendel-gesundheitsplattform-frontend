@@ -44,9 +44,14 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions v-if="!finished">
+        <v-row no-gutters v-if="!item.id && !facilityId">
+          <v-col class="d-flex justify-center">
+            <LoadingSpinner />
+          </v-col>
+        </v-row>
         <v-row
           no-gutters
-          v-if="(user.is_active_on_health_scope && item.id) || facilityId"
+          v-if="user.is_active_on_health_scope && (item.id || facilityId)"
         >
           <v-col md="6" class="d-flex justify-start">
             <v-btn
@@ -64,9 +69,19 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row no-gutters v-else>
+        <v-row
+          no-gutters
+          v-if="!user.is_active_on_health_scope"
+        >
           <v-col class="d-flex justify-center">
-            <LoadingSpinner />
+            <v-btn
+              variant="outlined"
+              class="save-buttons"
+              elevation="0"
+              @click="emitCloser()"
+            >
+              Schließen
+            </v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -100,23 +115,27 @@ export default defineComponent({
       emit("close");
     };
 
-    const translations: {[key: string]: string} = {
-      facility: "Einrichtung",
-      course: "Kurs",
-      event: "Veranstaltung",
-      news: "Beitrag",
-    };
-
     const itemKindStep1 = computed(() => {
-      const kind = props.item.kind;
-      const translation = translations[kind] || kind;
-      return `dein${kind === "news" ? "" : "e"} ${translation}`;
+      if (props.item.kind === "facility") {
+        return "deine Einrichtung";
+      } else if (props.item.kind === "course") {
+        return "deinen Kurs";
+      } else if (props.item.kind === "event") {
+        return "deine Veranstaltung";
+      } else if (props.item.kind === "news") {
+        return "deinen Beitrag";
+      }
     });
-
     const itemKindStep2 = computed(() => {
-      const kind = props.item.kind;
-      const translation = translations[kind] || kind;
-      return `Dein${kind === "news" ? "" : "e"} ${translation}`;
+      if (props.item.kind === "facility") {
+        return "Deine Einrichtung";
+      } else if (props.item.kind === "course") {
+        return "Dein Kurs";
+      } else if (props.item.kind === "event") {
+        return "Deine Veranstaltung";
+      } else if (props.item.kind === "news") {
+        return "Dein Beitrag";
+      }
     });
 
     const itemId = props.item.id;

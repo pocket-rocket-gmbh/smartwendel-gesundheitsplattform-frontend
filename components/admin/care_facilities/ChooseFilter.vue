@@ -12,7 +12,7 @@
       <template #title align="center">
         <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']">
           {{ mainFilter.name }}
-          <span v-if="mainFilter.name === 'Behandlungsschwerpunkte'">(„nur von ärztliche und therapeutische Leistungserbringern auszuwählen“)</span>
+          <span v-if="mainFilter.name === 'Behandlungsschwerpunkte'">(nur von ärztlichen und therapeutischen Leistungserbringern auszuwählen)</span>
         </span>
         <div>
           <span v-if="filterHasSelected(mainFilter)">Bereits ausgewählt: </span>
@@ -28,9 +28,9 @@
           <v-alert color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
-                <span>Falls der passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
+                <span class="has-font-size-small-medium mr-3">Falls der passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
                 <span>
-                  <v-btn  color="primary" class="is-white" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</v-btn>
+                  <v-btn color="primary" class="is-white" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</v-btn>
                 </span>
               </div>
             </div>

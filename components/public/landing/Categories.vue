@@ -1,59 +1,65 @@
 <template>
   <div class="categories-wrapper">
-    <v-row>
-      <v-col>
-        <div class="text">
-          <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">
-            Pflege, Ärtze, <br />
-            Krankenhäuser und co.
-          </h2>
-          <p class="text-justify">
-            Über diese Suchfunktion findest du sicher schnell die passende Einrichtung und
-            den richtigen Ansprechpartner.
-          </p>
-          <p class="text-justify mt-5">
-            Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher findest du unter mehr
-            als 1.000 gelisteten Anbieten die Leistung, nach der du suchst. Informierest
-            du über die Angebote oder nimmst direkt Kontakt auf und vereinbarst du
-            persönliches Beratungsgespräch.
-          </p>
-          <div class="button my-5">
-            <v-btn
-              variant="flat"
-              color="primary"
-              rounded="pill"
-              size="large"
-              @click="goToSearch()"
-            >
-              <span> Alle Einrichtungen </span>
-            </v-btn>
+    <div class="text general-font-size">
+      <div class="is-primary text-h4 font-weight-bold text-uppercase mb-5">
+        <p>
+          Anbieter aus Prävention und Gesundheit sowie medizinischer Versorgung
+          auf einen Blick!
+        </p>
+        <br />
+        <p>Was finde ich auf gesundesWND?</p>
+      </div>
+      <p class="text-justify">
+        Du bist auf der Suche nach Sportstätten, Ärzten, persönlicher Beratung
+        oder nach Vereinen im Gesundheitsbereich? Sicher findest du unter der
+        Vielzahl an Anbietern aus den Bereichen Gesundheitsförderung &
+        Prävention, medizinische Versorgung oder Pflege das passende Angebot.
+      </p>
+      <br />
+      <p class="text-justify">
+        Informiere dich schnell und einfach über die Angebote von
+        Gesundheitsdienstleistern aus dem Sankt Wendeler Land. Über gesundesWND
+        kannst du auch direkt mit den Anbietern in Kontakt treten.
+      </p>
+      <div class="button my-5">
+        <v-btn
+          variant="flat"
+          color="primary"
+          rounded="pill"
+          size="large"
+          @click="goToSearch()"
+        >
+          <span>ZUR ANBIETERSUCHE </span>
+        </v-btn>
+      </div>
+    </div>
+    <div class="icons">
+      <div
+        v-for="(item, index) in items"
+        :key="index"
+        class="d-flex is-clickable icon"
+        @click="goToLink(item.content.link)"
+      >
+        <img class="image" :src="item.content.icon" />
+        <div class="d-flex align-center">
+          <div class="font-weight-bold d-flex align-center is-clickable">
+            <span
+              class="is-dark-grey general-font-size"
+              v-html="item.content.heading"
+            ></span>
           </div>
         </div>
-      </v-col>
-      <v-col class="d-flex justify-center align-center">
-        <div class="icons">
-          <div v-for="(item, index) in items" :key="index" class="d-flex justify-start">
-            <div class="is-clickable d-flex icon py-3" @click="goToLink(item.link)">
-              <img class="image" :src="item.content.icon" />
-              <div class="d-flex align-center">
-                <div class="font-weight-bold d-flex align-center is-clickable">
-                  <span class="is-dark-grey" v-html="item.content.heading"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
-import icon1 from "@/assets/images/categories/icon_doctor.svg";
-import icon2 from "@/assets/images/categories/icon_fitness.svg";
+import icon1 from "@/assets/images/categories/icon_fitness.svg";
+import icon2 from "@/assets/images/categories/icon_doctor.svg";
 import icon3 from "@/assets/images/categories/icon_clubs.svg";
-import icon4 from "@/assets/images/categories/icon_pharmacies.svg";
-import icon5 from "@/assets/images/categories/icon_caring.svg";
-import icon6 from "@/assets/images/categories/icon_house.svg";
+import icon4 from "@/assets/images/categories/icon_caring.svg";
+import icon5 from "@/assets/images/categories/icon_consulting.svg";
+import icon6 from "@/assets/images/categories/icon_medical.svg";
 
 const router = useRouter();
 
@@ -61,51 +67,51 @@ const goToSearch = () => {
   router.push({ path: "/public/search/facilities" });
 };
 
-const goToLink = (item:string) => {
+const goToLink = (item: string) => {
   router.push({ path: `/public/search/facilities${item}` });
 };
 
 const items = [
   {
     content: {
-      heading: "Ärztinnen & Ärzte",
+      heading: "Sportstätten",
       icon: icon1,
-      link: ""
+      link: "",
     },
   },
   {
     content: {
-      heading: "Fitnesseinrichtungen",
+      heading: "Ärztliche Versorgung",
       icon: icon2,
-      link: ""
+      link: "",
     },
   },
   {
     content: {
       heading: "Vereine",
       icon: icon3,
-      link: ""
+      link: "",
     },
   },
   {
     content: {
-      heading: "Apotheken",
+      heading: "Pflege",
       icon: icon4,
-      link: ""
+      link: "",
     },
   },
   {
     content: {
-      heading: "Pflegeeinrichtungen",
+      heading: "Beratung",
       icon: icon5,
-      link: ""
+      link: "",
     },
   },
   {
     content: {
-      heading: "Wohnheime",
+      heading: "Kliniken",
       icon: icon6,
-      link: ""
+      link: "",
     },
   },
 ];
@@ -117,11 +123,12 @@ const items = [
 .categories-wrapper {
   margin: 5rem;
   display: flex;
-  gap: 1rem;
+  gap: 8rem;
 
   @include md {
     margin: 1rem;
     flex-direction: column;
+    gap: 1rem;
   }
 
   .text {
@@ -138,36 +145,37 @@ const items = [
 
   .icons {
     flex: 4;
-    display: grid;
     gap: 0.5rem;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 
-    @include xl {
-      grid-template-columns: 1fr 1fr;
+  .icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: calc(50% - 0.5rem);
+    box-sizing: border-box;
+
+    .image {
+      border-radius: 50%;
+      border: 1px solid black;
+      background-color: white;
+      transition: transform 0.5s ease-in-out;
+
+      &:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+      }
     }
+  }
 
+  @media (max-width: 768px) {
     .icon {
-      display: flex;
-      align-items: center;
-      font-size: 22px;
-      gap: 0.5rem;
-
-      .image {
-        border-radius: 50%;
-        border: 1px solid black;
-        background-color: white;
-        transition: transform 0.5s ease-in-out;
-
-        &:hover {
-          transform: scale(1.1);
-          cursor: pointer;
-        }
-      }
-
-      @include md {
-        flex-direction: column;
-        font-size: 18px;
-      }
+      flex: 100%;
+      padding-top: 30px;
+      text-align: center;
     }
   }
 }

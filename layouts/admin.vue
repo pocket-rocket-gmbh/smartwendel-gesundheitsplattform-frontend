@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer permanent>
       <div class="d-flex">
-        <router-link to="/admin">
+        <router-link to="/">
           <img class="mt-3 ml-4" src="~/assets/images/logo.png" width="200" />
         </router-link>
       </div>
@@ -11,7 +11,7 @@
         <v-list-item-subtitle> Smart Wendeler Land </v-list-item-subtitle>
       </v-list-item>
       <v-divider></v-divider>
-      <div v-if="!user?.currentUser?.is_active_on_health_scope" class="d-flex align-center">
+      <div v-if="!useUser().statusOnHealthScope()" class="d-flex align-center">
         <v-alert type="info" density="compact" color="grey">
           Du bist zur Zeit in Prüfung und nicht freigegeben.
           <v-tooltip location="top" width="200">
@@ -26,12 +26,10 @@
         </v-alert>
       </div>
       <v-list dense nav>
-        <v-list-item :to="'/'"> <v-icon>mdi-arrow-left</v-icon> Zurück zur Website </v-list-item>
-        <v-divider></v-divider>
         <template v-if="useUser().isAdmin()">
           <v-list-item link to="/admin/matomo" nuxt> <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin" nuxt> Admin-Bereich (Change Log) </v-list-item>
+          <v-list-item link to="/admin" nuxt> Admin-Bereich </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/filter/facilities" nuxt> Einrichtungsfilter </v-list-item>
           <v-list-item link to="/admin/filter/courses" nuxt> Kursfilter </v-list-item>
@@ -104,11 +102,11 @@ const checkSetupFinished = async () => {
   adminStore.loading = true;
   setupFinished.value = await user.setupFinished();
   adminStore.loading = false;
+  useUser().statusOnHealthScope();
 };
 
 onMounted(async () => {
   await checkSetupFinished();
-
   useNuxtApp().$bus.$on("facilityUpdate", async () => {
     await checkSetupFinished();
   });

@@ -1,9 +1,11 @@
 <template>
   <v-dialog
     width="900"
+    height="500"
     v-model="opened"
     transition="dialog-bottom-transition"
-    class="mt-10"
+    class="mt-10 general-font-size"
+    scrollable
   >
     <img
       class="close-btn is-clickable"
@@ -14,27 +16,6 @@
     <v-card class="dialog">
       <v-card-text>
         <v-row>
-          <v-col class="d-flex align-center justify-center">
-            <v-img
-              v-if="item?.image_url"
-              max-height="300px"
-              max-width="300px"
-              :src="item?.image_url"
-              cover
-              aspect-ratio="1"
-            />
-            <v-img
-              v-else
-              max-height="300px"
-              max-width="300px"
-              :src="noImage"
-              cover
-              aspect-ratio="1"
-              class="no-image"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
           <v-col class="d-flex flex-column justify-center aligin-center">
             <h3 class="mb-4">{{ item?.name }}</h3>
             <div class="content" v-html="item?.description"></div>
@@ -43,9 +24,19 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-row no-gutters>
-          <v-col class="d-flex justify-center">
+        <v-row>
+          <v-col class="d-flex"   :class="[item.kind ? 'justify-space-between' : 'justify-center']">
             <v-btn elevation="0" variant="outlined" @click="close"> Schließen </v-btn>
+          </v-col>
+          <v-col class="d-flex justify-end" v-if="item.kind">
+            <v-btn
+              :href="buttonHref"
+              :target="item.url ? '_blank' : ''"
+              variant="flat"
+              color="primary"
+            >
+              <span >{{ buttonText }}</span>
+            </v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -62,6 +53,39 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+});
+
+const buttonHref = computed(() => {
+  if (!props.item) return null;
+
+  if (props.item.kind) {
+    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
+  }
+
+  if (props.item.url) {
+    if (props.item.url_kind === "internal") {
+      return props.item.url;
+    }
+
+    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
+      return props.item.url;
+    } else return "https://" + props.item.url;
+  }
+
+  return null;
+});
+
+const buttonText = computed(() => {
+  if (!props.item) return null;
+  if (props.item.kind) {
+    if (props.item.kind === "course") return "Zum Kurs";
+    if (props.item.kind === "event") return "Zur Veranstaltung";
+    if (props.item.kind === "news") return "Zum Beitrag";
+    if (props.item.kind === "facility") return "Zur Einrichtung";
+  }
 });
 
 const opened = ref(props.open);

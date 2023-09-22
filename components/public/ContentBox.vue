@@ -7,24 +7,23 @@
     <div class="text">
       <template v-if="item.user">
         <div class="info">
-          <div class="align-center user-information" v-if="item?.name_instructor">
-            <v-icon class="facility-name">mdi-account-outline</v-icon
-            ><span class="break-title">{{ item?.name_instructor }}</span>
-          </div>
           <div
             class="d-flex align-center facility-name is-clickable"
-            v-if="item.user_care_facility?.name"
+            v-if="item.user_care_facility?.name && item.kind !== 'facility'"
           >
-            <a
+            <span>
+              <img :src="facilityIcon" />
+            </span>
+            <v-btn
               :href="`/public/care_facilities/${item.user_care_facility?.id}`"
-              class="is-clickable d-flex"
+              variant="text"
+              size="small"
             >
-              <v-icon class="facility-name">mdi-home-outline</v-icon>
               <span
                 class="break-title facility-name"
                 v-html="item.user_care_facility?.name"
               ></span>
-            </a>
+            </v-btn>
           </div>
           <div class="d-flex align-center justify-end" v-if="item.created_at">
             <v-icon>mdi-calendar-outline</v-icon
@@ -35,17 +34,23 @@
         </div>
         <hr />
       </template>
-
       <div class="content-wrapper">
-        <a :href="buttonHref" class="title">{{ item.name }}</a>
-        <span class="content break-text" v-html="item.description"></span>
+        <div class="d-flex justify-space-between align-center">
+          <a :href="`/public/care_facilities/${item.id}`">
+            <span class="title is-clickable">{{ item.name }}</span>
+          </a>
+          <span
+            v-if="item.description.length > 260"
+            class="is-clickable"
+            @click="openContentModal()"
+          >
+            <v-btn size="small" variant="text" class="read-more"> weiter lesen </v-btn>
+          </span>
+        </div>
         <span
-          v-if="item.description.length > 260"
-          class="is-clickable"
-          @click="openContentModal()"
-        >
-          <v-btn size="small" variant="text" class="read-more"> weiter lesen </v-btn>
-        </span>
+          class="content break-text general-font-size text-wrap"
+          v-html="item.description"
+        ></span>
       </div>
 
       <PublicCategoriesContentModal
@@ -54,7 +59,16 @@
         v-if="contentModalOpen"
       />
       <div class="action" v-if="buttonHref">
-        <a :href="buttonHref" :target="item.url ? '_blank' : ''">Mehr anzeigen &gt;</a>
+        <v-btn
+          :href="buttonHref"
+          :target="item.url ? '_blank' : ''"
+          variant="flat"
+          color="primary"
+          rounded="pill"
+        >
+          <span v-if="item.kind">{{ buttonText }}</span>
+          <span v-else> Mehr anzeigen</span>
+        </v-btn>
       </div>
     </div>
   </div>
@@ -62,6 +76,7 @@
 <script lang="ts" setup>
 import { Facility } from "~/store/searchFilter";
 import noImage from "@/assets/images/no-image.svg";
+import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 const props = defineProps<{
   item: Facility;
   size?: number;
@@ -97,6 +112,16 @@ const buttonHref = computed(() => {
   }
 
   return null;
+});
+
+const buttonText = computed(() => {
+  if (!props.item) return null;
+  if (props.item.kind) {
+    if (props.item.kind === "course") return "Zum Kurs";
+    if (props.item.kind === "event") return "Zur Veranstaltung";
+    if (props.item.kind === "news") return "Zum Beitrag";
+    if (props.item.kind === "facility") return "Zur Einrichtung";
+  }
 });
 
 const handleResize = () => {
@@ -147,7 +172,7 @@ $max-height: 240px;
 
     .info {
       display: flex;
-      font-size: 12px;
+      font-size: 0.75em;
       color: #a3a3a3;
       align-items: center;
       justify-content: space-between;
@@ -183,8 +208,4 @@ $max-height: 240px;
     }
   }
 }
-.read-more {
-  opacity: 0.5;
-}
-
 </style>

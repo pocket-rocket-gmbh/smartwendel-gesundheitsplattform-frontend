@@ -42,6 +42,7 @@
               v-model="item.email"
               :rules="[rules.required, rules.email]"
               label="E-Mail *"
+              disabled
             />
             <h3 class="mb-4">Profilbild</h3>
             <PublicUsersProfileImage
@@ -84,7 +85,7 @@
               "
             />
             <v-btn
-              :disabled="password !== password_confirmation"
+              :disabled="!password.length || !password_confirmation.length || password !== password_confirmation || password_confirmation.length < 6 || password.length < 6"
               variant="flat"
               color="primary"
               @click="updatePassword()"

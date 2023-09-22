@@ -1,5 +1,5 @@
 <template>
-  <div class="has-text-white">
+  <div class="general-font-size">
     <v-container class="mt-10">
       <h1>Impressum</h1>
       <h2>Herausgeber:</h2>
@@ -85,7 +85,3 @@
     </v-container>
   </div>
 </template>
-
-<script lang="ts" setup></script>
-
-<style lang="sass" scoped></style>

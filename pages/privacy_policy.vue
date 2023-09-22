@@ -1,5 +1,5 @@
 <template>
-  <div class="has-text-white">
+  <div class="general-font-size">
     <v-container class="mt-10">
       <h1>Datenschutzerklärung</h1>
     </v-container>
@@ -136,6 +136,7 @@
         Ein Cookie enthält eine charakteristische Zeichenfolge, die eine eindeutige
         Identifizierung Ihres Browsers beim erneuten Aufrufen der Website ermöglicht.
       </p>
+      <br />
       <p>
         Die meisten der von uns verwendeten Cookies sind so genannte “Session-Cookies”.
         Sie werden nach Ende Ihres Besuchs bzw. Ihrer Browser-Sitzung automatisch gelöscht
@@ -146,7 +147,7 @@
         Auskünfte zu den verwendeten funktionalen Cookies zu geben. Bitte wenden Sie sich
         dann an die o.g. Kontaktdaten.
       </p>
-
+      <br />
       <p>
         Sie können Ihren Browser so einstellen, dass Sie über das Setzen von Cookies
         informiert werden und Cookies nur im Einzelfall erlauben, die Annahme von Cookies
@@ -160,7 +161,7 @@
         Einzelerläuterungen zu den im Rahmen des Besuchs unserer Website konkret
         verwendeten Cookies und zugehörigen Funktionen/Technologien.
       </p>
-
+      <br />
       <p>
         Einige der Cookies, die wir auf unserer Website verwenden, stammen von Dritten,
         die uns helfen, die Wirkung unserer Websiteinhalte und Interessen unserer Besucher
@@ -173,19 +174,19 @@
         Nutzungsprofilen zusammengefasst. Die Daten verwenden wir zur Auswertung der
         Nutzung der Website. Eine Weitergabe der erfassten Daten an Dritte erfolgt nicht.
       </p>
-
+      <br />
       <p>
         Die IP-Adressen werden anonymisiert (IPMasking), sodass eine Zuordnung zu
         einzelnen Nutzern nicht möglich ist.
       </p>
-
+      <br />
       <p>
         Die Verarbeitung der Daten erfolgt auf Grundlage von Art. 6 Abs. 1 S. 1 lit. a
         DSGVO bzw. auf Grundlage des Art. 6 Abs. 1 S. 1 lit. f DSGVO. Wir verfolgen damit
         unser berechtigtes Interesse an der Optimierung unserer Webseite für unsere
         Außendarstellung.
       </p>
-
+      <br />
       <p>
         Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie die Cookies in Ihrem
         Browser löschen oder Ihre Datenschutzeinstellungen direkt auf der Plattform
@@ -203,6 +204,7 @@
         vorvertraglicher Pflichten) und anschließend Art. 6 Abs. 1 S. 1 lit. a) DSGVO
         (Einwilligung für einen bestimmten Verarbeitungszweck).
       </p>
+      <br />
       <p>
         In der Gesundheits- und Pflegeplattform können Sie sich und Ihre Einrichtung in
         Form einer Detailseite präsentieren und hierzu insbesondere Beiträge wie z. B.
@@ -215,6 +217,7 @@
         zu. Rechtsgrundlage für diese Datenverarbeitung ist Art. 6 Abs. 1 S. 1 lit. a)
         DSGVO (Einwilligung für einen bestimmten Verarbeitungszweck).
       </p>
+      <br />
       <p>
         Wenn Sie Ihr Benutzerkonto löschen oder Ihre Einwilligung widerrufen, werden alle
         anderen Daten, z. B. Ihr Vor- und Familienname, Ihre Adresse, Ihre E-Mail-Adresse
@@ -251,6 +254,7 @@
         ist erforderlich zur Erfüllung unserer vertraglichen und / oder gesetzlichen
         Pflichten.
       </p>
+      <br />
       <p>
         Wenn Sie Ihr Benutzerkonto löschen oder Ihre Einwilligung widerrufen, werden alle
         Daten, z. B. Ihr Vor- und Familienname, Ihre Adresse, Ihre E-Mail-Adresse und die
@@ -298,7 +302,6 @@
       </p>
       <br />
       <h4>Recht auf Berichtigung:</h4>
-
       <p>
         Sie sind berechtigt, nach Art. 16 DSGVO von uns zu verlangen, dass wir die über
         Sie gespeicherten personenbezogenen Daten berichtigen, wenn diese unzutreffend
@@ -310,6 +313,7 @@
         Sie sind berechtigt, unter den Voraussetzungen von Art. 17 DSGVO von uns zu
         verlangen, dass wir Sie betreffende personenbezogene Daten unverzüglich löschen.
       </p>
+      <br />
       <p>
         Das Recht auf Löschung besteht unter anderem nicht, wenn die Verarbeitung der
         personenbezogenen Daten erforderlich ist z. B. zur Erfüllung einer rechtlichen
@@ -389,7 +393,3 @@
     </v-container>
   </div>
 </template>
-
-<script lang="ts" setup></script>
-
-<style lang="sass" scoped></style>

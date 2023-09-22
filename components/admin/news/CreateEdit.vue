@@ -17,6 +17,7 @@
             >
               <span>{{ step.description }}</span>
             </div>
+            <sspan class="text-error d-flex justify-end">* Erforderlich</sspan>
           </div>
         </v-col>
         <v-col md="9">
@@ -24,7 +25,7 @@
             <div>
               <span class="text-h6"
                 >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen.
-                Je mehr Angaben du machst, umso leichter können Besucherinnen und Besucher
+                Je mehr Angaben du machst, umso leichter können Besucher
                 deine Beiträge finden. Pflichtfelder sind mit einem Sternchen
                 versehen.</span
               >
@@ -42,15 +43,6 @@
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
-            <v-text-field
-              class="text-field"
-              v-if="slotProps.item.kind !== 'news'"
-              v-model="slotProps.item.name"
-              hide-details="auto"
-              label="Name"
-              :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
-            />
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="leader">
@@ -61,7 +53,7 @@
             </div>
             <v-text-field
               class="text-field"
-              v-model="slotProps.item.name_instructor"
+              v-model="slotProps.item.name_responsible_person"
               hide-details="auto"
               label="Vor und Nachname des Autors"
               :rules="[rules.required]"
@@ -190,7 +182,7 @@
               @set-tags="setTagIds"
             />
           </div>
-          <v-divider class="my-10"></v-divider>
+          <v-divider class="my-5"></v-divider>
         </v-col>
       </v-row>
     </v-card-text>
@@ -223,7 +215,7 @@ const steps: CreateEditSteps<StepNames> = {
       "2.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
     tooltip: "",
     description: "Name der Autorin/des Autors *",
-    props: ["name_instructor"],
+    props: ["name_responsible_person"],
   },
   photo: {
     label:
@@ -252,7 +244,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "5. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder. *",
     tooltip:
-      "Auf diese Weise gelangen Besucherinnen und Besucher zu deinem Newsbeitrag sobald sie nach den entsprechenden Schlagwörtern suchen",
+      "Auf diese Weise gelangen Besucher zu deinem Newsbeitrag, sobald sie nach den entsprechenden Schlagwörtern suchen",
     description: "Schlagwörter *",
     props: ["tags"],
   },
@@ -515,6 +507,7 @@ const goToField = (n: string) => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
+  line-height: 1.2!important;
 }
 
 .ql-clean {

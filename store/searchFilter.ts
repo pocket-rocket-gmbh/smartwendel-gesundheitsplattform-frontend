@@ -2,7 +2,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 import { ResultStatus } from "~/types/serverCallResult";
 
-export const filterSortingDirections = ["Aufsteigend", "Absteigend"] as const;
+export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
@@ -72,7 +72,7 @@ const initialFilterState: Filter = {
   currentSearchTerm: "",
   currentTags: [],
   currentZip: null,
-  filterSort: "Absteigend",
+  filterSort: "A-Z",
   loading: false,
   mapFilter: null,
   currentKinds: [],
@@ -126,8 +126,8 @@ export const useFilterStore = defineStore({
       if (!filter) return;
 
       this.setFilterInfo(JSON.parse(filter));
-      const url = `${window.location.origin}${window.location.pathname}`;
-      window.history.pushState({ path: url }, "", url);
+      // const url = `${window.location.origin}${window.location.pathname}`;
+      // window.history.pushState({ path: url }, "", url);
     },
     async clearSearch() {
       this.currentSearchTerm = "";
@@ -147,20 +147,56 @@ export const useFilterStore = defineStore({
         if (index !== -1) this.currentTags.splice(index, 1);
       });
     },
+
+    async checkIfMultipleFacilityFiltersAreSelected() {
+      if (!this.currentKinds?.length || !this.currentTags?.length) return [];
+
+      // After the course/event-split, multiple kinds are obsolete
+      const filterKind = this.currentKinds[0];
+
+      const mainFilters = await getMainFilters("filter_facility", filterKind);
+      const allFilters = await getAllFilters();
+
+      const allOptions = mainFilters.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
+      // const allAvailableOptions = allOptions.reduce((prev, curr) => {
+      //   return [...prev, ...curr];
+      // }, []);)
+
+      for (const block of allOptions) {
+        const multipleOccuredInBlock = block.filter((item) => this.currentTags.includes(item.id));
+        if (multipleOccuredInBlock.length > 1) {
+          return multipleOccuredInBlock;
+        }
+      }
+      return [];
+    },
     async loadAllResults() {
       this.loading = true;
 
       const filters = [];
 
-      if (this.currentTags) {
-        filters.push({ field: "care_facility_tag_categories", value: this.currentTags });
+      const multipleFacilityFiltersSelected = await this.checkIfMultipleFacilityFiltersAreSelected();
+
+      const tagsToFilter = [...this.currentTags];
+
+      if (multipleFacilityFiltersSelected.length) {
+        multipleFacilityFiltersSelected.forEach((item) => {
+          tagsToFilter.splice(
+            tagsToFilter.findIndex((tag) => tag === item.id),
+            1
+          );
+        });
+      }
+
+      if (tagsToFilter.length) {
+        filters.push({ field: "care_facility_tag_categories", value: tagsToFilter });
       }
 
       const options = {
         page: 1,
         per_page: 25,
         sort_by: "created_at",
-        sort_order: this.filterSort == "Aufsteigend" ? "ASC" : "DESC",
+        sort_order: this.filterSort == "Z-A" ? "ASC" : "DESC",
         searchQuery: null as any,
         concat: false,
         filters,
@@ -229,9 +265,9 @@ export const useFilterStore = defineStore({
 
       this.loading = false;
 
-      this.loadFilteredResults();
+      this.loadFilteredResults(multipleFacilityFiltersSelected);
     },
-    loadFilteredResults() {
+    loadFilteredResults(filterCategories?: { id: string }[]) {
       if (this.loading || !this.allResults) return;
 
       const filteredResults: Facility[] = this.allResults
@@ -245,6 +281,11 @@ export const useFilterStore = defineStore({
               (result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
                 result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
           );
+        })
+        .filter((facility) => {
+          if (!filterCategories?.length) return true;
+
+          return filterCategories.some((category) => facility.tag_category_ids.includes(category.id));
         });
 
       if (this.mapFilter) {
@@ -255,13 +296,13 @@ export const useFilterStore = defineStore({
       this.filteredResults = filteredResults;
     },
     toggleSort() {
-      this.filterSort = this.filterSort === "Absteigend" ? "Aufsteigend" : "Absteigend";
+      this.filterSort = this.filterSort === "A-Z" ? "Z-A" : "A-Z";
     },
     resetAllFilters() {
       this.currentSearchTerm = "";
       this.currentTags = [];
       this.currentZip = null;
-      this.filterSort = "Absteigend";
+      this.filterSort = "A-Z";
       this.loading = false;
       this.mapFilter = null;
       this.currentKinds = [];
