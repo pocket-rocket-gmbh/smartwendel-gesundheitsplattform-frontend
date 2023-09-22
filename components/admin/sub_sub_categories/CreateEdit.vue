@@ -11,6 +11,7 @@
       </div>
       <div class="field mb-5">
         <v-textarea
+          counter
           v-model="slotProps.item.description"
           hide-details="auto"
           label="Beschreibung"
