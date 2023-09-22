@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <div>
-      <PublicSearchTheBasicSearchBox title="Kurse" sub-title="Deinen Wunschkurs auswählen" :filter-kind="'course'" />
+      <PublicSearchTheBasicSearchBox title="Kurse" sub-title="Finde den passenden Kurs!" :filter-kind="'course'" />
       <div class="container">
         <div class="filters" v-if="showSearchFilter">
           <PublicSearchTheFilter :filterKind="'course'" />

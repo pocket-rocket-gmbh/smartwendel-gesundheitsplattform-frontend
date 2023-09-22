@@ -42,6 +42,7 @@
               v-model="item.email"
               :rules="[rules.required, rules.email]"
               label="E-Mail *"
+              disabled
             />
             <h3 class="mb-4">Profilbild</h3>
             <PublicUsersProfileImage

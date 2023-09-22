@@ -52,34 +52,36 @@ export default defineComponent({
     const items = [
       {
         content: {
-          heading: "Erste Hilfe",
-          image: image1,
-          description:
-            "Du warst sicherlich schon mal in einer Situation, in der Du die Hilfe eines Mitmenschen benötigt hast. Hilf auch Du in Notfallsituationen. Weitere Informationen:",
-          linkText: "Anleitung",
-          link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/",
-        },
-      },
-      {
-        content: {
           heading: "Rettungsdienste",
           image: image3,
           description:
-            "Rufe den Rettungsdienst, wenn Du akut medizinische Hilfe benötigst. Egal ob es sich um die Folgen eines Unfalls handelt oder plötzliche starke gesundheitliche Beschwerden auftreten.",
+            "Wenn es eine akute Gefahr für das Leben gibt und es nicht ausgeschlossen werden kann, dass bleibende Schäden auftreten, sollte unverzüglich der Notruf gewählt werden.",
           linkText: "Notruf 112",
           link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/notruf-112/",
         },
       },
       {
         content: {
-          heading: "Apothekennotdienst",
+          heading: "Ärztlicher Bereitschaftsdienst",
           image: image2,
           description:
             "Es ist Wochenende und Du benötigst dringend Medikamente? Rufe sofort den Apothekennotdienst an und erfahre, welche Apotheke im Landkreis Sankt Wendel für Dich da ist.",
-          linkText: "Notruf 22833",
+          linkText: "Notruf 116 117",
           link: "https://www.google.com/search?q=Apothekennotdienst+LK+WND&oq=Apothekennotdienst+LK+WND&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQIRgKGKAB0gEHNjA1ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8",
         },
       },
+      {
+        content: {
+          heading: "Nummer gegen Kummer",
+          image: image1,
+          description:
+            'Die "Nummer gegen Kummer" ist eine Anlaufstelle für Kinder und Jugendliche, die mit Sorgen und Problemen zu kämpfen haben. Hier finden sie Unterstützung durch psychologisch geschulte Fachkräfte, die ihre Dienste anonym und kostenlos anbieten.',
+          linkText: "Notruf 116 123",
+          link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/",
+        },
+      },
+      
+      
     ];
 
     return {

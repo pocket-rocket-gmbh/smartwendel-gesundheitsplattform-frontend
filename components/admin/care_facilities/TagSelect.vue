@@ -62,8 +62,7 @@
     <template #content>
       <div class="content text-h6">
         <div v-if="kind === 'facility'">
-          Hier hast du die Möglichkeit, dein individuelles Leistungsangebot mit Hilfe von
-          Schlagwörtern zu beschreiben.
+          Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches Angebot.
         </div>
         <div v-if="kind === 'course'">
           Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern

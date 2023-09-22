@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <h1 class="title">Deine Gesundheits-plattform im Landkreis Sankt Wendel</h1>
+    <h1 class="title">Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land</h1>
     <PublicLandingChooseCategory />
-    <p class="general-font-size sub-title">Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreiche Pflegeangebote finden.</p>
+    <p class="general-font-size sub-title">Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.</p>
   </div>
 </template>
 

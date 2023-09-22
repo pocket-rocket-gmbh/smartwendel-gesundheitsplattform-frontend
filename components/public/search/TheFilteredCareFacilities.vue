@@ -66,7 +66,7 @@
     </template>
   </div>
   <div v-if="!filterStore.loading && !filterStore.filteredResults.length" class="no-items">
-    <div class="item">Leider keine Ergebnisse. Bitte Suche anpassen.</div>
+    <div class="item">Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </div>
   </div>
 </template>
 

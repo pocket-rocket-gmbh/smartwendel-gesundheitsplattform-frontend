@@ -1,19 +1,25 @@
 <template>
   <div class="categories-wrapper">
     <div class="text general-font-size">
-      <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">
-        Pflege, Ärtze, <br />
-        Krankenhäuser und co.
-      </h2>
+      <div class="is-primary text-h4 font-weight-bold text-uppercase mb-5">
+        <p>
+          Anbieter aus Prävention und Gesundheit sowie medizinischer Versorgung
+          auf einen Blick!
+        </p>
+        <br />
+        <p>Was finde ich auf gesundesWND?</p>
+      </div>
       <p class="text-justify">
-        Über diese Suchfunktion findest du sicher schnell die passende Einrichtung und den
-        richtigen Ansprechpartner.
+        Du bist auf der Suche nach Sportstätten, Ärzten, persönlicher Beratung
+        oder nach Vereinen im Gesundheitsbereich? Sicher findest du unter der
+        Vielzahl an Anbietern aus den Bereichen Gesundheitsförderung &
+        Prävention, medizinische Versorgung oder Pflege das passende Angebot.
       </p>
-      <p class="text-justify mt-5">
-        Ob in Bereich Pflege, Gesundheit oder Prävention. Sicher findest du unter mehr als
-        1.000 gelisteten Anbietern die Leistung, nach der du suchst. Du informierest dich über
-        die Angebote oder nimmst direkt Kontakt auf und vereinbarst ein persönliches
-        Beratungsgespräch.
+      <br />
+      <p class="text-justify">
+        Informiere dich schnell und einfach über die Angebote von
+        Gesundheitsdienstleistern aus dem Sankt Wendeler Land. Über gesundesWND
+        kannst du auch direkt mit den Anbietern in Kontakt treten.
       </p>
       <div class="button my-5">
         <v-btn
@@ -23,7 +29,7 @@
           size="large"
           @click="goToSearch()"
         >
-          <span> Alle Einrichtungen </span>
+          <span>ZUR ANBIETERSUCHE </span>
         </v-btn>
       </div>
     </div>
@@ -37,7 +43,10 @@
         <img class="image" :src="item.content.icon" />
         <div class="d-flex align-center">
           <div class="font-weight-bold d-flex align-center is-clickable">
-            <span class="is-dark-grey general-font-size" v-html="item.content.heading"></span>
+            <span
+              class="is-dark-grey general-font-size"
+              v-html="item.content.heading"
+            ></span>
           </div>
         </div>
       </div>
@@ -45,7 +54,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-
 import icon1 from "@/assets/images/categories/icon_fitness.svg";
 import icon2 from "@/assets/images/categories/icon_doctor.svg";
 import icon3 from "@/assets/images/categories/icon_clubs.svg";

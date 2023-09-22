@@ -12,7 +12,7 @@
       <template #title align="center">
         <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']">
           {{ mainFilter.name }}
-          <span v-if="mainFilter.name === 'Behandlungsschwerpunkte'">(„nur von ärztliche und therapeutische Leistungserbringern auszuwählen“)</span>
+          <span v-if="mainFilter.name === 'Behandlungsschwerpunkte'">(nur von ärztliche und therapeutische Leistungserbringern auszuwählen)</span>
         </span>
         <div>
           <span v-if="filterHasSelected(mainFilter)">Bereits ausgewählt: </span>
