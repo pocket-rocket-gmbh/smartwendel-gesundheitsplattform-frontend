@@ -7,18 +7,10 @@
         </div>
         <div class="mt-5 d-flex flex-column general-font-size" v-if="!registerSuccessful">
           <span class="">
-            Du bist im Landkreis ansässiger Gesundheitsanbieter und möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
-            veröffentlichen? Dann laden wir dich herzlich ein, dich zu registrieren!</span
+            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter und möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform veröffentlichen? Dann laden wir dich herzlich zur Registrierung ein! Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in wenigen Schritten auf der Plattform darstellen und veröffentlichen. </span
           >
           <span class="mt-5">
-            Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in wenigen Schritten auf der Plattform darstellen und veröffentlichen.
-            Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei der einheimischen
-            Bevölkerung.
-          </span>
-          <span class="mt-5">
-            Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches Angebot handelt: Auf der Gesundheits- und
-            Pflegeplattform sind alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung der Gesundheit der Landkreisbevölkerung
-            beitragen!
+            Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei der einheimischen Bevölkerung. Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
           </span>
         </div>
       </div>

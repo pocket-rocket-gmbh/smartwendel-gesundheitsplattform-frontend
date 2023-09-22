@@ -10,7 +10,7 @@
         <v-col>
           <div class="field">
             <label class="label is-white">
-              <div class="search-term">Suchbegriff</div>
+              <div class="search-term">Anbieter suchen</div>
             </label>
             <PublicSearchField
               v-model="filterStore.currentSearchTerm"
@@ -18,6 +18,7 @@
               :default-route-to="'/public/search'"
               :default-styling="true"
               @update:model-value="handleInput"
+              kind="facilities"
             />
           </div>
         </v-col>

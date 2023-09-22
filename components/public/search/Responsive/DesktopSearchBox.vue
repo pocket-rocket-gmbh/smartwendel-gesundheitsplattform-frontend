@@ -11,7 +11,7 @@
           <div class="field general-font-size">
             <label class="label is-white">
               <div class="search-term">
-                <span>Kategorie </span>
+                <span>{{ filterTitle }}</span>
               </div>
             </label>
             <FacilityFilterSelection
@@ -21,23 +21,8 @@
             />
           </div>
         </v-col>
-        <v-col>
-          <div class="field general-font-size">
-            <label class="label is-white">
-              <div class="search-term">
-                <span>Suchbegriff</span>
-                </div>
-            </label>
-            <PublicSearchField
-              v-model="filterStore.currentSearchTerm"
-              :filtered-items="filterStore.filteredResults"
-              :default-route-to="'/public/search'"
-              :default-styling="true"
-              @update:model-value="handleInput"
-            />
-          </div>
-        </v-col>
-        <v-col>
+
+        <v-col v-if="filterKind !== 'event'">
           <div class="field general-font-size">
             <label class="label is-white">Gemeinde</label>
             <div class="select-wrapper">
@@ -48,6 +33,30 @@
                 </option>
               </select>
             </div>
+          </div>
+        </v-col>
+        <v-col
+          v-if="filterKind !== 'event'"
+          md="1"
+          class="d-flex justify-center align-center is-white general-font-size"
+        >
+          <div>Oder</div>
+        </v-col>
+        <v-col>
+          <div class="field general-font-size">
+            <label class="label is-white">
+              <div class="search-term">
+                <span>{{ searchTitle }}</span>
+              </div>
+            </label>
+            <PublicSearchField
+              v-model="filterStore.currentSearchTerm"
+              :filtered-items="filterStore.filteredResults"
+              :default-route-to="'/public/search'"
+              :default-styling="true"
+              @update:model-value="handleInput"
+              :kind="filterKind"
+            />
           </div>
         </v-col>
         <v-col class="align-end field">
@@ -84,7 +93,9 @@
           </v-btn>
         </v-col>
         <v-col class="d-flex justify-end align-center general-font-size mx-3">
-          <span class="text-white font-weight-bold">{{ filterStore.filteredResults.length }} Treffer</span>
+          <span class="text-white font-weight-bold"
+            >{{ filterStore.filteredResults.length }} Treffer</span
+          >
         </v-col>
       </v-row>
     </div>
@@ -124,6 +135,26 @@ const startSearch = () => {
   filterStore.loadAllResults();
 };
 
+const filterTitle = ref("");
+const searchTitle = ref("");
+const setFilterTitle = () => {
+  if (props.filterKind === "facility") {
+    filterTitle.value = "Branche";
+    searchTitle.value = "Angebieter suchen";
+  }
+  if (props.filterKind === "event") {
+    filterTitle.value = "Suche nach Veranstaltungen";
+    searchTitle.value = "Veranstaltung suchen";
+  }
+  if (props.filterKind === "news") {
+    filterTitle.value = "Suche nach Neuigkeiten";
+    searchTitle.value = "Nachrichten suchen";
+  }
+  if (props.filterKind === "course") {
+    filterTitle.value = "Themengebiet";
+    searchTitle.value = "Kurs suchen";
+  }
+};
 const communitiesApi = useCollectionApi();
 communitiesApi.setBaseApi(usePublicApi());
 communitiesApi.setEndpoint(`communities`);
@@ -141,6 +172,7 @@ const getCommunities = async () => {
 onMounted(() => {
   getCommunities();
   updatePopoverWidth();
+  setFilterTitle();
 });
 </script>
 

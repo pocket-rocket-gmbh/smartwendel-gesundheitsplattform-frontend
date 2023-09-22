@@ -3,7 +3,7 @@
     <div>
       <PublicSearchTheBasicSearchBox
         title="Veranstaltungen"
-        sub-title="Deine Wunschveranstaltung auswählen"
+        sub-title="Finde die passende Veranstaltung!"
         :filter-kind="'event'"
       />
       <div class="container">

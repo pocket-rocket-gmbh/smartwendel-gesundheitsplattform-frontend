@@ -5,14 +5,14 @@
         <div class="field">
           <label class="label is-white">
             <div class="search-term">
-              Filter
+              Branche
               <v-chip v-if="filterStore.currentSearchTerm" closable @click:close="resetSearchTerm">
                 {{ filterStore.currentSearchTerm }}
               </v-chip>
             </div>
           </label>
           <div class="field" v-bind="props">
-            <div class="input">{{ selectedFilter?.name || "Kategorie wählen" }}</div>
+            <div class="input">{{ selectedFilter?.name || "Branche" }}</div>
           </div>
         </div>
       </template>

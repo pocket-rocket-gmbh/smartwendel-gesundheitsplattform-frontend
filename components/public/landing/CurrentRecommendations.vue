@@ -1,16 +1,9 @@
 <template>
   <div class="wrapper bg-gradient">
     <div class="d-flex align-center justify-center">
-      <h2 class="text-white text-h4">
-        Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun
-        kannst.
-      </h2>
-    </div>
-    <div class="d-flex align-center justify-center text-white my-3">
-      <h3>
-        Wähle einfach einen Themenbereich aus und finde gesundheitsförderliche und
-        präventive Angebote für dich
-      </h3>
+      <div class="text-white text-h4 my-5">
+        Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun kannst.
+      </div>
     </div>
     <div class="recommendations-wrapper">
       <div
