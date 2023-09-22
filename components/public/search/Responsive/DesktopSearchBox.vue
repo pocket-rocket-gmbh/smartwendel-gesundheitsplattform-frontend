@@ -140,7 +140,7 @@ const searchTitle = ref("");
 const setFilterTitle = () => {
   if (props.filterKind === "facility") {
     filterTitle.value = "Branche";
-    searchTitle.value = "Angebieter suchen";
+    searchTitle.value = "Anbieter suchen";
   }
   if (props.filterKind === "event") {
     filterTitle.value = "Suche nach Veranstaltungen";
