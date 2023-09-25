@@ -25,14 +25,17 @@
               ></span>
             </v-btn>
           </div>
-          <div class="d-flex align-center justify-end" v-if="item.created_at">
+          <div
+            class="d-flex align-center justify-end"
+            v-if="item.created_at && item.kind === 'news'"
+          >
             <v-icon>mdi-calendar-outline</v-icon
             ><span class="break-title">{{
               useDatetime().parseDatetime(item.created_at)
             }}</span>
           </div>
         </div>
-        <hr />
+        <hr v-if="item.kind !== 'facility'"/>
       </template>
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
@@ -44,7 +47,9 @@
             class="is-clickable"
             @click="openContentModal()"
           >
-            <v-btn size="small" variant="text" class="read-more"> weiter lesen </v-btn>
+            <v-btn size="small" variant="text" class="read-more">
+              weiter lesen
+            </v-btn>
           </span>
         </div>
         <span
@@ -95,10 +100,14 @@ const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "course")
+      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event")
+      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news")
+      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility")
+      return `/public/care_facilities/${props.item.id}`;
   }
 
   if (props.item.url) {
@@ -106,7 +115,10 @@ const buttonHref = computed(() => {
       return props.item.url;
     }
 
-    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
+    if (
+      props.item.url.includes("http://") ||
+      props.item.url.includes("https://")
+    ) {
       return props.item.url;
     } else return "https://" + props.item.url;
   }
@@ -137,7 +149,7 @@ const handleResize = () => {
   color: #58595e;
 }
 
-$max-height: 240px;
+$max-height: 300px;
 
 .content-box {
   background-color: #f5f5f5;
@@ -193,6 +205,7 @@ $max-height: 240px;
       gap: 0.5rem;
       max-height: 100%;
       overflow: hidden;
+     line-height: 30px;
 
       .title {
         font-size: 1.5rem;

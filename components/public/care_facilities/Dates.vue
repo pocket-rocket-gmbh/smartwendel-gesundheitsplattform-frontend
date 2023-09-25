@@ -27,8 +27,7 @@
               <td class="py-0 text-center">
                 {{ date.slice(Math.max(date.length - 5, 1)) }} Uhr
               </td>
-              <td v-if="careFacility?.kind === 'event'">{{ careFacility?.event_duration }} Std.</td>
-              <td class="text-center" v-else>{{ careFacility?.event_duration }} Min.</td>
+              <td class="text-center">{{ careFacility?.event_duration }} Min.</td>
             </tr>
           </tbody>
         </v-table>

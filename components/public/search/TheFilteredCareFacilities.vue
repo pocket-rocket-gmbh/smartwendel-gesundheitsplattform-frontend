@@ -2,7 +2,6 @@
   <Loading v-if="filterStore.loading" />
   <div class="entries general-font-size" v-if="!(!filterStore.loading && !filterStore.filteredResults.length)">
     <div class="d-flex actions">
-      <span class="hits">{{ filterStore.filteredResults.length }} Treffer</span>
       <div class="sort-order is-clickable d-flex align-center" @click="toggleFilterSort">
         <span>{{ filterStore.filterSort }}</span>
         <v-icon v-show="filterStore.filterSort === 'A-Z'">mdi-chevron-down</v-icon>
@@ -30,12 +29,12 @@
                 </v-col>
                 <v-col>
                   <div class="text-dark-grey mt-4">
-                    <div v-if="careFacility.phone">
-                      <v-icon color="primary" class="mr-2">mdi-phone-outline</v-icon>
+                    <div v-if="careFacility.phone" class="d-flex align-center">
+                      <img class="mr-2 icon" :src="iconPhone" />
                       <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
                     </div>
-                    <div v-if="careFacility.email">
-                      <v-icon color="primary" class="mr-2">mdi-email-outline</v-icon>
+                    <div v-if="careFacility.email" class="d-flex align-center">
+                      <img class="mr-2 icon" :src="iconMail" />
                       <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
                     </div>
                   </div>
@@ -65,13 +64,12 @@
       </div>
     </template>
   </div>
-  <div v-if="!filterStore.loading && !filterStore.filteredResults.length" class="no-items">
-    <div class="item">Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
+import iconPhone from "@/assets/icons/facilities/icon_phone.svg";
+import iconMail from "@/assets/icons/facilities/icon_mail.svg";
 
 const props = defineProps<{
   doubled?: boolean;
@@ -103,6 +101,9 @@ const toggleFilterSort = () => {
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
+
+.icon
+  width: 1.25rem
 .item
   background: #FFFFFF
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)

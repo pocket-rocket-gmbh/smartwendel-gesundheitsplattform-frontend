@@ -138,6 +138,11 @@ export const useFilterStore = defineStore({
       await this.loadAllResults();
       this.loadFilteredResults();
     },
+    async clearTermSearch() {
+      this.currentSearchTerm = "";
+      await this.loadAllResults();
+      this.loadFilteredResults();
+    },
     enableAllTags(tags: string[]) {
       this.currentTags = [...new Set([...this.currentTags, ...tags])];
     },

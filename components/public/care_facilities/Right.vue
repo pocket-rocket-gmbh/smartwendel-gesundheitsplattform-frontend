@@ -1,24 +1,24 @@
 <template>
   <div class="box flex-column text-dark-grey font-weight-bold pa-5">
     <h2 class="is-primary is-uppercase mb-6">Kontakt und Infos</h2>
-    <div v-if="careFacility?.phone" class="py-3">
-      <span>
-        <v-icon class="mr-2" color="primary">mdi-phone-outline</v-icon>
+    <div v-if="careFacility?.phone" class="py-3 d-flex flex-column justify-center">
+      <span class="d-flex align-center">
+        <img class="mr-2 icon" :src="iconPhone" />
         <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
       </span>
     </div>
     <div v-if="careFacility?.email" class="py-3">
-      <span>
-        <v-icon class="mr-2" color="primary">mdi-email-outline</v-icon>
+      <span class="d-flex align-center">
+        <img class="mr-2 icon" :src="iconMail" />
         <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
       </span>
     </div>
     <div v-if="careFacility?.street || careFacility?.zip || careFacility?.town">
       <div class="py-3">
-        <div>
-          <v-icon class="mr-2" color="primary">mdi-map-marker-outline</v-icon>
+        <span class="d-flex align-center">
+          <img class="mr-2 icon" :src="iconAddress" />
           <span>{{ careFacility.street }}</span>
-        </div>
+        </span>
         <div v-if="careFacility?.additional_address_info">
           <v-icon></v-icon>
           <span class="mr-2">
@@ -85,6 +85,9 @@
 </template>
 
 <script lang="ts" setup>
+import iconPhone from "@/assets/icons/facilities/icon_phone.svg";
+import iconMail from "@/assets/icons/facilities/icon_mail.svg";
+import iconAddress from "@/assets/icons/facilities/icon_address.svg";
 const props = defineProps({
   careFacility: {
     type: Object,
@@ -114,4 +117,8 @@ const buttonHref = computed(() => {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
   border-radius: 20px
   padding: 20px
+
+.icon
+  width: 1.25rem
+
 </style>

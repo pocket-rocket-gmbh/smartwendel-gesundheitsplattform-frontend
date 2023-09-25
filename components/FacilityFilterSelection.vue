@@ -1,6 +1,6 @@
 <template>
   <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
-    <div class="input" @click="showPopover = !showPopover">
+    <div class="input" @click="showPopover = !showPopover; handleClearTermSearch()">
       <div class="input-title">{{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}</div>
 
       <div class="actions">
@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { FilterKind } from "~/store/searchFilter";
+import { FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];
@@ -54,7 +54,8 @@ const props = defineProps<{
 }>();
 
 
-const placeholderText = ref("");
+
+const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
   if (props.filterKind === "facility") {
     placeholderText.value = "Branche wählen";
@@ -93,7 +94,13 @@ const mainFilters = ref([]);
 const filterOptions = ref<FilterOption[]>([]);
 
 const loadingFilters = ref(false);
-
+const filterStore = useFilterStore();
+const handleClearTermSearch = () => {
+  if(filterStore.currentSearchTerm) {
+    filterStore.clearTermSearch();
+  }
+  return;
+};
 const handleOptionSelect = (option: Filter, multiple?: boolean) => {
   if (multiple) {
     const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);

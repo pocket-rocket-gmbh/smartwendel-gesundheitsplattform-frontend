@@ -286,10 +286,6 @@ header,
     padding: 1rem;
   }
 }
-.hero {
-  background: linear-gradient(270deg, #017dc2 0.29%, #015281 100%);
-  height: 100%;
-}
 .my-account {
   background-color: #f5f5f5;
 }
@@ -304,9 +300,7 @@ header,
   flex-direction: row;
   align-items: center;
 }
-.divider {
-  color: #015281;
-}
+
 .mobile-logo-height {
   max-height: 40px;
 }
