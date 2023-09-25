@@ -5,6 +5,19 @@
         <v-col>
           <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
         </v-col>
+        <v-col v-if="filterKind === 'facility'" md="2" class="d-flex justify-end">
+          <v-btn
+            variant="outlined"
+            width="250px"
+            rounded="pill"
+            color="white"
+            @click="emit('toggleMap')"
+            class="font-weight-bold"
+          >
+            <span v-if="showMap"> Listenansicht </span>
+            <span v-if="!showMap"> Kartenansicht </span>
+          </v-btn>
+        </v-col>
       </v-row>
       <v-row>
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
@@ -21,19 +34,25 @@
             />
           </div>
         </v-col>
-
         <v-col v-if="filterKind !== 'event'">
           <div class="field general-font-size">
             <label class="label is-white">Gemeinde</label>
             <div class="select-wrapper">
-              <select class="input select" v-model="filterStore.currentZip">
-                <option :value="null">Gemeinde auswählen</option>
+              <select class="input select" v-model="filterStore.currentZip" @click="handleClearTermSearch()">
+                <option :value="null">Gemeinde wählen</option>
                 <option v-for="community in communities" :value="community.zip">
                   {{ community.name }}
                 </option>
               </select>
             </div>
           </div>
+        </v-col>
+        <v-col
+          v-if="filterKind !== 'event'"
+          md="1"
+          class="d-flex justify-center align-end is-white mb-5"
+        >
+          <div class="label general-font-size font-weight-bold">oder</div>
         </v-col>
         <v-col>
           <div class="field general-font-size">
@@ -52,18 +71,10 @@
             />
           </div>
         </v-col>
-        <v-col class="align-end field">
+        <v-col class="d-flex align-end field mb-4">
           <v-btn
-            class="ml-3 bordered"
-            variant="flat"
-            rounded="pill"
-            color="white"
-            @click="startSearch"
-          >
-            Suche starten
-          </v-btn>
-          <v-btn
-            class="mx-3 bordered"
+            class="font-weight-bold"
+            width="250px"
             variant="outlined"
             rounded="pill"
             color="white"
@@ -73,26 +84,20 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-row class="bottom-actions" v-if="mapControls">
-        <v-col class="center">
-          <v-btn
-            variant="outlined"
-            rounded="pill"
-            color="white"
-            @click="emit('toggleMap')"
-          >
-            <span v-if="showMap"> Listenansicht </span>
-            <span v-if="!showMap"> Kartenansicht </span>
-          </v-btn>
-        </v-col>
-        <v-col class="d-flex justify-end align-center general-font-size mx-3">
-          <span class="text-white font-weight-bold"
-            >{{ filterStore.filteredResults.length }} Treffer</span
-          >
-        </v-col>
-      </v-row>
     </div>
   </div>
+  <v-row
+    class="bottom-actions has-bg-darken-grey text-white font-weight-bold"
+  >
+    <v-col class="d-flex justify-center align-center general-font-size mx-3">
+      <span v-if="filterStore.filteredResults.length"
+        >{{ filterStore.filteredResults.length }} Treffer</span
+      >
+      <span v-else>
+        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
+      </span>
+    </v-col>
+  </v-row>
 </template>
 <script setup lang="ts">
 import { FilterKind, useFilterStore } from "~/store/searchFilter";
@@ -109,8 +114,6 @@ const emit = defineEmits<{
   (event: "toggleMap"): void;
 }>();
 
-const filterStore = useFilterStore();
-
 const contentWrapperRef = ref<HTMLDivElement>();
 const popoverWidth = ref(0);
 
@@ -126,6 +129,15 @@ const handleInput = () => {
 
 const startSearch = () => {
   filterStore.loadAllResults();
+};
+
+const filterStore = useFilterStore();
+
+const handleClearTermSearch = () => {
+  if(filterStore.currentSearchTerm) {
+    filterStore.clearTermSearch();
+  }
+  return;
 };
 
 const filterTitle = ref("");
