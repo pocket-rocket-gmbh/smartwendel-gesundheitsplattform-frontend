@@ -267,8 +267,8 @@
                   class="text-field"
                   v-model="slotProps.item.event_duration"
                   hide-details="auto"
-                  label="Veranstaltungsdauer (in Stunden)"
-                  placeholder="z.B. 8"
+                  label="Veranstaltungsdauer (in Minuten)"
+                  placeholder="z.B. 60"
                   :rules="[rules.required, rules.validateEventDuration]"
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
