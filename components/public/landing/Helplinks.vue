@@ -31,11 +31,13 @@
       >
         <div class="general-font-size">
           <a
-            :href="item.content.linkText"
+            :href="item.content.link"
             target="_blank"
             class="is-red is-clickable"
           >
-            {{ item.content.linkText }}
+            <v-btn variant="flat" color="primary" rounded="pill" size="large">
+              <span> {{ item.content.linkText }} </span>
+            </v-btn>
           </a>
         </div>
       </v-col>
@@ -44,16 +46,16 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import image1 from "@/assets/images/help-links/icon_firstaid.svg";
-import image2 from "@/assets/images/help-links/icon_pharmacy.svg";
-import image3 from "@/assets/images/help-links/icon_rescue.svg";
+import image1 from "@/assets/images/help-links/icon_rescue.svg";
+import image2 from "@/assets/images/help-links/icon_emergency.svg";
+import image3 from "@/assets/images/help-links/icon_grief_number.svg";
 export default defineComponent({
   setup() {
     const items = [
       {
         content: {
           heading: "Rettungsdienste",
-          image: image3,
+          image: image1,
           description:
             "Wenn es eine akute Gefahr für das Leben gibt und es nicht ausgeschlossen werden kann, dass bleibende Schäden auftreten, sollte unverzüglich der Notruf gewählt werden.",
           linkText: "Notruf 112",
@@ -65,23 +67,21 @@ export default defineComponent({
           heading: "Ärztlicher Bereitschaftsdienst",
           image: image2,
           description:
-            "Es ist Wochenende und Du benötigst dringend Medikamente? Rufe sofort den Apothekennotdienst an und erfahre, welche Apotheke im Landkreis Sankt Wendel für Dich da ist.",
+            "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe.",
           linkText: "Notruf 116 117",
-          link: "https://www.google.com/search?q=Apothekennotdienst+LK+WND&oq=Apothekennotdienst+LK+WND&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQIRgKGKAB0gEHNjA1ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8",
+          link: "https://www.116117.de/de/index.php",
         },
       },
       {
         content: {
           heading: "Nummer gegen Kummer",
-          image: image1,
+          image: image3,
           description:
-            'Die "Nummer gegen Kummer" ist eine Anlaufstelle für Kinder und Jugendliche, die mit Sorgen und Problemen zu kämpfen haben. Hier finden sie Unterstützung durch psychologisch geschulte Fachkräfte, die ihre Dienste anonym und kostenlos anbieten.',
+            'Die "Nummer gegen Kummer" ist eine Anlaufstelle für Kinder und Jugendliche, die mit Sorgen und Problemen zu kämpfen haben. Hier findest du Unterstützung durch psychologisch geschulte Fachkräfte, die ihre Dienste anonym und kostenlos anbieten.',
           linkText: "Notruf 116 123",
-          link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/",
+          link: "https://www.telefonseelsorge.de/",
         },
       },
-      
-      
     ];
 
     return {
