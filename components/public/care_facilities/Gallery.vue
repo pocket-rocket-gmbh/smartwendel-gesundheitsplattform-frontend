@@ -2,8 +2,10 @@
   <div v-if="showingGallery">
     <div class="curtain" />
     <div class="img-gallery">
-      <img class="close-btn is-clickable" src="~/assets/icons/icon-times.svg" height="20" @click="emitClose()" />
-      <v-carousel hide-delimiters progress="primary" show-arrows="hover">
+      <div class="close-btn">
+        <v-icon class="close" @click="emitClose()">mdi-close</v-icon>
+      </div>
+      <v-carousel hide-delimiters show-arrows="hover">
         <v-carousel-item v-for="(image, index) in careFacility.sanitized_images" :key="index" :src="image?.url" cover />
       </v-carousel>
     </div>
@@ -26,6 +28,14 @@ const props = defineProps({
 const emitClose = () => {
   emit("close");
 };
+
+onMounted(() => {
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      emitClose();
+    }
+  });
+});
 </script>
 
 <style lang="sass" scoped>
@@ -49,4 +59,12 @@ const emitClose = () => {
   @include md
     top: 50%
     width: 90vw
+
+.close
+  padding: 20px
+  background: $primary-color
+  color: white
+  z-index: 999
+  border-radius: 50%
+  border: $primary-color 3px solid
 </style>
