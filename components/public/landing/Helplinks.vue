@@ -48,7 +48,7 @@
 import { defineComponent } from "vue";
 import image1 from "@/assets/images/help-links/icon_rescue.svg";
 import image2 from "@/assets/images/help-links/icon_emergency.svg";
-import image3 from "@/assets/images/help-links/icon_grief_number.svg";
+import image3 from "@/assets/images/help-links/icon_grief.svg";
 export default defineComponent({
   setup() {
     const items = [
