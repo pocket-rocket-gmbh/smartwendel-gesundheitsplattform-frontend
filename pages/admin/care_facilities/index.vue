@@ -187,7 +187,7 @@ const fields = [
     type: "button",
     tooltip: "Einrichtung anzehen",
     action: (item: any) => {
-      goToFacility(item.id);
+      handleButtonClick(item.id);
     },
   },
 ];
@@ -342,8 +342,14 @@ const openAddFilesDialog = (id: string) => {
   addFilesDialogOpen.value = true;
 };
 
+const handleButtonClick = (id: string) => {
+  event.stopPropagation();
+  goToFacility(id);
+};
+
 const goToFacility = (id: string) => {
-  router.push({ path: `/public/care_facilities/${id}` });
+  const url = `/public/care_facilities/${id}`;
+  window.open(url, '_blank');
 };
 
 const handleShowPreview = (item: any) => {

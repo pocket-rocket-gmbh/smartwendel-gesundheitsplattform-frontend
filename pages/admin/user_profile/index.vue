@@ -11,9 +11,9 @@
       closable
       class="mt-2"
     >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
-      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
-      anlegen.
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
+      wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen
+      sowie Beiträge anlegen.
     </v-alert>
     <v-alert
       v-if="!setupFinished && !loading"
@@ -29,35 +29,43 @@
     <div class="box my-15">
       <div class="main" v-if="item">
         <h3 class="mb-4">Persönliche Daten</h3>
-        <v-row justify="center">
-          <v-col>
-            <v-text-field v-model="item.firstname" label="Vorname" />
-            <v-text-field v-model="item.lastname" label="Nachname" />
-            <v-text-field
-              v-model="item.phone"
-              :rules="[rules.required, rules.validateNumber]"
-              label="Telefonnummer*"
-            />
-            <v-text-field
-              v-model="item.email"
-              :rules="[rules.required, rules.email]"
-              label="E-Mail *"
-              disabled
-            />
-            <h3 class="mb-4">Profilbild</h3>
-            <PublicUsersProfileImage
-              :preset-image-url="item.image_url"
-              @setImage="setImage"
-              @purgeImage="item.file = 'purge'"
-              @save="saveUserData"
-              class="my-3"
-            />
-            <v-btn elevation="0" variant="outlined" @click="saveUserData()">
-              Persönliche Daten Speichern
-            </v-btn>
-          </v-col>
-          <v-col> </v-col>
-        </v-row>
+        <v-form ref="form">
+          <v-row justify="center">
+            <v-col>
+              <v-text-field v-model="item.firstname" label="Vorname" />
+              <v-text-field v-model="item.lastname" label="Nachname" />
+              <v-text-field
+                v-model="item.phone"
+                :rules="[rules.required, rules.validateNumber]"
+                label="Telefonnummer*"
+                type="number"
+              />
+              <v-text-field
+                v-model="item.email"
+                :rules="[rules.required, rules.email]"
+                label="E-Mail *"
+                disabled
+              />
+              <h3 class="mb-4">Profilbild</h3>
+              <PublicUsersProfileImage
+                :preset-image-url="item.image_url"
+                @setImage="setImage"
+                @purgeImage="item.file = 'purge'"
+                @save="saveUserData"
+                class="my-3"
+              />
+              <v-btn
+                elevation="0"
+                variant="outlined"
+                @click="saveUserData()"
+                :disabled="validateFrom"
+              >
+                Persönliche Daten Speichern
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
+
         <v-divider class="my-10"></v-divider>
         <v-row>
           <v-col md="6">
@@ -71,12 +79,15 @@
               label="Neues Passwort"
             />
             <v-text-field
-              :append-inner-icon="PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :append-inner-icon="
+                PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'
+              "
               :type="PasswordConfirmationVisible ? 'text' : 'password'"
               v-model="password_confirmation"
               label="Passwort Bestätigung"
               :rules="[
-                password === password_confirmation || 'Passwörter stimmen nicht überein',
+                password === password_confirmation ||
+                  'Passwörter stimmen nicht überein',
                 rules.required,
                 rules.password,
               ]"
@@ -85,7 +96,13 @@
               "
             />
             <v-btn
-              :disabled="!password.length || !password_confirmation.length || password !== password_confirmation || password_confirmation.length < 6 || password.length < 6"
+              :disabled="
+                !password.length ||
+                !password_confirmation.length ||
+                password !== password_confirmation ||
+                password_confirmation.length < 6 ||
+                password.length < 6
+              "
               variant="flat"
               color="primary"
               @click="updatePassword()"
@@ -96,7 +113,11 @@
               <span
                 ><i
                   >Letzte Änderung am:
-                  {{ useDatetime().parseDatetime(currentUser?.password_changed_at) }}</i
+                  {{
+                    useDatetime().parseDatetime(
+                      currentUser?.password_changed_at
+                    )
+                  }}</i
                 >
               </span>
             </div>
@@ -110,6 +131,8 @@
 <script lang="ts" setup>
 import { rules } from "../../../data/validationRules";
 import { useUserStore } from "@/store/user";
+import { VForm } from "vuetify/lib/components/index.mjs";
+import { tr } from "date-fns/locale";
 definePageMeta({
   layout: "admin",
 });
@@ -118,9 +141,15 @@ const loading = ref(false);
 const router = useRouter();
 const setupFinished = ref(false);
 
-const goToFacility = (page: string) => {
-  router.push({ path: `/admin/${page}` });
-};
+const form = ref<VForm>();
+
+const validateFrom = computed(() => {
+  const allValid = form.value?.isValid;
+  if (!allValid) {
+    return true;
+  }
+  return false;
+});
 
 const currentUser = useUserStore().currentUser;
 const item = ref({

@@ -8,14 +8,15 @@
         <v-col v-if="filterKind === 'facility'" md="2" class="d-flex justify-end">
           <v-btn
             variant="outlined"
-            width="250px"
+            min-width="250px"
+            max-width="250px"
             rounded="pill"
             color="white"
             @click="emit('toggleMap')"
             class="font-weight-bold"
           >
             <span v-if="showMap"> Listenansicht </span>
-            <span v-if="!showMap"> Kartenansicht </span>
+            <span v-else> Kartenansicht </span>
           </v-btn>
         </v-col>
       </v-row>
@@ -74,7 +75,8 @@
         <v-col class="d-flex align-end field mb-4">
           <v-btn
             class="font-weight-bold"
-            width="250px"
+            min-width="250px"
+            max-width="250px"
             variant="outlined"
             rounded="pill"
             color="white"
@@ -87,10 +89,11 @@
     </div>
   </div>
   <v-row
-    class="bottom-actions has-bg-darken-grey text-white font-weight-bold"
+    class="has-bg-darken-grey text-white font-weight-bold"
   >
-    <v-col class="d-flex justify-center align-center general-font-size mx-3">
-      <span v-if="filterStore.filteredResults.length"
+    <v-col class="d-flex justify-center align-center general-font-size bottom-actions mx-3">
+      <LoadingSpinner v-if="filterStore.loading"/>
+      <span v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }} Treffer</span
       >
       <span v-else>
@@ -109,6 +112,8 @@ const props = defineProps<{
   mapControls?: boolean;
   showMap?: boolean;
 }>();
+
+const filterStore = useFilterStore();
 
 const emit = defineEmits<{
   (event: "toggleMap"): void;
@@ -131,7 +136,6 @@ const startSearch = () => {
   filterStore.loadAllResults();
 };
 
-const filterStore = useFilterStore();
 
 const handleClearTermSearch = () => {
   if(filterStore.currentSearchTerm) {
@@ -214,7 +218,7 @@ onMounted(() => {
   align-items: center
 
 .bottom-actions
-  min-height: 80px
+  height: 50px
 
 .select-wrapper
   position: relative

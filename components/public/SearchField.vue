@@ -53,7 +53,7 @@
               </div>
               <div class="name">{{ modelValue }}</div>
             </div>
-            <div v-if="!filteredItems?.length" class="name">Keine Ergebnisse gefunden</div>
+            <div v-if="!filteredItems?.length && kind" class="name">Keine Ergebnisse gefunden</div>
             <div
               class="result"
               v-for="result in filteredItems"

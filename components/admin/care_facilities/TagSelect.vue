@@ -195,11 +195,22 @@ const createTag = async (name: string) => {
 
 const handleAddTag = async () => {
   if (!currentTag.value) return;
-
   if (typeof currentTag.value === "string") {
-    const newTag = await createTag(currentTag.value);
-    if (!newTag) return;
-    emit("setTags", [...props.preSetTags, newTag]);
+    if (currentTag.value.includes(',')) {
+      const tagsArray = currentTag.value.split(',');
+      const filteredTags = tagsArray.filter(tag => tag.trim() !== '');
+      for (const tag of filteredTags) {
+        const newTag = await createTag(tag.trim());
+        if (newTag) {
+          emit("setTags", [...props.preSetTags, newTag]);
+        }
+      }
+    } else {
+      const newTag = await createTag(currentTag.value);
+      if (newTag) {
+        emit("setTags", [...props.preSetTags, newTag]);
+      }
+    }
     currentTag.value = null;
     loadAllTags();
   } else {

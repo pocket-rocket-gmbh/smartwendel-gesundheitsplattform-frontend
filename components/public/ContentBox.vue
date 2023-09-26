@@ -42,28 +42,13 @@
           <a :href="`/public/care_facilities/${item.id}`">
             <span class="title is-clickable">{{ item.name }}</span>
           </a>
-          <span
-            v-if="item.description.length > 260"
-            class="is-clickable"
-            @click="openContentModal()"
-          >
-            <v-btn size="small" variant="text" class="read-more">
-              weiter lesen
-            </v-btn>
-          </span>
         </div>
         <span
           class="content break-text general-font-size text-wrap"
           v-html="item.description"
         ></span>
       </div>
-
-      <PublicCategoriesContentModal
-        :open="contentModalOpen"
-        :item="item"
-        v-if="contentModalOpen"
-      />
-      <div class="action" v-if="buttonHref">
+      <div class="action mb-n1" v-if="buttonHref">
         <v-btn
           :href="buttonHref"
           :target="item.url ? '_blank' : ''"
@@ -86,12 +71,6 @@ const props = defineProps<{
   item: Facility;
   size?: number;
 }>();
-
-const contentModalOpen = ref(false);
-
-const openContentModal = () => {
-  contentModalOpen.value = !contentModalOpen.value;
-};
 
 const contentBoxRef = ref<HTMLDivElement>();
 const showImage = ref(true);
@@ -149,7 +128,7 @@ const handleResize = () => {
   color: #58595e;
 }
 
-$max-height: 300px;
+$max-height: 315px;
 
 .content-box {
   background-color: #f5f5f5;

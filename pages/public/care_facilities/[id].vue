@@ -1,10 +1,46 @@
 <template>
-  <v-container class="facility-wrapper limited offset" v-if="!loading">
+  <div class="facility-wrapper limited offset content-wrapper" v-if="!loading">
     <v-btn prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
-    <PublicCareFacilitiesImages :care-facility="careFacility" />
+    <div v-if="careFacility?.kind === 'news'" class="mt-8">
+      <img :src="careFacility?.image_url" class="news-image"/>
+      <div class="mb-3">
+        <v-row>
+          <v-col class="bar-content d-flex justify-space-between pa-0 mb-3">
+            <div>
+              <span class="pr-1"
+                ><v-icon color="primary">mdi-clock-time-three-outline</v-icon></span
+              >
+              <span>{{ useDatetime().parseDatetime(careFacility.created_at) }}</span>
+            </div>
+            <div
+            class="d-flex align-center facility-name is-clickable"
+            v-if="careFacility?.user_care_facility?.name"
+          >
+            <a
+              :href="`/public/care_facilities/${careFacility?.user_care_facility?.id}`"
+              class="is-clickable d-flex"
+            >
+              <v-icon color="primary" class="facility-name">mdi-home-outline</v-icon>
+              <span
+                class="break-title facility-name"
+                v-html="careFacility?.user_care_facility?.name"
+              ></span>
+            </a>
+          </div>
+            <div class="bar-item" v-if="careFacility?.name_instructor">
+              <span class="px-1"><v-icon color="primary">mdi-account</v-icon></span>
+              <span>{{ careFacility?.name_instructor }}</span>
+            </div>
+          </v-col>
+          <v-divider class="my-1 mb-3"></v-divider>
+        </v-row>
+      </div>
+      <p class="general-font-size text-description " v-html="careFacility.description"></p>
+    </div>
+    <PublicCareFacilitiesImages :care-facility="careFacility" v-if="careFacility?.kind !== 'news'"/>
     <v-row class="row">
       <v-col class="column">
-        <PublicCareFacilitiesMain :care-facility="careFacility" />
+        <PublicCareFacilitiesMain v-if="careFacility?.kind !== 'news'" :care-facility="careFacility" />
       </v-col>
       <v-col md="4" v-if="careFacility?.kind !== 'news'">
         <PublicCareFacilitiesRight :care-facility="careFacility" />
@@ -16,7 +52,7 @@
         </div>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -84,4 +120,36 @@ onMounted(() => {
     }
   }
 }
+
+.news-image {
+  margin: 0 1.25em 0 0;
+  width: 50%;
+  object-fit: cover;
+  border-radius: 20px;
+  float: left;
+   @include md {
+    width: 100%;
+    margin-bottom: 2rem;
+   }
+}
+
+.text-description {
+  text-align: justify;
+}
+
+.content-wrapper {
+  margin: 5rem;
+  @include md {
+    margin: 1rem;
+  }
+}
+
+.bar-content {
+  @include md {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 </style>
