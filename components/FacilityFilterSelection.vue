@@ -8,9 +8,9 @@
       </div>
     </div>
 
-    <div class="popover-content" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
+    <div class="popover-content  general-font-size" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
       <div v-if="!loadingFilters" class="filters">
-        <div v-for="filter in mainFilters" :key="filter.id">
+        <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
           <div class="filter-name">
             {{ filter.name }}
           </div>
@@ -24,6 +24,7 @@
                 density="compact"
                 :label="option.name"
                 color="#8AB61D"
+                class="options-select"
               />
               <v-checkbox
                 v-else
@@ -42,6 +43,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
@@ -186,7 +188,6 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";
-
 .popover {
   position: relative;
   width: 100%;
@@ -240,14 +241,20 @@ onMounted(async () => {
     z-index: 5;
     display: flex;
     flex-direction: column;
+    font-size: 1.4rem;
 
     .filters {
       display: flex;
       gap: 1.5rem;
       justify-content: space-between;
 
+      .filter-column {
+        flex: 1;
+        max-width: calc(33.33% - 1rem);
+      }
+
       .filter-name {
-        font-size: 1.25rem;
+        font-size: 1.4rem;
         margin-bottom: 0.75rem;
       }
     }
@@ -264,5 +271,9 @@ onMounted(async () => {
       margin-left: auto;
     }
   }
+}
+.options-select {
+  gap: 0.5rem;
+  min-height: 3rem;
 }
 </style>
