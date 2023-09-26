@@ -54,5 +54,12 @@ export const isCompleteCourse = (facility: Facility) => {
 };
 
 export const isCompleteNews = (facility: Facility) => {
-  return !(facility && facility.name && facility.name_instructor && facility.description && facility.description !== "<p><br></p>" && facility.tags?.length);
+  return !(
+    facility &&
+    facility.name &&
+    facility.name_responsible_person &&
+    facility.description &&
+    facility.description !== "<p><br></p>" &&
+    facility.tags?.length
+  );
 };
