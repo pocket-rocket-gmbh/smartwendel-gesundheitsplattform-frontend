@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <h1 class="title">Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land</h1>
-    <PublicLandingChooseCategory />
+    <PublicLandingChooseCategory class="search-field"/>
     <p class="general-font-size sub-title">Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.</p>
   </div>
 </template>
@@ -47,6 +47,11 @@ onMounted(() => {
     font-size: 55px;
     text-transform: uppercase;
     line-height: 150%;
+    @include md {
+      text-align: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
   }
   .sub-title {
     color: white;
@@ -56,11 +61,19 @@ onMounted(() => {
     width: 75%;
 
     @include md {
+      text-align: center;
+      justify-content: center;
+      font-size: 1.5rem;
       width: 100%;
     }
   }
   .header {
     margin-top: 20%;
+  }
+}
+.search-field {
+  @include md {
+   margin: 2rem 0;
   }
 }
 </style>

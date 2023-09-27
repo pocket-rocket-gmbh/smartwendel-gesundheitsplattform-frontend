@@ -9,6 +9,7 @@
     v-else
     v-bind="{ ...$props }"
     @toggle-map="emit('toggleMap')"
+    :show-map="showMap"
   />
 </template>
 <script setup lang="ts">

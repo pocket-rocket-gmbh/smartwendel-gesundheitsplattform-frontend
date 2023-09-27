@@ -7,7 +7,7 @@
             <div>Dein Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
-          <v-col class="d-flex justify-start register-button align-end ml-15">
+          <v-col class="d-flex justify-start register-button align-end  justify-md-start ml-md-15">
             <v-btn variant="flat" color="grey" rounded="pill" size="x-large" href="/register">
               <span>Jetzt registrieren</span>
             </v-btn>
@@ -58,14 +58,14 @@
             </v-row>
             <v-row>
               <v-col>
-                <div class="disclaimer mt-5">
+                <div class="disclaimer text-wrap mt-5">
                   Zur besseren Lesbarkeit wird auf der Gesundheits- und Pflegeplattform das generische Maskulinum verwendet. Die auf dieser Webseite verwendeten Personenbezeichnungen sprechen – sofern nicht anders kenntlich gemacht – alle Geschlechter an. Weibliche und anderweitige Geschlechteridentitäten werden dabei ausdrücklich mit berücksichtigt.
                 </div>
               </v-col>
             </v-row>
           </v-col>
           <v-col class="links d-flex ma-0 pt-0 align-start">
-            <div class="ml-15">
+            <div class="ml-md-15">
               <h2>Landkreis Sankt Wendel</h2>
             <div class="footer-links">
               <p class="is-clickable">

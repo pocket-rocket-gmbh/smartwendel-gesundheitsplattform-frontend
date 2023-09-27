@@ -1,10 +1,10 @@
 <template>
   <div class="main">
-    <v-app-bar v-model="appStore.showTopbar" :elevation="2" class="hero-menu">
+    <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu">
       <v-app-bar-title>
         <div class="d-flex align-center">
           <div class="d-flex align-center">
-            <a href="/" class="d-flex align-center">
+            <a href="/" @click.prevent="navigateTo('/')" class="d-flex align-center">
               <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
             </a>
           </div>
@@ -50,7 +50,7 @@
         </div>
         <div>
           <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
-            <v-icon size="x-large">mdi-account-circle-outline</v-icon>
+            <v-icon class="pl-3" size="x-large">mdi-account-circle-outline</v-icon>
           </v-btn>
         </div>
         <div class="d-flex align-center main">
@@ -286,10 +286,6 @@ header,
     padding: 1rem;
   }
 }
-.hero {
-  background: linear-gradient(270deg, #017dc2 0.29%, #015281 100%);
-  height: 100%;
-}
 .my-account {
   background-color: #f5f5f5;
 }
@@ -304,9 +300,7 @@ header,
   flex-direction: row;
   align-items: center;
 }
-.divider {
-  color: #015281;
-}
+
 .mobile-logo-height {
   max-height: 40px;
 }

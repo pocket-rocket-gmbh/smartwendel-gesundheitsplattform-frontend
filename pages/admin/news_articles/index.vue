@@ -6,7 +6,6 @@
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie
       Beiträge anlegen.
     </v-alert>
-
     <v-row align="center">
       <v-col md="3">
         <v-btn
@@ -126,7 +125,7 @@ const fields = [
     type: "button",
     tooltip: "Einrichtung anzehen",
     action: (item: any) => {
-      goToFacility(item.id);
+      handleButtonClick(item.id);
     },
   },
 ];
@@ -136,7 +135,7 @@ const draftRequiredFields: RequiredField[] = [
     props: ["name"],
   },
   {
-    props: ["name_instructor"],
+    props: ["name_responsible_person"],
   },
   {
     props: ["description"],
@@ -199,8 +198,14 @@ const handlePreviewClose = () => {
   previewItem.value = null;
 };
 
+const handleButtonClick = (id: string) => {
+  event.stopPropagation();
+  goToFacility(id);
+};
+
 const goToFacility = (id: string) => {
-  router.push({ path: `/public/care_facilities/${id}` });
+  const url = `/public/care_facilities/${id}`;
+  window.open(url, '_blank');
 };
 
 const handleCreated = (createdItemId: string) => {

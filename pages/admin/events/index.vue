@@ -6,6 +6,9 @@
       >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucher auf der Webseite
       finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
     >
+    <v-alert density="compact" closable class="my-2"
+      >Leg hier deine Veranstaltung an. Veranstaltungen sind
+      einmalige Ereignisse, die sich über mehrere Tage verteilen können. </v-alert>
     <template v-if="setupFinished">
       <v-row align="center">
         <v-col md="5">
@@ -139,7 +142,7 @@ const fields = [
     type: "button",
     tooltip: "Einrichtung anzehen",
     action: (item: any) => {
-      goToFacility(item.id);
+      handleButtonClick(item.id);
     },
   },
 ];
@@ -230,8 +233,14 @@ const handleUpdateItems = () => {
   dataTableRef.value?.getItems();
 };
 
+const handleButtonClick = (id: string) => {
+  event.stopPropagation();
+  goToFacility(id);
+};
+
 const goToFacility = (id: string) => {
-  router.push({ path: `/public/care_facilities/${id}` });
+  const url = `/public/care_facilities/${id}`;
+  window.open(url, '_blank');
 };
 
 const handleCreated = (createdItemId: string) => {

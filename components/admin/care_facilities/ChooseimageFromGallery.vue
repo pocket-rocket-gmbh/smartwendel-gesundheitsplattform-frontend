@@ -14,6 +14,7 @@
         :key="index"
       >
         <v-img
+          v-if="image"
           :src="image"
           :key="index"
           cover
@@ -34,6 +35,7 @@
             </v-row>
           </template>
         </v-img>
+        <span v-else>Keine Bilder gefunden</span>
       </v-col>
     </v-row>
   </div>

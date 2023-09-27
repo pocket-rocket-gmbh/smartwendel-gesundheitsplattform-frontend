@@ -12,6 +12,7 @@
       <div class="field mb-5">
         <v-textarea
           counter
+          maxlength="300"
           v-model="slotProps.item.description"
           hide-details="auto"
           label="Beschreibung"
@@ -31,7 +32,7 @@
         :pre-set-image-url="slotProps.item.image_url || slotProps.item.file"
         @setImage="setLogo"
       />
-      <div class="field mb-" v-if="useUser().isAdmin()">
+      <div class="field mb-5" v-if="useUser().isAdmin()">
         <div>
           <v-select
             hide-details="auto"
@@ -45,7 +46,7 @@
         </div>
       </div>
 
-      <v-alert v-if="slotProps.item.url_kind === 'internal'" type="info" density="compact" closable class="mb-15">
+      <v-alert v-if="slotProps.item.url_kind === 'internal'" type="info" density="compact" closable class="mb-5">
         "bitte z.B.:
         "/public/categories/95bd1f21-800a-47a6-bb0c-afba56f33619?sub_category_id=d41393e1-20f2-4fee-8872-c275201dd26d"
       </v-alert>

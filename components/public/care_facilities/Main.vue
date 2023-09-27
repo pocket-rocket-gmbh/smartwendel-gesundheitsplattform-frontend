@@ -9,37 +9,6 @@
           >
         </span>
       </v-col>
-      <v-col class="info-bar d-flex align-center" v-if="careFacility?.kind === 'news'">
-        <v-row>
-          <v-col class="bar-content d-flex align-center">
-            <div class="d-flex align-center bar-item">
-              <span class="pr-1"
-                ><v-icon color="primary">mdi-clock-time-three-outline</v-icon></span
-              >
-              <span>{{ useDatetime().parseDatetime(careFacility.created_at) }}</span>
-            </div>
-            <div
-            class="d-flex align-center facility-name is-clickable"
-            v-if="careFacility?.user_care_facility?.name"
-          >
-            <a
-              :href="`/public/care_facilities/${careFacility?.user_care_facility?.id}`"
-              class="is-clickable d-flex"
-            >
-              <v-icon color="primary" class="facility-name">mdi-home-outline</v-icon>
-              <span
-                class="break-title facility-name"
-                v-html="careFacility?.user_care_facility?.name"
-              ></span>
-            </a>
-          </div>
-            <div class="bar-item" v-if="careFacility?.name_instructor">
-              <span class="px-1"><v-icon color="primary">mdi-account</v-icon></span>
-              <span>{{ careFacility?.name_instructor }}</span>
-            </div>
-          </v-col>
-        </v-row>
-      </v-col>
     </v-row>
     <v-divider class="my-5"></v-divider>
     <span

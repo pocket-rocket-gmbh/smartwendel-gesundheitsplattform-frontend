@@ -111,9 +111,6 @@
               <div v-if="useUser().statusOnHealthScope()" class="tooltip">{{
                 field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip
               }}</div>
-              <div v-else class="tooltip">
-                Durch die Prüfung deiner Userdaten durch einen Administrator, werden zur Zeit deine Beiträge/Kurse/Veranstaltungen nicht auf der Gesundheitsplattform angezeigt.
-              </div>
             </v-tooltip>
           </template>
           <TableDropdown

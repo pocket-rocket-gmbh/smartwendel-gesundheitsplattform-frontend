@@ -364,11 +364,12 @@ defineExpose({
 
 div.clustericon {
   background-color: #007344;
-  padding-top: 2px;
   text-align: center;
   font-size: 1.5em;
   border-radius: 25px;
   color: white;
+  display: grid;
+  place-items: center;
 }
 
 .leaflet-popup-content-wrapper {

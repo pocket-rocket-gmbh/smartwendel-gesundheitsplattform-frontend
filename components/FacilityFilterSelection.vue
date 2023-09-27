@@ -1,6 +1,6 @@
 <template>
   <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
-    <div class="input" @click="showPopover = !showPopover">
+    <div class="input" @click="showPopover = !showPopover; handleClearTermSearch()">
       <div class="input-title">{{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}</div>
 
       <div class="actions">
@@ -8,9 +8,9 @@
       </div>
     </div>
 
-    <div class="popover-content" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
+    <div class="popover-content  general-font-size" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
       <div v-if="!loadingFilters" class="filters">
-        <div v-for="filter in mainFilters" :key="filter.id">
+        <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
           <div class="filter-name">
             {{ filter.name }}
           </div>
@@ -24,6 +24,7 @@
                 density="compact"
                 :label="option.name"
                 color="#8AB61D"
+                class="options-select"
               />
               <v-checkbox
                 v-else
@@ -43,9 +44,10 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { FilterKind } from "~/store/searchFilter";
+import { FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];
@@ -54,7 +56,8 @@ const props = defineProps<{
 }>();
 
 
-const placeholderText = ref("");
+
+const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
   if (props.filterKind === "facility") {
     placeholderText.value = "Branche wählen";
@@ -93,7 +96,13 @@ const mainFilters = ref([]);
 const filterOptions = ref<FilterOption[]>([]);
 
 const loadingFilters = ref(false);
-
+const filterStore = useFilterStore();
+const handleClearTermSearch = () => {
+  if(filterStore.currentSearchTerm) {
+    filterStore.clearTermSearch();
+  }
+  return;
+};
 const handleOptionSelect = (option: Filter, multiple?: boolean) => {
   if (multiple) {
     const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
@@ -179,7 +188,6 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";
-
 .popover {
   position: relative;
   width: 100%;
@@ -233,14 +241,20 @@ onMounted(async () => {
     z-index: 5;
     display: flex;
     flex-direction: column;
+    font-size: 1.4rem;
 
     .filters {
       display: flex;
       gap: 1.5rem;
       justify-content: space-between;
 
+      .filter-column {
+        flex: 1;
+        max-width: calc(33.33% - 1rem);
+      }
+
       .filter-name {
-        font-size: 1.25rem;
+        font-size: 1.4rem;
         margin-bottom: 0.75rem;
       }
     }
@@ -257,5 +271,9 @@ onMounted(async () => {
       margin-left: auto;
     }
   }
+}
+.options-select {
+  gap: 0.5rem;
+  min-height: 3rem;
 }
 </style>

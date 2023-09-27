@@ -507,6 +507,7 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "Hauptstandort deines Unternehmens/deiner Einrichtung.",
     description: "Kontaktdaten *",
     props: ["street", "zip", "community_id", "town", "email", "phone"],
+    specialFilter: "phone",
   },
   locations: {
     label: "9. Falls deine Einrichtung mehrere Standorte hat, kannst du diese hier ergänzen.",
@@ -615,7 +616,6 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
 const isFilled = (slotProps: any, item: CreateEditStep) => {
   const props: string[] = item.props;
   if (!props) return;
-
   const slotPropsItem = slotProps.item;
   if (item.specialFilter) {
     if (item.specialFilter === "filter_facility") {
@@ -624,6 +624,9 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
       return servicesFilterSet.value;
     } else if (item.specialFilter === "opening_hours") {
       return slotPropsItem.opening_hours.some((day: any) => day.hours.length > 0);
+    } else if (item.specialFilter === "phone") {
+      const pattern = /^[0-9]+$/;
+      return pattern.test(slotPropsItem.phone) 
     }
   }
 

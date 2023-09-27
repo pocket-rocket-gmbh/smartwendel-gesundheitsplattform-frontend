@@ -25,14 +25,24 @@
           <span v-else>{{ conceptName }} erstellen </span>
         </v-card-title>
         <slot :item="item" :errors="errors"></slot>
-        <v-card-actions class="card-actions">
+        <v-card-actions class="card-actions d-flex justify-end">
+          <v-alert
+            v-if="showSaveHint"
+            type="info"
+            density="compact"
+            class="save-hint"
+          >
+            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren
+            gehen!
+          </v-alert>
           <v-btn @click="emitClose()"> Schließen </v-btn>
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
           <div
             v-if="
-              !statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded
+              !statusLoadingFilter.categoryLoaded &&
+              !statusLoadingFilter.servicesLoaded
             "
           >
             <v-btn
@@ -50,10 +60,6 @@
           <div v-else>
             <LoadingSpinner />
           </div>
-
-          <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
-            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren gehen!
-          </v-alert>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -261,12 +267,13 @@ const create = async (saveAsDraft = false) => {
   if (item.value.offlineLocations && item.value.offlineLocations.length) {
     createUpdateApi.setEndpoint(`locations/care_facility/${newFacilityId}`);
 
-    const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
-      createUpdateApi.createItem({
-        careFacility_id: facilityId,
-        longitude: location.longitude,
-        latitude: location.latitude,
-      })
+    const facilityLocationCreationPromises = item.value.offlineLocations.map(
+      (location) =>
+        createUpdateApi.createItem({
+          careFacility_id: facilityId,
+          longitude: location.longitude,
+          latitude: location.latitude,
+        })
     );
 
     await Promise.all(facilityLocationCreationPromises);
@@ -340,7 +347,9 @@ const emitClose = () => {
     return;
   }
 
-  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
+  const confirmed = confirm(
+    "Wenn Sie fortfahren, werden Ihre Änderungen verworfen."
+  );
   if (confirmed) {
     item.value = { ...props.itemPlaceholder };
     emit("close");
@@ -410,7 +419,10 @@ onMounted(async () => {
     () => item.value,
     () => {
       if (
-        !areObjectsEqual(deepToRaw(item.value), initialItem, ["is_active", "updated_at"])
+        !areObjectsEqual(deepToRaw(item.value), initialItem, [
+          "is_active",
+          "updated_at",
+        ])
       ) {
         itemHastChanged.value = true;
       }

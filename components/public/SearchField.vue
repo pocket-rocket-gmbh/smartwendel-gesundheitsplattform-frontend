@@ -4,10 +4,11 @@
       class="category-input is-dark-grey"
       :class="[defaultStyling ? 'default' : 'styled']"
     >
-      <form @submit.prevent="routeToResults()">
+      <div class="form">
         <div class="input-wrapper" :class="[defaultStyling ? 'field' : '']">
           <input
             type="text"
+            @keyup.enter="handlePressEnter($event)"
             :value="modelValue"
             class="input"
             :placeholder="placeholderText"
@@ -24,7 +25,7 @@
             "
           />
         </div>
-      </form>
+      </div>
 
       <div
         v-show="modelValue && showPopover"
@@ -40,6 +41,7 @@
           </div>
           <template v-else>
             <div
+              v-if="!kind"
               class="result"
               @click.stop="
                 routeToResults();
@@ -50,6 +52,9 @@
                 <img :src="getIconSourceFor()" />
               </div>
               <div class="name">{{ modelValue }}</div>
+            </div>
+            <div v-if="!filteredItems?.length && kind" class="name">
+              Keine Ergebnisse gefunden
             </div>
             <div
               class="result"
@@ -63,7 +68,7 @@
               <div class="icon">
                 <img :src="getIconSourceFor(result.kind)" />
               </div>
-              <div class="name">{{ result.name }}</div>
+              <div v-if="filteredItems?.length" class="name">{{ result.name }}</div>
             </div>
           </template>
         </div>
@@ -81,7 +86,7 @@ import {
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import newsIcon from "~/assets/icons/facilityTypes/news.svg";
 import searchIcon from "~/assets/icons/facilityTypes/search.svg";
-import { Facility, FilterKind } from "~/store/searchFilter";
+import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string;
@@ -91,6 +96,8 @@ const props = defineProps<{
   defaultRouteTo?: string;
   kind?: string;
 }>();
+
+const filterStore = useFilterStore();
 
 const emit = defineEmits<{
   (event: "update:modelValue", value: string): void;
@@ -109,16 +116,27 @@ const placeholderText = ref("");
 const setPlaceholderText = () => {
   if (props.kind === "facility") {
     placeholderText.value = "Name, Fachrichtung,…";
-  } else if (props.kind === 'event') {
+  } else if (props.kind === "event") {
     placeholderText.value = "Name, Thema, Angebote,…";
-  } else if (props.kind === 'course') {
+  } else if (props.kind === "course") {
     placeholderText.value = "Name, Kursinhalt,…";
   } else {
     placeholderText.value = "Suche nach Themen, Anbietern, Kursen,…";
   }
 };
+
+const handlePressEnter = (e: KeyboardEvent) => {
+  if (props.kind) {
+    showPopover.value = false;
+    return;
+  }
+  if (e.key === "Enter") {
+    routeToResults();
+    trackSearch();
+  }
+};
+
 const routeToResults = (result?: Facility) => {
-  if (props.kind) return;
   if (!result) {
     // router.push({ path: "/public/search" });
     if (props.defaultRouteTo) {
@@ -154,6 +172,7 @@ const getIconSourceFor = (kind?: FilterKind) => {
 };
 
 const handleInput = (e: Event) => {
+  filterStore.clearSearch();
   emit("update:modelValue", (e.target as HTMLInputElement).value);
 };
 
@@ -177,7 +196,7 @@ onMounted(() => {
       align-items: center;
       padding: 0;
 
-      form {
+      .form {
         flex: 1;
         .field {
           display: flex;
@@ -214,7 +233,7 @@ onMounted(() => {
         width: 100%;
       }
 
-      form {
+      .form {
         flex: 1;
 
         .input-wrapper {
@@ -222,6 +241,9 @@ onMounted(() => {
           padding: 0 1rem;
           align-items: center;
           flex: 1;
+          @include md {
+            font-size: 1.1rem;
+          }
 
           .icon {
             width: 1.25rem;
