@@ -27,7 +27,7 @@
         </div>
 
         <div>
-          <v-icon class="mr-2" color="primary"></v-icon>
+          <v-icon class="mr-1" color="primary"></v-icon>
           <span>{{ careFacility.zip }} {{ careFacility.town }}</span>
         </div>
       </div>

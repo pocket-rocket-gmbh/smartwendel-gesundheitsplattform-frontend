@@ -29,6 +29,7 @@
 
   @include sm {
     background-position: center;
+    height: 70vh;
   }
 
   @include md {

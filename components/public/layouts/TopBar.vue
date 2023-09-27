@@ -1,10 +1,10 @@
 <template>
   <div class="main">
-    <v-app-bar v-model="appStore.showTopbar" :elevation="2" class="hero-menu">
+    <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu">
       <v-app-bar-title>
         <div class="d-flex align-center">
           <div class="d-flex align-center">
-            <a href="/" class="d-flex align-center">
+            <a href="/" @click.prevent="navigateTo('/')" class="d-flex align-center">
               <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
             </a>
           </div>
@@ -50,7 +50,7 @@
         </div>
         <div>
           <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
-            <v-icon size="x-large">mdi-account-circle-outline</v-icon>
+            <v-icon class="pl-3" size="x-large">mdi-account-circle-outline</v-icon>
           </v-btn>
         </div>
         <div class="d-flex align-center main">

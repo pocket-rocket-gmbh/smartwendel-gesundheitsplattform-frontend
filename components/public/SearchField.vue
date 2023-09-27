@@ -53,7 +53,9 @@
               </div>
               <div class="name">{{ modelValue }}</div>
             </div>
-            <div v-if="!filteredItems?.length && kind" class="name">Keine Ergebnisse gefunden</div>
+            <div v-if="!filteredItems?.length && kind" class="name">
+              Keine Ergebnisse gefunden
+            </div>
             <div
               class="result"
               v-for="result in filteredItems"
@@ -114,9 +116,9 @@ const placeholderText = ref("");
 const setPlaceholderText = () => {
   if (props.kind === "facility") {
     placeholderText.value = "Name, Fachrichtung,…";
-  } else if (props.kind === 'event') {
+  } else if (props.kind === "event") {
     placeholderText.value = "Name, Thema, Angebote,…";
-  } else if (props.kind === 'course') {
+  } else if (props.kind === "course") {
     placeholderText.value = "Name, Kursinhalt,…";
   } else {
     placeholderText.value = "Suche nach Themen, Anbietern, Kursen,…";
@@ -124,8 +126,8 @@ const setPlaceholderText = () => {
 };
 
 const handlePressEnter = (e: KeyboardEvent) => {
-  if(props.kind) {
-    showPopover.value = false
+  if (props.kind) {
+    showPopover.value = false;
     return;
   }
   if (e.key === "Enter") {
@@ -170,7 +172,7 @@ const getIconSourceFor = (kind?: FilterKind) => {
 };
 
 const handleInput = (e: Event) => {
-  filterStore.clearSearch()
+  filterStore.clearSearch();
   emit("update:modelValue", (e.target as HTMLInputElement).value);
 };
 
@@ -239,6 +241,9 @@ onMounted(() => {
           padding: 0 1rem;
           align-items: center;
           flex: 1;
+          @include md {
+            font-size: 1.1rem;
+          }
 
           .icon {
             width: 1.25rem;
