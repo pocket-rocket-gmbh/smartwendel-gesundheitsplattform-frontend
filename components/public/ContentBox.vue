@@ -58,7 +58,7 @@
           rounded="pill"
         >
           <span v-if="item.kind">{{ buttonText }}</span>
-          <span v-else-if="item.url_kind === 'external'">Weiter auf {{ item.name }}</span>
+          <span v-else-if="item.url_kind === 'external'">Weiter zu {{ item.name }}</span>
           <span v-else> Mehr anzeigen</span>
         </v-btn>
       </div>

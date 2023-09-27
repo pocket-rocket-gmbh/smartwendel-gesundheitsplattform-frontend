@@ -16,29 +16,22 @@
               {{ item.content.heading }}
             </div>
 
-            <div class="my-5 is-dark-grey general-font-size">
+            <div class="my-5 is-dark-grey general-font-size description">
               {{ item.content.description }}
             </div>
+
+            <div class="general-font-size d-flex flex-column flex-1 buttons-wrapper">
+              <a
+                :href="item.content.link"
+                target="_blank"
+                class="is-red is-clickable"
+              >
+                <v-btn variant="flat" color="primary" rounded="pill" size="large">
+                  <span>{{ item.content.linkText }}</span>
+                </v-btn>
+              </a>
+            </div>
           </div>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col
-        v-for="(item, index) in items"
-        :key="index"
-        class="justify-center text-center align-center"
-      >
-        <div class="general-font-size">
-          <a
-            :href="item.content.link"
-            target="_blank"
-            class="is-red is-clickable"
-          >
-            <v-btn variant="flat" color="primary" rounded="pill" size="large">
-              <span> {{ item.content.linkText }} </span>
-            </v-btn>
-          </a>
         </div>
       </v-col>
     </v-row>
@@ -101,4 +94,13 @@ export default defineComponent({
 
 .items-column
   margin: 0 2.5rem
+
+.description 
+  min-height: 150px
+  
+.buttons-wrapper
+  @include md
+    height: auto
+    margin: 2rem 0
+
 </style>
