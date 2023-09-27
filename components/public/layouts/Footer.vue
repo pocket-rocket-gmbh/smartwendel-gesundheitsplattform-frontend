@@ -69,7 +69,7 @@
               <h2>Landkreis Sankt Wendel</h2>
             <div class="footer-links">
               <p class="is-clickable">
-                <span >
+                <span>
                   <a class="is-dark-grey" :href="`mailto:smartcity@lkwnd.de?subject=kontakt`">Kontakt</a>
                 </span>
               </p>
