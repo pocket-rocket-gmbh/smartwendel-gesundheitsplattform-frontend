@@ -29,32 +29,18 @@ const getTooltips = async () => {
   tooltipsStore.tooltips = api.items;
 };
 
-const handleScroll = (e: WheelEvent) => {
-  const direction = e.deltaY > 0 ? 1 : -1;
-
-  appStore.showTopbar = window.scrollY < 100 || direction === -1;
-};
-const lastTouchY = ref(-1);
-const handleTouchStart = (e: TouchEvent) => {
-  lastTouchY.value = e.touches[0].clientY;
-};
-const handleTouchMove = (e: TouchEvent) => {
-  const direction = lastTouchY.value - e.touches[0].clientY > 0 ? 1 : -1;
-  appStore.showTopbar = window.scrollY < 100 || direction === -1;
-  lastTouchY.value = e.touches[0].clientY;
-};
-const handleTouchEnd = (e: TouchEvent) => {
-  lastTouchY.value = -1;
+const lastYPosition = ref(-1);
+const handleScroll = () => {
+  const direction = lastYPosition.value - window.scrollY > 0 ? 1 : -1;
+  lastYPosition.value = window.scrollY;
+  appStore.showTopbar = window.scrollY < 100 || direction === 1;
 };
 
 onMounted(async () => {
   loading.value = true;
   getTooltips();
 
-  document.addEventListener("wheel", handleScroll);
-  document.addEventListener("touchstart", handleTouchStart);
-  document.addEventListener("touchmove", handleTouchMove);
-  document.addEventListener("touchend", handleTouchEnd);
+  document.addEventListener("scroll", handleScroll);
 
   if (!tooltipsStore.tooltips) {
     await api.retrieveCollection();
@@ -66,9 +52,6 @@ onMounted(async () => {
 
 onUnmounted(() => {
   document.removeEventListener("wheel", handleScroll);
-  document.removeEventListener("touchstart", handleTouchStart);
-  document.removeEventListener("touchmove", handleTouchMove);
-  document.removeEventListener("touchend", handleTouchEnd);
 });
 </script>
 
