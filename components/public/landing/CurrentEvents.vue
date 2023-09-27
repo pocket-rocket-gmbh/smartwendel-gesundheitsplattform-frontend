@@ -23,7 +23,7 @@
       <v-row>
         <v-col md="12" class="d-flex justify-center mt-10">
           <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToEvents()">
-            <span> Mehr anzeigen </span>
+            <span> Alles Anzeigen </span>
           </v-btn>
         </v-col>
       </v-row>
