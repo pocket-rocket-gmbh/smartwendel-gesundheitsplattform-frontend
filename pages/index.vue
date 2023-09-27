@@ -28,7 +28,9 @@
   background-position: right top;
 
   @include sm {
+    background: url("../assets/images/home_mobile.jpg") no-repeat center center;
     background-position: center;
+    background-size: cover;
     height: 70vh;
   }
 
