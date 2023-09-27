@@ -26,11 +26,15 @@
           </v-col>
         </v-row>
         <v-row v-else class="mt-15">
-          <v-col class="d-flex justify-center">
+          <v-col class="d-flex flex-column align-center justify-center">
             <div class="flex-column" align="center">
-              <h2>Keine Ergebnisse für die Suche "{{ filterStore.currentSearchTerm }}" gefunden</h2>
-              <v-btn class="mt-4" prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
+              <div class="general-font-size text-h4">Diese Stelle müssen wir noch fixen.
+                <br/>
+                Leider haben wir kein Suchergebnis zu deiner Anfrage.
+              </div>
+              <v-btn class="my-5" prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
             </div>
+            <img :src="noResults" class="no-results-image" />
           </v-col>
         </v-row>
       </template>
@@ -43,6 +47,7 @@
 
 <script setup lang="ts">
 import { useFilterStore } from "~/store/searchFilter";
+import noResults from "~/assets/images/search_no_results.jpg";
 
 const filterStore = useFilterStore();
 const router = useRouter();
@@ -123,5 +128,10 @@ onMounted(async () => {
       flex-direction: column;
     }
   }
+}
+.no-results-image {
+  max-width: 600px;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
 }
 </style>
