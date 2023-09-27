@@ -39,9 +39,10 @@
       </template>
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
-          <a :href="`/public/care_facilities/${item.id}`">
+          <a :href="`/public/care_facilities/${item.id}`" v-if="!item.url_kind">
             <span class="title is-clickable">{{ item.name }}</span>
           </a>
+          <span v-else class="title">{{ item.name }}</span>
         </div>
         <span
           class="content break-text general-font-size text-wrap"
@@ -57,6 +58,7 @@
           rounded="pill"
         >
           <span v-if="item.kind">{{ buttonText }}</span>
+          <span v-else-if="item.url_kind === 'external'">Weiter auf {{ item.name }}</span>
           <span v-else> Mehr anzeigen</span>
         </v-btn>
       </div>
