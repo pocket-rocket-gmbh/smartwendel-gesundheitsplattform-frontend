@@ -242,7 +242,7 @@ onMounted(() => {
           align-items: center;
           flex: 1;
           @include md {
-            font-size: 1.1rem;
+            font-size: 1rem;
           }
 
           .icon {

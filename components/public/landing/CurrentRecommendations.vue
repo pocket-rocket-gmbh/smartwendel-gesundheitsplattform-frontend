@@ -2,7 +2,8 @@
   <div class="wrapper bg-gradient">
     <div class="d-flex align-center justify-center">
       <div class="text-white text-h4 my-5">
-        Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun kannst.
+        Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun
+        kannst.
       </div>
     </div>
     <div class="recommendations-wrapper">
@@ -41,14 +42,16 @@ const items = [
     content: {
       heading: "Ernährung",
       image: image2,
-      link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=c88b0ce6-e51d-435f-8689-ed4bb193fab1",
+      link:
+        "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=c88b0ce6-e51d-435f-8689-ed4bb193fab1",
     },
   },
   {
     content: {
       heading: "Mentale Gesundheit",
       image: image3,
-      link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=0c2cf2d5-2834-45d6-a912-957a1f8e5153",
+      link:
+        "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=0c2cf2d5-2834-45d6-a912-957a1f8e5153",
     },
   },
   {
@@ -96,17 +99,17 @@ const items = [
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  // display: grid;
-  // grid-template-columns: repeat(5, 1fr);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   // font-size: 22px;
 
-  // @include md {
-  //   grid-template-columns: repeat(3, 1fr);
-  //   font-size: 18px;
-  // }
+  @include md {
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 18px;
+  }
 
-  // @include sm {
-  //   grid-template-columns: 1fr 1fr;
-  // }
+  @include sm {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 </style>

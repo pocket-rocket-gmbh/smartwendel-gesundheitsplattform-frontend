@@ -18,36 +18,48 @@
               :default-route-to="'/public/search'"
               :default-styling="true"
               @update:model-value="handleInput"
-              kind="facilities"
+              :kind="filterKind"
             />
           </div>
         </v-col>
       </v-row>
+      <div class="d-flex align-center justify-center is-white font-weight-bold my-2">oder</div>
       <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
-        <v-col class="align-end">
-          <PublicSearchCategorySelectModal v-model="filterStore.currentTags" :filter-kind="filterKind" />
+        <v-col c>
+          <PublicSearchCategorySelectModal
+            v-model="filterStore.currentTags"
+            :filter-kind="filterKind"
+          />
         </v-col>
       </v-row>
       <v-row>
-        <v-col class="align-end">
+        <v-col cols="10" class="d-flex align-center">
           <PublicSearchCommunitySelectModal />
         </v-col>
-        <v-col class="align-end" v-if="filterKind !== 'event' && filterKind !== 'news'">
+        <v-col class="" v-if="filterKind !== 'event' && filterKind !== 'news'">
           <PublicSearchFilterSelectModal :filter-kind="filterKind" />
         </v-col>
       </v-row>
       <v-row class="buttons">
-        <v-col class="field">
-          <v-btn variant="outlined" rounded="pill" color="white" @click="filterStore.clearSearch()"> Auswahl zurücksetzen </v-btn>
+        <v-col class="field d-flex justify-center">
+          <v-btn
+            variant="outlined"
+            width="100%"
+            rounded="pill"
+            color="white"
+            @click="filterStore.clearSearch()"
+          >
+            zurücksetzen
+          </v-btn>
         </v-col>
-        <v-col class="field search-button">
-          <v-btn variant="flat" rounded="pill" color="white" @click="startSearch"> Suche starten </v-btn>
-        </v-col>
-      </v-row>
-
-      <v-row v-if="mapControls" class="bottom-actions">
-        <v-col class="center">
-          <v-btn variant="outlined" rounded="pill" color="white" @click="emit('toggleMap')">
+        <v-col class="d-flex justify-center" v-if="mapControls">
+          <v-btn
+            variant="outlined"
+            width="100%"
+            rounded="pill"
+            color="white"
+            @click="emit('toggleMap')"
+          >
             <span v-if="showMap"> Listenansicht </span>
             <span v-if="!showMap"> Kartenansicht </span>
           </v-btn>
@@ -55,6 +67,17 @@
       </v-row>
     </div>
   </div>
+  <v-row class="has-bg-darken-grey text-white font-weight-bold ma-0 pa-0">
+    <v-col
+      class="d-flex justify-center align-center general-font-size "
+    >
+      <LoadingSpinner v-if="filterStore.loading" />
+      <span v-else-if="filterStore.filteredResults.length"
+        >{{ filterStore.filteredResults.length }} Treffer</span
+      >
+      <span v-else> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
+    </v-col>
+  </v-row>
 </template>
 <script setup lang="ts">
 import { FilterKind, useFilterStore } from "~/store/searchFilter";
@@ -78,9 +101,30 @@ const handleInput = () => {
   filterStore.loadFilteredResults();
 };
 
-const startSearch = () => {
-  filterStore.loadAllResults();
+const filterTitle = ref("");
+const searchTitle = ref("");
+const setFilterTitle = () => {
+  if (props.filterKind === "facility") {
+    filterTitle.value = "Branche";
+    searchTitle.value = "Anbieter suchen";
+  }
+  if (props.filterKind === "event") {
+    filterTitle.value = "Suche nach Veranstaltungen";
+    searchTitle.value = "Veranstaltung suchen";
+  }
+  if (props.filterKind === "news") {
+    filterTitle.value = "Suche nach Neuigkeiten";
+    searchTitle.value = "Nachrichten suchen";
+  }
+  if (props.filterKind === "course") {
+    filterTitle.value = "Themengebiet";
+    searchTitle.value = "Kurs suchen";
+  }
 };
+
+onMounted(() => {
+  setFilterTitle();
+});
 </script>
 
 <style lang="sass" scoped>
@@ -136,13 +180,6 @@ const startSearch = () => {
   &.solo
     margin-left: unset
     width: 100%
-
-.center
-  display: flex
-  align-items: center
-
-.bottom-actions
-  min-height: 80px
 
 .select
   cursor: pointer

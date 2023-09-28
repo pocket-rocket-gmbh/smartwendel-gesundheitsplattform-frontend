@@ -31,11 +31,15 @@
     background: url("../assets/images/home_mobile.jpg") no-repeat center center;
     background-position: center;
     background-size: cover;
-    height: 70vh;
+    height: 90vh;
   }
 
   @include md {
-    background-position: left;
+    background: url("../assets/images/home_mobile.jpg") no-repeat center center;
+    background-position: center;
+    background-size: cover;
+    background-position: right top;
+    height: 60vh;
   }
 }
 

@@ -1,11 +1,15 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      :scrim="false"
+      transition="dialog-bottom-transition"
+    >
       <template v-slot:activator="{ props }">
-        <div class="field" v-bind="props">
-          <div class="input more-filters">
-            <div class="text">weitere Filter</div>
-            <div class="icon"><v-icon>mdi-filter-outline</v-icon></div>
+        <div v-bind="props">
+          <div class="is-white d-flex align-end mt-10">
+            <v-icon>mdi-filter-outline</v-icon>
           </div>
         </div>
       </template>
@@ -23,15 +27,29 @@
               <div v-for="item in filter.next" class="filter-selections">
                 <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
                 <v-row no-gutters class="fill-height item-row">
-                  <v-col cols="12" md="6" class="align-center column-items" v-for="subItem in item.next" v-auto-animate>
+                  <v-col
+                    cols="12"
+                    md="6"
+                    class="align-center column-items"
+                    v-for="subItem in item.next"
+                    v-auto-animate
+                  >
                     <div
                       class="filter-tile pa-5"
-                      :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
+                      :class="{
+                        selected:
+                          isSelectedTagNext(subItem) ||
+                          expandedItemIds.includes(subItem.id),
+                      }"
                       @click="toggleSelection(subItem)"
                     >
                       {{ subItem.title }}
                     </div>
-                    <div v-if="subItem.next.length && expandedItemIds.includes(subItem.id)" class="tag-select" v-for="tag in subItem.next">
+                    <div
+                      v-if="subItem.next.length && expandedItemIds.includes(subItem.id)"
+                      class="tag-select"
+                      v-for="tag in subItem.next"
+                    >
                       <v-divider></v-divider>
                       <v-checkbox
                         :class="{ selected: isSelected(tag.id) }"
@@ -81,7 +99,12 @@ type FilterResponse = {
   parent_id: string;
 };
 
-const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number, allFilters: FilterResponse[]) => {
+const getItemsAndNext = (
+  filter: FilterResponse,
+  arrayToAdd: CollapsibleListItem[],
+  layer: number,
+  allFilters: FilterResponse[]
+) => {
   if (layer === 4) {
     return;
   }
@@ -96,13 +119,17 @@ const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem
 
   arrayToAdd.push(filterItem);
 
-  const childFilterItems: FilterResponse[] = allFilters.filter((item) => item.parent_id === filter.id);
+  const childFilterItems: FilterResponse[] = allFilters.filter(
+    (item) => item.parent_id === filter.id
+  );
 
   if (!childFilterItems.length) {
     return;
   }
 
-  childFilterItems.forEach((childFilterItem) => getItemsAndNext(childFilterItem, filterItem.next || [], layer + 1, allFilters));
+  childFilterItems.forEach((childFilterItem) =>
+    getItemsAndNext(childFilterItem, filterItem.next || [], layer + 1, allFilters)
+  );
 };
 
 const getItems = async () => {
@@ -125,18 +152,24 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
+  const filters: any[] = result?.data?.resources?.filter(
+    (item: Facility) => props.filterKind === item.kind
+  );
   if (!filters) {
     console.error("No filters!");
     return;
   }
 
-  const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
+  const serviceFilters = filters.filter(
+    (filter) => filter.filter_type === "filter_service"
+  );
   const allFilters = await getAllFilters();
 
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
-  serviceFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters));
+  serviceFilters.forEach((filter) =>
+    getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters)
+  );
 
   itemsForServiceList.value = [...tmpItemsForServiceList];
 };
@@ -156,7 +189,9 @@ const isSelectedTagNext = (tag: CollapsibleListItem) => {
 
 const toggleSelection = (item: CollapsibleListItem) => {
   if (item.next?.length) {
-    const index = expandedItemIds.value.findIndex((expandedItemId) => expandedItemId === item.id);
+    const index = expandedItemIds.value.findIndex(
+      (expandedItemId) => expandedItemId === item.id
+    );
 
     if (index === -1) {
       expandedItemIds.value.push(item.id);
@@ -191,7 +226,6 @@ onMounted(async () => {
 .more-filters {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .filter-tiles {
