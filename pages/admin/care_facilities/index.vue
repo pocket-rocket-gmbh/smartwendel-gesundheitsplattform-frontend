@@ -57,6 +57,7 @@
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
         :disable-delete="true"
+        defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
       />
 
