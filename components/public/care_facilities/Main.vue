@@ -68,7 +68,7 @@ h1 {
 .main-wrapper {
   margin: 1rem 0;
   @include md {
-    margin: 1rem 0;
+    margin: 2rem 0;
   }
 
   .heading {
