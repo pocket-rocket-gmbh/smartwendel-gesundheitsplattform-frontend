@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="mt-10">
+    <div class="my-15">
       <v-row justify="space-between">
         <v-col class="d-flex justify-start align-center is-uppercase">
           <div class="is-primary text-h4 font-weight-bold text-uppercase">Beiträge</div>

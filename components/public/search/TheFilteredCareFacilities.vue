@@ -43,8 +43,8 @@
                 </div>
               </div>
               <v-row>
-                <v-col cols="12" md="12" sm="6" xl="6">
-                  <div class="text-dark-grey mt-4 informations">
+                <v-col cols="12" md="6" sm="6" xl="6">
+                  <div class="text-dark-grey mt-4">
                     <div class="d-flex">
                       <img class="mr-2 icon" :src="iconAddress" />
                       <div v-if="careFacility.street">{{ careFacility.street }}</div>
@@ -58,7 +58,7 @@
                   </div>
                 </v-col>
                 <v-col>
-                  <div class="text-dark-grey mt-4 informations">
+                  <div class="text-dark-grey mt-4">
                     <div v-if="careFacility.phone" class="d-flex align-center">
                       <img class="mr-2 icon" :src="iconPhone" />
                       <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>

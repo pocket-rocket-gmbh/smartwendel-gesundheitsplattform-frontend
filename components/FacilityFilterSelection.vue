@@ -7,7 +7,6 @@
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-
     <div class="popover-content  general-font-size" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
@@ -48,6 +47,7 @@
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
 import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const props = defineProps<{
   modelValue: string[];
@@ -55,7 +55,7 @@ const props = defineProps<{
   popoverWidth?: number;
 }>();
 
-
+const breakpoints = useBreakpoints();
 
 const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
