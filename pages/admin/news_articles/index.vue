@@ -32,6 +32,7 @@
       :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      defaultSortBy="created_at"
       ref="dataTableRef"
       :disable-delete="false"
       :draft-required="draftRequiredFields"

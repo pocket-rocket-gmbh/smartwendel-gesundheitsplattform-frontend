@@ -44,7 +44,7 @@
       :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
-      defaultSortBy="kind"
+      defaultSortBy="created_at"
       :disable-delete="false"
       :draft-required="draftRequiredFields"
     />

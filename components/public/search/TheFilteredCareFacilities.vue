@@ -1,6 +1,9 @@
 <template>
   <Loading v-if="filterStore.loading" />
-  <div class="entries general-font-size" v-if="!(!filterStore.loading && !filterStore.filteredResults.length)">
+  <div
+    class="entries general-font-size"
+    v-if="!(!filterStore.loading && !filterStore.filteredResults.length)"
+  >
     <div class="d-flex actions">
       <div class="sort-order is-clickable d-flex align-center" @click="toggleFilterSort">
         <span>{{ filterStore.filterSort }}</span>
@@ -9,33 +12,62 @@
       </div>
     </div>
     <template v-if="filterStore.filteredResults.length > 0">
-      <div v-if="!filterStore.currentKinds.includes('facility')" class="boxes" :class="{ doubled }">
-        <PublicContentBox :size="12" class="" v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+      <div
+        v-if="!filterStore.currentKinds.includes('facility')"
+        class="boxes"
+        :class="{ doubled }"
+      >
+        <PublicContentBox
+          :size="12"
+          class=""
+          v-for="category in filterStore.filteredResults"
+          :key="category.id"
+          :item="category"
+        />
       </div>
       <div v-else class="boxes">
-        <div class="item" v-for="careFacility in filterStore.filteredResults" :key="careFacility.id">
+        <div
+          class="item"
+          v-for="careFacility in filterStore.filteredResults"
+          :key="careFacility.id"
+        >
           <v-row class="item-row">
             <v-col md="8">
-              <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
-                <a class="is-dark-grey" :href="`/public/care_facilities/${careFacility.id}`">{{ careFacility.name }}</a>
+              <div class="d-flex justify-space-between">
+                <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
+                  <a
+                    class="is-dark-grey"
+                    :href="`/public/care_facilities/${careFacility.id}`"
+                    >{{ careFacility.name }}</a
+                  >
+                </div>
               </div>
               <v-row>
-                <v-col>
-                  <div class="text-dark-grey mt-4">
-                    <div v-if="careFacility.street">{{ careFacility.street }}</div>
-                    <div v-if="careFacility.zip || careFacility.town">{{ careFacility.zip }} {{ careFacility.town }}</div>
+                <v-col cols="12" md="12" sm="6" xl="6">
+                  <div class="text-dark-grey mt-4 informations">
+                    <div class="d-flex">
+                      <img class="mr-2 icon" :src="iconAddress" />
+                      <div v-if="careFacility.street">{{ careFacility.street }}</div>
+                    </div>
+                   <div class="d-flex ml-n1" v-if="careFacility.zip || careFacility.town">
+                    <v-icon></v-icon>
+                      {{ careFacility.zip }} {{ careFacility.town }}
+                   </div>
+                  
                     <!-- <div v-if="careFacility.community">{{ careFacility.community }}</div> -->
                   </div>
                 </v-col>
                 <v-col>
-                  <div class="text-dark-grey mt-4">
+                  <div class="text-dark-grey mt-4 informations">
                     <div v-if="careFacility.phone" class="d-flex align-center">
                       <img class="mr-2 icon" :src="iconPhone" />
                       <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
                     </div>
                     <div v-if="careFacility.email" class="d-flex align-center">
                       <img class="mr-2 icon" :src="iconMail" />
-                      <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
+                      <a :href="`mailto:${careFacility.email}`">{{
+                        careFacility.email
+                      }}</a>
                     </div>
                   </div>
                 </v-col>
@@ -55,7 +87,13 @@
               </div>
             </v-col>
             <v-col align="right" class="action">
-              <v-btn variant="flat" color="primary" rounded="pill" size="large" :href="`/public/care_facilities/${careFacility.id}`">
+              <v-btn
+                variant="flat"
+                color="primary"
+                rounded="pill"
+                size="large"
+                :href="`/public/care_facilities/${careFacility.id}`"
+              >
                 <span> Details ansehen </span>
               </v-btn>
             </v-col>
@@ -70,6 +108,8 @@
 import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
 import iconPhone from "@/assets/icons/facilities/icon_phone.svg";
 import iconMail from "@/assets/icons/facilities/icon_mail.svg";
+import iconAddress from "@/assets/icons/facilities/icon_address.svg";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
 
 const props = defineProps<{
   doubled?: boolean;
@@ -79,6 +119,8 @@ const emit = defineEmits<{
 }>();
 
 const filterStore = useFilterStore();
+
+const breakPoints = useBreakpoints();
 
 const showCareFacilityInMap = async (careFacilityId: string) => {
   emit("showOnMap");
@@ -101,7 +143,7 @@ const toggleFilterSort = () => {
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
-
+ 
 .icon
   width: 1.25rem
 .item
@@ -148,6 +190,7 @@ const toggleFilterSort = () => {
   display: flex
   flex-direction: column
   gap: 2rem
+
 
   &.doubled
     display: grid

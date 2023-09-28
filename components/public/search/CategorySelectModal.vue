@@ -1,18 +1,20 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      :scrim="false"
+      transition="dialog-bottom-transition"
+    >
       <template v-slot:activator="{ props }">
         <div class="field">
           <label class="label is-white">
             <div class="search-term">
               Branche
-              <v-chip v-if="filterStore.currentSearchTerm" closable @click:close="resetSearchTerm">
-                {{ filterStore.currentSearchTerm }}
-              </v-chip>
             </div>
           </label>
-          <div class="field" v-bind="props">
-            <div class="input">{{ selectedFilter?.name || "Branche" }}</div>
+          <div class="field" v-bind="props" @click="handleClearTermSearch()">
+            <div class="input">{{ selectedFilter?.name || placeholderText }}</div>
           </div>
         </div>
       </template>
@@ -31,7 +33,12 @@
                 {{ filter.name }}
               </div>
               <div class="filter-options">
-                <label class="option" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
+                <label
+                  class="option"
+                  v-for="option in filterOptions.find(
+                    ({ parentId }) => parentId === filter.id
+                  ).options"
+                >
                   <v-radio
                     :model-value="selectedFilter?.id === option.id"
                     @click.prevent="handleOptionSelect(option)"
@@ -86,21 +93,27 @@ const mainFilters = ref([]);
 const filterOptions = ref<FilterOption[]>([]);
 const selectedFilter = ref<Filter>();
 
-const resetSearchTerm = () => {
-  filterStore.currentSearchTerm = "";
-  filterStore.loadFilteredResults();
+const handleClearTermSearch = () => {
+  if(filterStore.currentSearchTerm) {
+    filterStore.clearTermSearch();
+  }
+  return;
 };
 
 const handleOptionSelect = (option: Filter) => {
   if (selectedFilter.value && selectedFilter.value.id !== option.id) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
+    const indexOfAlreadySetFilter = props.modelValue.findIndex(
+      (item) => item === selectedFilter.value.id
+    );
 
     if (indexOfAlreadySetFilter !== -1) {
       props.modelValue.splice(indexOfAlreadySetFilter, 1);
     }
   }
 
-  const previousIndex = props.modelValue.findIndex((item) => item === option.id);
+  const previousIndex = props.modelValue.findIndex(
+    (item) => item === option.id
+  );
 
   if (previousIndex !== -1) {
     props.modelValue.splice(previousIndex, 1);
@@ -113,12 +126,24 @@ const handleOptionSelect = (option: Filter) => {
   emit("update:modelValue", props.modelValue);
 };
 
+const placeholderText = ref("Laden...");
+const setPlaceholderText = () => {
+  if (props.filterKind === "facility") {
+    placeholderText.value = "Branche wählen";
+  } else if (props.filterKind === "course") {
+    placeholderText.value = "Themengebiet wählen";
+  }
+};
+
 onMounted(async () => {
+  setPlaceholderText();
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
   const allFilters = await getAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) => allFilters.filter(item => item.parent_id === filter.id));
+  const allOptions = mainFilters.value.map((filter) =>
+    allFilters.filter((item) => item.parent_id === filter.id)
+  );
 
   allOptions.forEach((options, index) => {
     filterOptions.value.push({
@@ -133,7 +158,9 @@ onMounted(async () => {
   }, [] as Filter[]);
 
   const foundFilter = allAvailableOptions.find((option) => {
-    const doesInclude = props.modelValue.find((item: string) => item === option.id);
+    const doesInclude = props.modelValue.find(
+      (item: string) => item === option.id
+    );
     return doesInclude;
   });
 

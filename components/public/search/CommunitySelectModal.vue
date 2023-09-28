@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" :scrim="false" transition="dialog-bottom-transition">
       <template v-slot:activator="{ props }">
-        <div class="field" v-bind="props">
+        <div class="field" v-bind="props"  @click="handleClearTermSearch()">
           <label class="label is-white">Gemeinde</label>
           <div class="input">{{ activeCommunityName || "Gemeinde wählen" }}</div>
         </div>
@@ -65,6 +65,13 @@ const activeCommunityName = computed(() => {
 
 const handleCommunitySelect = (community: { name: string; zip: string }) => {
   filterStore.currentZip = community?.zip || null;
+};
+
+const handleClearTermSearch = () => {
+  if(filterStore.currentSearchTerm) {
+    filterStore.clearTermSearch();
+  }
+  return;
 };
 
 onMounted(() => {
