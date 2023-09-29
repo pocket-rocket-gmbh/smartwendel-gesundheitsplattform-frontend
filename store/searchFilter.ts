@@ -200,8 +200,8 @@ export const useFilterStore = defineStore({
       const options = {
         page: 1,
         per_page: 25,
-        sort_by: "created_at",
-        sort_order: this.filterSort == "Z-A" ? "ASC" : "DESC",
+        sort_by: "name",
+        sort_order: this.filterSort === "Z-A" ? "ASC" : "DESC",
         searchQuery: null as any,
         concat: false,
         filters,

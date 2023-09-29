@@ -109,7 +109,6 @@ import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
 import iconPhone from "@/assets/icons/facilities/icon_phone.svg";
 import iconMail from "@/assets/icons/facilities/icon_mail.svg";
 import iconAddress from "@/assets/icons/facilities/icon_address.svg";
-import { useBreakpoints } from "~/composables/ui/breakPoints";
 
 const props = defineProps<{
   doubled?: boolean;
@@ -120,7 +119,6 @@ const emit = defineEmits<{
 
 const filterStore = useFilterStore();
 
-const breakPoints = useBreakpoints();
 
 const showCareFacilityInMap = async (careFacilityId: string) => {
   emit("showOnMap");
