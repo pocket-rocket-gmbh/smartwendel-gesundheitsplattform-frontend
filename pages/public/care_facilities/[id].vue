@@ -39,10 +39,10 @@
     </div>
     <PublicCareFacilitiesImages :care-facility="careFacility" v-if="careFacility?.kind !== 'news'"/>
     <v-row class="row">
-      <v-col cols="12" md="12" xl="8">
+      <v-col>
         <PublicCareFacilitiesMain v-if="careFacility?.kind !== 'news'" :care-facility="careFacility" />
       </v-col>
-      <v-col  md="4" v-if="careFacility?.kind !== 'news'">
+      <v-col md="4" v-if="careFacility?.kind !== 'news'">
         <PublicCareFacilitiesRight :care-facility="careFacility" />
         <div class="mt-5" v-if="careFacility?.kind === 'course', 'event'">
           <PublicCareFacilitiesDates :care-facility="careFacility" />
