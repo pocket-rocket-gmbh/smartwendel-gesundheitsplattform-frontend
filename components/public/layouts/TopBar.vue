@@ -10,7 +10,7 @@
           </div>
           <div v-if="breakPoints.width.value >= 1400" class="align-center d-flex mx-2">
             <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
-              <div class="title ml-5">
+              <div class="title mx-5">
                 <span class="is-clickable main" @click="setItemsAndGo(category, null)">
                   {{ category.name }}
                 </span>
