@@ -40,7 +40,7 @@
         </div>
       </v-app-bar-title>
       <div class="align-center d-flex" v-if="breakPoints.width.value >= 1400 && !loading">
-        <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
+        <div class="has-bg-primary text-white offer py-1" v-if="!useUser().loggedIn() &&  breakPoints.width.value >= 1530 && currentRoute !== '/register'">
           <v-row class="mx-1 text-center">
             <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
               <div class="font-weight-bold">Dein Angebot fehlt?</div>
