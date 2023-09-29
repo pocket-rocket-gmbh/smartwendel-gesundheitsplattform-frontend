@@ -35,11 +35,13 @@
         :key="item.id"
         :class="[
           item === activeItems ? 'activeItems' : '',
-          item.user ? '' : 'user-deleted',
+          item?.user ? '' : 'user-deleted',
+          item?.kind  !== 'facility' ? 'has-normal-bg' : '',
+          getCurrentRoute() === 'admin-users' ? '' : '',
           isDraft(item) ? 'draft' : '',
         ]"
       >
-        <td
+        <td     
           v-for="(field, index) in fields"
           :key="index"
           class="is-clickable"
@@ -276,6 +278,10 @@ const resetActiveItems = () => {
   activeItems.value = null;
 };
 
+const getCurrentRoute = () => {
+  return router.currentRoute.value.name;
+};
+
 const isFilled = (itemToCheck: any, requiredField: RequiredField) => {
   const props: string[] = requiredField.props;
   if (!props) return;
@@ -451,6 +457,10 @@ defineExpose({ resetActiveItems, getItems });
 
 .small
   font-size: 0.5em
+
+
+.has-normal-bg
+  background: white
 
 .dropdown
   position: absolute
