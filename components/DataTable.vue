@@ -33,7 +33,11 @@
       <tr
         v-for="(item, indexMain) in filteredItems"
         :key="item.id"
-        :class="[item === activeItems ? 'activeItems' : '', { draft: isDraft(item) }]"
+        :class="[
+          item === activeItems ? 'activeItems' : '',
+          item.user ? '' : 'user-deleted',
+          isDraft(item) ? 'draft' : '',
+        ]"
       >
         <td
           v-for="(field, index) in fields"
@@ -108,9 +112,13 @@
                   />
                 </div>
               </template>
-              <div v-if="useUser().statusOnHealthScope()" class="tooltip">{{
-                field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip
-              }}</div>
+              <div v-if="useUser().statusOnHealthScope()" class="tooltip">
+                {{
+                  field?.disabledConditions?.(item)
+                    ? field.disabledTooltip
+                    : field.tooltip
+                }}
+              </div>
             </v-tooltip>
           </template>
           <TableDropdown
@@ -149,7 +157,9 @@
                         <v-icon v-if="!facility.is_active" size="x-small" color="error"
                           >mdi-circle</v-icon
                         >
-                        <v-icon v-if="facility.is_active" size="x-small" color="success">mdi-circle</v-icon>
+                        <v-icon v-if="facility.is_active" size="x-small" color="success"
+                          >mdi-circle</v-icon
+                        >
                       </div>
                     </v-chip>
                   </v-col>
@@ -157,18 +167,47 @@
               </div>
             </div>
           </span>
-          <span v-else-if="field.type === 'beinEdited'">
+          <span v-else-if="field.type === 'beinEdited' && item.user" >
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
+          <span v-else-if="field.type === 'beinEdited' && !item.user"><i>Nutzer existiert nicht</i></span>
           <span v-else-if="field.type === 'button' && field.action">
-            <button @click.stop="field.action(item)" v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'">
+            <button
+              @click.stop="field.action(item)"
+              v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'"
+            >
               {{ pathInto(item, field.value) }}
             </button>
-            <span v-if="field.value === 'mdi-eye' && item.is_active && useUser().statusOnHealthScope()">
+            <span v-if="field.value === 'user.name'">
+              <span class="align-center ml-2">
+                <v-icon
+                  v-if="item?.user?.is_active_on_health_scope"
+                  size="x-small"
+                  color="success"
+                  >mdi-circle</v-icon
+                >
+                <v-icon v-else size="x-small" color="error">mdi-circle</v-icon>
+              </span>
+            </span>
+            <span
+              v-if="
+                field.value === 'mdi-eye' &&
+                item.is_active &&
+                useUser().statusOnHealthScope()
+              "
+            >
               <v-icon class="is-clickable" @click="field.action(item)">mdi-eye</v-icon>
             </span>
-            <span v-if="field.value === 'mdi-check-decagram' && item.billable_through_health_insurance_approved && useUser().statusOnHealthScope()">
-              <v-icon class="is-clickable" color="primary" @click="field.action(item)">mdi-check-decagram</v-icon>
+            <span
+              v-if="
+                field.value === 'mdi-check-decagram' &&
+                item.billable_through_health_insurance_approved &&
+                useUser().statusOnHealthScope()
+              "
+            >
+              <v-icon class="is-clickable" color="primary" @click="field.action(item)"
+                >mdi-check-decagram</v-icon
+              >
             </span>
             <span v-else>
               <v-icon></v-icon>
@@ -225,7 +264,7 @@ const emit = defineEmits([
   "openCreateEditDialog",
   "openDeleteDialog",
   "itemsLoaded",
-  "itemUpdated"
+  "itemUpdated",
 ]);
 
 const sortOrder = ref(props.defaultSortOrder);
@@ -406,6 +445,9 @@ defineExpose({ resetActiveItems, getItems });
 <style lang="sass">
 .draft
   background: rgba(orange, 0.1)
+
+.user-deleted
+  background: rgba(red, 0.1)
 
 .small
   font-size: 0.5em

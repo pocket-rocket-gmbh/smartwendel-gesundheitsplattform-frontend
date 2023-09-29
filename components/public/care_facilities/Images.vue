@@ -5,7 +5,7 @@
       { 'has-logo': careFacility?.logo_url || careFacility?.logo },
     ]"
   >
-    <v-row class="image-row" no-gutters>
+    <v-row class="image-row">
       <v-col class="d-flex flex-wrap align-content-bottom" :md="careFacility?.sanitized_images?.length === 0 ? '8' : ''">
         <img
           class="image"

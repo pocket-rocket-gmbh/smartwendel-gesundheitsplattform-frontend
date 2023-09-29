@@ -91,11 +91,10 @@
             <div class="ml-md-15">
               <h2>Landkreis Sankt Wendel</h2>
               <div class="footer-links">
-                <p class="is-clickable">
+                <p class="is-clickable is-dark-grey">
                   <span>
                     <a
-                      class="is-dark-grey"
-                      :href="`mailto:smartcity@lkwnd.de?subject=kontakt`"
+                      href="mailto:smartcity@lkwnd.de?subject=kontakt"
                       >Kontakt</a
                     >
                   </span>
