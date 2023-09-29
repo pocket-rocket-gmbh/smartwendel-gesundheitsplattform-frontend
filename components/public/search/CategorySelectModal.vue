@@ -40,7 +40,7 @@
                   ).options"
                 >
                   <v-radio
-                    :model-value="selectedFilter?.id === option.id"
+                    :model-value="modelValue.includes(option.id)"
                     @click.prevent="handleOptionSelect(option)"
                     hide-details
                     density="compact"
