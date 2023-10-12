@@ -100,4 +100,7 @@ h1 {
     }
   }
 }
+.description {
+  font-weight: 300;
+}
 </style>
