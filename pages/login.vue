@@ -80,7 +80,7 @@ export default defineComponent({
     const auth = async () => {
       loading.value = true;
       errors.value = "";
-      const data = { email: email.value, password: password.value };
+      const data = { email: email.value, password: password.value, scope: 'health' };
 
       const { data: result } = await axios.post<ServerCallResult>(
         "/api/login",
