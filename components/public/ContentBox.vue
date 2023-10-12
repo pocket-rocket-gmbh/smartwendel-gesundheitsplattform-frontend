@@ -196,6 +196,7 @@ $max-height: 315px;
 
       .title {
         font-size: 1.5rem;
+        font-weight: 600;
         color: #8ab61d;
         &:visited {
           color: #8ab61d;

@@ -42,7 +42,7 @@
           <div class="d-flex align-center is-clickable">
             <div class="font-weight-bold">
               <span
-                class="is-dark-grey general-font-size"
+                class="is-dark-grey general-font-size title-content"
                 v-html="item.content.heading"
               ></span>
             </div>
@@ -189,5 +189,9 @@ const items = [
       text-align: center;
     }
   }
+}
+
+.title-content {
+  font-weight: 500;
 }
 </style>
