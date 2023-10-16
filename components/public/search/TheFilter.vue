@@ -5,10 +5,11 @@
       <div class="filter-tiles">
         <div v-for="filter in itemsForServiceList" class="filter-group">
           <div v-for="item in filter.next" class="mt-5 filter-selections">
-            <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
+            <span v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)" class="text-h5">{{ item.title }}</span>
             <v-row no-gutters class="mt-3 fill-height mr-1">
               <v-col cols="12" lg="6" md="12" class="align-center column-items pr-1 pt-1" v-for="subItem in item.next" v-auto-animate>
                 <div
+                  v-if="subItem?.care_facilities_count"
                   class="filter-tile"
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
@@ -74,6 +75,7 @@ type FilterResponse = {
   name: string;
   menu_order: number;
   parent_id: string;
+  care_facilities_count: string;
 };
 
 const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number, allFilters: FilterResponse[]) => {
@@ -87,6 +89,7 @@ const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem
     menuOrder: filter.menu_order,
     layer,
     next: [],
+    care_facilities_count: filter.care_facilities_count,
   };
 
   arrayToAdd.push(filterItem);
@@ -120,7 +123,7 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind); // Filter items for current kind (event/facility/news/course) // hereeeeee!!!!
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
   if (!filters) {
     console.error("No filters!");
     return;
