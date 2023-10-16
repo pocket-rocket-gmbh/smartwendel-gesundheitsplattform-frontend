@@ -31,7 +31,7 @@
     "luxon": "^3.4.3",
     "mitt": "^3.0.1",
     "nuxt-icons": "^3.2.1",
-    "pinia": "^2.1.6",
+    "pinia": "^2.1.7",
     "sass": "^1.69.3",
     "vue": "^3.3.4",
     "vue-advanced-cropper": "^2.8.8",

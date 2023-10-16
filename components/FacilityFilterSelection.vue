@@ -1,32 +1,77 @@
 <template>
   <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
-    <div class="input" @click="showPopover = !showPopover; handleClearTermSearch()">
-      <div class="input-title">{{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}</div>
+    <div
+      class="input"
+      @click="
+        showPopover = !showPopover;
+        handleClearTermSearch();
+      "
+    >
+      <div class="input-title">
+        {{
+          multipleSelections?.map((s) => s.name)?.join(", ") ||
+          selectedFilter?.name ||
+          placeholderText
+        }}
+      </div>
 
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-    <div class="popover-content  general-font-size" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
+    <div
+      class="popover-content general-font-size"
+      :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
+      v-if="showPopover"
+      v-auto-animate
+    >
       <div v-if="!loadingFilters" class="filters">
-        <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div class="filter-name">
+        <div
+          v-for="filter in mainFilters"
+          :key="filter.id"
+          class="filter-column"
+        >
+          <div class="filter-name my-1 font-weight-bold">
             {{ filter.name }}
           </div>
-          <div class="filter-options">
-            <label class="option" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
-              <v-radio
-                v-if="!useUser().isAdmin()"
-                :model-value="multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id"
-                @click.prevent="handleOptionSelect(option)"
+          <div
+            class="filter-options"
+            :style="{
+              width: popoverWidth ? `${popoverWidth}px` : 'max-content',
+            }"
+          >
+            <label
+              class="option"
+              v-for="option in filterOptions.find(
+                ({ parentId }) => parentId === filter.id
+              ).options"
+            >
+              <v-btn
+                v-if="!useUser().isAdmin() && option?.care_facilities_count > 0"
+                :model-value="
+                  multipleSelections?.length
+                    ? modelValue.includes(option.id)
+                    : selectedFilter?.id === option.id
+                "
+                @click.prevent="
+                  handleOptionSelect(option);
+                  showPopover = !showPopover;
+                "
                 hide-details
                 density="compact"
-                :label="option.name"
-                color="#8AB61D"
-                class="options-select"
-              />
+                class="options-select ma-2"
+                :class="{
+                  'is-selected': multipleSelections?.length
+                    ? modelValue.includes(option.id)
+                    : selectedFilter?.id === option.id,
+                }"
+              >
+                {{ option.name }}
+                
+              </v-btn>
+             
               <v-checkbox
-                v-else
+                v-else-if="option?.care_facilities_count > 0"
                 :model-value="modelValue.includes(option.id)"
                 @click.prevent="handleOptionSelect(option, true)"
                 hide-details
@@ -35,6 +80,7 @@
                 color="#8AB61D"
               />
             </label>
+            <v-divider class="my-2"></v-divider>
           </div>
         </div>
       </div>
@@ -42,7 +88,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
@@ -78,7 +123,7 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string };
+type Filter = { id: string; name: string;};
 
 type FilterOption = {
   parentId: string;
@@ -98,18 +143,22 @@ const filterOptions = ref<FilterOption[]>([]);
 const loadingFilters = ref(false);
 const filterStore = useFilterStore();
 const handleClearTermSearch = () => {
-  if(filterStore.currentSearchTerm) {
+  if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
   }
   return;
 };
 const handleOptionSelect = (option: Filter, multiple?: boolean) => {
   if (multiple) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+    const indexOfAlreadySetFilter = props.modelValue.findIndex(
+      (item) => item === option.id
+    );
 
     if (indexOfAlreadySetFilter !== -1) {
       props.modelValue.splice(indexOfAlreadySetFilter, 1);
-      multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
+      multipleSelections.value = multipleSelections.value?.filter(
+        (item) => item.id !== option.id
+      );
     } else {
       props.modelValue.push(option.id);
       multipleSelections.value.push(option);
@@ -120,21 +169,27 @@ const handleOptionSelect = (option: Filter, multiple?: boolean) => {
   }
 
   if (selectedFilter.value && selectedFilter.value.id !== option.id) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
+    const indexOfAlreadySetFilter = props.modelValue.findIndex(
+      (item) => item === selectedFilter.value.id
+    );
 
     if (indexOfAlreadySetFilter !== -1) {
       props.modelValue.splice(indexOfAlreadySetFilter, 1);
     }
   }
 
-  const previousIndex = props.modelValue.findIndex((item) => item === option.id);
+  const previousIndex = props.modelValue.findIndex(
+    (item) => item === option.id
+  );
 
   if (previousIndex !== -1) {
     props.modelValue.splice(previousIndex, 1);
 
     if (multipleSelections.value?.length) {
       multipleSelections.value.forEach((selection) => {
-        const index = props.modelValue.findIndex((item) => item === selection.id);
+        const index = props.modelValue.findIndex(
+          (item) => item === selection.id
+        );
         if (index === -1) {
           return;
         }
@@ -158,7 +213,12 @@ onMounted(async () => {
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
   const allFilters = await getAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
+  const allOptions = mainFilters.value.map((filter) =>
+    allFilters.filter(
+      (item) =>
+        item.parent_id === filter.id
+    )
+  );
 
   allOptions.forEach((options, index) => {
     filterOptions.value.push({
@@ -173,7 +233,9 @@ onMounted(async () => {
   }, [] as Filter[]);
 
   const foundFilters = allAvailableOptions.filter((option) => {
-    const doesInclude = props.modelValue.find((item: string) => item === option.id);
+    const doesInclude = props.modelValue.find(
+      (item: string) => item === option.id
+    );
     return doesInclude;
   });
 
@@ -232,31 +294,25 @@ onMounted(async () => {
 
   .popover-content {
     background-color: white;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+      0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     padding: 1rem;
     position: absolute;
     left: 0;
     top: calc(100% + 2px);
     border-radius: 10px;
     z-index: 5;
-    display: flex;
-    flex-direction: column;
     font-size: 1.4rem;
 
-    .filters {
+    .filter-name {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .filter-options {
       display: flex;
-      gap: 1.5rem;
-      justify-content: space-between;
-
-      .filter-column {
-        flex: 1;
-        max-width: calc(33.33% - 1rem);
-      }
-
-      .filter-name {
-        font-size: 1.4rem;
-        margin-bottom: 0.75rem;
-      }
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .option-label {
@@ -275,5 +331,10 @@ onMounted(async () => {
 .options-select {
   gap: 0.5rem;
   min-height: 3rem;
+}
+
+.is-selected {
+  background-color: #8ab61d !important;
+  color: white !important;
 }
 </style>

@@ -57,14 +57,15 @@
           variant="flat"
           color="primary"
           rounded="pill"
-            :width="breakPoints.width.value > 960 ? '' : '100%'"
-
+          :width="breakPoints.width.value > 960 ? '' : '100%'"
         >
-          <span v-if="item.kind">{{ buttonText }}</span>
-          <span v-else-if="item.url_kind === 'external'"
-            >Weiter zu "{{ item.name }}"</span
-          >
-          <span v-else> Mehr anzeigen</span>
+          <span class="general-font-size text-none" v-if="item.kind">{{
+            buttonText
+          }}</span>
+          <span class="general-font-size text-none" v-else-if="item.url_kind">{{
+            item.button_text
+          }}</span>
+          <span class="general-font-size text-none" v-else> Mehr anzeigen</span>
         </v-btn>
       </div>
     </div>
@@ -90,10 +91,14 @@ const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "course")
+      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event")
+      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news")
+      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility")
+      return `/public/care_facilities/${props.item.id}`;
   }
 
   if (props.item.url) {
@@ -101,7 +106,10 @@ const buttonHref = computed(() => {
       return props.item.url;
     }
 
-    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
+    if (
+      props.item.url.includes("http://") ||
+      props.item.url.includes("https://")
+    ) {
       return props.item.url;
     } else return "https://" + props.item.url;
   }

@@ -25,7 +25,7 @@
       </v-row>
       <div class="d-flex align-center justify-center is-white font-weight-bold my-2">oder</div>
       <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
-        <v-col c>
+        <v-col>
           <PublicSearchCategorySelectModal
             v-model="filterStore.currentTags"
             :filter-kind="filterKind"
