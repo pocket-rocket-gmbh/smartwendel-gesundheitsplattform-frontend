@@ -3,7 +3,7 @@
     <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')">
       <v-col class="d-flex is-dark-grey justify-center">
         <div>
-          <h2 class="is-uppercase mt-5 ">{{ subCategory?.name }}</h2>
+          <h2 class="is-uppercase mt-5">{{ subCategory?.name }}</h2>
           <span class="my-5 text-wrap" v-html="subCategory?.description"></span>
         </div>
       </v-col>

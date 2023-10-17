@@ -46,7 +46,7 @@
         </div>
         <span
           :class="item.description.length > 300 ? 'break-text' : ''"
-          class="content general-font-size text-wrap"
+          class="content general-font-size"
           v-html="item.description"
         ></span>
       </div>
@@ -204,7 +204,7 @@ $max-height: 315px;
 
       .title {
         font-size: 1.5rem;
-        font-weight: 600;
+        font-weight: 500;
         color: #8ab61d;
         &:visited {
           color: #8ab61d;

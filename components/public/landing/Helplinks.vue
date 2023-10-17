@@ -11,7 +11,7 @@
           <div>
             <div class="icons d-flex flex-column justify-center align-center">
               <img :src="item.content.image" min-width="50" max-width="50" />
-              <span class="d-flex align-center is-dark-grey font-weight-bold text-h5 title">
+              <span class="d-flex align-center is-dark-grey font-weight-medium general-font-size title">
                 {{ item.content.heading }}
               </span>
             </div>

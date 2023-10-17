@@ -14,7 +14,7 @@
       >
         <a :href="item.content.link" class="is-white is-clickable">
           <img class="is-clickable icons" :src="item.content.image" width="120" />
-          <div class="font-weight-bold general-font-size">
+          <div class="font-weight-medium general-font-size">
             {{ item.content.heading }}
           </div>
         </a>
