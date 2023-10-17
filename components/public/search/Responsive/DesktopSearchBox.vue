@@ -91,7 +91,7 @@
   <v-row
     class="has-bg-darken-grey text-white font-weight-bold"
   >
-    <v-col class="d-flex justify-center align-center general-font-size bottom-actions mx-3">
+    <v-col class="d-flex justify-center align-center font-weight-medium general-font-size bottom-actions mx-3">
       <LoadingSpinner v-if="filterStore.loading"/>
       <span v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }} Treffer</span

@@ -42,7 +42,7 @@
           <div class="d-flex align-center is-clickable">
             <div class="font-weight-bold">
               <span
-                class="is-dark-grey general-font-size title-content"
+                class="is-dark-grey general-font-size font-weight-medium title-content"
                 v-html="item.content.heading"
               ></span>
             </div>

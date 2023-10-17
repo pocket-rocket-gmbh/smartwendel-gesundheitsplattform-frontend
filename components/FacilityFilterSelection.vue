@@ -47,7 +47,7 @@
               ).options"
             >
               <v-btn
-                v-if="!useUser().isAdmin() && option?.care_facilities_count > 0"
+                v-if="!useUser().isAdmin() && option?.care_facilities_count > '0'"
                 :model-value="
                   multipleSelections?.length
                     ? modelValue.includes(option.id)
@@ -59,7 +59,7 @@
                 "
                 hide-details
                 density="compact"
-                class="options-select ma-2"
+                class="options-select ma-2 text-none font-weight-light"
                 :class="{
                   'is-selected': multipleSelections?.length
                     ? modelValue.includes(option.id)
@@ -71,7 +71,7 @@
               </v-btn>
              
               <v-checkbox
-                v-else-if="option?.care_facilities_count > 0"
+                v-else-if="option?.care_facilities_count > '0'"
                 :model-value="modelValue.includes(option.id)"
                 @click.prevent="handleOptionSelect(option, true)"
                 hide-details
@@ -123,7 +123,7 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string;};
+type Filter = { id: string; name: string; care_facilities_count: string; };
 
 type FilterOption = {
   parentId: string;
@@ -307,6 +307,7 @@ onMounted(async () => {
     .filter-name {
       font-size: 1.4rem;
       margin-bottom: 0.75rem;
+      color: $dark-grey;
     }
 
     .filter-options {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="box flex-column text-dark-grey font-weight-bold pa-3"
+    class="box flex-column text-dark-grey font-weight-medium pa-3"
     v-if="careFacility?.event_dates.length"
   >
     <h2 class="is-primary is-uppercase">Termine</h2>

@@ -1,22 +1,22 @@
 <template>
   <div
-    class="box flex-column text-dark-grey font-weight-bold pa-5"
+    class="box flex-column text-dark-grey font-weight-medium pa-5"
     v-if="careFacility?.sanitized_documents?.filter((doc:any) => doc.tag === 'documents')?.length > 0"
   >
     <h2 class="is-primary is-uppercase mb-6">Dokumente</h2>
     <div class="flex-column">
       <div
         v-for="document in careFacility.sanitized_documents.filter((doc:any) => doc.tag === 'documents')"
-        class="my-3"
+        class="my-3 d-flex align-center"
       >
+      <img class="mr-2 icon" :src="iconDownload" />
         <span class="d-flex align-center">
           <a :href="document.url" target="_blank"
-            ><img class="mr-2 icon" :src="iconDownload" />{{
+            >{{
               document.name.replace("-documents", ".pdf")
             }}</a
           >
         </span>
-        <v-divider class="my-10"></v-divider>
       </div>
     </div>
   </div>

@@ -34,7 +34,7 @@
           <v-row class="item-row">
             <v-col md="8">
               <div class="d-flex justify-space-between">
-                <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
+                <div class="is-dark-grey font-weight-medium is-clickable">
                   <a
                     class="is-dark-grey"
                     :href="`/public/care_facilities/${careFacility.id}`"
