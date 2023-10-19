@@ -16,7 +16,7 @@
     "nuxt": "^3.7.4"
   },
   "dependencies": {
-    "@formkit/auto-animate": "^0.7.0",
+    "@formkit/auto-animate": "^0.8.0",
     "@mdi/font": "^7.3.67",
     "@nuxtjs/vuetify": "^1.12.3",
     "@pinia/nuxt": "^0.5.1",
