@@ -28,23 +28,6 @@
         </div>
       </div>
     </v-skeleton-loader>
-    <div>
-      <v-btn prepend-icon="mdi-trash-can-outline" size="small" class="mt-4" variant="text" color="secondary" rounded="pill" @click="emitResetFilter">
-        Alle Filter löschen
-      </v-btn>
-      <v-btn
-        v-if="useUser().loggedIn()"
-        prepend-icon="mdi-content-copy"
-        size="small"
-        class="mt-4"
-        variant="text"
-        color="primary"
-        rounded="pill"
-        @click="copySearchFilterUrl"
-      >
-        Such-Filter kopieren
-      </v-btn>
-    </div>
   </div>
 </template>
 
