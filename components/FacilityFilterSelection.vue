@@ -59,7 +59,7 @@
                 "
                 hide-details
                 density="compact"
-                class="options-select ma-2 text-none font-weight-light"
+                class="options-select general-font-size ma-2 text-none font-weight-light"
                 :class="{
                   'is-selected': multipleSelections?.length
                     ? modelValue.includes(option.id)
