@@ -39,11 +39,11 @@
     </div>
     <PublicCareFacilitiesImages :care-facility="careFacility" v-if="careFacility?.kind !== 'news'"/>
     <v-row class="row">
-      <v-col>
+      <v-col sm="12" class="order-last order-md-first">
         <PublicCareFacilitiesMain v-if="careFacility?.kind !== 'news'" :care-facility="careFacility" />
       </v-col>
-      <v-col md="4" v-if="careFacility?.kind !== 'news'">
-        <PublicCareFacilitiesRight :care-facility="careFacility" />
+      <v-col md="4" sm="12" v-if="careFacility?.kind !== 'news'">
+        <PublicCareFacilitiesRight :class="[breakPoints.width.value < 960 ? 'mt-10' : 'down']" :care-facility="careFacility" />
         <div class="mt-5" v-if="careFacility?.kind === 'course', 'event'">
           <PublicCareFacilitiesDates :care-facility="careFacility" />
         </div>

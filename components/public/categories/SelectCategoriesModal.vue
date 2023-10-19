@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
     <template v-slot:activator="{ props }">
       <div v-bind="props">
-        <v-icon>mdi-arrow-left</v-icon>
+        <v-icon color="white">mdi-arrow-left</v-icon>
       </div>
     </template>
     <v-card>

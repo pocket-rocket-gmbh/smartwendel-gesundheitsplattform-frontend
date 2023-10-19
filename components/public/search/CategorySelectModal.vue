@@ -9,12 +9,12 @@
       <template v-slot:activator="{ props }">
         <div class="field">
           <label class="label is-white">
-            <div class="search-term">
-              Branche
-            </div>
+            <div class="search-term">Branche</div>
           </label>
           <div class="field" v-bind="props" @click="handleClearTermSearch()">
-            <div class="input">{{ selectedFilter?.name || placeholderText }}</div>
+            <div class="input">
+              {{ selectedFilter?.name || placeholderText }}
+            </div>
           </div>
         </div>
       </template>
@@ -29,25 +29,36 @@
         <div class="all-filters">
           <div v-if="!loadingFilters" class="filters">
             <div v-for="filter in mainFilters" :key="filter.id">
-              <div class="filter-name">
+              <div class="filter-name ml-2">
                 {{ filter.name }}
               </div>
               <div class="filter-options">
                 <label
-                  class="option"
+                  class="option ma-n1"
                   v-for="option in filterOptions.find(
                     ({ parentId }) => parentId === filter.id
                   ).options"
                 >
-                  <v-radio
+                <div v-if="option?.care_facilities_count > '0'">
+                  <v-btn
                     :model-value="modelValue.includes(option.id)"
-                    @click.prevent="handleOptionSelect(option)"
+                    @click.prevent="
+                      handleOptionSelect(option);
+                      dialog = false;
+                    "
                     hide-details
                     density="compact"
-                    :label="option.name"
-                    color="#8AB61D"
-                  />
+                    class="options-select general-font-size ma-2 text-none font-weight-light"
+                    :class="{
+                      'is-selected': selectedFilter?.id === option.id,
+                    }"
+                  >
+                    {{ option.name }}
+                  </v-btn>
+                </div>
+                 
                 </label>
+                <v-divider class="my-2"></v-divider>
               </div>
             </div>
           </div>
@@ -79,7 +90,12 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string; parent_id?: string };
+type Filter = {
+  id: string;
+  name: string;
+  parent_id?: string;
+  care_facilities_count: string;
+};
 type FilterOption = {
   parentId: string;
   options: Filter[];
@@ -94,7 +110,7 @@ const filterOptions = ref<FilterOption[]>([]);
 const selectedFilter = ref<Filter>();
 
 const handleClearTermSearch = () => {
-  if(filterStore.currentSearchTerm) {
+  if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
   }
   return;
@@ -189,14 +205,27 @@ onMounted(async () => {
       flex-wrap: wrap;
       gap: 0.5rem;
 
-      .option {
-        border: 1px solid black;
-        border-radius: 0.5rem;
-        padding: 0.25rem 0.5rem;
+      .option-label {
+        cursor: pointer;
         display: flex;
-        gap: 1rem;
+        align-items: center;
+        gap: 0.5rem;
       }
     }
   }
+}
+.filter-name {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  color: $dark-grey;
+}
+
+.options-select {
+  gap: 0.5rem;
+  min-height: 3rem;
+}
+.is-selected {
+  background-color: #8ab61d !important;
+  color: white !important;
 }
 </style>
