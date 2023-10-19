@@ -114,8 +114,9 @@ const careFacility = ref(props.careFacility);
     background-color: white
     @include md
       width: 100%
-      max-width: 30%
+      max-width: 50%
       bottom: -15%
+      left: 5%
     
 
 .image-row
