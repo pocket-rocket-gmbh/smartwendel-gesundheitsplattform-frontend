@@ -58,10 +58,10 @@
           </v-btn>
         </div>
         <div class="d-flex align-center main">
-          <span class="mx-3 menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </span>
+          <span class="mx-3 menu-list pointer" v-if="useUser().isAdmin() && breakPoints.width.value >= 1530" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </span>
           <span
             class="mx-3 menu-list pointer"
-            v-else-if="useUser().isFacilityOwner()"
+            v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
