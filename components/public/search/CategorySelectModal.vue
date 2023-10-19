@@ -29,18 +29,18 @@
         <div class="all-filters">
           <div v-if="!loadingFilters" class="filters">
             <div v-for="filter in mainFilters" :key="filter.id">
-              <div class="filter-name">
+              <div class="filter-name ml-2">
                 {{ filter.name }}
               </div>
               <div class="filter-options">
                 <label
-                  class="option"
+                  class="option ma-n1"
                   v-for="option in filterOptions.find(
                     ({ parentId }) => parentId === filter.id
                   ).options"
                 >
+                <div v-if="option?.care_facilities_count > '0'">
                   <v-btn
-                    v-if="option?.care_facilities_count > '0'"
                     :model-value="modelValue.includes(option.id)"
                     @click.prevent="
                       handleOptionSelect(option);
@@ -55,6 +55,8 @@
                   >
                     {{ option.name }}
                   </v-btn>
+                </div>
+                 
                 </label>
                 <v-divider class="my-2"></v-divider>
               </div>
@@ -202,12 +204,6 @@ onMounted(async () => {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-
-      .filter-options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
 
       .option-label {
         cursor: pointer;

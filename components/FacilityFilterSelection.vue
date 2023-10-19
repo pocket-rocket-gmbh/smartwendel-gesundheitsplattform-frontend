@@ -41,7 +41,7 @@
             }"
           >
             <label
-              class="option"
+              class="option ma-n1"
               v-for="option in filterOptions.find(
                 ({ parentId }) => parentId === filter.id
               ).options"
