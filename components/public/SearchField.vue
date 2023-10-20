@@ -68,7 +68,9 @@
               <div class="icon">
                 <img :src="getIconSourceFor(result.kind)" />
               </div>
-              <div v-if="filteredItems?.length" class="name">{{ result.name }}</div>
+              <div v-if="filteredItems?.length" class="name">
+                {{ result.name }}
+              </div>
             </div>
           </template>
         </div>
@@ -95,6 +97,7 @@ const props = defineProps<{
   loading?: boolean;
   defaultRouteTo?: string;
   kind?: string;
+  isResultPage?: boolean;
 }>();
 
 const filterStore = useFilterStore();
@@ -137,11 +140,8 @@ const handlePressEnter = (e: KeyboardEvent) => {
 };
 
 const routeToResults = (result?: Facility) => {
-  if (!result) {
-    // router.push({ path: "/public/search" });
-    if (props.defaultRouteTo) {
-      router.push({ path: props.defaultRouteTo });
-    }
+  if (props.defaultRouteTo) {
+    router.push({ path: props.defaultRouteTo });
     return;
   }
 
@@ -270,11 +270,12 @@ onMounted(() => {
   .search-results-popover {
     position: absolute;
     top: calc(100% + 2px);
-    left: 0;
     background-color: white;
     overflow: hidden;
     padding: 0.5rem;
     z-index: 10;
+    margin: 0 -10px;
+    border: 1px solid #8ab61d;
 
     .wrapper {
       max-height: 300px;
