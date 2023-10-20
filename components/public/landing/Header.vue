@@ -1,15 +1,29 @@
 <template>
   <div class="wrapper">
-    <h1 class="title">Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land</h1>
+    <h1 class="title">{{ title }}</h1>
     <PublicLandingChooseCategory class="search-field"/>
-    <p class="general-font-size sub-title">Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.</p>
+    <p class="general-font-size sub-title">{{ subTitle }}</p>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useFilterStore } from "~/store/searchFilter";
+import homeImage from "@/assets/images/home.jpg";
 
 const filterStore = useFilterStore();
+
+const title = ref('Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land')
+const subTitle = ref('Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.')
+
+useHead({
+  title: title,
+  meta: [
+    { property: "og:type", content: "Webseite" },
+    { name: "description", content: subTitle },
+    { name: "title", content: title },
+    { name: "image", content: homeImage },
+  ],
+});
 
 onMounted(() => {
   filterStore.resetAllFilters();

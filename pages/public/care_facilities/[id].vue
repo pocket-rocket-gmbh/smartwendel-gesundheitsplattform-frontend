@@ -106,8 +106,6 @@ const getCareFacility = async () => {
   careFacility.value = showApi.item.value;
 };
 
-const myTitle = ref("");
-
 const getFacilityDescription = async () => {
   await getCareFacility();
   return careFacility.value?.description;
