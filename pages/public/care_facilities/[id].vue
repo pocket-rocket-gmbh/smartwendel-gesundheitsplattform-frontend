@@ -114,7 +114,7 @@ const getFacilityDescription = async () => {
 };
 const getFacilityTitle = async () => {
   await getCareFacility();
-  return careFacility.value?.title;
+  return careFacility.value?.name;
 };
 const getFacilityImage = async () => {
   await getCareFacility();
