@@ -39,7 +39,7 @@
     </div>
     <PublicCareFacilitiesImages :care-facility="careFacility" v-if="careFacility?.kind !== 'news'"/>
     <v-row class="row">
-      <v-col sm="12" class="order-last order-md-first">
+      <v-col sm="12" md="8" class="order-last order-md-first">
         <PublicCareFacilitiesMain v-if="careFacility?.kind !== 'news'" :care-facility="careFacility" />
       </v-col>
       <v-col md="4" sm="12" v-if="careFacility?.kind !== 'news'">
