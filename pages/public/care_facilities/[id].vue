@@ -55,8 +55,11 @@
       v-if="careFacility?.kind !== 'news'"
     />
     <v-row class="row">
-      <v-col sm="12" class="order-last order-md-first">
-        <PublicCareFacilitiesMain v-if="careFacility?.kind !== 'news'" :care-facility="careFacility" />
+      <v-col sm="12" md="8" class="order-last order-md-first">
+        <PublicCareFacilitiesMain
+          v-if="careFacility?.kind !== 'news'"
+          :care-facility="careFacility"
+        />
       </v-col>
       <v-col md="4" sm="12" v-if="careFacility?.kind !== 'news'">
         <PublicCareFacilitiesRight
@@ -115,33 +118,6 @@ const getCareFacility = async () => {
   loading.value = false;
   careFacility.value = showApi.item.value;
 };
-
-const myTitle = ref("");
-
-const getFacilityDescription = async () => {
-  await getCareFacility();
-  return careFacility.value?.description;
-};
-
-const getFacilityTitle = async () => {
-  await getCareFacility();
-  return myTitle.value;
-};
-
-const getFacilityImage = async () => {
-  await getCareFacility();
-  return careFacility.value?.image_url;
-};
-
-useHead({
-  title: myTitle,
-  meta: [
-    { property: "og:type", content: "Webseite" },
-    { name: "description", content: getFacilityTitle() },
-    { name: "title", content: getFacilityTitle() },
-    { name: "image", content: getFacilityImage() },
-  ],
-});
 
 onMounted(() => {
   getCareFacility();
