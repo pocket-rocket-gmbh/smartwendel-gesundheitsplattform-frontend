@@ -2,24 +2,19 @@
   <div class="basic-search-box mt-6">
     <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
       <v-row>
-        <v-col>
+        <v-col class="d-flex">
           <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
-        </v-col>
-        <v-col  class="d-flex justify-end">
-          <div>
             <v-btn
               v-if="useUser().isAdmin()"
               prepend-icon="mdi-content-copy"
               variant="outlined"
-              min-width="250px"
-              max-width="250px"
               rounded="pill"
               color="red darken-2"
+              class="mx-5"
               @click="copySearchFilterUrl"
             >
               Such-Filter kopieren
             </v-btn>
-          </div>
         </v-col>
         <v-col
           v-if="filterKind === 'facility'"
