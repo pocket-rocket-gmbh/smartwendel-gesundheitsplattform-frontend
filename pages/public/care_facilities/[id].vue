@@ -114,14 +114,14 @@ const getFacilityDescription = async () => {
 };
 const getFacilityTitle = async () => {
   await getCareFacility();
-  return myTitle.value;
+  return careFacility.value?.title;
 };
 const getFacilityImage = async () => {
   await getCareFacility();
   return careFacility.value?.image_url;
 };
 useHead({
-  title: myTitle,
+  title: getFacilityTitle(),
   meta: [
     { property: "og:type", content: "Webseite" },
     { name: "description", content: getFacilityDescription() },
