@@ -1,8 +1,6 @@
 <template>
   <div class="facility-wrapper limited offset content-wrapper" v-if="!loading">
-    <v-btn prepend-icon="mdi-chevron-left" @click="goBack()">
-      Zurück zur Suche
-    </v-btn>
+    <v-btn prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
     <div v-if="careFacility?.kind === 'news'" class="mt-8">
       <img :src="careFacility?.image_url" class="news-image" />
       <div class="mb-3">
@@ -10,13 +8,9 @@
           <v-col class="bar-content d-flex justify-space-between pa-0 mb-3">
             <div>
               <span class="pr-1"
-                ><v-icon color="primary"
-                  >mdi-clock-time-three-outline</v-icon
-                ></span
+                ><v-icon color="primary">mdi-clock-time-three-outline</v-icon></span
               >
-              <span>{{
-                useDatetime().parseDatetime(careFacility.created_at)
-              }}</span>
+              <span>{{ useDatetime().parseDatetime(careFacility.created_at) }}</span>
             </div>
             <div
               class="d-flex align-center facility-name is-clickable"
@@ -26,9 +20,7 @@
                 :href="`/public/care_facilities/${careFacility?.user_care_facility?.id}`"
                 class="is-clickable d-flex"
               >
-                <v-icon color="primary" class="facility-name"
-                  >mdi-home-outline</v-icon
-                >
+                <v-icon color="primary" class="facility-name">mdi-home-outline</v-icon>
                 <span
                   class="break-title facility-name"
                   v-html="careFacility?.user_care_facility?.name"
@@ -36,19 +28,14 @@
               </a>
             </div>
             <div class="bar-item" v-if="careFacility?.name_instructor">
-              <span class="px-1"
-                ><v-icon color="primary">mdi-account</v-icon></span
-              >
+              <span class="px-1"><v-icon color="primary">mdi-account</v-icon></span>
               <span>{{ careFacility?.name_instructor }}</span>
             </div>
           </v-col>
           <v-divider class="my-1 mb-3"></v-divider>
         </v-row>
       </div>
-      <p
-        class="general-font-size text-description"
-        v-html="careFacility.description"
-      ></p>
+      <p class="general-font-size text-description" v-html="careFacility.description"></p>
     </div>
     <PublicCareFacilitiesImages
       :care-facility="careFacility"
@@ -118,6 +105,30 @@ const getCareFacility = async () => {
   loading.value = false;
   careFacility.value = showApi.item.value;
 };
+
+const myTitle = ref("");
+
+const getFacilityDescription = async () => {
+  await getCareFacility();
+  return careFacility.value?.description;
+};
+const getFacilityTitle = async () => {
+  await getCareFacility();
+  return myTitle.value;
+};
+const getFacilityImage = async () => {
+  await getCareFacility();
+  return careFacility.value?.image_url;
+};
+useHead({
+  title: myTitle,
+  meta: [
+    { property: "og:type", content: "Webseite" },
+    { name: "description", content: getFacilityDescription() },
+    { name: "title", content: getFacilityTitle() },
+    { name: "image", content: getFacilityImage() },
+  ],
+});
 
 onMounted(() => {
   getCareFacility();
