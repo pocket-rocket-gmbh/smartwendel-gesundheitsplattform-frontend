@@ -1,7 +1,23 @@
 <template>
   <div>
-    <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
-    <h2 v-else>Einrichtungen</h2>
+    <v-row>
+      <v-col>
+        <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
+        <h2 v-else>Einrichtungen</h2>
+      </v-col>
+
+      <v-col class="d-flex justify-end align-center">
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="success">mdi-circle</v-icon>
+          <span class="pl-1">Benutzer Aktiv</span>
+        </div>
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="error">mdi-circle</v-icon>
+          <span class="pl-1">Benutzer nicht Aktiv</span>
+        </div>
+      </v-col>
+    </v-row>
+
     <v-alert
       v-if="!setupFinished && !loading"
       type="info"
@@ -57,6 +73,7 @@
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
         :disable-delete="true"
+        defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
       />
 
@@ -349,7 +366,7 @@ const handleButtonClick = (id: string) => {
 
 const goToFacility = (id: string) => {
   const url = `/public/care_facilities/${id}`;
-  window.open(url, '_blank');
+  window.open(url, "_blank");
 };
 
 const handleShowPreview = (item: any) => {

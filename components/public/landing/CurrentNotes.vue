@@ -1,21 +1,42 @@
 <template>
   <div class="wrapper">
-    <div class="my-10">
+    <div class="my-15">
       <v-row justify="space-between">
         <v-col class="d-flex justify-start align-center is-uppercase">
           <div class="is-primary text-h4 font-weight-bold text-uppercase">Beiträge</div>
         </v-col>
       </v-row>
     </div>
-    <div class="articles">
-      <PublicContentBox :size="6" v-for="news in newsArticles" :key="news.id" :item="news" :item-type="'news'" />
+    <div v-if="newsArticles?.length">
+      <div class="articles">
+        <PublicContentBox
+          :size="6"
+          v-for="news in newsArticles"
+          :key="news.id"
+          :item="news"
+          :item-type="'news'"
+        />
+      </div>
+      <div>
+        <v-row>
+          <v-col md="12" class="d-flex justify-center mt-10">
+            <v-btn
+              variant="flat"
+              color="primary"
+              rounded="pill"
+              size="large"
+              @click="goToNews()"
+            >
+              <span> Alles Anzeigen </span>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
     </div>
-    <div>
+    <div v-else>
       <v-row>
-        <v-col md="12" class="d-flex justify-center mt-10">
-          <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToNews()">
-            <span> Alles Anzeigen </span>
-          </v-btn>
+        <v-col md="12" class="d-flex justify-center aligin-center my-10">
+          <span class="text-h5 is-primary">Noch keine Beiträge vorhanden</span>
         </v-col>
       </v-row>
     </div>

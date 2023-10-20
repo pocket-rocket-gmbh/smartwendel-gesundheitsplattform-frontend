@@ -19,12 +19,12 @@
         md="4"
         class="d-flex flex-wrap align-content-center justify-end"
       >
-        <v-row>
+        <v-row v-if="breakPoints.type.value !== 'sm' && breakPoints.type.value !== 'md' && breakPoints.type.value !== 'xs'">
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
             <img class="image right-top" :src="careFacility?.sanitized_images?.[0].url" />
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="breakPoints.type.value !== 'sm' && breakPoints.type.value !== 'md' && breakPoints.type.value !== 'xs'">
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
             <img
               class="image right-bottom"
@@ -54,12 +54,16 @@
 </template>
 
 <script lang="ts" setup>
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+
 const props = defineProps({
   careFacility: {
     type: Object,
     required: true,
   },
 });
+
+const breakPoints = useBreakpoints();
 
 const showingGallery = ref(false);
 const showGallery = () => {
@@ -83,6 +87,12 @@ const careFacility = ref(props.careFacility);
   &.left
     border-radius: 20px
     border-bottom-left-radius: 20px
+    @include md
+      border-top-right-radius: 20px
+      border-bottom-right-radius: 20px
+    @include sm
+      border-top-right-radius: 20px
+      border-bottom-right-radius: 20px
   &.right-top
     border-top-right-radius: 20px
   &.right-bottom
@@ -102,6 +112,12 @@ const careFacility = ref(props.careFacility);
     left: 40px
     bottom: -5%
     background-color: white
+    @include md
+      width: 100%
+      max-width: 50%
+      bottom: -15%
+      left: 5%
+    
 
 .image-row
   @include md

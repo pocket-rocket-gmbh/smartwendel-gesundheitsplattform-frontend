@@ -1,10 +1,32 @@
 <template>
   <div>
-    <h2 v-if="useUser().isFacilityOwner()">Meine Beiträge</h2>
-    <h2 v-else>Beiträge</h2>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie
-      Beiträge anlegen.
+    <v-row>
+      <v-col>
+        <h2 v-if="useUser().isFacilityOwner()">Meine Beiträge</h2>
+        <h2 v-else>Beiträge</h2>
+      </v-col>
+      <v-col class="d-flex justify-end align-center">
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="success">mdi-circle</v-icon>
+          <span class="pl-1">Benutzer Aktiv</span>
+        </div>
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="error">mdi-circle</v-icon>
+          <span class="pl-1">Benutzer nicht Aktiv</span>
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
+      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
+      anlegen.
     </v-alert>
     <v-row align="center">
       <v-col md="3">
@@ -21,7 +43,13 @@
         </v-btn>
       </v-col>
       <v-col>
-        <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Beiträge durchsuchen" />
+        <v-text-field
+          width="50"
+          prepend-icon="mdi-magnify"
+          v-model="facilitySearchTerm"
+          hide-details="auto"
+          label="Beiträge durchsuchen"
+        />
       </v-col>
     </v-row>
 
@@ -32,6 +60,7 @@
       :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      defaultSortBy="created_at"
       ref="dataTableRef"
       :disable-delete="false"
       :draft-required="draftRequiredFields"
@@ -52,7 +81,11 @@
       @update-items="handleUpdateItems"
     />
 
-    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
+    <AdminPreviewDummyPage
+      v-if="previewItem"
+      :item="previewItem"
+      @close="handlePreviewClose"
+    />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -102,7 +135,8 @@ const fields = [
       });
       return res;
     },
-    disabledTooltip: "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
+    disabledTooltip:
+      "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
@@ -205,7 +239,7 @@ const handleButtonClick = (id: string) => {
 
 const goToFacility = (id: string) => {
   const url = `/public/care_facilities/${id}`;
-  window.open(url, '_blank');
+  window.open(url, "_blank");
 };
 
 const handleCreated = (createdItemId: string) => {

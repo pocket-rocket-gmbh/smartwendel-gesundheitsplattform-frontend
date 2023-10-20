@@ -1,6 +1,6 @@
 <template>
   <v-row class="my-15">
-    <v-col sm="3" md="4" offset-sm="4">
+    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2" >
       <v-form @submit.prevent="auth">
         <v-card :class="['pa-6', { shake: animated }]">
           <img class="is-fullwidth" src="~/assets/images/logo.png" />
@@ -80,7 +80,7 @@ export default defineComponent({
     const auth = async () => {
       loading.value = true;
       errors.value = "";
-      const data = { email: email.value, password: password.value };
+      const data = { email: email.value, password: password.value, scope: 'health' };
 
       const { data: result } = await axios.post<ServerCallResult>(
         "/api/login",
@@ -162,28 +162,37 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css" scoped>
-.shake {
-  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-  transform: translate3d(0, 0, 0);
-}
-@keyframes shake {
+<style lang="sass">
+@import "@/assets/sass/main.sass"
+
+.shake
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both
+  transform: translate3d(0, 0, 0)
+
+@keyframes shake
   10%,
-  90% {
-    transform: translate3d(-1px, 0, 0);
-  }
+  90%
+    transform: translate3d(-1px, 0, 0)
+  
   20%,
-  80% {
-    transform: translate3d(2px, 0, 0);
-  }
+  80% 
+    transform: translate3d(2px, 0, 0)
+  
   30%,
   50%,
-  70% {
-    transform: translate3d(-4px, 0, 0);
-  }
+  70% 
+    transform: translate3d(-4px, 0, 0)
+
   40%,
-  60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
+  60% 
+    transform: translate3d(4px, 0, 0)
+  
+.login
+  width: 50%
+  @includes md
+    width: 50%
+  @includes sm
+    width: 50%
+
+  
 </style>

@@ -3,6 +3,7 @@
     <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu">
       <v-app-bar-title>
         <div class="d-flex align-center">
+
           <div class="d-flex align-center">
             <a href="/" @click.prevent="navigateTo('/')" class="d-flex align-center">
               <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
@@ -10,7 +11,7 @@
           </div>
           <div v-if="breakPoints.width.value >= 1400" class="align-center d-flex mx-2">
             <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
-              <div class="title mx-5">
+              <div class="title mx-5 font-weight-medium">
                 <span class="is-clickable main" @click="setItemsAndGo(category, null)">
                   {{ category.name }}
                 </span>
@@ -21,7 +22,7 @@
                     <div v-for="(sub_category, index) in subCategories[category.id]" :key="sub_category.id" @click="setItemsAndGo(category, sub_category)">
                       <div class="list-item main">
                         <div>
-                          <span class="is-clickable main">
+                          <span class="is-clickable main font-weight-medium">
                             {{ sub_category.name }}
                           </span>
                         </div>
@@ -31,7 +32,7 @@
                 </v-list>
               </div>
             </div>
-            <div v-if="!loading" class="main">
+            <div v-if="!loading" class="main font-weight-medium">
               <span href="/public/search/facilities" class="is-clickable mx-5" @click.prevent="goTo('/public/search/facilities')"> Anbietersuche </span>
               <span href="/public/search/courses" class="is-clickable mx-5" @click.prevent="goTo('/public/search/courses')"> Kurse </span>
               <span href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </span>
@@ -39,8 +40,8 @@
           </div>
         </div>
       </v-app-bar-title>
-      <div class="align-center d-flex" v-if="breakPoints.width.value >= 1400 && !loading">
-        <div class="has-bg-primary mr-5 text-white offer py-1" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
+      <div class="align-center d-flex">
+        <div class="has-bg-primary text-white offer py-1" v-if="!useUser().loggedIn() && breakPoints.width.value >= 1530 && currentRoute !== '/register'">
           <v-row class="mx-1 text-center">
             <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
               <div class="font-weight-bold">Dein Angebot fehlt?</div>
@@ -48,16 +49,19 @@
             </v-col>
           </v-row>
         </div>
+        <div class="align-center d-flex is-clickable" v-if="breakPoints.width.value <= 1530 && currentRoute !== '/register' && !useUser().loggedIn()" @click="goToRegister()">
+          <img :src="regiterIcon" width="30"/>
+        </div>
         <div>
           <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
             <v-icon class="pl-3" size="x-large">mdi-account-circle-outline</v-icon>
           </v-btn>
         </div>
         <div class="d-flex align-center main">
-          <span class="mx-3 menu-list pointer" v-if="useUser().isAdmin()" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </span>
+          <span class="mx-3 menu-list pointer" v-if="useUser().isAdmin() && breakPoints.width.value >= 1530" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </span>
           <span
             class="mx-3 menu-list pointer"
-            v-else-if="useUser().isFacilityOwner()"
+            v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
@@ -136,6 +140,7 @@ import { useAppStore } from "@/store/app";
 import { useUserStore } from "@/store/user";
 import { useFilterStore } from "~/store/searchFilter";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
+import regiterIcon from "@/assets/icons/registerIcons/icon_registration.svg";
 const currentUser = ref(null);
 const router = useRouter();
 const categories = ref([]);

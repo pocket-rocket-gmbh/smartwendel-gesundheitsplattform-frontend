@@ -28,16 +28,19 @@ onMounted(() => {
   width: 40%;
   padding: 0 0 0 5rem;
 
+  @include lg {
+    width: 70%;
+    justify-items: center;
+    padding: 2rem;
+  }
+
   @include md {
-    padding: 1rem;
-    padding-top: 5rem;
     width: 100%;
-    width: 100%;
-    justify-content: flex-start;
+    justify-items: center;
+    padding: 2rem;
   }
 
   @include sm {
-    padding: 1rem;
     width: 100%;
     justify-content: flex-start;
   }
@@ -50,7 +53,9 @@ onMounted(() => {
     @include md {
       text-align: center;
       justify-content: center;
-      font-size: 2rem;
+    }
+    @include sm {
+      font-size: 1.6rem;
     }
   }
   .sub-title {
@@ -63,7 +68,7 @@ onMounted(() => {
     @include md {
       text-align: center;
       justify-content: center;
-      font-size: 1.5rem;
+     
       width: 100%;
     }
   }
@@ -73,7 +78,7 @@ onMounted(() => {
 }
 .search-field {
   @include md {
-   margin: 2rem 0;
+   margin: 1rem 0;
   }
 }
 </style>

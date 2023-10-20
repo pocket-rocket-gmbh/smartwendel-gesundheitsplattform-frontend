@@ -7,25 +7,21 @@
     </v-row>
     <v-row>
       <v-col v-for="(item, index) in items" :key="index">
-        <div class="justify-center text-center align-center">
-          <div class="icons d-flex justify-center align-center">
-            <img :src="item.content.image" min-width="50" max-width="50" />
-          </div>
-          <div class="items-column">
-            <div class="is-dark-grey my-5 font-weight-bold text-h5">
-              {{ item.content.heading }}
+        <div class="d-flex flex-column justify-space-between text-center align-center items">
+          <div>
+            <div class="icons d-flex flex-column justify-center align-center">
+              <img :src="item.content.image" min-width="50" max-width="50" />
+              <span class="d-flex align-center is-dark-grey font-weight-medium general-font-size title">
+                {{ item.content.heading }}
+              </span>
             </div>
-
             <div class="my-5 is-dark-grey general-font-size description">
               {{ item.content.description }}
             </div>
-
+          </div>
+          <div class="items-column">
             <div class="general-font-size d-flex flex-column flex-1 buttons-wrapper">
-              <a
-                :href="item.content.link"
-                target="_blank"
-                class="is-red is-clickable"
-              >
+              <a :href="item.content.link" target="_blank" class="is-red is-clickable">
                 <v-btn variant="flat" color="primary" rounded="pill" size="large">
                   <span>{{ item.content.linkText }}</span>
                 </v-btn>
@@ -87,6 +83,11 @@ export default defineComponent({
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 
+.title
+  min-height: 70px
+
+.items
+  height: 100%
 .wrapper
   margin: 0 5rem
   @include md
@@ -95,12 +96,11 @@ export default defineComponent({
 .items-column
   margin: 0 2.5rem
 
-.description 
+.description
   min-height: 150px
-  
+
 .buttons-wrapper
   @include md
     height: auto
     margin: 2rem 0
-
 </style>

@@ -1,10 +1,10 @@
 <template>
   <v-app-bar v-model="appStore.showTopbar" :elevation="0" density="compact" class="title-bar">
     <div class="shifted">
-      <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
+      <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center font-weight-medium">
         <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
           <span
-            class="px-5 is-dark-grey"
+            class="px-5 is-dark-grey "
             :class="[selectedId === item?.id ? 'text-decoration-underline' : '']"
             v-show="item.sub_sub_categories.length > 0"
             >{{ item?.name }}

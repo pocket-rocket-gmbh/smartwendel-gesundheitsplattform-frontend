@@ -9,7 +9,6 @@ export enum BreakPoints {
 }
 
 export const useBreakpoints = () => {
-  console.log(process.client)
   const width = ref(process.client ? window.innerWidth : 0);
   const type = ref("md");
   const isMobile = ref(false);

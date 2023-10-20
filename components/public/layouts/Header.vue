@@ -27,7 +27,7 @@
         <div class="menu-bar-wrapper">
           <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
             <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
-              <span class="px-5 is-dark-grey general-font-size" :class="[selectedId === item?.id ? 'text-decoration-underline' : '']">
+              <span class="px-5 is-dark-grey general-font-size font-weight-medium" :class="[selectedId === item?.id ? 'text-decoration-underline' : '']">
                 {{ item?.name }}
               </span>
             </div>

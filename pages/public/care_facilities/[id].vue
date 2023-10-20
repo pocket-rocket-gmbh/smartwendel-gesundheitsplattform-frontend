@@ -35,15 +35,15 @@
           <v-divider class="my-1 mb-3"></v-divider>
         </v-row>
       </div>
-      <p class="general-font-size text-description " v-html="careFacility.description"></p>
+      <p class="general-font-size text-description" v-html="careFacility.description"></p>
     </div>
     <PublicCareFacilitiesImages :care-facility="careFacility" v-if="careFacility?.kind !== 'news'"/>
     <v-row class="row">
-      <v-col class="column">
+      <v-col sm="12" class="order-last order-md-first">
         <PublicCareFacilitiesMain v-if="careFacility?.kind !== 'news'" :care-facility="careFacility" />
       </v-col>
-      <v-col md="4" v-if="careFacility?.kind !== 'news'">
-        <PublicCareFacilitiesRight :care-facility="careFacility" />
+      <v-col md="4" sm="12" v-if="careFacility?.kind !== 'news'">
+        <PublicCareFacilitiesRight :class="[breakPoints.width.value < 960 ? 'mt-10' : 'down']" :care-facility="careFacility" />
         <div class="mt-5" v-if="careFacility?.kind === 'course', 'event'">
           <PublicCareFacilitiesDates :care-facility="careFacility" />
         </div>
@@ -57,6 +57,9 @@
 
 <script lang="ts" setup>
 import { Facility } from "~/store/searchFilter";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+
+const breakPoints = useBreakpoints();
 
 const route = useRoute();
 const router = useRouter();
@@ -103,13 +106,9 @@ onMounted(() => {
 @import "@/assets/sass/main";
 
 .facility-wrapper {
-  margin: 0 auto;
   margin-top: 4rem;
 
-  @include md {
-    margin: 0;
-    padding: 1rem !important;
-  }
+  
 
   .row {
     .column {

@@ -1,14 +1,31 @@
 <template>
   <div>
-    <h2 v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</h2>
-    <h2 v-else>Veranstaltungen</h2>
+    <v-row>
+      <v-col>
+        <h2 v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</h2>
+        <h2 v-else>Veranstaltungen</h2>
+      </v-col>
+      <v-col class="d-flex justify-end align-center">
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="success">mdi-circle</v-icon>
+          <span class="pl-1">Benutzer Aktiv</span>
+        </div>
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="error">mdi-circle</v-icon>
+          <span class="pl-1">Benutzer nicht Aktiv</span>
+        </div>
+      </v-col>
+    </v-row>
+
     <v-alert type="info" density="compact" closable class="my-2"
-      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucher auf der Webseite
-      finden. Pflichtfelder sind mit einem Sternchen versehen.</v-alert
+      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind,
+      desto besser können dich Besucher auf der Webseite finden. Pflichtfelder sind mit
+      einem Sternchen versehen.</v-alert
     >
     <v-alert density="compact" closable class="my-2"
-      >Leg hier deine Veranstaltung an. Veranstaltungen sind
-      einmalige Ereignisse, die sich über mehrere Tage verteilen können. </v-alert>
+      >Leg hier deine Veranstaltung an. Veranstaltungen sind einmalige Ereignisse, die
+      sich über mehrere Tage verteilen können.
+    </v-alert>
     <template v-if="setupFinished">
       <v-row align="center">
         <v-col md="5">
@@ -27,13 +44,25 @@
           </div>
         </v-col>
         <v-col>
-          <v-text-field width="50" prepend-icon="mdi-magnify" v-model="facilitySearchTerm" hide-details="auto" label="Veranstaltungen durchsuchen" />
+          <v-text-field
+            width="50"
+            prepend-icon="mdi-magnify"
+            v-model="facilitySearchTerm"
+            hide-details="auto"
+            label="Veranstaltungen durchsuchen"
+          />
         </v-col>
       </v-row>
     </template>
-    <v-alert v-if="!setupFinished && !loading" type="info" density="compact" closable class="mt-2">
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie
-      Beiträge anlegen.
+    <v-alert
+      v-if="!setupFinished && !loading"
+      type="info"
+      density="compact"
+      closable
+      class="mt-2"
+    >
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
+      freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie Beiträge anlegen.
     </v-alert>
 
     <DataTable
@@ -44,7 +73,7 @@
       :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
-      defaultSortBy="kind"
+      defaultSortBy="created_at"
       :disable-delete="false"
       :draft-required="draftRequiredFields"
     />
@@ -65,7 +94,11 @@
       @update-items="handleUpdateItems"
     />
 
-    <AdminPreviewDummyPage v-if="previewItem" :item="previewItem" @close="handlePreviewClose" />
+    <AdminPreviewDummyPage
+      v-if="previewItem"
+      :item="previewItem"
+      @close="handlePreviewClose"
+    />
 
     <DeleteItem
       v-if="confirmDeleteDialogOpen"
@@ -114,7 +147,8 @@ const fields = [
       });
       return res;
     },
-    disabledTooltip: "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
+    disabledTooltip:
+      "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
@@ -240,7 +274,7 @@ const handleButtonClick = (id: string) => {
 
 const goToFacility = (id: string) => {
   const url = `/public/care_facilities/${id}`;
-  window.open(url, '_blank');
+  window.open(url, "_blank");
 };
 
 const handleCreated = (createdItemId: string) => {

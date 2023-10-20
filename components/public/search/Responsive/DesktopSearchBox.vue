@@ -5,7 +5,27 @@
         <v-col>
           <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
         </v-col>
-        <v-col v-if="filterKind === 'facility'" md="2" class="d-flex justify-end">
+        <v-col  class="d-flex justify-end">
+          <div>
+            <v-btn
+              v-if="useUser().isAdmin()"
+              prepend-icon="mdi-content-copy"
+              variant="outlined"
+              min-width="250px"
+              max-width="250px"
+              rounded="pill"
+              color="red darken-2"
+              @click="copySearchFilterUrl"
+            >
+              Such-Filter kopieren
+            </v-btn>
+          </div>
+        </v-col>
+        <v-col
+          v-if="filterKind === 'facility'"
+          md="2"
+          class="d-flex justify-end"
+        >
           <v-btn
             variant="outlined"
             min-width="250px"
@@ -39,7 +59,11 @@
           <div class="field general-font-size">
             <label class="label is-white">Gemeinde</label>
             <div class="select-wrapper">
-              <select class="input select" v-model="filterStore.currentZip" @click="handleClearTermSearch()">
+              <select
+                class="input select"
+                v-model="filterStore.currentZip"
+                @click="handleClearTermSearch()"
+              >
                 <option :value="null">Gemeinde wählen</option>
                 <option v-for="community in communities" :value="community.zip">
                   {{ community.name }}
@@ -88,11 +112,11 @@
       </v-row>
     </div>
   </div>
-  <v-row
-    class="has-bg-darken-grey text-white font-weight-bold"
-  >
-    <v-col class="d-flex justify-center align-center general-font-size bottom-actions mx-3">
-      <LoadingSpinner v-if="filterStore.loading"/>
+  <v-row class="has-bg-darken-grey text-white font-weight-bold">
+    <v-col
+      class="d-flex justify-center align-center font-weight-medium general-font-size bottom-actions mx-3"
+    >
+      <LoadingSpinner v-if="filterStore.loading" />
       <span v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }} Treffer</span
       >
@@ -104,6 +128,8 @@
 </template>
 <script setup lang="ts">
 import { FilterKind, useFilterStore } from "~/store/searchFilter";
+
+const snackbar = useSnackbar();
 
 const props = defineProps<{
   title: string;
@@ -136,9 +162,8 @@ const startSearch = () => {
   filterStore.loadAllResults();
 };
 
-
 const handleClearTermSearch = () => {
-  if(filterStore.currentSearchTerm) {
+  if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
   }
   return;
@@ -172,6 +197,12 @@ const communities = communitiesApi.items;
 const resetSearchTerm = () => {
   filterStore.currentSearchTerm = "";
   filterStore.loadFilteredResults();
+};
+
+const copySearchFilterUrl = () => {
+  snackbar.showSuccess("Filter in Zwischenablage gespeichert!");
+  const url = filterStore.getUrlQuery();
+  navigator.clipboard.writeText(url);
 };
 
 const getCommunities = async () => {

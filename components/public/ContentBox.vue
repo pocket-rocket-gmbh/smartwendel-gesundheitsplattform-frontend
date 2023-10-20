@@ -35,17 +35,18 @@
             }}</span>
           </div>
         </div>
-        <hr v-if="item.kind !== 'facility'"/>
+        <hr v-if="item.kind !== 'facility'" />
       </template>
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
           <a :href="`/public/care_facilities/${item.id}`" v-if="!item.url_kind">
-            <span class="title is-clickable">{{ item.name }}</span>
+            <span class="title is-clickable break-title">{{ item.name }}</span>
           </a>
-          <span v-else class="title">{{ item.name }}</span>
+          <span v-else class="title break-title">{{ item.name }}</span>
         </div>
         <span
-          class="content break-text general-font-size text-wrap"
+          :class="item.description.length > 300 ? 'break-text' : ''"
+          class="content general-font-size"
           v-html="item.description"
         ></span>
       </div>
@@ -56,10 +57,15 @@
           variant="flat"
           color="primary"
           rounded="pill"
+          :width="breakPoints.width.value > 960 ? '' : '100%'"
         >
-          <span v-if="item.kind">{{ buttonText }}</span>
-          <span v-else-if="item.url_kind === 'external'">Weiter zu {{ item.name }}</span>
-          <span v-else> Mehr anzeigen</span>
+          <span class="general-font-size text-none" v-if="item.kind">{{
+            buttonText
+          }}</span>
+          <span class="general-font-size text-none" v-else-if="item.url_kind">{{
+            item.button_text
+          }}</span>
+          <span class="general-font-size text-none" v-else> Mehr anzeigen</span>
         </v-btn>
       </div>
     </div>
@@ -69,6 +75,8 @@
 import { Facility } from "~/store/searchFilter";
 import noImage from "@/assets/images/no-image.svg";
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+
 const props = defineProps<{
   item: Facility;
   size?: number;
@@ -76,6 +84,8 @@ const props = defineProps<{
 
 const contentBoxRef = ref<HTMLDivElement>();
 const showImage = ref(true);
+
+const breakPoints = useBreakpoints();
 
 const buttonHref = computed(() => {
   if (!props.item) return null;
@@ -141,6 +151,10 @@ $max-height: 315px;
     0 1px 8px 0 rgba(0, 0, 0, 0.12);
   overflow: hidden;
   display: flex;
+  @include md {
+    flex-direction: column;
+    height: auto;
+  }
 
   .image {
     display: block;
@@ -158,7 +172,7 @@ $max-height: 315px;
 
   .text {
     flex: 1;
-    padding: 0.75rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -186,10 +200,11 @@ $max-height: 315px;
       gap: 0.5rem;
       max-height: 100%;
       overflow: hidden;
-     line-height: 30px;
+      line-height: 30px;
 
       .title {
         font-size: 1.5rem;
+        font-weight: 500;
         color: #8ab61d;
         &:visited {
           color: #8ab61d;
@@ -199,7 +214,28 @@ $max-height: 315px;
 
     .action {
       font-size: 1.2rem;
+      @include md {
+        margin-top: 1rem;
+      }
     }
   }
+}
+
+.break-text {
+  word-break: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+.break-title {
+  word-break: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 </style>

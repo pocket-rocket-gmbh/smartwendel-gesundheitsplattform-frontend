@@ -1,18 +1,20 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      :scrim="false"
+      transition="dialog-bottom-transition"
+    >
       <template v-slot:activator="{ props }">
         <div class="field">
           <label class="label is-white">
-            <div class="search-term">
-              Branche
-              <v-chip v-if="filterStore.currentSearchTerm" closable @click:close="resetSearchTerm">
-                {{ filterStore.currentSearchTerm }}
-              </v-chip>
-            </div>
+            <div class="search-term">Branche</div>
           </label>
-          <div class="field" v-bind="props">
-            <div class="input">{{ selectedFilter?.name || "Branche" }}</div>
+          <div class="field" v-bind="props" @click="handleClearTermSearch()">
+            <div class="input">
+              {{ selectedFilter?.name || placeholderText }}
+            </div>
           </div>
         </div>
       </template>
@@ -27,20 +29,36 @@
         <div class="all-filters">
           <div v-if="!loadingFilters" class="filters">
             <div v-for="filter in mainFilters" :key="filter.id">
-              <div class="filter-name">
+              <div class="filter-name ml-2">
                 {{ filter.name }}
               </div>
               <div class="filter-options">
-                <label class="option" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
-                  <v-radio
-                    :model-value="selectedFilter?.id === option.id"
-                    @click.prevent="handleOptionSelect(option)"
+                <label
+                  class="option ma-n1"
+                  v-for="option in filterOptions.find(
+                    ({ parentId }) => parentId === filter.id
+                  ).options"
+                >
+                <div v-if="option?.care_facilities_count > '0'">
+                  <v-btn
+                    :model-value="modelValue.includes(option.id)"
+                    @click.prevent="
+                      handleOptionSelect(option);
+                      dialog = false;
+                    "
                     hide-details
                     density="compact"
-                    :label="option.name"
-                    color="#8AB61D"
-                  />
+                    class="options-select general-font-size ma-2 text-none font-weight-light"
+                    :class="{
+                      'is-selected': selectedFilter?.id === option.id,
+                    }"
+                  >
+                    {{ option.name }}
+                  </v-btn>
+                </div>
+                 
                 </label>
+                <v-divider class="my-2"></v-divider>
               </div>
             </div>
           </div>
@@ -72,7 +90,12 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string; parent_id?: string };
+type Filter = {
+  id: string;
+  name: string;
+  parent_id?: string;
+  care_facilities_count: string;
+};
 type FilterOption = {
   parentId: string;
   options: Filter[];
@@ -86,21 +109,27 @@ const mainFilters = ref([]);
 const filterOptions = ref<FilterOption[]>([]);
 const selectedFilter = ref<Filter>();
 
-const resetSearchTerm = () => {
-  filterStore.currentSearchTerm = "";
-  filterStore.loadFilteredResults();
+const handleClearTermSearch = () => {
+  if (filterStore.currentSearchTerm) {
+    filterStore.clearTermSearch();
+  }
+  return;
 };
 
 const handleOptionSelect = (option: Filter) => {
   if (selectedFilter.value && selectedFilter.value.id !== option.id) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
+    const indexOfAlreadySetFilter = props.modelValue.findIndex(
+      (item) => item === selectedFilter.value.id
+    );
 
     if (indexOfAlreadySetFilter !== -1) {
       props.modelValue.splice(indexOfAlreadySetFilter, 1);
     }
   }
 
-  const previousIndex = props.modelValue.findIndex((item) => item === option.id);
+  const previousIndex = props.modelValue.findIndex(
+    (item) => item === option.id
+  );
 
   if (previousIndex !== -1) {
     props.modelValue.splice(previousIndex, 1);
@@ -113,12 +142,24 @@ const handleOptionSelect = (option: Filter) => {
   emit("update:modelValue", props.modelValue);
 };
 
+const placeholderText = ref("Laden...");
+const setPlaceholderText = () => {
+  if (props.filterKind === "facility") {
+    placeholderText.value = "Branche wählen";
+  } else if (props.filterKind === "course") {
+    placeholderText.value = "Themengebiet wählen";
+  }
+};
+
 onMounted(async () => {
+  setPlaceholderText();
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
   const allFilters = await getAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) => allFilters.filter(item => item.parent_id === filter.id));
+  const allOptions = mainFilters.value.map((filter) =>
+    allFilters.filter((item) => item.parent_id === filter.id)
+  );
 
   allOptions.forEach((options, index) => {
     filterOptions.value.push({
@@ -133,7 +174,9 @@ onMounted(async () => {
   }, [] as Filter[]);
 
   const foundFilter = allAvailableOptions.find((option) => {
-    const doesInclude = props.modelValue.find((item: string) => item === option.id);
+    const doesInclude = props.modelValue.find(
+      (item: string) => item === option.id
+    );
     return doesInclude;
   });
 
@@ -162,14 +205,27 @@ onMounted(async () => {
       flex-wrap: wrap;
       gap: 0.5rem;
 
-      .option {
-        border: 1px solid black;
-        border-radius: 0.5rem;
-        padding: 0.25rem 0.5rem;
+      .option-label {
+        cursor: pointer;
         display: flex;
-        gap: 1rem;
+        align-items: center;
+        gap: 0.5rem;
       }
     }
   }
+}
+.filter-name {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  color: $dark-grey;
+}
+
+.options-select {
+  gap: 0.5rem;
+  min-height: 3rem;
+}
+.is-selected {
+  background-color: #8ab61d !important;
+  color: white !important;
 }
 </style>
