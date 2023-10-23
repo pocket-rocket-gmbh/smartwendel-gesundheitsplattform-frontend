@@ -7,7 +7,7 @@
   >
     <v-card class="dialog">
       <v-card-title class="text-h5">Adresse ändern</v-card-title>
-      <v-card-text v-if="type === 'email'">Bitte beachten: Wenn du die E-Mail Adresse änderst, wird deine Benutzer wieder durch den Landkreis geprüft und freigegeben. So lange stehen deine Inhalte nicht zur Verfügung. </v-card-text>
+      <v-card-text v-if="type === 'email'">Bitte beachten: Wenn du die E-Mail Adresse änderst, wird dein Benutzer wieder durch den Landkreis geprüft und freigegeben. So lange stehen deine Inhalte nicht zur Verfügung. </v-card-text>
       <v-card-text v-else>Bitte beachten: Wenn du die Adresse deiner Einrichtung änderst, wird die Einrichtung wieder durch den Landkreis geprüft und freigegeben. So lange stehen deine Inhalte nicht zur Verfügung. </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
