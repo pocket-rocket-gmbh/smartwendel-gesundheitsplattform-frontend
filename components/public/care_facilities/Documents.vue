@@ -1,6 +1,6 @@
 <template>
   <div
-    class="box flex-column text-dark-grey font-weight-medium pa-5"
+    class="box flex-column is-dark-grey font-weight-medium pa-5"
     v-if="careFacility?.sanitized_documents?.filter((doc:any) => doc.tag === 'documents')?.length > 0"
   >
     <h2 class="is-primary is-uppercase mb-6">Dokumente</h2>

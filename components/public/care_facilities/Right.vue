@@ -1,5 +1,5 @@
 <template>
-  <div class="box flex-column text-dark-grey font-weight-medium pa-5">
+  <div class="box flex-column is-dark-grey font-weight-medium pa-5">
     <h2 class="is-primary is-uppercase mb-6">Kontakt und Infos</h2>
     <div v-if="careFacility?.phone" class="py-3 d-flex flex-column justify-center">
       <span class="d-flex align-center">

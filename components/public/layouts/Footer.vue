@@ -91,26 +91,27 @@
             <div class="ml-md-15">
               <h2>Landkreis Sankt Wendel</h2>
               <div class="footer-links">
-                <p class="is-clickable is-dark-grey">
+                <p class="is-clickable">
                   <span>
                     <a
+                      class="is-dark-grey"
                       href="mailto:smartcity@lkwnd.de?subject=kontakt"
                       >Kontakt</a
                     >
                   </span>
                 </p>
-                <p class="is-clickable">
-                  <router-link class="is-dark-grey" to="/rules_of_conduct"
+                <p class="is-clickable is-dark-grey">
+                  <router-link to="/rules_of_conduct"
                     >Nutzungsbedingungen</router-link
                   >
                 </p>
-                <p class="is-clickable">
-                  <router-link class="is-dark-grey" to="/privacy_policy"
+                <p class="is-clickable is-dark-grey">
+                  <router-link to="/privacy_policy"
                     >Datenschutzerklärung</router-link
                   >
                 </p>
-                <p class="is-clickable">
-                  <router-link class="is-dark-grey" to="/imprint">Impressum</router-link>
+                <p class="is-clickable is-dark-grey">
+                  <router-link to="/imprint">Impressum</router-link>
                 </p>
               </div>
               <div class="socials mt-5">
@@ -160,7 +161,7 @@
         </v-row>
         <v-row v-if="breakPoints.width.value < 960">
           <v-col>
-            <div class="disclamer text-wrap mt-5">
+            <div class="disclamer text-wrap is-dark-grey mt-5">
               Zur besseren Lesbarkeit wird auf der Gesundheits- und Pflegeplattform das
               generische Maskulinum verwendet. Die auf dieser Webseite verwendeten
               Personenbezeichnungen sprechen – sofern nicht anders kenntlich gemacht –
