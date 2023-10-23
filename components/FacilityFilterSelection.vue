@@ -294,16 +294,13 @@ onMounted(async () => {
 
   .popover-content {
     background-color: white;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-      0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25);
     padding: 1rem;
     position: absolute;
     left: 0;
     top: calc(100% + 2px);
     border-radius: 10px;
     z-index: 5;
-    font-size: 1.4rem;
-
     .filter-name {
       font-size: 1.4rem;
       margin-bottom: 0.75rem;
