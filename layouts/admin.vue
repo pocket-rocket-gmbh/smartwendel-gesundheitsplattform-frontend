@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-if="useUser().currentUser">
     <v-navigation-drawer permanent>
       <div class="d-flex">
         <router-link to="/">

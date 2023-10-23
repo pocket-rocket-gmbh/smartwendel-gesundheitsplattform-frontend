@@ -142,7 +142,7 @@ export default defineComponent({
           }, 300);
         }
       }
-      if (lastRoute.value.includes("/password_reset")) {
+      if (lastRoute.value && lastRoute.value.includes("/password_reset")) {
         lastRoute.value = "/";
       }
     });

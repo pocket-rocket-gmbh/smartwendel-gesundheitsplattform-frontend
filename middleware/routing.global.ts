@@ -31,7 +31,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
 
     // Scrollto top on route change
-    if (to.path !== from.path && process.client) {
+    if (to.path !== from.path) {
       window.scrollTo(0, 0)
     }
   }
