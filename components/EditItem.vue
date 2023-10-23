@@ -7,7 +7,8 @@
   >
     <v-card class="dialog">
       <v-card-title class="text-h5">Adresse ändern</v-card-title>
-      <v-card-text>Bitte beachten: Wenn du die Adresse deiner Einrichtung änderst, wird die Einrichtung wieder durch den Landkreis geprüft und freigegeben. So lange stehen deine Inhalte nicht zur Verfügung. </v-card-text>
+      <v-card-text v-if="type === 'email'">Bitte beachten: Wenn du die E-Mail Adresse änderst, wird deine Benutzer wieder durch den Landkreis geprüft und freigegeben. So lange stehen deine Inhalte nicht zur Verfügung. </v-card-text>
+      <v-card-text v-else>Bitte beachten: Wenn du die Adresse deiner Einrichtung änderst, wird die Einrichtung wieder durch den Landkreis geprüft und freigegeben. So lange stehen deine Inhalte nicht zur Verfügung. </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
         <v-row>
@@ -15,7 +16,7 @@
             <v-btn variant="outlined" elevation="0" @click="emitClose()"> abbrechen </v-btn>
           </v-col>
           <v-col md="6" class="d-flex justify-end">
-            <v-btn variant="outlined" color="error" elevation="0" @click="emitAccept()"> Adresse ändern </v-btn>
+            <v-btn variant="outlined" color="error" elevation="0" @click="emitAccept()"> <span v-if="type === 'email'">E-Mail Adresse ändern</span><span v-else>Adresse ändern </span></v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -28,6 +29,7 @@ export default defineComponent({
   emits: ["close", "accepted"],
   props : {
     open: Boolean,
+    type: String
   },
   setup(props, { emit }) {
 
