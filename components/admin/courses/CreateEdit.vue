@@ -330,8 +330,8 @@
                   class="text-field"
                   v-model="slotProps.item.event_duration"
                   hide-details="auto"
-                  label="Kursdauer (in Minuten)"
-                  placeholder="z.B. 60"
+                  label="Kursdauer (HH:MM)"
+                  placeholder="z.B. 01:30"
                   :rules="[rules.required, rules.validateEventDuration]"
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />

@@ -40,11 +40,61 @@
                 label="Telefonnummer*"
                 type="number"
               />
-              <v-text-field
+              <v-alert type="info" density="compact" class="my-2" v-if="editInformations"
+                >Diese funktion ist noch nicht implementiert, änderungen werden noch nicht gespeichert</v-alert>
+
+              <v-alert type="warning" density="compact" class="my-2" v-if="emailConfirmation.length"
+                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss deine Benutzer
+                vom Landkreis neu freigegeben werden</v-alert
+              >
+              <div :class="[
+              editInformations
+                ? 'has-bg-light-red pt-5'
+                : '',
+            ]">
+                <v-text-field
                 v-model="item.email"
                 :rules="[rules.required, rules.email]"
                 label="E-Mail *"
-                disabled
+                :disabled="!editInformations"
+              />
+              <v-text-field
+                v-if="editInformations"
+                v-model="emailConfirmation"
+                label="E-Mail Bestätigung *"
+                :disabled="!editInformations"
+                :rules="[
+                  item.email === emailConfirmation ||
+                    'Passwörter stimmen nicht überein',
+                  rules.required,
+                  rules.email,
+                ]"
+              />
+              </div>             
+              <div class="my-5" >
+                <span v-if="editInformations">
+                  <v-btn variant="outlined" @click="editInformations = false" :disabled="!item.email.includes('@') || !emailConfirmation.includes('@') || item.email !== emailConfirmation">
+                    Neue E-mail Adresse speichern
+                  </v-btn>
+                </span>
+                <span v-else>
+                  <v-btn variant="outlined" @click="confirmEditDialogOpen = true">
+                    E-mail Adresse ändern
+                  </v-btn>
+                </span>
+              </div>
+
+              <EditItem
+                :open="confirmEditDialogOpen"
+                type="email"
+                @accepted="
+                  editInformations = true;
+                  confirmEditDialogOpen = false;
+                "
+                @close="
+                  confirmEditDialogOpen = false;
+                  editInformations = false;
+                "
               />
               <h3 class="mb-4">Profilbild</h3>
               <PublicUsersProfileImage
@@ -141,6 +191,10 @@ const loading = ref(false);
 const router = useRouter();
 const setupFinished = ref(false);
 
+const editInformations = ref(false);
+
+const confirmEditDialogOpen = ref(false);
+
 const form = ref<VForm>();
 
 const validateFrom = computed(() => {
@@ -160,6 +214,8 @@ const item = ref({
   file: "",
   image_url: null,
 });
+
+const emailConfirmation = ref("");
 
 const password = ref("");
 const password_confirmation = ref("");
