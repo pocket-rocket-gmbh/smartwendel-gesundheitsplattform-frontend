@@ -349,4 +349,8 @@ onMounted(() => {
     }
   }
 }
+
+.input {
+  color: #58595E;
+}
 </style>
