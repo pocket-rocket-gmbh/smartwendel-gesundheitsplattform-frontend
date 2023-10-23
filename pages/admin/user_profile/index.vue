@@ -41,11 +41,10 @@
                 type="number"
               />
               <v-alert type="info" density="compact" class="my-2" v-if="editInformations"
-                >Diese funktion ist noch nicht implementiert, änderungen werden noch nicht gespeichert</v-alert>
+                > Diese Funktion ist noch nicht implementiert, Änderungen werden noch nicht gespeichert</v-alert>
 
               <v-alert type="warning" density="compact" class="my-2" v-if="emailConfirmation.length"
-                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss deine Benutzer
-                vom Landkreis neu freigegeben werden</v-alert
+                >Aufgrund dieser Änderungen muss dein Benutzer durch den Landkreis neu geprüft und freigegeben werden. So lange stehen deine Inhalte nicht zur Verfügung.</v-alert
               >
               <div :class="[
               editInformations
@@ -74,12 +73,12 @@
               <div class="my-5" >
                 <span v-if="editInformations">
                   <v-btn variant="outlined" @click="editInformations = false" :disabled="!item.email.includes('@') || !emailConfirmation.includes('@') || item.email !== emailConfirmation">
-                    Neue E-mail Adresse speichern
+                    Neue E-Mail-Adresse speichern
                   </v-btn>
                 </span>
                 <span v-else>
                   <v-btn variant="outlined" @click="confirmEditDialogOpen = true">
-                    E-mail Adresse ändern
+                    E-Mail-Adresse ändern
                   </v-btn>
                 </span>
               </div>
