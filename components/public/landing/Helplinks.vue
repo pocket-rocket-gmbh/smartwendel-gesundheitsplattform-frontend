@@ -2,11 +2,11 @@
   <div class="wrapper">
     <v-row>
       <v-col class="d-flex justify-center my-3">
-        <h2 class="is-uppercase">Du benötigst dringend Hilfe?</h2>
+        <span class="general-font-size is-dark-grey font-weight-medium is-uppercase">Du benötigst dringend Hilfe?</span>
       </v-col>
     </v-row>
     <v-row>
-      <v-col v-for="(item, index) in items" :key="index">
+      <v-col v-for="(item, index) in items" :key="index" class="items-nummber">
         <div class="d-flex flex-column justify-space-between text-center align-center items">
           <div>
             <div class="icons d-flex flex-column justify-center align-center">
@@ -15,14 +15,14 @@
                 {{ item.content.heading }}
               </span>
             </div>
-            <div class="my-5 is-dark-grey general-font-size description">
+            <div class="is-dark-grey general-font-size description">
               {{ item.content.description }}
             </div>
           </div>
           <div class="items-column">
             <div class="general-font-size d-flex flex-column flex-1 buttons-wrapper">
-              <a :href="item.content.link" target="_blank" class="is-red is-clickable">
-                <v-btn variant="flat" color="primary" rounded="pill" size="large">
+              <a :href="item.content.link" target="_blank" class="is-clickable">
+                <v-btn variant="flat" color="primary" rounded="pill" size="large" class="general-font-size">
                   <span>{{ item.content.linkText }}</span>
                 </v-btn>
               </a>
@@ -56,7 +56,7 @@ export default defineComponent({
           heading: "Ärztlicher Bereitschaftsdienst",
           image: image2,
           description:
-            "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe.",
+            "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe. HILFE HILFE HILFE",
           linkText: "Notruf 116 117",
           link: "https://www.116117.de/de/index.php",
         },
@@ -94,13 +94,17 @@ export default defineComponent({
     margin: 0 1rem
 
 .items-column
-  margin: 0 2.5rem
+  margin: 1rem 2.5rem
 
 .description
   min-height: 150px
+
 
 .buttons-wrapper
   @include md
     height: auto
     margin: 2rem 0
+
+.items-nummber
+  margin: 0 2rem
 </style>
