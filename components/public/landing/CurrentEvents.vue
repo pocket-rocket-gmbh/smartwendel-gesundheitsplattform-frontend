@@ -5,7 +5,9 @@
         <v-col class="d-flex align-center">
           <div>
             <!-- TODO: Split? -->
-            <h2 class="is-primary text-h4 font-weight-bold text-uppercase mb-5">Kurse und Veranstaltungen</h2>
+            <h2 class="is-primary text-h4 font-weight-medium mb-5">
+              Kurse und Veranstaltungen
+            </h2>
           </div>
         </v-col>
       </v-row>
@@ -22,7 +24,14 @@
     <div>
       <v-row>
         <v-col md="12" class="d-flex justify-center mt-10">
-          <v-btn variant="flat" color="primary" rounded="pill" size="large" @click="goToEvents()">
+          <v-btn
+            variant="flat"
+            color="primary"
+            rounded="pill"
+            size="large"
+            class="general-font-size"
+            @click="goToEvents()"
+          >
             <span> Alles Anzeigen </span>
           </v-btn>
         </v-col>
