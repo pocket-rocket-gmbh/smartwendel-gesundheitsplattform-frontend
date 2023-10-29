@@ -1,16 +1,16 @@
 <template>
   <v-row class="my-10 general-font-size">
-    <v-col sm="3" md="4" offset-sm="4">
+    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2" >
       <v-card :class="['pa-6', { shake: animated }]">
         <img class="is-fullwidth" src="~/assets/images/logo.png" />
 
         <div v-if="resetSuccessful" class="mt-3" align="center">
-          <span
+          <span class="general-font-size is-dark-grey"
             >Das Zurücksetzen Deines Passworts wurde angefragt.<br />Bitte folge den
             Anweisungen in der E-Mail.</span
           >
           <div class="mt-5">
-            <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>
+            <v-btn color="primary" @click="toLogin" class="general-font-size" size="large" block depressed>Jetzt anmelden</v-btn>
           </div>
         </div>
         <div v-else>
@@ -24,10 +24,10 @@
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
-          <v-btn class="mb-6" color="primary" block depressed @click="auth">
+          <v-btn class="mb-6 general-font-size" color="primary" size="large" block depressed @click="auth">
             Neues Passwort anfordern
           </v-btn>
-          <v-btn block depressed @click="goBack"> zurück </v-btn>
+          <v-btn class="general-font-size" block depressed @click="goBack"> zurück </v-btn>
         </div>
       </v-card>
     </v-col>

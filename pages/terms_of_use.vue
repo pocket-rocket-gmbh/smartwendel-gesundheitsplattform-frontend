@@ -1,12 +1,12 @@
 <template>
-  <div class="has-text-white">
+  <div class="general-font-size is-dark-grey">
     <v-container>
       <h1>
         Allgemeine Nutzungsbedingungen der Online-Projektplattform
         unser.smartwendelerland.de
       </h1>
       <v-container>
-        <h2>Allgemeines</h2>
+        <span class="font-weight-medium">Allgemeines</span>
         <p>
           Der Landkreis Sankt Wendel, Mommstraße 21-31 8, 66606 St. Wendel betreibt die
           Online-Plattform unser.smartwendelerland.de. Die Plattform ermöglicht es
@@ -22,7 +22,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Vertragsschluss</h2>
+        <span class="font-weight-medium">Vertragsschluss</span>
         <p>
           Die Nutzung der Plattform erfolgt auf Grundlage eines Nutzungsvertrags. Der
           Nutzungsvertrag kommt durch die kostenfreie Registrierung der Nutzer:innen
@@ -30,7 +30,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Registrierung</h2>
+        <span class="font-weight-medium">Registrierung</span>
         <p>
           Jede natürliche Person kann sich auf unser.smartwendelerland.de registrieren.
           Die Registrierung ist über die plattformeigene Registrierung, möglich. Dabei ist
@@ -60,7 +60,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Erstellen von Inhalten</h2>
+        <span class="font-weight-medium">Erstellen von Inhalten</span>
         <p>
           Je nachdem, welches Vorhaben aktuell für eine Beteiligung auf der Plattform
           geöffnet ist, können die Nutzer:innen Ideen einbringen, Vorschläge erstellen,
@@ -83,7 +83,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Pflichten der Nutzer:innen</h2>
+        <span class="font-weight-medium">Pflichten der Nutzer:innen</span>
         <p>
           Die Nutzer:innen dürfen die Plattform nur für private Zwecke nutzen.
           <br />
@@ -136,7 +136,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Nutzungsrechte</h2>
+        <span class="font-weight-medium">Nutzungsrechte</span>
         <p>
           Erstellte Inhalte werden automatisch veröffentlicht.
           <br />
@@ -166,7 +166,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Haftung</h2>
+        <span class="font-weight-medium">Haftung</span>
         <p>
           Die Nutzer:innen sind allein für ihre Inhalte und für die Einhaltung der
           gesetzlichen und sonstigen Vorschriften und Regelungen verantwortlich. Alle
@@ -201,7 +201,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Freistellungsanspruch</h2>
+        <span class="font-weight-medium">Freistellungsanspruch</span>
         <p>
           Die Nutzer:innen stellen den Landkreis für den Fall der Inanspruchnahme wegen
           vermeintlicher oder tatsächlicher Rechtsverletzung und/oder Verletzung von
@@ -214,7 +214,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Weiterverwendung und Umsetzung der Nutzer:innen-Beiträge</h2>
+        <span class="font-weight-medium">Weiterverwendung und Umsetzung der Nutzer:innen-Beiträge</span>
         <p>
           Die Plattform unser.smartwendelerland.de dient vorrangig dazu, dass Nutzer:innen
           ihre Ideen, Vorschläge und Diskussionsbeiträge einbringen können. Eine
@@ -225,7 +225,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Beendigung des Nutzungsverhältnisses</h2>
+        <span class="font-weight-medium">Beendigung des Nutzungsverhältnisses</span>
         <p>
           Die Nutzer:innen können das Nutzungsverhältnis jederzeit ordentlich gegenüber
           dem Betreiber oder durch Löschung des Nutzer:innenkontos kündigen. Das Recht zur
@@ -239,7 +239,7 @@
         </p>
       </v-container>
       <v-container>
-        <h2>Schlussbestimmungen</h2>
+        <span class="font-weight-medium">Schlussbestimmungen</span>
         <p>
           Auf diese Nutzungsbedingungen findet ausschließlich deutsches Recht Anwendung.
           <br />

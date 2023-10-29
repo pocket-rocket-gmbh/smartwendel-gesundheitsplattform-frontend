@@ -44,7 +44,7 @@
               </div>
               <v-row>
                 <v-col cols="12" md="6" sm="6" xl="6">
-                  <div class="text-dark-grey mt-4">
+                  <div class="is-dark-grey mt-4">
                     <div class="d-flex">
                       <img class="mr-2 icon" :src="iconAddress" />
                       <div v-if="careFacility.street">{{ careFacility.street }}</div>
@@ -58,14 +58,14 @@
                   </div>
                 </v-col>
                 <v-col>
-                  <div class="text-dark-grey mt-4">
+                  <div class="mt-4">
                     <div v-if="careFacility.phone" class="d-flex align-center">
                       <img class="mr-2 icon" :src="iconPhone" />
-                      <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
+                      <a class="is-dark-grey" :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
                     </div>
                     <div v-if="careFacility.email" class="d-flex align-center">
                       <img class="mr-2 icon" :src="iconMail" />
-                      <a :href="`mailto:${careFacility.email}`">{{
+                      <a class="is-dark-grey" :href="`mailto:${careFacility.email}`">{{
                         careFacility.email
                       }}</a>
                     </div>
@@ -89,6 +89,7 @@
             <v-col align="right" class="action">
               <v-btn
                 variant="flat"
+                class="general-font-size"
                 color="primary"
                 rounded="pill"
                 size="large"

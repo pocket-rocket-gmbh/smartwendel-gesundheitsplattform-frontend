@@ -23,17 +23,17 @@
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
-          <v-btn color="primary" block depressed type="submit">Login</v-btn>
+          <v-btn color="primary" block depressed type="submit" class="general-font-size" size="large">Login</v-btn>
           <div
             @click="emailAlreadyGiven()"
             align="center"
-            class="mt-2 is-clickable"
+            class="mt-2 is-clickable is-dark-grey general-font-size"
           >
             Passwort vergessen?
           </div>
 
           <nuxt-link to="/register"
-            ><div align="center" class="mt-6">
+            ><div align="center" class="mt-6 is-dark-grey general-font-size">
               Noch keinen Account? Jetzt registrieren!
             </div></nuxt-link
           >

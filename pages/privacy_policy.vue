@@ -1,10 +1,10 @@
 <template>
-  <div class="general-font-size">
+  <div class="general-font-size is-dark-grey">
     <v-container class="mt-10">
-      <h1>Datenschutzerklärung</h1>
+      <div class="font-weight-medium">Datenschutzerklärung</div>
     </v-container>
     <v-container>
-      <h2>1. Allgemeine Hinweise</h2>
+      <span class="font-weight-medium">1. Allgemeine Hinweise</span>
       <p>
         Wir behandeln personenbezogene Daten gemäß der gesetzlichen
         Datenschutzvorschriften insbesondere der DS-GVO und dem Saarländischen
@@ -29,7 +29,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>2. Verantwortlicher</h2>
+      <span class="font-weight-medium">2. Verantwortlicher</span>
       <p>
         Verantwortlicher ist die natürliche oder juristische Person, die allein oder
         gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von
@@ -50,7 +50,7 @@
       <p>Landrat Udo Recktenwald</p>
     </v-container>
     <v-container>
-      <h2>3. Der behördliche Datenschutzbeauftragte</h2>
+      <span class="font-weight-medium">3. Der behördliche Datenschutzbeauftragte</span>
       <p>Kontaktdaten des behördlichen Datenschutzbeauftragten:</p>
       <br />
       <p>Datenschutzbeauftragter Christian Kaster</p>
@@ -61,12 +61,12 @@
       <p>E-Mail: datenschutz@lkwnd.de</p>
     </v-container>
     <v-container>
-      <h2>4. Zwecke und Rechtsgrundlagen der Verarbeitung von Daten</h2>
+      <span class="font-weight-medium">4. Zwecke und Rechtsgrundlagen der Verarbeitung von Daten</span>
       <br />
-      <h3>
+      <span class="font-weight-medium">
         4.1. Aufruf und Besuch unserer Gesundheits- und Pflegeplattform –
         Server-Log-Dateien
-      </h3>
+      </span>
       <p>
         Zum Zweck der technischen Bereitstellung der Gesundheits- und Pflegeplattform, ist
         es erforderlich, dass wir bestimmte, durch Ihren Browser automatisch übermittelte
@@ -109,7 +109,7 @@
       </p>
     </v-container>
     <v-container>
-      <h3>4.2 Kontaktaufnahme</h3>
+      <span class="font-weight-medium">4.2 Kontaktaufnahme</span>
       <p>
         Wenn Sie uns kontaktieren, werden Ihre Nachricht / Mitteilung inklusive der von
         Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung und Beantwortung der
@@ -127,7 +127,7 @@
       </p>
     </v-container>
     <v-container>
-      <h3>4.3 Verwendung von Cookies und zugehöriger Funktionen/Technologien</h3>
+      <span class="font-weight-medium">4.3 Verwendung von Cookies und zugehöriger Funktionen/Technologien</span>
       <p>
         Wir setzen auf unserer Website teilweise so genannte Cookies ein. Cookies dienen
         dazu, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen und die
@@ -194,7 +194,7 @@
       </p>
     </v-container>
     <v-container>
-      <h3>4.4 Registrierung und Beteiligung</h3>
+      <span class="font-weight-medium">4.4 Registrierung und Beteiligung</span>
       <p>
         Um die Gesundheits- und Pflegeplattform nutzen zu können, müssen Sie sich
         registrieren. Hierzu ist die Angabe des Vor- und Nachnamens, Ihrer Telefonnummer,
@@ -225,7 +225,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>5. Empfänger von Daten</h2>
+      <span class="font-weight-medium">5. Empfänger von Daten</span>
       <p>
         Innerhalb der Behörde erhalten diejenigen Stellen Zugriff auf Ihre Daten, die
         diese zur Erfüllung unserer vertraglichen und gesetzlichen Pflichten brauchen.
@@ -238,7 +238,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>6. Datenübermittlung in Drittländer</h2>
+      <span class="font-weight-medium">6. Datenübermittlung in Drittländer</span>
       <p>
         Wir übertragen Ihre personenbezogenen Daten nicht in Länder außerhalb der EU bzw.
         des EWR oder an internationale Organisationen, soweit in dieser
@@ -246,7 +246,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>7. Dauer der Datenspeicherung</h2>
+      <span class="font-weight-medium">7. Dauer der Datenspeicherung</span>
       <p>
         Wir verarbeiten und speichern Ihre personenbezogenen Daten zunächst für die Dauer,
         für die der jeweilige Nutzungszweck eine entsprechende Speicherung erfordert.
@@ -262,7 +262,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>8. Datensicherheit</h2>
+      <span class="font-weight-medium">8. Datensicherheit</span>
       <p>
         Personenbezogene Daten werden durch uns mittels geeigneter technischer und
         organisatorischer Maßnahmen geschützt, um ein angemessenes Schutzniveau zu
@@ -283,12 +283,12 @@
       </p>
     </v-container>
     <v-container>
-      <h2>9. Ihre Rechte als betroffene Person</h2>
-      <h3>
+      <span class="font-weight-medium">9. Ihre Rechte als betroffene Person</span>
+      <span class="font-weight-medium">
         Ihnen stehen unter den gesetzlichen Voraussetzungen die nachfolgenden Rechte als
         betroffene Person zu:
-      </h3>
-      <h4>Auskunftsrecht:</h4>
+      </span>
+      <span class="font-weight-medium">Auskunftsrecht:</span>
       <p>
         Sie sind jederzeit berechtigt, im Rahmen von Art. 15 DSGVO von uns eine
         Bestätigung darüber zu verlangen, ob wir Sie betreffende personenbezogene Daten
@@ -301,14 +301,14 @@
         erhalten. Es gelten die Einschränkungen des § 34 BDSG.
       </p>
       <br />
-      <h4>Recht auf Berichtigung:</h4>
+      <span class="font-weight-medium">Recht auf Berichtigung:</span>
       <p>
         Sie sind berechtigt, nach Art. 16 DSGVO von uns zu verlangen, dass wir die über
         Sie gespeicherten personenbezogenen Daten berichtigen, wenn diese unzutreffend
         oder fehlerhaft sind.
       </p>
       <br />
-      <h4>Recht auf Löschung:</h4>
+      <span class="font-weight-medium">Recht auf Löschung:</span>
       <p>
         Sie sind berechtigt, unter den Voraussetzungen von Art. 17 DSGVO von uns zu
         verlangen, dass wir Sie betreffende personenbezogene Daten unverzüglich löschen.
@@ -322,7 +322,7 @@
         Einschränkungen des § 35 BDSG.
       </p>
       <br />
-      <h4>Recht auf Einschränkung der Verarbeitung:</h4>
+      <span class="font-weight-medium">Recht auf Einschränkung der Verarbeitung:</span>
       <p>
         Sie sind berechtigt, unter den Voraussetzungen von Art. 18 DSGVO von uns zu
         verlangen, dass wir die Verarbeitung Ihrer personenbezogenen Daten einschränken.
@@ -332,7 +332,7 @@
         strukturierten, gängigen und maschinenlesbaren Format übergeben.
       </p>
       <br />
-      <h4>Widerrufsrecht:</h4>
+      <span class="font-weight-medium">Widerrufsrecht:</span>
       <p>
         Eine erteilte Einwilligung in die Verarbeitung personenbezogener Daten können Sie
         jederzeit uns gegenüber widerrufen. Bitte beachten Sie, dass der Widerruf erst für
@@ -341,7 +341,7 @@
         per E-Mail an datenschutz(at)lkwnd.de.
       </p>
       <br />
-      <h4>Widerspruchsrecht:</h4>
+      <span class="font-weight-medium">Widerspruchsrecht:</span>
       <p>
         Sie sind berechtigt, unter den Voraussetzungen von Art. 21 DSGVO Widerspruch gegen
         die Verarbeitung Ihrer personenbezogenen Daten einzulegen, sodass wir die
@@ -351,7 +351,7 @@
         Ihres Widerspruchs berechtigt sind, Ihre personenbezogenen Daten zu verarbeiten.
       </p>
       <br />
-      <h4>Beschwerderecht bei einer Aufsichtsbehörde:</h4>
+      <span class="font-weight-medium">Beschwerderecht bei einer Aufsichtsbehörde:</span>
       <p>
         Unter den Voraussetzungen von Art. 77 DSGVO in Verbindung mit § 19 BDSG steht
         Ihnen ein Beschwerderecht bei einer zuständigen Aufsichtsbehörde zu. Insbesondere
@@ -371,7 +371,7 @@
       <p>E-Mail: poststelle@datenschutz.saarland.de</p>
 
       <br />
-      <h4>Sonstige Anliegen:</h4>
+      <span class="font-weight-medium">Sonstige Anliegen:</span>
       <p>
         Für weitergehende Datenschutzfragen und -anliegen steht Ihnen unser
         Datenschutzbeauftragter zur Verfügung. Entsprechende Anfragen sowie die Ausübung
@@ -381,8 +381,8 @@
     </v-container>
 
     <v-container>
-      <h2>Umsetzung</h2>
-      <h4>Konzeption, Design und Entwicklung</h4>
+      <span class="font-weight-medium">Umsetzung</span>
+      <div class="font-weight-medium">Konzeption, Design und Entwicklung</div>
       <p>Pocket Rocket GmbH</p>
       <p>Essener Straße 4</p>
       <p>66606 St. Wendel</p>

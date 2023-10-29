@@ -1,20 +1,20 @@
 <template>
   <div>
-    <h2 class="is-dark-grey is-uppercase">Suche filtern</h2>
+    <span class="general-font-size font-weight-medium is-dark-grey">Verfeinere hier deine Suche:</span>
     <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
       <div class="filter-tiles">
         <div v-for="filter in itemsForServiceList" class="filter-group">
           <div v-for="item in filter.next" class="mt-5 filter-selections">
-            <span v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)" class="text-h5">{{ item.title }}</span>
-            <v-row no-gutters class="mt-3 fill-height mr-1">
+            <span v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)" class="general-font-size font-weight-bold is-dark-grey">{{ item.title }}</span>
+            <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1">
               <v-col cols="12" lg="6" md="12" class="align-center column-items pr-1 pt-1" v-for="subItem in item.next" v-auto-animate>
                 <div
-                  v-if="subItem && subItem?.care_facilities_count"
+                  v-if="subItem"
                   class="filter-tile"
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
                 >
-                  <span class="word-break general-font-size">
+                  <span class="word-break sub-item-title general-font-size">
                     {{ subItem.title }}
                   </span>
                 </div>
@@ -218,6 +218,10 @@ onMounted(async () => {
 
 .sub-filter {
   margin-top: 2rem;
+}
+
+.sub-item-title {
+  line-height: 27px;
 }
 
 .filter-sticky {
