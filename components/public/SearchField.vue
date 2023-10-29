@@ -10,7 +10,7 @@
             type="text"
             @keyup.enter="handlePressEnter($event)"
             :value="modelValue"
-            class="input"
+            class="input is-dark-grey general-font-size"
             :placeholder="placeholderText"
             @input="handleInput"
             @click="showPopover = true"
@@ -29,7 +29,7 @@
 
       <div
         v-show="modelValue && showPopover"
-        class="search-results-popover"
+        class="search-results-popover is-dark-grey general-font-size"
         :class="[defaultStyling ? 'default' : 'styled']"
         ref="popoverParentRef"
       >
@@ -53,11 +53,11 @@
               </div>
               <div class="name">{{ modelValue }}</div>
             </div>
-            <div v-if="!filteredItems?.length && kind" class="name">
+            <div v-if="!filteredItems?.length && kind" class="name is-dark-grey general-font-size">
               Keine Ergebnisse gefunden
             </div>
             <div
-              class="result"
+              class="result is-dark-grey general-font-size"
               v-for="result in filteredItems"
               :key="result.id"
               @click.stop="
