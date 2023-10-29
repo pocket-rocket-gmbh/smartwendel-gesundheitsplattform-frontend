@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper bg-gradient">
     <div class="d-flex align-center justify-center">
-      <div class="text-white text-h4 my-5">
+      <div class="text-white text-h4 font-weight-medium my-5">
         Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun
         kannst.
       </div>
