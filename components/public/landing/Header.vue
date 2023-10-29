@@ -1,8 +1,8 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper mt-n15">
     <h1 class="title">{{ title }}</h1>
     <PublicLandingChooseCategory class="search-field"/>
-    <p class="general-font-size sub-title">{{ subTitle }}</p>
+    <p class="sub-title">{{ subTitle }}</p>
   </div>
 </template>
 
@@ -37,9 +37,9 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 1rem;
+  gap: 2rem;
   justify-content: center;
-  width: 40%;
+  width: 50%;
   padding: 0 0 0 5rem;
 
   @include lg {
@@ -75,9 +75,10 @@ onMounted(() => {
   .sub-title {
     color: white;
     font-style: normal;
-    font-weight: 400;
-    line-height: 160%;
+    font-weight: 300;
+    line-height: 35px;
     width: 75%;
+    font-size: 27px;
 
     @include md {
       text-align: center;

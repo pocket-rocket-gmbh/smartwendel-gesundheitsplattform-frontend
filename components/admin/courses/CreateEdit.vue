@@ -332,7 +332,7 @@
                   hide-details="auto"
                   label="Kursdauer (HH:MM)"
                   placeholder="z.B. 01:30"
-                  :rules="[rules.required, rules.validateEventDuration]"
+                  :rules="[rules.required]"
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
               </div>

@@ -12,7 +12,7 @@
           <div v-if="breakPoints.width.value >= 1400" class="align-center d-flex mx-2">
             <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
               <div class="title mx-5 font-weight-medium">
-                <span class="is-clickable main" @click="setItemsAndGo(category, null)">
+                <span class="is-clickable main is-dark-grey" @click="setItemsAndGo(category, null)">
                   {{ category.name }}
                 </span>
               </div>
@@ -22,7 +22,7 @@
                     <div v-for="(sub_category, index) in subCategories[category.id]" :key="sub_category.id" @click="setItemsAndGo(category, sub_category)">
                       <div class="list-item main">
                         <div>
-                          <span class="is-clickable main font-weight-medium">
+                          <span class="is-clickable main font-weight-medium is-dark-grey">
                             {{ sub_category.name }}
                           </span>
                         </div>
@@ -32,7 +32,7 @@
                 </v-list>
               </div>
             </div>
-            <div v-if="!loading" class="main font-weight-medium">
+            <div v-if="!loading" class="main font-weight-medium is-dark-grey">
               <span href="/public/search/facilities" class="is-clickable mx-5" @click.prevent="goTo('/public/search/facilities')"> Anbietersuche </span>
               <span href="/public/search/courses" class="is-clickable mx-5" @click.prevent="goTo('/public/search/courses')"> Kurse </span>
               <span href="/public/search/events" class="is-clickable mx-5" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </span>
@@ -44,7 +44,7 @@
         <div class="has-bg-primary text-white offer py-1" v-if="!useUser().loggedIn() && breakPoints.width.value >= 1530 && currentRoute !== '/register'">
           <v-row class="mx-1 text-center">
             <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
-              <div class="font-weight-bold">Dein Angebot fehlt?</div>
+              <div class="font-weight-medium">Dein Angebot fehlt?</div>
               <div class="font-weight-light">Registriere dich!</div>
             </v-col>
           </v-row>
@@ -58,9 +58,9 @@
           </v-btn>
         </div>
         <div class="d-flex align-center main">
-          <span class="mx-3 menu-list pointer" v-if="useUser().isAdmin() && breakPoints.width.value >= 1530" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </span>
+          <span class="mx-3 menu-list is-dark-grey pointer" v-if="useUser().isAdmin() && breakPoints.width.value >= 1530" href="/admin" @click.prevent="saveCurrentUrlAndRoute('/admin')"> Admin-Bereich </span>
           <span
-            class="mx-3 menu-list pointer"
+            class="mx-3 menu-list pointer is-dark-grey"
             v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
@@ -78,7 +78,7 @@
       <div class="navigation-drawer-content">
         <div class="has-bg-primary text-white offer d-flex align-center justify-center py-2" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
           <div @click="goToRegister()">
-            <div class="font-weight-bold">Dein Angebot fehlt?</div>
+            <div class="font-weight-medium">Dein Angebot fehlt?</div>
             <div class="font-weight-light">Registriere dich!</div>
           </div>
         </div>

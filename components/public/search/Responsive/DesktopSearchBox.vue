@@ -3,7 +3,7 @@
     <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
       <v-row>
         <v-col class="d-flex">
-          <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
+          <span class="font-weight-medium text-h4 text-white">{{ subTitle }}</span>
             <v-btn
               v-if="useUser().isAdmin()"
               prepend-icon="mdi-content-copy"
@@ -26,9 +26,10 @@
             min-width="250px"
             max-width="250px"
             rounded="pill"
+            size="large"
             color="white"
             @click="emit('toggleMap')"
-            class="font-weight-bold"
+            class="general-font-size"
           >
             <span v-if="showMap"> Listenansicht </span>
             <span v-else> Kartenansicht </span>
@@ -39,7 +40,7 @@
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field general-font-size">
             <label class="label is-white">
-              <div class="search-term">
+              <div class="search-term font-weight-medium general-font-size">
                 <span>{{ filterTitle }}</span>
               </div>
             </label>
@@ -52,7 +53,7 @@
         </v-col>
         <v-col v-if="filterKind !== 'event'">
           <div class="field general-font-size">
-            <label class="label is-white">Gemeinde</label>
+            <label class="label is-white font-weight-medium">Gemeinde</label>
             <div class="select-wrapper">
               <select
                 class="input select"
@@ -72,11 +73,11 @@
           md="1"
           class="d-flex justify-center align-end is-white mb-5"
         >
-          <div class="label general-font-size font-weight-bold">oder</div>
+          <div class="label font-weight-medium general-font-size">oder</div>
         </v-col>
         <v-col>
           <div class="field general-font-size">
-            <label class="label is-white">
+            <label class="label is-white font-weight-medium">
               <div class="search-term">
                 <span>{{ searchTitle }}</span>
               </div>
@@ -93,26 +94,28 @@
         </v-col>
         <v-col class="d-flex align-end field mb-4">
           <v-btn
-            class="font-weight-bold"
+            class="general-font-size"
             min-width="250px"
             max-width="250px"
+            size="large"
             variant="outlined"
             rounded="pill"
             color="white"
             @click="filterStore.clearSearch()"
           >
-            Auswahl zurücksetzen
+          <span>Filter löschen</span>
+           
           </v-btn>
         </v-col>
       </v-row>
     </div>
   </div>
-  <v-row class="has-bg-darken-grey text-white font-weight-bold">
+  <v-row class="has-bg-darken-grey text-white">
     <v-col
-      class="d-flex justify-center align-center font-weight-medium general-font-size bottom-actions mx-3"
+      class="d-flex justify-center align-center bottom-actions mx-3"
     >
       <LoadingSpinner v-if="filterStore.loading" />
-      <span v-else-if="filterStore.filteredResults.length"
+      <span class=" general-font-size" v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }} Treffer</span
       >
       <span v-else>

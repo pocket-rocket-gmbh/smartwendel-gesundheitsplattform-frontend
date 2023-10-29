@@ -2,9 +2,9 @@
   <div>
     <v-row class="mt-4 search-field-search">
       <v-col class="d-flex align-center is-white">
-        <h2 class="is-white font-weight-bold">
+        <span class="is-white font-weight-medium general-font-size">
           Suchbegriff: {{ filterStore.currentSearchTerm }}
-        </h2>
+        </span>
       </v-col>
       <v-col>
         <PublicSearchField
@@ -32,23 +32,20 @@
                 <br />
                 Leider haben wir kein Suchergebnis zu deiner Anfrage.
               </div>
-              <v-btn class="my-5" prepend-icon="mdi-chevron-left" @click="goBack()">
-                Zurück zur Suche
-              </v-btn>
             </div>
-            <img :src="noResults" class="no-results-image" />
+            <img :src="noResults" class="no-results-image mt-10" />
           </v-col>
         </v-row>
         <v-row class="mt-4" v-else>
           <v-col class="kinds">
             <v-btn
-              v-for="kind in filteredKinds"
-              :key="kind"
+            v-for="(kind, index) in filteredKinds"
+              :key="index"
               variant="outlined"
               size="large"
               rounded="lg"
               color="primary"
-              class="kind"
+              class="kind general-font-size"
               @click="routeToFilterPage(kind)"
             >
               {{ getMappedKindName(kind) }}
@@ -152,7 +149,7 @@ onMounted(async () => {
   }
 }
 .no-results-image {
-  max-width: 600px;
+  max-width: 800px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
   border-radius: 20px;
 }

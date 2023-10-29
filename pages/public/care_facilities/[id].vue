@@ -1,6 +1,6 @@
 <template>
   <div class="facility-wrapper limited offset content-wrapper" v-if="!loading">
-    <v-btn prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
+    <v-btn prepend-icon="mdi-chevron-left" class="general-font-size" size="large" @click="goBack()"> Zurück zur Suche </v-btn>
     <div v-if="careFacility?.kind === 'news'" class="mt-8">
       <img :src="careFacility?.image_url" class="news-image" />
       <div class="mb-3">
@@ -10,7 +10,7 @@
               <span class="pr-1"
                 ><v-icon color="primary">mdi-clock-time-three-outline</v-icon></span
               >
-              <span>{{ useDatetime().parseDatetime(careFacility.created_at) }}</span>
+              <span class="general-font-size is-dark-grey">{{ useDatetime().parseDatetime(careFacility.created_at) }}</span>
             </div>
             <div
               class="d-flex align-center facility-name is-clickable"
@@ -18,7 +18,7 @@
             >
               <a
                 :href="`/public/care_facilities/${careFacility?.user_care_facility?.id}`"
-                class="is-clickable d-flex"
+                class="is-clickable d-flex general-font-size is-dark-grey"
               >
                 <v-icon color="primary" class="facility-name">mdi-home-outline</v-icon>
                 <span
@@ -29,7 +29,7 @@
             </div>
             <div class="bar-item" v-if="careFacility?.name_instructor">
               <span class="px-1"><v-icon color="primary">mdi-account</v-icon></span>
-              <span>{{ careFacility?.name_instructor }}</span>
+              <span class="general-font-size is-dark-grey">{{ careFacility?.name_instructor }}</span>
             </div>
           </v-col>
           <v-divider class="my-1 mb-3"></v-divider>

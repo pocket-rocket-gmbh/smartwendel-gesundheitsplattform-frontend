@@ -1,6 +1,6 @@
 <template>
-  <div ref="contentBoxRef" class="content-box" v-resize="handleResize">
-    <a class="image" :href="buttonHref" v-if="showImage">
+  <div ref="contentBoxRef" class="content-box" v-resize="handleResize" >
+    <a class="image" :href="buttonHref" v-if="showImage && breakPoints.width.value >= 1420">
       <img v-if="item.image_url" :src="item.image_url" />
       <img v-else :src="noImage" />
     </a>
@@ -11,38 +11,36 @@
             class="d-flex align-center facility-name is-clickable"
             v-if="item.user_care_facility?.name && item.kind !== 'facility'"
           >
-            <span>
+            <span class="mr-3">
               <img :src="facilityIcon" />
             </span>
-            <v-btn
+            <a
+              class="is-dark-grey"
               :href="`/public/care_facilities/${item.user_care_facility?.id}`"
-              variant="text"
-              size="small"
             >
               <span
-                class="break-title facility-name"
+                class="break-title facility-name general-font-size"
                 v-html="item.user_care_facility?.name"
               ></span>
-            </v-btn>
+            </a>
           </div>
           <div
             class="d-flex align-center justify-end"
             v-if="item.created_at && item.kind === 'news'"
           >
-            <v-icon>mdi-calendar-outline</v-icon
-            ><span class="break-title">{{
-              useDatetime().parseDatetime(item.created_at)
-            }}</span>
+            <img :src="eventsIcon" class="mr-2" /><span
+              class="break-title facility-name"
+              >{{ useDatetime().parseDatetime(item.created_at) }}</span
+            >
           </div>
         </div>
         <hr v-if="item.kind !== 'facility'" />
       </template>
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
-          <a :href="`/public/care_facilities/${item.id}`" v-if="!item.url_kind">
+          <a :href="buttonHref">
             <span class="title is-clickable break-title">{{ item.name }}</span>
           </a>
-          <span v-else class="title break-title">{{ item.name }}</span>
         </div>
         <span
           :class="item.description.length > 300 ? 'break-text' : ''"
@@ -50,23 +48,36 @@
           v-html="item.description"
         ></span>
       </div>
-      <div class="action mb-n1" v-if="buttonHref">
-        <v-btn
-          :href="buttonHref"
-          :target="item.url ? '_blank' : ''"
-          variant="flat"
-          color="primary"
-          rounded="pill"
-          :width="breakPoints.width.value > 960 ? '' : '100%'"
+      <div class="d-flex align-center justify-space-between">
+        <div class="action mb-n2" v-if="buttonHref">
+          <v-btn
+            :href="buttonHref"
+            :target="item.url ? '_blank' : ''"
+            variant="flat"
+            color="primary"
+            size="large"
+            class="general-font-size"
+            rounded="pill"
+            :width="breakPoints.width.value > 960 ? '' : '100%'"
+          >
+            <span class="general-font-size" v-if="item.kind">{{
+              buttonText
+            }}</span>
+            <span class="general-font-size" v-else-if="item.url_kind">{{
+              item.button_text
+            }}</span>
+            <span class="general-font-size" v-else> Mehr anzeigen</span>
+          </v-btn>
+        </div>
+        <div
+          class="general-font-size d-flex align-center mb-n3"
+          v-if="item.kind === 'event' || item.kind === 'course'"
         >
-          <span class="general-font-size text-none" v-if="item.kind">{{
-            buttonText
-          }}</span>
-          <span class="general-font-size text-none" v-else-if="item.url_kind">{{
-            item.button_text
-          }}</span>
-          <span class="general-font-size text-none" v-else> Mehr anzeigen</span>
-        </v-btn>
+          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1700">
+            <img :src="eventsIcon" class="mr-1" />
+            {{ item?.event_dates?.[0]?.slice(0, 10) }}
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -76,6 +87,7 @@ import { Facility } from "~/store/searchFilter";
 import noImage from "@/assets/images/no-image.svg";
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
+import { default as eventsIcon } from "~/assets/icons/facilityTypes/events.svg";
 
 const props = defineProps<{
   item: Facility;
@@ -125,12 +137,12 @@ const buttonText = computed(() => {
     if (props.item.kind === "news") return "Zum Beitrag";
     if (props.item.kind === "facility") return "Zur Einrichtung";
   }
-});
+})
 
 const handleResize = () => {
   if (!contentBoxRef.value) return;
-
-  showImage.value = contentBoxRef.value.getBoundingClientRect().width > 550;
+  const imageWidth = contentBoxRef.value.getBoundingClientRect().width
+  showImage.value = imageWidth > 550;
 };
 </script>
 <style lang="scss" scoped>
@@ -141,6 +153,8 @@ const handleResize = () => {
 }
 
 $max-height: 315px;
+$max-width: 300px;
+$min-width: 200px;
 
 .content-box {
   background-color: #f5f5f5;
@@ -160,7 +174,7 @@ $max-height: 315px;
     display: block;
 
     img {
-      width: $max-height;
+      width: $max-width;
       height: $max-height;
       object-fit: cover;
     }
@@ -203,7 +217,7 @@ $max-height: 315px;
       line-height: 30px;
 
       .title {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 500;
         color: #8ab61d;
         &:visited {
@@ -225,8 +239,8 @@ $max-height: 315px;
   word-break: break-word;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
-  line-clamp: 5;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
   -webkit-box-orient: vertical;
 }
 
@@ -237,5 +251,9 @@ $max-height: 315px;
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
+}
+
+.content {
+  line-height: 27px;
 }
 </style>

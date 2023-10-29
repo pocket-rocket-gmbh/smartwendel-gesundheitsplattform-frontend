@@ -32,7 +32,8 @@
               :src="careFacility?.sanitized_images?.[1].url"
             />
             <v-btn
-              class="show-more"
+              class="show-more general-font-size"
+              size="large"
               v-if="careFacility.sanitized_images.length > 1"
               @click="showGallery()"
             >

@@ -5,7 +5,7 @@
         <v-row class="has-bg-grey register-hint">
           <v-col
             md="8"
-            class="flex-column justify-start text-h4 has-bg-grey is-dark-grey font-weight-bold"
+            class="flex-column justify-start text-h4 has-bg-grey is-dark-grey font-weight-medium"
           >
             <div>Dein Angebot fehlt?</div>
             <div>Hier kannst du deine Einrichtung registrieren!</div>
@@ -16,8 +16,9 @@
             <v-btn
               variant="flat"
               color="grey"
+              class="general-font-size"
               rounded="pill"
-              size="x-large"
+              size="large"
               href="/register"
             >
               <span>Jetzt registrieren</span>
@@ -89,9 +90,9 @@
           </v-col>
           <v-col class="links d-flex ma-0 pt-0 align-start">
             <div class="ml-md-15">
-              <h2>Landkreis Sankt Wendel</h2>
+              <span class="general-font-size font-weight-medium is-dark-grey">Landkreis Sankt Wendel</span>
               <div class="footer-links">
-                <p class="is-clickable">
+                <p class="is-clickable is-dark-grey">
                   <span>
                     <a
                       class="is-dark-grey"
@@ -101,17 +102,17 @@
                   </span>
                 </p>
                 <p class="is-clickable is-dark-grey">
-                  <router-link to="/rules_of_conduct"
+                  <router-link class="is-dark-grey" to="/rules_of_conduct"
                     >Nutzungsbedingungen</router-link
                   >
                 </p>
                 <p class="is-clickable is-dark-grey">
-                  <router-link to="/privacy_policy"
+                  <router-link class="is-dark-grey" to="/privacy_policy"
                     >Datenschutzerklärung</router-link
                   >
                 </p>
                 <p class="is-clickable is-dark-grey">
-                  <router-link to="/imprint">Impressum</router-link>
+                  <router-link class="is-dark-grey" to="/imprint">Impressum</router-link>
                 </p>
               </div>
               <div class="socials mt-5">
@@ -161,7 +162,7 @@
         </v-row>
         <v-row v-if="breakPoints.width.value < 960">
           <v-col>
-            <div class="disclamer text-wrap is-dark-grey mt-5">
+            <div class="disclamer text-wrap is-dark-grey general-font-size mt-5">
               Zur besseren Lesbarkeit wird auf der Gesundheits- und Pflegeplattform das
               generische Maskulinum verwendet. Die auf dieser Webseite verwendeten
               Personenbezeichnungen sprechen – sofern nicht anders kenntlich gemacht –

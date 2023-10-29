@@ -1,5 +1,5 @@
 <template>
-  <div class="loading"><slot /><span class="spinner"></span></div>
+  <div class="loading is-dark-grey general-font-size"><slot /><span class="spinner"></span></div>
 </template>
 
 <script setup lang="ts">

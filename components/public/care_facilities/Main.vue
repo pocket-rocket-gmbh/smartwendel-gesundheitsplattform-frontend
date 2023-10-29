@@ -2,7 +2,7 @@
   <div class="main-wrapper">
     <v-row class="heading">
       <v-col class="d-flex align-center">
-        <h1 class="is-dark-grey">{{ careFacility?.name }}</h1>
+        <span class="general-font-size font-weight-medium is-dark-grey">{{ careFacility?.name }}</span>
         <span v-if="careFacility?.billable_through_health_insurance_approved">
           <v-icon size="x-large" class="pl-8" color="primary"
             >mdi-check-decagram-outline</v-icon
@@ -20,10 +20,10 @@
     </span>
     <div class="mt-4">
       <ClientOnly>
-        <PublicTextTooltipWrap class="pr-5 description" :text="careFacility?.description" />
+        <PublicTextTooltipWrap class="pr-5 is-dark-grey description" :text="careFacility?.description" />
       </ClientOnly>
       <v-divider class="my-10"></v-divider>
-      <div>
+      <div class="genral-font-size is-dark-grey">
         <i
           >Inhaltlich verantwortlich:
           <span v-if="careFacility?.name_responsible_person">{{

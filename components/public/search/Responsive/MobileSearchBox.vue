@@ -23,7 +23,7 @@
           </div>
         </v-col>
       </v-row>
-      <div class="d-flex align-center justify-center is-white font-weight-bold my-2">oder</div>
+      <div class="d-flex align-center justify-center is-white font-weight-medium my-2">oder</div>
       <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
         <v-col>
           <PublicSearchCategorySelectModal
@@ -49,7 +49,7 @@
             color="white"
             @click="filterStore.clearSearch()"
           >
-            zurücksetzen
+          Filter löschen
           </v-btn>
         </v-col>
         <v-col class="d-flex justify-center" v-if="mapControls">
@@ -69,7 +69,7 @@
   </div>
   <v-row class="has-bg-darken-grey text-white font-weight-bold ma-0 pa-0">
     <v-col
-      class="d-flex justify-center align-center general-font-size font-weight-medium"
+      class="d-flex justify-center align-center general-font-size"
     >
       <LoadingSpinner v-if="filterStore.loading" />
       <span v-else-if="filterStore.filteredResults.length"
