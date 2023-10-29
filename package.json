@@ -21,11 +21,11 @@
     "@nuxtjs/vuetify": "^1.12.3",
     "@pinia/nuxt": "^0.5.1",
     "@types/leaflet": "^1.9.7",
-    "@unhead/vue": "^1.7.4",
+    "@unhead/vue": "^1.8.0",
     "@vuepic/vue-datepicker": "^7.2.0",
     "@vueup/vue-quill": "^1.2.0",
     "@vueuse/core": "^10.5.0",
-    "axios": "^1.5.1",
+    "axios": "^1.6.0",
     "date-fns": "^2.30.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
@@ -33,12 +33,12 @@
     "mitt": "^3.0.1",
     "nuxt-icons": "^3.2.1",
     "pinia": "^2.1.7",
-    "sass": "^1.69.4",
+    "sass": "^1.69.5",
     "vue": "^3.3.4",
     "vue-advanced-cropper": "^2.8.8",
     "vue-matomo": "^4.2.0",
     "vue-rewards": "^1.0.1",
     "vuedraggable": "^4.1.0",
-    "vuetify": "^3.3.22"
+    "vuetify": "^3.3.23"
   }
 }
