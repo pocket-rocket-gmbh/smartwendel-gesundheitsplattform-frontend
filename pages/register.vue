@@ -152,11 +152,11 @@
           <template #label>
             <div class="general-font-size">
               Ich stimme der
-              <a target="_blank" href="/privacy_policy" @click.stop>
+              <a class="is-dark-grey" target="_blank" href="/privacy_policy" @click.stop>
                 <u>Datenschutzerklärung</u>
               </a>
               <span> und den </span>
-              <a target="_blank" href="/rules_of_conduct" @click.stop>
+              <a class="is-dark-grey" target="_blank" href="/rules_of_conduct" @click.stop>
                 <u>Nutzungsbedingungen</u>
               </a>
               zu
