@@ -36,7 +36,7 @@
           </v-list-item>
           <v-list-item
             class="is-clicable"
-            @click="closeMenuAndRouteTo(`/rules_of_conduct`)"
+            @click="closeMenuAndRouteTo('/rules_of_conduct')"
           >
             <v-icon class="mr-2">mdi-note-check-outline</v-icon>
             <span class="is-dark-grey">Nutzungsbedingungen</span>

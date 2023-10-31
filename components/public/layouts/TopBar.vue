@@ -114,7 +114,7 @@
         <v-divider></v-divider>
         <div>
           <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-          <span class="mr-6" href="/rules_of_conduct">Nutzungsbedingungen</span>
+          <span class="mr-6 is-clickable" @click.prevent="goTo('/rules_of_conduct')">Nutzungsbedingungen</span>
         </div>
         <v-divider></v-divider>
 
