@@ -56,7 +56,7 @@ export default defineComponent({
           heading: "Ärztlicher Bereitschaftsdienst",
           image: image2,
           description:
-            "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe. HILFE HILFE HILFE",
+            "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe.",
           linkText: "Notruf 116 117",
           link: "https://www.116117.de/de/index.php",
         },
