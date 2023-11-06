@@ -104,7 +104,6 @@
             @click="filterStore.clearSearch()"
           >
           <span>Filter löschen</span>
-           
           </v-btn>
         </v-col>
       </v-row>

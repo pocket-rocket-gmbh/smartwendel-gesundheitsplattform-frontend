@@ -8,29 +8,16 @@
       "
     >
       <div class="input-title">
-        {{
-          multipleSelections?.map((s) => s.name)?.join(", ") ||
-          selectedFilter?.name ||
-          placeholderText
-        }}
+        {{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}
       </div>
 
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-    <div
-      class="popover-content general-font-size"
-      :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
-      v-if="showPopover"
-      v-auto-animate
-    >
+    <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
       <div v-if="!loadingFilters" class="filters">
-        <div
-          v-for="filter in mainFilters"
-          :key="filter.id"
-          class="filter-column"
-        >
+        <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
           <div class="filter-name my-1 font-weight-bold">
             {{ filter.name }}
           </div>
@@ -40,19 +27,10 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label
-              class="option ma-n1"
-              v-for="option in filterOptions.find(
-                ({ parentId }) => parentId === filter.id
-              ).options"
-            >
+            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
               <v-btn
                 v-if="!useUser().isAdmin() && option?.care_facilities_count > '0'"
-                :model-value="
-                  multipleSelections?.length
-                    ? modelValue.includes(option.id)
-                    : selectedFilter?.id === option.id
-                "
+                :model-value="multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id"
                 @click.prevent="
                   handleOptionSelect(option);
                   showPopover = !showPopover;
@@ -61,15 +39,12 @@
                 density="compact"
                 class="options-select general-font-size ma-2 text-none font-weight-light"
                 :class="{
-                  'is-selected': multipleSelections?.length
-                    ? modelValue.includes(option.id)
-                    : selectedFilter?.id === option.id,
+                  'is-selected': multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id,
                 }"
               >
                 {{ option.name }}
-                
               </v-btn>
-             
+
               <v-checkbox
                 v-else-if="option?.care_facilities_count > '0'"
                 :model-value="modelValue.includes(option.id)"
@@ -123,7 +98,7 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string; care_facilities_count: string; };
+type Filter = { id: string; name: string; care_facilities_count: string };
 
 type FilterOption = {
   parentId: string;
@@ -150,15 +125,11 @@ const handleClearTermSearch = () => {
 };
 const handleOptionSelect = (option: Filter, multiple?: boolean) => {
   if (multiple) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex(
-      (item) => item === option.id
-    );
+    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
 
     if (indexOfAlreadySetFilter !== -1) {
       props.modelValue.splice(indexOfAlreadySetFilter, 1);
-      multipleSelections.value = multipleSelections.value?.filter(
-        (item) => item.id !== option.id
-      );
+      multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
     } else {
       props.modelValue.push(option.id);
       multipleSelections.value.push(option);
@@ -169,27 +140,21 @@ const handleOptionSelect = (option: Filter, multiple?: boolean) => {
   }
 
   if (selectedFilter.value && selectedFilter.value.id !== option.id) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex(
-      (item) => item === selectedFilter.value.id
-    );
+    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
 
     if (indexOfAlreadySetFilter !== -1) {
       props.modelValue.splice(indexOfAlreadySetFilter, 1);
     }
   }
 
-  const previousIndex = props.modelValue.findIndex(
-    (item) => item === option.id
-  );
+  const previousIndex = props.modelValue.findIndex((item) => item === option.id);
 
   if (previousIndex !== -1) {
     props.modelValue.splice(previousIndex, 1);
 
     if (multipleSelections.value?.length) {
       multipleSelections.value.forEach((selection) => {
-        const index = props.modelValue.findIndex(
-          (item) => item === selection.id
-        );
+        const index = props.modelValue.findIndex((item) => item === selection.id);
         if (index === -1) {
           return;
         }
@@ -213,12 +178,7 @@ onMounted(async () => {
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
   const allFilters = await getAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) =>
-    allFilters.filter(
-      (item) =>
-        item.parent_id === filter.id
-    )
-  );
+  const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
 
   allOptions.forEach((options, index) => {
     filterOptions.value.push({
@@ -233,9 +193,7 @@ onMounted(async () => {
   }, [] as Filter[]);
 
   const foundFilters = allAvailableOptions.filter((option) => {
-    const doesInclude = props.modelValue.find(
-      (item: string) => item === option.id
-    );
+    const doesInclude = props.modelValue.find((item: string) => item === option.id);
     return doesInclude;
   });
 
