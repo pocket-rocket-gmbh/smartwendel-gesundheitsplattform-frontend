@@ -4,19 +4,9 @@ import { ResultStatus } from "~/types/serverCallResult";
 
 export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
-export type CategoriesFilter =
-  | "category"
-  | "subCategory"
-  | "subSubCategory"
-  | "tags";
+export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
-export type FilterType =
-  | "filter_facility"
-  | "filter_service"
-  | "certificate"
-  | "documents"
-  | "opening_hours"
-  | "phone";
+export type FilterType = "filter_facility" | "filter_service" | "certificate" | "documents" | "opening_hours" | "phone";
 export type FilterTag = {
   id: string;
   menu_order: number;
@@ -73,6 +63,7 @@ export type Filter = {
   currentKinds: FilterKind[];
 
   //
+  allUnalteredResults: Facility[];
   allResults: Facility[];
   filteredResults: Facility[];
   onlySearchInTitle: boolean;
@@ -88,6 +79,7 @@ const initialFilterState: Filter = {
   currentKinds: [],
 
   //
+  allUnalteredResults: [],
   allResults: [],
   filteredResults: [],
   onlySearchInTitle: false,
@@ -172,30 +164,39 @@ export const useFilterStore = defineStore({
       const mainFilters = await getMainFilters("filter_facility", filterKind);
       const allFilters = await getAllFilters();
 
-      const allOptions = mainFilters.map((filter) =>
-        allFilters.filter((item) => item.parent_id === filter.id)
-      );
+      const allOptions = mainFilters.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
       // const allAvailableOptions = allOptions.reduce((prev, curr) => {
       //   return [...prev, ...curr];
       // }, []);)
 
       for (const block of allOptions) {
-        const multipleOccuredInBlock = block.filter((item) =>
-          this.currentTags.includes(item.id)
-        );
+        const multipleOccuredInBlock = block.filter((item) => this.currentTags.includes(item.id));
         if (multipleOccuredInBlock.length > 1) {
           return multipleOccuredInBlock;
         }
       }
       return [];
     },
+    async loadUnalteredAllResults() {
+      const options = {
+        page: 1,
+        per_page: 1000,
+      };
+
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`care_facilities`);
+
+      await api.retrieveCollection(options as any);
+
+      this.allUnalteredResults = api.items.value;
+    },
     async loadAllResults() {
       this.loading = true;
 
       const filters = [];
 
-      const multipleFacilityFiltersSelected =
-        await this.checkIfMultipleFacilityFiltersAreSelected();
+      const multipleFacilityFiltersSelected = await this.checkIfMultipleFacilityFiltersAreSelected();
 
       const tagsToFilter = [...this.currentTags];
 
@@ -217,7 +218,7 @@ export const useFilterStore = defineStore({
 
       const options = {
         page: 1,
-        per_page: 25,
+        per_page: 1000,
         sort_by: "name",
         sort_order: this.filterSort === "Z-A" ? "ASC" : "DESC",
         searchQuery: null as any,
@@ -251,14 +252,9 @@ export const useFilterStore = defineStore({
 
       this.allResults = allResultsFromApi;
 
-      const getLatLngFromZipCodeAndStreet = async (
-        zipCode: string,
-        street: string
-      ) => {
+      const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
         try {
-          const { data } = await axios.get(
-            `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`
-          );
+          const { data } = await axios.get(`https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`);
 
           if (!data.length) {
             return null;
@@ -281,9 +277,7 @@ export const useFilterStore = defineStore({
           return getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
         });
 
-        const newLocationLatLongs = (
-          await Promise.allSettled(newLocationLatLongsPromises)
-        )
+        const newLocationLatLongs = (await Promise.allSettled(newLocationLatLongsPromises))
           .filter((item) => item.status === "fulfilled")
           .map((item) => (item.status === "fulfilled" ? item.value : []));
         newLocationLatLongs.forEach((item, index) => {
@@ -302,38 +296,24 @@ export const useFilterStore = defineStore({
 
       const filteredResults: Facility[] = this.allResults
         .filter((result) => {
-          return result.zip && this.currentZip
-            ? result.zip === this.currentZip
-            : true;
+          return result.zip && this.currentZip ? result.zip === this.currentZip : true;
         })
         .filter((result) => {
           return (
-            result.name
-              .toUpperCase()
-              .includes(this.currentSearchTerm.toUpperCase()) ||
+            result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
             (!this.onlySearchInTitle &&
-              (result.description
-                ?.toUpperCase()
-                .includes(this.currentSearchTerm.toUpperCase()) ||
-                result.tags.find((tag) =>
-                  tag.name
-                    .toUpperCase()
-                    .includes(this.currentSearchTerm.toUpperCase())
-                )))
+              (result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
+                result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
           );
         })
         .filter((facility) => {
           if (!filterCategories?.length) return true;
 
-          return filterCategories.some((category) =>
-            facility.tag_category_ids.includes(category.id)
-          );
+          return filterCategories.some((category) => facility.tag_category_ids.includes(category.id));
         });
 
       if (this.mapFilter) {
-        this.filteredResults = filteredResults.filter(
-          (facility) => facility.id === this.mapFilter
-        );
+        this.filteredResults = filteredResults.filter((facility) => facility.id === this.mapFilter);
         return;
       }
 
