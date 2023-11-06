@@ -5,7 +5,7 @@
       <div class="filter-tiles">
         <div v-for="filter in itemsForServiceList" class="filter-group">
           <div v-for="item in filter.next" class="mt-5 filter-selections">
-            <span v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)" class="general-font-size font-weight-bold is-dark-grey">{{ item.title }}</span>
+            <span v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)" class="general-font-size font-weight-bold is-dark-grey" :class="[breakPoints.width.value <= 1280 ? 'd-flex justify-center' : '']">{{ item.title }}</span>
             <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1">
               <v-col cols="12" lg="6" md="12" class="align-center column-items pr-1 pt-1" v-for="subItem in item.next" v-auto-animate>
                 <div
@@ -36,6 +36,9 @@ import { VSkeletonLoader } from "vuetify/labs/VSkeletonLoader";
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem } from "../../../types/collapsibleList";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+
+const breakPoints = useBreakpoints();
 
 const props = defineProps<{
   filterKind: FilterKind;

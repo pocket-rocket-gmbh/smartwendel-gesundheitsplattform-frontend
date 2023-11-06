@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper mt-n15">
+  <div class="wrapper">
     <h1 class="title">{{ title }}</h1>
     <PublicLandingChooseCategory class="search-field"/>
     <p class="sub-title">{{ subTitle }}</p>
