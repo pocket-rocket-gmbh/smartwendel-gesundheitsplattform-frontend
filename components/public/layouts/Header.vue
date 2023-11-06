@@ -10,8 +10,8 @@
               @set-category-and-scroll="setSubCategoryAndScroll"
             />
           </div>
-          <h2 class="is-white text-center" v-if="category">{{ category.name }}</h2>
-          <h2 class="is-white text-center" v-else>{{ title }}</h2>
+          <div class="is-white text-center font-weight-medium text-h4" v-if="category">{{ category.name }}</div>
+          <div class="is-white text-center font-weight-medium text-h4" v-else>{{ title }}</div>
           <div class="spacer"></div>
         </div>
       </div>
