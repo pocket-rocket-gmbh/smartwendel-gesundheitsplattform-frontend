@@ -199,8 +199,7 @@ onMounted(async () => {
 
   useNuxtApp().$bus.$on("filtersUpdated", () => {
     availableItemsForServiceList.value = [...deepToRaw(itemsForServiceList.value)];
-    console.log(filterStore.allUnalteredResults);
-    checkIfFiltersAreInFacilities(availableItemsForServiceList.value, filterStore.allUnalteredResults.map((facility) => facility.tag_category_ids).flat());
+    checkIfFiltersAreInFacilities(availableItemsForServiceList.value, filterStore.allResults.map((facility) => facility.tag_category_ids).flat());
   });
 });
 </script>

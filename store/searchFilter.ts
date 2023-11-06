@@ -251,7 +251,7 @@ export const useFilterStore = defineStore({
       // });
 
       this.allResults = allResultsFromApi;
-
+      useNuxtApp().$bus.$emit("filtersUpdated");
       const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
         try {
           const { data } = await axios.get(`https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`);

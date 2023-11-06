@@ -124,7 +124,6 @@ const handleClearTermSearch = () => {
   return;
 };
 const handleOptionSelect = (option: Filter, multiple?: boolean) => {
-  useNuxtApp().$bus.$emit("filtersUpdated");
   if (multiple) {
     const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
 
