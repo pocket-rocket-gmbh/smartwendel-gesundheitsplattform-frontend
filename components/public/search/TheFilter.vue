@@ -3,9 +3,14 @@
     <span class="general-font-size font-weight-medium is-dark-grey">Verfeinere hier deine Suche:</span>
     <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
       <div class="filter-tiles">
-        <div v-for="filter in itemsForServiceList" class="filter-group">
+        <div v-for="filter in availableItemsForServiceList" class="filter-group">
           <div v-for="item in filter.next" class="mt-5 filter-selections">
-            <span v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)" class="general-font-size font-weight-bold is-dark-grey" :class="[breakPoints.width.value <= 1280 ? 'd-flex justify-center' : '']">{{ item.title }}</span>
+            <span
+              v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)"
+              class="general-font-size font-weight-bold is-dark-grey"
+              :class="[breakPoints.width.value <= 1280 ? 'd-flex justify-center' : '']"
+              >{{ item.title }}</span
+            >
             <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1">
               <v-col cols="12" lg="6" md="12" class="align-center column-items pr-1 pt-1" v-for="subItem in item.next" v-auto-animate>
                 <div
@@ -50,6 +55,7 @@ const snackbar = useSnackbar();
 const loading = ref(false);
 
 const itemsForServiceList = ref<CollapsibleListItem[]>([]);
+const availableItemsForServiceList = ref<CollapsibleListItem[]>([]);
 const expandedItemIds = ref([]);
 
 const api = useCollectionApi();
@@ -167,10 +173,35 @@ const copySearchFilterUrl = () => {
   navigator.clipboard.writeText(url);
 };
 
+const checkIfFiltersAreInFacilities = (filters: CollapsibleListItem[], filterIdsInFacility: string[]) => {
+  filters = filters.filter((currentFilter) => {
+    if (filterIdsInFacility.includes(currentFilter.id)) {
+      return true;
+    }
+
+    if (currentFilter.next?.length) {
+      currentFilter.next = checkIfFiltersAreInFacilities(currentFilter.next, filterIdsInFacility);
+      return currentFilter.next.length;
+    }
+
+    return false;
+  });
+
+  return filters;
+};
+
 onMounted(async () => {
   loading.value = true;
   await getItems();
   loading.value = false;
+
+  availableItemsForServiceList.value = [...deepToRaw(itemsForServiceList.value)];
+
+  useNuxtApp().$bus.$on("filtersUpdated", () => {
+    availableItemsForServiceList.value = [...deepToRaw(itemsForServiceList.value)];
+    console.log(filterStore.allUnalteredResults);
+    checkIfFiltersAreInFacilities(availableItemsForServiceList.value, filterStore.allUnalteredResults.map((facility) => facility.tag_category_ids).flat());
+  });
 });
 </script>
 

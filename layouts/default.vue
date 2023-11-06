@@ -42,6 +42,8 @@ onMounted(async () => {
 
   document.addEventListener("scroll", handleScroll);
 
+  useFilterStore().loadUnalteredAllResults()
+
   if (!tooltipsStore.tooltips) {
     await api.retrieveCollection();
     tooltipsStore.tooltips = api.items;
