@@ -11,7 +11,7 @@
             <div>Hier kannst du deine Einrichtung registrieren!</div>
           </v-col>
           <v-col
-            class="d-flex justify-start register-button align-end justify-md-start ml-md-15"
+            class="d-flex justify-start register-button align-end justify-md-start ml-md-13"
           >
             <v-btn
               variant="flat"
@@ -88,9 +88,11 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col class="links d-flex ma-0 pt-0 align-start">
+          <v-col class="links d-flex ma-0 pt-0 ml-n2 align-start">
             <div class="ml-md-15">
-              <span class="general-font-size font-weight-medium is-dark-grey">Landkreis Sankt Wendel</span>
+              <span class="general-font-size font-weight-medium is-dark-grey"
+                >Landkreis Sankt Wendel</span
+              >
               <div class="footer-links">
                 <p class="is-clickable is-dark-grey">
                   <span>
@@ -116,46 +118,56 @@
                 </p>
               </div>
               <div class="socials mt-5">
-                <v-btn
-                  href="https://www.facebook.com/Landkreis.StWendel/"
-                  target="_blank"
-                  variant="outlined"
-                  size="large"
-                  icon
-                  class="social-buttons mr-5"
-                >
-                  <v-icon>mdi-facebook</v-icon>
-                </v-btn>
-                <v-btn
-                  href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
-                  target="_blank"
-                  variant="outlined"
-                  size="large"
-                  icon
-                  class="social-buttons mr-5"
-                >
-                  <v-icon>mdi-instagram</v-icon>
-                </v-btn>
-                <v-btn
-                  href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
-                  target="_blank"
-                  variant="outlined"
-                  size="large"
-                  icon
-                  class="social-buttons mr-5"
-                >
-                  <v-icon>mdi-youtube</v-icon>
-                </v-btn>
-                <v-btn
-                  href="https://www.linkedin.com/showcase/smart-wendeler-land"
-                  target="_blank"
-                  variant="outlined"
-                  size="large"
-                  icon
-                  class="social-buttons"
-                >
-                  <v-icon>mdi-linkedin</v-icon>
-                </v-btn>
+                <v-row>
+                  <v-col>
+                    <v-btn
+                      href="https://www.facebook.com/Landkreis.StWendel/"
+                      target="_blank"
+                      variant="outlined"
+                      size="large"
+                      icon
+                      class="social-buttons mr-5"
+                    >
+                      <v-icon>mdi-facebook</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
+                      target="_blank"
+                      variant="outlined"
+                      size="large"
+                      icon
+                      class="social-buttons mr-5"
+                    >
+                      <v-icon>mdi-instagram</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
+                      target="_blank"
+                      variant="outlined"
+                      size="large"
+                      icon
+                      class="social-buttons mr-5"
+                    >
+                      <v-icon>mdi-youtube</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      href="https://www.linkedin.com/showcase/smart-wendeler-land"
+                      target="_blank"
+                      variant="outlined"
+                      size="large"
+                      icon
+                      class="social-buttons"
+                    >
+                      <v-icon>mdi-linkedin</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </div>
             </div>
           </v-col>
@@ -193,7 +205,7 @@ const currentRoute = computed(() => {
 
 
 .social-buttons
-  border: 3px solid
+  border: 1px solid
   color: $dark-grey
   &:visited
     color: $dark-grey
@@ -243,11 +255,6 @@ const currentRoute = computed(() => {
   .footer-content-row
     @include md
       flex-direction: column
-
-.socials
-  @include md
-    display: flex
-    justify-content: space-between
 
 .disclamer
   @include md

@@ -28,14 +28,12 @@
   background-position: right bottom;
 
   @include sm {
-    background: url("../assets/images/home_mobile.jpg") no-repeat center center;
     background-position: center;
     background-size: cover;
     height: 90vh;
   }
 
   @include md {
-    background: url("../assets/images/home_mobile.jpg") no-repeat center center;
     background-position: center;
     background-size: cover;
     background-position: right top;

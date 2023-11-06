@@ -52,9 +52,9 @@
         <div class="align-center d-flex is-clickable" v-if="breakPoints.width.value <= 1530 && currentRoute !== '/register' && !useUser().loggedIn()" @click="goToRegister()">
           <img :src="regiterIcon" width="30"/>
         </div>
-        <div>
+        <div class="pl-3">
           <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
-            <v-icon class="pl-3" size="x-large">mdi-account-circle-outline</v-icon>
+            <v-icon size="x-large">mdi-account-circle-outline</v-icon>
           </v-btn>
         </div>
         <div class="d-flex align-center main">
@@ -112,11 +112,6 @@
         </div>
 
         <v-divider></v-divider>
-        <div>
-          <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-          <span class="mr-6 is-clickable" @click.prevent="goTo('/rules_of_conduct')">Nutzungsbedingungen</span>
-        </div>
-        <v-divider></v-divider>
 
         <div class="categories-wrapper is-clickable d-flex" v-for="(category, index) in categories" :key="index">
           <div class="title">
@@ -131,6 +126,12 @@
           <span href="/public/search/events" class="is-clickable" @click.prevent="goTo('/public/search/events')"> Veranstaltungen </span>
         </template>
       </div>
+      <div class="terms-of-use my-5">
+        <v-divider class="my-5"></v-divider>
+          <v-icon class="mr-2">mdi-note-check-outline</v-icon>
+          <span class="mr-6 is-clickable" @click.prevent="goTo('/rules_of_conduct')">Nutzungsbedingungen</span>
+        </div>
+        <v-divider></v-divider>
     </v-navigation-drawer>
   </div>
 </template>
@@ -371,5 +372,11 @@ header,
     flex-direction: column;
     gap: 0.75rem;
   }
+}
+
+.terms-of-use {
+  display: absolute;
+  margin-bottom: 1rem;
+  bottom: 0;
 }
 </style>
