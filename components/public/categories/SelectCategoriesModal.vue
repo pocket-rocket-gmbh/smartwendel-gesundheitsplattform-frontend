@@ -1,10 +1,5 @@
 <template>
   <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
-    <template v-slot:activator="{ props }">
-      <div v-bind="props">
-        <v-icon color="white">mdi-arrow-left</v-icon>
-      </div>
-    </template>
     <v-card>
       <v-toolbar dark color="primary">
         <v-btn icon dark @click="dialog = false">
