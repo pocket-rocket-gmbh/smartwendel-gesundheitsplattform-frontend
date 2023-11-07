@@ -50,6 +50,10 @@
                 </div>
                 <div class="hidden-md-and-up">
                   <v-icon
+                    v-if="
+                      careFacility.geocode_address.length ||
+                      careFacility.locations.length
+                    "
                     size="x-large"
                     color="primary"
                     @click="showCareFacilityInMap(careFacility.id)"
@@ -130,6 +134,10 @@
           </v-row>
           <div class="hidden-sm-and-down">
             <v-btn
+              v-if="
+                careFacility.geocode_address.length ||
+                careFacility.locations.length
+              "
               append-icon="mdi-map-marker-outline"
               size="small"
               class="mt-4 pa-1"
@@ -140,6 +148,7 @@
             >
               Auf karte zeigen
             </v-btn>
+            <div v-else class="mt-4 pa-1"></div>
           </div>
         </div>
       </div>
