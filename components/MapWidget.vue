@@ -102,16 +102,13 @@ onMounted(async () => {
   map = L.map(mapWidgetId, {
     zoomControl: props.zoomControl,
   });
-  //tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // OpenStreetMaps for testing.
-  L.tileLayer(
-    "https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=4j93vp78lAxWgkgEuWgF",
-    {
-      // MapTiler Development for usage on developer workstations.
-      //tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=5ublSVwnjyc9Ansfmc7r', { // MapTiler Production: Commit only with this line active!!!.
+    //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // OpenStreetMaps for testing.
+    //L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=tVi34bM6PTUr9iztZ0dR', { // MapTiler Development for usage on developer workstations.
+    L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=ZKYxdvnMOpWy7cmBIb2L', { // MapTiler Production: Commit only with this line active!!!.
       minZoom: props.minZoom,
-      maxZoom: props.maxZoom,
-    }
-  ).addTo(map);
+      maxZoom: props.maxZoom
+    }).addTo(map);
+
   createAttribution();
   if (!props.zoom) {
     disableZoom();
@@ -201,7 +198,9 @@ const refreshView = async () => {
       </div>
       </h2>
       <div class="action">
-        <a class="link" style="text-align: center" href="${location.url}" target="_blank">Mehr Details</a>
+        <a class="link" style="text-align: center" href="${
+          location.url
+        }" target="_blank">Mehr Details</a>
         </div>
         </div>
         `
@@ -298,10 +297,14 @@ const createAttribution = () => {
     `<span style="font-size: ${props.attributionFontSize}px"><a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a></span>`
   );
   map.attributionControl.setPrefix("");
-  map.attributionControl.getContainer().style.height = `${props.attributionFontSize + 4}px`;
+  map.attributionControl.getContainer().style.height = `${
+    props.attributionFontSize + 4
+  }px`;
   map.attributionControl.getContainer().style.paddingRight = "2px";
   map.attributionControl.getContainer().style.paddingLeft = "2px";
-  map.attributionControl.getContainer().style.paddingTop = getTopPaddingFromFontSize(props.attributionFontSize);
+  map.attributionControl.getContainer().style.paddingTop = getTopPaddingFromFontSize(
+    props.attributionFontSize
+  );
   map.attributionControl.getContainer().style.lineHeight = `${props.attributionFontSize}px`;
 };
 
