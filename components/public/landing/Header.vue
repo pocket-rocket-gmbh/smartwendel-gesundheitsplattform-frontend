@@ -3,6 +3,7 @@
     <h1 class="title">{{ title }}</h1>
     <PublicLandingChooseCategory class="search-field"/>
     <p class="sub-title">{{ subTitle }}</p>
+    
   </div>
 </template>
 
@@ -51,7 +52,7 @@ onMounted(() => {
   @include md {
     width: 100%;
     justify-items: center;
-    padding: 2rem;
+    padding: 3rem 2rem;
   }
 
   @include sm {

@@ -37,7 +37,7 @@
     background-position: center;
     background-size: cover;
     background-position: right top;
-    height: 60vh;
+    height: 70vh;
   }
 }
 

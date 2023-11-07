@@ -9,7 +9,7 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <div class="is-white d-flex align-end mt-10">
-            <v-icon>mdi-filter-outline</v-icon>
+            <img class="filter-icon" :src="iconFilter">
           </div>
         </div>
       </template>
@@ -75,6 +75,7 @@
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem } from "../../../types/collapsibleList";
+import iconFilter from "@/assets/icons/icon_filter.svg";
 
 const props = defineProps<{
   filterKind: FilterKind;
@@ -270,5 +271,8 @@ onMounted(async () => {
       }
     }
   }
+}
+.filter-icon {
+  width: 30px;
 }
 </style>
