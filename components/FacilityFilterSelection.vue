@@ -29,7 +29,7 @@
           >
             <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
               <v-btn
-                v-if="!useUser().isAdmin() && option?.care_facilities_count > '0'"
+                v-if="!useUser().isAdmin() && option?.care_facilities_active_count > '0'"
                 :model-value="multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id"
                 @click.prevent="
                   handleOptionSelect(option);
@@ -46,7 +46,7 @@
               </v-btn>
 
               <v-checkbox
-                v-else-if="option?.care_facilities_count > '0'"
+                v-else-if="option?.care_facilities_active_count > '0'"
                 :model-value="modelValue.includes(option.id)"
                 @click.prevent="handleOptionSelect(option, true)"
                 hide-details
@@ -98,7 +98,7 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string; care_facilities_count: string };
+type Filter = { id: string; name: string; care_facilities_active_count: string };
 
 type FilterOption = {
   parentId: string;
