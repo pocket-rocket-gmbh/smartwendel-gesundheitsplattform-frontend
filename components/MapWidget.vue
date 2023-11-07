@@ -103,8 +103,8 @@ onMounted(async () => {
     zoomControl: props.zoomControl,
   });
     //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // OpenStreetMaps for testing.
-    L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=tVi34bM6PTUr9iztZ0dR', { // MapTiler Development for usage on developer workstations.
-    //L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=ZKYxdvnMOpWy7cmBIb2L', { // MapTiler Production: Commit only with this line active!!!.
+    //L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=tVi34bM6PTUr9iztZ0dR', { // MapTiler Development for usage on developer workstations.
+    L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=ZKYxdvnMOpWy7cmBIb2L', { // MapTiler Production: Commit only with this line active!!!.
       minZoom: props.minZoom,
       maxZoom: props.maxZoom
     }).addTo(map);
