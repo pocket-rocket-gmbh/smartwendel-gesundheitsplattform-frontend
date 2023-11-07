@@ -94,11 +94,11 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
   locations.value = [];
 
   for (const facility of facilities) {
-    if (facility.latitude && facility.longitude) {
+    if (facility.geocode_address?.length && facility.geocode_address[0] && facility.geocode_address[0].lon && facility.geocode_address[0].lat) {
       locations.value.push({
         id: facility.id,
-        longitude: parseFloat(facility.longitude),
-        latitude: parseFloat(facility.latitude),
+        latitude: parseFloat(facility.geocode_address[0].lat),
+        longitude: parseFloat(facility.geocode_address[0].lon),
         draggable: false,
         name: facility.name,
         url: `${window.location.origin}/public/care_facilities/${facility.id}`,

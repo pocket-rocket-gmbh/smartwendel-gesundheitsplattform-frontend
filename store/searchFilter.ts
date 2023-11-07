@@ -252,40 +252,6 @@ export const useFilterStore = defineStore({
 
       this.allResults = allResultsFromApi;
       useNuxtApp().$bus.$emit("filtersUpdated");
-      const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
-        try {
-          const { data } = await axios.get(`https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`);
-
-          if (!data.length) {
-            return null;
-          }
-
-          const bestResult = data[0];
-
-          return [bestResult.lat, bestResult.lon] as [string, string];
-        } catch (err) {
-          console.error(err);
-          return null;
-        }
-      };
-
-      if (this.currentKinds.includes("facility")) {
-        const newLocationLatLongsPromises = this.allResults.map((facility) => {
-          if (!facility.zip || !facility.street) {
-            return null;
-          }
-          return getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
-        });
-
-        const newLocationLatLongs = (await Promise.allSettled(newLocationLatLongsPromises))
-          .filter((item) => item.status === "fulfilled")
-          .map((item) => (item.status === "fulfilled" ? item.value : []));
-        newLocationLatLongs.forEach((item, index) => {
-          if (!item) return;
-          this.allResults[index].latitude = item[0];
-          this.allResults[index].longitude = item[1];
-        });
-      }
 
       this.loading = false;
 
