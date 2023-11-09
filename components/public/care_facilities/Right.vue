@@ -41,7 +41,7 @@
         {{ careFacility.name_instructor }}
       </span>
     </div>
-    <div class="mt-3" v-if="careFacility?.kind === 'facility'">
+    <div class="mt-3" v-if="careFacility?.kind === 'facility' && careFacility.location">
       <v-table density="compact">
         <tbody>
           <h3 class="is-primary is-dark-grey general-font-size font-weight-medium is-uppercase mb-1">Öffnungszeiten</h3>

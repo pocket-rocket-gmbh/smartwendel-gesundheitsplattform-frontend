@@ -2,7 +2,7 @@
   <div class="main-wrapper">
     <v-row class="heading">
       <v-col class="d-flex align-center">
-        <span class="general-font-size font-weight-medium is-dark-grey">{{ careFacility?.name }}</span>
+        <span class="general-font-size font-weight-medium is-dark-grey d-md-block d-none">{{ careFacility?.name }}</span>
         <span v-if="careFacility?.billable_through_health_insurance_approved">
           <v-icon size="x-large" class="pl-8" color="primary"
             >mdi-check-decagram-outline</v-icon
@@ -10,7 +10,7 @@
         </span>
       </v-col>
     </v-row>
-    <v-divider class="my-5"></v-divider>
+    <v-divider class="my-5 d-md-block d-none"></v-divider>
     <span
       class="is-primary mr-2"
       v-if="careFacility?.kind === 'news'"
@@ -67,9 +67,6 @@ h1 {
 
 .main-wrapper {
   margin: 1rem 0;
-  @include md {
-    margin: 2rem 0;
-  }
 
   .heading {
     display: flex;

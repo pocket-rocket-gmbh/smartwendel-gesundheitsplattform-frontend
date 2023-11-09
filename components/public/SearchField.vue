@@ -72,7 +72,9 @@
                 {{ result.name }}
               </div>
             </div>
+           
           </template>
+     {{ defaultStyling }}
         </div>
       </div>
     </div>
@@ -339,6 +341,7 @@ onMounted(() => {
     &.default {
       width: 100%;
       border-radius: 10px;
+      margin: 0;
     }
 
     &.styled {

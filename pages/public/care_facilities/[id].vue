@@ -61,6 +61,14 @@
       :care-facility="careFacility"
       v-if="careFacility?.kind !== 'news'"
     />
+    <div class="d-md-none d-sm-block mt-15 pt-15">
+      <span
+      class="general-font-size font-weight-medium is-dark-grey"
+      >{{ careFacility?.name }}</span
+    >
+    <v-divider class="my-5"></v-divider>
+    </div>
+
     <v-row class="row">
       <v-col sm="12" md="8" class="order-last order-md-first">
         <PublicCareFacilitiesMain
@@ -77,10 +85,7 @@
         </div>
       </v-col>
       <v-col md="4" sm="12" v-if="careFacility?.kind !== 'news'">
-        <PublicCareFacilitiesRight
-          :class="[breakPoints.width.value < 960 ? 'mt-15' : 'down']"
-          :care-facility="careFacility"
-        />
+        <PublicCareFacilitiesRight :care-facility="careFacility" />
         <div class="hidden-sm-and-down">
           <div class="mt-5" v-if="(careFacility?.kind === 'course', 'event')">
             <PublicCareFacilitiesDates :care-facility="careFacility" />
