@@ -12,11 +12,33 @@
         </v-col>
       </v-row>
       <div v-if="showFilter">
-        <v-row>
+
+
+        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
+          <v-col>
+            <PublicSearchCategorySelectModal
+              v-model="filterStore.currentTags"
+              :filter-kind="filterKind"
+              :filterTitle="filterTitle"
+            />
+          </v-col>
+        </v-row>
+        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
+          <v-col cols="10" class="d-flex align-center">
+            <PublicSearchCommunitySelectModal />
+          </v-col>
+          <v-col>
+            <PublicSearchFilterSelectModal :filter-kind="filterKind" />
+          </v-col>
+        </v-row>
+        <div class="d-flex align-center justify-center is-white font-weight-medium my-2" v-if="filterKind !== 'event' && filterKind !== 'news'">
+          oder
+        </div>
+        <v-row :class="[filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '']">
           <v-col>
             <div class="field">
               <label class="label is-white">
-                <div class="search-term">Anbieter suchen</div>
+                <div class="search-term">{{ searchTitle }}</div>
               </label>
               <PublicSearchField
                 v-model="filterStore.currentSearchTerm"
@@ -27,25 +49,6 @@
                 :kind="filterKind"
               />
             </div>
-          </v-col>
-        </v-row>
-        <div class="d-flex align-center justify-center is-white font-weight-medium my-2">
-          oder
-        </div>
-        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
-          <v-col>
-            <PublicSearchCategorySelectModal
-              v-model="filterStore.currentTags"
-              :filter-kind="filterKind"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="10" class="d-flex align-center">
-            <PublicSearchCommunitySelectModal />
-          </v-col>
-          <v-col class="" v-if="filterKind !== 'event' && filterKind !== 'news'">
-            <PublicSearchFilterSelectModal :filter-kind="filterKind" />
           </v-col>
         </v-row>
         <v-row class="buttons">
@@ -135,6 +138,16 @@ const setFilterTitle = () => {
 const toogleShowFilter = () => {
   showFilter.value = !showFilter.value;
 };
+
+watch(
+  () => props.showMap,
+  debounce(() => {
+    showFilter.value = false;
+  }),
+  {
+    deep: true,
+  }
+);
 
 const isMobilie = computed(() => {
   if (breakpoints.type.value === "sm" || breakpoints.type.value === "xs") {
