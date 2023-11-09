@@ -51,7 +51,7 @@
             />
           </div>
         </v-col>
-        <v-col v-if="filterKind !== 'event'">
+        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field general-font-size">
             <label class="label is-white font-weight-medium">Gemeinde</label>
             <div class="select-wrapper">
@@ -69,7 +69,7 @@
           </div>
         </v-col>
         <v-col
-          v-if="filterKind !== 'event'"
+          v-if="filterKind !== 'event' && filterKind !== 'news'"
           md="1"
           class="d-flex justify-center align-end is-white mb-5"
         >
