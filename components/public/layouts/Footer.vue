@@ -89,7 +89,7 @@
             </v-row>
           </v-col>
           <v-col class="links d-flex ma-0 pt-0 ml-n2 align-start">
-            <div class="ml-md-15">
+            <div class="ml-md-15" :class="[breakPoints.width.value <= 960 ? 'mt-10' : '' ]">
               <span class="general-font-size font-weight-medium is-dark-grey"
                 >Landkreis Sankt Wendel</span
               >
