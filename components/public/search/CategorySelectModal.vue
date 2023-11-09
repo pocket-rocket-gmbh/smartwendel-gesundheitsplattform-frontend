@@ -9,7 +9,7 @@
       <template v-slot:activator="{ props }">
         <div class="field">
           <label class="label is-white">
-            <div class="search-term">Branche</div>
+            <div class="search-term">{{ filterTitle }}</div>
           </label>
           <div class="field" v-bind="props" @click="handleClearTermSearch()">
             <div class="input">
@@ -75,6 +75,7 @@ import { FilterKind, useFilterStore } from "~/store/searchFilter";
 const props = defineProps<{
   modelValue: string[];
   filterKind: FilterKind;
+  filterTitle: string;
 }>();
 
 const emit = defineEmits<{

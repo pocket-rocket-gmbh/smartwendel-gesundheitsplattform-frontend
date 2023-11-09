@@ -19,7 +19,7 @@
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
                 >
-                  <span class="word-break sub-item-title general-font-size">
+                  <span class="word-break sub-item-title general-font-size" lang="de">
                     {{ subItem.title }}
                   </span>
                 </div>
