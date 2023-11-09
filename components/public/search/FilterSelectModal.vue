@@ -25,7 +25,7 @@
           <template v-if="!loading">
             <div v-for="filter in itemsForServiceList" class="filter-group">
               <div v-for="item in filter.next" class="filter-selections">
-                <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
+                <span v-if="item.next.length" class="text-h4 d-flex justify-center">{{ item.title }}</span>
                 <v-row no-gutters class="fill-height item-row">
                   <v-col
                     cols="12"
@@ -35,7 +35,8 @@
                     v-auto-animate
                   >
                     <div
-                      class="filter-tile pa-5"
+                      class="filter-tile pa-5 word-break general-font-size"
+                      lang="de"
                       :class="{
                         selected:
                           isSelectedTagNext(subItem) ||
