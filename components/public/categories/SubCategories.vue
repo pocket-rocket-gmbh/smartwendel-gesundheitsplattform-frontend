@@ -1,10 +1,16 @@
 <template>
   <div class="sub-categories-wrapper general-font-size">
-    <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')">
+    <v-row
+      class="sub-category text-center align-center justify-center"
+      :id="subCategory?.id.replaceAll('-', '')"
+    >
       <v-col class="d-flex is-dark-grey justify-center">
         <div>
           <span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
-          <span class="my-5 text-wrap sub-category-description general-font-size" v-html="subCategory?.description"></span>
+          <span
+            class="my-5 text-wrap sub-category-description general-font-size"
+            v-html="subCategory?.description"
+          ></span>
         </div>
       </v-col>
     </v-row>
@@ -69,7 +75,9 @@ const listApi = useCollectionApi();
 listApi.setBaseApi(usePublicApi());
 
 const getSubSubCategories = async () => {
-  listApi.setEndpoint(`categories/${props.categoryId}/sub_categories/${props.subCategory.id}/sub_sub_categories`);
+  listApi.setEndpoint(
+    `categories/${props.categoryId}/sub_categories/${props.subCategory.id}/sub_sub_categories`
+  );
   const options = {
     page: 1,
     per_page: 25,
@@ -91,7 +99,7 @@ const getSubSubCategories = async () => {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/sass/main.sass";
 
 .sub-categories-wrapper {
@@ -126,5 +134,13 @@ const getSubSubCategories = async () => {
 
 .sub-category-description {
   line-height: 29px;
+  a {
+    font-weight: 500 !important;
+    text-decoration: underline !important;
+    &:visited {
+      font-weight: 500 !important;
+      text-decoration: underline !important;
+    }
+  }
 }
 </style>
