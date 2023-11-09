@@ -123,6 +123,8 @@ const setPlaceholderText = () => {
     placeholderText.value = "Name, Thema, Angebote,…";
   } else if (props.kind === "course") {
     placeholderText.value = "Name, Kursinhalt,…";
+  } else if (props.kind === "news") {
+    placeholderText.value = "Name, Thema,…";
   } else {
     placeholderText.value = "Suche nach Themen, Anbietern, Kursen,…";
   }
