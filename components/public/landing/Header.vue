@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <h1 class="title">{{ title }}</h1>
+    <h1 class="title word-break" lang="de">{{ title }}</h1>
     <PublicLandingChooseCategory class="search-field"/>
-    <p class="sub-title">{{ subTitle }}</p>
+    <p class="sub-title word-break" lang="de">{{ subTitle }}</p>
     
   </div>
 </template>
