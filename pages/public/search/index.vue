@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="mt-4 search-field-search">
+    <v-row class="mt-md-4 search-field-search">
       <v-col class="d-flex align-center is-white">
         <span class="is-white font-weight-medium general-font-size">
           Suchbegriff: {{ filterStore.currentSearchTerm }}
@@ -79,7 +79,7 @@ const goBack = () => {
 };
 
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
-  if (kind === "facility") return "Zu den Einrichtungen";
+  if (kind === "facility") return "Zu den Anbietern";
   if (kind === "news") return "Zu den Beiträgen";
   if (kind === "event" || kind === "course") return "Zu den Veranstaltungen";
   if (kind === "course") return "Zu den Kursen";
