@@ -43,7 +43,7 @@
           </a>
         </div>
         <span
-          :class="item.description.length > 300 ? 'break-text' : ''"
+          :class="item.description?.length > 300 ? 'break-text' : ''"
           class="content general-font-size"
           v-html="item.description"
         ></span>
