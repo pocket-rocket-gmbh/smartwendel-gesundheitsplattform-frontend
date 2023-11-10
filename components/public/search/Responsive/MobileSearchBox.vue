@@ -5,33 +5,54 @@
         <v-col>
           <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
         </v-col>
+
         <v-col cols="2" class="d-flex justify-center align-center">
-          <v-icon color="white" size="x-large" @click="toogleShowFilter()"
+          <v-icon
+            color="white"
+            size="x-large"
+            v-if="showFilter"
+            @click="toogleShowFilter()"
+            >mdi-filter-off-outline</v-icon
+          >
+          <v-icon
+            color="white"
+            size="x-large"
+            v-if="!showFilter && !filterStore.mapFilter?.length"
+            @click="toogleShowFilter()"
             >mdi-filter-outline</v-icon
+          >
+          <v-icon
+            color="white"
+            size="x-large"
+            v-if="!showFilter && filterStore.mapFilter?.length"
+            @click="handleClearSearch()"
+            >mdi-close-outline</v-icon
           >
         </v-col>
       </v-row>
       <div v-if="showFilter">
-
-
         <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
-          <v-col>
+          <v-col cols="10">
             <PublicSearchCategorySelectModal
               v-model="filterStore.currentTags"
               :filter-kind="filterKind"
               :filterTitle="filterTitle"
             />
           </v-col>
-        </v-row>
-        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
-          <v-col cols="10" class="d-flex align-center">
-            <PublicSearchCommunitySelectModal />
-          </v-col>
           <v-col>
             <PublicSearchFilterSelectModal :filter-kind="filterKind" />
           </v-col>
         </v-row>
-        <div class="d-flex align-center justify-center is-white font-weight-medium my-2" v-if="filterKind !== 'event' && filterKind !== 'news'">
+        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
+          <v-col class="d-flex align-center">
+            <PublicSearchCommunitySelectModal />
+          </v-col>
+
+        </v-row>
+        <div
+          class="d-flex align-center justify-center is-white font-weight-medium my-2"
+          v-if="filterKind !== 'event' && filterKind !== 'news'"
+        >
           oder
         </div>
         <v-row :class="[filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '']">
@@ -133,6 +154,12 @@ const setFilterTitle = () => {
     filterTitle.value = "Themengebiet";
     searchTitle.value = "Kurs suchen";
   }
+};
+
+const handleClearSearch = () => {
+  filterStore.clearSearch();
+  showFilter.value = false;
+  emit('toggleMap')
 };
 
 const toogleShowFilter = () => {

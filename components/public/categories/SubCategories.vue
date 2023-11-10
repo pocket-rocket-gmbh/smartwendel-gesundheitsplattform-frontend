@@ -4,9 +4,11 @@
       class="sub-category text-center align-center justify-center"
       :id="subCategory?.id.replaceAll('-', '')"
     >
-      <v-col class="d-flex is-dark-grey justify-center">
+      <v-col class="d-flex flex-column is-dark-grey justify-center">
         <div>
           <span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
+        </div>
+        <div>
           <span
             class="my-5 text-wrap sub-category-description general-font-size"
             v-html="subCategory?.description"
