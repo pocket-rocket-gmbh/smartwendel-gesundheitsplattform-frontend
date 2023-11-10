@@ -14,14 +14,15 @@
         </div>
       </template>
       <v-card>
-        <v-toolbar dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
+        <v-toolbar dense fixed dark color="primary" class="modal-toolbar">
+          <v-btn icon v-if="filterStore.currentTags?.length" @click="filterStore.currentTags = []">
+            <v-icon>mdi-reload</v-icon>
           </v-btn>
-          <v-toolbar-title>Filter</v-toolbar-title>
-          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+          <v-toolbar-title class="d-flex justify-center">Leistung auswählen</v-toolbar-title>
+          <v-btn v-if="filterStore.currentTags?.length" variant="text" @click="dialog = false"> Fertig </v-btn>
+          <v-btn v-else variant="text" @click="dialog = false"> Schließen </v-btn>
         </v-toolbar>
-        <div class="filter-tiles">
+        <div class="filter-tiles mt-5">
           <template v-if="!loading">
             <div v-for="filter in itemsForServiceList" class="filter-group">
               <div v-for="item in filter.next" class="filter-selections">
@@ -275,5 +276,9 @@ onMounted(async () => {
 }
 .filter-icon {
   width: 30px;
+}
+.modal-toolbar {
+  position: fixed;
+  z-index: 99;
 }
 </style>
