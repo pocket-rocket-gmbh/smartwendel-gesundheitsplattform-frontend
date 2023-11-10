@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import { VSkeletonLoader } from "vuetify/labs/VSkeletonLoader";
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem } from "../../../types/collapsibleList";
