@@ -53,7 +53,10 @@
               </div>
               <div class="name">{{ modelValue }}</div>
             </div>
-            <div v-if="!filteredItems?.length && kind" class="name is-dark-grey general-font-size">
+            <div
+              v-if="!filteredItems?.length && kind"
+              class="name is-dark-grey general-font-size"
+            >
               Keine Ergebnisse gefunden
             </div>
             <div
@@ -72,9 +75,7 @@
                 {{ result.name }}
               </div>
             </div>
-           
           </template>
-     {{ defaultStyling }}
         </div>
       </div>
     </div>
@@ -144,24 +145,22 @@ const handlePressEnter = (e: KeyboardEvent) => {
 };
 
 const routeToResults = (result?: Facility) => {
-  if (props.defaultRouteTo) {
+  if (!props.defaultRouteTo) {
     router.push({ path: props.defaultRouteTo });
-    return;
+  } else {
+    if (result?.kind && result?.kind === "facility") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
+    }
+    if (result?.kind && result?.kind === "course") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
+    }
+    if (result?.kind && result?.kind === "event") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
+    }
+    if (result?.kind && result?.kind === "news") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
+    }
   }
-
-  if (result.kind === "facility") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-  if (result.kind === "course") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-  if (result.kind === "event") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-  if (result.kind === "news") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-
   router.push({ path: "/public/search" });
 };
 
@@ -356,6 +355,6 @@ onMounted(() => {
 }
 
 .input {
-  color: #58595E;
+  color: #58595e;
 }
 </style>
