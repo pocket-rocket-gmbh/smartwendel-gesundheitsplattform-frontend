@@ -318,7 +318,7 @@ const getCategories = async () => {
   categoriesApi.setEndpoint(`categories`);
   const options = {
     page: 1,
-    per_page: 25,
+    per_page: 999,
     sort_by: "menu_order",
     sort_order: "ASC",
     searchQuery: null as any,
@@ -334,7 +334,7 @@ const getSubCategories = async (categoryId: string) => {
   categoriesApi.setEndpoint(`categories/${categoryId}/sub_categories`);
   const options = {
     page: 1,
-    per_page: 25,
+    per_page: 999,
     sort_by: "menu_order",
     sort_order: "ASC",
     searchQuery: null as any,

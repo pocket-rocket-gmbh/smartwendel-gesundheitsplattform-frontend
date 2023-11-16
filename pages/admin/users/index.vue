@@ -102,6 +102,11 @@ const fields = ref([
     condition: "admin",
   },
   {
+    value: "",
+    type: "is-lk",
+    tooltip: "Nutzer ist Admin."
+  },
+  {
     prop: "last_seen",
     text: "Zuletzt gesehen",
     value: "last_seen",

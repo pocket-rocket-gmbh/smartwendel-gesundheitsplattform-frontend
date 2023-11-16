@@ -179,6 +179,11 @@ const fields = [
       handleButtonClick(item.id);
     },
   },
+  {
+    value: "",
+    type: "is-lk",
+    tooltip: "Veranstaltung wurde von einer Admin erstellt."
+  },
 ];
 
 const draftRequiredFields: RequiredField[] = [

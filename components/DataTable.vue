@@ -36,12 +36,12 @@
         :class="[
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
-          item?.kind  !== 'facility' ? 'has-normal-bg' : '',
+          item?.kind !== 'facility' ? 'has-normal-bg' : '',
           getCurrentRoute() === 'admin-users' ? '' : '',
           isDraft(item) ? 'draft' : '',
         ]"
       >
-        <td     
+        <td
           v-for="(field, index) in fields"
           :key="index"
           class="is-clickable"
@@ -169,10 +169,15 @@
               </div>
             </div>
           </span>
-          <span v-else-if="field.type === 'beinEdited' && item.user" >
+          <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
-          <span v-else-if="field.type === 'beinEdited' && !item.user"><i>Nutzer existiert nicht</i></span>
+          <span v-else-if="field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'">
+            <img :src="logo" width="20" class="ml-2 pt-2" />
+          </span>
+          <span v-else-if="field.type === 'beinEdited' && !item.user"
+            ><i>Nutzer existiert nicht</i></span
+          >
           <span v-else-if="field.type === 'button' && field.action">
             <button
               @click.stop="field.action(item)"
@@ -239,6 +244,7 @@ import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
 import { RequiredField } from "~/types/facilities";
+import logo from "@/assets/images/lk-logo.png";
 
 const router = useRouter();
 
