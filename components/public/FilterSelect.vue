@@ -38,7 +38,7 @@ const getItems = async () => {
 
   const options = {
     page: 1,
-    per_page: 25,
+    per_page: 999,
     sort_by: "name",
     sort_order: "asc",
     searchQuery: null as any,

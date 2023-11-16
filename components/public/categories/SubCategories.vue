@@ -82,7 +82,7 @@ const getSubSubCategories = async () => {
   );
   const options = {
     page: 1,
-    per_page: 25,
+    per_page: 999,
     sort_by: "menu_order",
     sort_order: "ASC",
     searchQuery: null as any,
