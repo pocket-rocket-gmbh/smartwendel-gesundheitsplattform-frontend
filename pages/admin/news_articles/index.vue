@@ -162,6 +162,11 @@ const fields = [
       handleButtonClick(item.id);
     },
   },
+  {
+    value: "",
+    type: "is-lk",
+    tooltip: "Beitrag wurde von einer Admin erstellt."
+  },
 ];
 
 const draftRequiredFields: RequiredField[] = [
