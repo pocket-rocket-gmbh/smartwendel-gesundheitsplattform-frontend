@@ -239,8 +239,8 @@ $min-width: 200px;
   word-break: break-word;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 6;
-  line-clamp: 6;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
   -webkit-box-orient: vertical;
 }
 
@@ -254,6 +254,6 @@ $min-width: 200px;
 }
 
 .content {
-  line-height: 27px;
+  line-height: 28px;
 }
 </style>

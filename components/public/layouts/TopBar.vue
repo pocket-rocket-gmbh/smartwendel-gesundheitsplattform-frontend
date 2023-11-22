@@ -161,7 +161,7 @@
       app
       fixed
       temporary
-      width="350"
+      width="1000"
       class="d-flex justify-center"
     >
       <div class="navigation-drawer-content">
@@ -239,7 +239,6 @@
             >
               {{ category.name }}
             </span>
-            <v-icon class="ml-5">mdi-arrow-right</v-icon>
           </div>
         </div>
         <template v-if="!loading" class="main">
@@ -250,7 +249,6 @@
             @click.prevent="goTo('/public/search/facilities')"
           >
           <div class="d-flex align-center general-font-size"> <img class="icons-menu mr-5" :src="iconFacility"> <span>Anbieter</span></div>
-          <v-icon class="ml-5">mdi-arrow-right</v-icon>
           </div>
           <div
             href="/public/search/courses"
@@ -259,7 +257,6 @@
             @click.prevent="goTo('/public/search/courses')"
           >
           <div class="d-flex align-center general-font-size"> <img class="icons-menu mr-5" :src="iconCourse"> <span>Kurse</span></div>
-          <v-icon class="ml-5">mdi-arrow-right</v-icon>
           </div>
           <div
             href="/public/search/events"
@@ -268,7 +265,6 @@
             @click.prevent="goTo('/public/search/events')"
           >
           <div class="d-flex align-center general-font-size"> <img class="icons-menu mr-5" :src="iconEvent"> <span>Veranstaltungen</span></div>
-          <v-icon class="ml-5">mdi-arrow-right</v-icon>
             </div>
         </template>
       </div>
