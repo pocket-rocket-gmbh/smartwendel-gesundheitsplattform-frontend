@@ -20,7 +20,7 @@
     </span>
     <div class="mt-4">
       <ClientOnly>
-        <PublicTextTooltipWrap class="pr-5 is-dark-grey description" :text="careFacility?.description" />
+        <PublicTextTooltipWrap class="pr-5 is-dark-grey description" :text="careFacility?.description.replace('<p><br></p><p><br></p>', '<p><br></p>')" />
       </ClientOnly>
       <v-divider class="my-10"></v-divider>
       <div class="genral-font-size is-dark-grey">
