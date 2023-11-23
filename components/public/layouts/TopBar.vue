@@ -111,7 +111,7 @@
           "
           @click="goToRegister()"
         >
-          <img :src="regiterIcon" width="30" />
+          <img :src="regiterIcon" />
         </div>
         <div class="pl-3">
           <v-btn
@@ -120,7 +120,8 @@
             icon
             @click="goToLogin"
           >
-            <v-icon size="x-large">mdi-account-circle-outline</v-icon>
+          <img :src="loginIcon" />
+            
           </v-btn>
         </div>
         <div class="d-flex align-center main">
@@ -288,6 +289,7 @@ import { useUserStore } from "@/store/user";
 import { useFilterStore } from "~/store/searchFilter";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
 import regiterIcon from "@/assets/icons/registerIcons/icon_registration.svg";
+import loginIcon from "@/assets/icons/registerIcons/icon_login.svg";
 import iconCourse from "~/assets/icons/mobileMenu/icon_course.svg";
 import iconEvent from "~/assets/icons/mobileMenu/icon_event.svg";
 import iconFacility from "~/assets/icons/mobileMenu/icon_facility.svg";
