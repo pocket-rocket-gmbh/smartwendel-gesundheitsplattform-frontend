@@ -17,7 +17,7 @@
             >
               <span>{{ step.description }}</span>
             </div>
-            <span class="text-error d-flex justify-end">* Erforderlich</span>
+            <span class="text-error d-flex justify-end">* Pflichtangabe</span>
           </div>
         </v-col>
         <v-col md="9">
@@ -143,7 +143,7 @@
                     v-if="isDescriptionEmpty(slotProps.item.description)"
                     class="required"
                   >
-                    Erforderlich
+                    Pflichtangabe
                   </div>
                   <v-text-field
                     v-show="false"
@@ -210,7 +210,7 @@
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
+                    >Falls das passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
                   </span>
                   <span>
                     <a
@@ -234,7 +234,7 @@
           <v-checkbox
             v-show="false"
             v-bind:model-value="!!slotProps.item?.event_dates?.length"
-            :rules="[!!slotProps.item?.event_dates?.length || 'Erforderlich']"
+            :rules="[!!slotProps.item?.event_dates?.length || 'Pflichtangabe']"
           ></v-checkbox>
           <div class="field" id="date">
             <div class="my-2">

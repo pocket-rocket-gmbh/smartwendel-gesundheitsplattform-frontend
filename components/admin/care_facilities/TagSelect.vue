@@ -3,7 +3,7 @@
     v-if="kind !== 'facility' && kind !== 'course'"
     v-show="false"
     v-bind:model-value="!!preSetTags.length"
-    :rules="[!!preSetTags.length || 'Erforderlich']"
+    :rules="[!!preSetTags.length || 'Pflichtangabe']"
   ></v-checkbox>
   <CollapsibleItem
     class="tag-select mt-10"

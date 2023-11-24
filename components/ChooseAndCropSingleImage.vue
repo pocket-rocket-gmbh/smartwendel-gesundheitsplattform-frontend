@@ -157,7 +157,7 @@ const errorFileSizeTooLarge = ref(false);
 const croppedImage = ref(null);
 
 const isImageSet = () => {
-  return !!props.preSetImageUrl || !!props.tempImage || "Erforderlich";
+  return !!props.preSetImageUrl || !!props.tempImage || "Pflichtangabe";
 };
 
 const toBase64 = (file: any) =>

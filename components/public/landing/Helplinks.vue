@@ -57,7 +57,7 @@ export default defineComponent({
           image: image2,
           description:
             "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe.",
-          linkText: "Notruf 116 117",
+          linkText: "116 117",
           link: "https://www.116117.de/de/index.php",
         },
       },
@@ -67,7 +67,7 @@ export default defineComponent({
           image: image3,
           description:
             'Die "Nummer gegen Kummer" ist eine Anlaufstelle für Kinder und Jugendliche, die mit Sorgen und Problemen zu kämpfen haben. Hier findest du Unterstützung durch psychologisch geschulte Fachkräfte, die ihre Dienste anonym und kostenlos anbieten.',
-          linkText: "Notruf 116 123",
+          linkText: "116 123",
           link: "https://www.telefonseelsorge.de/",
         },
       },

@@ -24,15 +24,6 @@
               ></span>
             </a>
           </div>
-          <div
-            class="d-flex align-center justify-end"
-            v-if="item.created_at && item.kind === 'news'"
-          >
-            <img :src="eventsIcon" class="mr-2" /><span
-              class="break-title facility-name"
-              >{{ useDatetime().parseDatetime(item.created_at) }}</span
-            >
-          </div>
         </div>
         <hr v-if="item.kind !== 'facility'" />
       </template>
@@ -76,6 +67,15 @@
           <span v-if="item?.event_dates.length && breakPoints.width.value >= 1700">
             <img :src="eventsIcon" class="mr-1" />
             {{ item?.event_dates?.[0]?.slice(0, 10) }}
+          </span>
+        </div>
+        <div
+          class="general-font-size d-flex align-center mb-n3"
+          v-if="item.kind === 'news'"
+        >
+          <span v-if="breakPoints.width.value >= 1700">
+            <img :src="eventsIcon" class="mr-1" />
+            {{ useDatetime().parseDatetime(item?.created_at) }}
           </span>
         </div>
       </div>
