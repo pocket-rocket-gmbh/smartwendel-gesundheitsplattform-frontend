@@ -48,18 +48,6 @@
               Neue Einrichtung
             </v-btn>
           </v-col>
-          <v-col md="3" class="d-flex mx-1">
-            <v-btn
-              elevation="0"
-              variant="outlined"
-              @click="
-                itemId = null;
-                createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
-              ">
-              Einrichtungen importieren
-              </v-btn>
-          </v-col>
           <v-col v-if="user.isAdmin()">
             <v-text-field
               width="50"
