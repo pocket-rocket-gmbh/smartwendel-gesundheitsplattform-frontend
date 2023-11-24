@@ -22,7 +22,7 @@
             >
               <span>{{ step.description }}</span>
             </div>
-            <span class="text-error d-flex justify-end">* Erforderlich</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangabe</span>
           </div>
         </v-col>
         <v-col md="9">
@@ -141,7 +141,7 @@
                     v-if="isDescriptionEmpty(slotProps.item.description)"
                     class="required"
                   >
-                    Erforderlich
+                    Pflichtangabe
                   </div>
                   <v-text-field
                     v-show="false"
@@ -225,8 +225,7 @@
           >
             <span v-if="adressChanged && user.currentUser.is_active_on_health_scope">
               <v-alert type="warning" density="compact" class="mt-2"
-                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung
-                vom Landkreis neu freigegeben werden</v-alert
+                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die Einrichtung erneut von einem Mitarbeiter verifiziert werden. Vielen Dank für deine Geduld!</v-alert
               >
             </span>
             <div class="my-2 d-flex align-center">
@@ -361,7 +360,7 @@
                   useUser().statusOnHealthScope()
                 "
                 hide-details="auto"
-                label="Telefonnummer * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
+                label="Telefonnummer * (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.validateNumber]"
                 :type="'tel'"
                 :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
@@ -378,7 +377,7 @@
                   useUser().statusOnHealthScope()
                 "
                 hide-details="auto"
-                label="E-Mail * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
+                label="E-Mail * (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.email]"
                 :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
@@ -420,8 +419,7 @@
               <div v-if="isValidAddress && !loadingAdress && slotProps.item.street && slotProps.item.town">
                 <div class="mt-3">
                   <v-alert type="success">
-                    Deine Adresse wurde erfolgreich überprüft. Diese wird auf der Webseite
-                    angezeigt.</v-alert
+                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese Adresse auch auf der Webseite angezeigt wird. </v-alert
                   >
                 </div>
               </div>
