@@ -35,7 +35,7 @@
             Bitte denke daran regelmäßig zu speichern damit keine Daten verloren
             gehen!
           </v-alert>
-          <v-btn @click="emitClose()"> Schließen </v-btn>
+          <v-btn variant="outlined" @click="emitClose()"> Schließen </v-btn>
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
