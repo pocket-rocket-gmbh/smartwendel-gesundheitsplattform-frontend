@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="dialog" transition="dialog-bottom-transition" @click:outside="emitClose()">
+  <v-dialog
+    v-model="dialog"
+    transition="dialog-bottom-transition"
+    @click:outside="emitClose()"
+  >
     <v-card class="">
       <v-card-title v-if="location" class="text-h5"> Ort bearbeiten </v-card-title>
       <v-card-title v-else class="text-h5"> Ort erstellen </v-card-title>
@@ -51,9 +55,9 @@
         </v-form>
       </v-container>
       <v-divider></v-divider>
-      <v-card-actions>
-        <v-btn @click="emitSave()">OK</v-btn>
-        <v-btn @click="emitClose()">Abbrechen</v-btn>
+      <v-card-actions class="d-flex justify-end">
+        <v-btn variant="outlined" @click="emitClose()">Abbrechen</v-btn>
+        <v-btn color="blue darken-1" variant="outlined" @click="emitSave()">OK</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -110,7 +114,10 @@ onBeforeMount(async () => {
 
   if (props.location) {
     try {
-      const { address } = await getAddressInfoFromLatLong(props.location.latitude, props.location.longitude);
+      const { address } = await getAddressInfoFromLatLong(
+        props.location.latitude,
+        props.location.longitude
+      );
 
       street.value = `${address.road} ${address.house_number || ""}`;
       community.value = address.city_district;
@@ -141,7 +148,9 @@ const emitSave = async () => {
     emit("save", lat, long);
   } else {
     console.error("Address not found");
-    snackbar.showError("Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!");
+    snackbar.showError(
+      "Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!"
+    );
     error.value = "Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!";
   }
 };
@@ -166,7 +175,9 @@ const getLatLngFromAddress = async (zipCode: string, street: string) => {
 };
 
 const getAddressInfoFromLatLong = async (lat: number, long: number) => {
-  const { data } = await axios.get(`https://geocode.maps.co/reverse?lat=${lat}&lon=${long}`);
+  const { data } = await axios.get(
+    `https://geocode.maps.co/reverse?lat=${lat}&lon=${long}`
+  );
 
   return data;
 };
@@ -183,6 +194,4 @@ const getTownsByCommunityId = (communityId: string) => {
 };
 </script>
 
-<style lang="sass">
-
-</style>
+<style lang="sass"></style>
