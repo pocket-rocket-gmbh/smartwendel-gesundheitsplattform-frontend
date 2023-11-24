@@ -1,5 +1,5 @@
 <template>
-  <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Erforderlich']"></v-checkbox>
+  <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Pflichtangabe']"></v-checkbox>
   <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable> Bitte mindestens einen Filter auswählen </v-alert>
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)"> Filter werden geladen ... </LoadingSpinner>
   <div class="choose-facility-type" v-else>
@@ -28,7 +28,7 @@
           <v-alert color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
-                <span class="has-font-size-small-medium mr-3">Falls der passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
+                <span class="has-font-size-small-medium mr-3">Falls das passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
                 <span>
                   <v-btn color="primary" class="is-white" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</v-btn>
                 </span>
