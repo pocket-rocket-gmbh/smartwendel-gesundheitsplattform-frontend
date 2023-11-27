@@ -55,7 +55,7 @@
         </v-form>
       </v-container>
       <v-divider></v-divider>
-      <v-card-actions class="d-flex justify-end">
+      <v-card-actions class="d-flex justify-end actions">
         <v-btn variant="outlined" @click="emitClose()">Abbrechen</v-btn>
         <v-btn color="blue darken-1" variant="outlined" @click="emitSave()">OK</v-btn>
       </v-card-actions>
@@ -194,4 +194,8 @@ const getTownsByCommunityId = (communityId: string) => {
 };
 </script>
 
-<style lang="sass"></style>
+<style lang="sass">
+.actions
+  gap: 1rem
+
+</style>

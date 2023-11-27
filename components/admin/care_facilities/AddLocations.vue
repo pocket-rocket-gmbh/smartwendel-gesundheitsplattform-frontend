@@ -136,14 +136,13 @@ const handleSaveLocation = (lat: number, long: number) => {
   if (props.itemId) {
     return saveLocation(lat, long);
   }
-
   return saveLocationOffline(lat, long);
 };
 
 const saveLocation = async (lat: number, long: number) => {
   createEditLocationOpen.value = false;
   loadingItem.value = true;
-
+  await getCareFacility();
   if (location.value) {
     api.setEndpoint(`/locations/${location.value.id}`);
     await api.updateItem({
