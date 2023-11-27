@@ -10,7 +10,7 @@
               variant="outlined"
               rounded="pill"
               color="red darken-2"
-              class="mx-5"
+              class="mx-5 mt-1"
               @click="copySearchFilterUrl"
             >
               Such-Filter kopieren
@@ -71,7 +71,7 @@
         <v-col
           v-if="filterKind !== 'event' && filterKind !== 'news'"
           md="1"
-          class="d-flex justify-center align-end is-white mb-5"
+          class="d-flex justify-center align-end is-white mb-4"
         >
           <div class="label font-weight-medium general-font-size">oder</div>
         </v-col>
@@ -92,7 +92,7 @@
             />
           </div>
         </v-col>
-        <v-col class="d-flex align-end field mb-4">
+        <v-col class="d-flex align-end field">
           <v-btn
             class="general-font-size"
             min-width="250px"

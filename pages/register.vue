@@ -388,7 +388,7 @@ onMounted(() => {
   }
 
   .text {
-    min-height: 200px;
+    min-height: 350px;
   }
 
   .shake {
@@ -430,16 +430,19 @@ onMounted(() => {
       flex-direction: column;
 
       .arrow {
-        rotate: 90deg;
+        transform: rotate(90deg);
       }
 
       .item {
         align-self: stretch;
+       
       }
     }
+  
 
     .item {
       flex: 1;
+      min-height: 100%;
 
       .background-text {
         background-color: #f5f5f5;
