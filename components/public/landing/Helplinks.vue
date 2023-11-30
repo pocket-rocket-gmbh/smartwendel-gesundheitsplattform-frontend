@@ -15,7 +15,7 @@
                 {{ item.content.heading }}
               </span>
             </div>
-            <div class="is-dark-grey general-font-size description">
+            <div class="is-dark-grey general-font-size" :class="[breakPoints.width.value > 960 ? 'description' : '']">
               {{ item.content.description }}
             </div>
           </div>
@@ -29,6 +29,7 @@
             </div>
           </div>
         </div>
+        <v-divider v-if="breakPoints.width.value < 960 "></v-divider>
       </v-col>
     </v-row>
   </div>
@@ -38,6 +39,7 @@ import { defineComponent } from "vue";
 import image1 from "@/assets/images/help-links/icon_rescue.svg";
 import image2 from "@/assets/images/help-links/icon_emergency.svg";
 import image3 from "@/assets/images/help-links/icon_grief.svg";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
 export default defineComponent({
   setup() {
     const items = [
@@ -73,8 +75,11 @@ export default defineComponent({
       },
     ];
 
+    const breakPoints = useBreakpoints();
+
     return {
       items,
+      breakPoints
     };
   },
 });
