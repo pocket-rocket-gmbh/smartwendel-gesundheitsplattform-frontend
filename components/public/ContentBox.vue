@@ -39,17 +39,18 @@
           v-html="item.description"
         ></span>
       </div>
-      <div class="d-flex align-center justify-space-between">
+      <div :class="[breakPoints.width.value > 1420 ? 'd-flex align-center justify-space-between' : 'mb-5']">
         <div class="action mb-n2" v-if="buttonHref">
           <v-btn
             :href="buttonHref"
             :target="item.url ? '_blank' : ''"
             variant="flat"
             color="primary"
-            size="large"
+            :size="breakPoints.width.value > 960 ? 'large' : 'large'"
+
             class="general-font-size"
             rounded="pill"
-            :width="breakPoints.width.value > 960 ? '' : '100%'"
+            :width="breakPoints.width.value > 1420 ? '' : '100%'"
           >
             <span class="general-font-size" v-if="item.kind">{{
               buttonText

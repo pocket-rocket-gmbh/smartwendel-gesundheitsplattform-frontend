@@ -4,6 +4,9 @@
       <ClientSnackbar />
     </ClientOnly>
     <PublicLayoutsTopBar />
+<!--     <ClientOnly>
+      <PublicCookieBanner />
+    </ClientOnly> -->
     <v-main>
       <slot />
     </v-main>
