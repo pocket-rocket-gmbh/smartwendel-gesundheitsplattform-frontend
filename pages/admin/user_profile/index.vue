@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2>Mein Konto</h2>
-    <v-alert type="info" density="compact" closable class="mt-2">
+    <span class="general-font-size is-dark-grey font-weight-bold">Mein Konto</span>
+    <v-alert type="info" density="compact" closable class="mt-2 general-font-size">
       Hier kannst du deine Daten vervollständigen und dein Passwort ändern.
     </v-alert>
     <v-alert
@@ -28,7 +28,7 @@
     <v-divider class="my-10"></v-divider>
     <div class="box my-15">
       <div class="main" v-if="item">
-        <h3 class="mb-4">Persönliche Daten</h3>
+        <span class="general-font-size is-dark-grey font-weight-bold mb-4">Persönliche Daten</span>
         <v-form ref="form">
           <v-row justify="center">
             <v-col>
@@ -95,7 +95,7 @@
                   editInformations = false;
                 "
               />
-              <h3 class="mb-4">Profilbild</h3>
+              <span class="general-font-size is-dark-grey font-weight-bold mb-4">Profilbild</span>
               <PublicUsersProfileImage
                 :preset-image-url="item.image_url"
                 @setImage="setImage"
@@ -118,7 +118,7 @@
         <v-divider class="my-10"></v-divider>
         <v-row>
           <v-col md="6">
-            <h3 class="mb-4">Passwort ändern</h3>
+            <span class="general-font-size is-dark-grey font-weight-bold mb-4">Passwort ändern</span>
             <v-text-field
               v-model="password"
               :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"

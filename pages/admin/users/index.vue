@@ -3,16 +3,16 @@
     <div>
       <v-row>
         <v-col md="3">
-          <h2>Benutzer</h2>
+          <span class="general-font-size is-dark-grey font-weight-bold">Benutzer</span>
         </v-col>
         <v-col class="d-flex justify-end align-center">
           <div class="d-flex align-center mx-3">
             <v-icon size="x-small" color="success">mdi-circle</v-icon>
-            <span class="pl-1">Einrichtung online</span>
+            <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Einrichtung online</span>
           </div>
           <div class="d-flex align-center mx-3">
             <v-icon size="x-small" color="error">mdi-circle</v-icon>
-            <span class="pl-1">Einrichtung nicht online</span>
+            <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Einrichtung nicht online</span>
           </div>
         </v-col>
       </v-row>

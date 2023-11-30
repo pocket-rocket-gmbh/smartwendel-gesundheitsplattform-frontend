@@ -9,7 +9,10 @@
           openImageupload = !openImageupload;
           openPhotoGallery = false;
         "
-        >Hochladen
+        >
+        <span class="general-font-size is-dark-grey">
+          Hochladen
+        </span>
       </v-btn>
     </v-col>
     <v-col md="2" class="d-flex align-center justify-start">
@@ -21,7 +24,10 @@
           openPhotoGallery = !openPhotoGallery;
           openImageupload = false;
         "
-        >aus der Galerie
+        >
+        <span class="general-font-size is-dark-grey">
+          aus der Galerie
+        </span>
       </v-btn>
     </v-col>
   </v-row>
@@ -41,7 +47,7 @@
   <div class="field">
     <v-file-input
       v-if="!openPhotoGallery && openImageupload || kind === 'category'"
-      class="text-field my-3"
+      class="text-field my-3 general-font-size is-dark-grey"
       hide-details="auto"
       v-model="image"
       :label="`${labelText} ${tempImage || preSetImageUrl ? 'aktualisieren' : 'wählen'}`"
@@ -52,7 +58,7 @@
       :rules="[isImageSet()]"
       accept="image/*"
     />
-    <div class="text-caption" v-if="!openPhotoGallery && openImageupload">
+    <div class="text-caption is-dark-grey" v-if="!openPhotoGallery && openImageupload">
       * Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt
     </div>
     <div
@@ -78,7 +84,7 @@
   <template v-else-if="croppedImage || tempImage || preSetImageUrl">
     <v-row class="my-1">
       <v-col md="1" class="d-flex align-center justify-center">
-        <span>Bereits ausgewählt:</span>
+        <span class="general-font-size is-dark-grey">Bereits ausgewählt:</span>
       </v-col>
       <v-col>
         <v-card max-width="200">

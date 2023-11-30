@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Admin-Bereich</h2>
+    <span class="general-font-size is-dark-grey font-weight-bold">Admin-Bereich</span>
   </div>
 </template>
 

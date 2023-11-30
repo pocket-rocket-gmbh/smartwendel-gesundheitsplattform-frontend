@@ -20,14 +20,14 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span class="general-font-size">{{ step.description }}</span>
+              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
             </div>
             <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
           </div>
         </v-col>
         <v-col md="9">
           <div class="py-10">
-            <span class="text-h6"
+            <span class="general-font-size is-dark-grey"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
               spezifisches Leistungsangebot in einem eigenen Profil darstellen und
               veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer
@@ -40,7 +40,7 @@
               <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name"
               hide-details="auto"
               label="Einrichtung/Unternehmen/Behörde/Verein/Verband"
@@ -130,7 +130,7 @@
                 >
                   <QuillEditor
                     ref="ql-editor"
-                    class="ql-blank"
+                    class="ql-blank is-dark-grey"
                     :placeholder="steps['description'].placeholder"
                     :options="textOptions"
                     v-model:content="slotProps.item.description"
@@ -270,7 +270,7 @@
             />
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.street"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -290,7 +290,7 @@
             {{ handleInitialCheckValidAddress(slotProps.item) }}
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.additional_address_info"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -305,7 +305,7 @@
             <div class="field">
               <v-select
                 hide-details="auto"
-                class="text-field"
+                class="text-field is-drak-grey"
                 v-model="slotProps.item.community_id"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -322,7 +322,7 @@
             </div>
             <div class="field split">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.zip"
                 disabled
                 hide-details="auto"
@@ -333,7 +333,7 @@
               />
               <v-select
                 hide-details="auto"
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.town"
                 :disabled="
                   (!useUser().isAdmin() &&
@@ -352,7 +352,7 @@
             </div>
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.phone"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -369,7 +369,7 @@
             </div>
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.email"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -458,7 +458,7 @@
               <v-text-field
                 v-for="day in slotProps.item.opening_hours"
                 :key="day.day"
-                class="mb-2 mt-5"
+                class="mb-2 mt-5 is-dark-grey"
                 v-model="day.hours"
                 :placeholder="day.placeholder"
                 hide-details="auto"
@@ -482,7 +482,7 @@
               </v-tooltip>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
@@ -524,7 +524,7 @@
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name_responsible_person"
               hide-details="auto"
               label="Vor- und Nachname"

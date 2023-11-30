@@ -15,7 +15,7 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span>{{ step.description }}</span>
+              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
             </div>
             <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
           </div>
@@ -23,7 +23,7 @@
         <v-col md="9">
           <div class="py-10">
             <div>
-              <span class="text-h6"
+              <span class="general-font-size is-dark-grey"
                 >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind,
                 desto besser können dich Besucher auf der Webseite finden. Pflichtfelder
                 sind mit einem Sternchen versehen.</span
@@ -32,10 +32,10 @@
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="general-font-size font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name"
               hide-details="auto"
               label="Name"
@@ -46,7 +46,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="leader">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["leader"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -59,7 +59,7 @@
               </v-tooltip>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name_instructor"
               hide-details="auto"
               label="Name des Veranstalters"
@@ -71,7 +71,7 @@
 
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["photo"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -97,7 +97,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["gallery"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["gallery"].label }}</span>
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
@@ -110,7 +110,7 @@
 
           <div class="field" id="description">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["description"].label
               }}</span>
             </div>
@@ -124,7 +124,7 @@
                 >
                   <QuillEditor
                     ref="ql-editor"
-                    class="ql-blank"
+                    class="ql-blank is-dark-grey"
                     :placeholder="steps['description'].placeholder"
                     :options="textOptions"
                     v-model:content="slotProps.item.description"
@@ -139,7 +139,7 @@
                   </div>
                   <v-text-field
                     v-show="false"
-                    class="hidden-text-field"
+                    class="hidden-text-field is-dark-grey"
                     :model-value="
                       isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
                     "
@@ -152,7 +152,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["services"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -181,13 +181,13 @@
           ></v-checkbox>
           <div class="field" id="date">
             <div class="my-2">
-              <span class="text-h5 mr-2 font-weight-bold">{{ steps["date"].label }}</span>
+              <span class="general-font-size is-dark-grey mr-2 font-weight-bold">{{ steps["date"].label }}</span>
             </div>
             <div class="mb-15">
               <v-row>
                 <v-col md="4" class="d-flex flex-column">
                   <div class="my-5">
-                    <span class="text-h5 mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
+                    <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
                   </div>
 
                   <Datepicker
@@ -215,8 +215,8 @@
                     <thead>
                       <tr>
                         <th></th>
-                        <th class="text-left">Datum</th>
-                        <th class="text-left">Löschen</th>
+                        <th class="text-left is-dark-grey">Datum</th>
+                        <th class="text-left is-dark-grey">Löschen</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -236,11 +236,12 @@
                           >
                           </v-btn>
                         </td>
-                        <td>{{ date }}</td>
+                        <td class="is-dark-grey">{{ date }}</td>
                         <td>
                           <v-btn
                             icon="mdi-delete"
                             variant="text"
+                            class="is-dark-grey"
                             @click="deleteDate(index, slotProps.item.event_dates)"
                           ></v-btn>
                         </td>
@@ -260,11 +261,11 @@
                 </v-col>
               </v-row>
               <div class="mt-5">
-                <span class="text-h5 mr-2 font-weight-bold"> Dauer: </span>
+                <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Dauer: </span>
               </div>
               <div class="field split mt-5">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.event_duration"
                   hide-details="auto"
                   label="Veranstaltungsdauer (HH:MM)"
@@ -279,12 +280,12 @@
 
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["website"].label
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
@@ -298,7 +299,7 @@
 
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["documents"].label
               }}</span>
             </div>
@@ -314,7 +315,7 @@
           <v-divider class="my-10"></v-divider>
           <div id="address">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["address"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["address"].label }}</span>
               <v-checkbox
                 hide-details
                 density="compact"
@@ -326,7 +327,7 @@
             <div v-if="slotProps.item.course_outside_facility">
               <div class="field">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
@@ -338,7 +339,7 @@
               </div>
               <div class="field">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.additional_address_info"
                   hide-details="auto"
                   label="Adresszusatz"
@@ -347,7 +348,7 @@
               <div class="field">
                 <v-select
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.community_id"
                   :items="communities"
                   item-title="name"
@@ -358,7 +359,7 @@
               </div>
               <div class="field split">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.zip"
                   hide-details="auto"
                   label="PLZ"
@@ -370,7 +371,7 @@
                 <v-select
                   :disabled="!slotProps.item.zip"
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.town"
                   :items="getTownsByCommunityId(slotProps.item.community_id)"
                   item-title="name"
@@ -384,7 +385,7 @@
               <div class="field">
                 <v-text-field
                   disabled
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
@@ -397,7 +398,7 @@
               <div class="field">
                 <v-text-field
                   disabled
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.additional_address_info"
                   hide-details="auto"
                   label="Adresszusatz"
@@ -407,7 +408,7 @@
                 <v-select
                   disabled
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.community_id"
                   :items="communities"
                   item-title="name"
@@ -417,7 +418,7 @@
               </div>
               <div class="field split">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   disabled
                   v-model="slotProps.item.zip"
                   hide-details="auto"
@@ -429,7 +430,7 @@
                 <v-select
                   disabled
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.town"
                   :items="getTownsByCommunityId(slotProps.item.community_id)"
                   item-title="name"
@@ -442,12 +443,12 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="responsible">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name_responsible_person"
               hide-details="auto"
               label="Vor- und Nachname"

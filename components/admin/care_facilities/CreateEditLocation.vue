@@ -5,14 +5,15 @@
     @click:outside="emitClose()"
   >
     <v-card class="">
-      <v-card-title v-if="location" class="text-h5"> Ort bearbeiten </v-card-title>
-      <v-card-title v-else class="text-h5"> Ort erstellen </v-card-title>
+      <v-card-title v-if="location" class="general-font-size is-dark-grey"> Ort bearbeiten </v-card-title>
+      <v-card-title v-else class="general-font-size is-dark-grey"> Ort erstellen </v-card-title>
       <v-container>
         <v-form ref="form">
           <div class="mb-15">
             <div class="field">
               <v-text-field
                 v-model="street"
+                class="is-dark-grey"
                 hide-details="auto"
                 label="Straße und Nummer"
                 :rules="[rules.required, rules.counterStreet]"
@@ -23,6 +24,7 @@
                 hide-details="auto"
                 v-model="community"
                 :items="communities"
+                class="is-dark-grey"
                 item-title="name"
                 item-value="id"
                 label="Gemeinde"
@@ -36,6 +38,7 @@
                 disabled
                 label="PLZ"
                 :type="'number'"
+                class="is-dark-grey"
                 readonly
                 :rules="[rules.required, rules.zip]"
               />
@@ -46,12 +49,13 @@
                 :items="townsByCommunityId"
                 item-title="name"
                 item-value="name"
+                class="is-dark-grey"
                 label="Ort"
                 :rules="[rules.required]"
               />
             </div>
           </div>
-          <v-alert v-if="error" type="error">{{ error }}</v-alert>
+          <v-alert class="general-font-size" v-if="error" type="error">{{ error }}</v-alert>
         </v-form>
       </v-container>
       <v-divider></v-divider>

@@ -8,7 +8,7 @@
         <v-table v-if="careFacility?.locations.length > 0">
           <thead>
             <tr>
-              <th>Adresse</th>
+              <th class="general-font-size is-dark-grey">Adresse</th>
               <th></th>
               <th></th>
             </tr>
@@ -43,7 +43,7 @@
         <v-table v-if="offlineLocations.length > 0">
           <thead>
             <tr>
-              <th>Addresse</th>
+              <th class="general-font-size is-dark-grey">Addresse</th>
               <th></th>
               <th></th>
             </tr>
@@ -53,7 +53,7 @@
               <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" /></td>
               <td>
                 <v-icon
-                  class="is-clickable"
+                  class="is-clickable general-font-size is-dark-grey"
                   @click="
                     openLocationDialog({
                       id: String(index),
@@ -69,7 +69,7 @@
                   >mdi-pencil</v-icon
                 >
               </td>
-              <td><v-icon class="is-clickable" @click="deleteOfflineLocation(index)">mdi-delete</v-icon></td>
+              <td><v-icon class="is-clickable general-font-size is-dark-grey" @click="deleteOfflineLocation(index)">mdi-delete</v-icon></td>
             </tr>
           </tbody>
         </v-table>
