@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Tooltips</h2>
+    <span class="general-font-size is-dark-grey font-weight-bold">Tooltips</span>
 
     <div>
       <v-row align="center">
