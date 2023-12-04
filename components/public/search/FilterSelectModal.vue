@@ -18,15 +18,15 @@
           <v-btn icon v-if="filterStore.currentTags?.length" @click="filterStore.currentTags = []">
             <v-icon>mdi-reload</v-icon>
           </v-btn>
-          <v-toolbar-title class="d-flex justify-center">Leistung auswählen</v-toolbar-title>
+          <v-toolbar-title class="d-flex justify-start">Leistung auswählen</v-toolbar-title>
           <v-btn v-if="filterStore.currentTags?.length" variant="text" @click="dialog = false"> Fertig </v-btn>
           <v-btn v-else variant="text" @click="dialog = false"> Schließen </v-btn>
         </v-toolbar>
         <div class="filter-tiles mt-5">
           <template v-if="!loading">
             <div v-for="filter in itemsForServiceList" class="filter-group">
-              <div v-for="item in filter.next" class="filter-selections">
-                <span v-if="item.next.length" class="text-h4 d-flex justify-center">{{ item.title }}</span>
+              <div v-for="item in filter.next" class="filter-selections mt-10">
+                <span v-if="item.next.length" class="text-h4 d-flex justify-center is-dark-grey">{{ item.title }}</span>
                 <v-row no-gutters class="fill-height item-row">
                   <v-col
                     cols="12"
