@@ -1,6 +1,10 @@
 <template>
-  <div ref="contentBoxRef" class="content-box" v-resize="handleResize" >
-    <a class="image" :href="buttonHref" v-if="showImage && breakPoints.width.value >= 1420">
+  <div ref="contentBoxRef" class="content-box" v-resize="handleResize">
+    <a
+      class="image"
+      :href="buttonHref"
+      v-if="showImage && breakPoints.width.value >= 1420"
+    >
       <img v-if="item.image_url" :src="item.image_url" />
       <img v-else :src="noImage" />
     </a>
@@ -39,7 +43,15 @@
           v-html="item.description"
         ></span>
       </div>
-      <div :class="[breakPoints.width.value > 1420 ? 'd-flex align-center justify-space-between' : 'mb-5']">
+      <div
+        :class="[
+          breakPoints.width.value > 1420
+            ? 'd-flex align-center justify-space-between'
+            : item.kind !== 'facility'
+            ? 'mb-3'
+            : '',
+        ]"
+      >
         <div class="action mb-n2" v-if="buttonHref">
           <v-btn
             :href="buttonHref"
@@ -47,14 +59,11 @@
             variant="flat"
             color="primary"
             :size="breakPoints.width.value > 960 ? 'large' : 'large'"
-
             class="general-font-size"
             rounded="pill"
             :width="breakPoints.width.value > 1420 ? '' : '100%'"
           >
-            <span class="general-font-size" v-if="item.kind">{{
-              buttonText
-            }}</span>
+            <span class="general-font-size" v-if="item.kind">{{ buttonText }}</span>
             <span class="general-font-size" v-else-if="item.url_kind">{{
               item.button_text
             }}</span>
@@ -104,14 +113,10 @@ const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "facility")
-      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
   }
 
   if (props.item.url) {
@@ -119,10 +124,7 @@ const buttonHref = computed(() => {
       return props.item.url;
     }
 
-    if (
-      props.item.url.includes("http://") ||
-      props.item.url.includes("https://")
-    ) {
+    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
       return props.item.url;
     } else return "https://" + props.item.url;
   }
@@ -138,11 +140,11 @@ const buttonText = computed(() => {
     if (props.item.kind === "news") return "Zum Beitrag";
     if (props.item.kind === "facility") return "Zur Einrichtung";
   }
-})
+});
 
 const handleResize = () => {
   if (!contentBoxRef.value) return;
-  const imageWidth = contentBoxRef.value.getBoundingClientRect().width
+  const imageWidth = contentBoxRef.value.getBoundingClientRect().width;
   showImage.value = imageWidth > 550;
 };
 </script>
@@ -231,6 +233,7 @@ $min-width: 200px;
       font-size: 1.2rem;
       @include md {
         margin-top: 1rem;
+        margin-bottom: 1rem;
       }
     }
   }
