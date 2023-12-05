@@ -61,7 +61,7 @@
       :care-facility="careFacility"
       v-if="careFacility?.kind !== 'news'"
     />
-    <div class="d-md-none d-sm-block mt-15 pt-15">
+    <div class="d-md-none d-sm-block" :class="[careFacility?.logo_url ? ' mt-10 pt-15' : 'mt-5']">
       <span
       class="general-font-size font-weight-medium is-dark-grey"
       >{{ careFacility?.name }}</span
