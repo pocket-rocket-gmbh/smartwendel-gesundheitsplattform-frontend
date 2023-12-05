@@ -29,7 +29,7 @@
         <div class="all-filters">
           <div v-if="!loadingFilters" class="filters">
             <div v-for="filter in mainFilters" :key="filter.id">
-              <div class="filter-name ml-2">
+              <div v-if="hasActiveOptions(filter.id)" class="filter-name ml-2">
                 {{ filter.name }}
               </div>
               <div class="filter-options">
@@ -56,9 +56,8 @@
                     {{ option.name }}
                   </v-btn>
                 </div>
-                 
                 </label>
-                <v-divider class="my-2"></v-divider>
+                <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
               </div>
             </div>
           </div>
@@ -96,6 +95,7 @@ type Filter = {
   name: string;
   parent_id?: string;
   care_facilities_count: string;
+  care_facilities_active_count: string;
 };
 type FilterOption = {
   parentId: string;
@@ -142,6 +142,12 @@ const handleOptionSelect = (option: Filter) => {
 
   emit("update:modelValue", props.modelValue);
 };
+
+const hasActiveOptions = (filterId:string) => {
+  const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
+  return options && options.some(option => (option?.care_facilities_active_count) > '0');
+};
+
 
 const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
