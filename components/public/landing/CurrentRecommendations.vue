@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper bg-gradient">
     <div class="d-flex align-center justify-center">
-      <div class="text-white text-h4 my-5">
+      <div class="text-white text-h4 font-weight-medium my-5">
         Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun
         kannst.
       </div>
@@ -14,7 +14,7 @@
       >
         <a :href="item.content.link" class="is-white is-clickable">
           <img class="is-clickable icons" :src="item.content.image" width="120" />
-          <div class="font-weight-bold general-font-size">
+          <div class="font-weight-medium general-font-size">
             {{ item.content.heading }}
           </div>
         </a>

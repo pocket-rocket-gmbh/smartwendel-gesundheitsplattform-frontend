@@ -2,7 +2,7 @@
   <template v-if="breakPoints.isMobile.value">
     <v-app-bar :elevation="0" density="compact" class="main-layouts-title-bar">
       <div class="main-toolbar-content">
-        <div class="menu-title is-uppercase has-font-size-big d-flex align-center justify-space-between text">
+        <div class="menu-title is-uppercase text-h4 d-flex align-center justify-space-between text">
           <div class="spacer">
             <PublicCategoriesSelectCategoriesModal
               :sub-categories="subCategories"
@@ -10,8 +10,8 @@
               @set-category-and-scroll="setSubCategoryAndScroll"
             />
           </div>
-          <h2 class="is-white text-center" v-if="category">{{ category.name }}</h2>
-          <h2 class="is-white text-center" v-else>{{ title }}</h2>
+          <div class="is-white text-center font-weight-medium text-h4" v-if="category">{{ category.name }}</div>
+          <div class="is-white text-center font-weight-medium text-h4" v-else>{{ title }}</div>
           <div class="spacer"></div>
         </div>
       </div>
@@ -20,14 +20,14 @@
   <template v-else>
     <v-app-bar v-model="appStore.showTopbar" :elevation="0" density="compact" class="main-layouts-title-bar">
       <div class="main-toolbar-content">
-        <div class="menu-title is-uppercase has-font-size-big d-flex align-center justify-center text">
-          <h2 class="is-white" v-if="category">{{ category.name }}</h2>
+        <div class="menu-title is-uppercase text-h4 d-flex align-center justify-center text my-3">
+          <span class="is-white font-weight-medium" v-if="category">{{ category.name }}</span>
           <h2 class="is-white" v-else>{{ title }}</h2>
         </div>
         <div class="menu-bar-wrapper">
           <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
             <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
-              <span class="px-5 is-dark-grey general-font-size" :class="[selectedId === item?.id ? 'text-decoration-underline' : '']">
+              <span class="px-5 is-dark-grey text-h5 font-weight-medium" :class="[selectedId === item?.id ? 'text-decoration-underline' : '']">
                 {{ item?.name }}
               </span>
             </div>
@@ -119,9 +119,6 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
 
         @include md
           margin-top: 0
-      h2
-        @include md
-          font-size: 1.75rem
 
       .spacer
         width: 4rem

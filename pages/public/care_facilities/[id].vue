@@ -1,54 +1,98 @@
 <template>
   <div class="facility-wrapper limited offset content-wrapper" v-if="!loading">
-    <v-btn prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
+    <v-btn
+      prepend-icon="mdi-chevron-left"
+      class="general-font-size"
+      size="large"
+      @click="goBack()"
+    >
+      Zurück zur Suche
+    </v-btn>
     <div v-if="careFacility?.kind === 'news'" class="mt-8">
-      <img :src="careFacility?.image_url" class="news-image"/>
+      <img :src="careFacility?.image_url" class="news-image" />
       <div class="mb-3">
         <v-row>
           <v-col class="bar-content d-flex justify-space-between pa-0 mb-3">
             <div>
               <span class="pr-1"
-                ><v-icon color="primary">mdi-clock-time-three-outline</v-icon></span
+                ><v-icon color="primary"
+                  >mdi-clock-time-three-outline</v-icon
+                ></span
               >
-              <span>{{ useDatetime().parseDatetime(careFacility.created_at) }}</span>
+              <span class="general-font-size is-dark-grey">{{
+                useDatetime().parseDatetime(careFacility.created_at)
+              }}</span>
             </div>
             <div
-            class="d-flex align-center facility-name is-clickable"
-            v-if="careFacility?.user_care_facility?.name"
-          >
-            <a
-              :href="`/public/care_facilities/${careFacility?.user_care_facility?.id}`"
-              class="is-clickable d-flex"
+              class="d-flex align-center facility-name is-clickable"
+              v-if="careFacility?.user_care_facility?.name"
             >
-              <v-icon color="primary" class="facility-name">mdi-home-outline</v-icon>
-              <span
-                class="break-title facility-name"
-                v-html="careFacility?.user_care_facility?.name"
-              ></span>
-            </a>
-          </div>
+              <a
+                :href="`/public/care_facilities/${careFacility?.user_care_facility?.id}`"
+                class="is-clickable d-flex general-font-size is-dark-grey"
+              >
+                <v-icon color="primary" class="facility-name"
+                  >mdi-home-outline</v-icon
+                >
+                <span
+                  class="break-title facility-name"
+                  v-html="careFacility?.user_care_facility?.name"
+                ></span>
+              </a>
+            </div>
             <div class="bar-item" v-if="careFacility?.name_instructor">
-              <span class="px-1"><v-icon color="primary">mdi-account</v-icon></span>
-              <span>{{ careFacility?.name_instructor }}</span>
+              <span class="px-1"
+                ><v-icon color="primary">mdi-account</v-icon></span
+              >
+              <span class="general-font-size is-dark-grey">{{
+                careFacility?.name_instructor
+              }}</span>
             </div>
           </v-col>
           <v-divider class="my-1 mb-3"></v-divider>
         </v-row>
       </div>
-      <p class="general-font-size text-description" v-html="careFacility.description"></p>
+      <p
+        class="general-font-size text-description"
+        v-html="careFacility.description"
+      ></p>
     </div>
-    <PublicCareFacilitiesImages :care-facility="careFacility" v-if="careFacility?.kind !== 'news'"/>
+    <PublicCareFacilitiesImages
+      :care-facility="careFacility"
+      v-if="careFacility?.kind !== 'news'"
+    />
+    <div class="d-md-none d-sm-block" :class="[careFacility?.logo_url ? ' mt-10 pt-15' : 'mt-5']">
+      <span
+      class="general-font-size font-weight-medium is-dark-grey"
+      >{{ careFacility?.name }}</span
+    >
+    <v-divider class="my-5"></v-divider>
+    </div>
+
     <v-row class="row">
-      <v-col>
-        <PublicCareFacilitiesMain v-if="careFacility?.kind !== 'news'" :care-facility="careFacility" />
-      </v-col>
-      <v-col md="4" v-if="careFacility?.kind !== 'news'">
-        <PublicCareFacilitiesRight :care-facility="careFacility" />
-        <div class="mt-5" v-if="careFacility?.kind === 'course', 'event'">
-          <PublicCareFacilitiesDates :care-facility="careFacility" />
+      <v-col sm="12" md="8" class="order-last order-md-first">
+        <PublicCareFacilitiesMain
+          v-if="careFacility?.kind !== 'news'"
+          :care-facility="careFacility"
+        />
+        <div class="hidden-md-and-up">
+          <div class="mt-5" v-if="(careFacility?.kind === 'course', 'event')">
+            <PublicCareFacilitiesDates :care-facility="careFacility" />
+          </div>
+          <div class="mt-5">
+            <PublicCareFacilitiesDocuments :care-facility="careFacility" />
+          </div>
         </div>
-        <div class="mt-5">
-          <PublicCareFacilitiesDocuments :care-facility="careFacility" />
+      </v-col>
+      <v-col md="4" sm="12" v-if="careFacility?.kind !== 'news'">
+        <PublicCareFacilitiesRight :care-facility="careFacility" />
+        <div class="hidden-sm-and-down">
+          <div class="mt-5" v-if="(careFacility?.kind === 'course', 'event')">
+            <PublicCareFacilitiesDates :care-facility="careFacility" />
+          </div>
+          <div class="mt-5">
+            <PublicCareFacilitiesDocuments :care-facility="careFacility" />
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -71,16 +115,16 @@ const careFacilityId = computed(() => {
 });
 
 const goBack = () => {
-  if(careFacility.value.kind === "news") {
+  if (careFacility.value.kind === "news") {
     router.push({ path: "/public/search/news" });
   }
-  if(careFacility.value.kind === "event") {
+  if (careFacility.value.kind === "event") {
     router.push({ path: "/public/search/events" });
   }
-  if(careFacility.value.kind === "course") {
+  if (careFacility.value.kind === "course") {
     router.push({ path: "/public/search/courses" });
   }
-  if(careFacility.value.kind === "facility") {
+  if (careFacility.value.kind === "facility") {
     router.push({ path: "/public/search/facilities" });
   }
 };
@@ -97,6 +141,28 @@ const getCareFacility = async () => {
   careFacility.value = showApi.item.value;
 };
 
+const getFacilityDescription = async () => {
+  await getCareFacility();
+  return careFacility.value?.description;
+};
+const getFacilityTitle = async () => {
+  await getCareFacility();
+  return careFacility.value?.name;
+};
+const getFacilityImage = async () => {
+  await getCareFacility();
+  return careFacility.value?.image_url;
+};
+useHead({
+  title: getFacilityTitle(),
+  meta: [
+    { property: "og:type", content: "Webseite" },
+    { name: "description", content: getFacilityDescription() },
+    { name: "title", content: getFacilityTitle() },
+    { name: "image", content: getFacilityImage() },
+  ],
+});
+
 onMounted(() => {
   getCareFacility();
 });
@@ -107,8 +173,6 @@ onMounted(() => {
 
 .facility-wrapper {
   margin-top: 4rem;
-
-  
 
   .row {
     .column {
@@ -126,10 +190,10 @@ onMounted(() => {
   object-fit: cover;
   border-radius: 20px;
   float: left;
-   @include md {
+  @include md {
     width: 100%;
     margin-bottom: 2rem;
-   }
+  }
 }
 
 .text-description {
@@ -150,5 +214,4 @@ onMounted(() => {
     flex-direction: column;
   }
 }
-
 </style>

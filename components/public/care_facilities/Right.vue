@@ -1,56 +1,56 @@
 <template>
-  <div class="box flex-column text-dark-grey font-weight-bold pa-5">
-    <h2 class="is-primary is-uppercase mb-6">Kontakt und Infos</h2>
+  <div class="box flex-column is-dark-grey pa-5">
+    <span class="is-primary general-font-size is-uppercase font-weight-medium mb-6">Kontakt und Infos</span>
     <div v-if="careFacility?.phone" class="py-3 d-flex flex-column justify-center">
       <span class="d-flex align-center">
         <img class="mr-2 icon" :src="iconPhone" />
-        <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
+        <a class="is-dark-grey general-font-size" :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
       </span>
     </div>
     <div v-if="careFacility?.email" class="py-3">
       <span class="d-flex align-center">
         <img class="mr-2 icon" :src="iconMail" />
-        <a :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
+        <a class="is-dark-grey general-font-size" :href="`mailto:${careFacility.email}`">{{ careFacility.email }}</a>
       </span>
     </div>
     <div v-if="careFacility?.street || careFacility?.zip || careFacility?.town">
       <div class="py-3">
         <span class="d-flex align-center">
           <img class="mr-2 icon" :src="iconAddress" />
-          <span>{{ careFacility.street }}</span>
+          <span class="is-dark-grey general-font-size">{{ careFacility.street }}</span>
         </span>
         <div v-if="careFacility?.additional_address_info">
           <v-icon></v-icon>
-          <span class="mr-2">
+          <span class="mr-2 is-dark-grey general-font-size">
             {{ careFacility?.additional_address_info }}
           </span>
         </div>
 
         <div>
           <v-icon class="mr-1" color="primary"></v-icon>
-          <span>{{ careFacility.zip }} {{ careFacility.town }}</span>
+          <span class="is-dark-grey general-font-size">{{ careFacility.zip }} {{ careFacility.town }}</span>
         </div>
       </div>
     </div>
     <div v-if="careFacility?.name_instructor" class="py-4">
-      <h3 class="is-primary is-uppercase mb-1">
+      <h3 class="is-primary is-uppercase general-font-size font-weight-medium mb-1">
         <span v-if="careFacility.kind === 'course'"> Kursleitung </span>
         <span v-else> Veranstalter </span>
       </h3>
-      <span>
+      <span class="is-dark-grey general-font-size">
         {{ careFacility.name_instructor }}
       </span>
     </div>
-    <div class="mt-3" v-if="careFacility?.kind === 'facility'">
+    <div class="mt-3" v-if="careFacility?.kind === 'facility' && careFacility.location">
       <v-table density="compact">
         <tbody>
-          <h3 class="is-primary is-uppercase mb-1">Öffnungszeiten</h3>
+          <h3 class="is-primary is-dark-grey general-font-size font-weight-medium is-uppercase mb-1">Öffnungszeiten</h3>
           <tr v-for="opening in careFacility.opening_hours" :key="opening.day">
-            <td class="py-3 is-primary">{{ opening.day }}</td>
-            <td class="py-3" v-if="opening.hours.length">
+            <td class="py-3 is-primary is-dark-grey general-font-size">{{ opening.day }}</td>
+            <td class="py-3 is-dark-grey general-font-size" v-if="opening.hours.length">
               {{ opening.hours }}
             </td>
-            <td class="py-3" v-else>keine Angabe</td>
+            <td class="py-3 is-dark-grey general-font-size" v-else>keine Angabe</td>
           </tr>
         </tbody>
       </v-table>
@@ -58,6 +58,7 @@
     <div class="my-4" v-if="careFacility?.website">
       <v-btn
         append-icon="mdi-open-in-new"
+        class="general-font-size"
         variant="outlined"
         size="large"
         rounded="pill"
@@ -72,6 +73,7 @@
     <div class="my-4">
       <v-btn
         variant="outlined"
+        class="general-font-size"
         size="large"
         rounded="pill"
         color="primary"

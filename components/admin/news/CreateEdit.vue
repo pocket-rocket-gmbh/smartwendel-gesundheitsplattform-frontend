@@ -15,15 +15,15 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span>{{ step.description }}</span>
+              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
             </div>
-            <span class="text-error d-flex justify-end">* Erforderlich</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
           </div>
         </v-col>
         <v-col md="9">
           <div class="py-10">
             <div>
-              <span class="text-h6"
+              <span class="general-font-size is-dark-grey"
                 >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen.
                 Je mehr Angaben du machst, umso leichter können Besucher
                 deine Beiträge finden. Pflichtfelder sind mit einem Sternchen
@@ -33,10 +33,10 @@
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name"
               hide-details="auto"
               label="Überschrift"
@@ -47,12 +47,12 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="leader">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["leader"].label
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name_responsible_person"
               hide-details="auto"
               label="Vor und Nachname des Autors"
@@ -63,7 +63,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["photo"].label
               }}</span>
             </div>
@@ -82,7 +82,7 @@
 
           <div class="field" id="description">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["description"].label
               }}</span>
             </div>
@@ -96,7 +96,7 @@
                 >
                   <QuillEditor
                     ref="ql-editor"
-                    class="ql-blank"
+                    class="ql-blank is-dark-grey"
                     :placeholder="steps['description'].placeholder"
                     :options="textOptions"
                     v-model:content="slotProps.item.description"
@@ -107,11 +107,11 @@
                     v-if="isDescriptionEmpty(slotProps.item.description)"
                     class="required"
                   >
-                    Erforderlich
+                    Pflichtangabe
                   </div>
                   <v-text-field
                     v-show="false"
-                    class="hidden-text-field"
+                    class="hidden-text-field is-dark-grey"
                     :model-value="
                       isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
                     "
@@ -138,7 +138,7 @@
           </div> -->
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["services"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -162,7 +162,7 @@
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
+                    >Falls das passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
                   </span>
                   <span>
                     <a

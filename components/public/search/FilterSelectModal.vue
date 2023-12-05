@@ -9,23 +9,24 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props">
           <div class="is-white d-flex align-end mt-10">
-            <v-icon>mdi-filter-outline</v-icon>
+            <img class="filter-icon" :src="iconFilter">
           </div>
         </div>
       </template>
       <v-card>
-        <v-toolbar dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
+        <v-toolbar dense fixed dark color="primary" class="modal-toolbar">
+          <v-btn icon v-if="filterStore.currentTags?.length" @click="filterStore.currentTags = []">
+            <v-icon>mdi-reload</v-icon>
           </v-btn>
-          <v-toolbar-title>Filter</v-toolbar-title>
-          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+          <v-toolbar-title class="d-flex justify-start">Leistung auswählen</v-toolbar-title>
+          <v-btn v-if="filterStore.currentTags?.length" variant="text" @click="dialog = false"> Fertig </v-btn>
+          <v-btn v-else variant="text" @click="dialog = false"> Schließen </v-btn>
         </v-toolbar>
-        <div class="filter-tiles">
+        <div class="filter-tiles mt-5">
           <template v-if="!loading">
             <div v-for="filter in itemsForServiceList" class="filter-group">
-              <div v-for="item in filter.next" class="filter-selections">
-                <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
+              <div v-for="item in filter.next" class="filter-selections mt-10">
+                <span v-if="item.next.length" class="text-h4 d-flex justify-center is-dark-grey">{{ item.title }}</span>
                 <v-row no-gutters class="fill-height item-row">
                   <v-col
                     cols="12"
@@ -35,7 +36,8 @@
                     v-auto-animate
                   >
                     <div
-                      class="filter-tile pa-5"
+                      class="filter-tile pa-5 word-break general-font-size"
+                      lang="de"
                       :class="{
                         selected:
                           isSelectedTagNext(subItem) ||
@@ -75,6 +77,7 @@
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem } from "../../../types/collapsibleList";
+import iconFilter from "@/assets/icons/icon_filter.svg";
 
 const props = defineProps<{
   filterKind: FilterKind;
@@ -270,5 +273,12 @@ onMounted(async () => {
       }
     }
   }
+}
+.filter-icon {
+  width: 30px;
+}
+.modal-toolbar {
+  position: fixed;
+  z-index: 99;
 }
 </style>

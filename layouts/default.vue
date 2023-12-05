@@ -4,6 +4,9 @@
       <ClientSnackbar />
     </ClientOnly>
     <PublicLayoutsTopBar />
+<!--     <ClientOnly>
+      <PublicCookieBanner />
+    </ClientOnly> -->
     <v-main>
       <slot />
     </v-main>
@@ -41,6 +44,8 @@ onMounted(async () => {
   getTooltips();
 
   document.addEventListener("scroll", handleScroll);
+
+  useFilterStore().loadUnalteredAllResults()
 
   if (!tooltipsStore.tooltips) {
     await api.retrieveCollection();

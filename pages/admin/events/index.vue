@@ -2,27 +2,27 @@
   <div>
     <v-row>
       <v-col>
-        <h2 v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</h2>
-        <h2 v-else>Veranstaltungen</h2>
+        <span class="general-font-size is-dark-grey font-weight-bold" v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</span>
+        <span class="general-font-size is-dark-grey font-weight-bold" v-else>Veranstaltungen</span>
       </v-col>
       <v-col class="d-flex justify-end align-center">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span class="pl-1">Benutzer Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer Aktiv</span>
         </div>
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span class="pl-1">Benutzer nicht Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer nicht Aktiv</span>
         </div>
       </v-col>
     </v-row>
 
-    <v-alert type="info" density="compact" closable class="my-2"
+    <v-alert type="info" density="compact" closable class="my-2 general-font-size"
       >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind,
       desto besser können dich Besucher auf der Webseite finden. Pflichtfelder sind mit
       einem Sternchen versehen.</v-alert
     >
-    <v-alert density="compact" closable class="my-2"
+    <v-alert density="compact" closable class="my-2 general-font-size"
       >Leg hier deine Veranstaltung an. Veranstaltungen sind einmalige Ereignisse, die
       sich über mehrere Tage verteilen können.
     </v-alert>
@@ -178,6 +178,11 @@ const fields = [
     action: (item: any) => {
       handleButtonClick(item.id);
     },
+  },
+  {
+    value: "",
+    type: "is-lk",
+    tooltip: "Veranstaltung wurde von einer Admin erstellt."
   },
 ];
 

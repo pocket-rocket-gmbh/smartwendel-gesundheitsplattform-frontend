@@ -1,10 +1,10 @@
 <template>
   <div
-    class="box flex-column text-dark-grey font-weight-bold pa-3"
+    class="box flex-column is-dark-grey font-weight-medium pa-3"
     v-if="careFacility?.event_dates.length"
   >
-    <h2 class="is-primary is-uppercase">Termine</h2>
-    <p>
+    <span class="is-primary is-dark-grey general-font-size font-weight-medium is-uppercase">Termine</span>
+    <p class="is-dark-grey general-font-size">
       <i
         >{{ careFacility?.event_dates.length }}
         <span v-if="careFacility?.event_dates.length === 1">
@@ -13,10 +13,10 @@
         <span v-else> Termine gefunden </span></i
       >
     </p>
-    <div class="my-3">
+    <div class="my-3 is-dark-grey general-font-size">
       <v-table density="compact" fixed-header>
         <thead>
-          <tr>
+          <tr class="is-dark-grey general-font-size">
             <th class="text-center">Datum</th>
             <th class="text-center">Uhrzeit</th>
             <th class="text-center">Dauer</th>
@@ -28,7 +28,7 @@
             <td class="py-0 text-center">
               {{ date.slice(Math.max(date.length - 5, 1)) }} Uhr
             </td>
-            <td class="text-center">{{ careFacility?.event_duration }} Min.</td>
+            <td class="text-center">{{ careFacility?.event_duration }} Std.</td>
           </tr>
         </tbody>
       </v-table>
@@ -51,4 +51,13 @@ const props = defineProps({
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
   border-radius: 20px
   padding: 20px
+
+
+th
+  color: #58595E!important
+  font-weight: 300!important
+
+tr
+  color: #58595E!important
+  font-weight: 300!important
 </style>

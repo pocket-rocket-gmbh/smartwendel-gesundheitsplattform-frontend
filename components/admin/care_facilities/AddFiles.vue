@@ -10,7 +10,7 @@
               1
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
-        class="text-field file-input"
+        class="text-field file-input general-font-size"
         
         label="Datei auswählen"
         v-model="file"
@@ -19,7 +19,7 @@
         show-size
       />
       <v-text-field
-        class="text-field"
+        class="text-field is-dark-grey"
         :disabled="
           tagName === 'insurance' &&
           (itemId
@@ -35,13 +35,13 @@
     <div class="errors">
       <div v-if="errorInvalidFileType">
         <span class="warning">
-          <v-alert type="error" density="compact" closable class="mt-2"
+          <v-alert type="error" density="compact" closable class="mt-2 general-font-size"
             >nur (.pdf) Dateien sind erlaubt</v-alert
           >
         </span>
       </div>
       <div v-if="errorFileSizeTooLarge">
-        <v-alert type="warning" density="compact" closable class="mt-2"
+        <v-alert type="warning" density="compact" closable class="mt-2 general-font-size"
           >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 10 MB
           erlaubt</v-alert
         >
@@ -58,8 +58,8 @@
     >
       Hinzufügen
     </v-btn>
-    <div class="text-caption">* Maximal 10 MB, PDF erlaubt</div>
-    <span class="mr-3 is-red" v-if="loadingItem">wird hochgeladen ....</span>
+    <div class="text-caption is-dark-grey">* Maximal 10 MB, PDF erlaubt</div>
+    <span class="mr-3 is-red is-dark-grey" v-if="loadingItem">wird hochgeladen ....</span>
 
     <v-list class="mt-5" v-if="tagName === 'insurance'">
       <template v-if="itemId">
@@ -70,6 +70,7 @@
           :key="document.id"
           :title="document.title"
           item-props
+          class="general-font-size is-dark-grey"
         >
           <template v-slot:prepend>
             <v-btn
@@ -83,15 +84,22 @@
             >
             </v-btn>
           </template>
-          <i>{{ document.name.replace("-insurance", ".pdf") }}</i>
+          <span class="general-font-size is-dark-grey">
+            <i>{{ document.name.replace("-insurance", ".pdf") }}</i>
+          </span>
           <v-divider></v-divider>
           <span v-if="documentAcepted" class="d-flex align-center text-primary">
             <v-icon>mdi-check-decagram-outline</v-icon>
-            <i>Genehmigt</i>
+            <span class="general-font-size is-dark-grey">
+              <i>Genehmigt</i>
+            </span>
+         
           </span>
           <span v-else class="d-flex align-center text-warning">
             <v-icon>mdi-alert-outline</v-icon>
-            <i>Datei wird überprüft</i>
+            <span class="general-font-size is-dark-grey">
+              <i>Datei wird überprüft</i>
+            </span>
           </span>
 
           <template v-slot:append>
@@ -111,6 +119,7 @@
           :key="index"
           :title="document.documentname"
           item-props
+          class="general-font-size is-dark-grey"
         >
           <template v-slot:prepend>
             <v-btn
@@ -127,11 +136,15 @@
           <v-divider></v-divider>
           <span v-if="documentAcepted" class="d-flex align-center text-primary">
             <v-icon>mdi-check-decagram-outline</v-icon>
-            <i>Genehmigt</i>
+            <span class="general-font-size is-dark-grey">
+              <i>Genehmigt</i>
+            </span>
           </span>
           <span v-else class="d-flex align-center text-warning">
             <v-icon>mdi-alert-outline</v-icon>
-            <i>Datei wird überprüft</i>
+            <span class="general-font-size is-dark-grey">
+              <i>Datei wird überprüft</i>
+            </span>
           </span>
           <template v-slot:append>
             <v-btn
@@ -152,6 +165,7 @@
           :key="document.id"
           :title="document.title"
           item-props
+          class="general-font-size is-dark-grey"
         >
           <template v-slot:prepend>
             <v-btn
@@ -165,7 +179,9 @@
             >
             </v-btn>
           </template>
-          <i>{{ document.name.replace("-documents", ".pdf") }}</i>
+          <span class="general-font-size is-dark-grey">
+            <i>{{ document.name.replace("-documents", ".pdf") }}</i>
+          </span>
           <v-divider></v-divider>
           <template v-slot:append>
             <v-btn
@@ -184,6 +200,7 @@
           :key="index"
           :title="document.documentname"
           item-props
+          class="general-font-size is-dark-grey"
         >
           <template v-slot:prepend>
             <v-btn

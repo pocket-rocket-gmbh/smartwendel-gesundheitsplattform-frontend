@@ -3,7 +3,7 @@
     v-if="kind !== 'facility' && kind !== 'course'"
     v-show="false"
     v-bind:model-value="!!preSetTags.length"
-    :rules="[!!preSetTags.length || 'Erforderlich']"
+    :rules="[!!preSetTags.length || 'Pflichtangabe']"
   ></v-checkbox>
   <CollapsibleItem
     class="tag-select mt-10"
@@ -13,7 +13,7 @@
   >
     <template #title>
       <div
-        class="d-flex align-center"
+        class="d-flex align-center is-dark-grey"
         :class="[handleExpandToggled ? 'text-h5' : 'text-h6']"
       >
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
@@ -53,14 +53,14 @@
         </div>
       </div>
       <div v-if="!expand" class="mt-3">
-        <span v-if="preSetTags.length">Bereits ausgewählt:</span>
+        <span class="is-dark-grey general-font-size" v-if="preSetTags.length">Bereits ausgewählt:</span>
         <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
           {{ tag.name }}
         </v-chip>
       </div>
     </template>
     <template #content>
-      <div class="content text-h6">
+      <div class="content general-font-size is-dark-grey">
         <div v-if="kind === 'facility'">
           Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches Angebot.
         </div>
@@ -73,12 +73,13 @@
           individuell zu beschreiben.
         </div>
         <div v-if="preSetTags?.length" class="tags my-6">
-          <span class="font-weight-bold">Bereits ausgewählt:</span>
+          <span class="general-font-size is-dark-grey font-weight-bold mt-1">Bereits ausgewählt:</span>
           <v-chip
             v-for="tag in preSetTags"
             closable
             @click:close="handleRemoveTag(tag)"
             :key="tag.id"
+            class="is-dark-grey"
           >
             {{ tag.name }}
           </v-chip>
@@ -102,12 +103,12 @@
           >
             <template v-slot:no-data>
               <v-list-item>
-                <v-list-item-title v-if="currentTagSearch.length <= 2">
+                <v-list-item-title v-if="currentTagSearch.length <= 2" class="is-dark-grey">
                   Bitte mindestens 3 Zeichen eingeben um Schlagwörter zu finden
                 </v-list-item-title>
-                <v-list-item-title v-else>
+                <v-list-item-title v-else class="is-dark-grey">
                   Kein Schlagwort mit dem Namen "<strong>{{ currentTagSearch }}</strong
-                  >" gefunden. Drücke auf <kbd>Hinzufügen</kbd> um das neue Schlagwort zu
+                  >" gefunden. Drücke auf <b>Hinzufügen</b> um das neue Schlagwort zu
                   erstellen
                 </v-list-item-title>
               </v-list-item>
@@ -283,7 +284,8 @@ onMounted(async () => {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-top: 0.5rem;
+  padding-top: 0.9rem;
+  align-content: center;
 
   .tag {
     cursor: pointer;

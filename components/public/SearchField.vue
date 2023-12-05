@@ -10,7 +10,7 @@
             type="text"
             @keyup.enter="handlePressEnter($event)"
             :value="modelValue"
-            class="input"
+            class="input is-dark-grey general-font-size"
             :placeholder="placeholderText"
             @input="handleInput"
             @click="showPopover = true"
@@ -29,7 +29,7 @@
 
       <div
         v-show="modelValue && showPopover"
-        class="search-results-popover"
+        class="search-results-popover is-dark-grey general-font-size"
         :class="[defaultStyling ? 'default' : 'styled']"
         ref="popoverParentRef"
       >
@@ -53,11 +53,14 @@
               </div>
               <div class="name">{{ modelValue }}</div>
             </div>
-            <div v-if="!filteredItems?.length && kind" class="name">
+            <div
+              v-if="!filteredItems?.length && kind"
+              class="name is-dark-grey general-font-size"
+            >
               Keine Ergebnisse gefunden
             </div>
             <div
-              class="result"
+              class="result is-dark-grey general-font-size"
               v-for="result in filteredItems"
               :key="result.id"
               @click.stop="
@@ -68,7 +71,9 @@
               <div class="icon">
                 <img :src="getIconSourceFor(result.kind)" />
               </div>
-              <div v-if="filteredItems?.length" class="name">{{ result.name }}</div>
+              <div v-if="filteredItems?.length" class="name">
+                {{ result.name }}
+              </div>
             </div>
           </template>
         </div>
@@ -95,6 +100,7 @@ const props = defineProps<{
   loading?: boolean;
   defaultRouteTo?: string;
   kind?: string;
+  isResultPage?: boolean;
 }>();
 
 const filterStore = useFilterStore();
@@ -120,6 +126,8 @@ const setPlaceholderText = () => {
     placeholderText.value = "Name, Thema, Angebote,…";
   } else if (props.kind === "course") {
     placeholderText.value = "Name, Kursinhalt,…";
+  } else if (props.kind === "news") {
+    placeholderText.value = "Name, Thema,…";
   } else {
     placeholderText.value = "Suche nach Themen, Anbietern, Kursen,…";
   }
@@ -137,27 +145,22 @@ const handlePressEnter = (e: KeyboardEvent) => {
 };
 
 const routeToResults = (result?: Facility) => {
-  if (!result) {
-    // router.push({ path: "/public/search" });
-    if (props.defaultRouteTo) {
-      router.push({ path: props.defaultRouteTo });
+  if (!props.defaultRouteTo) {
+    router.push({ path: props.defaultRouteTo });
+  } else {
+    if (result?.kind && result?.kind === "facility") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
     }
-    return;
+    if (result?.kind && result?.kind === "course") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
+    }
+    if (result?.kind && result?.kind === "event") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
+    }
+    if (result?.kind && result?.kind === "news") {
+      return router.push({ path: `/public/care_facilities/${result.id}` });
+    }
   }
-
-  if (result.kind === "facility") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-  if (result.kind === "course") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-  if (result.kind === "event") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-  if (result.kind === "news") {
-    return router.push({ path: `/public/care_facilities/${result.id}` });
-  }
-
   router.push({ path: "/public/search" });
 };
 
@@ -270,11 +273,12 @@ onMounted(() => {
   .search-results-popover {
     position: absolute;
     top: calc(100% + 2px);
-    left: 0;
     background-color: white;
     overflow: hidden;
     padding: 0.5rem;
     z-index: 10;
+    margin: 0 -10px;
+    border: 1px solid #8ab61d;
 
     .wrapper {
       max-height: 300px;
@@ -336,6 +340,7 @@ onMounted(() => {
     &.default {
       width: 100%;
       border-radius: 10px;
+      margin: 0;
     }
 
     &.styled {
@@ -347,5 +352,9 @@ onMounted(() => {
       width: 100%;
     }
   }
+}
+
+.input {
+  color: #58595e;
 }
 </style>

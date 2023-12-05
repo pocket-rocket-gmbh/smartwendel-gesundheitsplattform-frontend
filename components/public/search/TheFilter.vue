@@ -1,19 +1,25 @@
 <template>
   <div>
-    <h2 class="is-dark-grey is-uppercase">Suche filtern</h2>
+    <span class="general-font-size font-weight-medium is-dark-grey">Verfeinere hier deine Suche:</span>
     <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
       <div class="filter-tiles">
-        <div v-for="filter in itemsForServiceList" class="filter-group">
+        <div v-for="filter in availableItemsForServiceList" class="filter-group">
           <div v-for="item in filter.next" class="mt-5 filter-selections">
-            <span v-if="item.next.length" class="text-h5">{{ item.title }}</span>
-            <v-row no-gutters class="mt-3 fill-height mr-1">
+            <span
+              v-if="item.next.length && item.next.reduce((acc, subItem) => acc + parseInt(subItem.care_facilities_count), 0)"
+              class="general-font-size font-weight-bold is-dark-grey"
+              :class="[breakPoints.width.value <= 1280 ? 'd-flex justify-center' : '']"
+              >{{ item.title }}</span
+            >
+            <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1">
               <v-col cols="12" lg="6" md="12" class="align-center column-items pr-1 pt-1" v-for="subItem in item.next" v-auto-animate>
                 <div
+                  v-if="subItem"
                   class="filter-tile"
                   :class="{ selected: isSelectedTagNext(subItem) || expandedItemIds.includes(subItem.id) }"
                   @click="toggleSelection(subItem)"
                 >
-                  <span class="word-break general-font-size">
+                  <span class="word-break sub-item-title general-font-size" lang="de">
                     {{ subItem.title }}
                   </span>
                 </div>
@@ -27,31 +33,16 @@
         </div>
       </div>
     </v-skeleton-loader>
-    <div>
-      <v-btn prepend-icon="mdi-trash-can-outline" size="small" class="mt-4" variant="text" color="secondary" rounded="pill" @click="emitResetFilter">
-        Alle Filter löschen
-      </v-btn>
-      <v-btn
-        v-if="useUser().loggedIn()"
-        prepend-icon="mdi-content-copy"
-        size="small"
-        class="mt-4"
-        variant="text"
-        color="primary"
-        rounded="pill"
-        @click="copySearchFilterUrl"
-      >
-        Such-Filter kopieren
-      </v-btn>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { VSkeletonLoader } from "vuetify/labs/VSkeletonLoader";
 import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import { CollapsibleListItem } from "../../../types/collapsibleList";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+
+const breakPoints = useBreakpoints();
 
 const props = defineProps<{
   filterKind: FilterKind;
@@ -63,6 +54,7 @@ const snackbar = useSnackbar();
 const loading = ref(false);
 
 const itemsForServiceList = ref<CollapsibleListItem[]>([]);
+const availableItemsForServiceList = ref<CollapsibleListItem[]>([]);
 const expandedItemIds = ref([]);
 
 const api = useCollectionApi();
@@ -74,6 +66,7 @@ type FilterResponse = {
   name: string;
   menu_order: number;
   parent_id: string;
+  care_facilities_count: string;
 };
 
 const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number, allFilters: FilterResponse[]) => {
@@ -87,6 +80,7 @@ const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem
     menuOrder: filter.menu_order,
     layer,
     next: [],
+    care_facilities_count: filter.care_facilities_count,
   };
 
   arrayToAdd.push(filterItem);
@@ -120,7 +114,7 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind); // Filter items for current kind (event/facility/news/course) // hereeeeee!!!!
+  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
   if (!filters) {
     console.error("No filters!");
     return;
@@ -178,10 +172,34 @@ const copySearchFilterUrl = () => {
   navigator.clipboard.writeText(url);
 };
 
+const checkIfFiltersAreInFacilities = (filters: CollapsibleListItem[], filterIdsInFacility: string[]) => {
+  filters = filters.filter((currentFilter) => {
+    if (filterIdsInFacility.includes(currentFilter.id)) {
+      return true;
+    }
+
+    if (currentFilter.next?.length) {
+      currentFilter.next = checkIfFiltersAreInFacilities(currentFilter.next, filterIdsInFacility);
+      return currentFilter.next.length;
+    }
+
+    return false;
+  });
+
+  return filters;
+};
+
 onMounted(async () => {
   loading.value = true;
   await getItems();
   loading.value = false;
+
+  availableItemsForServiceList.value = [...deepToRaw(itemsForServiceList.value)];
+
+  useNuxtApp().$bus.$on("filtersUpdated", () => {
+    availableItemsForServiceList.value = [...deepToRaw(itemsForServiceList.value)];
+    checkIfFiltersAreInFacilities(availableItemsForServiceList.value, filterStore.allResults.map((facility) => facility.tag_category_ids).flat());
+  });
 });
 </script>
 
@@ -232,6 +250,10 @@ onMounted(async () => {
 
 .sub-filter {
   margin-top: 2rem;
+}
+
+.sub-item-title {
+  line-height: 27px;
 }
 
 .filter-sticky {

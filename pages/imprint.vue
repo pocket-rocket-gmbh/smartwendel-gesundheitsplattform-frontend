@@ -1,8 +1,8 @@
 <template>
-  <div class="general-font-size">
+  <div class="general-font-size is-dark-grey">
     <v-container class="mt-10">
-      <h1>Impressum</h1>
-      <h2>Herausgeber:</h2>
+      <div class="font-weight-medium">Impressum</div>
+      <span class="font-weight-medium">Herausgeber:</span>
       <p>Landkreis Sankt Wendel</p>
       <p>Landrat Udo Recktenwald</p>
       <p>Mommstraße 21-31</p>
@@ -16,14 +16,14 @@
       <p>Ust.-Identifikationsnummer: DE 13 82 44 018</p>
     </v-container>
     <v-container>
-      <h2>Redaktion:</h2>
+      <span class="font-weight-medium">Redaktion:</span>
       <p>
         Die Internetseiten des Landkreises Sankt Wendel werden durch das Amt für Presse-
         und Öffentlichkeitsarbeit des Landkreises Sankt Wendel betreut und gepflegt.
       </p>
     </v-container>
     <v-container>
-      <h2>Nutzungsbedingungen</h2>
+      <span class="font-weight-medium">Nutzungsbedingungen</span>
       <p>
         Texte, Bilder, Grafiken sowie die Gestaltung dieser Internetseiten unterliegen dem
         Urheberrecht. Sie dürfen von Ihnen nur zum privaten und sonstigen eigenen Gebrauch
@@ -39,11 +39,11 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Bildnachweis</h2>
+      <span class="font-weight-medium">Bildnachweis</span>
       <p>Landkreis St. Wendel</p>
     </v-container>
     <v-container>
-      <h2>Haftungsausschluss</h2>
+      <span class="font-weight-medium">Haftungsausschluss</span>
       <p>
         Alle auf dieser Internetseite bereitgestellten Informationen haben wir nach bestem
         Wissen und Gewissen erarbeitet und geprüft. Eine Gewähr für die jederzeitige
@@ -58,7 +58,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Links</h2>
+      <span class="font-weight-medium">Links</span>
       <p>
         Von unseren eigenen Inhalten sind Querverweise („Links“) auf die Webseiten anderer
         Anbieter zu unterscheiden. Durch diese Links ermöglichen wir lediglich den Zugang
@@ -73,13 +73,13 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Umsetzung</h2>
-      <h4>Konzeption, Design und Entwicklung</h4>
+      <span class="font-weight-medium">Umsetzung</span>
+      <div class="font-weight-medium">Konzeption, Design und Entwicklung</div>
       <p>Pocket Rocket GmbH</p>
       <p>Essener Straße 4</p>
       <p>66606 St. Wendel</p>
       <p>info(at)pocket-rocket.io</p>
-      <a href="https://pocket-rocket.io" target="_blank">
+      <a class="is-dark-grey font-weight-medium" href="https://pocket-rocket.io" target="_blank">
         <p>www.pocket-rocket.io</p>
       </a>
     </v-container>

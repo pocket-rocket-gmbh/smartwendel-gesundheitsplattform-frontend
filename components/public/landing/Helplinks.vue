@@ -2,33 +2,34 @@
   <div class="wrapper">
     <v-row>
       <v-col class="d-flex justify-center my-3">
-        <h2 class="is-uppercase">Du benötigst dringend Hilfe?</h2>
+        <span class="general-font-size is-dark-grey font-weight-medium is-uppercase">Du benötigst dringend Hilfe?</span>
       </v-col>
     </v-row>
     <v-row>
-      <v-col v-for="(item, index) in items" :key="index">
+      <v-col v-for="(item, index) in items" :key="index" class="items-nummber">
         <div class="d-flex flex-column justify-space-between text-center align-center items">
           <div>
             <div class="icons d-flex flex-column justify-center align-center">
               <img :src="item.content.image" min-width="50" max-width="50" />
-              <span class="d-flex align-center is-dark-grey font-weight-bold text-h5 title">
+              <span class="d-flex align-center is-dark-grey font-weight-medium general-font-size title">
                 {{ item.content.heading }}
               </span>
             </div>
-            <div class="my-5 is-dark-grey general-font-size description">
+            <div class="is-dark-grey general-font-size" :class="[breakPoints.width.value > 960 ? 'description' : '']">
               {{ item.content.description }}
             </div>
           </div>
           <div class="items-column">
             <div class="general-font-size d-flex flex-column flex-1 buttons-wrapper">
-              <a :href="item.content.link" target="_blank" class="is-red is-clickable">
-                <v-btn variant="flat" color="primary" rounded="pill" size="large">
+              <a :href="item.content.link" target="_blank" class="is-clickable">
+                <v-btn variant="flat" color="primary" rounded="pill" size="large" class="general-font-size">
                   <span>{{ item.content.linkText }}</span>
                 </v-btn>
               </a>
             </div>
           </div>
         </div>
+        <v-divider v-if="breakPoints.width.value < 960 "></v-divider>
       </v-col>
     </v-row>
   </div>
@@ -38,6 +39,7 @@ import { defineComponent } from "vue";
 import image1 from "@/assets/images/help-links/icon_rescue.svg";
 import image2 from "@/assets/images/help-links/icon_emergency.svg";
 import image3 from "@/assets/images/help-links/icon_grief.svg";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
 export default defineComponent({
   setup() {
     const items = [
@@ -57,7 +59,7 @@ export default defineComponent({
           image: image2,
           description:
             "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe.",
-          linkText: "Notruf 116 117",
+          linkText: "116 117",
           link: "https://www.116117.de/de/index.php",
         },
       },
@@ -67,14 +69,17 @@ export default defineComponent({
           image: image3,
           description:
             'Die "Nummer gegen Kummer" ist eine Anlaufstelle für Kinder und Jugendliche, die mit Sorgen und Problemen zu kämpfen haben. Hier findest du Unterstützung durch psychologisch geschulte Fachkräfte, die ihre Dienste anonym und kostenlos anbieten.',
-          linkText: "Notruf 116 123",
+          linkText: "116 123",
           link: "https://www.telefonseelsorge.de/",
         },
       },
     ];
 
+    const breakPoints = useBreakpoints();
+
     return {
       items,
+      breakPoints
     };
   },
 });
@@ -94,13 +99,17 @@ export default defineComponent({
     margin: 0 1rem
 
 .items-column
-  margin: 0 2.5rem
+  margin: 1rem 2.5rem
 
 .description
   min-height: 150px
+
 
 .buttons-wrapper
   @include md
     height: auto
     margin: 2rem 0
+
+.items-nummber
+  margin: 0 2rem
 </style>

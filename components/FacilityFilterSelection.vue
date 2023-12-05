@@ -1,32 +1,52 @@
 <template>
   <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
-    <div class="input" @click="showPopover = !showPopover; handleClearTermSearch()">
-      <div class="input-title">{{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}</div>
+    <div
+      class="input"
+      @click="
+        showPopover = !showPopover;
+        handleClearTermSearch();
+      "
+    >
+      <div class="input-title">
+        {{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}
+      </div>
 
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-    <div class="popover-content  general-font-size" :style="{ width: popoverWidth ? `${popoverWidth}px` : 'max-content' }" v-if="showPopover" v-auto-animate>
+    <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div class="filter-name">
+          <div class="filter-name my-1 font-weight-bold">
             {{ filter.name }}
           </div>
-          <div class="filter-options">
-            <label class="option" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
-              <v-radio
-                v-if="!useUser().isAdmin()"
+          <div
+            class="filter-options"
+            :style="{
+              width: popoverWidth ? `${popoverWidth}px` : 'max-content',
+            }"
+          >
+            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
+              <v-btn
+                v-if="!useUser().isAdmin() && option?.care_facilities_active_count > '0'"
                 :model-value="multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id"
-                @click.prevent="handleOptionSelect(option)"
+                @click.prevent="
+                  handleOptionSelect(option);
+                  showPopover = !showPopover;
+                "
                 hide-details
                 density="compact"
-                :label="option.name"
-                color="#8AB61D"
-                class="options-select"
-              />
+                class="options-select general-font-size ma-2 text-none font-weight-light"
+                :class="{
+                  'is-selected': multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id,
+                }"
+              >
+                {{ option.name }}
+              </v-btn>
+
               <v-checkbox
-                v-else
+                v-else-if="option?.care_facilities_active_count > '0'"
                 :model-value="modelValue.includes(option.id)"
                 @click.prevent="handleOptionSelect(option, true)"
                 hide-details
@@ -35,6 +55,7 @@
                 color="#8AB61D"
               />
             </label>
+            <v-divider class="my-2"></v-divider>
           </div>
         </div>
       </div>
@@ -42,7 +63,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
@@ -78,7 +98,7 @@ watch(
   }
 );
 
-type Filter = { id: string; name: string };
+type Filter = { id: string; name: string; care_facilities_active_count: string };
 
 type FilterOption = {
   parentId: string;
@@ -98,7 +118,7 @@ const filterOptions = ref<FilterOption[]>([]);
 const loadingFilters = ref(false);
 const filterStore = useFilterStore();
 const handleClearTermSearch = () => {
-  if(filterStore.currentSearchTerm) {
+  if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
   }
   return;
@@ -232,31 +252,23 @@ onMounted(async () => {
 
   .popover-content {
     background-color: white;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25);
     padding: 1rem;
     position: absolute;
     left: 0;
     top: calc(100% + 2px);
     border-radius: 10px;
     z-index: 5;
-    display: flex;
-    flex-direction: column;
-    font-size: 1.4rem;
+    .filter-name {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: $dark-grey;
+    }
 
-    .filters {
+    .filter-options {
       display: flex;
-      gap: 1.5rem;
-      justify-content: space-between;
-
-      .filter-column {
-        flex: 1;
-        max-width: calc(33.33% - 1rem);
-      }
-
-      .filter-name {
-        font-size: 1.4rem;
-        margin-bottom: 0.75rem;
-      }
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .option-label {
@@ -275,5 +287,10 @@ onMounted(async () => {
 .options-select {
   gap: 0.5rem;
   min-height: 3rem;
+}
+
+.is-selected {
+  background-color: #8ab61d !important;
+  color: white !important;
 }
 </style>

@@ -22,24 +22,22 @@
 .background {
   width: 100vw;
   height: 100vh;
-  background: url("../assets/images/home.jpg") no-repeat center center;
+  background: url("../assets/images/home-2.png") no-repeat center center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: right top;
+  background-position: right bottom;
 
   @include sm {
-    background: url("../assets/images/home_mobile.jpg") no-repeat center center;
     background-position: center;
     background-size: cover;
     height: 90vh;
   }
 
   @include md {
-    background: url("../assets/images/home_mobile.jpg") no-repeat center center;
     background-position: center;
     background-size: cover;
     background-position: right top;
-    height: 60vh;
+    height: 70vh;
   }
 }
 

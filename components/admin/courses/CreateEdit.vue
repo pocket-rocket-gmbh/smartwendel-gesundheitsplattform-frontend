@@ -15,15 +15,15 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span>{{ step.description }}</span>
+              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
             </div>
-            <span class="text-error d-flex justify-end">* Erforderlich</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
           </div>
         </v-col>
         <v-col md="9">
           <div class="py-10">
             <div>
-              <span class="text-h6"
+              <span class="general-font-size is-dark-grey"
                 >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn
                 möglich alle Felder sorgfältig aus. Pflichtfelder sind mit einem
                 Sternchen versehen.</span
@@ -32,12 +32,12 @@
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["name"].label
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name"
               hide-details="auto"
               label="Name"
@@ -50,7 +50,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="leader">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["leader"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -63,7 +63,7 @@
               </v-tooltip>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name_instructor"
               hide-details="auto"
               label="Name der Kursleitung"
@@ -76,7 +76,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["photo"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -102,7 +102,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["gallery"].label
               }}</span>
             </div>
@@ -116,7 +116,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="description">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["description"].label
               }}</span>
             </div>
@@ -132,7 +132,7 @@
                 >
                   <QuillEditor
                     ref="ql-editor"
-                    class="ql-blank"
+                    class="ql-blank is-dark-grey"
                     :placeholder="steps['description'].placeholder"
                     :options="textOptions"
                     v-model:content="slotProps.item.description"
@@ -143,11 +143,11 @@
                     v-if="isDescriptionEmpty(slotProps.item.description)"
                     class="required"
                   >
-                    Erforderlich
+                    Pflichtangabe
                   </div>
                   <v-text-field
                     v-show="false"
-                    class="hidden-text-field"
+                    class="hidden-text-field is-dark-grey"
                     :model-value="
                       isDescriptionEmpty(slotProps.item.description)
                         ? ''
@@ -162,7 +162,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["category"].label
               }}</span>
               <v-tooltip location="top" width="200px">
@@ -186,7 +186,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["services"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -210,7 +210,7 @@
               <div class="d-flex align-center filter-request">
                 <div class="py-1">
                   <span
-                    >Falls der passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
+                    >Falls das passende Dienstleistungsbereich für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
                   </span>
                   <span>
                     <a
@@ -234,11 +234,11 @@
           <v-checkbox
             v-show="false"
             v-bind:model-value="!!slotProps.item?.event_dates?.length"
-            :rules="[!!slotProps.item?.event_dates?.length || 'Erforderlich']"
+            :rules="[!!slotProps.item?.event_dates?.length || 'Pflichtangabe']"
           ></v-checkbox>
           <div class="field" id="date">
             <div class="my-2">
-              <span class="text-h5 mr-2 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey mr-2 font-weight-bold">{{
                 steps["date"].label
               }}</span>
             </div>
@@ -246,7 +246,7 @@
               <v-row>
                 <v-col md="4" class="d-flex flex-column">
                   <div class="my-5">
-                    <span class="text-h5 mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
+                    <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
                   </div>
                   <Datepicker
                     inline
@@ -276,8 +276,8 @@
                     <thead>
                       <tr>
                         <th></th>
-                        <th class="text-left">Datum</th>
-                        <th class="text-left">Löschen</th>
+                        <th class="text-left is-dark-grey">Datum</th>
+                        <th class="text-left is-dark-grey">Löschen</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -297,11 +297,12 @@
                           >
                           </v-btn>
                         </td>
-                        <td>{{ date }}</td>
+                        <td class="is-dark-grey">{{ date }}</td>
                         <td>
                           <v-btn
                             icon="mdi-delete"
                             variant="text"
+                            class="is-dark-grey"
                             @click="
                               deleteDate(index, slotProps.item.event_dates)
                             "
@@ -323,16 +324,16 @@
                 </v-col>
               </v-row>
               <div class="mt-5">
-                <span class="text-h5 mr-2 font-weight-bold"> Dauer: </span>
+                <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Dauer: </span>
               </div>
               <div class="field split mt-5">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.event_duration"
                   hide-details="auto"
-                  label="Kursdauer (in Minuten)"
-                  placeholder="z.B. 60"
-                  :rules="[rules.required, rules.validateEventDuration]"
+                  label="Kursdauer (HH:MM)"
+                  placeholder="z.B. 01:30"
+                  :rules="[rules.required]"
                   :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
               </div>
@@ -341,7 +342,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="certificates">
             <div class="my-2 d-flex">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["certificates"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -396,12 +397,12 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["website"].label
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
@@ -415,7 +416,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["documents"].label
               }}</span>
             </div>
@@ -432,7 +433,7 @@
           <v-divider class="my-10"></v-divider>
           <div id="address">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["address"].label
               }}</span>
               <v-checkbox
@@ -446,7 +447,7 @@
             <div v-if="slotProps.item.course_outside_facility">
               <div class="field">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
@@ -458,7 +459,7 @@
               </div>
               <div class="field">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.additional_address_info"
                   hide-details="auto"
                   label="Adresszusatz"
@@ -467,7 +468,7 @@
               <div class="field">
                 <v-select
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.community_id"
                   :items="communities"
                   item-title="name"
@@ -478,7 +479,7 @@
               </div>
               <div class="field split">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.zip"
                   hide-details="auto"
                   label="PLZ"
@@ -492,7 +493,7 @@
                 <v-select
                   :disabled="!slotProps.item.zip"
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.town"
                   :items="getTownsByCommunityId(slotProps.item.community_id)"
                   item-title="name"
@@ -506,7 +507,7 @@
               <div class="field">
                 <v-text-field
                   disabled
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
@@ -518,7 +519,7 @@
               <div class="field">
                 <v-text-field
                   disabled
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.additional_address_info"
                   hide-details="auto"
                   label="Adresszusatz"
@@ -528,7 +529,7 @@
                 <v-select
                   disabled
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.community_id"
                   :items="communities"
                   item-title="name"
@@ -538,7 +539,7 @@
               </div>
               <div class="field split">
                 <v-text-field
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   v-model="slotProps.item.zip"
                   hide-details="auto"
                   label="PLZ"
@@ -550,7 +551,7 @@
                 />
                 <v-select
                   hide-details="auto"
-                  class="text-field"
+                  class="text-field is-dark-grey"
                   disabled
                   v-model="slotProps.item.town"
                   :items="getTownsByCommunityId(slotProps.item.community_id)"
@@ -564,12 +565,12 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="responsible">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name_responsible_person"
               hide-details="auto"
               label="Vor- und Nachname"
@@ -1058,7 +1059,7 @@ onMounted(async () => {
 }
 
 .dp__instance_calendar .dp__button {
-  background-color: #8ab61d;;
+  background-color: #8ab61d;
   color: white;
   height: 3rem;
   font-weight: bold;
@@ -1128,6 +1129,10 @@ onMounted(async () => {
 
 .dp--overlay-absolute {
   z-index: 9999 !important;
+}
+
+.dp__active_date {
+  background-color: #8ab61d!important;
 }
 
 .ql-snow .ql-tooltip {

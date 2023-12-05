@@ -3,7 +3,7 @@
     <Loading v-if="loadingItem" />
     <div class="field mt-3">
       <v-file-input
-        class="text-field"
+        class="text-field general-font-size is-dark-grey"
         :disabled="item?.sanitized_images?.length >= 6 || item?.offline_images?.length >= 6"
         hide-details="auto"
         v-model="images"
@@ -15,9 +15,9 @@
         multiple
         show-size
       />
-      <div class="text-caption">* Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt</div>
-      <v-alert v-if="item?.sanitized_images?.length >= 6 || item?.offline_images?.length >= 6" class="my-5" type="error">Es können maximal 6 Bilder hinzugefügt werden.</v-alert>
-      <v-alert v-if="errorFileSizeTooLarge" class="my-5" type="error">Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.</v-alert>
+      <div class="text-caption is-dark-grey">* Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt</div>
+      <v-alert v-if="item?.sanitized_images?.length >= 6 || item?.offline_images?.length >= 6" class="my-5 general-font-size" type="error">Es können maximal 6 Bilder hinzugefügt werden.</v-alert>
+      <v-alert v-if="errorFileSizeTooLarge" class="my-5 general-font-size" type="error">Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.</v-alert>
     </div>
     <ImageCropper
       class="mb-5"
@@ -40,7 +40,7 @@
     </v-row>
     <v-row v-else-if="item?.offline_images.length || item?.sanitized_images.length" class="my-1">
       <v-col md="1" class="d-flex align-center justify-center">
-        <span>Bereits ausgewählt:</span>
+        <span class="general-font-size is-dark-grey">Bereits ausgewählt:</span>
       </v-col>
       <v-col v-for="(image, index) in item?.offline_images" :key="index" md="2">
         <v-card>

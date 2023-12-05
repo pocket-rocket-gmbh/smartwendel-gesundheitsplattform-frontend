@@ -14,20 +14,20 @@
           <div class="mt-10 mx-5 menu-boxes">
             <div
               v-for="[key, step] in Object.entries(steps)"
-              class="d-flex align-center my-3 justify-center align-center select-box mx-1 pa-1 is-clickable text-h5"
+              class="d-flex align-center my-3 justify-center align-center is-dark-grey select-box mx-1 pa-1 is-clickable text-h5"
               :class="[isFilled(slotProps, step) ? 'is-filled' : '']"
               :key="key"
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span>{{ step.description }}</span>
+              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
             </div>
-            <span class="text-error d-flex justify-end">* Erforderlich</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
           </div>
         </v-col>
         <v-col md="9">
           <div class="py-10">
-            <span class="text-h6"
+            <span class="general-font-size is-dark-grey"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
               spezifisches Leistungsangebot in einem eigenen Profil darstellen und
               veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer
@@ -37,10 +37,10 @@
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name"
               hide-details="auto"
               label="Einrichtung/Unternehmen/Behörde/Verein/Verband"
@@ -52,7 +52,7 @@
 
           <div class="field" id="logo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{ steps["logo"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["logo"].label }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -76,7 +76,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["photo"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -102,7 +102,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["gallery"].label
               }}</span>
             </div>
@@ -116,7 +116,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="description">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["description"].label
               }}</span>
             </div>
@@ -130,7 +130,7 @@
                 >
                   <QuillEditor
                     ref="ql-editor"
-                    class="ql-blank"
+                    class="ql-blank is-dark-grey"
                     :placeholder="steps['description'].placeholder"
                     :options="textOptions"
                     v-model:content="slotProps.item.description"
@@ -141,7 +141,7 @@
                     v-if="isDescriptionEmpty(slotProps.item.description)"
                     class="required"
                   >
-                    Erforderlich
+                    Pflichtangabe
                   </div>
                   <v-text-field
                     v-show="false"
@@ -158,7 +158,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-3 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["category"].label
               }}</span>
               <v-tooltip location="top" width="200px">
@@ -182,7 +182,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["services"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -219,18 +219,18 @@
             :class="[
               (adressChanged || editInformations) &&
               user.currentUser.is_active_on_health_scope
+              && slotProps.item.id
                 ? 'has-bg-light-red pa-5'
                 : '',
             ]"
           >
-            <span v-if="adressChanged && user.currentUser.is_active_on_health_scope">
+            <span v-if="adressChanged && user.currentUser.is_active_on_health_scope && slotProps.item.id">
               <v-alert type="warning" density="compact" class="mt-2"
-                >Änderungen vorgenommen! Aufgrund dieser Änderungen muss diese Einrichtung
-                vom Landkreis neu freigegeben werden</v-alert
+                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die Einrichtung erneut von einem Mitarbeiter verifiziert werden. Vielen Dank für deine Geduld!</v-alert
               >
             </span>
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 mr-3 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["contact"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -270,7 +270,7 @@
             />
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.street"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -279,7 +279,7 @@
                   useUser().statusOnHealthScope()
                 "
                 hide-details="auto"
-                label="Straße und Nummer *"
+                label="Straße und Nummer"
                 :rules="[rules.required, rules.counterStreet]"
                 :error-messages="
                   useErrors().checkAndMapErrors('street', slotProps.errors)
@@ -290,7 +290,7 @@
             {{ handleInitialCheckValidAddress(slotProps.item) }}
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.additional_address_info"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -305,7 +305,7 @@
             <div class="field">
               <v-select
                 hide-details="auto"
-                class="text-field"
+                class="text-field is-drak-grey"
                 v-model="slotProps.item.community_id"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -316,24 +316,24 @@
                 :items="communities"
                 item-title="name"
                 item-value="id"
-                label="Gemeinde *"
+                label="Gemeinde"
                 :rules="[rules.required]"
               />
             </div>
             <div class="field split">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.zip"
                 disabled
                 hide-details="auto"
-                label="PLZ *"
+                label="PLZ"
                 :type="'number'"
                 :rules="[rules.required, rules.zip]"
                 :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
               />
               <v-select
                 hide-details="auto"
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.town"
                 :disabled="
                   (!useUser().isAdmin() &&
@@ -345,14 +345,14 @@
                 :items="getTownsByCommunityId(slotProps.item.community_id)"
                 item-title="name"
                 item-value="name"
-                label="Ort *"
+                label="Ort"
                 :rules="[rules.required]"
                 @update:model-value="checkValidAddress(slotProps.item)"
               />
             </div>
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.phone"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -361,7 +361,7 @@
                   useUser().statusOnHealthScope()
                 "
                 hide-details="auto"
-                label="Telefonnummer * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
+                label="Telefonnummer (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.validateNumber]"
                 :type="'tel'"
                 :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
@@ -369,7 +369,7 @@
             </div>
             <div class="field">
               <v-text-field
-                class="text-field"
+                class="text-field is-dark-grey"
                 v-model="slotProps.item.email"
                 :disabled="
                   !useUser().isAdmin() &&
@@ -378,14 +378,14 @@
                   useUser().statusOnHealthScope()
                 "
                 hide-details="auto"
-                label="E-Mail * (Auf Plattform sichtbar. Wird zur Kontaktaufnahme verwendet)"
+                label="E-Mail (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.email]"
                 :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
             </div>
             <div>
               <div class="d-flex mt-5">
-                <span class="text-h6 font-weight-bold">Adresse überprüfen</span>
+                <span class="general-font-size is-dark-grey font-weight-bold">Adresse überprüfen</span>
                 <LoadingSpinner v-if="loadingAdress" />
               </div>
               <div class="mt-3">
@@ -401,27 +401,26 @@
 
               <div v-if="!slotProps.item.street || !slotProps.item.town">
                 <div class="mt-3">
-                  <v-alert type="info">Adresse bitte vervollständigen.</v-alert>
+                  <v-alert type="info" class="general-font-size">Adresse bitte vervollständigen.</v-alert>
                 </div>
               </div>
               <div
                 v-else-if="!isValidAddress && isValidAddress !== null && !loadingAdress"
               >
                 <div class="mt-3">
-                  <v-alert type="error"
+                  <v-alert type="error" class="general-font-size"
                     >Adresse nicht gefunden. überprüfe deine Straße, Hausnr., Gemeinde und
                     Ort</v-alert
                   >
                 </div>
               </div>
               <div class="mt-3" v-if="isValidAddress === null && editInformations">
-                <v-alert type="info"> Neue Adresse bitte eingeben.</v-alert>
+                <v-alert type="info" class="general-font-size"> Neue Adresse bitte eingeben.</v-alert>
               </div>
               <div v-if="isValidAddress && !loadingAdress && slotProps.item.street && slotProps.item.town">
                 <div class="mt-3">
-                  <v-alert type="success">
-                    Deine Adresse wurde erfolgreich überprüft. Diese wird auf der Webseite
-                    angezeigt.</v-alert
+                  <v-alert type="success" class="general-font-size">
+                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese Adresse auch auf der Webseite angezeigt wird. </v-alert
                   >
                 </div>
               </div>
@@ -430,7 +429,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="locations">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 mr-3 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["locations"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -453,13 +452,13 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="openingHours">
             <div class="my-2">
-              <span class="text-h5 font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["openingHours"].label
               }}</span>
               <v-text-field
                 v-for="day in slotProps.item.opening_hours"
                 :key="day.day"
-                class="mb-2"
+                class="mb-2 mt-5 is-dark-grey"
                 v-model="day.hours"
                 :placeholder="day.placeholder"
                 hide-details="auto"
@@ -470,7 +469,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["website"].label
               }}</span>
               <v-tooltip location="top" width="200px">
@@ -483,7 +482,7 @@
               </v-tooltip>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               type="url"
               v-model="slotProps.item.website"
               hide-details="auto"
@@ -495,7 +494,7 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["documents"].label
               }}</span>
               <v-tooltip location="top" width="300px">
@@ -520,12 +519,12 @@
           </div>
           <div class="field" id="responsible">
             <div class="my-2 d-flex align-center">
-              <span class="text-h5 font-weight-bold mr-3">{{
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
                 steps["responsible"].label
               }}</span>
             </div>
             <v-text-field
-              class="text-field"
+              class="text-field is-dark-grey"
               v-model="slotProps.item.name_responsible_person"
               hide-details="auto"
               label="Vor- und Nachname"

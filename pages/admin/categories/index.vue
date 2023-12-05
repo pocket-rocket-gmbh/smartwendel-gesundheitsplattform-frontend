@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Bereiche</h2>
+    <div class="general-font-size is-dark-grey font-weight-bold">Bereiche</div>
 
     <v-btn
       elevation="0"

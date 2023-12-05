@@ -1,12 +1,12 @@
 <template>
-  <div class="register-wrapper">
+  <div class="register-wrapper is-dark-grey">
     <div
       class="register-now elevation-10"
       :class="['card', { shake: animated }]"
     >
       <div>
         <div
-          class="d-flex justify-center align-center text-primary text-h2 font-weight-bold"
+          class="d-flex justify-center align-center text-primary thank-you font-weight-medium"
           v-if="!registerSuccessful"
         >
           <span>Jetzt registrieren!</span>
@@ -36,7 +36,7 @@
       </div>
       <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
         <div class="my-5">
-          <h2 class="mb-3">Meine Einrichtung</h2>
+          <span class="mb-3 general-font-size font-weight-medium">Meine Einrichtung</span>
           <div class="field">
             <v-text-field
               v-model="careFacilityName"
@@ -84,7 +84,7 @@
         </div>
         <div class="my-5">
           <div class="d-flex align-center">
-            <h2 class="mr-3">Mein Benutzerkonto</h2>
+            <span class="mr-3 general-font-size font-weight-medium">Mein Benutzerkonto</span>
             <v-tooltip location="top" width="300px">
               <template v-slot:activator="{ props }">
                 <v-icon class="is-clickable mr-10" v-bind="props"
@@ -150,13 +150,13 @@
           class="check"
         >
           <template #label>
-            <div>
+            <div class="general-font-size">
               Ich stimme der
-              <a target="_blank" href="/privacy_policy" @click.stop>
+              <a class="is-dark-grey" target="_blank" href="/privacy_policy" @click.stop>
                 <u>Datenschutzerklärung</u>
               </a>
               <span> und den </span>
-              <a target="_blank" href="/rules_of_conduct" @click.stop>
+              <a class="is-dark-grey" target="_blank" href="/rules_of_conduct" @click.stop>
                 <u>Nutzungsbedingungen</u>
               </a>
               zu
@@ -164,14 +164,14 @@
           </template>
         </v-checkbox>
 
-        <v-btn color="primary" class="mt-5" block depressed @click="register"
+        <v-btn color="primary" class="mt-5 general-font-size" size="large" block depressed @click="register"
           >Registrieren</v-btn
         >
       </v-form>
       <div align="center" class="mt-5" v-if="registerSuccessful">
         <div class="d-flex flex-column align-center justify-center">
           <span
-            class="text-h2 text-primary font-weight-bold mb-10 general-font-size"
+            class="thank-you text-primary font-weight-medium mb-10"
           >
             Vielen Dank für deine Registrierung!
           </span>
@@ -190,7 +190,7 @@
 
     <span
       v-if="registerSuccessful"
-      class="text-h2 is-dark-grey font-weight-bold d-flex justify-center"
+      class="thank-you is-dark-grey font-weight-medium d-flex justify-center"
       >So geht es weiter:</span
     >
     <div v-if="registerSuccessful" class="steps-wrapper">
@@ -388,7 +388,7 @@ onMounted(() => {
   }
 
   .text {
-    min-height: 200px;
+    min-height: 350px;
   }
 
   .shake {
@@ -430,16 +430,19 @@ onMounted(() => {
       flex-direction: column;
 
       .arrow {
-        rotate: 90deg;
+        transform: rotate(90deg);
       }
 
       .item {
         align-self: stretch;
+       
       }
     }
+  
 
     .item {
       flex: 1;
+      min-height: 100%;
 
       .background-text {
         background-color: #f5f5f5;
@@ -463,5 +466,9 @@ onMounted(() => {
     padding-left: 1rem;
     width: 100%;
   }
+}
+
+.thank-you {
+  font-size: 55px;
 }
 </style>

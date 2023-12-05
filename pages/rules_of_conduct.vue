@@ -1,13 +1,13 @@
 <template>
-  <div class="general-font-size">
+  <div class="general-font-size is-dark-grey">
     <v-container class="mt-10">
-      <h1>
+      <div class="font-weight-medium">
         Nutzungsbedingungen der Gesundheits- und Pflegeplattform des Smart Wendeler Landes
         für Anbieter
-      </h1>
+      </div>
     </v-container>
     <v-container>
-      <h2>Allgemeines</h2>
+      <span class="font-weight-medium">Allgemeines</span>
       <p>
         Der Landkreis Sankt Wendel, Mommstraße 21-31 8, 66606 St. Wendel betreibt die
         Online-Plattform gesundes-wnd.de. Die Plattform ermöglicht es Anbietern und
@@ -19,7 +19,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Vertragsschluss</h2>
+      <span class="font-weight-medium">Vertragsschluss</span>
       <p>
         Die Nutzung der Plattform erfolgt auf Grundlage eines Nutzungsvertrags. Der
         Nutzungsvertrag kommt durch die kostenfreie Registrierung der Anbieter
@@ -27,7 +27,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Registrierung</h2>
+      <span class="font-weight-medium">Registrierung</span>
       <p>
         Jeder Anbieter aus dem Bereich Gesundheit und Pflege mit Sitz im Landkreis
         Sankt Wendel kann sich auf gesundes-wnd.de registrieren. Die Registrierung ist
@@ -53,7 +53,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Erstellen von Inhalten</h2>
+      <span class="font-weight-medium">Erstellen von Inhalten</span>
       <p>
         Anbieter haben die Möglichkeit, ihre Einrichtung über die persönliche
         Detailseite vorzustellen und in Form einer Galerie Bilder hochzuladen. Außerdem
@@ -78,7 +78,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Pflichten der Anbieter</h2>
+      <span class="font-weight-medium">Pflichten der Anbieter</span>
       <p>
         Die Anbieter verpflichten sich, bei der Erstellung und Verwendung eigener
         Inhalte geltendes Recht (z. B. Straf- und Jugendschutzrecht) einzuhalten und nicht
@@ -128,7 +128,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Nutzungsrechte</h2>
+      <span class="font-weight-medium">Nutzungsrechte</span>
       <p>Erstellte Inhalte werden automatisch veröffentlicht.</p>
       <br />
       <p>
@@ -156,7 +156,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Haftung</h2>
+      <span class="font-weight-medium">Haftung</span>
       <p>
         Die Anbieter sind allein für ihre Inhalte und für die Einhaltung der
         gesetzlichen und sonstigen Vorschriften und Regelungen verantwortlich. Alle
@@ -191,7 +191,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Freistellungsanspruch</h2>
+      <span class="font-weight-medium">Freistellungsanspruch</span>
       <p>
         Die Anbieter stellen den Landkreis für den Fall der Inanspruchnahme wegen
         vermeintlicher oder tatsächlicher Rechtsverletzung und/oder Verletzung von Rechten
@@ -204,7 +204,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Beendigung des Nutzungsverhältnisses</h2>
+      <span class="font-weight-medium">Beendigung des Nutzungsverhältnisses</span>
       <p>
         Die Anbieter können das Nutzungsverhältnis jederzeit ordentlich gegenüber
         dem Betreiber oder durch Löschung des Nutzerkontos kündigen. Das Recht zur
@@ -218,7 +218,7 @@
       </p>
     </v-container>
     <v-container>
-      <h2>Schlussbestimmungen</h2>
+      <span class="font-weight-medium">Schlussbestimmungen</span>
       <p>
         Auf diese Nutzungsbedingungen findet ausschließlich deutsches Recht Anwendung.
       </p>

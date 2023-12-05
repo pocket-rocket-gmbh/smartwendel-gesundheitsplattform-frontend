@@ -3,7 +3,7 @@
     <div class="my-15">
       <v-row justify="space-between">
         <v-col class="d-flex justify-start align-center is-uppercase">
-          <div class="is-primary text-h4 font-weight-bold text-uppercase">Beiträge</div>
+          <div class="is-primary text-h4 font-weight-medium">Beiträge</div>
         </v-col>
       </v-row>
     </div>
@@ -22,6 +22,7 @@
           <v-col md="12" class="d-flex justify-center mt-10">
             <v-btn
               variant="flat"
+              class="general-font-size"
               color="primary"
               rounded="pill"
               size="large"
@@ -35,7 +36,7 @@
     </div>
     <div v-else>
       <v-row>
-        <v-col md="12" class="d-flex justify-center aligin-center my-10">
+        <v-col md="12" class="d-flex justify-center aligin-center my-5">
           <span class="text-h5 is-primary">Noch keine Beiträge vorhanden</span>
         </v-col>
       </v-row>

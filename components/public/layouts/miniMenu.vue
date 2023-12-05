@@ -1,50 +1,62 @@
 <template>
   <div>
-    <v-menu v-if="useUser().loggedIn()"
-    v-model="menu"
-    :close-on-content-click="false"
+    <v-menu
+      v-if="useUser().loggedIn()"
+      v-model="menu"
+      :close-on-content-click="false"
     >
       <template v-slot:activator="{ props }">
-        <div class="account-button"
-          v-bind="props"
-        >
+        <div class="account-button" v-bind="props">
           <!-- <p class="mx-5 menu-list">Mein Account</p> -->
           <div v-if="currentUser">
-            <UserProfile
-              :user="currentUser"
-            />
+            <UserProfile :user="currentUser" />
           </div>
         </div>
       </template>
       <v-card class="mx-auto ma-2" width="300" v-if="currentUser">
         <v-list class="card-header">
           <v-list-item-content>
-            <v-list-item-title>{{currentUser?.name}}</v-list-item-title>
-            <v-list-item-subtitle>{{currentUser?.email}}</v-list-item-subtitle>
+            <v-list-item-title class="is-dark-grey font-weight-medium">{{
+              currentUser?.name
+            }}</v-list-item-title>
+            <v-list-item-subtitle class="is-dark-grey">{{
+              currentUser?.email
+            }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list>
         <v-divider></v-divider>
         <v-list>
-          <v-list-item class="is-clicable" v-if="useUser().isAdmin()" @click="closeMenuAndRouteTo(`/admin`)">
+          <v-list-item
+            class="is-clicable"
+            v-if="useUser().isAdmin()"
+            @click="closeMenuAndRouteTo(`/admin`)"
+          >
             <v-icon class="mr-2">mdi-cog</v-icon>
-            Admin-Bereich
+            <span class="is-dark-grey"> Admin-Bereich</span>
           </v-list-item>
-          <v-list-item class="is-clicable" @click="closeMenuAndRouteTo(`/rules_of_conduct`)">
+          <v-list-item
+            class="is-clicable"
+            @click="closeMenuAndRouteTo('/rules_of_conduct')"
+          >
             <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-            Nutzungsbedingungen
+            <span class="is-dark-grey">Nutzungsbedingungen</span>
           </v-list-item>
-          <v-list-item class="is-clicable" v-if="currentUser" @click="useUser().logout(); reload();">
+          <v-list-item
+            class="is-clicable"
+            v-if="currentUser"
+            @click="
+              useUser().logout();
+              reload();
+            "
+          >
             <v-icon class="mr-2">mdi-logout</v-icon>
-            Logout
+            <span class="is-dark-grey">Logout</span>
           </v-list-item>
         </v-list>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            @click="closeMenuAndRouteTo(``)"
-          >
-          schließen
+          <v-btn color="primary" @click="closeMenuAndRouteTo(``)">
+            schließen
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -54,44 +66,44 @@
 
 <script lang="ts">
 export default defineComponent({
-  name: 'miniMenu',
+  name: "miniMenu",
   props: {
     currentUser: {
-      required: true
+      required: true,
     },
     userIsAdmin: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   setup() {
-    const router = useRouter()
-    const menu = ref(false)
+    const router = useRouter();
+    const menu = ref(false);
 
     const reload = () => {
-      router.push({ path: '/' })
-    }
+      router.push({ path: "/" });
+    };
 
     const handleResetLink = () => {
-      if (router.currentRoute.value.path === '/') {
-        location.reload()
+      if (router.currentRoute.value.path === "/") {
+        location.reload();
       } else {
-        router.push({ path: '/' })
+        router.push({ path: "/" });
       }
-    }
+    };
 
     const closeMenuAndRouteTo = (route: string) => {
       menu.value = false;
       router.push(route);
-    }
+    };
 
     return {
       handleResetLink,
       menu,
       reload,
-      closeMenuAndRouteTo
-    }
-  }
-})
+      closeMenuAndRouteTo,
+    };
+  },
+});
 </script>
 
 <style lang="sass">
@@ -105,5 +117,4 @@ export default defineComponent({
   margin-left: 30px
   flex-direction: row
   align-items: center
-
 </style>

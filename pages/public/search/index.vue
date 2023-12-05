@@ -1,46 +1,65 @@
 <template>
+  <div>
+    <v-row class="mt-md-4 search-field-search">
+      <v-col class="d-flex align-center is-white">
+        <span class="is-white font-weight-medium general-font-size">
+          Suchbegriff: {{ filterStore.currentSearchTerm }}
+        </span>
+      </v-col>
+      <v-col>
+        <PublicSearchField
+          class="search-fields"
+          v-model="filterStore.currentSearchTerm"
+          :filtered-items="filterStore.filteredResults"
+          @update:model-value="filterStore.currentSearchTerm"
+          :isResultPage="true"
+        />
+      </v-col>
+    </v-row>
+  </div>
+
   <div class="search-page-wrapper">
     <div>
-      <v-row class="mt-4" v-if="filterStore.filteredResults.length">
-        <v-col>
-          <h2>Suchbegriff: {{ filterStore.currentSearchTerm }}</h2>
-        </v-col>
-      </v-row>
-
-      <LoadingSpinner class="loading" v-if="filterStore.loading">Ergebnisse werden geladen...</LoadingSpinner>
+      <LoadingSpinner class="loading" v-if="filterStore.loading"
+        >Ergebnisse werden geladen...</LoadingSpinner
+      >
       <template v-else>
-        <v-row v-if="filteredKinds.length" class="mt-4">
+        <v-row v-if="!filterStore.filteredResults.length">
+          <v-col class="d-flex flex-column align-center justify-center">
+            <div class="flex-column" align="center">
+              <div class="general-font-size text-h4">
+                Diese Stelle müssen wir noch fixen.
+                <br />
+                Leider haben wir kein Suchergebnis zu deiner Anfrage.
+              </div>
+            </div>
+            <img :src="noResults" class="no-results-image mt-10" />
+          </v-col>
+        </v-row>
+        <v-row class="mt-4" v-else>
           <v-col class="kinds">
             <v-btn
-              v-for="kind in filteredKinds"
-              :key="kind"
+            v-for="(kind, index) in filteredKinds"
+              :key="index"
               variant="outlined"
               size="large"
               rounded="lg"
               color="primary"
-              class="kind"
+              class="kind general-font-size"
               @click="routeToFilterPage(kind)"
             >
               {{ getMappedKindName(kind) }}
             </v-btn>
           </v-col>
         </v-row>
-        <v-row v-else class="mt-15">
-          <v-col class="d-flex flex-column align-center justify-center">
-            <div class="flex-column" align="center">
-              <div class="general-font-size text-h4">Diese Stelle müssen wir noch fixen.
-                <br/>
-                Leider haben wir kein Suchergebnis zu deiner Anfrage.
-              </div>
-              <v-btn class="my-5" prepend-icon="mdi-chevron-left" @click="goBack()"> Zurück zur Suche </v-btn>
-            </div>
-            <img :src="noResults" class="no-results-image" />
-          </v-col>
-        </v-row>
       </template>
     </div>
     <div class="container">
-      <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+      <PublicContentBox
+        v-for="category in filterStore.filteredResults"
+        :key="category.id"
+        :item="category"
+      />
     </div>
   </div>
 </template>
@@ -60,7 +79,7 @@ const goBack = () => {
 };
 
 const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
-  if (kind === "facility") return "Zu den Einrichtungen";
+  if (kind === "facility") return "Zu den Anbietern";
   if (kind === "news") return "Zu den Beiträgen";
   if (kind === "event" || kind === "course") return "Zu den Veranstaltungen";
   if (kind === "course") return "Zu den Kursen";
@@ -130,8 +149,19 @@ onMounted(async () => {
   }
 }
 .no-results-image {
-  max-width: 600px;
+  max-width: 800px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
   border-radius: 20px;
+}
+
+.search-field-search {
+  background: $green-gradient;
+  padding: 2rem 5rem;
+}
+
+.search-fields {
+  width: 100%;
+  justify-content: flex-end;
+  display: flex;
 }
 </style>

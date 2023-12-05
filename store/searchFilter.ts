@@ -63,6 +63,7 @@ export type Filter = {
   currentKinds: FilterKind[];
 
   //
+  allUnalteredResults: Facility[];
   allResults: Facility[];
   filteredResults: Facility[];
   onlySearchInTitle: boolean;
@@ -78,6 +79,7 @@ const initialFilterState: Filter = {
   currentKinds: [],
 
   //
+  allUnalteredResults: [],
   allResults: [],
   filteredResults: [],
   onlySearchInTitle: false,
@@ -175,6 +177,20 @@ export const useFilterStore = defineStore({
       }
       return [];
     },
+    async loadUnalteredAllResults() {
+      const options = {
+        page: 1,
+        per_page: 1000,
+      };
+
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`care_facilities`);
+
+      await api.retrieveCollection(options as any);
+
+      this.allUnalteredResults = api.items.value;
+    },
     async loadAllResults() {
       this.loading = true;
 
@@ -194,12 +210,15 @@ export const useFilterStore = defineStore({
       }
 
       if (tagsToFilter.length) {
-        filters.push({ field: "care_facility_tag_categories", value: tagsToFilter });
+        filters.push({
+          field: "care_facility_tag_categories",
+          value: tagsToFilter,
+        });
       }
 
       const options = {
         page: 1,
-        per_page: 25,
+        per_page: 1000,
         sort_by: "name",
         sort_order: this.filterSort === "Z-A" ? "ASC" : "DESC",
         searchQuery: null as any,
@@ -232,41 +251,7 @@ export const useFilterStore = defineStore({
       // });
 
       this.allResults = allResultsFromApi;
-
-      const getLatLngFromZipCodeAndStreet = async (zipCode: string, street: string) => {
-        try {
-          const { data } = await axios.get(`https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`);
-
-          if (!data.length) {
-            return null;
-          }
-
-          const bestResult = data[0];
-
-          return [bestResult.lat, bestResult.lon] as [string, string];
-        } catch (err) {
-          console.error(err);
-          return null;
-        }
-      };
-
-      if (this.currentKinds.includes("facility")) {
-        const newLocationLatLongsPromises = this.allResults.map((facility) => {
-          if (!facility.zip || !facility.street) {
-            return null;
-          }
-          return getLatLngFromZipCodeAndStreet(facility.zip, facility.street);
-        });
-
-        const newLocationLatLongs = (await Promise.allSettled(newLocationLatLongsPromises))
-          .filter((item) => item.status === "fulfilled")
-          .map((item) => (item.status === "fulfilled" ? item.value : []));
-        newLocationLatLongs.forEach((item, index) => {
-          if (!item) return;
-          this.allResults[index].latitude = item[0];
-          this.allResults[index].longitude = item[1];
-        });
-      }
+      useNuxtApp().$bus.$emit("filtersUpdated");
 
       this.loading = false;
 

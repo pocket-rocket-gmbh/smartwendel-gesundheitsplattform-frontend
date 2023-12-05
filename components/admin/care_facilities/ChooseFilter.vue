@@ -1,6 +1,6 @@
 <template>
-  <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Erforderlich']"></v-checkbox>
-  <v-alert class="my-5" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable> Bitte mindestens einen Filter auswählen </v-alert>
+  <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Pflichtangabe']"></v-checkbox>
+  <v-alert class="my-5 general-font-size" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable> Bitte mindestens einen Filter auswählen </v-alert>
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)"> Filter werden geladen ... </LoadingSpinner>
   <div class="choose-facility-type" v-else>
     <CollapsibleItem
@@ -10,14 +10,14 @@
       @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title align="center">
-        <span :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']">
+        <span class="is-dark-grey" :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']">
           {{ mainFilter.name }}
           <span v-if="mainFilter.name === 'Behandlungsschwerpunkte'">(nur von ärztlichen und therapeutischen Leistungserbringern auszuwählen)</span>
         </span>
         <div>
-          <span v-if="filterHasSelected(mainFilter)">Bereits ausgewählt: </span>
+          <span class="is-dark-grey" v-if="filterHasSelected(mainFilter)">Bereits ausgewählt: </span>
           <span v-for="tag in preSetTags">
-            <v-chip size="small" class="mx-2 my-2" v-if="getTagName(mainFilter, tag)">
+            <v-chip size="small" class="mx-2 my-2 is-dark-grey" v-if="getTagName(mainFilter, tag)">
               {{ getTagName(mainFilter, tag) }}
             </v-chip>
           </span>
@@ -28,7 +28,7 @@
           <v-alert color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
-                <span class="has-font-size-small-medium mr-3">Falls der passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
+                <span class="has-font-size-small-medium mr-3">Falls das passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
                 <span>
                   <v-btn color="primary" class="is-white" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</v-btn>
                 </span>
@@ -38,7 +38,7 @@
         </div>
         <div class="main-class">
           <div class="filter-options" v-for="option in mainFilter.next">
-            <div class="filter-tile" :class="{ selected: preSetTags.includes(option.id) }" @click.stop="handleSubFilterParentClick(mainFilter, option)">
+            <div class="filter-tile is-dark-grey" :class="{ selected: preSetTags.includes(option.id) }" @click.stop="handleSubFilterParentClick(mainFilter, option)">
               {{ option.name }}
             </div>
             <div v-if="option.next?.length" class="options">

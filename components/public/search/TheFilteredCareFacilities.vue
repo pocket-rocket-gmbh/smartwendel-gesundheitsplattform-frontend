@@ -5,10 +5,17 @@
     v-if="!(!filterStore.loading && !filterStore.filteredResults.length)"
   >
     <div class="d-flex actions">
-      <div class="sort-order is-clickable d-flex align-center" @click="toggleFilterSort">
+      <div
+        class="sort-order is-clickable d-flex align-center"
+        @click="toggleFilterSort"
+      >
         <span>{{ filterStore.filterSort }}</span>
-        <v-icon v-show="filterStore.filterSort === 'A-Z'">mdi-chevron-down</v-icon>
-        <v-icon v-show="filterStore.filterSort === 'Z-A'">mdi-chevron-up</v-icon>
+        <v-icon v-show="filterStore.filterSort === 'A-Z'"
+          >mdi-chevron-down</v-icon
+        >
+        <v-icon v-show="filterStore.filterSort === 'Z-A'"
+          >mdi-chevron-up</v-icon
+        >
       </div>
     </div>
     <template v-if="filterStore.filteredResults.length > 0">
@@ -32,63 +39,37 @@
           :key="careFacility.id"
         >
           <v-row class="item-row">
-            <v-col md="8">
-              <div class="d-flex justify-space-between">
-                <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
+            <v-col sm="12" md="6" class="mb-0 pb-0">
+              <div class="d-flex justify-space-between align-center">
+                <div class="is-dark-grey font-weight-medium is-clickable">
                   <a
                     class="is-dark-grey"
                     :href="`/public/care_facilities/${careFacility.id}`"
                     >{{ careFacility.name }}</a
                   >
                 </div>
-              </div>
-              <v-row>
-                <v-col cols="12" md="6" sm="6" xl="6">
-                  <div class="text-dark-grey mt-4">
-                    <div class="d-flex">
-                      <img class="mr-2 icon" :src="iconAddress" />
-                      <div v-if="careFacility.street">{{ careFacility.street }}</div>
-                    </div>
-                   <div class="d-flex ml-n1" v-if="careFacility.zip || careFacility.town">
-                    <v-icon></v-icon>
-                      {{ careFacility.zip }} {{ careFacility.town }}
-                   </div>
-                  
-                    <!-- <div v-if="careFacility.community">{{ careFacility.community }}</div> -->
-                  </div>
-                </v-col>
-                <v-col>
-                  <div class="text-dark-grey mt-4">
-                    <div v-if="careFacility.phone" class="d-flex align-center">
-                      <img class="mr-2 icon" :src="iconPhone" />
-                      <a :href="`tel:${careFacility.phone}`">{{ careFacility.phone }}</a>
-                    </div>
-                    <div v-if="careFacility.email" class="d-flex align-center">
-                      <img class="mr-2 icon" :src="iconMail" />
-                      <a :href="`mailto:${careFacility.email}`">{{
-                        careFacility.email
-                      }}</a>
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
-              <div>
-                <v-btn
-                  append-icon="mdi-map-marker-outline"
-                  size="small"
-                  class="mt-4 pa-1"
-                  variant="text"
-                  color="primary"
-                  rounded="pill"
-                  @click="showCareFacilityInMap(careFacility.id)"
-                >
-                  Auf karte zeigen
-                </v-btn>
+                <div class="hidden-md-and-up">
+                  <v-icon
+                    v-if="
+                      careFacility.geocode_address.length ||
+                      careFacility.locations.length
+                    "
+                    size="x-large"
+                    color="primary"
+                    @click="showCareFacilityInMap(careFacility.id)"
+                    >mdi-map-marker-outline</v-icon
+                  >
+                </div>
               </div>
             </v-col>
-            <v-col align="right" class="action">
+            <v-col
+              sm="12"
+              md="6"
+              class="action d-md-flex justify-end hidden-sm-and-down"
+            >
               <v-btn
                 variant="flat"
+                class="general-font-size"
                 color="primary"
                 rounded="pill"
                 size="large"
@@ -98,6 +79,77 @@
               </v-btn>
             </v-col>
           </v-row>
+
+          <v-row class="item-row">
+            <v-col cols="12" md="6" sm="6" xl="6" xs="12" class="mb-0 pb-0">
+              <div class="is-dark-grey mt-4">
+                <div class="d-flex">
+                  <img class="mr-2 icon" :src="iconAddress" />
+                  <div v-if="careFacility.street">
+                    {{ careFacility.street }}
+                  </div>
+                </div>
+                <div
+                  class="d-flex ml-n1"
+                  v-if="careFacility.zip || careFacility.town"
+                >
+                  <v-icon></v-icon>
+                  {{ careFacility.zip }} {{ careFacility.town }}
+                </div>
+              </div>
+            </v-col>
+            <v-col cols="12" md="6" sm="6" xl="6" xs="12" class="mb-0 pb-0">
+              <div class="mt-4">
+                <div v-if="careFacility.phone" class="d-flex align-center">
+                  <img class="mr-2 icon" :src="iconPhone" />
+                  <a class="is-dark-grey" :href="`tel:${careFacility.phone}`">{{
+                    careFacility.phone
+                  }}</a>
+                </div>
+                <div v-if="careFacility.email" class="d-flex align-center">
+                  <img class="mr-2 icon" :src="iconMail" />
+                  <a
+                    class="is-dark-grey"
+                    :href="`mailto:${careFacility.email}`"
+                    >{{ careFacility.email }}</a
+                  >
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12" md="12" class="action hidden-md-and-up">
+              <v-btn
+                variant="flat"
+                width="100%"
+                class="general-font-size"
+                color="primary"
+                rounded="pill"
+                size="large"
+                :href="`/public/care_facilities/${careFacility.id}`"
+              >
+                <span> Details ansehen </span>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <div class="hidden-sm-and-down">
+            <v-btn
+              v-if="
+                careFacility.geocode_address.length ||
+                careFacility.locations.length
+              "
+              append-icon="mdi-map-marker-outline"
+              size="small"
+              class="mt-4 pa-1"
+              variant="text"
+              color="primary"
+              rounded="pill"
+              @click="showCareFacilityInMap(careFacility.id)"
+            >
+              Auf karte zeigen
+            </v-btn>
+            <div v-else class="mt-4 pa-1"></div>
+          </div>
         </div>
       </div>
     </template>
@@ -119,7 +171,6 @@ const emit = defineEmits<{
 
 const filterStore = useFilterStore();
 
-
 const showCareFacilityInMap = async (careFacilityId: string) => {
   emit("showOnMap");
   window.scrollTo({
@@ -130,7 +181,6 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
   setTimeout(() => {
     filterStore.mapFilter = careFacilityId;
     filterStore.loadFilteredResults();
-    filterStore.mapFilter = null;
   }, 100);
 };
 
@@ -141,7 +191,7 @@ const toggleFilterSort = () => {
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
- 
+
 .icon
   width: 1.25rem
 .item
@@ -153,7 +203,6 @@ const toggleFilterSort = () => {
 
   .item-row
     @include md
-      flex-direction: column
       .action
         flex: 1
         a
@@ -179,7 +228,6 @@ const toggleFilterSort = () => {
 
 .items
   display: flex
-  flex-direction: column
 
   .content-box
     flex: 1
@@ -196,6 +244,5 @@ const toggleFilterSort = () => {
 
     @include md
       display: flex
-      flex-direction: column
       // gap: 0.5rem
 </style>

@@ -26,10 +26,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-16',
-      title: 'gesundesWND',
       meta: [
         { property: 'og:type', content: 'website' },
-        { property: 'og:title', content: 'gesundesWND' },
         { property: 'og:description', content: 'Gesundheitsplattform' }
       ],
       link: [

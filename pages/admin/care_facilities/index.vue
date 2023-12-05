@@ -2,18 +2,18 @@
   <div>
     <v-row>
       <v-col>
-        <h2 v-if="useUser().isFacilityOwner()">Meine Einrichtung</h2>
-        <h2 v-else>Einrichtungen</h2>
+        <span class="general-font-size is-dark-grey font-weight-bold" v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
+        <span class="general-font-size is-dark-grey font-weight-bold" v-else>Einrichtungen</span>
       </v-col>
 
       <v-col class="d-flex justify-end align-center">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span class="pl-1">Benutzer Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer Aktiv</span>
         </div>
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span class="pl-1">Benutzer nicht Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer nicht Aktiv</span>
         </div>
       </v-col>
     </v-row>
@@ -206,6 +206,11 @@ const fields = [
     action: (item: any) => {
       handleButtonClick(item.id);
     },
+  },
+  {
+    value: "",
+    type: "is-lk",
+    tooltip: "Einrichtung wurde von einer Admin erstellt."
   },
 ];
 

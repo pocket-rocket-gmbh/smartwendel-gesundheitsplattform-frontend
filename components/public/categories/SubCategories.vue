@@ -1,10 +1,18 @@
 <template>
   <div class="sub-categories-wrapper general-font-size">
-    <v-row class="sub-category text-center align-center justify-center" :id="subCategory?.id.replaceAll('-', '')">
-      <v-col class="d-flex is-dark-grey justify-center">
+    <v-row
+      class="sub-category text-center align-center justify-center"
+      :id="subCategory?.id.replaceAll('-', '')"
+    >
+      <v-col class="d-flex flex-column is-dark-grey justify-center">
         <div>
-          <h2 class="is-uppercase mt-5 ">{{ subCategory?.name }}</h2>
-          <span class="my-5 text-wrap" v-html="subCategory?.description"></span>
+          <span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
+        </div>
+        <div>
+          <span
+            class="my-5 text-wrap sub-category-description general-font-size"
+            v-html="subCategory?.description"
+          ></span>
         </div>
       </v-col>
     </v-row>
@@ -69,10 +77,12 @@ const listApi = useCollectionApi();
 listApi.setBaseApi(usePublicApi());
 
 const getSubSubCategories = async () => {
-  listApi.setEndpoint(`categories/${props.categoryId}/sub_categories/${props.subCategory.id}/sub_sub_categories`);
+  listApi.setEndpoint(
+    `categories/${props.categoryId}/sub_categories/${props.subCategory.id}/sub_sub_categories`
+  );
   const options = {
     page: 1,
-    per_page: 25,
+    per_page: 999,
     sort_by: "menu_order",
     sort_order: "ASC",
     searchQuery: null as any,
@@ -91,7 +101,7 @@ const getSubSubCategories = async () => {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/assets/sass/main.sass";
 
 .sub-categories-wrapper {
@@ -119,4 +129,20 @@ const getSubSubCategories = async () => {
   }
 }
 
+.sub-category-name {
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.sub-category-description {
+  line-height: 29px;
+  a {
+    font-weight: 500 !important;
+    text-decoration: underline !important;
+    &:visited {
+      font-weight: 500 !important;
+      text-decoration: underline !important;
+    }
+  }
+}
 </style>

@@ -2,18 +2,34 @@
   <div class="basic-search-box mt-6">
     <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
       <v-row>
-        <v-col>
-          <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
+        <v-col class="d-flex">
+          <span class="font-weight-medium text-h4 text-white">{{ subTitle }}</span>
+            <v-btn
+              v-if="useUser().isAdmin()"
+              prepend-icon="mdi-content-copy"
+              variant="outlined"
+              rounded="pill"
+              color="red darken-2"
+              class="mx-5 mt-1"
+              @click="copySearchFilterUrl"
+            >
+              Such-Filter kopieren
+            </v-btn>
         </v-col>
-        <v-col v-if="filterKind === 'facility'" md="2" class="d-flex justify-end">
+        <v-col
+          v-if="filterKind === 'facility'"
+          md="2"
+          class="d-flex justify-end"
+        >
           <v-btn
             variant="outlined"
             min-width="250px"
             max-width="250px"
             rounded="pill"
+            size="large"
             color="white"
             @click="emit('toggleMap')"
-            class="font-weight-bold"
+            class="general-font-size"
           >
             <span v-if="showMap"> Listenansicht </span>
             <span v-else> Kartenansicht </span>
@@ -24,7 +40,7 @@
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field general-font-size">
             <label class="label is-white">
-              <div class="search-term">
+              <div class="search-term font-weight-medium general-font-size">
                 <span>{{ filterTitle }}</span>
               </div>
             </label>
@@ -35,11 +51,15 @@
             />
           </div>
         </v-col>
-        <v-col v-if="filterKind !== 'event'">
+        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field general-font-size">
-            <label class="label is-white">Gemeinde</label>
+            <label class="label is-white font-weight-medium">Gemeinde</label>
             <div class="select-wrapper">
-              <select class="input select" v-model="filterStore.currentZip" @click="handleClearTermSearch()">
+              <select
+                class="input select"
+                v-model="filterStore.currentZip"
+                @click="handleClearTermSearch()"
+              >
                 <option :value="null">Gemeinde wählen</option>
                 <option v-for="community in communities" :value="community.zip">
                   {{ community.name }}
@@ -49,15 +69,15 @@
           </div>
         </v-col>
         <v-col
-          v-if="filterKind !== 'event'"
+          v-if="filterKind !== 'event' && filterKind !== 'news'"
           md="1"
-          class="d-flex justify-center align-end is-white mb-5"
+          class="d-flex justify-center align-end is-white mb-4"
         >
-          <div class="label general-font-size font-weight-bold">oder</div>
+          <div class="label font-weight-medium general-font-size">oder</div>
         </v-col>
         <v-col>
           <div class="field general-font-size">
-            <label class="label is-white">
+            <label class="label is-white font-weight-medium">
               <div class="search-term">
                 <span>{{ searchTitle }}</span>
               </div>
@@ -72,28 +92,29 @@
             />
           </div>
         </v-col>
-        <v-col class="d-flex align-end field mb-4">
+        <v-col class="d-flex align-end field">
           <v-btn
-            class="font-weight-bold"
+            class="general-font-size"
             min-width="250px"
             max-width="250px"
+            size="large"
             variant="outlined"
             rounded="pill"
             color="white"
             @click="filterStore.clearSearch()"
           >
-            Auswahl zurücksetzen
+          <span>Filter löschen</span>
           </v-btn>
         </v-col>
       </v-row>
     </div>
   </div>
-  <v-row
-    class="has-bg-darken-grey text-white font-weight-bold"
-  >
-    <v-col class="d-flex justify-center align-center general-font-size bottom-actions mx-3">
-      <LoadingSpinner v-if="filterStore.loading"/>
-      <span v-else-if="filterStore.filteredResults.length"
+  <v-row class="has-bg-darken-grey text-white">
+    <v-col
+      class="d-flex justify-center align-center bottom-actions mx-3"
+    >
+      <LoadingSpinner v-if="filterStore.loading" />
+      <span class=" general-font-size" v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }} Treffer</span
       >
       <span v-else>
@@ -104,6 +125,8 @@
 </template>
 <script setup lang="ts">
 import { FilterKind, useFilterStore } from "~/store/searchFilter";
+
+const snackbar = useSnackbar();
 
 const props = defineProps<{
   title: string;
@@ -136,9 +159,8 @@ const startSearch = () => {
   filterStore.loadAllResults();
 };
 
-
 const handleClearTermSearch = () => {
-  if(filterStore.currentSearchTerm) {
+  if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
   }
   return;
@@ -172,6 +194,12 @@ const communities = communitiesApi.items;
 const resetSearchTerm = () => {
   filterStore.currentSearchTerm = "";
   filterStore.loadFilteredResults();
+};
+
+const copySearchFilterUrl = () => {
+  snackbar.showSuccess("Filter in Zwischenablage gespeichert!");
+  const url = filterStore.getUrlQuery();
+  navigator.clipboard.writeText(url);
 };
 
 const getCommunities = async () => {
