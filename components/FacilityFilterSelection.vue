@@ -18,7 +18,7 @@
     <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div class="filter-name my-1 font-weight-bold">
+          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
             {{ filter.name }}
           </div>
           <div
@@ -55,7 +55,7 @@
                 color="#8AB61D"
               />
             </label>
-            <v-divider class="my-2"></v-divider>
+            <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
           </div>
         </div>
       </div>
@@ -88,6 +88,12 @@ const setPlaceholderText = () => {
 const emit = defineEmits<{
   (event: "update:modelValue", values: string[]): void;
 }>();
+
+const hasActiveOptions = (filterId:string) => {
+  const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
+  return options && options.some(option => Number(option?.care_facilities_active_count) > 0);
+};
+
 
 watch(
   () => props.modelValue,
