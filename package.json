@@ -22,9 +22,9 @@
     "@pinia/nuxt": "^0.5.1",
     "@types/leaflet": "^1.9.8",
     "@unhead/vue": "^1.8.8",
-    "@vuepic/vue-datepicker": "^7.3.0",
+    "@vuepic/vue-datepicker": "^7.4.0",
     "@vueup/vue-quill": "^1.2.0",
-    "@vueuse/core": "^10.6.0",
+    "@vueuse/core": "^10.7.0",
     "axios": "^1.6.2",
     "date-fns": "^2.30.0",
     "leaflet": "^1.9.4",
@@ -39,6 +39,6 @@
     "vue-matomo": "^4.2.0",
     "vue-rewards": "^1.0.1",
     "vuedraggable": "^4.1.0",
-    "vuetify": "^3.4.4"
+    "vuetify": "^3.4.6"
   }
 }
