@@ -15,7 +15,7 @@
           </thead>
           <tbody>
             <tr v-for="location in careFacility?.locations" :key="location.id">
-              <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" /></td>
+              <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" :item-id="itemId"/></td>
               <td>
                 <v-icon
                   class="is-clickable"
