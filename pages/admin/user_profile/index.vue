@@ -9,7 +9,7 @@
       type="info"
       density="compact"
       closable
-      class="mt-2"
+      class="mt-2 general-font-size"
     >
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
       wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen
@@ -21,7 +21,7 @@
       color="yellow"
       density="compact"
       closable
-      class="mt-2"
+      class="mt-2 general-font-size"
     >
       Bitte vervollständige deine Daten und ändere dein Passwort
     </v-alert>
