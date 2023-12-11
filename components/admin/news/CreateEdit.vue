@@ -29,7 +29,7 @@
         <v-col md="9">
           <div class="py-10">
             <div>
-              <span class="general-font-size is-dark-grey"
+              <span class="general-font-size is-dark-grey facility-kind-description"
                 >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen.
                 Je mehr Angaben du machst, umso leichter können Besucher deine Beiträge
                 finden. Pflichtfelder sind mit einem Sternchen versehen.</span

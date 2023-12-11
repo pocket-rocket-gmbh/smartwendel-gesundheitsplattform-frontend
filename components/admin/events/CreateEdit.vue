@@ -29,7 +29,7 @@
         <v-col md="9">
           <div class="py-10">
             <div>
-              <span class="general-font-size is-dark-grey"
+              <span class="general-font-size is-dark-grey facility-kind-description"
                 >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind,
                 desto besser können dich Besucher auf der Webseite finden. Pflichtfelder
                 sind mit einem Sternchen versehen.</span

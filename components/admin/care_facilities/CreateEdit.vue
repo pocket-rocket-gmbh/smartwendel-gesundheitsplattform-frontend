@@ -33,7 +33,7 @@
         </v-col>
         <v-col md="9">
           <div class="py-10">
-            <span class="general-font-size is-dark-grey"
+            <span class="general-font-size is-dark-grey facility-kind-description"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
               spezifisches Leistungsangebot in einem eigenen Profil darstellen und
               veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer
