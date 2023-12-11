@@ -32,8 +32,7 @@
             density="compact"
             class="save-hint"
           >
-            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren
-            gehen!
+          Bitte denke daran regelmäßig zu speichern, damit keine Daten verloren gehen!
           </v-alert>
           <v-btn variant="outlined" @click="emitClose()"> Schließen </v-btn>
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">

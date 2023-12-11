@@ -114,10 +114,17 @@
                   />
                 </div>
               </template>
-              <div v-if="useUser().statusOnHealthScope()" class="tooltip">
+              <div v-if="!useUser().statusOnHealthScope()" class="tooltip">
                 {{
                   field?.disabledConditions?.(item)
                     ? field.disabledTooltip
+                    : field.tooltip
+                }}
+              </div>
+              <div v-else class="tooltip">
+                {{
+                  field?.disabledConditions?.(item)
+                    ? field.disabledTooltipFacilityImcomplete
                     : field.tooltip
                 }}
               </div>

@@ -1,11 +1,11 @@
 <template>
   <v-app v-if="useUser().currentUser">
     <div @click.stop="drawer = !drawer" class="d-flex justify-start">
-        <v-icon size="x-large">mdi-menu-close</v-icon>
+        <v-icon size="x-large" class="is-dark-grey">mdi-menu-close</v-icon>
       </div>
     <v-navigation-drawer v-model="drawer">
       <div @click.stop="drawer = !drawer" class="d-flex justify-end">
-        <v-icon size="x-large">mdi-backburger</v-icon>
+        <v-icon size="x-large" class="is-dark-grey">mdi-backburger</v-icon>
       </div>
       <div class="d-flex">
         <router-link to="/">
