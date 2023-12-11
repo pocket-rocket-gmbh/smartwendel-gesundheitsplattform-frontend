@@ -197,7 +197,7 @@ const fields = [
   {
     value: "",
     type: "is-lk",
-    tooltip: "Kurs wurde von einer Admin erstellt.",
+    tooltip: "Kurs wurde von einem Admin erstellt.",
   },
 ];
 
