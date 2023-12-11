@@ -24,7 +24,7 @@
           <img class="mr-2 icon" :src="iconAddress" />
           <span class="is-dark-grey general-font-size">{{ careFacility.street }}</span>
         </span>
-        <div v-if="careFacility?.additional_address_info">
+        <div v-if="careFacility?.additional_address_info" class="aditional-info">
           <v-icon class="mr-2"></v-icon>
           <span class="mr-2 is-dark-grey general-font-size">
             {{ careFacility?.additional_address_info }}
@@ -154,4 +154,9 @@ const buttonHref = computed(() => {
 
 .icon
   width: 1.50rem
+
+.aditional-info
+  width: 100%
+  display: flex
+  flex-wrap: nowrap
 </style>
