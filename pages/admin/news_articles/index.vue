@@ -177,7 +177,7 @@ const fields = [
   {
     value: "",
     type: "is-lk",
-    tooltip: "Beitrag wurde von einer Admin erstellt.",
+    tooltip: "Beitrag wurde von einem Admin erstellt.",
   },
 ];
 

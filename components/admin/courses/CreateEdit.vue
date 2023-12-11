@@ -676,7 +676,7 @@ const steps: CreateEditSteps<StepNames> = {
   website: {
     label:
       "10. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
-    tooltip: "Falls du keine eigene Webseite besitzen, überspringst du diesen Schritt.",
+    tooltip: "Falls du keine eigene Website angeben möchtest, kannst du diesen Schritt überspringen.",
     description: "Link zur Webseite",
     props: ["website"],
   },
