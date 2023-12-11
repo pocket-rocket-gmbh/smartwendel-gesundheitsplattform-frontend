@@ -28,7 +28,7 @@
       @crop="setImage"
     />
     <v-row v-if="itemId" class="my-1">
-      <v-col md="1" class="d-flex align-center justify-center" v-if="item?.sanitized_images.length">
+      <v-col md="2" class="d-flex align-center justify-center" v-if="item?.sanitized_images.length">
         <span>Bereits ausgewählt:</span>
       </v-col>
       <v-col v-for="(image, index) in item?.sanitized_images" :key="index" md="2">
@@ -39,7 +39,7 @@
       </v-col>
     </v-row>
     <v-row v-else-if="item?.offline_images.length || item?.sanitized_images.length" class="my-1">
-      <v-col md="1" class="d-flex align-center justify-center">
+      <v-col md="2" class="d-flex align-center justify-center">
         <span class="general-font-size is-dark-grey">Bereits ausgewählt:</span>
       </v-col>
       <v-col v-for="(image, index) in item?.offline_images" :key="index" md="2">
