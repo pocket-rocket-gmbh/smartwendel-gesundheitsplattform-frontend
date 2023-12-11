@@ -15,9 +15,15 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
+              <span
+                class="general-font-size font-weight-medium word-break general-font-size"
+                lang="de"
+                >{{ step.description }}</span
+              >
             </div>
-            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end"
+              >* Pflichtangaben</span
+            >
           </div>
         </v-col>
         <v-col md="9">
@@ -25,15 +31,16 @@
             <div>
               <span class="general-font-size is-dark-grey"
                 >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen.
-                Je mehr Angaben du machst, umso leichter können Besucher
-                deine Beiträge finden. Pflichtfelder sind mit einem Sternchen
-                versehen.</span
+                Je mehr Angaben du machst, umso leichter können Besucher deine Beiträge
+                finden. Pflichtfelder sind mit einem Sternchen versehen.</span
               >
             </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
+                steps["name"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -195,13 +202,7 @@ import { CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
-const stepNames = [
-  "name",
-  "photo",
-  "description",
-  "leader",
-  "services",
-] as const;
+const stepNames = ["name", "photo", "description", "leader", "services"] as const;
 type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
@@ -285,7 +286,7 @@ const textOptions = ref({
   theme: "snow",
   contentType: "html",
   required: true,
-  formats: formats
+  formats: formats,
 });
 
 const onQuillReady = (quill: any) => {
@@ -507,7 +508,7 @@ const goToField = (n: string) => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
-  line-height: 1.2!important;
+  line-height: 1.2 !important;
 }
 
 .ql-clean {
@@ -518,9 +519,9 @@ const goToField = (n: string) => {
   z-index: 9999 !important;
 }
 .ql-snow .ql-tooltip::before {
-  content: "Link hinzufügen"!important;
+  content: "Link hinzufügen" !important;
 }
 .ql-snow .ql-tooltip.ql-editing a.ql-action::after {
-  content: "Speichern"!important;
+  content: "Speichern" !important;
 }
 </style>

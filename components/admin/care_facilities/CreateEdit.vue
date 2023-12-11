@@ -20,9 +20,15 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
+              <span
+                class="general-font-size font-weight-medium word-break general-font-size"
+                lang="de"
+                >{{ step.description }}</span
+              >
             </div>
-            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end"
+              >* Pflichtangaben</span
+            >
           </div>
         </v-col>
         <v-col md="9">
@@ -37,7 +43,9 @@
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
+                steps["name"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -52,7 +60,9 @@
 
           <div class="field" id="logo">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["logo"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["logo"].label
+              }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -218,15 +228,23 @@
             id="contact"
             :class="[
               (adressChanged || editInformations) &&
-              user.currentUser.is_active_on_health_scope
-              && slotProps.item.id
+              user.currentUser.is_active_on_health_scope &&
+              slotProps.item.id
                 ? 'has-bg-light-red pa-5'
                 : '',
             ]"
           >
-            <span v-if="adressChanged && user.currentUser.is_active_on_health_scope && slotProps.item.id">
+            <span
+              v-if="
+                adressChanged &&
+                user.currentUser.is_active_on_health_scope &&
+                slotProps.item.id
+              "
+            >
               <v-alert type="warning" density="compact" class="mt-2"
-                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die Einrichtung erneut von einem Mitarbeiter verifiziert werden. Vielen Dank für deine Geduld!</v-alert
+                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die Einrichtung
+                erneut von einem Mitarbeiter verifiziert werden. Vielen Dank für deine
+                Geduld!</v-alert
               >
             </span>
             <div class="my-2 d-flex align-center">
@@ -385,7 +403,9 @@
             </div>
             <div>
               <div class="d-flex mt-5">
-                <span class="general-font-size is-dark-grey font-weight-bold">Adresse überprüfen</span>
+                <span class="general-font-size is-dark-grey font-weight-bold"
+                  >Adresse überprüfen</span
+                >
                 <LoadingSpinner v-if="loadingAdress" />
               </div>
               <div class="mt-3">
@@ -401,7 +421,9 @@
 
               <div v-if="!slotProps.item.street || !slotProps.item.town">
                 <div class="mt-3">
-                  <v-alert type="info" class="general-font-size">Adresse bitte vervollständigen.</v-alert>
+                  <v-alert type="info" class="general-font-size"
+                    >Adresse bitte vervollständigen.</v-alert
+                  >
                 </div>
               </div>
               <div
@@ -415,13 +437,23 @@
                 </div>
               </div>
               <div class="mt-3" v-if="isValidAddress === null && editInformations">
-                <v-alert type="info" class="general-font-size"> Neue Adresse bitte eingeben.</v-alert>
+                <v-alert type="info" class="general-font-size">
+                  Neue Adresse bitte eingeben.</v-alert
+                >
               </div>
-              <div v-if="isValidAddress && !loadingAdress && slotProps.item.street && slotProps.item.town">
+              <div
+                v-if="
+                  isValidAddress &&
+                  !loadingAdress &&
+                  slotProps.item.street &&
+                  slotProps.item.town
+                "
+              >
                 <div class="mt-3">
                   <v-alert type="success" class="general-font-size">
-                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese Adresse auch auf der Webseite angezeigt wird. </v-alert
-                  >
+                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese
+                    Adresse auch auf der Webseite angezeigt wird.
+                  </v-alert>
                 </div>
               </div>
             </div>

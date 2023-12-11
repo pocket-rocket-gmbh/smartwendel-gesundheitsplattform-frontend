@@ -15,9 +15,15 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
+              <span
+                class="general-font-size font-weight-medium word-break general-font-size"
+                lang="de"
+                >{{ step.description }}</span
+              >
             </div>
-            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end"
+              >* Pflichtangaben</span
+            >
           </div>
         </v-col>
         <v-col md="9">
@@ -32,7 +38,9 @@
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="general-font-size font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="general-font-size font-weight-bold">{{
+                steps["name"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -97,7 +105,9 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
             <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["gallery"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
+                steps["gallery"].label
+              }}</span>
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
@@ -181,13 +191,17 @@
           ></v-checkbox>
           <div class="field" id="date">
             <div class="my-2">
-              <span class="general-font-size is-dark-grey mr-2 font-weight-bold">{{ steps["date"].label }}</span>
+              <span class="general-font-size is-dark-grey mr-2 font-weight-bold">{{
+                steps["date"].label
+              }}</span>
             </div>
             <div class="mb-15">
               <v-row>
                 <v-col md="4" class="d-flex flex-column">
                   <div class="my-5">
-                    <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
+                    <span class="general-font-size is-dark-grey mr-2 font-weight-bold">
+                      Datum und Uhrzeit:
+                    </span>
                   </div>
 
                   <Datepicker
@@ -261,7 +275,9 @@
                 </v-col>
               </v-row>
               <div class="mt-5">
-                <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Dauer: </span>
+                <span class="general-font-size is-dark-grey mr-2 font-weight-bold">
+                  Dauer:
+                </span>
               </div>
               <div class="field split mt-5">
                 <v-text-field
@@ -315,7 +331,9 @@
           <v-divider class="my-10"></v-divider>
           <div id="address">
             <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["address"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
+                steps["address"].label
+              }}</span>
               <v-checkbox
                 hide-details
                 density="compact"
