@@ -179,6 +179,9 @@
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
+          <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
+            <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
+          </span>
           <span v-else-if="field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'">
             <img :src="logo" width="20" class="ml-2 pt-2" />
           </span>

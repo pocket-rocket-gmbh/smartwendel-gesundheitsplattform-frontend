@@ -177,6 +177,10 @@ const fields = [
     },
   },
   {
+    value: "",
+    type: "has-dates",
+  },
+  {
     text: "",
     value: "mdi-check-decagram",
     type: "button",

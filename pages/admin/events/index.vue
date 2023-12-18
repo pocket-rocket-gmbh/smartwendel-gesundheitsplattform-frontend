@@ -183,6 +183,10 @@ const fields = [
     },
   },
   {
+    value: "",
+    type: "has-dates",
+  },
+  {
     text: "",
     value: "mdi-eye",
     type: "button",
