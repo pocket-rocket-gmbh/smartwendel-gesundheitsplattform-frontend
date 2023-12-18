@@ -38,7 +38,7 @@
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="general-font-size font-weight-bold">{{
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
                 steps["name"].label
               }}</span>
             </div>
