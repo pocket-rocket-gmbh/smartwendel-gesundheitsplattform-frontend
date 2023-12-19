@@ -265,7 +265,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   excerpt: {
     label:
-      "4. Bitte gib hier den Inhalt deines Newsartikels/Beitrages einen kurzebeschreibung *",
+      "4. Gib deinem Beitrag eine Kurzbeschreibung zur Darstellung in der Suche. *",
     tooltip: "",
     description: "Kurzbeschreibung *",
     placeholder: "Inhalt des Beitrags",
