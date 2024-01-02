@@ -145,7 +145,7 @@ const handlePressEnter = (e: KeyboardEvent) => {
 };
 
 const routeToResults = (result?: Facility) => {
-  if (!props.defaultRouteTo) {
+  if (props.defaultRouteTo) {
     router.push({ path: props.defaultRouteTo });
   } else {
     if (result?.kind && result?.kind === "facility") {
