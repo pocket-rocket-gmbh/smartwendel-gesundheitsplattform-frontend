@@ -8,7 +8,7 @@
       <PublicCookieBanner />
     </ClientOnly> -->
     <v-main>
-      <slot v-if="!appStore.loading" />
+      <slot />
     </v-main>
     <PublicLayoutsFooter />
   </v-app>
@@ -53,6 +53,7 @@ onMounted(async () => {
   await initialize();
   appStore.loading = false;
 });
+
 
 onUnmounted(() => {
   document.removeEventListener("wheel", handleScroll);
