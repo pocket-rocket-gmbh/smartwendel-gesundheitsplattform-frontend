@@ -54,7 +54,7 @@
       >
         <div class="action mb-n2" v-if="buttonHref">
           <v-btn
-            :href="buttonHref"
+            @click="goToFacility(buttonHref)"
             :target="item.url ? '_blank' : ''"
             variant="flat"
             color="primary"
@@ -104,6 +104,8 @@ const props = defineProps<{
   size?: number;
 }>();
 
+const router = useRouter();
+
 const contentBoxRef = ref<HTMLDivElement>();
 const showImage = ref(true);
 
@@ -131,6 +133,11 @@ const buttonHref = computed(() => {
 
   return null;
 });
+
+const goToFacility = (buttonHref: any) => {
+  router.push({ path: buttonHref }); 
+};
+
 
 const buttonText = computed(() => {
   if (!props.item) return null;
