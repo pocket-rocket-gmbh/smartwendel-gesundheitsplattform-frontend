@@ -54,6 +54,7 @@ onMounted(async () => {
   appStore.loading = false;
 });
 
+
 onUnmounted(() => {
   document.removeEventListener("wheel", handleScroll);
 });

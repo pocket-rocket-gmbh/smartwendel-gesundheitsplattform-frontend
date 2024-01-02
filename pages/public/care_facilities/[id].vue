@@ -119,18 +119,7 @@ const careFacilityId = computed(() => {
 });
 
 const goBack = () => {
-  if (careFacility.value.kind === "news") {
-    router.push({ path: "/public/search/news" });
-  }
-  if (careFacility.value.kind === "event") {
-    router.push({ path: "/public/search/events" });
-  }
-  if (careFacility.value.kind === "course") {
-    router.push({ path: "/public/search/courses" });
-  }
-  if (careFacility.value.kind === "facility") {
-    router.push({ path: "/public/search/facilities" });
-  }
+  router.push({ path: router.options.history.state.back });
 };
 
 const showApi = useCollectionApi();
