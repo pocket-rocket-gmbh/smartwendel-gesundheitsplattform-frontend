@@ -89,11 +89,10 @@ const emit = defineEmits<{
   (event: "update:modelValue", values: string[]): void;
 }>();
 
-const hasActiveOptions = (filterId:string) => {
+const hasActiveOptions = (filterId: string) => {
   const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
-  return options && options.some(option => Number(option?.care_facilities_active_count) > 0);
+  return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
 };
-
 
 watch(
   () => props.modelValue,
@@ -182,7 +181,7 @@ const handleOptionSelect = (option: Filter, multiple?: boolean) => {
 onMounted(async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
-  const allFilters = await getAllFilters();
+  const allFilters = await filterStore.loadAllFilters();
 
   const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
 

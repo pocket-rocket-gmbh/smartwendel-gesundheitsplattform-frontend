@@ -166,7 +166,7 @@ const getItems = async () => {
   const serviceFilters = filters.filter(
     (filter) => filter.filter_type === "filter_service"
   );
-  const allFilters = await getAllFilters();
+  const allFilters = await filterStore.loadAllFilters();
 
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
