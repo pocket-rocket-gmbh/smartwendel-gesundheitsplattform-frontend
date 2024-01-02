@@ -73,7 +73,7 @@
                 color="primary"
                 rounded="pill"
                 size="large"
-                :href="`/public/care_facilities/${careFacility.id}`"
+                @click="goToFacility(careFacility)"
               >
                 <span> Details ansehen </span>
               </v-btn>
@@ -126,7 +126,7 @@
                 color="primary"
                 rounded="pill"
                 size="large"
-                :href="`/public/care_facilities/${careFacility.id}`"
+                @click="goToFacility(careFacility)"
               >
                 <span> Details ansehen </span>
               </v-btn>
@@ -162,12 +162,19 @@ import iconPhone from "@/assets/icons/facilities/icon_phone.svg";
 import iconMail from "@/assets/icons/facilities/icon_mail.svg";
 import iconAddress from "@/assets/icons/facilities/icon_address.svg";
 
+const router = useRouter();
+
 const props = defineProps<{
   doubled?: boolean;
 }>();
 const emit = defineEmits<{
   (event: "showOnMap"): void;
 }>();
+
+const goToFacility = (careFacility: any) => {
+  router.push({ path: `/public/care_facilities/${careFacility.id}` });
+};
+
 
 const filterStore = useFilterStore();
 
