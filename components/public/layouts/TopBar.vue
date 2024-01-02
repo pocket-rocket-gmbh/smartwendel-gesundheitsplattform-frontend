@@ -13,6 +13,7 @@
                 src="~/assets/images/logo.png"
                 class="is-clickable"
                 width="200"
+                v-if="!appStore.loading"
               />
             </a>
           </div>
@@ -90,6 +91,7 @@
             !useUser().loggedIn() &&
             breakPoints.width.value >= 1560 &&
             currentRoute !== '/register'
+            && !appStore.loading
           "
         >
           <v-row class="mx-1 text-center">
@@ -108,12 +110,12 @@
             breakPoints.width.value <= 1560 &&
             currentRoute !== '/register' &&
             !useUser().loggedIn()
-          "
+           && !appStore.loading"
           @click="goToRegister()"
         >
           <img :src="regiterIcon" />
         </div>
-        <div class="pl-3">
+        <div class="pl-3" v-if="!appStore.loading">
           <v-btn
             v-if="!useUser().loggedIn()"
             color="primary"
@@ -146,13 +148,16 @@
           <PublicLayoutsMiniMenu
             :current-user="currentUser"
             :user-is-admin="userIsAdmin"
+            v-if="!appStore.loading"
           />
+          <v-skeleton-loader v-if="appStore.loading" type="avatar"></v-skeleton-loader>
         </div>
       </div>
       <div
-        v-if="breakPoints.width.value < 1480"
+        v-if="breakPoints.width.value < 1480 && !appStore.loading"
         class="d-flex align-center"
         align="center"
+        
       >
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </div>
