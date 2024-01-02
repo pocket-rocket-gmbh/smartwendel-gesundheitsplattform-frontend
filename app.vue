@@ -1,8 +1,7 @@
 <template>
-  <NuxtLayout :class="[appStore.loading ? 'overlay' : '']">
+  <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
-  <LoadingSpinner class="text-spinner" v-if="appStore.loading">Die Gesundheitsplattform wird geladen...</LoadingSpinner>
 </template>
 
 <script lang="ts" setup>
