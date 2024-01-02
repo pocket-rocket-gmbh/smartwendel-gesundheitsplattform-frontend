@@ -121,7 +121,7 @@ const getItems = async () => {
   }
 
   const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
-  const allFilters = await getAllFilters();
+  const allFilters = await filterStore.loadAllFilters();
 
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
@@ -129,8 +129,6 @@ const getItems = async () => {
 
   itemsForServiceList.value = [...tmpItemsForServiceList];
 };
-
-filterStore.currentTags;
 
 const isSelected = (itemId: string) => {
   return filterStore.currentTags.includes(itemId);

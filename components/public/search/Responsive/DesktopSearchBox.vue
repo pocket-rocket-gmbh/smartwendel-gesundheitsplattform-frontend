@@ -4,23 +4,19 @@
       <v-row>
         <v-col class="d-flex">
           <span class="font-weight-medium text-h4 text-white">{{ subTitle }}</span>
-            <v-btn
-              v-if="useUser().isAdmin()"
-              prepend-icon="mdi-content-copy"
-              variant="outlined"
-              rounded="pill"
-              color="red darken-2"
-              class="mx-5 mt-1"
-              @click="copySearchFilterUrl"
-            >
-              Such-Filter kopieren
-            </v-btn>
+          <v-btn
+            v-if="useUser().isAdmin()"
+            prepend-icon="mdi-content-copy"
+            variant="outlined"
+            rounded="pill"
+            color="red darken-2"
+            class="mx-5 mt-1"
+            @click="copySearchFilterUrl"
+          >
+            Such-Filter kopieren
+          </v-btn>
         </v-col>
-        <v-col
-          v-if="filterKind === 'facility'"
-          md="2"
-          class="d-flex justify-end"
-        >
+        <v-col v-if="filterKind === 'facility'" md="2" class="d-flex justify-end">
           <v-btn
             variant="outlined"
             min-width="250px"
@@ -44,22 +40,14 @@
                 <span>{{ filterTitle }}</span>
               </div>
             </label>
-            <FacilityFilterSelection
-              v-model="filterStore.currentTags"
-              :popover-width="popoverWidth"
-              :filter-kind="filterKind"
-            />
+            <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" :filter-kind="filterKind" />
           </div>
         </v-col>
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field general-font-size">
             <label class="label is-white font-weight-medium">Gemeinde</label>
             <div class="select-wrapper">
-              <select
-                class="input select"
-                v-model="filterStore.currentZip"
-                @click="handleClearTermSearch()"
-              >
+              <select class="input select" v-model="filterStore.currentZip" @click="handleClearTermSearch()">
                 <option :value="null">Gemeinde wählen</option>
                 <option v-for="community in communities" :value="community.zip">
                   {{ community.name }}
@@ -68,11 +56,7 @@
             </div>
           </div>
         </v-col>
-        <v-col
-          v-if="filterKind !== 'event' && filterKind !== 'news'"
-          md="1"
-          class="d-flex justify-center align-end is-white mb-4"
-        >
+        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'" md="1" class="d-flex justify-center align-end is-white mb-4">
           <div class="label font-weight-medium general-font-size">oder</div>
         </v-col>
         <v-col>
@@ -103,23 +87,17 @@
             color="white"
             @click="filterStore.clearSearch()"
           >
-          <span>Filter löschen</span>
+            <span>Filter löschen</span>
           </v-btn>
         </v-col>
       </v-row>
     </div>
   </div>
   <v-row class="has-bg-darken-grey text-white">
-    <v-col
-      class="d-flex justify-center align-center bottom-actions mx-3"
-    >
+    <v-col class="d-flex justify-center align-center bottom-actions mx-3">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span class=" general-font-size" v-else-if="filterStore.filteredResults.length"
-        >{{ filterStore.filteredResults.length }} Treffer</span
-      >
-      <span v-else>
-        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
-      </span>
+      <span class="general-font-size" v-else-if="filterStore.filteredResults.length">{{ filterStore.filteredResults.length }} Treffer</span>
+      <span v-else> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
     </v-col>
   </v-row>
 </template>
@@ -186,10 +164,8 @@ const setFilterTitle = () => {
     searchTitle.value = "Kurs suchen";
   }
 };
-const communitiesApi = useCollectionApi();
-communitiesApi.setBaseApi(usePublicApi());
-communitiesApi.setEndpoint(`communities`);
-const communities = communitiesApi.items;
+
+const communities = ref<any[]>([]);
 
 const resetSearchTerm = () => {
   filterStore.currentSearchTerm = "";
@@ -202,12 +178,9 @@ const copySearchFilterUrl = () => {
   navigator.clipboard.writeText(url);
 };
 
-const getCommunities = async () => {
-  await communitiesApi.retrieveCollection();
-};
+onMounted(async () => {
+  communities.value = await filterStore.loadAllCommunities();
 
-onMounted(() => {
-  getCommunities();
   updatePopoverWidth();
   setFilterTitle();
 });
