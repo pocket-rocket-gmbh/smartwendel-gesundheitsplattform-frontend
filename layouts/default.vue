@@ -8,7 +8,7 @@
       <PublicCookieBanner />
     </ClientOnly> -->
     <v-main>
-      <slot />
+      <slot v-if="!appStore.loading" />
     </v-main>
     <PublicLayoutsFooter />
   </v-app>
