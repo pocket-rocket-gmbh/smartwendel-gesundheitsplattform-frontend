@@ -137,8 +137,8 @@
 
 <script lang="ts" setup>
 import { isCompleteFacility } from "~/utils/facility.utils";
-import { Facility } from "~/store/searchFilter";
-import { RequiredField } from "types/facilities";
+import { type Facility } from "~/store/searchFilter";
+import { type RequiredField } from "~/types/facilities";
 
 definePageMeta({
   layout: "admin",

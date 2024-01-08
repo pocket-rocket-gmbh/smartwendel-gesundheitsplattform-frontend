@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const props = defineProps<{

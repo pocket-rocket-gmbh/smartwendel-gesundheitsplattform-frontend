@@ -485,9 +485,9 @@
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
-import { FilterType } from "~/store/searchFilter";
+import { type FilterType } from "~/store/searchFilter";
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
-import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import type {  CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [

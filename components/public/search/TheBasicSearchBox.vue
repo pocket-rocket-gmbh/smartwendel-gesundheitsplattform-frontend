@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { useBreakpoints } from "~/composables/ui/breakPoints";
-import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   title: string;

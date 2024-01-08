@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFilterStore } from "~/store/searchFilter";
+import { type useFilterStore } from "~/store/searchFilter";
 
 type Tag = {
   id: string;

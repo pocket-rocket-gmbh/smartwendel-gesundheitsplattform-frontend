@@ -67,7 +67,7 @@
   </v-row>
 </template>
 <script setup lang="ts">
-import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const props = defineProps<{

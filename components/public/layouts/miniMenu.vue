@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-menu
-      v-if="useUser().loggedIn()"
-      v-model="menu"
-      :close-on-content-click="false"
-    >
+    <v-menu v-if="useUser().loggedIn()" v-model="menu" :close-on-content-click="false">
       <template v-slot:activator="{ props }">
         <div class="account-button" v-bind="props">
           <!-- <p class="mx-5 menu-list">Mein Account</p> -->
@@ -13,16 +9,15 @@
           </div>
         </div>
       </template>
+
       <v-card class="mx-auto ma-2" width="300" v-if="currentUser">
         <v-list class="card-header">
-          <v-list-item-content>
-            <v-list-item-title class="is-dark-grey font-weight-medium">{{
+          <v-list-item>
+            <v-list-item class="is-dark-grey font-weight-medium pa-0 ma-0">{{
               currentUser?.name
-            }}</v-list-item-title>
-            <v-list-item-subtitle class="is-dark-grey">{{
-              currentUser?.email
-            }}</v-list-item-subtitle>
-          </v-list-item-content>
+            }}</v-list-item>
+            <v-list-item-subtitle class="is-dark-grey">{{ currentUser?.email }}</v-list-item-subtitle>
+          </v-list-item>
         </v-list>
         <v-divider></v-divider>
         <v-list>
@@ -55,9 +50,7 @@
         </v-list>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="closeMenuAndRouteTo(``)">
-            schließen
-          </v-btn>
+          <v-btn color="primary" @click="closeMenuAndRouteTo(``)"> schließen </v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>

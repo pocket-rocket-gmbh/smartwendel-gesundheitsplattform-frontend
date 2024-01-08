@@ -74,9 +74,9 @@
 </template>
 
 <script setup lang="ts">
-import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type Facility, type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
-import { CollapsibleListItem } from "../../../types/collapsibleList";
+import type { CollapsibleListItem } from "../../../types/collapsibleList";
 import iconFilter from "@/assets/icons/icon_filter.svg";
 
 const props = defineProps<{

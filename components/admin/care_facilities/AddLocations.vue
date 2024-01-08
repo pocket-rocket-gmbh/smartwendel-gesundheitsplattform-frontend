@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import { ResultStatus } from "@/types/serverCallResult";
-import { MapLocation } from "@/types/MapLocation";
+import type { MapLocation } from "@/types/MapLocation";
 
 const emit = defineEmits(["offline", "update"]);
 const props = defineProps<{

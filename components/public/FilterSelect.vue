@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { CategoriesFilter, useFilterStore } from "~/store/searchFilter";
+import { type CategoriesFilter, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   label: string;
@@ -70,4 +70,3 @@ onMounted(async () => {
 </script>
 
 <style lang="sass" scoped></style>
-~/store/SearchFilter

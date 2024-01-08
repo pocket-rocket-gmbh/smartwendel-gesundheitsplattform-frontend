@@ -6,11 +6,11 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, onUnmounted } from "vue";
-import L, { LatLngExpression, Map } from "leaflet";
+import type { PropType, onMounted, onUnmounted } from "vue";
+import L, { type LatLngExpression, Map } from "leaflet";
 import "../js/leaflet.mask";
 import "leaflet.markercluster";
-import { MapLocation } from "@/types/MapLocation";
+import type { MapLocation } from "@/types/MapLocation";
 
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";

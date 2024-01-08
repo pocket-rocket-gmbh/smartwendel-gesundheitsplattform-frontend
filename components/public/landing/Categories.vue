@@ -39,7 +39,7 @@
     </div>
     <div class="icons mb-2">
       <div v-for="(item, index) in items" :key="index" class="icon">
-        <a :href="item.content.link" class="d-flex">
+        <div @click="goToLink(item.content.link)" class="d-flex">
           <div class="is-clickable items-content">
             <img class="image mt-3" :src="item.content.icon" />
             <div
@@ -50,7 +50,7 @@
           <div class="d-flex align-center is-clickable">
             <div class="font-weight-bold"></div>
           </div>
-        </a>
+        </div>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@ const goToSearch = () => {
 };
 
 const goToLink = (item: string) => {
-  router.push({ path: `/public/search/facilities${item}` });
+  router.push({ path: item });
 };
 
 const items = [

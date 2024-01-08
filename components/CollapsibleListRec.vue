@@ -125,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
+import type { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { rules } from "~/data/validationRules";
 import draggable from "vuedraggable";
 
