@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { MapLocation } from "@/types/MapLocation";
+import type { MapLocation } from "@/types/MapLocation";
 import { rules } from "../../../data/validationRules";
 import axios from "axios";
 

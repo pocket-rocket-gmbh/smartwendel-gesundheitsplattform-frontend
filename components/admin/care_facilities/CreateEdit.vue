@@ -26,7 +26,7 @@
                 >{{ step.description }}</span
               >
             </div>
-            <span class="general-font-size is-dark-grey d-flex justify-end"
+            <span class="general-font-size is-dark-grey d-flex justify-end mb-5"
               >* Pflichtangaben</span
             >
           </div>
@@ -180,6 +180,7 @@
                 <span>{{ steps["category"].tooltip }}</span>
               </v-tooltip>
             </div>
+        
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_facility"
@@ -580,8 +581,8 @@
 
 <script setup lang="ts">
 import "@vuepic/vue-datepicker/dist/main.css";
-import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
-import { FilterType, Facility } from "~/store/searchFilter";
+import type { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import type { FilterType, Facility } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 import axios from "axios";
 

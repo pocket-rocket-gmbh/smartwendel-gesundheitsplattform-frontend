@@ -253,7 +253,7 @@ import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
-import { RequiredField } from "~/types/facilities";
+import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
 
 const router = useRouter();
@@ -384,6 +384,9 @@ const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 api.setEndpoint(props.endpoint);
 const items = api.items;
+
+//limit items to 10
+
 
 const filteredItems = computed(() => {
   if (props.searchQuery === undefined || props.searchColumns === undefined)

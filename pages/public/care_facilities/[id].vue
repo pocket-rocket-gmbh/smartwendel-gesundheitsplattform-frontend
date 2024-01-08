@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Facility } from "~/store/searchFilter";
+import type { Facility } from "~/store/searchFilter";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
 import facilityIcon from "~/assets/icons/facilityTypes/facilities_green.svg";
 import eventIcon from "~/assets/icons/facilityTypes/events_green.svg";
@@ -119,7 +119,13 @@ const careFacilityId = computed(() => {
 });
 
 const goBack = () => {
-  router.push({ path: router.options.history.state.back });
+  const backLink = router.options.history.state.back as string;
+
+  if (backLink) {
+    router.push({ path: backLink });
+  } else {
+    router.push({ path: "/public/search/facilities" });
+  }
 };
 
 const showApi = useCollectionApi();

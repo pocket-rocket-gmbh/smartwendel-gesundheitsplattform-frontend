@@ -78,7 +78,7 @@ import { ResultStatus } from "@/types/serverCallResult";
 import { areObjectsEqual, deepToRaw } from "~/utils/global.utils";
 import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
-import { CreateEditFacility } from "~/types/facilities";
+import type { CreateEditFacility } from "~/types/facilities";
 import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const statusLoadingFilter = useStatusLoadingFilter();

@@ -125,8 +125,8 @@
 </template>
 <script lang="ts" setup>
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
-import { Facility } from "~/store/searchFilter";
-import { RequiredField } from "~/types/facilities";
+import { type Facility } from "~/store/searchFilter";
+import { type RequiredField } from "~/types/facilities";
 import { isCompleteEvent } from "~/utils/facility.utils";
 
 definePageMeta({

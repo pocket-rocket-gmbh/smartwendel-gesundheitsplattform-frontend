@@ -47,9 +47,9 @@ import { useAdminStore } from "../../../store/admin";
 import { useSnackbar } from "../../../composables/ui/snackbar";
 import { useCollectionApi } from "../../../composables/api/collectionApi";
 import { usePrivateApi } from "../../../composables/api/private";
-import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
+import type { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
 import { ResultStatus } from "../../../types/serverCallResult";
-import { Facility, FilterKind, FilterTag, FilterType, useFilterStore } from "../../../store/searchFilter";
+import { type Facility, type FilterKind, type FilterTag, type FilterType, useFilterStore } from "../../../store/searchFilter";
 import { filterKindToFilterScope } from "~/utils/filter.utils";
 
 const props = defineProps<{
@@ -179,6 +179,7 @@ const getItems = async () => {
     static: true,
     specialType: "tag",
     next: [...transformedTags],
+    care_facilities_count: ""
   });
 
   itemsForFacilityList.value = [...tmpItemsForFacilityList];

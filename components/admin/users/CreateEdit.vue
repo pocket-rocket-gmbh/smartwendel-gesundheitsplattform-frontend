@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { User } from "~/store/searchFilter";
+import { type User } from "~/store/searchFilter";
 import { ResultStatus } from "@/types/serverCallResult";
 import axios from "axios";
 

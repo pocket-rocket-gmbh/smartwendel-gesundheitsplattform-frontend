@@ -1,4 +1,8 @@
 <template>
+  <LoadingSpinner class="text-spinner" v-if="appStore.loading && !isAdminRoute"
+    >Die Gesundheitsplattform wird geladen...</LoadingSpinner
+  >
+  <SnackBar></SnackBar>
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -6,6 +10,20 @@
 
 <script lang="ts" setup>
 import { useAppStore } from "./store/app";
+
+const snackbar = useSnackbar();
+
+const router = useRouter();
+
+const route = router.currentRoute;
+
+const isAdminRoute = computed(() => {
+  if (route.value.path.includes("admin")) {
+    return true;
+  }
+  return false;
+});
+  
 
 const appStore = useAppStore();
 </script>
@@ -20,7 +38,7 @@ const appStore = useAppStore();
 
 .text-spinner {
   position: fixed !important;
-  top: 50% !important;
+  top: 30% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
   opacity: 1 !important;

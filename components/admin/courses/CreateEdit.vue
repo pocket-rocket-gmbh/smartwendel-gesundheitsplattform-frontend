@@ -577,8 +577,8 @@
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
-import { FilterType } from "~/store/searchFilter";
-import { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import { type FilterType } from "~/store/searchFilter";
+import type {  CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
 import { set } from "date-fns";

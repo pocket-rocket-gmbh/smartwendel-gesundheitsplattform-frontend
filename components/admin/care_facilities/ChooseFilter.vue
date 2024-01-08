@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { FilterKind, FilterType, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, type FilterType, useFilterStore } from "~/store/searchFilter";
 import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const props = defineProps<{
@@ -231,7 +231,6 @@ const isChecked = (option: Filter) => {
 };
 
 const reloadFilters = async () => {
-  return
   if (props.filterType === "filter_facility") {
     statusLoadingFilter.categoryLoaded = true;
   } else {

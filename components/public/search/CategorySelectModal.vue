@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];

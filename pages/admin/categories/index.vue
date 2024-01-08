@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { useAdminStore } from "~/store/admin";
-import { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
+import type { CollapsibleListItem, EmitAction } from "~/types/collapsibleList";
 import { ResultStatus } from "~/types/serverCallResult";
 
 definePageMeta({

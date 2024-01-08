@@ -228,8 +228,8 @@
 
 <script setup lang="ts">
 import "@vuepic/vue-datepicker/dist/main.css";
-import { CreateEditStep, CreateEditSteps } from "~/types/facilities";
-import { FilterType } from "~/store/searchFilter";
+import type { CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import type {  FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [
