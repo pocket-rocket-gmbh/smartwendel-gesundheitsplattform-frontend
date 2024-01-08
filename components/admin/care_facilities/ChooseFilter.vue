@@ -231,7 +231,6 @@ const isChecked = (option: Filter) => {
 };
 
 const reloadFilters = async () => {
-  console.log("Relaoad fitlers")
   return
   if (props.filterType === "filter_facility") {
     statusLoadingFilter.categoryLoaded = true;
