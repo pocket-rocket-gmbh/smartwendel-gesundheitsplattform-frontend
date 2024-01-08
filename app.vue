@@ -2,6 +2,7 @@
   <LoadingSpinner class="text-spinner" v-if="appStore.loading && !isAdminRoute"
     >Die Gesundheitsplattform wird geladen...</LoadingSpinner
   >
+  <SnackBar></SnackBar>
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -10,6 +11,7 @@
 <script lang="ts" setup>
 import { useAppStore } from "./store/app";
 
+const snackbar = useSnackbar();
 
 const router = useRouter();
 
