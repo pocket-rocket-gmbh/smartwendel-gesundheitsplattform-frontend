@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" :scrim="false" transition="dialog-bottom-transition">
       <template v-slot:activator="{ props }">
-        <div class="field" v-bind="props"  @click="handleClearTermSearch()">
+        <div class="field" v-bind="props" @click="handleClearTermSearch()">
           <label class="label is-white">Gemeinde</label>
           <div class="input">{{ activeCommunityName || "Gemeinde wählen" }}</div>
         </div>
@@ -49,15 +49,7 @@ import { useFilterStore } from "~/store/searchFilter";
 
 const filterStore = useFilterStore();
 const dialog = ref(false);
-
-const communitiesApi = useCollectionApi();
-communitiesApi.setBaseApi(usePublicApi());
-communitiesApi.setEndpoint(`communities`);
-const communities = communitiesApi.items;
-
-const getCommunities = async () => {
-  await communitiesApi.retrieveCollection();
-};
+const communities = ref<any[]>([]);
 
 const activeCommunityName = computed(() => {
   return communities.value?.find((community) => community.zip === filterStore.currentZip)?.name;
@@ -68,14 +60,14 @@ const handleCommunitySelect = (community: { name: string; zip: string }) => {
 };
 
 const handleClearTermSearch = () => {
-  if(filterStore.currentSearchTerm) {
+  if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
   }
   return;
 };
 
-onMounted(() => {
-  getCommunities();
+onMounted(async () => {
+  communities.value = await filterStore.loadAllCommunities();
 });
 </script>
 

@@ -3,6 +3,7 @@
     v-model="dialog"
     transition="dialog-bottom-transition"
     @click:outside="emitClose()"
+    width="900px"
   >
     <v-card class="">
       <v-card-title v-if="location" class="general-font-size is-dark-grey"> Ort bearbeiten </v-card-title>
@@ -68,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { MapLocation } from "@/types/MapLocation";
+import type { MapLocation } from "@/types/MapLocation";
 import { rules } from "../../../data/validationRules";
 import axios from "axios";
 

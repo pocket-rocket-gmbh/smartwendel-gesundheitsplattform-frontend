@@ -1,13 +1,13 @@
 <template>
   <div ref="contentBoxRef" class="content-box" v-resize="handleResize">
-    <a
-      class="image"
-      :href="buttonHref"
+    <div
+      class="image is-clickable"
+      @click="goToFacility(buttonHref)"
       v-if="showImage && breakPoints.width.value >= 1420"
     >
       <img v-if="item.image_url" :src="item.image_url" />
       <img v-else :src="noImage" />
-    </a>
+    </div>
     <div class="text">
       <template v-if="item.user">
         <div class="info">
@@ -18,15 +18,15 @@
             <span class="mr-3">
               <img :src="facilityIcon" />
             </span>
-            <a
+            <div
               class="is-dark-grey"
-              :href="`/public/care_facilities/${item.user_care_facility?.id}`"
+              @click="goToMainFacility(item)"
             >
               <span
                 class="break-title facility-name general-font-size"
                 v-html="item.user_care_facility?.name"
               ></span>
-            </a>
+            </div>
           </div>
         </div>
         <hr v-if="item.kind !== 'facility'" />
@@ -54,7 +54,7 @@
       >
         <div class="action mb-n2" v-if="buttonHref">
           <v-btn
-            :href="buttonHref"
+            @click="goToFacility(buttonHref)"
             :target="item.url ? '_blank' : ''"
             variant="flat"
             color="primary"
@@ -93,7 +93,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Facility } from "~/store/searchFilter";
+import { type Facility } from "~/store/searchFilter";
 import noImage from "@/assets/images/no-image.svg";
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
@@ -103,6 +103,8 @@ const props = defineProps<{
   item: Facility;
   size?: number;
 }>();
+
+const router = useRouter();
 
 const contentBoxRef = ref<HTMLDivElement>();
 const showImage = ref(true);
@@ -131,6 +133,15 @@ const buttonHref = computed(() => {
 
   return null;
 });
+
+const goToFacility = (buttonHref: any) => {
+  router.push({ path: buttonHref }); 
+};
+
+const goToMainFacility = (item:any) => {
+  router.push({ path:`/public/care_facilities/${item.user_care_facility?.id}` });
+};
+
 
 const buttonText = computed(() => {
   if (!props.item) return null;

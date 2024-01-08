@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="general-font-size font-weight-medium is-dark-grey">Verfeinere hier deine Suche:</span>
+    <span v-if="filterStore.filteredResults.length" class="general-font-size font-weight-medium is-dark-grey">Verfeinere hier deine Suche:</span>
     <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
       <div class="filter-tiles">
         <div v-for="filter in availableItemsForServiceList" class="filter-group">
@@ -37,9 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type Facility, type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
-import { CollapsibleListItem } from "../../../types/collapsibleList";
+import type { CollapsibleListItem } from "../../../types/collapsibleList";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
 
 const breakPoints = useBreakpoints();
@@ -121,7 +121,7 @@ const getItems = async () => {
   }
 
   const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
-  const allFilters = await getAllFilters();
+  const allFilters = await filterStore.loadAllFilters();
 
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
@@ -129,8 +129,6 @@ const getItems = async () => {
 
   itemsForServiceList.value = [...tmpItemsForServiceList];
 };
-
-filterStore.currentTags;
 
 const isSelected = (itemId: string) => {
   return filterStore.currentTags.includes(itemId);

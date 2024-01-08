@@ -114,10 +114,17 @@
                   />
                 </div>
               </template>
-              <div v-if="useUser().statusOnHealthScope()" class="tooltip">
+              <div v-if="!useUser().statusOnHealthScope()" class="tooltip">
                 {{
                   field?.disabledConditions?.(item)
                     ? field.disabledTooltip
+                    : field.tooltip
+                }}
+              </div>
+              <div v-else class="tooltip">
+                {{
+                  field?.disabledConditions?.(item)
+                    ? field.disabledTooltipFacilityImcomplete
                     : field.tooltip
                 }}
               </div>
@@ -171,6 +178,9 @@
           </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
+          </span>
+          <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
+            <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
           </span>
           <span v-else-if="field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'">
             <img :src="logo" width="20" class="ml-2 pt-2" />
@@ -243,7 +253,7 @@ import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
-import { RequiredField } from "~/types/facilities";
+import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
 
 const router = useRouter();
@@ -374,6 +384,9 @@ const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 api.setEndpoint(props.endpoint);
 const items = api.items;
+
+//limit items to 10
+
 
 const filteredItems = computed(() => {
   if (props.searchQuery === undefined || props.searchColumns === undefined)

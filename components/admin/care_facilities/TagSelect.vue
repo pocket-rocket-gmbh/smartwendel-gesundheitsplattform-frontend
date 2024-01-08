@@ -125,7 +125,7 @@
 
 <script setup lang="ts">
 import { filterKindToFilterScope } from "~/utils/filter.utils";
-import { FilterKind, FilterTag } from "~/store/searchFilter";
+import { type FilterKind, type FilterTag } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 
 const props = defineProps<{

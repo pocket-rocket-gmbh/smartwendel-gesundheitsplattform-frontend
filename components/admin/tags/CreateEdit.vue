@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { Facility, FilterKind } from "~/store/searchFilter";
+import { type Facility, type FilterKind } from "~/store/searchFilter";
 const setKind = (slotProps: any) => {
   slotProps.item.filter_type = "filter_service";
 };

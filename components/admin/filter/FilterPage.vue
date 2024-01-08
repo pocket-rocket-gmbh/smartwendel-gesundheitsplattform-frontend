@@ -47,9 +47,9 @@ import { useAdminStore } from "../../../store/admin";
 import { useSnackbar } from "../../../composables/ui/snackbar";
 import { useCollectionApi } from "../../../composables/api/collectionApi";
 import { usePrivateApi } from "../../../composables/api/private";
-import { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
+import type { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
 import { ResultStatus } from "../../../types/serverCallResult";
-import { Facility, FilterKind, FilterTag, FilterType } from "../../../store/searchFilter";
+import { type Facility, type FilterKind, type FilterTag, type FilterType, useFilterStore } from "../../../store/searchFilter";
 import { filterKindToFilterScope } from "~/utils/filter.utils";
 
 const props = defineProps<{
@@ -154,7 +154,7 @@ const getItems = async () => {
   const tmpItemsForFacilityList: CollapsibleListItem[] = [];
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
-  const allFilters = await getAllFilters();
+  const allFilters = await useFilterStore().loadAllFilters();
 
   facilityFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForFacilityList, 0, allFilters));
   serviceFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters));
@@ -179,6 +179,7 @@ const getItems = async () => {
     static: true,
     specialType: "tag",
     next: [...transformedTags],
+    care_facilities_count: ""
   });
 
   itemsForFacilityList.value = [...tmpItemsForFacilityList];

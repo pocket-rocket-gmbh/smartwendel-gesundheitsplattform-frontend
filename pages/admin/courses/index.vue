@@ -2,17 +2,25 @@
   <div>
     <v-row>
       <v-col>
-        <span class="general-font-size is-dark-grey font-weight-bold" v-if="useUser().isFacilityOwner()">Meine Kurse</span>
+        <span
+          class="general-font-size is-dark-grey font-weight-bold"
+          v-if="useUser().isFacilityOwner()"
+          >Meine Kurse</span
+        >
         <span class="general-font-size is-dark-grey font-weight-bold" v-else>Kurse</span>
       </v-col>
       <v-col class="d-flex justify-end align-center">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+            >Benutzer Aktiv</span
+          >
         </div>
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer nicht Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+            >Benutzer nicht Aktiv</span
+          >
         </div>
       </v-col>
     </v-row>
@@ -60,7 +68,7 @@
       type="info"
       density="compact"
       closable
-      class="mt-2"
+      class="mt-2 general-font-size"
     >
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
       freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie Beiträge anlegen.
@@ -116,8 +124,8 @@
 </template>
 <script lang="ts" setup>
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
-import { Facility } from "~/store/searchFilter";
-import { RequiredField } from "~/types/facilities";
+import { type Facility } from "~/store/searchFilter";
+import { type RequiredField } from "~/types/facilities";
 import { isCompleteCourse } from "~/utils/facility.utils";
 
 definePageMeta({
@@ -150,6 +158,8 @@ const fields = [
     },
     disabledTooltip:
       "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
+    disabledTooltipFacilityImcomplete:
+      "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.",
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
@@ -165,6 +175,10 @@ const fields = [
         router.push({ path: "/admin/users", query: { userId: item.user.id } });
       }
     },
+  },
+  {
+    value: "",
+    type: "has-dates",
   },
   {
     text: "",
@@ -187,7 +201,7 @@ const fields = [
   {
     value: "",
     type: "is-lk",
-    tooltip: "Kurs wurde von einer Admin erstellt."
+    tooltip: "Kurs wurde von einem Admin erstellt.",
   },
 ];
 

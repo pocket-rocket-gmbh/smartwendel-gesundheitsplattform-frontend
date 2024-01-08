@@ -17,7 +17,7 @@
           <div class="map-widget">
             <ClientMap
               :locations="locations"
-              v-if="showMap"
+              v-if="showMap && filterStore.filteredResults.length > 0"
               ref="map"
               :auto-fit="false"
               :center-point="{
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { useFilterStore } from "~/store/searchFilter";
-import { MapLocation } from "~/types/MapLocation";
+import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const filterStore = useFilterStore();

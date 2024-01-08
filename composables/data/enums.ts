@@ -1,9 +1,9 @@
 // insert enums in Interface
 export interface Enums {
   facilitiesStatus: EnumValue[],
-  facilitiesKind: EnumValue[]
+  facilitiesKind: EnumValue[],
+  userRole: EnumValue[]  // Add the userRole property
 }
-
 
 export type EnumValue = {
   value: string;
@@ -30,12 +30,6 @@ export function useEnums() {
     { value: 'care_facility_admin', name: 'Super Adminitrator', class: '' },
   ]
 
-  type EnumValue = {
-    value: string;
-    name: string;
-    class: string;
-  }
-  
   // insert enums in Interface
   interface Enums {
     facilitiesStatus: EnumValue[],
@@ -58,7 +52,7 @@ export function useEnums() {
     return null
   }
 
- const getClassName = (enumName: keyof Enums, value:string) => {
+  const getClassName = (enumName: keyof Enums, value:string) => {
     const found = enums[enumName].find((val:any) => val.value === value) as EnumValue | undefined
     if (found) {
       return found.class

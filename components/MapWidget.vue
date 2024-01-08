@@ -6,11 +6,11 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, onUnmounted } from "vue";
-import L, { LatLngExpression, Map } from "leaflet";
+import type { PropType, onMounted, onUnmounted } from "vue";
+import L, { type LatLngExpression, Map } from "leaflet";
 import "../js/leaflet.mask";
 import "leaflet.markercluster";
-import { MapLocation } from "@/types/MapLocation";
+import type { MapLocation } from "@/types/MapLocation";
 
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -103,8 +103,8 @@ onMounted(async () => {
     zoomControl: props.zoomControl,
   });
     //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // OpenStreetMaps for testing.
-    //L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=tVi34bM6PTUr9iztZ0dR', { // MapTiler Development for usage on developer workstations.
-    L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=ZKYxdvnMOpWy7cmBIb2L', { // MapTiler Production: Commit only with this line active!!!.
+    L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=tVi34bM6PTUr9iztZ0dR', { // MapTiler Development for usage on developer workstations.
+    // L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=ZKYxdvnMOpWy7cmBIb2L', { // MapTiler Production: Commit only with this line active!!!.
       minZoom: props.minZoom,
       maxZoom: props.maxZoom
     }).addTo(map);
@@ -198,9 +198,9 @@ const refreshView = async () => {
       </div>
       </h2>
       <div class="action">
-        <a class="link" style="text-align: center" href="${
+        <a class="link" style="text-align: center; color: white!important;" href="${
           location.url
-        }" target="_blank">Mehr Details</a>
+        }">Mehr Details</a>
         </div>
         </div>
         `
@@ -415,6 +415,7 @@ div.clustericon {
         align-items: center;
         justify-content: center;
         padding: 1rem;
+        color: white;
 
         .link {
           text-decoration: none;

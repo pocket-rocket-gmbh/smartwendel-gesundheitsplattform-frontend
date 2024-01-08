@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { CollapsibleListItemAdditionalData } from "~/types/collapsibleList";
+import type { CollapsibleListItemAdditionalData } from "~/types/collapsibleList";
 
 const props = defineProps<{
   data: CollapsibleListItemAdditionalData;

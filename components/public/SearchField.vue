@@ -91,7 +91,7 @@ import {
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import newsIcon from "~/assets/icons/facilityTypes/news.svg";
 import searchIcon from "~/assets/icons/facilityTypes/search.svg";
-import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type Facility, type FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string;
@@ -145,7 +145,7 @@ const handlePressEnter = (e: KeyboardEvent) => {
 };
 
 const routeToResults = (result?: Facility) => {
-  if (!props.defaultRouteTo) {
+  if (props.defaultRouteTo) {
     router.push({ path: props.defaultRouteTo });
   } else {
     if (result?.kind && result?.kind === "facility") {

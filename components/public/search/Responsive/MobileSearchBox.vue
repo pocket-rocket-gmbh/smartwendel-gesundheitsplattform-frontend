@@ -7,37 +7,15 @@
         </v-col>
 
         <v-col cols="2" class="d-flex justify-center align-center">
-          <v-icon
-            color="white"
-            size="x-large"
-            v-if="showFilter"
-            @click="toogleShowFilter()"
-            >mdi-filter-off-outline</v-icon
-          >
-          <v-icon
-            color="white"
-            size="x-large"
-            v-if="!showFilter && !filterStore.mapFilter?.length"
-            @click="toogleShowFilter()"
-            >mdi-filter-outline</v-icon
-          >
-          <v-icon
-            color="white"
-            size="x-large"
-            v-if="!showFilter && filterStore.mapFilter?.length"
-            @click="handleClearSearch()"
-            >mdi-close-outline</v-icon
-          >
+          <v-icon color="white" size="x-large" v-if="showFilter" @click="toogleShowFilter()">mdi-filter-off-outline</v-icon>
+          <v-icon color="white" size="x-large" v-if="!showFilter && !filterStore.mapFilter?.length" @click="toogleShowFilter()">mdi-filter-outline</v-icon>
+          <v-icon color="white" size="x-large" v-if="!showFilter && filterStore.mapFilter?.length" @click="handleClearSearch()">mdi-close-outline</v-icon>
         </v-col>
       </v-row>
       <div v-if="showFilter">
         <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
           <v-col cols="10">
-            <PublicSearchCategorySelectModal
-              v-model="filterStore.currentTags"
-              :filter-kind="filterKind"
-              :filterTitle="filterTitle"
-            />
+            <PublicSearchCategorySelectModal v-model="filterStore.currentTags" :filter-kind="filterKind" :filterTitle="filterTitle" />
           </v-col>
           <v-col>
             <PublicSearchFilterSelectModal :filter-kind="filterKind" />
@@ -47,14 +25,8 @@
           <v-col class="d-flex align-center">
             <PublicSearchCommunitySelectModal />
           </v-col>
-
         </v-row>
-        <div
-          class="d-flex align-center justify-center is-white font-weight-medium my-2"
-          v-if="filterKind !== 'event' && filterKind !== 'news'"
-        >
-          oder
-        </div>
+        <div class="d-flex align-center justify-center is-white font-weight-medium my-2" v-if="filterKind !== 'event' && filterKind !== 'news'">oder</div>
         <v-row :class="[filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '']">
           <v-col>
             <div class="field">
@@ -74,24 +46,10 @@
         </v-row>
         <v-row class="buttons">
           <v-col class="field d-flex justify-center">
-            <v-btn
-              variant="outlined"
-              width="100%"
-              rounded="pill"
-              color="white"
-              @click="filterStore.clearSearch()"
-            >
-              Filter löschen
-            </v-btn>
+            <v-btn variant="outlined" width="100%" rounded="pill" color="white" @click="filterStore.clearSearch()"> Filter löschen </v-btn>
           </v-col>
           <v-col class="d-flex justify-center" v-if="mapControls">
-            <v-btn
-              variant="outlined"
-              width="100%"
-              rounded="pill"
-              color="white"
-              @click="emit('toggleMap')"
-            >
+            <v-btn variant="outlined" width="100%" rounded="pill" color="white" @click="emit('toggleMap')">
               <span v-if="showMap"> Listenansicht </span>
               <span v-if="!showMap"> Kartenansicht </span>
             </v-btn>
@@ -103,15 +61,13 @@
   <v-row class="has-bg-darken-grey text-white font-weight-bold ma-0 pa-0">
     <v-col class="d-flex justify-center align-center general-font-size">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span v-else-if="filterStore.filteredResults.length"
-        >{{ filterStore.filteredResults.length }} Treffer</span
-      >
+      <span v-else-if="filterStore.filteredResults.length">{{ filterStore.filteredResults.length }} Treffer</span>
       <span v-else> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
     </v-col>
   </v-row>
 </template>
 <script setup lang="ts">
-import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const props = defineProps<{
@@ -159,7 +115,7 @@ const setFilterTitle = () => {
 const handleClearSearch = () => {
   filterStore.clearSearch();
   showFilter.value = false;
-  emit('toggleMap')
+  emit("toggleMap");
 };
 
 const toogleShowFilter = () => {
@@ -168,9 +124,9 @@ const toogleShowFilter = () => {
 
 watch(
   () => props.showMap,
-  debounce(() => {
+  () => {
     showFilter.value = false;
-  }),
+  },
   {
     deep: true,
   }

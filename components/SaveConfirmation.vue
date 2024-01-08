@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { Loading, LoadingSpinner } from "#build/components";
+import type { Loading, LoadingSpinner } from "#build/components";
 import { useReward } from "vue-rewards";
 export default defineComponent({
   emits: ["close", "accepted", "update"],

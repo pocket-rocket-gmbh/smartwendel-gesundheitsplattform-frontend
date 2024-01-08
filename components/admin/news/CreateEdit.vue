@@ -15,25 +15,34 @@
               @click="goToField(key)"
               v-fit-text="{ min: 16, max: 45 }"
             >
-              <span class="general-font-size font-weight-medium">{{ step.description }}</span>
+              <span
+                class="general-font-size font-weight-medium word-break general-font-size"
+                lang="de"
+                >{{ step.description }}</span
+              >
             </div>
-            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
+            <span class="general-font-size is-dark-grey d-flex justify-end"
+              >* Pflichtangaben</span
+            >
           </div>
         </v-col>
         <v-col md="9">
           <div class="py-10">
             <div>
-              <span class="general-font-size is-dark-grey"
-                >Hier kannst du deine News und Beiträge zu verschiedenen Themen anlegen.
-                Je mehr Angaben du machst, umso leichter können Besucher
-                deine Beiträge finden. Pflichtfelder sind mit einem Sternchen
-                versehen.</span
+              <span
+                class="general-font-size is-dark-grey facility-kind-description"
+                >Hier kannst du deine News und Beiträge zu verschiedenen Themen
+                anlegen. Je mehr Angaben du machst, umso leichter können
+                Besucher deine Beiträge finden. Pflichtfelder sind mit einem
+                Sternchen versehen.</span
               >
             </div>
           </div>
           <div class="field" id="name">
             <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["name"].label }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
+                steps["name"].label
+              }}</span>
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -41,15 +50,18 @@
               hide-details="auto"
               label="Überschrift"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="leader">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["leader"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["leader"].label }}</span
+              >
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -57,15 +69,18 @@
               hide-details="auto"
               label="Vor und Nachname des Autors"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["photo"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["photo"].label }}</span
+              >
             </div>
             <ChooseAndCropSingleImage
               kind="cover"
@@ -79,6 +94,23 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
+          <div class="field" id="excerpt">
+            <div class="my-2">
+              <span class="general-font-size is-dark-grey font-weight-bold">{{
+                steps["excerpt"].label
+              }}</span>
+            </div>
+            <v-textarea
+              :maxlength="250"
+              :rules="[rules.required, rules.excerptCounter]"
+              placeholder="Kurze Beschreibung des Beitrags (max. 250 Zeichen)"
+              v-model="slotProps.item.excerpt"
+              counter
+            >
+            </v-textarea>
+          </div>
+
+          <v-divider class="my-10"></v-divider>
 
           <div class="field" id="description">
             <div class="my-2">
@@ -91,7 +123,9 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
+                    'empty-editor': isDescriptionEmpty(
+                      slotProps.item.description
+                    ),
                   }"
                 >
                   <QuillEditor
@@ -113,7 +147,9 @@
                     v-show="false"
                     class="hidden-text-field is-dark-grey"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
+                      isDescriptionEmpty(slotProps.item.description)
+                        ? ''
+                        : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -138,9 +174,10 @@
           </div> -->
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["services"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["services"].label }}</span
+              >
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -191,18 +228,19 @@
 
 <script setup lang="ts">
 import "@vuepic/vue-datepicker/dist/main.css";
-import { CreateEditStep, CreateEditSteps } from "~/types/facilities";
-import { FilterType } from "~/store/searchFilter";
+import type { CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import type {  FilterType } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 
 const stepNames = [
   "name",
   "photo",
+  "excerpt",
   "description",
   "leader",
   "services",
 ] as const;
-type StepNames = typeof stepNames[number];
+type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte gib hier den Titel deines Newsartikels/Beitrags an. *",
@@ -225,8 +263,18 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["image_url", "file"],
     justSome: true,
   },
+  excerpt: {
+    label:
+      "4. Gib deinem Beitrag eine Kurzbeschreibung zur Darstellung in der Suche. *",
+    tooltip: "",
+    description: "Kurzbeschreibung *",
+    placeholder: "Inhalt des Beitrags",
+    props: ["excerpt"],
+  },
+
   description: {
-    label: "4. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
+    label:
+      "5. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
     tooltip: "",
     description: "Beschreibungstext *",
     placeholder: "Inhalt des Beitrags",
@@ -242,7 +290,7 @@ const steps: CreateEditSteps<StepNames> = {
   }, */
   services: {
     label:
-      "5. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder. *",
+      "6. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder. *",
     tooltip:
       "Auf diese Weise gelangen Besucher zu deinem Newsbeitrag, sobald sie nach den entsprechenden Schlagwörtern suchen",
     description: "Schlagwörter *",
@@ -285,7 +333,7 @@ const textOptions = ref({
   theme: "snow",
   contentType: "html",
   required: true,
-  formats: formats
+  formats: formats,
 });
 
 const onQuillReady = (quill: any) => {
@@ -464,6 +512,10 @@ const goToField = (n: string) => {
   margin-left: 0.25rem;
 }
 
+.ql-editor {
+  min-height: 200px;
+}
+
 .ql-editor p,
 .ql-editor ol,
 .ql-editor ul {
@@ -507,7 +559,7 @@ const goToField = (n: string) => {
 
 .v-tooltip > .v-overlay__content {
   font-size: 20px !important;
-  line-height: 1.2!important;
+  line-height: 1.2 !important;
 }
 
 .ql-clean {
@@ -518,9 +570,9 @@ const goToField = (n: string) => {
   z-index: 9999 !important;
 }
 .ql-snow .ql-tooltip::before {
-  content: "Link hinzufügen"!important;
+  content: "Link hinzufügen" !important;
 }
 .ql-snow .ql-tooltip.ql-editing a.ql-action::after {
-  content: "Speichern"!important;
+  content: "Speichern" !important;
 }
 </style>

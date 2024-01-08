@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFilterStore } from "~/store/searchFilter";
+import { type useFilterStore } from "~/store/searchFilter";
 
 type Tag = {
   id: string;
@@ -69,7 +69,7 @@ const showMoreTags = () => {
 const getTags = async () => {
   loading.value = true;
   availableTags.value = await getFilters(props.filterId);
-  const allTags = await getAllFilters();
+  const allTags = await filterStore.loadAllFilters();
 
   for (const tag of availableTags.value) {
     const subTags = allTags.filter((tag) => tag.parentId === tag.id);

@@ -133,7 +133,6 @@
     }
 
     onMounted(() => {
-    console.log('uhuhu')
       const showStorage = localStorage.getItem('platform_cookies_accepteds')
       if (showStorage && showStorage === 'true') {
         showFrame.value = false

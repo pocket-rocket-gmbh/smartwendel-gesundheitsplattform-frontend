@@ -137,8 +137,8 @@
 
 <script lang="ts" setup>
 import { isCompleteFacility } from "~/utils/facility.utils";
-import { Facility } from "~/store/searchFilter";
-import { RequiredField } from "types/facilities";
+import { type Facility } from "~/store/searchFilter";
+import { type RequiredField } from "~/types/facilities";
 
 definePageMeta({
   layout: "admin",
@@ -181,6 +181,8 @@ const fields = [
     },
     disabledTooltip:
       "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
+    disabledTooltipFacilityImcomplete:
+      "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "beinEdited" },

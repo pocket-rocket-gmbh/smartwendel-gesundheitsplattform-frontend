@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Facility } from "~/store/searchFilter";
+import { type Facility } from "~/store/searchFilter";
 
 const props = defineProps<{
   item: Facility;

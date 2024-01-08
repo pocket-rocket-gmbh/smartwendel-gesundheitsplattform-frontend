@@ -1,6 +1,4 @@
-import axios from "axios";
 import { defineStore } from "pinia";
-import { ResultStatus } from "~/types/serverCallResult";
 
 export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
@@ -67,6 +65,10 @@ export type Filter = {
   allResults: Facility[];
   filteredResults: Facility[];
   onlySearchInTitle: boolean;
+
+  allFilters: null | any[];
+  allCommunities: null | any[];
+  mainFilters: null | any[];
 };
 
 const initialFilterState: Filter = {
@@ -83,6 +85,10 @@ const initialFilterState: Filter = {
   allResults: [],
   filteredResults: [],
   onlySearchInTitle: false,
+
+  allFilters: null,
+  allCommunities: null,
+  mainFilters: null,
 };
 
 export const useFilterStore = defineStore({
@@ -154,15 +160,41 @@ export const useFilterStore = defineStore({
         if (index !== -1) this.currentTags.splice(index, 1);
       });
     },
+    async loadAllCommunities() {
+      if (this.allCommunities) return this.allCommunities;
 
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`communities`);
+
+      await api.retrieveCollection();
+
+      this.allCommunities = api.items.value;
+
+      return this.allCommunities;
+    },
+    async loadAllFilters() {
+      if (this.allFilters) return this.allFilters;
+
+      this.allFilters = await getAllFilters();
+
+      return this.allFilters;
+    },
+    async loadMainFilters(filterKind: FilterKind) {
+      if (this.mainFilters) return this.mainFilters;
+
+      this.mainFilters = await getMainFilters("filter_facility", filterKind);
+
+      return this.mainFilters;
+    },
     async checkIfMultipleFacilityFiltersAreSelected() {
       if (!this.currentKinds?.length || !this.currentTags?.length) return [];
 
       // After the course/event-split, multiple kinds are obsolete
       const filterKind = this.currentKinds[0];
 
-      const mainFilters = await getMainFilters("filter_facility", filterKind);
-      const allFilters = await getAllFilters();
+      const mainFilters = await this.loadMainFilters(filterKind);
+      const allFilters = await this.loadAllFilters();
 
       const allOptions = mainFilters.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
       // const allAvailableOptions = allOptions.reduce((prev, curr) => {
@@ -226,16 +258,15 @@ export const useFilterStore = defineStore({
         filters,
       };
 
-      const api = useCollectionApi();
-      api.setBaseApi(usePublicApi());
-      api.setEndpoint(`care_facilities`);
-      if (this.currentKinds && this.currentKinds.length) {
-        api.setEndpoint(`care_facilities?kind=${this.currentKinds.join(",")}`);
-      }
+      // const api = useCollectionApi();
+      // api.setBaseApi(usePublicApi());
+      // api.setEndpoint(`care_facilities`);
+      // if (this.currentKinds && this.currentKinds.length) {
+      //   api.setEndpoint(`care_facilities?kind=${this.currentKinds.join(",")}`);
+      // }
+      // await api.retrieveCollection(options as any);
 
-      await api.retrieveCollection(options as any);
-
-      const allResultsFromApi: Facility[] = api.items.value;
+      // const allResultsFromApi: Facility[] = api.items.value;
 
       // const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
       //   api.setEndpoint(`care_facilities/${result.id}`);
@@ -250,7 +281,19 @@ export const useFilterStore = defineStore({
       //     .filter(Boolean);
       // });
 
-      this.allResults = allResultsFromApi;
+      this.allResults = this.allUnalteredResults
+        .filter((result) => {
+          return this.currentKinds.length ? this.currentKinds.includes(result.kind) : true;
+        })
+        .filter((result) => {
+          return result.zip && this.currentZip ? result.zip === this.currentZip : true;
+        })
+        .filter((result) => {
+          if (!this.currentTags.length) return true;
+          return result.tag_category_ids?.find((tag) => this.currentTags.includes(tag));
+        });
+
+      // this.allResults = allResultsFromApi;
       useNuxtApp().$bus.$emit("filtersUpdated");
 
       this.loading = false;
@@ -299,6 +342,7 @@ export const useFilterStore = defineStore({
       this.allResults = [];
       this.filteredResults = [];
       this.onlySearchInTitle = false;
+      this.mainFilters = null;
     },
   },
 });

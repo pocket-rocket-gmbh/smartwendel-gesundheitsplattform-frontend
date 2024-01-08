@@ -83,7 +83,7 @@
   />
   <template v-else-if="croppedImage || tempImage || preSetImageUrl">
     <v-row class="my-1">
-      <v-col md="1" class="d-flex align-center justify-center">
+      <v-col md="2" class="d-flex align-center justify-center">
         <span class="general-font-size is-dark-grey">Bereits ausgewählt:</span>
       </v-col>
       <v-col>
