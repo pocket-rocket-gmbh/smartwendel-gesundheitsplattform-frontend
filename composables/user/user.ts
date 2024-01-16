@@ -1,5 +1,6 @@
 import { useUserStore } from "@/store/user";
 import { ResultStatus } from "@/types/serverCallResult";
+import { useSnackbar } from "~/composables/ui/snackbar";
 
 export function useUser() {
   const userStore = useUserStore();
