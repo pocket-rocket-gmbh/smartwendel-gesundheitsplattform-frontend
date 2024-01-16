@@ -182,7 +182,7 @@
             <img :src="logo" width="20" class="ml-2 pt-2" />
           </span>
           <span
-            v-else-if="field.type === 'imported' && item?.user?.imported"
+            v-else-if="field.type === 'imported' && item?.user?.imported && useUser().isAdmin()"
             @click.stop="copyTokenLink(item)"
           >
             <div class="d-flex flex-column">

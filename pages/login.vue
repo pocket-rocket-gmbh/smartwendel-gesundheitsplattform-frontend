@@ -1,6 +1,6 @@
 <template>
   <v-row class="my-15">
-    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2" >
+    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
       <v-form @submit.prevent="auth">
         <v-card :class="['pa-6', { shake: animated }]">
           <img class="is-fullwidth" src="~/assets/images/logo.png" />
@@ -23,7 +23,15 @@
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
-          <v-btn color="primary" block depressed type="submit" class="general-font-size" size="large">Login</v-btn>
+          <v-btn
+            color="primary"
+            block
+            depressed
+            type="submit"
+            class="general-font-size"
+            size="large"
+            >Login</v-btn
+          >
           <div
             @click="emailAlreadyGiven()"
             align="center"
@@ -77,15 +85,14 @@ export default defineComponent({
       }
     };
 
+    console.log(router.options.history);
+
     const auth = async () => {
       loading.value = true;
       errors.value = "";
-      const data = { email: email.value, password: password.value, scope: 'health' };
+      const data = { email: email.value, password: password.value, scope: "health" };
 
-      const { data: result } = await axios.post<ServerCallResult>(
-        "/api/login",
-        { data }
-      );
+      const { data: result } = await axios.post<ServerCallResult>("/api/login", { data });
 
       if (result.status === ResultStatus.SUCCESSFUL) {
         const jwt = result.data.jwt_token;
@@ -106,7 +113,9 @@ export default defineComponent({
             lastRoute.value &&
             !lastRoute.value.includes("/password_forgotten") &&
             lastRoute.value !== "/password_reset" &&
-            lastRoute.value !== "/register"
+            lastRoute.value !== "/register" &&
+            lastRoute.value !== "/login" &&
+            router.options.history.state.current === "/onboarding"
           ) {
             router.push({ path: lastRoute.value });
           } else if (result.data.user.role === "user") {
@@ -173,26 +182,24 @@ export default defineComponent({
   10%,
   90%
     transform: translate3d(-1px, 0, 0)
-  
+
   20%,
-  80% 
+  80%
     transform: translate3d(2px, 0, 0)
-  
+
   30%,
   50%,
-  70% 
+  70%
     transform: translate3d(-4px, 0, 0)
 
   40%,
-  60% 
+  60%
     transform: translate3d(4px, 0, 0)
-  
+
 .login
   width: 50%
   @includes md
     width: 50%
   @includes sm
     width: 50%
-
-  
 </style>
