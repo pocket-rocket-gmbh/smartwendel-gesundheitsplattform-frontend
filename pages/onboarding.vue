@@ -207,7 +207,7 @@ const firstname = ref("");
 const lastname = ref("");
 const email = ref("");
 const careFacilityName = ref("");
-const loading = ref(false);
+const loading = ref(true);
 const animated = ref(false);
 const errors = ref({});
 const registerSuccessful = ref(false);
@@ -270,10 +270,10 @@ const validateToken = async () => {
     const data = result;
     if (data) {
       hasToken.value = true;
-      firstname.value = data.data.user.firstname;
-      lastname.value = data.data.user.lastname;
-      email.value = data.data.user.email;
-      careFacilityName.value = data.data.care_facility.name;
+      firstname.value = data?.data?.user?.firstname;
+      lastname.value = data?.data?.user?.lastname;
+      email.value = data?.data?.user?.email;
+      careFacilityName.value = data?.data?.care_facility?.name;
     }
     loading.value = false;
   } else {
@@ -322,7 +322,7 @@ const scrollToTop = () => {
 };
 onMounted(async () => {
   getToken();
-  validateToken();
+  await validateToken();
   scrollToTop();
   const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
   if (rememberedEmail) {
