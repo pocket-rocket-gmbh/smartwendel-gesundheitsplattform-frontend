@@ -182,8 +182,25 @@
           <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
             <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
           </span>
-          <span v-else-if="field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'">
+          <span
+            v-else-if="
+              field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
+            "
+          >
             <img :src="logo" width="20" class="ml-2 pt-2" />
+          </span>
+          <span
+            v-else-if="field.type === 'imported' && item?.user?.imported"
+            @click.stop="copyTokenLink(item)"
+          >
+            <div class="d-flex flex-column">
+              <v-icon class="tick-icon" v-if="!item?.user?.onboarding_token"
+                >mdi-check-all</v-icon
+              >
+              <v-icon :class="[item?.user?.onboarding_token ? 'not-onboard' : 'onboard']"
+                >mdi-application-import</v-icon
+              >
+            </div>
           </span>
           <span v-else-if="field.type === 'beinEdited' && !item.user"
             ><i>Nutzer existiert nicht</i></span
@@ -277,6 +294,8 @@ const props = withDefaults(
   }
 );
 
+const snackbar = useSnackbar();
+
 const emit = defineEmits([
   "close",
   "openCreateEditDialog",
@@ -344,6 +363,13 @@ const isDraft = (item: any) => {
   });
 };
 
+const copyTokenLink = (item: any) => {
+  if (!item?.user?.onboarding_token) return;
+  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}`;
+  navigator.clipboard.writeText(link);
+  snackbar.showSuccess(`Link kopiert`);
+};
+
 const emitopenDeleteDialog = (itemId: any) => {
   emit("openDeleteDialog", itemId);
 };
@@ -386,7 +412,6 @@ api.setEndpoint(props.endpoint);
 const items = api.items;
 
 //limit items to 10
-
 
 const filteredItems = computed(() => {
   if (props.searchQuery === undefined || props.searchColumns === undefined)
@@ -477,6 +502,14 @@ defineExpose({ resetActiveItems, getItems });
 .small
   font-size: 0.5em
 
+.tick-icon
+  position: absolute
+  margin-left: 0.7rem
+  margin-top: -1rem
+  z-index: 99
+  color: #8ab61d
+
+
 
 .has-normal-bg
   background: white
@@ -502,6 +535,11 @@ defineExpose({ resetActiveItems, getItems });
     &.up
       transform: rotate(180deg)
 
+.onboard
+  color: #8ab61d
+
+.not-onboard
+  color: #FB8C00
 
 .disabled
   cursor: not-allowed !important

@@ -5,7 +5,7 @@
     >
     <div
       class="py-3 d-flex flex-column justify-center"
-      v-if="careFacility.kind !== 'facility'"
+      v-if="careFacility?.kind !== 'facility'"
     >
       <span class="d-flex align-center">
         <img class="mr-2 icon" :src="facilityIcon" />
@@ -59,7 +59,7 @@
     </div>
     <div v-if="careFacility?.name_instructor" class="py-4">
       <h3 class="is-primary is-uppercase general-font-size font-weight-medium mb-1">
-        <span v-if="careFacility.kind === 'course'"> Kursleitung </span>
+        <span v-if="careFacility?.kind === 'course'"> Kursleitung </span>
         <span v-else> Veranstalter </span>
       </h3>
       <span class="is-dark-grey general-font-size">

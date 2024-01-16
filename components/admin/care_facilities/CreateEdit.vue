@@ -41,6 +41,36 @@
               Pflichtfelder sind mit einem Sternchen versehen.</span
             >
           </div>
+
+          <div class="field">
+            <div class="my-2 d-flex align-center">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >Link</span
+              >
+            </div>
+
+            <div class="d-flex align-center">
+              <div class="field split d-flex align-center">
+                <v-text-field
+                  class="text-field is-dark-grey"
+                  :value="slotProps.item?.user?.onboarding_token"
+                  disabled
+                  hide-details="auto"
+                />
+                <v-btn
+                  variant="flat"
+                  class="general-font-size"
+                  color="primary"
+                  rounded="pill"
+                  size="large"
+                  @click="copyTokenLink(slotProps.item)"
+                >
+                  <span> Token kopieren </span>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+          <v-divider class="my-10"></v-divider>
           <div class="field" id="name">
             <div class="my-2">
               <span class="general-font-size is-dark-grey font-weight-bold">{{
@@ -180,7 +210,7 @@
                 <span>{{ steps["category"].tooltip }}</span>
               </v-tooltip>
             </div>
-        
+
             <AdminCareFacilitiesChooseFilter
               :pre-set-tags="slotProps.item.tag_category_ids"
               filter-type="filter_facility"
@@ -581,7 +611,11 @@
 
 <script setup lang="ts">
 import "@vuepic/vue-datepicker/dist/main.css";
-import type { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import type {
+  CreateEditFacility,
+  CreateEditStep,
+  CreateEditSteps,
+} from "~/types/facilities";
 import type { FilterType, Facility } from "~/store/searchFilter";
 import { rules } from "../../../data/validationRules";
 import axios from "axios";
@@ -843,6 +877,14 @@ const checkValidAddress = debounce(async (slotProps: any) => {
     }
   }
 });
+
+const snackbar = useSnackbar();
+
+const copyTokenLink = (item: any) => {
+  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}`;
+  navigator.clipboard.writeText(link);
+  snackbar.showSuccess(`import für ${item.name} Link kopiert`);
+};
 
 const isValidAddress = ref(null);
 
