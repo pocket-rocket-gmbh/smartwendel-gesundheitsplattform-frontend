@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="showBar">
       <v-col>
         <span
           class="general-font-size is-dark-grey font-weight-bold"
@@ -42,7 +42,7 @@
       @changed="handleSaved()"
     />
     <div>
-      <div>
+      <div v-if="showBar">
         <v-row align="center">
           <v-col md="3" class="d-flex">
             <v-btn
@@ -82,6 +82,7 @@
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
+        @toogle-bar="showBar = !showBar"
         :disable-delete="true"
         defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
@@ -153,6 +154,8 @@ import { type RequiredField } from "~/types/facilities";
 definePageMeta({
   layout: "admin",
 });
+
+const showBar = ref(true);
 
 const user = useUser();
 const router = useRouter();

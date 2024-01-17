@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="showBar">
       <v-col>
         <span
           class="general-font-size is-dark-grey font-weight-bold"
@@ -38,7 +38,7 @@
       freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
       anlegen.
     </v-alert>
-    <v-row align="center">
+    <v-row align="center" v-if="showBar">
       <v-col md="3">
         <v-btn
           v-if="setupFinished"
@@ -70,6 +70,7 @@
       :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      @toogle-bar="showBar = !showBar"
       defaultSortBy="created_at"
       ref="dataTableRef"
       :disable-delete="false"
@@ -120,7 +121,7 @@ definePageMeta({
 });
 
 const previewItem = ref<Facility>();
-
+const showBar = ref(true);
 const user = useUser();
 const loading = ref(false);
 const router = useRouter();
