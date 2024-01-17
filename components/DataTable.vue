@@ -218,10 +218,18 @@
               @click.stop="field.action(item)"
               v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'"
             >
-              {{ pathInto(item, field.value) }}
+              <span v-if="pathInto(item, field.value).length > 1">
+                {{ pathInto(item, field.value) }}
+              </span>
+              <span v-else>
+                <i>keine Nutzerdaten</i>
+              </span>
             </button>
             <span v-if="field.value === 'user.name'">
-              <span class="align-center ml-2">
+              <span
+                class="align-center ml-2"
+                v-if="pathInto(item, field.value).length > 1"
+              >
                 <v-icon
                   v-if="item?.user?.is_active_on_health_scope"
                   size="x-small"
@@ -273,6 +281,8 @@
   </v-table>
   <v-pagination
     v-if="!searchQuery"
+    rounded="circle"
+    :total-visible="7"
     v-model="pagination.page"
     :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
     @update:model-value="getItems"
