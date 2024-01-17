@@ -1,44 +1,46 @@
 <template>
   <div>
-    <div>
-      <v-row>
-        <v-col md="3">
-          <span class="general-font-size is-dark-grey font-weight-bold">Benutzer</span>
-        </v-col>
-        <v-col class="d-flex justify-end align-center">
-          <div class="d-flex align-center mx-3">
-            <v-icon size="x-small" color="success">mdi-circle</v-icon>
-            <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Einrichtung online</span>
-          </div>
-          <div class="d-flex align-center mx-3">
-            <v-icon size="x-small" color="error">mdi-circle</v-icon>
-            <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Einrichtung nicht online</span>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row align="center">
-        <v-col md="3">
-          <v-btn
-            elevation="0"
-            variant="outlined"
-            @click="
-              itemId = null;
-              createEditDialogOpen = true;
-            "
-            >Neuer Benutzer</v-btn
+    <v-row v-if="showBar">
+      <v-col md="3">
+        <span class="general-font-size is-dark-grey font-weight-bold">Benutzer</span>
+      </v-col>
+      <v-col class="d-flex justify-end align-center">
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="success">mdi-circle</v-icon>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+            >Einrichtung online</span
           >
-        </v-col>
-        <v-col>
-          <v-text-field
-            width="50"
-            prepend-icon="mdi-magnify"
-            v-model="facilitySearchTerm"
-            hide-details="auto"
-            label="Benutzer durchsuchen"
-          />
-        </v-col>
-      </v-row>
-    </div>
+        </div>
+        <div class="d-flex align-center mx-3">
+          <v-icon size="x-small" color="error">mdi-circle</v-icon>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+            >Einrichtung nicht online</span
+          >
+        </div>
+      </v-col>
+    </v-row>
+    <v-row align="center" v-if="showBar">
+      <v-col md="3">
+        <v-btn
+          elevation="0"
+          variant="outlined"
+          @click="
+            itemId = null;
+            createEditDialogOpen = true;
+          "
+          >Neuer Benutzer</v-btn
+        >
+      </v-col>
+      <v-col>
+        <v-text-field
+          width="50"
+          prepend-icon="mdi-magnify"
+          v-model="facilitySearchTerm"
+          hide-details="auto"
+          label="Benutzer durchsuchen"
+        />
+      </v-col>
+    </v-row>
 
     <DataTable
       :fields="fields"
@@ -48,6 +50,7 @@
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @mailUser="mailUser"
+      @toogle-bar="showBar = !showBar"
       ref="dataTableRef"
       :disable-delete="false"
     />
@@ -82,6 +85,8 @@ definePageMeta({
   layout: "admin",
 });
 
+const showBar = ref(true);
+
 const fields = ref([
   { prop: "firstname", text: "Vorname", value: "firstname", type: "string" },
   { prop: "lastname", text: "Nachname", value: "lastname", type: "string" },
@@ -104,7 +109,7 @@ const fields = ref([
   {
     value: "",
     type: "is-lk",
-    tooltip: "Nutzer ist Admin."
+    tooltip: "Nutzer ist Admin.",
   },
   {
     prop: "last_seen",

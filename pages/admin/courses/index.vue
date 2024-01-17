@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="showBar">
       <v-col>
         <span
           class="general-font-size is-dark-grey font-weight-bold"
@@ -35,7 +35,7 @@
       etc.)</v-alert
     >
     <template v-if="setupFinished">
-      <v-row align="center">
+      <v-row align="center" v-if="showBar">
         <v-col md="5">
           <div class="my-5">
             <v-btn
@@ -84,6 +84,7 @@
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="created_at"
       :disable-delete="false"
+      @toogle-bar="showBar = !showBar"
       :draft-required="draftRequiredFields"
     />
 
@@ -132,6 +133,7 @@ definePageMeta({
   layout: "admin",
 });
 
+const showBar = ref(true);
 const user = useUser();
 const loading = ref(false);
 const router = useRouter();

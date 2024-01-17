@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="showBar"> 
       <v-col>
         <span
           class="general-font-size is-dark-grey font-weight-bold"
@@ -37,7 +37,7 @@
       sich über mehrere Tage verteilen können.
     </v-alert>
     <template v-if="setupFinished">
-      <v-row align="center">
+      <v-row align="center" v-if="showBar">
         <v-col md="5">
           <div class="my-5">
             <v-btn
@@ -83,6 +83,7 @@
       :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      @toogle-bar="showBar = !showBar"
       defaultSortBy="created_at"
       :disable-delete="false"
       :draft-required="draftRequiredFields"
@@ -132,6 +133,8 @@ import { isCompleteEvent } from "~/utils/facility.utils";
 definePageMeta({
   layout: "admin",
 });
+
+const showBar = ref(true);
 
 const user = useUser();
 const loading = ref(false);
