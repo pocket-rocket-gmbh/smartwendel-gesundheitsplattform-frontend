@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column align-center justify-center my-1">
-    <div class="d-flex align-center justify-center">
+  <div class="d-flex flex-column align-center justify-center my-1 pagination">
+    <div class="d-flex align-center justify-center mt-1">
       <p v-if="props.searchQuery">
         Zeigt
         {{ Math.min((pagination.page - 1) * pagination.itemsPerPage + 1, items.length) }}-
@@ -12,6 +12,16 @@
         {{ Math.min(pagination.page * pagination.itemsPerPage, pagination.totalItems) }}
         von {{ pagination.totalItems }} Einträgen
       </p>
+
+      <v-select
+        v-model="pagination.itemsPerPage"
+        @update:model-value="getItems"
+        :items="[10, 20, 30, 100]"
+        density="compact"
+        hide-details
+        class="mx-1"
+      />
+
       <span @click="toogleBar">
         <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
         <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
@@ -26,9 +36,8 @@
       @update:model-value="getItems"
     ></v-pagination>
   </div>
-
   <v-divider> </v-divider>
-  <v-table fixed-header height="80vh">
+  <v-table fixed-header>
     <thead class="elevation-1 primary">
       <tr>
         <th
@@ -338,7 +347,7 @@ const emit = defineEmits([
   "openDeleteDialog",
   "itemsLoaded",
   "itemUpdated",
-  "toogleBar"
+  "toogleBar",
 ]);
 
 const sortOrder = ref(props.defaultSortOrder);
@@ -346,12 +355,12 @@ const sortBy = ref(props.defaultSortBy);
 
 const loading = ref(false);
 
-const showBar = ref(true)
+const showBar = ref(true);
 
 const toogleBar = () => {
-  showBar.value = !showBar.value
-  emit("toogleBar", showBar.value)
-}
+  showBar.value = !showBar.value;
+  emit("toogleBar", showBar.value);
+};
 
 const resetActiveItems = () => {
   activeItems.value = null;
@@ -607,4 +616,7 @@ defineExpose({ resetActiveItems, getItems });
 
 .tooltip
   max-width: 400px
+
+.pagination
+  position: sticky
 </style>
