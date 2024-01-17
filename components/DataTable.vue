@@ -1,17 +1,35 @@
 <template>
-  <p v-if="props.searchQuery">
-    Zeigt
-    {{ Math.min((pagination.page - 1) * pagination.itemsPerPage + 1, items.length) }}-
-    {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }} von
-    {{ items.length }} Einträgen
-  </p>
-  <p v-else>
-    Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
-    {{ Math.min(pagination.page * pagination.itemsPerPage, pagination.totalItems) }}
-    von {{ pagination.totalItems }} Einträgen
-  </p>
-  <v-table>
-    <thead>
+  <div class="d-flex flex-column align-center justify-center my-1">
+    <div class="d-flex align-center justify-center">
+      <p v-if="props.searchQuery">
+        Zeigt
+        {{ Math.min((pagination.page - 1) * pagination.itemsPerPage + 1, items.length) }}-
+        {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }} von
+        {{ items.length }} Einträgen
+      </p>
+      <p v-else>
+        Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
+        {{ Math.min(pagination.page * pagination.itemsPerPage, pagination.totalItems) }}
+        von {{ pagination.totalItems }} Einträgen
+      </p>
+      <span @click="toogleBar">
+        <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
+        <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
+      </span>
+    </div>
+    <v-pagination
+      v-if="!searchQuery"
+      rounded="circle"
+      :total-visible="7"
+      v-model="pagination.page"
+      :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
+      @update:model-value="getItems"
+    ></v-pagination>
+  </div>
+
+  <v-divider> </v-divider>
+  <v-table fixed-header height="80vh">
+    <thead class="elevation-1 primary">
       <tr>
         <th
           v-for="field in fields"
@@ -202,9 +220,6 @@
             @click.stop="copyTokenLink(item)"
           >
             <div class="d-flex flex-column">
-              <v-icon class="tick-icon" v-if="!item?.user?.onboarding_token"
-                >mdi-check-all</v-icon
-              >
               <v-icon :class="[item?.user?.onboarding_token ? 'not-onboard' : 'onboard']"
                 >mdi-application-import</v-icon
               >
@@ -279,14 +294,6 @@
       </tr>
     </tbody>
   </v-table>
-  <v-pagination
-    v-if="!searchQuery"
-    rounded="circle"
-    :total-visible="7"
-    v-model="pagination.page"
-    :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
-    @update:model-value="getItems"
-  ></v-pagination>
 </template>
 
 <script setup lang="ts">
@@ -331,12 +338,20 @@ const emit = defineEmits([
   "openDeleteDialog",
   "itemsLoaded",
   "itemUpdated",
+  "toogleBar"
 ]);
 
 const sortOrder = ref(props.defaultSortOrder);
 const sortBy = ref(props.defaultSortBy);
 
 const loading = ref(false);
+
+const showBar = ref(true)
+
+const toogleBar = () => {
+  showBar.value = !showBar.value
+  emit("toogleBar", showBar.value)
+}
 
 const resetActiveItems = () => {
   activeItems.value = null;
@@ -579,6 +594,7 @@ defineExpose({ resetActiveItems, getItems });
 
     &.up
       transform: rotate(180deg)
+
 
 .onboard
   color: #8ab61d
