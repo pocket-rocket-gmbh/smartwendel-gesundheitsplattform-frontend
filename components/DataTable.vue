@@ -14,6 +14,7 @@
       </p>
 
       <v-select
+        v-if="!searchQuery"
         v-model="pagination.itemsPerPage"
         @update:model-value="getItems"
         :items="[10, 20, 30, 100]"
