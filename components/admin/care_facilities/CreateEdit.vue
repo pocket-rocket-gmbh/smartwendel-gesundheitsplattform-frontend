@@ -883,7 +883,7 @@ const snackbar = useSnackbar();
 const copyTokenLink = (item: any) => {
   const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}`;
   navigator.clipboard.writeText(link);
-  snackbar.showSuccess(`import für ${item.name} Link kopiert`);
+  snackbar.showSuccess("Übernahme-Link generiert und kopiert.");
 };
 
 const isValidAddress = ref(null);
