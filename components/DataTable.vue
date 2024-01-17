@@ -1,4 +1,15 @@
 <template>
+  <p v-if="props.searchQuery">
+    Zeigt
+    {{ Math.min((pagination.page - 1) * pagination.itemsPerPage + 1, items.length) }}-
+    {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }} von
+    {{ items.length }} Einträgen
+  </p>
+  <p v-else>
+    Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
+    {{ Math.min(pagination.page * pagination.itemsPerPage, pagination.totalItems) }}
+    von {{ pagination.totalItems }} Einträgen
+  </p>
   <v-table>
     <thead>
       <tr>
@@ -31,7 +42,7 @@
     </thead>
     <tbody>
       <tr
-        v-for="(item, indexMain) in filteredItems"
+        v-for="(item, indexMain) in items"
         :key="item.id"
         :class="[
           item === activeItems ? 'activeItems' : '',
@@ -72,9 +83,7 @@
           </v-tooltip>
           <v-tooltip
             top
-            v-else-if="
-              field.type === 'move_down' && indexMain !== filteredItems.length - 1
-            "
+            v-else-if="field.type === 'move_down' && indexMain !== items.length - 1"
           >
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
@@ -190,7 +199,9 @@
             <img :src="logo" width="20" class="ml-2 pt-2" />
           </span>
           <span
-            v-else-if="field.type === 'imported' && item?.user?.imported && useUser().isAdmin()"
+            v-else-if="
+              field.type === 'imported' && item?.user?.imported && useUser().isAdmin()
+            "
             @click.stop="copyTokenLink(item)"
           >
             <div class="d-flex flex-column">
@@ -263,6 +274,12 @@
       </tr>
     </tbody>
   </v-table>
+  <v-pagination
+    v-if="!searchQuery"
+    v-model="pagination.page"
+    :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
+    @update:model-value="getItems"
+  ></v-pagination>
 </template>
 
 <script setup lang="ts">
@@ -274,6 +291,12 @@ import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
 
 const router = useRouter();
+
+const pagination = ref({
+  page: 1,
+  itemsPerPage: 20,
+  totalItems: 0,
+});
 
 const props = withDefaults(
   defineProps<{
@@ -413,43 +436,6 @@ const items = api.items;
 
 //limit items to 10
 
-const filteredItems = computed(() => {
-  if (props.searchQuery === undefined || props.searchColumns === undefined)
-    return items.value;
-
-  const itemsFiltered = items.value.filter((item) => {
-    const some = props.searchColumns.some((columnProp) => {
-      let column = pathIntoObject(item, columnProp);
-      if (column) {
-        let searchTerm = props.searchQuery.toUpperCase();
-        if (columnProp === "kind") {
-          if ("VERANSTALTUNG".includes(searchTerm)) {
-            searchTerm = "EVENT";
-          } else if ("BERICHT".includes(searchTerm)) {
-            searchTerm = "NEWS";
-          } else if ("KURS".includes(searchTerm)) {
-            searchTerm = "COURSE";
-          } else if ("EINRICHTUNG".includes(searchTerm)) {
-            searchTerm = "FACILITY";
-          }
-        }
-        if (columnProp === "created_at" || columnProp === "last_seen") {
-          column = useDatetime().parseDatetime(column);
-        }
-        if (typeof column === "string") {
-          return column.toUpperCase().includes(searchTerm);
-        }
-        if (Array.isArray(column)) {
-          // TODO: Right now i only check for the 'name' field on my items, not all
-          return column.find((item) => item.name?.toUpperCase().includes(searchTerm));
-        }
-      }
-    });
-    return some;
-  });
-  return itemsFiltered;
-});
-
 const handleToggled = async (item: any) => {
   emit("itemUpdated", item);
 };
@@ -457,20 +443,42 @@ const handleToggled = async (item: any) => {
 const getItems = async () => {
   loading.value = true;
   const options = {
-    page: 1,
-    per_page: 9999,
+    page: pagination.value.page,
+    per_page: props.searchQuery ? 999 : pagination.value.itemsPerPage,
     sort_by: sortBy.value,
     sort_order: sortOrder.value,
-    searchQuery: null as string,
+    searchQuery: props.searchQuery || null,
     concat: false,
     filters: [] as any[],
   };
+
   adminStore.loading = true;
-  await api.retrieveCollection(options);
+  const response = await api.retrieveCollection(options);
+
+  if (response.data && response.data.resources) {
+    items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
+  } else {
+    items.value = Array.isArray(response.data) ? response.data : [];
+  }
+
+  if (props.searchQuery) {
+    pagination.value.totalItems = items.value.length;
+  } else {
+    pagination.value.totalItems = response.data.total_results;
+  }
+
   adminStore.loading = false;
   emit("itemsLoaded", items.value);
   loading.value = false;
 };
+
+watch(
+  () => props.searchQuery,
+  debounce(() => {
+    pagination.value.page = 1;
+    getItems();
+  })
+);
 
 const rotateColumnSortOrder = (columnProp: string) => {
   if (sortBy.value !== columnProp) {
