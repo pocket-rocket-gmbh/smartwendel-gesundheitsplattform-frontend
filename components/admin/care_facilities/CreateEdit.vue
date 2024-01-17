@@ -42,10 +42,10 @@
             >
           </div>
 
-          <div class="field">
+          <div class="field" v-if="slotProps.item?.user?.onboarding_token">
             <div class="my-2 d-flex align-center">
               <span class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >Link</span
+                >URL zur Einrichtungsübernahme generieren</span
               >
             </div>
 
@@ -65,7 +65,7 @@
                   size="large"
                   @click="copyTokenLink(slotProps.item)"
                 >
-                  <span> Token kopieren </span>
+                  <span> URL kopieren </span>
                 </v-btn>
               </div>
             </div>

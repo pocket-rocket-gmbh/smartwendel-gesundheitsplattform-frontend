@@ -1,4 +1,4 @@
-import { FilterKind, FilterType } from "~/store/searchFilter";
+import type { FilterKind, FilterType } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 
 export const getFilters = async (parentId: string) => {
