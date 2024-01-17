@@ -36,7 +36,7 @@
           <v-col md="8">
             <v-row class="align-center bg-white">
               <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-                <a href="https://www.landkreis-st-wendel.de/" target="_blank">
+                <a href="https://www.smartwendelerland.de/" target="_blank">
                   <img
                     src="~/assets/images/sub-footer/logo-footer-wnd.png"
                     class="is-clickable logo-footer"
