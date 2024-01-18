@@ -3,17 +3,24 @@
     <div class="background">
       <PublicLandingHeader />
     </div>
-    <PublicLandingCurrentNotes />
-    <div class="divider"></div>
-    <PublicLandingCategories />
-    <PublicLandingCurrentRecommendations />
-    <PublicLandingCurrentEvents />
-    <div class="divider"></div>
-    <PublicLandingHelplinks />
+    <div>
+      <PublicLandingCurrentNotes />
+      <div class="divider"></div>
+      <PublicLandingCategories />
+      <PublicLandingCurrentRecommendations />
+      <PublicLandingCurrentEvents />
+      <div class="divider"></div>
+      <PublicLandingHelplinks />
+    </div>
   </div>
 </template>
 
-<script lang="ts"></script>
+<script setup lang="ts">
+import { useAppStore } from "@/store/app";
+
+const appStore = useAppStore();
+
+</script>
 
 <style lang="scss" scoped>
 @import "@/assets/sass/base/breakpoints";
