@@ -226,8 +226,6 @@ export const useFilterStore = defineStore({
     async loadAllResults() {
       this.loading = true;
 
-      const filters = [];
-
       const multipleFacilityFiltersSelected = await this.checkIfMultipleFacilityFiltersAreSelected();
 
       const tagsToFilter = [...this.currentTags];
@@ -241,46 +239,6 @@ export const useFilterStore = defineStore({
         });
       }
 
-      if (tagsToFilter.length) {
-        filters.push({
-          field: "care_facility_tag_categories",
-          value: tagsToFilter,
-        });
-      }
-
-      const options = {
-        page: 1,
-        per_page: 1000,
-        sort_by: "name",
-        sort_order: this.filterSort === "Z-A" ? "ASC" : "DESC",
-        searchQuery: null as any,
-        concat: false,
-        filters,
-      };
-
-      // const api = useCollectionApi();
-      // api.setBaseApi(usePublicApi());
-      // api.setEndpoint(`care_facilities`);
-      // if (this.currentKinds && this.currentKinds.length) {
-      //   api.setEndpoint(`care_facilities?kind=${this.currentKinds.join(",")}`);
-      // }
-      // await api.retrieveCollection(options as any);
-
-      // const allResultsFromApi: Facility[] = api.items.value;
-
-      // const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
-      //   api.setEndpoint(`care_facilities/${result.id}`);
-      //   return api.retrieveCollection();
-      // });
-
-      // this.allResults = await Promise.all(enrichedPossibleResultsPromised).then((responses) => {
-      //   return responses
-      //     .map((response) =>
-      //       response.status !== ResultStatus.SUCCESSFUL ? null : (response.data.resource as Facility)
-      //     )
-      //     .filter(Boolean);
-      // });
-
       this.allResults = this.allUnalteredResults
         .filter((result) => {
           return this.currentKinds.length ? this.currentKinds.includes(result.kind) : true;
@@ -289,11 +247,13 @@ export const useFilterStore = defineStore({
           return result.zip && this.currentZip ? result.zip === this.currentZip : true;
         })
         .filter((result) => {
-          if (!this.currentTags.length) return true;
-          return result.tag_category_ids?.find((tag) => this.currentTags.includes(tag));
+          if (!tagsToFilter.length) return true;
+
+          return tagsToFilter.every((tag) => {
+            return result.tag_category_ids.includes(tag);
+          });
         });
 
-      // this.allResults = allResultsFromApi;
       useNuxtApp().$bus.$emit("filtersUpdated");
 
       this.loading = false;
