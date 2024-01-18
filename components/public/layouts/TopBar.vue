@@ -12,8 +12,7 @@
               <img
                 src="~/assets/images/logo.png"
                 class="is-clickable"
-                
-                v-if="!appStore.loading"
+                width="200"
               />
             </a>
           </div>
