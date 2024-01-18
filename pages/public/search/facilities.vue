@@ -39,6 +39,9 @@
 import { useFilterStore } from "~/store/searchFilter";
 import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
+import { useAppStore } from "~/store/app";
+
+const appStore = useAppStore();
 
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
@@ -53,13 +56,20 @@ watch(
 
 watch(
   () => filterStore.filteredResults,
-  () => updateLocations(),
+  () => updateLocations()
+);
+
+watch(
+  () => appStore.loading,
+  () => {
+    if (appStore.loading) return;
+    filterStore.loadAllResults();
+  }
 );
 
 const showSearchFilter = computed(() => {
   return breakpoints.width.value > BreakPoints.md;
 });
-
 
 const locations = ref<MapLocation[]>([]);
 const getLocationsFromFacilies = async (facilities: any[]) => {
@@ -147,6 +157,4 @@ onBeforeUnmount(() => {
 
 .filter-control
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-
-
 </style>
