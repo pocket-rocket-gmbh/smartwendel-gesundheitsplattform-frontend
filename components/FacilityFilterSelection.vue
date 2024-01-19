@@ -8,18 +8,48 @@
       "
     >
       <div class="input-title">
-        {{ multipleSelections?.map((s) => s.name)?.join(", ") || selectedFilter?.name || placeholderText }}
+        {{
+          multipleSelections?.map((s) => s.name)?.join(", ") ||
+          selectedFilter?.name ||
+          placeholderText
+        }}
       </div>
 
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-    <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
+    <div
+      class="popover-content general-font-size"
+      :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
+      v-if="showPopover"
+      v-auto-animate
+    >
+      <v-btn
+        @click="showPopover = false"
+        hide-details
+        density="compact"
+        class="options-select general-font-size ma-2 text-none font-weight-light"
+      >
+        <span>Fertig</span>
+      </v-btn>
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
+          <div
+            v-if="hasActiveOptions(filter.id)"
+            class="filter-name my-1 font-weight-bold"
+          >
             {{ filter.name }}
+
+            <v-btn
+              @click="selectAllOptions(filter)"
+              hide-details
+              color="grey"
+              density="compact"
+              class="options-select general-font-size ma-2 text-none font-weight-light"
+            >
+              <span>Alle anzeigen</span>
+            </v-btn>
           </div>
           <div
             class="filter-options"
@@ -27,33 +57,27 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
+            <label
+              class="option ma-n1"
+              v-for="option in filterOptions.find(
+                ({ parentId }) => parentId === filter.id
+              ).options"
+            >
               <v-btn
-                v-if="!useUser().isAdmin() && option?.care_facilities_active_count > '0'"
-                :model-value="multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id"
-                @click.prevent="
-                  handleOptionSelect(option);
-                  showPopover = !showPopover;
-                "
-                hide-details
-                density="compact"
-                class="options-select general-font-size ma-2 text-none font-weight-light"
-                :class="{
-                  'is-selected': multipleSelections?.length ? modelValue.includes(option.id) : selectedFilter?.id === option.id,
-                }"
-              >
-                {{ option.name }}
-              </v-btn>
-
-              <v-checkbox
-                v-else-if="option?.care_facilities_active_count > '0'"
+                v-if="option?.care_facilities_active_count > '0'"
                 :model-value="modelValue.includes(option.id)"
                 @click.prevent="handleOptionSelect(option, true)"
                 hide-details
                 density="compact"
-                :label="option.name"
-                color="#8AB61D"
-              />
+                class="options-select general-font-size ma-2 text-none font-weight-light"
+                :class="{
+                  'is-selected': multipleSelections?.length
+                    ? modelValue.includes(option.id)
+                    : selectedFilter?.id === option.id,
+                }"
+              >
+                {{ option.name }}
+              </v-btn>
             </label>
             <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
           </div>
@@ -111,7 +135,7 @@ type FilterOption = {
 const showPopover = ref(false);
 const popoverParentRef = ref<HTMLDivElement>();
 const selectedFilter = ref<Filter>();
-const multipleSelections = ref<Filter[] | null>();
+const multipleSelections = ref<Filter[]>([]);
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));
 
@@ -150,30 +174,17 @@ const handleOptionSelect = (option: Filter, multiple?: boolean) => {
     }
   }
 
-  const previousIndex = props.modelValue.findIndex((item) => item === option.id);
-
-  if (previousIndex !== -1) {
-    props.modelValue.splice(previousIndex, 1);
-
-    if (multipleSelections.value?.length) {
-      multipleSelections.value.forEach((selection) => {
-        const index = props.modelValue.findIndex((item) => item === selection.id);
-        if (index === -1) {
-          return;
-        }
-        props.modelValue.splice(index, 1);
-      });
-
-      multipleSelections.value = null;
-    }
-
-    selectedFilter.value = null;
-  } else if (option) {
-    props.modelValue.push(option.id);
-    selectedFilter.value = option;
-  }
-
   emit("update:modelValue", props.modelValue);
+};
+
+const selectAllOptions = (filter:any) => {
+  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+  options.forEach((option) => {
+    if (multipleSelections.value.includes(option)) {
+      return;
+    }
+    handleOptionSelect(option, true);
+  });
 };
 
 onMounted(async () => {
@@ -200,7 +211,7 @@ onMounted(async () => {
     return doesInclude;
   });
 
-  if (foundFilters.length > 1) {
+  if (foundFilters?.length > 1) {
     multipleSelections.value = foundFilters;
   }
 

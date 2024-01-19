@@ -76,7 +76,6 @@
             !useUser().loggedIn() &&
             breakPoints.width.value >= 1560 &&
             currentRoute !== '/register'
-            && !appStore.loading
           "
         >
           <v-row class="mx-1 text-center">
