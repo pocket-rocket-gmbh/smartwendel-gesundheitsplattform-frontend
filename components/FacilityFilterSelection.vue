@@ -8,47 +8,30 @@
       "
     >
       <div class="input-title">
-        {{
-          multipleSelections?.map((s) => s.name)?.join(", ") ||
-          selectedFilter?.name ||
-          placeholderText
-        }}
+        {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
       </div>
 
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-    <div
-      class="popover-content general-font-size"
-      :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
-      v-if="showPopover"
-      v-auto-animate
-    >
-      <v-btn
-        @click="showPopover = false"
-        hide-details
-        density="compact"
-        class="options-select general-font-size ma-2 text-none font-weight-light"
-      >
+    <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
+      <v-btn @click="showPopover = false" hide-details density="compact" class="options-select general-font-size ma-2 text-none font-weight-light">
         <span>Fertig</span>
       </v-btn>
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div
-            v-if="hasActiveOptions(filter.id)"
-            class="filter-name my-1 font-weight-bold"
-          >
+          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
             {{ filter.name }}
 
             <v-btn
-              @click="selectAllOptions(filter)"
+              @click="handleToggleAll(filter)"
               hide-details
               color="grey"
               density="compact"
               class="options-select general-font-size ma-2 text-none font-weight-light"
             >
-              <span>Alle anzeigen</span>
+              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
             </v-btn>
           </div>
           <div
@@ -57,23 +40,16 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label
-              class="option ma-n1"
-              v-for="option in filterOptions.find(
-                ({ parentId }) => parentId === filter.id
-              ).options"
-            >
+            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
               <v-btn
                 v-if="option?.care_facilities_active_count > '0'"
                 :model-value="modelValue.includes(option.id)"
-                @click.prevent="handleOptionSelect(option, true)"
+                @click.prevent="handleOptionSelect(option)"
                 hide-details
                 density="compact"
                 class="options-select general-font-size ma-2 text-none font-weight-light"
                 :class="{
-                  'is-selected': multipleSelections?.length
-                    ? modelValue.includes(option.id)
-                    : selectedFilter?.id === option.id,
+                  'is-selected': modelValue.includes(option.id),
                 }"
               >
                 {{ option.name }}
@@ -93,10 +69,21 @@ import { onClickOutside } from "@vueuse/core";
 import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
+type Filter = { id: string; name: string; care_facilities_active_count: string };
+
+type FilterOption = {
+  parentId: string;
+  options: Filter[];
+};
+
 const props = defineProps<{
   modelValue: string[];
   filterKind: FilterKind;
   popoverWidth?: number;
+}>();
+
+const emit = defineEmits<{
+  (event: "update:modelValue", values: string[]): void;
 }>();
 
 const breakpoints = useBreakpoints();
@@ -107,34 +94,14 @@ const setPlaceholderText = () => {
     placeholderText.value = "Branche wählen";
   }
 };
-const emit = defineEmits<{
-  (event: "update:modelValue", values: string[]): void;
-}>();
 
 const hasActiveOptions = (filterId: string) => {
   const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
   return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
 };
 
-watch(
-  () => props.modelValue,
-  () => {
-    if (!props.modelValue.length) {
-      selectedFilter.value = null;
-    }
-  }
-);
-
-type Filter = { id: string; name: string; care_facilities_active_count: string };
-
-type FilterOption = {
-  parentId: string;
-  options: Filter[];
-};
-
 const showPopover = ref(false);
 const popoverParentRef = ref<HTMLDivElement>();
-const selectedFilter = ref<Filter>();
 const multipleSelections = ref<Filter[]>([]);
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));
@@ -150,42 +117,68 @@ const handleClearTermSearch = () => {
   }
   return;
 };
-const handleOptionSelect = (option: Filter, multiple?: boolean) => {
-  if (multiple) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+const handleOptionSelect = (option: Filter) => {
+  const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
 
-    if (indexOfAlreadySetFilter !== -1) {
-      props.modelValue.splice(indexOfAlreadySetFilter, 1);
-      multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
-    } else {
-      props.modelValue.push(option.id);
-      multipleSelections.value.push(option);
-    }
-
-    emit("update:modelValue", props.modelValue);
-    return;
-  }
-
-  if (selectedFilter.value && selectedFilter.value.id !== option.id) {
-    const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === selectedFilter.value.id);
-
-    if (indexOfAlreadySetFilter !== -1) {
-      props.modelValue.splice(indexOfAlreadySetFilter, 1);
-    }
+  if (indexOfAlreadySetFilter !== -1) {
+    props.modelValue.splice(indexOfAlreadySetFilter, 1);
+    multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
+  } else {
+    props.modelValue.push(option.id);
+    multipleSelections.value.push(option);
   }
 
   emit("update:modelValue", props.modelValue);
 };
 
-const selectAllOptions = (filter:any) => {
+const handleToggleAll = (filter: any) => {
   const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
-  options.forEach((option) => {
-    if (multipleSelections.value.includes(option)) {
-      return;
-    }
-    handleOptionSelect(option, true);
-  });
+  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+
+  const selectAll = !areAllSelected(filter);
+
+  if (selectAll) {
+    relevantOptions.forEach((option) => {
+      if (!props.modelValue.includes(option.id)) {
+        props.modelValue.push(option.id);
+      }
+    });
+
+    multipleSelections.value = [...multipleSelections.value, ...relevantOptions];
+  } else {
+    relevantOptions.forEach((option) => {
+      const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+      if (indexOfAlreadySetFilter !== -1) {
+        props.modelValue.splice(indexOfAlreadySetFilter, 1);
+      }
+    });
+
+    multipleSelections.value = multipleSelections.value.filter((item) => !relevantOptions.find((option) => option.id === item.id));
+  }
+
+  emit(
+    "update:modelValue",
+    multipleSelections.value.map((item) => item.id)
+  );
 };
+
+const areAllSelected = (filter: any) => {
+  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+
+  return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
+};
+
+watch(
+  () => props.modelValue,
+  () => {
+    console.log(props.modelValue)
+    multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
+      const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
+      return [...prev, ...foundOptions];
+    }, [] as Filter[]);
+  }
+);
 
 onMounted(async () => {
   loadingFilters.value = true;
@@ -215,7 +208,6 @@ onMounted(async () => {
     multipleSelections.value = foundFilters;
   }
 
-  selectedFilter.value = foundFilters[0];
   setPlaceholderText();
 });
 </script>
