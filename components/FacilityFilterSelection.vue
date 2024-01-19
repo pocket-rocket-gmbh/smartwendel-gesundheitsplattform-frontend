@@ -15,23 +15,45 @@
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-    <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
-      <v-btn @click="showPopover = false" hide-details density="compact" class="options-select general-font-size ma-2 text-none font-weight-light">
-        <span>Fertig</span>
-      </v-btn>
+    <div
+      class="popover-content general-font-size"
+      :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
+      v-if="showPopover"
+      v-auto-animate
+    >
+      <v-row>
+        <v-col class="d-flex justify-end">
+          <v-btn
+            @click="showPopover = false"
+            hide-details
+            density="compact"
+            color="primary"
+            class="options-select general-font-size ma-2 text-none font-weight-light"
+          >
+            <span>Fertig</span>
+          </v-btn>
+        </v-col>
+      </v-row>
+
       <div v-if="!loadingFilters" class="filters">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
+          <div
+            v-if="hasActiveOptions(filter.id)"
+            class="filter-name my-1 font-weight-bold"
+          >
             {{ filter.name }}
 
             <v-btn
               @click="handleToggleAll(filter)"
               hide-details
-              color="grey"
+              :color="areAllSelected(filter) ? 'primary' : 'grey'"
               density="compact"
-              class="options-select general-font-size ma-2 text-none font-weight-light"
+              class="ma-2"
+              :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
             >
-              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
+              <span>
+                {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span
+              >
             </v-btn>
           </div>
           <div
@@ -40,7 +62,12 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
+            <label
+              class="option ma-n1"
+              v-for="option in filterOptions.find(
+                ({ parentId }) => parentId === filter.id
+              ).options"
+            >
               <v-btn
                 v-if="option?.care_facilities_active_count > '0'"
                 :model-value="modelValue.includes(option.id)"
@@ -172,7 +199,6 @@ const areAllSelected = (filter: any) => {
 watch(
   () => props.modelValue,
   () => {
-    console.log(props.modelValue)
     multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
       const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
       return [...prev, ...foundOptions];

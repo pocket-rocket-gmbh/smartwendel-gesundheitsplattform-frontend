@@ -3,7 +3,7 @@
     <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
       <v-row>
         <v-col class="d-flex">
-          <span class="font-weight-medium text-h4 text-white">{{ subTitle }}</span>
+          <span class="general-font-size text-h4 text-white">{{ subTitle }}</span>
           <v-btn
             v-if="useUser().isAdmin()"
             prepend-icon="mdi-content-copy"
@@ -36,20 +36,29 @@
         <v-col>
           <div class="field general-font-size">
             <label class="label is-white">
-              <div class="search-term font-weight-medium general-font-size">
-                <span>{{ filterTitle }}</span>
+              <div class="search-term general-font-size">
+                <p v-if="filterTitle">{{ filterTitle }}</p>
+                <p v-else class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
               </div>
             </label>
-            <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" :filter-kind="filterKind" />
+            <FacilityFilterSelection
+              v-model="filterStore.currentTags"
+              :popover-width="popoverWidth"
+              :filter-kind="filterKind"
+            />
           </div>
         </v-col>
         <v-col>
           <div class="field general-font-size">
-            <label class="label is-white font-weight-medium">Gemeinde</label>
+            <label class="label is-white general-font-size">Gemeinde</label>
             <div class="select-wrapper">
-              <select class="input select" v-model="filterStore.currentZip" @click="handleClearTermSearch()">
+              <select
+                class="input select"
+                v-model="filterStore.currentZip"
+                @click="handleClearTermSearch()"
+              >
                 <option :value="null">Gemeinde wählen</option>
-                <option v-for="community in communities" :value="community.zip">
+                <option v-for="community in communities" :value="community.zip" class="general-font-size">
                   {{ community.name }}
                 </option>
               </select>
@@ -61,9 +70,10 @@
         </v-col>
         <v-col>
           <div class="field general-font-size">
-            <label class="label is-white font-weight-medium">
+            <label class="label is-white">
               <div class="search-term">
-                <span>{{ searchTitle }}</span>
+                <p class="general-font-size" v-if="searchTitle">{{ searchTitle }}</p>
+                <p v-else class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
               </div>
             </label>
             <PublicSearchField
@@ -96,13 +106,21 @@
   <v-row class="has-bg-darken-grey text-white">
     <v-col class="d-flex justify-center align-center bottom-actions mx-3">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span class="general-font-size" v-else-if="filterStore.filteredResults.length">{{ filterStore.filteredResults.length }} Treffer</span>
-      <span v-else> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
+      <span class="general-font-size" v-else-if="filterStore.filteredResults.length"
+        >{{ filterStore.filteredResults.length }} Treffer</span
+      >
+      <span v-else-if="!appStore.loading">
+        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
+      </span>
+      <span v-else> Bitte warten... </span>
     </v-col>
   </v-row>
 </template>
 <script setup lang="ts">
 import { type FilterKind, useFilterStore } from "~/store/searchFilter";
+import { useAppStore } from "@/store/app";
+
+const appStore = useAppStore();
 
 const snackbar = useSnackbar();
 
@@ -234,4 +252,25 @@ onMounted(async () => {
 
 .bordered
   --v-btn-height: 38px
+
+  @keyframes blink
+    0%
+      opacity: .2
+    20%
+      opacity: 1
+    100%
+      opacity: .2
+
+.waiting span
+  animation-name: blink
+  animation-duration: 1.4s
+  animation-iteration-count: infinite
+  animation-fill-mode: both
+
+
+.waiting span:nth-child(2)
+  animation-delay: .2s
+
+.waiting span:nth-child(3)
+  animation-delay: .4s
 </style>
