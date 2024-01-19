@@ -190,24 +190,23 @@ export const useFilterStore = defineStore({
     async checkIfMultipleFacilityFiltersAreSelected() {
       if (!this.currentKinds?.length || !this.currentTags?.length) return [];
 
-      // After the course/event-split, multiple kinds are obsolete
       const filterKind = this.currentKinds[0];
 
       const mainFilters = await this.loadMainFilters(filterKind);
       const allFilters = await this.loadAllFilters();
 
       const allOptions = mainFilters.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
-      // const allAvailableOptions = allOptions.reduce((prev, curr) => {
-      //   return [...prev, ...curr];
-      // }, []);)
 
+      const relevantItems = [];
       for (const block of allOptions) {
         const multipleOccuredInBlock = block.filter((item) => this.currentTags.includes(item.id));
-        if (multipleOccuredInBlock.length > 1) {
-          return multipleOccuredInBlock;
+
+        if (multipleOccuredInBlock.length) {
+          relevantItems.push(multipleOccuredInBlock);
         }
       }
-      return [];
+
+      return relevantItems.flat();
     },
     async loadUnalteredAllResults() {
       const options = {
