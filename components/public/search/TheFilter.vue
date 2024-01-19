@@ -6,8 +6,7 @@
       </div>
 
       <div v-for="(tags, parentName) in groupedTags" :key="parentName">
-        <h2>{{ parentName }} - ({{ (tags as Array<any>).length }})</h2>
-
+        <h2>{{ parentName }} ({{ (tags as Array<any>).length }})</h2>
         <span
           v-if="Array.isArray(tags)"
           v-for="(tag, index) in (tags as Array<any>).slice(0, 3)"
@@ -108,9 +107,16 @@
                     @click="toggleSelection(subItem)"
                   >
                     <span class="word-break sub-item-title general-font-size" lang="de">
-                      {{ subItem.title }}
+                      {{ subItem.title }} 
+                    </span>
+                    <span v-if="subItem.next.length">
+                      <v-icon class="is-clickable" v-if=" expandedItemIds.includes(subItem.id)" size="x-large">mdi-menu-up</v-icon>
+                      <span v-else>
+                        <v-icon class="is-clickable" size="x-large">mdi-menu-down</v-icon>
+                      </span>
                     </span>
                   </div>
+  
                   <div
                     v-if="subItem.next.length && expandedItemIds.includes(subItem.id)"
                     class="tag-select"

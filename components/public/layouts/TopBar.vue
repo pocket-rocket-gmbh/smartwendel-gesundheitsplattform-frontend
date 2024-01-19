@@ -126,7 +126,7 @@
         </div>
         <div class="d-flex align-center main">
           <span
-            class="mx-3 menu-list is-dark-grey pointer"
+            class="mx-3 menu-list general-font-size is-dark-grey pointer"
             v-if="useUser().isAdmin() && breakPoints.width.value >= 1530"
             href="/admin"
             @click.prevent="saveCurrentUrlAndRoute('/admin')"
@@ -134,7 +134,7 @@
             Admin-Bereich
           </span>
           <span
-            class="mx-3 menu-list pointer is-dark-grey"
+            class="mx-3 menu-list general-font-size pointer is-dark-grey"
             v-else-if="
               useUser().isFacilityOwner() && breakPoints.width.value >= 1530
             "
