@@ -6,7 +6,7 @@
         class="general-font-size font-weight-medium is-dark-grey mb-1"
         >Deine ausgewählten Filter:
       </div>
-      <v-chip color="white" close-icon="mdi-delete" @click:close="removeTagFromStore(tag)" closable class="selected-tags mr-2 pa-4 mb-2 general-font-size" v-for="tag in getCurrentTags">{{ tag.name }}</v-chip>
+      <v-chip color="white" close-icon="mdi-delete" @click:close="removeTagFromStore(tag)" closable class="selected-tags mr-2 pa-4 mb-2 general-font-size" v-for="tag in getCurrentTags" :key="tag.id">{{ tag.name }}</v-chip>
     </div>
     <div>
       <span
