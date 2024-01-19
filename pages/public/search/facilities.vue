@@ -15,9 +15,10 @@
         </div>
         <div class="results">
           <div class="map-widget">
+            <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
             <ClientMap
               :locations="locations"
-              v-if="showMap && filterStore.filteredResults.length > 0"
+              v-if="showMap && !appStore.loading"
               ref="map"
               :auto-fit="false"
               :center-point="{
@@ -28,7 +29,9 @@
             />
           </div>
 
-          <div class="facilities"><PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" /></div>
+          <div class="facilities">
+            <PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" />
+          </div>
         </div>
       </div>
     </div>
@@ -76,7 +79,12 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
   locations.value = [];
 
   for (const facility of facilities) {
-    if (facility.geocode_address?.length && facility.geocode_address[0] && facility.geocode_address[0].lon && facility.geocode_address[0].lat) {
+    if (
+      facility.geocode_address?.length &&
+      facility.geocode_address[0] &&
+      facility.geocode_address[0].lon &&
+      facility.geocode_address[0].lat
+    ) {
       locations.value.push({
         id: facility.id,
         latitude: parseFloat(facility.geocode_address[0].lat),
@@ -157,4 +165,5 @@ onBeforeUnmount(() => {
 
 .filter-control
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
+
 </style>

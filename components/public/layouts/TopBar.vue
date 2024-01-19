@@ -27,7 +27,7 @@
             >
               <div class="title mx-5 font-weight-medium">
                 <span
-                  class="is-clickable main is-dark-grey"
+                  class="is-clickable general-font-size is-dark-grey"
                   @click="setItemsAndGo(category, null)"
                 >
                   {{ category.name }}
@@ -43,10 +43,10 @@
                       :key="sub_category.id"
                       @click="setItemsAndGo(category, sub_category)"
                     >
-                      <div class="list-item main">
+                      <div class="list-item">
                         <div>
                           <span
-                            class="is-clickable main font-weight-medium is-dark-grey"
+                            class="general-font-size is-dark-grey"
                           >
                             {{ sub_category.name }}
                           </span>
@@ -57,7 +57,7 @@
                 </v-list>
               </div>
             </div>
-            <div v-if="!loading" class="main font-weight-medium is-dark-grey">
+            <div v-if="!loading" class="general-font-size is-dark-grey">
               <span
                 href="/public/search/facilities"
                 class="is-clickable mx-5"
@@ -88,9 +88,8 @@
           class="has-bg-primary text-white offer py-1"
           v-if="
             !useUser().loggedIn() &&
-            breakPoints.width.value >= 1560 &&
+            breakPoints.width.value >= 1610 &&
             currentRoute !== '/register'
-            && !appStore.loading
           "
         >
           <v-row class="mx-1 text-center">
@@ -106,7 +105,7 @@
         <div
           class="align-center d-flex is-clickable"
           v-if="
-            breakPoints.width.value <= 1560 &&
+            breakPoints.width.value <= 1619 &&
             currentRoute !== '/register' &&
             !useUser().loggedIn()
            && !appStore.loading"
@@ -127,7 +126,7 @@
         </div>
         <div class="d-flex align-center main">
           <span
-            class="mx-3 menu-list is-dark-grey pointer"
+            class="mx-3 menu-list general-font-size is-dark-grey pointer"
             v-if="useUser().isAdmin() && breakPoints.width.value >= 1530"
             href="/admin"
             @click.prevent="saveCurrentUrlAndRoute('/admin')"
@@ -135,7 +134,7 @@
             Admin-Bereich
           </span>
           <span
-            class="mx-3 menu-list pointer is-dark-grey"
+            class="mx-3 menu-list general-font-size pointer is-dark-grey"
             v-else-if="
               useUser().isFacilityOwner() && breakPoints.width.value >= 1530
             "

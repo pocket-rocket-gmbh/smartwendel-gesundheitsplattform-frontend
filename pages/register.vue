@@ -130,7 +130,7 @@
               <a class="is-dark-grey" target="_blank" href="/rules_of_conduct" @click.stop>
                 <u>Nutzungsbedingungen</u>
               </a>
-              zu
+              zu.
             </div>
           </template>
         </v-checkbox>
