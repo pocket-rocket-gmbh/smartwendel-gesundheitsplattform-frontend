@@ -134,14 +134,11 @@ const handlePressEnter = (e: KeyboardEvent) => {
 };
 
 const routeToResults = (result?: Facility) => {
-  if (props.defaultRouteTo) {
-    router.push({ path: props.defaultRouteTo });
+  if (result?.kind) {
+    router.push({ path: `/public/care_facilities/${result.id}` });
   } else {
-    if (result?.kind && result?.kind === "facility") {
-      return router.push({ path: `/public/care_facilities/${result.id}` });
-    }
-  }
-  router.push({ path: "/public/search" });
+    router.push({ path: "/public/search" });
+   }
 };
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));

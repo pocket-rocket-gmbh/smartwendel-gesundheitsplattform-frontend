@@ -71,6 +71,22 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
+
+          <div class="field" id="name">
+            <div class="my-2">
+              <span class="general-font-size is-dark-grey font-weight-bold">Slug</span>
+            </div>
+            <v-text-field
+              class="text-field is-dark-grey"
+              v-model="slotProps.item.slug"
+              hide-details="auto"
+              label="Slug"
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+            />
+          </div>
+          <v-divider class="my-10"></v-divider>
+
+
           <div class="field" id="name">
             <div class="my-2">
               <span class="general-font-size is-dark-grey font-weight-bold">{{
