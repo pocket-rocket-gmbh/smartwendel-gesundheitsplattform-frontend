@@ -4,22 +4,11 @@
       <v-app-bar-title>
         <div class="d-flex align-center">
           <div class="d-flex align-center">
-            <a
-              href="/"
-              @click.prevent="navigateTo('/')"
-              class="d-flex align-center"
-            >
-              <img
-                src="~/assets/images/logo.png"
-                class="is-clickable"
-                width="200"
-              />
+            <a href="/" @click.prevent="navigateTo('/')" class="d-flex align-center">
+              <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
             </a>
           </div>
-          <div
-            v-if="breakPoints.width.value >= 1480"
-            class="align-center d-flex mx-2"
-          >
+          <div v-if="breakPoints.width.value >= 1480" class="align-center d-flex mx-2">
             <div
               class="categories-wrapper is-clickable d-flex"
               v-for="(category, index) in categories"
@@ -28,6 +17,12 @@
               <div class="title mx-5 font-weight-medium">
                 <span
                   class="is-clickable general-font-size is-dark-grey"
+                  :class="[
+                    currentRoute.includes(currentCategory?.id) &&
+                    currentCategory.name === category.name
+                      ? 'is-primary'
+                      : '',
+                  ]"
                   @click="setItemsAndGo(category, null)"
                 >
                   {{ category.name }}
@@ -37,16 +32,14 @@
                 <v-list>
                   <v-list-item>
                     <div
-                      v-for="(sub_category, index) in subCategories[
-                        category.id
-                      ]"
+                      v-for="(sub_category) in subCategories[category.id]"
                       :key="sub_category.id"
                       @click="setItemsAndGo(category, sub_category)"
                     >
                       <div class="list-item">
                         <div>
                           <span
-                            class="general-font-size is-dark-grey"
+                            class="general-font-size"
                           >
                             {{ sub_category.name }}
                           </span>
@@ -61,6 +54,7 @@
               <span
                 href="/public/search/facilities"
                 class="is-clickable mx-5"
+                :class="[currentRoute.includes('facilities') ? 'is-primary' : '']"
                 @click.prevent="goTo('/public/search/facilities')"
               >
                 Anbietersuche
@@ -79,10 +73,7 @@
           "
         >
           <v-row class="mx-1 text-center">
-            <v-col
-              class="flex-column align-center is-clickable"
-              @click="goToRegister()"
-            >
+            <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
               <div class="font-weight-medium">Dein Angebot fehlt?</div>
               <div class="font-weight-light">Registriere dich!</div>
             </v-col>
@@ -93,21 +84,16 @@
           v-if="
             breakPoints.width.value <= 1619 &&
             currentRoute !== '/register' &&
-            !useUser().loggedIn()
-           && !appStore.loading"
+            !useUser().loggedIn() &&
+            !appStore.loading
+          "
           @click="goToRegister()"
         >
           <img :src="regiterIcon" />
         </div>
         <div class="pl-3" v-if="!appStore.loading">
-          <v-btn
-            v-if="!useUser().loggedIn()"
-            color="primary"
-            icon
-            @click="goToLogin"
-          >
-          <img :src="loginIcon" />
-            
+          <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
+            <img :src="loginIcon" />
           </v-btn>
         </div>
         <div class="d-flex align-center main">
@@ -121,9 +107,7 @@
           </span>
           <span
             class="mx-3 menu-list general-font-size pointer is-dark-grey"
-            v-else-if="
-              useUser().isFacilityOwner() && breakPoints.width.value >= 1530
-            "
+            v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
@@ -141,7 +125,6 @@
         v-if="breakPoints.width.value < 1480 && !appStore.loading"
         class="d-flex align-center"
         align="center"
-        
       >
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </div>
@@ -159,12 +142,19 @@
           class="has-bg-primary text-white offer d-flex align-center justify-center py-2 my-5"
           v-if="!useUser().loggedIn() && currentRoute !== '/register'"
         >
-          <div @click="goToRegister()"  class="text-center">
-            <div class="general-font-size font-weight-medium mb-1">Dein Angebot fehlt?</div>
+          <div @click="goToRegister()" class="text-center">
+            <div class="general-font-size font-weight-medium mb-1">
+              Dein Angebot fehlt?
+            </div>
             <div class="general-font-size font-weight-light">Registriere dich!</div>
           </div>
         </div>
-        <v-btn v-if="!useUser().loggedIn()" color="primary" class="general-font-size my-2" @click="goToLogin">
+        <v-btn
+          v-if="!useUser().loggedIn()"
+          color="primary"
+          class="general-font-size my-2"
+          @click="goToLogin"
+        >
           Einloggen
         </v-btn>
         <div v-if="useUser().loggedIn() && currentUser" class="d-flex ml-5 my-2">
@@ -197,7 +187,7 @@
             <span class="general-font-size">Admin-Bereich</span>
           </span>
           <span
-            class="menu-list pointer general-font-size "
+            class="menu-list pointer general-font-size"
             v-else-if="useUser().isFacilityOwner()"
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
@@ -213,7 +203,7 @@
           </div>
         </div>
 
-        <v-divider class=mt-5></v-divider>
+        <v-divider class="mt-5"></v-divider>
         <div
           class="categories-wrapper-mobile py-5 is-clickable d-flex"
           :class="[currentRoute.includes(category.id) ? 'is-visited' : '']"
@@ -221,8 +211,12 @@
           :key="index"
         >
           <div class="d-flex align-center">
-            <img v-if="category.name.includes('Prävention')" class="icons-menu mr-5" :src="iconHealth">
-            <img v-else class="icons-menu mr-5" :src="iconSick"> 
+            <img
+              v-if="category.name.includes('Prävention')"
+              class="icons-menu mr-5"
+              :src="iconHealth"
+            />
+            <img v-else class="icons-menu mr-5" :src="iconSick" />
             <span
               class="is-clickable general-font-size"
               @click="setItemsAndGo(category, null)"
@@ -234,7 +228,7 @@
         <template v-if="!loading" class="main">
           <div
             href="/public/search/facilities"
-            class="is-clickable categories-wrapper-mobile py-5 "
+            class="is-clickable categories-wrapper-mobile py-5"
             :class="[currentRoute.includes('facilities') ? 'is-visited' : '']"
             @click.prevent="goTo('/public/search/facilities')"
           >
@@ -249,9 +243,8 @@
           @click.prevent="goTo('/rules_of_conduct')"
           >Nutzungsbedingungen</span
         >
-       <v-icon></v-icon>
+        <v-icon></v-icon>
       </div>
-      
     </v-navigation-drawer>
   </div>
 </template>
@@ -280,6 +273,9 @@ const breakPoints = useBreakpoints();
 
 const categoriesApi = useCollectionApi();
 categoriesApi.setBaseApi(usePublicApi());
+
+const currentCategory = ref(null);
+const currentSubCategory = ref(null);
 
 const getCategories = async () => {
   loading.value = true;
@@ -332,19 +328,26 @@ const goToRegister = () => {
 
 const setItemsAndGo = (category: any, sub_category: any) => {
   if (sub_category) {
+    currentCategory.value = category;
+    currentSubCategory.value = sub_category;
     router.push({
       path: `/public/categories/${category.id}`,
       query: { sub_category_id: sub_category.id },
     });
     if (sub_category.id) {
+      currentCategory.value = category;
+      currentSubCategory.value = sub_category;
       sub_categoryId.value = sub_category.id;
     }
   } else {
+    currentCategory.value = category;
+    currentSubCategory.value = sub_category;
     return router.push({
       path: `/public/categories/${category.id}`,
       query: null,
     });
   }
+
   useNuxtApp().$bus.$emit("setSubCategory", sub_category.id);
 };
 
@@ -372,6 +375,7 @@ onMounted(async () => {
     subCategories.value[category.id] = await getSubCategories(category.id);
   }
 });
+
 // watch store changes
 useUserStore().$subscribe((mutation, state) => {
   currentUser.value = state.currentUser;
@@ -457,7 +461,7 @@ header,
   display: flex;
   height: 4rem;
   justify-content: space-between;
-  border-bottom: rgb(0,0,0,.1) 1px solid;
+  border-bottom: rgb(0, 0, 0, 0.1) 1px solid;
   &.is-visited {
     background-color: rgb(242, 242, 242);
   }
@@ -507,9 +511,8 @@ header,
   }
   @include sm {
     margin-top: 0;
-    
   }
-    @include xs {
+  @include xs {
     margin-top: 0;
   }
 
@@ -530,7 +533,7 @@ header,
   height: 4rem;
   align-items: center;
   justify-content: space-between;
-  border-top: rgb(0,0,0,.3) 1px solid;
+  border-top: rgb(0, 0, 0, 0.3) 1px solid;
 }
 
 .icons-menu {
