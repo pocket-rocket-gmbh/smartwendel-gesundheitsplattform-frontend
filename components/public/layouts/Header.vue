@@ -83,11 +83,15 @@ const props = defineProps({
 const appStore = useAppStore();
 const breakPoints = useBreakpoints();
 const selectedId = ref(null);
+const router = useRouter();
 
 const setSubCategoryAndScroll = (id: any) => {
   requestAnimationFrame(() => {
     useNuxtApp().$bus.$emit("setSubCategory", id);
     selectedId.value = id;
+  });
+  router.push({
+    query: { sub_category_id: id },
   });
 };
 
@@ -155,7 +159,6 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
         width: 4rem
 
     .menu-bar-wrapper
-      padding: 0.5rem
       padding-top: 0
 
       .menu-bar
