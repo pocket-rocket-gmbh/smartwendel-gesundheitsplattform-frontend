@@ -25,7 +25,7 @@
     "@vuepic/vue-datepicker": "^7.4.1",
     "@vueup/vue-quill": "^1.2.0",
     "@vueuse/core": "^10.7.2",
-    "axios": "^1.6.5",
+    "axios": "^1.6.7",
     "date-fns": "^3.2.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
