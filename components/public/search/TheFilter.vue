@@ -1,10 +1,24 @@
 <template>
   <div>
-    <div class="mb-6" v-if="filterStore.currentTags?.length">
+    <div class="mb-6" v-if="filterStore.currentTags?.length || filterStore.currentZips?.length">
       <div class="general-font-size font-weight-medium is-dark-grey mb-1">
         Deine ausgewählten Filter:
       </div>
-
+      <div v-if="filterStore.currentZips?.length">
+        <h2>Gemeinde:</h2>
+        <span v-for="community in filterStore.currentZips"  :key="community">
+            <v-chip
+            color="white"
+            close-icon="mdi-delete"
+            @click:close="filterStore.currentZips = filterStore.currentZips.filter((zip) => zip !== community)"
+            closable
+            class="selected-tags mr-2 pa-4 mb-2 general-font-size"
+          >
+          {{ (getAllSelectedCommunitiesName([community]) as string[]).join('') }}
+          </v-chip>
+        </span>
+        <v-divider class="my-3"></v-divider>
+      </div>
       <div v-for="(tags, parentName) in groupedTags" :key="parentName">
         <h2>{{ parentName }} ({{ (tags as Array<any>).length }})</h2>
         <span
@@ -22,7 +36,6 @@
             {{ tag.name }}
           </v-chip>
         </span>
-
         <span v-if="showAllTagsForParent === parentName">
           <v-chip
             v-for="(tag, index) in (tags as Array<any>).slice(3)"
@@ -191,6 +204,7 @@ const groupedTags = computed(() => {
 
 const removeAllTags = () => {
   filterStore.currentTags = [];
+  filterStore.currentZips = [];
 };
 
 const getCurrentTags = computed(() => {
@@ -264,6 +278,14 @@ const getItemsAndNext = (
       allFilters
     )
   );
+};
+
+const getAllSelectedCommunitiesName = (zips: string[]) => {
+  if(!zips.length) return "";
+  const allSelectedCommunities = filterStore.allCommunities.filter((community) =>
+    zips.includes(community.zip)
+  );
+  return allSelectedCommunities.map((community) => community.name);
 };
 
 const getItems = async () => {

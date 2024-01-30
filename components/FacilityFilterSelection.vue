@@ -10,12 +10,16 @@
       <div class="input-title">
         {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
       </div>
-
       <div class="actions">
         <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
       </div>
     </div>
-    <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
+    <div
+      class="popover-content general-font-size loading-filters"
+      :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
+      v-if="showPopover"
+      v-auto-animate
+    >
       <v-row>
         <v-col class="d-flex justify-end">
           <v-btn
@@ -29,10 +33,12 @@
           </v-btn>
         </v-col>
       </v-row>
-
-      <div v-if="!loadingFilters" class="filters">
+      <div class="filters">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
+          <div
+            v-if="hasActiveOptions(filter.id)"
+            class="filter-name my-1 font-weight-bold"
+          >
             {{ filter.name }}
 
             <v-btn
@@ -43,7 +49,9 @@
               class="ma-2"
               :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
             >
-              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
+              <span>
+                {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span
+              >
             </v-btn>
           </div>
           <div
@@ -52,7 +60,13 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
+            <label
+              class="option ma-n1"
+              v-for="option in filterOptions.find(
+                ({ parentId }) => parentId === filter.id
+              )?.options"
+              :key="option.id"
+            >
               <v-btn
                 v-if="option?.care_facilities_active_count > '0'"
                 :model-value="modelValue.includes(option.id)"
@@ -64,14 +78,24 @@
                   'is-selected': modelValue.includes(option.id),
                 }"
               >
-                {{ option.name }}
+                <p v-if="loadingFilters" class="waiting general-font-size">
+                  <span>.</span><span>.</span><span>.</span>
+                </p>
+
+                <span v-else>
+                  {{ option.name }}
+                </span>
               </v-btn>
             </label>
             <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
           </div>
         </div>
       </div>
-      <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
+      <v-row v-if="loadingFilters">
+        <v-col cols="12" class="d-flex justify-center">
+          <LoadingSpinner> Filter werden geladen ... </LoadingSpinner>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
@@ -81,7 +105,11 @@ import { onClickOutside } from "@vueuse/core";
 import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
-type Filter = { id: string; name: string; care_facilities_active_count: string };
+type Filter = {
+  id: string;
+  name: string;
+  care_facilities_active_count: string;
+};
 
 type FilterOption = {
   parentId: string;
@@ -108,8 +136,13 @@ const setPlaceholderText = () => {
 };
 
 const hasActiveOptions = (filterId: string) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
-  return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
+  const options = filterOptions.value.find(
+    ({ parentId }) => parentId === filterId
+  )?.options;
+  return (
+    options &&
+    options.some((option) => Number(option?.care_facilities_active_count) > 0)
+  );
 };
 
 const showPopover = ref(false);
@@ -130,11 +163,15 @@ const handleClearTermSearch = () => {
   return;
 };
 const handleOptionSelect = (option: Filter) => {
-  const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+  const indexOfAlreadySetFilter = props.modelValue.findIndex(
+    (item) => item === option.id
+  );
 
   if (indexOfAlreadySetFilter !== -1) {
     props.modelValue.splice(indexOfAlreadySetFilter, 1);
-    multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
+    multipleSelections.value = multipleSelections.value?.filter(
+      (item) => item.id !== option.id
+    );
   } else {
     props.modelValue.push(option.id);
     multipleSelections.value.push(option);
@@ -144,8 +181,12 @@ const handleOptionSelect = (option: Filter) => {
 };
 
 const handleToggleAll = (filter: any) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
-  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+  const options = filterOptions.value.find(
+    ({ parentId }) => parentId === filter.id
+  )?.options;
+  const relevantOptions = options.filter(
+    (option) => !!option?.care_facilities_active_count
+  );
 
   const selectAll = !areAllSelected(filter);
 
@@ -157,13 +198,17 @@ const handleToggleAll = (filter: any) => {
     });
   } else {
     relevantOptions.forEach((option) => {
-      const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+      const indexOfAlreadySetFilter = props.modelValue.findIndex(
+        (item) => item === option.id
+      );
       if (indexOfAlreadySetFilter !== -1) {
         props.modelValue.splice(indexOfAlreadySetFilter, 1);
       }
     });
 
-    multipleSelections.value = multipleSelections.value.filter((item) => !relevantOptions.find((option) => option.id === item.id));
+    multipleSelections.value = multipleSelections.value.filter(
+      (item) => !relevantOptions.find((option) => option.id === item.id)
+    );
   }
 
   emit(
@@ -173,33 +218,82 @@ const handleToggleAll = (filter: any) => {
 };
 
 const areAllSelected = (filter: any) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
-  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+  const options = filterOptions.value.find(
+    ({ parentId }) => parentId === filter.id
+  )?.options;
+  const relevantOptions = options.filter(
+    (option) => !!option?.care_facilities_active_count
+  );
 
-  return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
+  return relevantOptions.every((option) =>
+    multipleSelections.value.find((item) => item.id === option.id)
+  );
 };
 
 watch(
   () => props.modelValue,
   () => {
     multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
-      const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
+      const foundOptions = curr.options.filter((option) =>
+        props.modelValue.includes(option.id)
+      );
       return [...prev, ...foundOptions];
     }, [] as Filter[]);
   }
 );
 
-onMounted(async () => {
+watch(
+  () => filterStore.filteredResults,
+  () => {
+    if(!filterStore.filteredResults.length) {
+     setTimeout(() => {
+      filterStore.currentTags = [];
+      }, 500);
+    }
+    debounce(() => {
+      handleSetFilters();
+    }, 500);
+  },
+  { deep: true }
+);
+
+watch(
+  () => filterStore.currentZips,
+  () => {
+    handleSetFilters();
+  },
+  { deep: true }
+)
+
+
+
+const handleSetFilters = async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
+
   const allFilters = await filterStore.loadAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
+  const allOptions = mainFilters.value.map((filter) =>
+    allFilters.filter((item) => item.parent_id === filter.id)
+  );
 
+  filterOptions.value = [];
   allOptions.forEach((options, index) => {
+    const filteredOptions = options.filter((option) => {
+      return filterStore.filteredResults.find((filteredResult) => {
+        return filteredResult.tag_category_ids.find(
+          (tagCategoryId) => tagCategoryId === option.id
+        );
+      });
+    });
+
+    if (!filteredOptions.length) {
+      return;
+    }
+
     filterOptions.value.push({
       parentId: mainFilters.value[index].id,
-      options,
+      options: filteredOptions,
     });
   });
   loadingFilters.value = false;
@@ -209,7 +303,9 @@ onMounted(async () => {
   }, [] as Filter[]);
 
   const foundFilters = allAvailableOptions.filter((option) => {
-    const doesInclude = props.modelValue.find((item: string) => item === option.id);
+    const doesInclude = props.modelValue.find(
+      (item: string) => item === option.id
+    );
     return doesInclude;
   });
 
@@ -218,91 +314,40 @@ onMounted(async () => {
   }
 
   setPlaceholderText();
+};
+
+onMounted(async () => {
+  handleSetFilters();
 });
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";
-.popover {
-  position: relative;
-  width: 100%;
 
-  .input {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
-
-    .input-title {
-      max-width: 300px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-
-      .chevron {
-        width: 20px;
-        height: 20px;
-        background-image: url("@/assets/icons/chevron-down.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        transition: transform 150ms linear;
-
-        &.up {
-          transform: rotate(180deg);
-        }
-      }
-    }
-  }
-
-  .popover-content {
-    background-color: white;
-    box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25);
-    padding: 1rem;
-    position: absolute;
-    left: 0;
-    top: calc(100% + 2px);
-    border-radius: 10px;
-    z-index: 5;
-    .filter-name {
-      font-size: 1.4rem;
-      margin-bottom: 0.75rem;
-      color: red;
-    }
-
-    .filter-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .option-label {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .clear-button {
-      margin-top: 0.5rem;
-      margin-left: auto;
-    }
-  }
+.is-selected {
+  background-color: #8ab61d !important;
+  color: white !important;
 }
-.options-select {
-  gap: 0.5rem;
-  min-height: 3rem;
+
+.waiting span {
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  min-width: 300px;
 }
+
+.waiting span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.waiting span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+</style>
+
+<style lang="scss" scoped>
+@import "@/assets/sass/main.sass";
 
 .is-selected {
   background-color: #8ab61d !important;
