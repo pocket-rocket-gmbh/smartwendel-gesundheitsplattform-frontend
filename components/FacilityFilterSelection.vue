@@ -1,117 +1,125 @@
 <template>
-  <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
-    <div
-      class="input"
-      @click="
-        showPopover = !showPopover;
-        handleClearTermSearch();
-      "
-    >
-      <div class="input-title">
-        {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
-      </div>
+	<div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
+		<div
+			class="input"
+			@click="
+				showPopover = !showPopover;
+				handleClearTermSearch();
+			"
+		>
+			<div class="input-title">
+				{{ multipleSelections?.map((s) => s.name)?.join(', ') || placeholderText }}
+			</div>
 
-      <div class="actions">
-        <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
-      </div>
-    </div>
-    <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
-      <v-row>
-        <v-col class="d-flex justify-end">
-          <v-btn
-            @click="showPopover = false"
-            hide-details
-            density="compact"
-            color="primary"
-            class="options-select general-font-size ma-2 text-none font-weight-light"
-          >
-            <span>Fertig</span>
-          </v-btn>
-        </v-col>
-      </v-row>
+			<div class="actions">
+				<div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
+			</div>
+		</div>
+		<div
+			class="popover-content general-font-size"
+			:width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
+			v-if="showPopover"
+			v-auto-animate
+		>
+			<v-row>
+				<v-col class="d-flex justify-end">
+					<v-btn
+						@click="showPopover = false"
+						hide-details
+						density="compact"
+						color="primary"
+						class="options-select general-font-size ma-2 text-none font-weight-light"
+					>
+						<span>Fertig</span>
+					</v-btn>
+				</v-col>
+			</v-row>
 
-      <div v-if="!loadingFilters" class="filters">
-        <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
-            {{ filter.name }}
+			<div v-if="!loadingFilters" class="filters">
+				<div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
+					<div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
+						{{ filter.name }}
 
-            <v-btn
-              @click="handleToggleAll(filter)"
-              hide-details
-              :color="areAllSelected(filter) ? 'primary' : 'grey'"
-              density="compact"
-              class="ma-2"
-              :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
-            >
-              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
-            </v-btn>
-          </div>
-          <div
-            class="filter-options"
-            :style="{
-              width: popoverWidth ? `${popoverWidth}px` : 'max-content',
-            }"
-          >
-            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options">
-              <v-btn
-                v-if="option?.care_facilities_active_count > '0'"
-                :model-value="modelValue.includes(option.id)"
-                @click.prevent="handleOptionSelect(option)"
-                hide-details
-                density="compact"
-                class="options-select general-font-size ma-2 text-none font-weight-light"
-                :class="{
-                  'is-selected': modelValue.includes(option.id),
-                }"
-              >
-                {{ option.name }}
-              </v-btn>
-            </label>
-            <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
-          </div>
-        </div>
-      </div>
-      <LoadingSpinner v-else> Filter werden geladen ... </LoadingSpinner>
-    </div>
-  </div>
+						<v-btn
+							@click="handleToggleAll(filter)"
+							hide-details
+							:color="areAllSelected(filter) ? 'primary' : 'grey'"
+							density="compact"
+							class="ma-2"
+							:append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
+						>
+							<span>{{ areAllSelected(filter) ? 'Alle abwählen' : 'Alle auswählen' }}</span>
+						</v-btn>
+					</div>
+					<div
+						class="filter-options"
+						:style="{
+							width: popoverWidth ? `${popoverWidth}px` : 'max-content',
+						}"
+					>
+						<label
+							class="option ma-n1"
+							v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id).options"
+						>
+							<v-btn
+								v-if="option?.care_facilities_active_count > '0'"
+								:model-value="modelValue.includes(option.id)"
+								@click.prevent="handleOptionSelect(option)"
+								hide-details
+								density="compact"
+								class="options-select general-font-size ma-2 text-none font-weight-light"
+								:class="{
+									'is-selected': modelValue.includes(option.id),
+								}"
+							>
+								{{ option.name }}
+							</v-btn>
+						</label>
+						<v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
+					</div>
+				</div>
+			</div>
+			<LoadingSpinner v-else>Filter werden geladen ...</LoadingSpinner>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { onClickOutside } from "@vueuse/core";
-import { type FilterKind, useFilterStore } from "~/store/searchFilter";
-import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
+import { onClickOutside } from '@vueuse/core';
+import { type FilterKind, useFilterStore } from '~/store/searchFilter';
+import { BreakPoints, useBreakpoints } from '~/composables/ui/breakPoints';
 
 type Filter = { id: string; name: string; care_facilities_active_count: string };
 
 type FilterOption = {
-  parentId: string;
-  options: Filter[];
+	parentId: string;
+	options: Filter[];
 };
 
 const props = defineProps<{
-  modelValue: string[];
-  filterKind: FilterKind;
-  popoverWidth?: number;
+	modelValue: string[];
+	filterKind: FilterKind;
+	popoverWidth?: number;
 }>();
 
 const emit = defineEmits<{
-  (event: "update:modelValue", values: string[]): void;
+	(event: 'update:modelValue', values: string[]): void;
 }>();
 
 const breakpoints = useBreakpoints();
 
-const placeholderText = ref("Laden...");
+const placeholderText = ref('Laden...');
 const setPlaceholderText = () => {
-  if (props.filterKind === "facility") {
-    placeholderText.value = "Branche wählen";
-  } else if (props.filterKind === "course") {
-    placeholderText.value = "Themengebiet wählen";
-  }
+	if (props.filterKind === 'facility') {
+		placeholderText.value = 'Branche wählen';
+	} else if (props.filterKind === 'course') {
+		placeholderText.value = 'Themengebiet wählen';
+	}
 };
 
 const hasActiveOptions = (filterId: string) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
-  return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
+	const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
+	return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
 };
 
 const showPopover = ref(false);
@@ -126,188 +134,194 @@ const filterOptions = ref<FilterOption[]>([]);
 const loadingFilters = ref(false);
 const filterStore = useFilterStore();
 const handleClearTermSearch = () => {
-  if (filterStore.currentSearchTerm) {
-    filterStore.clearTermSearch();
-  }
-  return;
+	if (filterStore.currentSearchTerm) {
+		filterStore.clearTermSearch();
+	}
+	return;
 };
 const handleOptionSelect = (option: Filter) => {
-  const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+	const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
 
-  if (indexOfAlreadySetFilter !== -1) {
-    props.modelValue.splice(indexOfAlreadySetFilter, 1);
-    multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
-  } else {
-    props.modelValue.push(option.id);
-    multipleSelections.value.push(option);
-  }
+	if (indexOfAlreadySetFilter !== -1) {
+		props.modelValue.splice(indexOfAlreadySetFilter, 1);
+		multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
+	} else {
+		props.modelValue.push(option.id);
+		multipleSelections.value.push(option);
+	}
 
-  emit("update:modelValue", props.modelValue);
+	emit('update:modelValue', props.modelValue);
 };
 
 const handleToggleAll = (filter: any) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
-  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+	const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+	const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
-  const selectAll = !areAllSelected(filter);
+	const selectAll = !areAllSelected(filter);
 
-  if (selectAll) {
-    relevantOptions.forEach((option) => {
-      if (!props.modelValue.includes(option.id)) {
-        multipleSelections.value.push(option);
-      }
-    });
-  } else {
-    relevantOptions.forEach((option) => {
-      const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
-      if (indexOfAlreadySetFilter !== -1) {
-        props.modelValue.splice(indexOfAlreadySetFilter, 1);
-      }
-    });
+	if (selectAll) {
+		relevantOptions.forEach((option) => {
+			if (!props.modelValue.includes(option.id)) {
+				multipleSelections.value.push(option);
+			}
+		});
+	} else {
+		relevantOptions.forEach((option) => {
+			const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+			if (indexOfAlreadySetFilter !== -1) {
+				props.modelValue.splice(indexOfAlreadySetFilter, 1);
+			}
+		});
 
-    multipleSelections.value = multipleSelections.value.filter((item) => !relevantOptions.find((option) => option.id === item.id));
-  }
+		multipleSelections.value = multipleSelections.value.filter(
+			(item) => !relevantOptions.find((option) => option.id === item.id)
+		);
+	}
 
-  emit(
-    "update:modelValue",
-    multipleSelections.value.map((item) => item.id)
-  );
+	emit(
+		'update:modelValue',
+		multipleSelections.value.map((item) => item.id)
+	);
 };
 
 const areAllSelected = (filter: any) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
-  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+	const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+	const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
-  return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
+	return relevantOptions.every((option) =>
+		multipleSelections.value.find((item) => item.id === option.id)
+	);
 };
 
 watch(
-  () => props.modelValue,
-  () => {
-    multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
-      const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
-      return [...prev, ...foundOptions];
-    }, [] as Filter[]);
-  }
+	() => props.modelValue,
+	() => {
+		multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
+			const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
+			return [...prev, ...foundOptions];
+		}, [] as Filter[]);
+	}
 );
 
 onMounted(async () => {
-  loadingFilters.value = true;
-  mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
-  const allFilters = await filterStore.loadAllFilters();
+	loadingFilters.value = true;
+	mainFilters.value = await getMainFilters('filter_facility', props.filterKind);
+	const allFilters = await filterStore.loadAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
+	const allOptions = mainFilters.value.map((filter) =>
+		allFilters.filter((item) => item.parent_id === filter.id)
+	);
 
-  allOptions.forEach((options, index) => {
-    filterOptions.value.push({
-      parentId: mainFilters.value[index].id,
-      options,
-    });
-  });
-  loadingFilters.value = false;
+	allOptions.forEach((options, index) => {
+		filterOptions.value.push({
+			parentId: mainFilters.value[index].id,
+			options,
+		});
+	});
+	loadingFilters.value = false;
 
-  const allAvailableOptions = filterOptions.value.reduce((prev, curr) => {
-    return [...prev, ...curr.options];
-  }, [] as Filter[]);
+	const allAvailableOptions = filterOptions.value.reduce((prev, curr) => {
+		return [...prev, ...curr.options];
+	}, [] as Filter[]);
 
-  const foundFilters = allAvailableOptions.filter((option) => {
-    const doesInclude = props.modelValue.find((item: string) => item === option.id);
-    return doesInclude;
-  });
+	const foundFilters = allAvailableOptions.filter((option) => {
+		const doesInclude = props.modelValue.find((item: string) => item === option.id);
+		return doesInclude;
+	});
 
-  if (foundFilters?.length > 1) {
-    multipleSelections.value = foundFilters;
-  }
+	if (foundFilters?.length > 1) {
+		multipleSelections.value = foundFilters;
+	}
 
-  setPlaceholderText();
+	setPlaceholderText();
 });
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/sass/main.sass";
+@import '@/assets/sass/main.sass';
 .popover {
-  position: relative;
-  width: 100%;
+	position: relative;
+	width: 100%;
 
-  .input {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
+	.input {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		width: 100%;
 
-    .input-title {
-      max-width: 300px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
+		.input-title {
+			max-width: 300px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 
-    .actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
+		.actions {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 1rem;
 
-      .chevron {
-        width: 20px;
-        height: 20px;
-        background-image: url("@/assets/icons/chevron-down.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        transition: transform 150ms linear;
+			.chevron {
+				width: 20px;
+				height: 20px;
+				background-image: url('@/assets/icons/chevron-down.svg');
+				background-repeat: no-repeat;
+				background-position: center;
+				transition: transform 150ms linear;
 
-        &.up {
-          transform: rotate(180deg);
-        }
-      }
-    }
-  }
+				&.up {
+					transform: rotate(180deg);
+				}
+			}
+		}
+	}
 
-  .popover-content {
-    background-color: white;
-    box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25);
-    padding: 1rem;
-    position: absolute;
-    left: 0;
-    top: calc(100% + 2px);
-    border-radius: 10px;
-    z-index: 5;
-    .filter-name {
-      font-size: 1.4rem;
-      margin-bottom: 0.75rem;
-      color: $dark-grey;
-    }
+	.popover-content {
+		background-color: white;
+		box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25);
+		padding: 1rem;
+		position: absolute;
+		left: 0;
+		top: calc(100% + 2px);
+		border-radius: 10px;
+		z-index: 5;
+		.filter-name {
+			font-size: 1.4rem;
+			margin-bottom: 0.75rem;
+			color: $secondary-color;
+		}
 
-    .filter-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+		.filter-options {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+		}
 
-    .option-label {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+		.option-label {
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
 
-    .clear-button {
-      margin-top: 0.5rem;
-      margin-left: auto;
-    }
-  }
+		.clear-button {
+			margin-top: 0.5rem;
+			margin-left: auto;
+		}
+	}
 }
 .options-select {
-  gap: 0.5rem;
-  min-height: 3rem;
+	gap: 0.5rem;
+	min-height: 3rem;
 }
 
 .is-selected {
-  background-color: #8ab61d !important;
-  color: white !important;
+	background-color: #8ab61d !important;
+	color: white !important;
 }
 </style>
