@@ -33,7 +33,7 @@ watch(
 );
 
 watch(
-  () => filterStore.currentZip,
+  () => filterStore.currentZips,
   () => {
     filterStore.loadAllResults();
   },

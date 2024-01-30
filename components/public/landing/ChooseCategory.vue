@@ -22,7 +22,7 @@ const handleInput = () => {
 onMounted(async () => {
   filterStore.currentKinds = [];
   filterStore.currentTags = [];
-  filterStore.currentZip = null;
+  filterStore.currentZips = [];
   filterStore.onlySearchInTitle = true;
   await filterStore.loadAllResults();
 });
