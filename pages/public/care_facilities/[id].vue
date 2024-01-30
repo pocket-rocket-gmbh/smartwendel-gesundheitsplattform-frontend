@@ -12,7 +12,12 @@
       <img :src="careFacility?.image_url" class="news-image" />
       <div class="mb-3">
         <v-row>
-          <v-col cols="12" md="4" sm="12" class="bar-content d-flex justify-space-between pa-0 mb-3">
+          <v-col
+            cols="12"
+            md="4"
+            sm="12"
+            class="bar-content d-flex justify-space-between pa-0 mb-3"
+          >
             <div class="d-flex align-center">
               <img class="icon mb-1" :src="eventIcon" />
               <span class="general-font-size is-dark-grey pl-3">{{
@@ -20,8 +25,13 @@
               }}</span>
             </div>
           </v-col>
-            <v-col cols="12" md="4" sm="12" class="bar-content d-flex justify-space-between pa-0 mb-3">
-              <div
+          <v-col
+            cols="12"
+            md="4"
+            sm="12"
+            class="bar-content d-flex justify-space-between pa-0 mb-3"
+          >
+            <div
               class="d-flex align-center facility-name is-clickable"
               v-if="careFacility?.user_care_facility?.name"
             >
@@ -36,10 +46,14 @@
                 ></span>
               </a>
             </div>
-            </v-col>
-            <v-col cols="12" md="4" sm="12" class="bar-content d-flex justify-space-between pa-0 mb-3">
-
-              <div class="bar-item" v-if="careFacility?.name_responsible_person">
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            sm="12"
+            class="bar-content d-flex justify-space-between pa-0 mb-3"
+          >
+            <div class="bar-item" v-if="careFacility?.name_responsible_person">
               <div class="d-flex align-center">
                 <img class="icon mb-1" :src="personIcon" />
                 <span class="general-font-size is-dark-grey pl-3 break-title">{{
@@ -47,14 +61,15 @@
                 }}</span>
               </div>
             </div>
-            </v-col>
-          
-
+          </v-col>
 
           <v-divider class="my-1 mb-3"></v-divider>
         </v-row>
       </div>
-      <p class="general-font-size text-description" v-html="careFacility.description"></p>
+      <p
+        class="general-font-size text-description"
+        v-html="careFacility.description"
+      ></p>
     </div>
     <PublicCareFacilitiesImages
       :care-facility="careFacility"

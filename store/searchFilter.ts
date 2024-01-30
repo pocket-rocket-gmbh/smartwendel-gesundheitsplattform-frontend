@@ -54,7 +54,7 @@ export type Facility = {
 export type Filter = {
   currentSearchTerm: string;
   currentTags: string[];
-  currentZip: string;
+  currentZips: string[];
   filterSort: (typeof filterSortingDirections)[number];
   loading: boolean;
   mapFilter: string;
@@ -74,7 +74,7 @@ export type Filter = {
 const initialFilterState: Filter = {
   currentSearchTerm: "",
   currentTags: [],
-  currentZip: null,
+  currentZips: [],
   filterSort: "A-Z",
   loading: false,
   mapFilter: null,
@@ -98,7 +98,7 @@ export const useFilterStore = defineStore({
     filterInfo: (state) => {
       return {
         currentSearchTerm: state.currentSearchTerm,
-        currentZip: state.currentZip,
+        currentZips: state.currentZips,
         currentTags: state.currentTags,
         filterSort: state.filterSort,
         currentKinds: state.currentKinds,
@@ -108,7 +108,7 @@ export const useFilterStore = defineStore({
   actions: {
     setFilterInfo(newFilterInfo: typeof this.filterInfo) {
       this.currentSearchTerm = newFilterInfo.currentSearchTerm;
-      this.currentZip = newFilterInfo.currentZip;
+      this.currentZips = newFilterInfo.currentZips;
       this.currentTags = newFilterInfo.currentTags;
       this.filterSort = newFilterInfo.filterSort;
       this.currentKinds = newFilterInfo.currentKinds;
@@ -139,7 +139,7 @@ export const useFilterStore = defineStore({
     },
     async clearSearch() {
       this.currentSearchTerm = "";
-      this.currentZip = null;
+      this.currentZips = [];
       this.currentTags = [];
       this.mapFilter = null;
 
@@ -242,8 +242,10 @@ export const useFilterStore = defineStore({
         .filter((result) => {
           return this.currentKinds.length ? this.currentKinds.includes(result.kind) : true;
         })
-        .filter((result) => {
-          return result.zip && this.currentZip ? result.zip === this.currentZip : true;
+     .filter((result) => {
+          return this.currentZips?.length ? this.currentZips.includes(result?.zip) : true;
+          
+          
         })
         .filter((result) => {
           if (!tagsToFilter.length) return true;
@@ -263,8 +265,8 @@ export const useFilterStore = defineStore({
       if (this.loading || !this.allResults) return;
 
       const filteredResults: Facility[] = this.allResults
-        .filter((result) => {
-          return result.zip && this.currentZip ? result.zip === this.currentZip : true;
+       .filter((result) => {
+          return this.currentZips?.length ? this.currentZips.includes(result.zip) : true;
         })
         .filter((result) => {
           return (
@@ -293,7 +295,7 @@ export const useFilterStore = defineStore({
     resetAllFilters() {
       this.currentSearchTerm = "";
       this.currentTags = [];
-      this.currentZip = null;
+      this.currentZips = [];
       this.filterSort = "A-Z";
       this.loading = false;
       this.mapFilter = null;
