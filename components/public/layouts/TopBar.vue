@@ -78,7 +78,7 @@
 			</v-app-bar-title>
 			<div class="align-center d-flex">
 				<div
-					class="has-bg-primary text-white offer py-1"
+					class="is-primary-background text-white offer py-1"
 					v-if="
 						!useUser().loggedIn() && breakPoints.width.value >= 1610 && currentRoute !== '/register'
 					"
@@ -150,7 +150,7 @@
 		>
 			<div class="navigation-drawer-content">
 				<div
-					class="has-bg-primary text-white offer d-flex align-center justify-center py-2 my-5"
+					class="is-primary-background text-white offer d-flex align-center justify-center py-2 my-5"
 					v-if="!useUser().loggedIn() && currentRoute !== '/register'"
 				>
 					<div @click="goToRegister()" class="text-center">
