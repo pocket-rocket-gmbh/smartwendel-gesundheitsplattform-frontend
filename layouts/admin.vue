@@ -81,8 +81,8 @@
 				<!-- <v-list-item link to="/admin/care_facilities" nuxt class="general-font-size is-dark-grey">
 					<span v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
 					<span v-else>Einrichtungen</span>
-				</v-list-item>
-				<v-list-item
+				</v-list-item> -->
+				<!-- <v-list-item
 					:disabled="!setupFinished"
 					link
 					to="/admin/courses"

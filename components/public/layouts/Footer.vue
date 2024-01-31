@@ -1,5 +1,65 @@
 <template>
-	<ClientOnly>
+	<footer>
+		<v-row>
+			<v-col :cols="12" :md="4" class="main">
+				<span>Landkreis Wunsiedel i. Fichtelgebirge</span>
+				<nav>
+					<ul>
+						<li>
+							<nuxt-link class="is-dark-grey" href="mailto:EMAIL?subject=Kontakt">
+								Kontakt
+							</nuxt-link>
+						</li>
+						<li>
+							<nuxt-link class="is-dark-grey" to="/rules_of_conduct">Nutzungsbedingungen</nuxt-link>
+						</li>
+						<li>
+							<nuxt-link class="is-dark-grey" to="/privacy_policy">Datenschutzerklärung</nuxt-link>
+						</li>
+						<li>
+							<nuxt-link class="is-dark-grey" to="/imprint">Impressum</nuxt-link>
+						</li>
+					</ul>
+				</nav>
+				<ul class="social-buttons">
+					<li>
+						<v-btn href="TODO" target="_blank" variant="outlined" icon class="social-button">
+							<v-icon>mdi-facebook</v-icon>
+						</v-btn>
+					</li>
+					<li>
+						<v-btn href="TODO" target="_blank" variant="outlined" icon class="social-button">
+							<v-icon>mdi-instagram</v-icon>
+						</v-btn>
+					</li>
+					<li>
+						<v-btn href="TODO" target="_blank" variant="outlined" icon class="social-button">
+							<v-icon>mdi-youtube</v-icon>
+						</v-btn>
+					</li>
+					<li>
+						<v-btn href="TODO" target="_blank" variant="outlined" icon class="social-button">
+							<v-icon>mdi-linkedin</v-icon>
+						</v-btn>
+					</li>
+				</ul>
+			</v-col>
+			<v-col :cols="12" :md="4" class="logo">
+				<img src="~/assets/images/logo.png" alt="logo" class="is-clickable" />
+			</v-col>
+			<v-col :cols="12" :md="4" class="register">
+				<span>Dein Angebot fehlt?</span>
+				<span>
+					Du machst Kultur in unserem Landkreis?
+					<br />
+					Dann registriere dich jetzt!
+				</span>
+				<v-btn color="primary" rounded>Jetzt registrieren</v-btn>
+			</v-col>
+		</v-row>
+	</footer>
+
+	<!-- <ClientOnly>
 		<div class="wrapper pt-5 general-font-size">
 			<div class="py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
 				<v-row class="has-bg-grey register-hint">
@@ -34,7 +94,7 @@
 					<v-col md="8">
 						<v-row class="align-center bg-white">
 							<v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-								<a href="https://www.smartwendelerland.de/" target="_blank">
+								<a href="TODO>
 									<img
 										src="~/assets/images/sub-footer/logo-footer-wnd.png"
 										class="is-clickable logo-footer"
@@ -180,7 +240,7 @@
 				</v-row>
 			</div>
 		</div>
-	</ClientOnly>
+	</ClientOnly> -->
 </template>
 
 <script setup lang="ts">
@@ -194,63 +254,59 @@ const currentRoute = computed(() => {
 });
 </script>
 
-<style lang="sass" scoped>
-@import "@/assets/sass/main.sass"
+<style lang="scss" scoped>
+@import '@/assets/sass/main.sass';
 
+footer {
+	background-color: #c4c4c4;
+	padding: 46px 80px;
 
-.social-buttons
-  border: 1px solid
-  color: $secondary-color
-  &:visited
-    color: $secondary-color
+	.main {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: left;
+		gap: 28px;
 
-.divider
-  border: 1px $secondary-color solid
+		ul {
+			list-style-type: none;
+			margin: 0;
+		}
 
-.input-field
-  border: 2px solid red
-  border-radius: 25px
+		ul.social-buttons {
+			display: flex;
+			flex-direction: row;
+			gap: 13px;
+		}
+	}
+	.logo {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 
-.sub-footer
-  background: white
+		img {
+			max-height: 170px;
+		}
+	}
+	.register {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-end;
+		gap: 28px;
+		@include md {
+			background-color: red;
+		}
 
-.mobile-height
-  max-width: 100px
+		span {
+			text-align: right;
+		}
+	}
+}
 
-.desktop-height
-  max-width: 150px
-
-.desktop-height-kfw
-  max-width: 100px
-
-.mobile-bigger-width
-  max-width: 150px
-
-.footer-links
-  line-height: 1.8rem
-
-.wrapper
-  background-color: $light-grey
-  margin: 5rem 0 0rem 0
-  padding: 0 5rem 2rem
-  @include md
-    padding: 0 1rem
-
-  .register-hint
-    @include md
-      flex-direction: column
-      justify-content: stretch
-
-      .register-button
-        a
-          flex: 1
-
-.footer-content
-  .footer-content-row
-    @include md
-      flex-direction: column
-
-.disclamer
-  @include md
-    margin-bottom: 5rem
+// .social-button {
+// 	border: 2px solid $dark-green;
+// 	color: $dark-green !important;
+// }
 </style>
