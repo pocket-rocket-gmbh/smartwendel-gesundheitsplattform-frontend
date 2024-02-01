@@ -113,7 +113,7 @@ const fields = ref([
   },
   {
     prop: "last_seen",
-    text: "Zuletzt gesehen",
+    text: "Zuletzt eingeloggt",
     value: "last_seen",
     type: "datetime",
   },
@@ -123,7 +123,7 @@ const fields = ref([
     value: "mdi-email-outline",
     type: "icon",
     emit: "mailUser",
-    tooltip: "E-Mail an Benutzer",
+    tooltip: "Benutzer E-Mail Kopieren",
   },
 ]);
 
@@ -161,10 +161,13 @@ const openDeleteDialog = (id: string) => {
   confirmDeleteDialogOpen.value = true;
 };
 
+const snackbar = useSnackbar();
+
 const mailUser = async (id: String) => {
   const user = users.value.find((user) => user.id === id);
   if (process.client && user) {
-    window.location.href = `mailto:${user.email}`;
+    navigator.clipboard.writeText(user.email);
+    snackbar.showSuccess(`E-Mail kopiert`);
   }
 };
 
