@@ -244,29 +244,15 @@ watch(
   }
 );
 
-watch(
-  () => filterStore.filteredResults,
-  () => {
-    if(!filterStore.filteredResults.length) {
-     setTimeout(() => {
-      filterStore.currentTags = [];
-      }, 500);
-    }
-    debounce(() => {
-      handleSetFilters();
-    }, 500);
-  },
-  { deep: true }
-);
 
 watch(
   () => filterStore.currentZips,
-  () => {
+  async () => {
+    await filterStore.loadAllResults();
     handleSetFilters();
   },
   { deep: true }
 )
-
 
 
 const handleSetFilters = async () => {
