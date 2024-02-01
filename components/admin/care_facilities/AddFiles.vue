@@ -230,7 +230,7 @@
 
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
-import { CreateEditFacility } from "~/types/facilities";
+import type { CreateEditFacility } from "~/types/facilities";
 
 const emit = defineEmits<{
   (event: "offline", docs: CreateEditFacility["offlineDocuments"]): void;

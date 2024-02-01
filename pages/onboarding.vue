@@ -1,83 +1,71 @@
 <template>
-  <div class="register-wrapper is-dark-grey">
-    <div class="register-now elevation-10" :class="['card', { shake: animated }]">
+  <div class="register-wrapper is-dark-grey" v-if="loading">
+    <div
+      class="register-now elevation-10 d-flex flex-column justify-center align-center text-primary text-h4 font-weight-medium"
+    >
+      <span class="mb-10">Token wird überprüft</span>
+      <v-progress-linear
+        color="primary"
+        indeterminate
+        rounded
+        height="10"
+      ></v-progress-linear>
+    </div>
+  </div>
+  <div class="register-wrapper is-dark-grey" v-else>
+    <div
+      class="register-now elevation-10"
+      :class="['card', { shake: animated }]"
+      v-if="hasToken"
+    >
       <div>
-        <div class="d-flex justify-center align-center text-primary thank-you font-weight-medium" v-if="!registerSuccessful">
-          <span>Jetzt registrieren!</span>
+        <div
+          class="d-flex justify-center align-center text-primary thank-you font-weight-medium"
+          v-if="!registerSuccessful"
+        >
+          <span>Einrichtung "{{ careFacilityName }}" übernehmen</span>
         </div>
         <div class="mt-5 d-flex flex-column general-font-size" v-if="!registerSuccessful">
           <span class="">
-            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter und möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
-            veröffentlichen? Dann laden wir dich herzlich zur Registrierung ein! Als Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in
+            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter und
+            möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
+            veröffentlichen? Dann laden wir dich herzlich zur Registrierung ein! Als
+            Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in
             wenigen Schritten auf der Plattform darstellen und veröffentlichen.
           </span>
           <span class="mt-5">
-            Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei der einheimischen
-            Bevölkerung. Ganz gleich ob es sich um ein behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches Angebot handelt: Auf gesundesWND sind alle
-            Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
+            Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
+            dein Angebot und steigerst deine Bekanntheit bei der einheimischen
+            Bevölkerung. Ganz gleich ob es sich um ein behördliches, gemeinnütziges,
+            ehrenamtliches oder gewerbliches Angebot handelt: Auf gesundesWND sind alle
+            Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung
+            der Gesundheit der Landkreisbevölkerung beitragen!
+          </span>
+          <span class="mt-5">
+            Durch die Vervollständigung deiner Daten übernimmst du die importierten Daten
+            deiner Einrichtung und kannst weitere Inhalte pflegen.
           </span>
         </div>
       </div>
       <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
         <div class="my-5">
-          <span class="mb-3 general-font-size font-weight-medium">Meine Einrichtung</span>
-          <div class="field">
-            <v-text-field
-              v-model="careFacilityName"
-              type="text"
-              label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
-              :rules="[rules.required]"
-              hide-details="auto"
-            />
-          </div>
-          <div class="field">
-            <v-select
-              hide-details="auto"
-              v-model="careFacilityCommunityId"
-              :items="communities"
-              item-title="name"
-              item-value="id"
-              label="Gemeinde *"
-              :rules="[rules.required]"
-            />
-          </div>
-          <div class="field split">
-            <v-text-field
-              v-model="careFacilityZip"
-              hide-details="auto"
-              label="PLZ *"
-              :type="'number'"
-              :rules="[rules.required, rules.zip]"
-              :error-messages="useErrors().checkAndMapErrors('zip', errors)"
-              disabled
-            />
-            <v-select
-              :disabled="careFacilityCommunityId.length === 0"
-              hide-details="auto"
-              v-model="careFacilityTown"
-              :items="getTownsByCommunityId(careFacilityCommunityId)"
-              item-title="name"
-              item-value="name"
-              label="Ort *"
-              :rules="[rules.required]"
-            />
-          </div>
-        </div>
-        <div class="my-5">
           <div class="d-flex align-center">
-            <span class="mr-3 general-font-size font-weight-medium">Mein Benutzerkonto</span>
+            <span class="mr-3 general-font-size font-weight-medium"
+              >Mein Benutzerkonto</span
+            >
             <v-tooltip location="top" width="300px">
               <template v-slot:activator="{ props }">
-                <v-icon class="is-clickable mr-10" v-bind="props">mdi-information-outline</v-icon>
+                <v-icon class="is-clickable mr-10" v-bind="props"
+                  >mdi-information-outline</v-icon
+                >
               </template>
               <span
-                >Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern verwendet werden, trage bitte eine allg. E-Mail Adresse ein, auf die jeder
-                Nutzer Zugriff hat</span
+                >Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern verwendet
+                werden, trage bitte eine allg. E-Mail Adresse ein, auf die jeder Nutzer
+                Zugriff hat</span
               >
             </v-tooltip>
           </div>
-
           <div class="field">
             <v-text-field
               v-model="firstname"
@@ -98,16 +86,7 @@
               hide-details="auto"
             />
           </div>
-          <div class="field">
-            <v-text-field
-              v-model="phone"
-              type="tel"
-              label="Telefonnummer *"
-              hide-details="auto"
-              :rules="[rules.required, rules.validateNumber, rules.phoneCounter]"
-              :error-messages="useErrors().checkAndMapErrors('phone', errors)"
-            />
-          </div>
+          {{ currentUser }}
           <div class="field">
             <v-text-field
               v-model="email"
@@ -127,21 +106,37 @@
                 <u>Datenschutzerklärung</u>
               </a>
               <span> und den </span>
-              <a class="is-dark-grey" target="_blank" href="/rules_of_conduct" @click.stop>
+              <a
+                class="is-dark-grey"
+                target="_blank"
+                href="/rules_of_conduct"
+                @click.stop
+              >
                 <u>Nutzungsbedingungen</u>
               </a>
-              zu.
+              zu
             </div>
           </template>
         </v-checkbox>
 
-        <v-btn color="primary" class="mt-5 general-font-size" size="large" block depressed @click="register">Registrieren</v-btn>
+        <v-btn
+          color="primary"
+          class="mt-5 general-font-size"
+          size="large"
+          block
+          depressed
+          @click="register"
+          >Übernehmen</v-btn
+        >
       </v-form>
       <div align="center" class="mt-5" v-if="registerSuccessful">
         <div class="d-flex flex-column align-center justify-center">
-          <span class="thank-you text-primary font-weight-medium mb-10"> Vielen Dank für deine Registrierung! </span>
+          <span class="thank-you text-primary font-weight-medium mb-10">
+            Vielen Dank für deine Registrierung!
+          </span>
           <span class="general-font-size">
-            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären
+            Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
           </span>
         </div>
         <div class="mt-5">
@@ -150,7 +145,31 @@
       </div>
     </div>
 
-    <span v-if="registerSuccessful" class="thank-you is-dark-grey font-weight-medium d-flex justify-center">So geht es weiter:</span>
+    <div
+      class="register-now elevation-10 d-flex flex-column justify-center align-center text-primary text-h4 font-weight-medium"
+      :class="['card', { shake: animated }]"
+      v-else
+    >
+      <div class="d-flex align-center">
+        <v-icon class="mr-3">mdi-alert-circle-outline</v-icon
+        ><span>Das Token ist ungültig.</span>
+      </div>
+      <v-btn
+        color="primary"
+        class="mt-5 general-font-size"
+        size="large"
+        block
+        depressed
+        @click="router.push({ path: '/login' })"
+        >Zum Login</v-btn
+      >
+    </div>
+
+    <span
+      v-if="registerSuccessful"
+      class="thank-you is-dark-grey font-weight-medium d-flex justify-center"
+      >So geht es weiter:</span
+    >
     <div v-if="registerSuccessful" class="steps-wrapper">
       <template v-for="step in steps">
         <div class="item" elevation="0">
@@ -183,48 +202,50 @@ import LogoStep4 from "@/assets/icons/registerIcons/icon_step4.png";
 import LogoStep5 from "@/assets/icons/registerIcons/icon_step5.png";
 
 import arrow from "@/assets/icons/registerIcons/arrow.png";
-import { useFilterStore } from "~/store/searchFilter";
 
-const careFacilityName = ref("");
-const email = ref("");
-const careFacilityZip = ref("");
-const careFacilityTown = ref("");
-const careFacilityCommunityId = ref("");
 const firstname = ref("");
 const lastname = ref("");
-const phone = ref("");
-const loading = ref(false);
+const email = ref("");
+const careFacilityName = ref("");
+const loading = ref(true);
 const animated = ref(false);
 const errors = ref({});
 const registerSuccessful = ref(false);
 const privacyAccepted = ref(false);
 const registerForm = ref<VForm>();
 const router = useRouter();
+const currentToken = ref("");
+const hasToken = ref(false);
 const icons = ref([LogoStep1, LogoStep2, LogoStep3, LogoStep4, LogoStep5]);
 
 const steps = {
   step1: {
-    description: "Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere zunächst dein Passwort.",
+    description:
+      "Melde dich mit dem zugesandten Zugangscode an (E-Mail-Postfach) und ändere zunächst dein Passwort.",
     icon: LogoStep1,
     next: true,
   },
   step2: {
-    description: "Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.",
+    description:
+      "Wir verifizieren deine Anmeldung zu den üblichen Geschäftszeiten von Montag bis Freitag.",
     icon: LogoStep2,
     next: true,
   },
   step3: {
-    description: "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”).",
+    description:
+      "In der Zwischenzeit kannst du dein Profil ergänzen und dein(e) Angebot(e) einstellen (“Meine Einrichtung”).",
     icon: LogoStep3,
     next: true,
   },
   step4: {
-    description: "Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
+    description:
+      "Sobald alle Pflichtangaben hinterlegt sind, kannst du dein Profil für alle Besucher:innen der Plattform sichtbar veröffentlichen.",
     icon: LogoStep4,
     next: true,
   },
   step5: {
-    description: "Vervollständige deinen Account und lege deine Kursangebote an, teile Veranstaltungen oder verfasse Newsbeiträge.",
+    description:
+      "Vervollständige deinen Account und lege deine Kursangebote an, teile Veranstaltungen oder verfasse Newsbeiträge.",
     icon: LogoStep5,
     next: false,
   },
@@ -234,31 +255,51 @@ const toLogin = () => {
   router.push({ path: "/login" });
 };
 
+const getToken = () => {
+  currentToken.value = String(router.currentRoute.value.query.token);
+};
+
+const publicApi = usePublicApi();
+const validateToken = async () => {
+  loading.value = true;
+  const result = await publicApi.call(
+    "get",
+    `/users/find-by-onboarding-token/${currentToken.value}`
+  );
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    const data = result;
+    if (data) {
+      hasToken.value = true;
+      firstname.value = data?.data?.user?.firstname;
+      lastname.value = data?.data?.user?.lastname;
+      email.value = data?.data?.user?.email;
+      careFacilityName.value = data?.data?.care_facility?.name;
+    }
+    loading.value = false;
+  } else {
+    hasToken.value = false;
+    loading.value = false;
+  }
+};
+
+const currentUser = ref<any>(null);
+
 const register = async () => {
   const { valid } = await registerForm.value.validate();
 
   if (!valid) return;
-
-  loading.value = true;
-  errors.value = {};
   const data = {
     email: email.value,
     firstname: firstname.value,
     lastname: lastname.value,
-    phone: phone.value,
-    commercial_register_number: " ",
-    care_facility_name: careFacilityName.value,
-    care_facility_zip: careFacilityZip.value,
-    care_facility_town: careFacilityTown.value,
-    care_facility_community_id: careFacilityCommunityId.value,
   };
-
-  const { data: result } = await axios.post<ServerCallResult>("/api/register_with_facility", { data });
-
+  const result = await publicApi.call(
+    "post",
+    `/users/onboarding-health/${currentToken.value}`,
+    data
+  );
   if (result.status === ResultStatus.SUCCESSFUL) {
-    localStorage.setItem("health_platform._remembered_email", email.value);
     registerSuccessful.value = true;
-    scrollToTop();
   } else {
     errors.value = {
       errors: [{ field_name: "email", code: "register.failed" }],
@@ -273,34 +314,22 @@ const register = async () => {
   }
 };
 
-const communities = ref<any[]>([]);
-
-const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find((community: any) => community.id === communityId);
-  if (found) {
-    careFacilityZip.value = found.zip;
-    return found.towns;
-  } else {
-    [];
-  }
-};
+const api = useCollectionApi();
+api.setBaseApi(usePublicApi());
 
 const scrollToTop = () => {
   window.scrollTo(0, 0);
 };
-
 onMounted(async () => {
+  getToken();
+  await validateToken();
   scrollToTop();
-  communities.value = await useFilterStore().loadAllCommunities();
-
   const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
   if (rememberedEmail) {
     setTimeout(() => {
       email.value = rememberedEmail;
     }, 300);
   }
-
-  // registerForm.value?.validate()
 });
 </script>
 

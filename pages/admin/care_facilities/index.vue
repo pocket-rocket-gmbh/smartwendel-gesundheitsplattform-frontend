@@ -1,19 +1,29 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="showBar">
       <v-col>
-        <span class="general-font-size is-dark-grey font-weight-bold" v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
-        <span class="general-font-size is-dark-grey font-weight-bold" v-else>Einrichtungen</span>
+        <span
+          class="general-font-size is-dark-grey font-weight-bold"
+          v-if="useUser().isFacilityOwner()"
+          >Meine Einrichtung</span
+        >
+        <span class="general-font-size is-dark-grey font-weight-bold" v-else
+          >Einrichtungen</span
+        >
       </v-col>
 
       <v-col class="d-flex justify-end align-center">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+            >Benutzer Aktiv</span
+          >
         </div>
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold">Benutzer nicht Aktiv</span>
+          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+            >Benutzer nicht Aktiv</span
+          >
         </div>
       </v-col>
     </v-row>
@@ -32,7 +42,7 @@
       @changed="handleSaved()"
     />
     <div>
-      <div>
+      <div v-if="showBar">
         <v-row align="center">
           <v-col md="3" class="d-flex">
             <v-btn
@@ -72,6 +82,7 @@
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
+        @toogle-bar="showBar = !showBar"
         :disable-delete="true"
         defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
@@ -137,12 +148,14 @@
 
 <script lang="ts" setup>
 import { isCompleteFacility } from "~/utils/facility.utils";
-import { Facility } from "~/store/searchFilter";
-import { RequiredField } from "types/facilities";
+import { type Facility } from "~/store/searchFilter";
+import type { RequiredField } from "~/types/facilities";
 
 definePageMeta({
   layout: "admin",
 });
+
+const showBar = ref(true);
 
 const user = useUser();
 const router = useRouter();
@@ -181,10 +194,12 @@ const fields = [
     },
     disabledTooltip:
       "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.",
+    disabledTooltipFacilityImcomplete:
+      "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.",
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
-  { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
+  { prop: "updated_at", text: "Letzte Aktualisierung", value: "updated_at", type: "datetime" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",
@@ -211,6 +226,11 @@ const fields = [
     value: "",
     type: "is-lk",
     tooltip: "Einrichtung wurde von einer Admin erstellt."
+  },
+  {
+    value: "",
+    type: "imported",
+    tooltip: "Einrichtung wurde importiert."
   },
 ];
 

@@ -1,6 +1,8 @@
 <template>
   <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Pflichtangabe']"></v-checkbox>
-  <v-alert class="my-5 general-font-size" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable> Bitte mindestens einen Filter auswählen </v-alert>
+  <v-alert class="my-5 general-font-size" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable>
+    Bitte mindestens einen Filter auswählen
+  </v-alert>
   <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)"> Filter werden geladen ... </LoadingSpinner>
   <div class="choose-facility-type" v-else>
     <CollapsibleItem
@@ -28,7 +30,9 @@
           <v-alert color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
-                <span class="has-font-size-small-medium mr-3">Falls das passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte </span>
+                <span class="has-font-size-small-medium mr-3"
+                  >Falls das passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
+                </span>
                 <span>
                   <v-btn color="primary" class="is-white" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</v-btn>
                 </span>
@@ -38,7 +42,11 @@
         </div>
         <div class="main-class">
           <div class="filter-options" v-for="option in mainFilter.next">
-            <div class="filter-tile is-dark-grey" :class="{ selected: preSetTags.includes(option.id) }" @click.stop="handleSubFilterParentClick(mainFilter, option)">
+            <div
+              class="filter-tile is-dark-grey"
+              :class="{ selected: preSetTags.includes(option.id) }"
+              @click.stop="handleSubFilterParentClick(mainFilter, option)"
+            >
               {{ option.name }}
             </div>
             <div v-if="option.next?.length" class="options">
@@ -62,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { FilterKind, FilterType } from "~/store/searchFilter";
+import { type FilterKind, type FilterType, useFilterStore } from "~/store/searchFilter";
 import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const props = defineProps<{
@@ -230,7 +238,7 @@ const reloadFilters = async () => {
   }
 
   const mainFilters = await getMainFilters(props.filterType, props.filterKind);
-  const allFilters = await getAllFilters();
+  const allFilters = await useFilterStore().loadAllFilters();
 
   const allNextFilters = mainFilters.map((mainFilter) => getFilterOptions(mainFilter.id, allFilters));
 

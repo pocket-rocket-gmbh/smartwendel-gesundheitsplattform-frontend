@@ -1,21 +1,25 @@
 <template>
-  <NuxtLayout :class="[loading ? 'overlay' : '']">
+  <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
-  <LoadingSpinner class="text-spinner"  v-if="loading"></LoadingSpinner>
 </template>
 
 <script lang="ts" setup>
-const loading = ref(true);
-const setLoading = async() => {
-  setTimeout(() => {
-    loading.value = false;
-  }, 0);
-};
+import { useAppStore } from "./store/app";
 
-onMounted(() => {
-  setLoading();
+const router = useRouter();
+
+const route = router.currentRoute;
+
+const isAdminRoute = computed(() => {
+  if (route.value.path.includes("admin")) {
+    return true;
+  }
+  return false;
 });
+  
+
+const appStore = useAppStore();
 </script>
 <style lang="scss">
 @import "@/assets/sass/main.sass";
@@ -26,17 +30,16 @@ onMounted(() => {
   }
 }
 
-
 .text-spinner {
-  position: fixed!important;
-  top: 50%!important;
-  left: 50%!important;
-  transform: translate(-50%, -50%)!important;
-  opacity: 1!important;
+  position: fixed !important;
+  top: 30% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  opacity: 1 !important;
 }
 
 .spinner {
-  border-top-color: #8ab61d!important;
+  border-top-color: #8ab61d !important;
 }
 .overlay {
   position: fixed;

@@ -1,10 +1,10 @@
 <template>
-  <v-app>
+  <v-app v-if="!loading">
     <ClientOnly>
       <ClientSnackbar />
     </ClientOnly>
     <PublicLayoutsTopBar />
-<!--     <ClientOnly>
+    <!--     <ClientOnly>
       <PublicCookieBanner />
     </ClientOnly> -->
     <v-main>
@@ -25,7 +25,13 @@ const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
 api.setEndpoint("tooltips");
 
-const loading = ref(false);
+const loading = ref(true);
+
+const setTimeOutForPageLoad = () => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 100);
+};
 
 const getTooltips = async () => {
   await api.retrieveCollection();
@@ -39,21 +45,25 @@ const handleScroll = () => {
   appStore.showTopbar = window.scrollY < 100 || direction === 1;
 };
 
-onMounted(async () => {
-  loading.value = true;
-  getTooltips();
+const initialize = async () => {
+  return Promise.allSettled([
+    useFilterStore().loadAllFilters(),
+    useFilterStore().loadAllCommunities(),
+    useFilterStore().loadUnalteredAllResults(),
+    useFilterStore().loadAllCategories(),
+    getTooltips(),
+  ]);
+};
 
+onMounted(async () => {
+  setTimeOutForPageLoad();
   document.addEventListener("scroll", handleScroll);
 
-  useFilterStore().loadUnalteredAllResults()
-
-  if (!tooltipsStore.tooltips) {
-    await api.retrieveCollection();
-    tooltipsStore.tooltips = api.items;
-  }
-
-  loading.value = false;
+  appStore.loading = true;
+  await initialize();
+  appStore.loading = false;
 });
+
 
 onUnmounted(() => {
   document.removeEventListener("wheel", handleScroll);

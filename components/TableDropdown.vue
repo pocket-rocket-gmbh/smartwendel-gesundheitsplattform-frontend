@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Enums, useEnums } from "@/composables/data/enums";
+import { type Enums, useEnums } from "@/composables/data/enums";
 
 const snackbar = useSnackbar();
 

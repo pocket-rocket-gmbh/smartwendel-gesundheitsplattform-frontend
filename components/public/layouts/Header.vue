@@ -1,33 +1,60 @@
 <template>
   <template v-if="breakPoints.isMobile.value">
-    <v-app-bar :elevation="0" density="compact" class="main-layouts-title-bar">
+    <v-app-bar :elevation="0" density="compact" class="main-layouts-title-bar mb-5">
       <div class="main-toolbar-content">
-        <div class="menu-title is-uppercase text-h4 d-flex align-center justify-space-between text">
-          <div class="spacer">
-            <PublicCategoriesSelectCategoriesModal
-              :sub-categories="subCategories"
-              :selected-id="selectedId"
-              @set-category-and-scroll="setSubCategoryAndScroll"
-            />
+        <div class="is-uppercase text-h4 d-flex align-center justify-center text my-3">
+          <div class="is-white text-center font-weight-medium text-h4" v-if="category">
+            {{ category.name }}
           </div>
-          <div class="is-white text-center font-weight-medium text-h4" v-if="category">{{ category.name }}</div>
-          <div class="is-white text-center font-weight-medium text-h4" v-else>{{ title }}</div>
-          <div class="spacer"></div>
+          <div class="is-white text-center font-weight-medium text-h4" v-else>
+            {{ title }}
+          </div>
+        </div>
+        <div class="d-flex justify-center category-chips">
+          <v-slide-group size="large" class="text-white" multiple column>
+            <v-chip-group selected-class="chip-selected">
+              <v-chip
+                size="large"
+                class="ml-2"
+                v-for="item in subCategories"
+                @click="setSubCategoryAndScroll(item?.id)"
+                >{{ item?.name }}</v-chip
+              >
+            </v-chip-group>
+          </v-slide-group>
         </div>
       </div>
     </v-app-bar>
   </template>
   <template v-else>
-    <v-app-bar v-model="appStore.showTopbar" :elevation="0" density="compact" class="main-layouts-title-bar">
+    <v-app-bar
+      v-model="appStore.showTopbar"
+      :elevation="0"
+      density="compact"
+      class="main-layouts-title-bar"
+    >
       <div class="main-toolbar-content">
-        <div class="menu-title is-uppercase text-h4 d-flex align-center justify-center text my-3">
-          <span class="is-white font-weight-medium" v-if="category">{{ category.name }}</span>
+        <div
+          class="menu-title is-uppercase text-h4 d-flex align-center justify-center text my-3"
+        >
+          <span class="is-white font-weight-medium" v-if="category">{{
+            category.name
+          }}</span>
           <h2 class="is-white" v-else>{{ title }}</h2>
         </div>
         <div class="menu-bar-wrapper">
-          <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center">
-            <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
-              <span class="px-5 is-dark-grey text-h5 font-weight-medium" :class="[selectedId === item?.id ? 'text-decoration-underline' : '']">
+          <div
+            class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center"
+          >
+            <div
+              v-for="item in subCategories"
+              @click="setSubCategoryAndScroll(item?.id)"
+              class="is-clickable"
+            >
+              <span
+                class="px-5 is-dark-grey text-h5 font-weight-medium"
+                :class="[selectedId === item?.id ? 'text-decoration-underline' : '']"
+              >
                 {{ item?.name }}
               </span>
             </div>
@@ -56,11 +83,15 @@ const props = defineProps({
 const appStore = useAppStore();
 const breakPoints = useBreakpoints();
 const selectedId = ref(null);
+const router = useRouter();
 
 const setSubCategoryAndScroll = (id: any) => {
   requestAnimationFrame(() => {
     useNuxtApp().$bus.$emit("setSubCategory", id);
     selectedId.value = id;
+  });
+  router.push({
+    query: { sub_category_id: id },
   });
 };
 
@@ -72,7 +103,6 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
 @import "@/assets/sass/main.sass"
 
 .main-layouts-title-bar
-  display: flex
   align-items: center
   justify-content: center
   flex-direction: column
@@ -86,11 +116,16 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
   .v-toolbar__content
     height: fit-content !important
     padding: 0
+    display: flex
+    flex-direction: column
+    .category-chips
+      color: white
+      margin-bottom: 20px
+      font-weight: bold
 
   .main-toolbar-content
     max-width: 100%
     width: 100%
-    display: flex
     align-items: center
     justify-content: center
     flex-direction: column
@@ -124,18 +159,22 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
         width: 4rem
 
     .menu-bar-wrapper
-      padding: 0.5rem
       padding-top: 0
 
       .menu-bar
         border-radius: 20px
         min-height: 60px
-        width: 100%
         color: $dark-green
+        margin: 0 4rem
 
         @include md
           padding: 0.5rem
           flex-wrap: wrap
           gap: 0.5rem
           height: fit-content
+
+.chip-selected
+  color: $primary-color
+  background-color: white
+  font-weight: bold
 </style>

@@ -3,7 +3,7 @@
     <span class="general-font-size is-dark-grey font-weight-bold">Tooltips</span>
 
     <div>
-      <v-row align="center">
+      <v-row align="center" v-if="showBar">
         <v-col md="3">
           <v-btn
             elevation="0"
@@ -34,6 +34,7 @@
       :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
+      @toogle-bar="showBar = !showBar"
       ref="dataTableRef"
     />
 
@@ -78,6 +79,8 @@ const itemPlaceholder = ref({
   name: "",
   scope: "tooltips",
 });
+
+const showBar = ref(true);
 
 const facilitySearchColums = ref(["name", "content", "url"]);
 const facilitySearchTerm = ref("");

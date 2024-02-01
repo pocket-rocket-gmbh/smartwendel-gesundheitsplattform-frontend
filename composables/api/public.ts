@@ -1,8 +1,8 @@
 import { ServerCallResult } from "@/types/serverCallResult";
 import axios, { Method } from "axios";
+import { useErrors } from '@/composables/ui/errors'
 
 export function usePublicApi() {
-  const snackbar = useSnackbar();
   const errors = useErrors();
 
   const call = async (method: Method, url: string, data?: any): Promise<ServerCallResult> => {

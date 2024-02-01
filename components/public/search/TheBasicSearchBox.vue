@@ -1,20 +1,11 @@
 <template>
-  <PublicSearchResponsiveMobileSearchBox
-    v-if="breakPoints.isMobile.value"
-    v-bind="{ ...$props }"
-    @toggle-map="emit('toggleMap')"
-  />
+  <PublicSearchResponsiveMobileSearchBox v-if="breakPoints.isMobile.value" v-bind="{ ...$props }" @toggle-map="emit('toggleMap')" />
 
-  <PublicSearchResponsiveDesktopSearchBox
-    v-else
-    v-bind="{ ...$props }"
-    @toggle-map="emit('toggleMap')"
-    :show-map="showMap"
-  />
+  <PublicSearchResponsiveDesktopSearchBox v-else v-bind="{ ...$props }" @toggle-map="emit('toggleMap')" :show-map="showMap" />
 </template>
 <script setup lang="ts">
 import { useBreakpoints } from "~/composables/ui/breakPoints";
-import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   title: string;
@@ -33,19 +24,19 @@ const filterStore = useFilterStore();
 
 watch(
   () => filterStore.currentTags,
-  debounce(() => {
+  () => {
     filterStore.loadAllResults();
-  }),
+  },
   {
     deep: true,
   }
 );
 
 watch(
-  () => filterStore.currentZip,
-  debounce(() => {
+  () => filterStore.currentZips,
+  () => {
     filterStore.loadAllResults();
-  }),
+  },
   {
     deep: true,
   }

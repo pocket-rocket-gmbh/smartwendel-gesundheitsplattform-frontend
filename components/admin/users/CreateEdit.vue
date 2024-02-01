@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { User } from "~/store/searchFilter";
+import { type User } from "~/store/searchFilter";
 import { ResultStatus } from "@/types/serverCallResult";
 import axios from "axios";
 
@@ -68,7 +68,7 @@ const user = useUser();
 
 const allRoles = [
   { name: "Einrichtung", id: "facility_owner" },
-  { name: "Administrator", id: "admin", condition: "admin" },
+  //{ name: "Administrator", id: "admin", condition: "admin" },
   { name: "Super Administrator", id: "care_facility_admin", condition: "care_facility_admin" },
 ];
 

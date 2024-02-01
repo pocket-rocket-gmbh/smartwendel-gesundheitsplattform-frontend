@@ -1,6 +1,4 @@
-import axios from "axios";
 import { defineStore } from "pinia";
-import { ResultStatus } from "~/types/serverCallResult";
 
 export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
@@ -56,33 +54,43 @@ export type Facility = {
 export type Filter = {
   currentSearchTerm: string;
   currentTags: string[];
-  currentZip: string;
+  currentZips: string[];
   filterSort: (typeof filterSortingDirections)[number];
   loading: boolean;
   mapFilter: string;
   currentKinds: FilterKind[];
+  allCategories: any[];
 
   //
   allUnalteredResults: Facility[];
   allResults: Facility[];
   filteredResults: Facility[];
   onlySearchInTitle: boolean;
+
+  allFilters: null | any[];
+  allCommunities: null | any[];
+  mainFilters: null | any[];
 };
 
 const initialFilterState: Filter = {
   currentSearchTerm: "",
   currentTags: [],
-  currentZip: null,
+  currentZips: [],
   filterSort: "A-Z",
   loading: false,
   mapFilter: null,
   currentKinds: [],
+  allCategories: [],
 
   //
   allUnalteredResults: [],
   allResults: [],
   filteredResults: [],
   onlySearchInTitle: false,
+
+  allFilters: null,
+  allCommunities: null,
+  mainFilters: null,
 };
 
 export const useFilterStore = defineStore({
@@ -92,7 +100,7 @@ export const useFilterStore = defineStore({
     filterInfo: (state) => {
       return {
         currentSearchTerm: state.currentSearchTerm,
-        currentZip: state.currentZip,
+        currentZips: state.currentZips,
         currentTags: state.currentTags,
         filterSort: state.filterSort,
         currentKinds: state.currentKinds,
@@ -102,7 +110,7 @@ export const useFilterStore = defineStore({
   actions: {
     setFilterInfo(newFilterInfo: typeof this.filterInfo) {
       this.currentSearchTerm = newFilterInfo.currentSearchTerm;
-      this.currentZip = newFilterInfo.currentZip;
+      this.currentZips = newFilterInfo.currentZips;
       this.currentTags = newFilterInfo.currentTags;
       this.filterSort = newFilterInfo.filterSort;
       this.currentKinds = newFilterInfo.currentKinds;
@@ -133,7 +141,7 @@ export const useFilterStore = defineStore({
     },
     async clearSearch() {
       this.currentSearchTerm = "";
-      this.currentZip = null;
+      this.currentZips = [];
       this.currentTags = [];
       this.mapFilter = null;
 
@@ -154,28 +162,53 @@ export const useFilterStore = defineStore({
         if (index !== -1) this.currentTags.splice(index, 1);
       });
     },
+    async loadAllCommunities() {
+      if (this.allCommunities) return this.allCommunities;
 
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`communities`);
+
+      await api.retrieveCollection();
+
+      this.allCommunities = api.items.value;
+
+      return this.allCommunities;
+    },
+    async loadAllFilters() {
+      if (this.allFilters) return this.allFilters;
+
+      this.allFilters = await getAllFilters();
+
+      return this.allFilters;
+    },
+    async loadMainFilters(filterKind: FilterKind) {
+      if (this.mainFilters) return this.mainFilters;
+
+      this.mainFilters = await getMainFilters("filter_facility", filterKind);
+
+      return this.mainFilters;
+    },
     async checkIfMultipleFacilityFiltersAreSelected() {
       if (!this.currentKinds?.length || !this.currentTags?.length) return [];
 
-      // After the course/event-split, multiple kinds are obsolete
       const filterKind = this.currentKinds[0];
 
-      const mainFilters = await getMainFilters("filter_facility", filterKind);
-      const allFilters = await getAllFilters();
+      const mainFilters = await this.loadMainFilters(filterKind);
+      const allFilters = await this.loadAllFilters();
 
       const allOptions = mainFilters.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
-      // const allAvailableOptions = allOptions.reduce((prev, curr) => {
-      //   return [...prev, ...curr];
-      // }, []);)
 
+      const relevantItems = [];
       for (const block of allOptions) {
         const multipleOccuredInBlock = block.filter((item) => this.currentTags.includes(item.id));
-        if (multipleOccuredInBlock.length > 1) {
-          return multipleOccuredInBlock;
+
+        if (multipleOccuredInBlock.length) {
+          relevantItems.push(multipleOccuredInBlock);
         }
       }
-      return [];
+
+      return relevantItems.flat();
     },
     async loadUnalteredAllResults() {
       const options = {
@@ -191,10 +224,23 @@ export const useFilterStore = defineStore({
 
       this.allUnalteredResults = api.items.value;
     },
-    async loadAllResults() {
-      this.loading = true;
+    async loadAllCategories() {
+      const options = {
+        page: 1,
+        per_page: 1000,
+      };
 
-      const filters = [];
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`categories`);
+
+      await api.retrieveCollection(options as any);
+
+      this.allCategories = api.items.value;
+    },
+
+      async loadAllResults() {
+      this.loading = true;
 
       const multipleFacilityFiltersSelected = await this.checkIfMultipleFacilityFiltersAreSelected();
 
@@ -209,48 +255,21 @@ export const useFilterStore = defineStore({
         });
       }
 
-      if (tagsToFilter.length) {
-        filters.push({
-          field: "care_facility_tag_categories",
-          value: tagsToFilter,
+      this.allResults = this.allUnalteredResults
+        .filter((result) => {
+          return this.currentKinds.length ? this.currentKinds.includes(result.kind) : true;
+        })
+        .filter((result) => {
+          return this.currentZips?.length ? this.currentZips.includes(result?.zip) : true;
+        })
+        .filter((result) => {
+          if (!tagsToFilter.length) return true;
+
+          return tagsToFilter.every((tag) => {
+            return result.tag_category_ids.includes(tag);
+          });
         });
-      }
 
-      const options = {
-        page: 1,
-        per_page: 1000,
-        sort_by: "name",
-        sort_order: this.filterSort === "Z-A" ? "ASC" : "DESC",
-        searchQuery: null as any,
-        concat: false,
-        filters,
-      };
-
-      const api = useCollectionApi();
-      api.setBaseApi(usePublicApi());
-      api.setEndpoint(`care_facilities`);
-      if (this.currentKinds && this.currentKinds.length) {
-        api.setEndpoint(`care_facilities?kind=${this.currentKinds.join(",")}`);
-      }
-
-      await api.retrieveCollection(options as any);
-
-      const allResultsFromApi: Facility[] = api.items.value;
-
-      // const enrichedPossibleResultsPromised = allResultsFromApi.map((result) => {
-      //   api.setEndpoint(`care_facilities/${result.id}`);
-      //   return api.retrieveCollection();
-      // });
-
-      // this.allResults = await Promise.all(enrichedPossibleResultsPromised).then((responses) => {
-      //   return responses
-      //     .map((response) =>
-      //       response.status !== ResultStatus.SUCCESSFUL ? null : (response.data.resource as Facility)
-      //     )
-      //     .filter(Boolean);
-      // });
-
-      this.allResults = allResultsFromApi;
       useNuxtApp().$bus.$emit("filtersUpdated");
 
       this.loading = false;
@@ -261,9 +280,11 @@ export const useFilterStore = defineStore({
       if (this.loading || !this.allResults) return;
 
       const filteredResults: Facility[] = this.allResults
-        .filter((result) => {
-          return result.zip && this.currentZip ? result.zip === this.currentZip : true;
+       .filter((result) => {
+          return this.currentZips?.length ? this.currentZips.includes(result.zip) : true;
         })
+
+        // todo: search in the category name and description
         .filter((result) => {
           return (
             result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
@@ -291,7 +312,7 @@ export const useFilterStore = defineStore({
     resetAllFilters() {
       this.currentSearchTerm = "";
       this.currentTags = [];
-      this.currentZip = null;
+      this.currentZips = [];
       this.filterSort = "A-Z";
       this.loading = false;
       this.mapFilter = null;
@@ -299,6 +320,8 @@ export const useFilterStore = defineStore({
       this.allResults = [];
       this.filteredResults = [];
       this.onlySearchInTitle = false;
+      this.mainFilters = null;
     },
   },
 });
+

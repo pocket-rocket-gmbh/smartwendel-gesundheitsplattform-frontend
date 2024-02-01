@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string[];
@@ -162,7 +162,7 @@ onMounted(async () => {
   setPlaceholderText();
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
-  const allFilters = await getAllFilters();
+  const allFilters = await filterStore.loadAllFilters();
 
   const allOptions = mainFilters.value.map((filter) =>
     allFilters.filter((item) => item.parent_id === filter.id)

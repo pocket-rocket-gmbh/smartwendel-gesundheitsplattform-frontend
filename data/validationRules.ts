@@ -2,6 +2,8 @@ export const rules = {
   required: (value: string) => !!value || "Pflichtangabe",
   counter: (value: string) => value?.length <= 20 || "Maximal 20 Zeichen",
   phoneCounter: (value: string) => value?.length <= 15 || "Maximal 15 Zeichen",
+  excerptCounter:(value: string) => value?.length <= 250 || "Maximal 250 Zeichen",
+  Counter: (value: string) => value?.length <= 15 || "Maximal 15 Zeichen",
   counterStreet: (value: string) => value?.length <= 60 || "Maximal 60 Zeichen",
   zip: (value: string) => value.length === 5 || "Maximal 5 Zeichen",
   email: (value: string) => {
@@ -11,14 +13,25 @@ export const rules = {
   },
   validateNumber: (value: string) => {
     const pattern = /^[0-9]+$/;
-    return pattern.test(value) || "Die Eingabe ist ungültig. Es dürfen keine Sonder- oder Leerzeichen verwendet werden";
+    return (
+      pattern.test(value) ||
+      "Die Eingabe ist ungültig. Es dürfen keine Sonder- oder Leerzeichen verwendet werden"
+    );
   },
   validateEventDuration: (value: string) => {
     const pattern = /^[0-9]+$/;
-    return pattern.test(value) || "Ungültige Eingabe. Außschließlich Zahlen eingeben";
+    return (
+      pattern.test(value) || "Ungültige Eingabe. Außschließlich Zahlen eingeben"
+    );
   },
-  length: (value: string) => !value || value?.length < 1000 || "Die Beschreibung darf höchstens 1000 Zeichen lang sein.",
-  password: (value: string) => !value || value.length >= 6 || "Das Passwort muss mindestens 6 Zeichen haben.",
+  length: (value: string) =>
+    !value ||
+    value?.length < 1000 ||
+    "Die Beschreibung darf höchstens 1000 Zeichen lang sein.",
+  password: (value: string) =>
+    !value ||
+    value.length >= 6 ||
+    "Das Passwort muss mindestens 6 Zeichen haben.",
   fileRequired: (v: File) => (v && v.size > 0) || "Pflichtangabe",
   isUrl: (url: string) => {
     const urlRegex =

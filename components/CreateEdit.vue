@@ -32,8 +32,7 @@
             density="compact"
             class="save-hint"
           >
-            Bitte denke daran regelmäßig zu speichern damit keine Daten verloren
-            gehen!
+          Bitte denke daran regelmäßig zu speichern, damit keine Daten verloren gehen!
           </v-alert>
           <v-btn variant="outlined" @click="emitClose()"> Schließen </v-btn>
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
@@ -79,7 +78,7 @@ import { ResultStatus } from "@/types/serverCallResult";
 import { areObjectsEqual, deepToRaw } from "~/utils/global.utils";
 import { VForm } from "vuetify/lib/components/index.mjs";
 import { useAdminStore } from "~/store/admin";
-import { CreateEditFacility } from "~/types/facilities";
+import type { CreateEditFacility } from "~/types/facilities";
 import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const statusLoadingFilter = useStatusLoadingFilter();

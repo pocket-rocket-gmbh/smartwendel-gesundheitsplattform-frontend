@@ -74,9 +74,9 @@
 </template>
 
 <script setup lang="ts">
-import { Facility, FilterKind, useFilterStore } from "~/store/searchFilter";
+import { type Facility, type FilterKind, useFilterStore } from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
-import { CollapsibleListItem } from "../../../types/collapsibleList";
+import type { CollapsibleListItem } from "../../../types/collapsibleList";
 import iconFilter from "@/assets/icons/icon_filter.svg";
 
 const props = defineProps<{
@@ -166,7 +166,7 @@ const getItems = async () => {
   const serviceFilters = filters.filter(
     (filter) => filter.filter_type === "filter_service"
   );
-  const allFilters = await getAllFilters();
+  const allFilters = await filterStore.loadAllFilters();
 
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 

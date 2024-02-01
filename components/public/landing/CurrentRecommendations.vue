@@ -12,12 +12,12 @@
         v-for="(item, index) in items"
         :key="index"
       >
-        <a :href="item.content.link" class="is-white is-clickable">
+        <div @click="goToLink(item.content.link)" class="is-white is-clickable">
           <img class="is-clickable icons" :src="item.content.image" width="120" />
           <div class="font-weight-medium general-font-size">
             {{ item.content.heading }}
           </div>
-        </a>
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +28,12 @@ import image2 from "@/assets/images/current-recommendations/icon_nutrition.svg";
 import image3 from "@/assets/images/current-recommendations/icon_mental_health.svg";
 import image4 from "@/assets/images/current-recommendations/icon_health_course.svg";
 import image5 from "@/assets/images/current-recommendations/icon_free_time.svg";
+
+const router = useRouter();
+
+const goToLink = (item: string) => {
+  router.push({ path: item });
+};
 
 const items = [
   {
