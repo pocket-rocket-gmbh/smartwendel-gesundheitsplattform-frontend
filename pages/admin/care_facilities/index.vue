@@ -199,7 +199,7 @@ const fields = [
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
-  { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
+  { prop: "updated_at", text: "Letzte Aktualisierung", value: "updated_at", type: "datetime" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",
