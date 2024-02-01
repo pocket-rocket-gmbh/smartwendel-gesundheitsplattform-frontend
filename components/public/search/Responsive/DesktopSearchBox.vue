@@ -95,25 +95,28 @@
                       </v-btn>
                     </v-col>
                   </v-row>
-                  <div class="d-flex community-filter-options">
-                    <div v-for="community in allCommunities" :key="community.id">
-                      <label class="option ma-n1">
-                        <v-btn
-                          hide-details
-                          @click.prevent="handleOptionSelectCommunity(community)"
-                          density="compact"
-                          class="options-select general-font-size ma-2 text-none font-weight-light"
-                          :class="{
-                            'is-selected': filterStore.currentZips.includes(
-                              community.zip
-                            ),
-                          }"
-                        >
-                          {{ community.name }}
-                        </v-btn>
-                      </label>
+
+                  <div v-if="allCommunities?.length">
+                    <div class="d-flex community-filter-options">
+                      <div v-for="community in allCommunities" :key="community.id">
+                        <label class="option ma-n1">
+                          <v-btn
+                            hide-details
+                            @click.prevent="handleOptionSelectCommunity(community)"
+                            density="compact"
+                            class="options-select general-font-size ma-2 text-none font-weight-light"
+                            :class="{
+                              'is-selected': filterStore.currentZips.includes(
+                                community.zip
+                              ),
+                            }"
+                          >
+                            {{ community.name }}
+                          </v-btn>
+                        </label>
+                      </div>
+                      <v-divider class="my-2"></v-divider>
                     </div>
-                    <v-divider class="my-2"></v-divider>
                   </div>
                 </div>
               </div>
@@ -282,19 +285,13 @@ const copySearchFilterUrl = () => {
 };
 
 const allCommunities = computed(() => {
-  const filteredCommunites =  filterStore.allCommunities.filter((community) => community.care_facilities_active_count > 0)
-    .map((community) => community);
-  const communityHasTgas = filterStore.filteredResults.filter((result) => result.zip).map((result) => result.zip);
-   if (communityHasTgas.length && filterStore.currentTags.length) {
-    return filteredCommunites.filter((community) => communityHasTgas.includes(community.zip));
-  } else {
+  const filteredCommunites =  filterStore.allCommunities.filter((community) => community.care_facilities_active_count > 0 );
     return filteredCommunites;
-  }
 });
+
 
 onMounted(async () => {
   communities.value = await filterStore.loadAllCommunities();
-
   updatePopoverWidth();
   setFilterTitle();
 
