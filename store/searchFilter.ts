@@ -59,6 +59,7 @@ export type Filter = {
   loading: boolean;
   mapFilter: string;
   currentKinds: FilterKind[];
+  allCategories: any[];
 
   //
   allUnalteredResults: Facility[];
@@ -79,6 +80,7 @@ const initialFilterState: Filter = {
   loading: false,
   mapFilter: null,
   currentKinds: [],
+  allCategories: [],
 
   //
   allUnalteredResults: [],
@@ -222,7 +224,22 @@ export const useFilterStore = defineStore({
 
       this.allUnalteredResults = api.items.value;
     },
-    async loadAllResults() {
+    async loadAllCategories() {
+      const options = {
+        page: 1,
+        per_page: 1000,
+      };
+
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`categories`);
+
+      await api.retrieveCollection(options as any);
+
+      this.allCategories = api.items.value;
+    },
+
+      async loadAllResults() {
       this.loading = true;
 
       const multipleFacilityFiltersSelected = await this.checkIfMultipleFacilityFiltersAreSelected();
@@ -242,10 +259,8 @@ export const useFilterStore = defineStore({
         .filter((result) => {
           return this.currentKinds.length ? this.currentKinds.includes(result.kind) : true;
         })
-     .filter((result) => {
+        .filter((result) => {
           return this.currentZips?.length ? this.currentZips.includes(result?.zip) : true;
-          
-          
         })
         .filter((result) => {
           if (!tagsToFilter.length) return true;
@@ -268,6 +283,8 @@ export const useFilterStore = defineStore({
        .filter((result) => {
           return this.currentZips?.length ? this.currentZips.includes(result.zip) : true;
         })
+
+        // todo: search in the category name and description
         .filter((result) => {
           return (
             result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
@@ -307,3 +324,4 @@ export const useFilterStore = defineStore({
     },
   },
 });
+
