@@ -50,6 +50,7 @@ const initialize = async () => {
     useFilterStore().loadAllFilters(),
     useFilterStore().loadAllCommunities(),
     useFilterStore().loadUnalteredAllResults(),
+    useFilterStore().loadAllCategories(),
     getTooltips(),
   ]);
 };
