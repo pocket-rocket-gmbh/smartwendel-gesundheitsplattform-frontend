@@ -17,7 +17,9 @@
         v-if="!searchQuery"
         v-model="pagination.itemsPerPage"
         @update:model-value="getItems"
-        :items="[10, 20, 30, 100]"
+        :items="paginationValues"
+        item-title="text"
+        item-value="value"
         density="compact"
         hide-details
         class="mx-1"
@@ -55,13 +57,16 @@
           :class="{ 'is-clickable': field.prop }"
           @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
-          <div class="table-head-item">
+          <div class="table-head-item" :class="sortBy === field.prop ? 'selected-sort' : ''">
             {{ field.text }}
             <div
               v-if="sortBy === field.prop"
               class="chevron"
-              :class="{ up: sortOrder === 'desc' }"
+              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc'}"
             ></div>
+            <div v-else-if="field.text">
+              <div class="chevron"></div>
+            </div>
           </div>
         </th>
         <th width="15px" v-if="!disableEdit"></th>
@@ -513,7 +518,6 @@ const getItems = async () => {
     concat: false,
     filters: [] as any[],
   };
-
   adminStore.loading = true;
   const response = await api.retrieveCollection(options);
 
@@ -533,6 +537,14 @@ const getItems = async () => {
   emit("itemsLoaded", items.value);
   loading.value = false;
 };
+
+
+const paginationValues = ref([
+  { text: "10", value: 10 },
+  { text: "20", value: 20 },
+  { text: "30", value: 30 },
+  { text: "Alle", value: 9999 },
+]);
 
 watch(
   () => props.searchQuery,
@@ -597,13 +609,24 @@ defineExpose({ resetActiveItems, getItems });
     margin-left: 0.5rem
     width: 20px
     height: 20px
-    background-image: url("@/assets/icons/chevron-down.svg")
+    background-image: url("@/assets/icons/minus.svg")
     background-repeat: no-repeat
     background-position: center
     transition: transform 150ms linear
+    border-radius: 50%
+    background-color: #E7E8E7
 
     &.up
-      transform: rotate(180deg)
+      background-image: url("@/assets/icons/chevron-down.svg")
+      background-color: #E7E8E7
+      
+    &.down
+      background-image: url("@/assets/icons/chevron-up.svg")
+      background-color: #E7E8E7
+
+  
+.selected-sort
+  color: #8ab61d
 
 
 .onboard
