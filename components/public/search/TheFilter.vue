@@ -79,12 +79,15 @@
       </v-btn>
     </div>
     <div>
+      <span v-if="filterStore.filteredResults.length === 0 && !loading" class="general-font-size font-weight-medium is-dark-grey">
+        Keine weiteren Filter gefunden
+      </span>
       <span
-        v-if="filterStore.filteredResults.length"
+        v-if="filterStore.filteredResults.length && loading"
         class="general-font-size font-weight-medium is-dark-grey"
         >Verfeinere hier deine Suche:
       </span>
-      <v-skeleton-loader :loading="loading" type="article" class="filter-wrapper">
+      <v-skeleton-loader v-if="filterStore.filteredResults.length" :loading="loading" type="article" class="filter-wrapper">
         <div class="filter-tiles">
           <div v-for="filter in availableItemsForServiceList" class="filter-group">
             <div v-for="item in filter.next" class="mt-5 filter-selections">
@@ -100,13 +103,13 @@
                 :class="[breakPoints.width.value <= 1280 ? 'd-flex justify-center' : '']"
                 >{{ item.title }}</span
               >
-              <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1">
+              <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1"  >
                 <v-col
                   cols="12"
                   lg="6"
                   md="12"
                   class="align-center column-items pr-1 pt-1"
-                  v-for="subItem in item.next"
+                  v-for="subItem in item.next.filter((subItem) => parseInt(subItem.care_facilities_count) > 0)"
                   v-auto-animate
                 >
                   <div
