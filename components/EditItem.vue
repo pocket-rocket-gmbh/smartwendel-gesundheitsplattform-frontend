@@ -15,7 +15,7 @@
         durch den Landkreis geprüft und freigegeben. So lange stehen deine Inhalte nicht
         zur Verfügung.
       </v-card-text>
-      <v-card-text v-if="type === 'slug'">Bitte beachten: Wenn du...... </v-card-text>
+      <v-card-text v-if="type === 'slug'">Bitte beachten: Wenn du die bestehende URL bearbeitest, wird keine automatische Weiterleitung zur neuen URL erzeugt. Die alte URL wird nicht mehr funktionieren und bestehende Verlinkungen auf bspw. sozialen Medien werden dadurch unwirksam.</v-card-text>
       <v-card-text v-else
         >Bitte beachten: Wenn du die Adresse deiner Einrichtung änderst, wird die
         Einrichtung wieder durch den Landkreis geprüft und freigegeben. So lange stehen
