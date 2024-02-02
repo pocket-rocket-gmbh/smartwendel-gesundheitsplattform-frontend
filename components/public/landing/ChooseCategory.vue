@@ -5,6 +5,7 @@
       :filtered-items="filterStore.filteredResults"
       :default-route-to="'/public/search'"
       @update:model-value="handleInput"
+      :filtered-categories="filterStore.filteredCategories" 
     />
   </div>
 </template>
@@ -17,6 +18,7 @@ const filterStore = useFilterStore();
 const handleInput = () => {
   filterStore.onlySearchInTitle = true;
   filterStore.loadFilteredResults();
+  filterStore.loadFilteredCategories();
 };
 
 onMounted(async () => {
