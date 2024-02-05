@@ -52,6 +52,7 @@ const initialize = async () => {
     useFilterStore().loadUnalteredAllResults(),
     useFilterStore().loadAllCategories(),
     getTooltips(),
+    useFilterStore().resetAllFilters(),
   ]);
 };
 

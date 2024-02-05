@@ -82,20 +82,6 @@
                   v-if="showPopover"
                   v-auto-animate
                 >
-                  <v-row>
-                    <v-col class="d-flex justify-end">
-                      <v-btn
-                        @click="showPopover = false"
-                        hide-details
-                        density="compact"
-                        color="primary"
-                        class="options-select general-font-size ma-2 text-none font-weight-light"
-                      >
-                        <span>Fertig</span>
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-
                   <div v-if="allCommunities?.length">
                     <div class="d-flex community-filter-options">
                       <div v-for="community in allCommunities" :key="community.id">
@@ -115,7 +101,7 @@
                           </v-btn>
                         </label>
                       </div>
-                      <v-divider class="my-2"></v-divider>
+
                     </div>
                   </div>
                 </div>
@@ -171,9 +157,22 @@
     <v-col class="d-flex justify-center align-center bottom-actions mx-3">
       <LoadingSpinner v-if="filterStore.loading" />
       <span class="general-font-size" v-else-if="filterStore.filteredResults.length"
-        >{{ filterStore.filteredResults.length }} Treffer</span
-      >
-      <span v-else-if="!appStore.loading">
+        >{{ filterStore.filteredResults.length }}
+        <span v-if="filterStore.currentKinds.includes('facility')"> Anbieter </span>
+        <span v-else-if="filterStore.currentKinds.includes('event')">
+          <span v-if="filterStore.filteredResults.length === 1">Veranstaltung</span>
+          <span v-else>Veranstaltungen</span>
+        </span>
+        <span v-else-if="filterStore.currentKinds.includes('news')">
+          <span v-if="filterStore.filteredResults.length === 1">Beitrag</span>
+          <span v-else>Beiträge</span>
+        </span>
+        <span v-else-if="filterStore.currentKinds.includes('course')">
+          <span v-if="filterStore.filteredResults.length === 1">Kurs</span>
+          <span v-else>Kurse</span>
+        </span>
+      </span>
+      <span class="general-font-size" v-else-if="!appStore.loading">
         Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
       </span>
       <span v-else> Bitte warten... </span>

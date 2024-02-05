@@ -42,7 +42,7 @@
             <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken
           </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin" nuxt class="general-font-size is-dark-grey"> Admin-Bereich </v-list-item>
+          <v-list-item link to="/admin" nuxt class="general-font-size is-dark-grey"> Dashboard </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin/filter/facilities" nuxt class="general-font-size is-dark-grey">
             Einrichtungsfilter

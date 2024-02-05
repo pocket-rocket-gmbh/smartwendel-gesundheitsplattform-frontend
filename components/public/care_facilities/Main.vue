@@ -2,7 +2,8 @@
   <div class="main-wrapper">
     <v-row class="heading">
       <v-col class="d-flex align-center">
-        <span class="general-font-size font-weight-medium is-dark-grey d-md-block d-none text-wrap">{{ careFacility?.name }}</span>
+        <span class="general-font-size text-h4
+         font-weight-medium is-dark-grey d-md-block d-none text-wrap">{{ careFacility?.name }}</span>
         <span v-if="careFacility?.billable_through_health_insurance_approved">
           <v-icon size="x-large" class="pl-8" color="primary"
             >mdi-check-decagram-outline</v-icon
