@@ -2,12 +2,22 @@
   <Loading v-if="filterStore.loading" />
   <div
     class="entries general-font-size"
-    v-if="!(!filterStore.loading && !filterStore.filteredResults.length)"
+    v-if="!(!filterStore.loading && !sortedResults.length)"
   >
     <div class="d-flex actions">
+      <div v-if="!filterStore.currentKinds.includes('facility')"  class="sort-order is-clickable d-flex align-center"
+        @click="toggleFilterSort">
+        <v-icon color="primary" v-show="sortDirection === 'asc' || sortDirection === null"
+          >mdi-sort-calendar-ascending</v-icon
+        >
+        <v-icon  color="primary" v-show="sortDirection === 'desc'"
+          >mdi-sort-calendar-descending</v-icon
+        >
+      </div>
       <div
+        v-if="filterStore.currentKinds.includes('facility')"
         class="sort-order is-clickable d-flex align-center"
-        @click="toggleFilterSort"
+        @click="toogleFilterSortFacilities"
       >
         <span>{{ filterStore.filterSort }}</span>
         <v-icon v-show="filterStore.filterSort === 'A-Z'"
@@ -18,7 +28,7 @@
         >
       </div>
     </div>
-    <template v-if="filterStore.filteredResults.length > 0">
+    <template v-if="sortedResults.length > 0">
       <div
         v-if="!filterStore.currentKinds.includes('facility')"
         class="boxes"
@@ -27,7 +37,7 @@
         <PublicContentBox
           :size="12"
           class=""
-          v-for="category in filterStore.filteredResults"
+          v-for="category in sortedResults"
           :key="category.id"
           :item="category"
         />
@@ -35,7 +45,7 @@
       <div v-else class="boxes">
         <div
           class="item"
-          v-for="careFacility in filterStore.filteredResults"
+          v-for="careFacility in sortedResults"
           :key="careFacility.id"
         >
           <v-row class="item-row">
@@ -191,9 +201,42 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
   }, 100);
 };
 
+
+const sortDirection = ref(null);
+
+const sortedResults = computed(() => {
+  return filterStore.filteredResults.sort((a: any, b: any) => {
+    if (sortDirection.value === "asc") {
+      return (
+        new Date(a.event_dates[0]).valueOf() -
+        new Date(b.event_dates[0]).valueOf()
+      );
+    } else if (sortDirection.value === "desc") {
+      return (
+        new Date(b.event_dates[0]).valueOf() -
+        new Date(a.event_dates[0]).valueOf()
+      );
+    }
+    return 0;
+  });
+});
+
 const toggleFilterSort = () => {
+  if (sortDirection.value === "asc") {
+    sortDirection.value = "desc";
+  } else {
+    sortDirection.value = "asc";
+  }
+};
+
+const toogleFilterSortFacilities = () => {
   filterStore.toggleSort();
 };
+
+onMounted(() => {
+  sortDirection.value = "asc";
+});
+
 </script>
 
 <style lang="sass" scoped>
