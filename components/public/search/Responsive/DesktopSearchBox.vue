@@ -301,7 +301,6 @@ onMounted(async () => {
     height: 20px
     position: absolute
     right: 0.75rem
-    background-image: url("@/assets/icons/chevron-down.svg")
     background-repeat: no-repeat
     background-position: center
     pointer-events: none
