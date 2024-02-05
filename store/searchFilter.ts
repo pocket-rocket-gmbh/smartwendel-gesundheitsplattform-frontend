@@ -262,7 +262,7 @@ export const useFilterStore = defineStore({
         .filter((community) => {
           if (!this.filteredResults?.length) return true;
 
-          return this.filteredResults.find((result) => result.community_id === community.id);
+          return this.filteredResults.find((result) => result.community_id === community.id || this.currentZips.includes(result.zip));
         });
       return this.filteredCommunities;
     },
