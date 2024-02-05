@@ -87,8 +87,9 @@
         class="general-font-size font-weight-medium is-dark-grey"
         >Verfeinere hier deine Suche:
       </span>
-      <v-skeleton-loader v-if="filterStore.filteredResults.length" :loading="loading" type="article" class="filter-wrapper">
-        <div class="filter-tiles">
+      <v-skeleton-loader v-if="!filterStore.filteredResults.length" :loading="loading" type="article" class="filter-wrapper"> </v-skeleton-loader>
+        <div class="filter-tiles" v-else>
+         
           <div v-for="filter in availableItemsForServiceList" class="filter-group">
             <div v-for="item in filter.next" class="mt-5 filter-selections">
               <span
@@ -152,9 +153,8 @@
             </div>
           </div>
         </div>
-      </v-skeleton-loader>
+      </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -367,16 +367,6 @@ const toggleSelection = (item: CollapsibleListItem) => {
   }
 };
 
-const emitResetFilter = () => {
-  filterStore.clearSearch();
-};
-
-const copySearchFilterUrl = () => {
-  snackbar.showSuccess("Filter in Zwischenablage gespeichert!");
-  const url = filterStore.getUrlQuery();
-  navigator.clipboard.writeText(url);
-};
-
 const checkIfFiltersAreInFacilities = (
   filters: CollapsibleListItem[],
   filterIdsInFacility: string[]
@@ -400,6 +390,19 @@ const checkIfFiltersAreInFacilities = (
   return filters;
 };
 
+
+const emitFiltersUpdated = () => {
+  useNuxtApp().$bus.$on("filtersUpdated", () => {
+    availableItemsForServiceList.value = [
+      ...deepToRaw(itemsForServiceList.value),
+    ];
+    checkIfFiltersAreInFacilities(
+      availableItemsForServiceList.value,
+       filterStore.allResults.map((facility) => facility.tag_category_ids).flat()
+    );
+  });
+};
+
 onMounted(async () => {
   loading.value = true;
   await getItems();
@@ -409,15 +412,8 @@ onMounted(async () => {
     ...deepToRaw(itemsForServiceList.value),
   ];
 
-  useNuxtApp().$bus.$on("filtersUpdated", () => {
-    availableItemsForServiceList.value = [
-      ...deepToRaw(itemsForServiceList.value),
-    ];
-    checkIfFiltersAreInFacilities(
-      availableItemsForServiceList.value,
-      filterStore.allResults.map((facility) => facility.tag_category_ids).flat()
-    );
-  });
+  emitFiltersUpdated();
+
 });
 </script>
 
