@@ -2,9 +2,19 @@ import { defineStore } from "pinia";
 
 export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
-export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
+export type CategoriesFilter =
+  | "category"
+  | "subCategory"
+  | "subSubCategory"
+  | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
-export type FilterType = "filter_facility" | "filter_service" | "certificate" | "documents" | "opening_hours" | "phone";
+export type FilterType =
+  | "filter_facility"
+  | "filter_service"
+  | "certificate"
+  | "documents"
+  | "opening_hours"
+  | "phone";
 export type FilterTag = {
   id: string;
   menu_order: number;
@@ -60,6 +70,7 @@ export type Filter = {
   mapFilter: string;
   currentKinds: FilterKind[];
   allCategories: any[];
+  filteredCategories: any[];
 
   //
   allUnalteredResults: Facility[];
@@ -81,6 +92,7 @@ const initialFilterState: Filter = {
   mapFilter: null,
   currentKinds: [],
   allCategories: [],
+  filteredCategories: [],
 
   //
   allUnalteredResults: [],
@@ -197,11 +209,15 @@ export const useFilterStore = defineStore({
       const mainFilters = await this.loadMainFilters(filterKind);
       const allFilters = await this.loadAllFilters();
 
-      const allOptions = mainFilters.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
+      const allOptions = mainFilters.map((filter) =>
+        allFilters.filter((item) => item.parent_id === filter.id)
+      );
 
       const relevantItems = [];
       for (const block of allOptions) {
-        const multipleOccuredInBlock = block.filter((item) => this.currentTags.includes(item.id));
+        const multipleOccuredInBlock = block.filter((item) =>
+          this.currentTags.includes(item.id)
+        );
 
         if (multipleOccuredInBlock.length) {
           relevantItems.push(multipleOccuredInBlock);
@@ -236,13 +252,32 @@ export const useFilterStore = defineStore({
 
       await api.retrieveCollection(options as any);
 
-      this.allCategories = api.items.value;
+      this.allCategories = api.items.value
+        .map((item) => {
+          return item.sub_sub_categories;
+        })
+        .flat();
     },
 
-      async loadAllResults() {
+    loadFilteredCategories() {
+      if (!this.allCategories.length) return;
+      this.filteredCategories = this.allCategories.filter((result) => {
+        return (
+          result.name
+            .toUpperCase()
+            .includes(this.currentSearchTerm.toUpperCase()) ||
+          result.description
+            ?.toUpperCase()
+            .includes(this.currentSearchTerm.toUpperCase())
+        );
+      });
+    },
+
+    async loadAllResults() {
       this.loading = true;
 
-      const multipleFacilityFiltersSelected = await this.checkIfMultipleFacilityFiltersAreSelected();
+      const multipleFacilityFiltersSelected =
+        await this.checkIfMultipleFacilityFiltersAreSelected();
 
       const tagsToFilter = [...this.currentTags];
 
@@ -257,10 +292,14 @@ export const useFilterStore = defineStore({
 
       this.allResults = this.allUnalteredResults
         .filter((result) => {
-          return this.currentKinds.length ? this.currentKinds.includes(result.kind) : true;
+          return this.currentKinds.length
+            ? this.currentKinds.includes(result.kind)
+            : true;
         })
         .filter((result) => {
-          return this.currentZips?.length ? this.currentZips.includes(result?.zip) : true;
+          return this.currentZips?.length
+            ? this.currentZips.includes(result?.zip)
+            : true;
         })
         .filter((result) => {
           if (!tagsToFilter.length) return true;
@@ -280,27 +319,40 @@ export const useFilterStore = defineStore({
       if (this.loading || !this.allResults) return;
 
       const filteredResults: Facility[] = this.allResults
-       .filter((result) => {
-          return this.currentZips?.length ? this.currentZips.includes(result.zip) : true;
+        .filter((result) => {
+          return this.currentZips?.length
+            ? this.currentZips.includes(result.zip)
+            : true;
         })
-
-        // todo: search in the category name and description
         .filter((result) => {
           return (
-            result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
+            result.name
+              .toUpperCase()
+              .includes(this.currentSearchTerm.toUpperCase()) ||
             (!this.onlySearchInTitle &&
-              (result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
-                result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
+              (result.description
+                ?.toUpperCase()
+                .includes(this.currentSearchTerm.toUpperCase()) ||
+                result.tags.find((tag) =>
+                  tag.name
+                    .toUpperCase()
+                    .includes(this.currentSearchTerm.toUpperCase())
+                )))
           );
         })
+
         .filter((facility) => {
           if (!filterCategories?.length) return true;
 
-          return filterCategories.some((category) => facility.tag_category_ids.includes(category.id));
+          return filterCategories.some((category) =>
+            facility.tag_category_ids.includes(category.id)
+          );
         });
 
       if (this.mapFilter) {
-        this.filteredResults = filteredResults.filter((facility) => facility.id === this.mapFilter);
+        this.filteredResults = filteredResults.filter(
+          (facility) => facility.id === this.mapFilter
+        );
         return;
       }
 
@@ -321,7 +373,7 @@ export const useFilterStore = defineStore({
       this.filteredResults = [];
       this.onlySearchInTitle = false;
       this.mainFilters = null;
+      this.filteredCategories = [];
     },
   },
 });
-
