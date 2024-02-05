@@ -20,20 +20,7 @@
       v-if="showPopover"
       v-auto-animate
     >
-      <v-row>
-        <v-col class="d-flex justify-end">
-          <v-btn
-            @click="showPopover = false"
-            hide-details
-            density="compact"
-            color="primary"
-            class="options-select general-font-size ma-2 text-none font-weight-light"
-          >
-            <span>Fertig</span>
-          </v-btn>
-        </v-col>
-      </v-row>
-      <div class="filters">
+      <div class="filters filter-wrap">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
           <div
             v-if="hasActiveOptions(filter.id)"
@@ -91,6 +78,19 @@
           </div>
         </div>
       </div>
+      <v-row class="done-button">
+        <v-col class="d-flex justify-end">
+          <v-btn
+            @click="showPopover = false"
+            hide-details
+            density="compact"
+            color="primary"
+            class="options-select general-font-size ma-2 text-none font-weight-light"
+          >
+            <span>Fertig</span>
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-row v-if="loadingFilters">
         <v-col cols="12" class="d-flex justify-center">
           <LoadingSpinner> Filter werden geladen ... </LoadingSpinner>
@@ -340,5 +340,10 @@ onMounted(async () => {
 .is-selected {
   background-color: #8ab61d !important;
   color: white !important;
+}
+
+.filter-wrap {
+  max-height: 500px;
+  overflow-y: auto;
 }
 </style>
