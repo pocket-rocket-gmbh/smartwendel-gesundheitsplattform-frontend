@@ -83,7 +83,7 @@
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
-            <div class="d-flex align-center my-2">
+            <div class="d-flex align-center my-4">
               <span class="general-font-size is-dark-grey font-weight-bold mr-3">Link zur Einrichtung: </span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
