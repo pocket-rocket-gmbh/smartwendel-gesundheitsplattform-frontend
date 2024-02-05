@@ -22,10 +22,7 @@
     >
       <div class="filters filter-wrap">
         <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div
-            v-if="hasActiveOptions(filter.id)"
-            class="filter-name my-1 font-weight-bold"
-          >
+          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
             {{ filter.name }}
 
             <v-btn
@@ -36,9 +33,7 @@
               class="ma-2"
               :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
             >
-              <span>
-                {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span
-              >
+              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
             </v-btn>
           </div>
           <div
@@ -47,13 +42,7 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label
-              class="option ma-n1"
-              v-for="option in filterOptions.find(
-                ({ parentId }) => parentId === filter.id
-              )?.options"
-              :key="option.id"
-            >
+            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id)?.options" :key="option.id">
               <v-btn
                 v-if="option?.care_facilities_active_count > '0'"
                 :model-value="modelValue.includes(option.id)"
@@ -65,9 +54,7 @@
                   'is-selected': modelValue.includes(option.id),
                 }"
               >
-                <p v-if="loadingFilters" class="waiting general-font-size">
-                  <span>.</span><span>.</span><span>.</span>
-                </p>
+                <p v-if="loadingFilters" class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
 
                 <span v-else>
                   {{ option.name }}
@@ -138,13 +125,8 @@ const setPlaceholderText = () => {
 };
 
 const hasActiveOptions = (filterId: string) => {
-  const options = filterOptions.value.find(
-    ({ parentId }) => parentId === filterId
-  )?.options;
-  return (
-    options &&
-    options.some((option) => Number(option?.care_facilities_active_count) > 0)
-  );
+  const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
+  return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
 };
 
 const showPopover = ref(false);
@@ -165,15 +147,11 @@ const handleClearTermSearch = () => {
   return;
 };
 const handleOptionSelect = (option: Filter) => {
-  const indexOfAlreadySetFilter = props.modelValue.findIndex(
-    (item) => item === option.id
-  );
+  const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
 
   if (indexOfAlreadySetFilter !== -1) {
     props.modelValue.splice(indexOfAlreadySetFilter, 1);
-    multipleSelections.value = multipleSelections.value?.filter(
-      (item) => item.id !== option.id
-    );
+    multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
   } else {
     props.modelValue.push(option.id);
     multipleSelections.value.push(option);
@@ -183,12 +161,8 @@ const handleOptionSelect = (option: Filter) => {
 };
 
 const handleToggleAll = (filter: any) => {
-  const options = filterOptions.value.find(
-    ({ parentId }) => parentId === filter.id
-  )?.options;
-  const relevantOptions = options.filter(
-    (option) => !!option?.care_facilities_active_count
-  );
+  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
   const selectAll = !areAllSelected(filter);
 
@@ -200,17 +174,13 @@ const handleToggleAll = (filter: any) => {
     });
   } else {
     relevantOptions.forEach((option) => {
-      const indexOfAlreadySetFilter = props.modelValue.findIndex(
-        (item) => item === option.id
-      );
+      const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
       if (indexOfAlreadySetFilter !== -1) {
         props.modelValue.splice(indexOfAlreadySetFilter, 1);
       }
     });
 
-    multipleSelections.value = multipleSelections.value.filter(
-      (item) => !relevantOptions.find((option) => option.id === item.id)
-    );
+    multipleSelections.value = multipleSelections.value.filter((item) => !relevantOptions.find((option) => option.id === item.id));
   }
 
   emit(
@@ -220,30 +190,32 @@ const handleToggleAll = (filter: any) => {
 };
 
 const areAllSelected = (filter: any) => {
-  const options = filterOptions.value.find(
-    ({ parentId }) => parentId === filter.id
-  )?.options;
-  const relevantOptions = options.filter(
-    (option) => !!option?.care_facilities_active_count
-  );
+  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
-  return relevantOptions.every((option) =>
-    multipleSelections.value.find((item) => item.id === option.id)
-  );
+  return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
 };
 
 watch(
   () => props.modelValue,
   () => {
     multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
-      const foundOptions = curr.options.filter((option) =>
-        props.modelValue.includes(option.id)
-      );
+      const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
       return [...prev, ...foundOptions];
     }, [] as Filter[]);
   }
 );
 
+watch(
+  () => filterStore.currentTags,
+  async () => {
+    await filterStore.loadAllResults();
+    filterStore.loadFilteredCommunities();
+  },
+  {
+    deep: true,
+  }
+);
 
 watch(
   () => filterStore.currentZips,
@@ -252,8 +224,7 @@ watch(
     handleSetFilters();
   },
   { deep: true }
-)
-
+);
 
 const handleSetFilters = async () => {
   loadingFilters.value = true;
@@ -261,17 +232,13 @@ const handleSetFilters = async () => {
 
   const allFilters = await filterStore.loadAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) =>
-    allFilters.filter((item) => item.parent_id === filter.id)
-  );
+  const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
 
   filterOptions.value = [];
   allOptions.forEach((options, index) => {
     const filteredOptions = options.filter((option) => {
-      return filterStore.filteredResults.find((filteredResult) => {
-        return filteredResult.tag_category_ids.find(
-          (tagCategoryId) => tagCategoryId === option.id
-        );
+      return filterStore.allResults.find((filteredResult) => {
+        return filteredResult.tag_category_ids.find((tagCategoryId) => tagCategoryId === option.id);
       });
     });
 
@@ -291,9 +258,7 @@ const handleSetFilters = async () => {
   }, [] as Filter[]);
 
   const foundFilters = allAvailableOptions.filter((option) => {
-    const doesInclude = props.modelValue.find(
-      (item: string) => item === option.id
-    );
+    const doesInclude = props.modelValue.find((item: string) => item === option.id);
     return doesInclude;
   });
 
@@ -306,6 +271,9 @@ const handleSetFilters = async () => {
 
 onMounted(async () => {
   handleSetFilters();
+
+  await filterStore.loadAllCommunities();
+  filterStore.loadFilteredCommunities();
 });
 </script>
 

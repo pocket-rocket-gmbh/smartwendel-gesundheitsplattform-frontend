@@ -38,27 +38,17 @@
             <label class="label is-white">
               <div class="search-term general-font-size">
                 <p v-if="filterTitle">{{ filterTitle }}</p>
-                <p v-else class="waiting general-font-size">
-                  <span>.</span><span>.</span><span>.</span>
-                </p>
+                <p v-else class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
               </div>
             </label>
-            <FacilityFilterSelection
-              v-model="filterStore.currentTags"
-              :popover-width="popoverWidth"
-              :filter-kind="filterKind"
-            />
+            <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" :filter-kind="filterKind" />
           </div>
         </v-col>
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
           <div class="field general-font-size">
             <label class="label is-white general-font-size">Gemeinde</label>
             <div class="select-wrapper">
-              <div
-                class="popover general-font-size"
-                ref="popoverParentRef2"
-                v-auto-animate
-              >
+              <div class="popover general-font-size" ref="popoverParentRef2" v-auto-animate>
                 <div
                   class="input"
                   @click="
@@ -67,24 +57,16 @@
                   "
                 >
                   <div class="input-title">
-                    {{
-                      getAllSelectedCommunitiesName(filterStore.currentZips) ||
-                      "Gemeinde wählen"
-                    }}
+                    {{ getAllSelectedCommunitiesName(filterStore.currentZips) || "Gemeinde wählen" }}
                   </div>
                   <div class="actions">
                     <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
                   </div>
                 </div>
-                <div
-                  class="popover-content general-font-size"
-                  :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
-                  v-if="showPopover"
-                  v-auto-animate
-                >
-                  <div v-if="allCommunities?.length">
+                <div class="popover-content general-font-size" :width="popoverWidth ? `${popoverWidth}px` : 'max-content'" v-if="showPopover" v-auto-animate>
+                  <div v-if="filterStore.filteredCommunities?.length">
                     <div class="d-flex community-filter-options">
-                      <div v-for="community in allCommunities" :key="community.id">
+                      <div v-for="community in filterStore.filteredCommunities" :key="community.id">
                         <label class="option ma-n1">
                           <v-btn
                             hide-details
@@ -92,16 +74,13 @@
                             density="compact"
                             class="options-select general-font-size ma-2 text-none font-weight-light"
                             :class="{
-                              'is-selected': filterStore.currentZips.includes(
-                                community.zip
-                              ),
+                              'is-selected': filterStore.currentZips.includes(community.zip),
                             }"
                           >
                             {{ community.name }}
                           </v-btn>
                         </label>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -109,11 +88,7 @@
             </div>
           </div>
         </v-col>
-        <v-col
-          v-if="filterKind !== 'event' && filterKind !== 'news'"
-          md="1"
-          class="d-flex justify-center align-end is-white mb-4"
-        >
+        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'" md="1" class="d-flex justify-center align-end is-white mb-4">
           <div class="label general-font-size">oder</div>
         </v-col>
         <v-col>
@@ -121,9 +96,7 @@
             <label class="label is-white">
               <div class="search-term">
                 <p class="general-font-size" v-if="searchTitle">{{ searchTitle }}</p>
-                <p v-else class="waiting general-font-size">
-                  <span>.</span><span>.</span><span>.</span>
-                </p>
+                <p v-else class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
               </div>
             </label>
             <PublicSearchField
@@ -172,9 +145,7 @@
           <span v-else>Kurse</span>
         </span>
       </span>
-      <span class="general-font-size" v-else-if="!appStore.loading">
-        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
-      </span>
+      <span class="general-font-size" v-else-if="!appStore.loading"> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
       <span v-else> Bitte warten... </span>
     </v-col>
   </v-row>
@@ -209,21 +180,18 @@ const popoverParentRef2 = ref<HTMLDivElement>();
 onClickOutside(popoverParentRef2, () => (showPopover.value = false));
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
-  if(!zips.length) return "";
-  const allSelectedCommunities = filterStore.allCommunities.filter((community) =>
-    zips.includes(community.zip)
-  );
+  if (!zips.length) return "";
+  const allSelectedCommunities = filterStore.allCommunities.filter((community) => zips.includes(community.zip));
   return allSelectedCommunities.map((community) => community.name).join(", ");
 };
 
-const handleOptionSelectCommunity = (community:any) => {
+const handleOptionSelectCommunity = (community: any) => {
   if (filterStore.currentZips.includes(community?.zip)) {
     filterStore.currentZips = filterStore.currentZips.filter((item) => item !== community.zip);
   } else {
     filterStore.currentZips.push(community.zip);
   }
-}
-
+};
 
 const contentWrapperRef = ref<HTMLDivElement>();
 const popoverWidth = ref(0);
@@ -270,30 +238,17 @@ const setFilterTitle = () => {
   }
 };
 
-const communities = ref<any[]>([]);
-
-const resetSearchTerm = () => {
-  filterStore.currentSearchTerm = "";
-  filterStore.loadFilteredResults();
-};
-
 const copySearchFilterUrl = () => {
   snackbar.showSuccess("Filter in Zwischenablage gespeichert!");
   const url = filterStore.getUrlQuery();
   navigator.clipboard.writeText(url);
 };
 
-const allCommunities = computed(() => {
-  const filteredCommunites =  filterStore.allCommunities.filter((community) => community.care_facilities_active_count > 0 );
-    return filteredCommunites;
-});
-
 
 onMounted(async () => {
-  communities.value = await filterStore.loadAllCommunities();
+  await filterStore.loadAllCommunities();
   updatePopoverWidth();
   setFilterTitle();
-
 });
 </script>
 
