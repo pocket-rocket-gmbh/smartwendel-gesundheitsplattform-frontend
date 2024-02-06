@@ -98,6 +98,13 @@ const fields = ref([
     type: "facilities",
   },
   {
+    prop: "email",
+    text: "E-mail",
+    value: "email",
+    emit: "mailUser",
+    tooltip: "Benutzer E-Mail Kopieren",
+  },
+  {
     prop: "is_active_on_health_scope",
     text: "Status",
     type: "enumDropdown",
@@ -116,14 +123,6 @@ const fields = ref([
     text: "Zuletzt eingeloggt",
     value: "last_seen",
     type: "datetime",
-  },
-  {
-    prop: "",
-    text: "",
-    value: "mdi-email-outline",
-    type: "icon",
-    emit: "mailUser",
-    tooltip: "Benutzer E-Mail Kopieren",
   },
 ]);
 
