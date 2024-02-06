@@ -211,6 +211,7 @@ watch(
   async () => {
     await filterStore.loadAllResults();
     filterStore.loadFilteredCommunities();
+    handleSetFilters();
   },
   {
     deep: true,
@@ -226,19 +227,20 @@ watch(
   { deep: true }
 );
 
+
 const handleSetFilters = async () => {
   loadingFilters.value = true;
   mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
 
   const allFilters = await filterStore.loadAllFilters();
 
-  const allOptions = mainFilters.value.map((filter) => allFilters.filter((item) => item.parent_id === filter.id));
+  const allOptions = mainFilters.value.map((filter:any) => allFilters.filter((item:any) => item.parent_id === filter.id));
 
   filterOptions.value = [];
-  allOptions.forEach((options, index) => {
-    const filteredOptions = options.filter((option) => {
-      return filterStore.allResults.find((filteredResult) => {
-        return filteredResult.tag_category_ids.find((tagCategoryId) => tagCategoryId === option.id);
+  allOptions.forEach((options:any, index:any) => {
+    const filteredOptions = options.filter((option:any) => {
+      return filterStore.filteredResults.find((filteredResult:any) => {
+        return filteredResult.tag_category_ids.find((tagCategoryId:any) => tagCategoryId === option.id);
       });
     });
 
@@ -253,11 +255,11 @@ const handleSetFilters = async () => {
   });
   loadingFilters.value = false;
 
-  const allAvailableOptions = filterOptions.value.reduce((prev, curr) => {
+  const allAvailableOptions = filterOptions.value.reduce((prev:any, curr:any) => {
     return [...prev, ...curr.options];
   }, [] as Filter[]);
 
-  const foundFilters = allAvailableOptions.filter((option) => {
+  const foundFilters = allAvailableOptions.filter((option:any) => {
     const doesInclude = props.modelValue.find((item: string) => item === option.id);
     return doesInclude;
   });

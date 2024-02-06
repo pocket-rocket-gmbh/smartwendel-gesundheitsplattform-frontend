@@ -180,7 +180,7 @@ const loading = ref(false);
 
 const removeTagFromStore = (tag: Facility) => {
   filterStore.currentTags = filterStore.currentTags.filter(
-    (tagId) => tagId !== tag.id
+    (tagId:any) => tagId !== tag.id
   );
 };
 
@@ -211,10 +211,10 @@ const removeAllTags = () => {
 };
 
 const getCurrentTags = computed(() => {
-  return filterStore.currentTags.map((tagId) => {
-    const tag = filterStore.allFilters.find((filter) => filter.id === tagId);
+  return filterStore.currentTags.map((tagId:any) => {
+    const tag = filterStore.allFilters.find((filter:any) => filter.id === tagId);
     const tageWithParent = filterStore.allFilters.find(
-      (filter) => filter.id === tag?.parent_id
+      (filter : any) => filter.id === tag?.parent_id
     );
     if (!tag) {
       return "";
@@ -287,10 +287,10 @@ const getItemsAndNext = (
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
   if(!zips.length) return "";
-  const allSelectedCommunities = filterStore.allCommunities.filter((community) =>
+  const allSelectedCommunities = filterStore.allCommunities.filter((community:any) =>
     zips.includes(community.zip)
   );
-  return allSelectedCommunities.map((community) => community.name);
+  return allSelectedCommunities.map((community:any) => community.name);
 };
 
 const getItems = async () => {
@@ -362,7 +362,7 @@ const toggleSelection = (item: CollapsibleListItem) => {
 
   if (isSelected(item.id)) {
     filterStore.currentTags = filterStore.currentTags.filter(
-      (id) => id !== item.id
+      (id:any) => id !== item.id
     );
   } else {
     filterStore.currentTags.push(item.id);
@@ -392,6 +392,18 @@ const checkIfFiltersAreInFacilities = (
   return filters;
 };
 
+watch(
+  () => filterStore.filteredResults,
+  (newValue:any) => {
+    availableItemsForServiceList.value = [
+      ...deepToRaw(itemsForServiceList.value),
+    ];
+    checkIfFiltersAreInFacilities(
+      availableItemsForServiceList.value,
+      newValue.map((facility : any) => facility.tag_category_ids).flat()
+    );
+  }
+);
 
 const emitFiltersUpdated = () => {
   useNuxtApp().$bus.$on("filtersUpdated", () => {
@@ -400,7 +412,7 @@ const emitFiltersUpdated = () => {
     ];
     checkIfFiltersAreInFacilities(
       availableItemsForServiceList.value,
-       filterStore.allResults.map((facility : any) => facility.tag_category_ids).flat()
+       filterStore.filteredResults.map((facility : any) => facility.tag_category_ids).flat()
     );
   });
 };
