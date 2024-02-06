@@ -57,15 +57,12 @@
           :class="{ 'is-clickable': field.prop }"
           @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
-          <div
-            class="table-head-item"
-            :class="sortBy === field.prop ? 'selected-sort' : ''"
-          >
+          <div class="table-head-item" :class="sortBy === field.prop ? 'selected-sort' : ''">
             {{ field.text }}
             <div
               v-if="sortBy === field.prop"
               class="chevron"
-              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc' }"
+              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc'}"
             ></div>
             <div v-else-if="field.text">
               <div class="chevron"></div>
@@ -327,6 +324,12 @@ import logo from "@/assets/images/lk-logo.png";
 
 const router = useRouter();
 
+const pagination = ref({
+  page: 1,
+  itemsPerPage: 20,
+  totalItems: 0,
+});
+
 const props = withDefaults(
   defineProps<{
     disableDelete: boolean;
@@ -339,7 +342,6 @@ const props = withDefaults(
     defaultSortBy?: string;
     defaultSortOrder?: string;
     draftRequired?: RequiredField[];
-    importFilter?: number;
   }>(),
   {
     defaultSortBy: "created_at",
@@ -472,17 +474,11 @@ api.setBaseApi(usePrivateApi());
 api.setEndpoint(props.endpoint);
 const items = api.items;
 
+//limit items to 10
+
 const handleToggled = async (item: any) => {
   emit("itemUpdated", item);
 };
-
-
-const pagination = ref({
-  page: 1,
-  itemsPerPage: 20,
-  totalItems: 0,
-});
-
 
 const getItems = async () => {
   loading.value = true;
@@ -497,37 +493,25 @@ const getItems = async () => {
   };
   adminStore.loading = true;
   const response = await api.retrieveCollection(options);
-  switch (itemsToShow.value) {
-    case "imported":
-      items.value = response.data.resources.filter((item: any) => item.user.imported);
-      break;
-    case "taken":
-      items.value = response.data.resources.filter((item: any) => !item?.user?.onboarding_token && item?.user?.imported);
-      break;
-    case "notTaken":
-      items.value = response.data.resources.filter((item: any) => item?.user?.onboarding_token);
-      break;
-    case "all":
-      items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
-      break;
-    case "notImported":
-      items.value = response.data.resources.filter((item: any) => !item?.user?.imported);
-      break;
-    default:
-      break;
+
+  if (response.data && response.data.resources) {
+    items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
+  } else {
+    items.value = Array.isArray(response.data) ? response.data : [];
   }
 
-
-
-  // Update the total items count in all cases
-  pagination.value.totalItems = Array.isArray(response.data.resources)
-    ? response.data.total_results
-    : items.value.length;
+  if (props.searchQuery) {
+    pagination.value.totalItems = items.value.length;
+  } else {
+    pagination.value.totalItems = response.data.total_results;
+  }
 
   adminStore.loading = false;
   emit("itemsLoaded", items.value);
   loading.value = false;
 };
+
+
 const paginationValues = ref([
   { text: "10", value: 10 },
   { text: "20", value: 20 },
@@ -552,33 +536,6 @@ const rotateColumnSortOrder = (columnProp: string) => {
   sortBy.value = columnProp;
   getItems();
 };
-
-const itemsToShow = ref("all");
-watch(
-  () => props.importFilter,
-  () => {
-    if (props.importFilter === 1) {
-      itemsToShow.value = "imported";
-      getItems();
-    }
-    if (props.importFilter === 2) {
-      itemsToShow.value = "taken";
-      getItems();
-    }
-    if (props.importFilter === 3) {
-      itemsToShow.value = "notTaken";
-      getItems();
-    }
-    if (props.importFilter === 4) {
-      itemsToShow.value = "all";
-      getItems();
-    }
-    if (props.importFilter === 5) {
-      itemsToShow.value = "notImported";
-      getItems();
-    }
-  }
-);
 
 onMounted(() => {
   useNuxtApp().$bus.$on("triggerGetItems", () => {
@@ -635,12 +592,12 @@ defineExpose({ resetActiveItems, getItems });
     &.up
       background-image: url("@/assets/icons/chevron-down.svg")
       background-color: #E7E8E7
-
+      
     &.down
       background-image: url("@/assets/icons/chevron-up.svg")
       background-color: #E7E8E7
 
-
+  
 .selected-sort
   color: #8ab61d
 
