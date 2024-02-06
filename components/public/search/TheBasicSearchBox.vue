@@ -20,7 +20,7 @@ const emit = defineEmits<{
 }>();
 
 const breakPoints = useBreakpoints();
-const filterStore = useFilterStore();
+
 </script>
 
 <style lang="sass" scoped></style>

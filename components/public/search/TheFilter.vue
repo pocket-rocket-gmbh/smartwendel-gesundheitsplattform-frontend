@@ -83,12 +83,12 @@
         Keine weiteren Filter gefunden
       </span>
       <span
-        v-if="filterStore.filteredResults.length && loading"
+        v-if="filterStore.filteredResults.length && !loading"
         class="general-font-size font-weight-medium is-dark-grey"
         >Verfeinere hier deine Suche:
       </span>
-      <v-skeleton-loader v-if="!filterStore.filteredResults.length" :loading="loading" type="article" class="filter-wrapper"> </v-skeleton-loader>
-        <div class="filter-tiles" v-else>
+      <v-skeleton-loader v-if="filterStore.filteredResults.length && loading" :loading="loading" type="article" class="filter-wrapper"> </v-skeleton-loader>
+        <div class="filter-tiles" v-if="filterStore.filteredResults.length !== 0 && !loading">
          
           <div v-for="filter in availableItemsForServiceList" class="filter-group">
             <div v-for="item in filter.next" class="mt-5 filter-selections">
@@ -180,7 +180,7 @@ const loading = ref(false);
 
 const removeTagFromStore = (tag: Facility) => {
   filterStore.currentTags = filterStore.currentTags.filter(
-    (tagId) => tagId !== tag.id
+    (tagId:any) => tagId !== tag.id
   );
 };
 
@@ -211,10 +211,10 @@ const removeAllTags = () => {
 };
 
 const getCurrentTags = computed(() => {
-  return filterStore.currentTags.map((tagId) => {
-    const tag = filterStore.allFilters.find((filter) => filter.id === tagId);
+  return filterStore.currentTags.map((tagId:any) => {
+    const tag = filterStore.allFilters.find((filter:any) => filter.id === tagId);
     const tageWithParent = filterStore.allFilters.find(
-      (filter) => filter.id === tag?.parent_id
+      (filter : any) => filter.id === tag?.parent_id
     );
     if (!tag) {
       return "";
@@ -231,6 +231,8 @@ const getCurrentTags = computed(() => {
 const itemsForServiceList = ref<CollapsibleListItem[]>([]);
 const availableItemsForServiceList = ref<CollapsibleListItem[]>([]);
 const expandedItemIds = ref([]);
+
+
 
 const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
@@ -285,10 +287,10 @@ const getItemsAndNext = (
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
   if(!zips.length) return "";
-  const allSelectedCommunities = filterStore.allCommunities.filter((community) =>
+  const allSelectedCommunities = filterStore.allCommunities.filter((community:any) =>
     zips.includes(community.zip)
   );
-  return allSelectedCommunities.map((community) => community.name);
+  return allSelectedCommunities.map((community:any) => community.name);
 };
 
 const getItems = async () => {
@@ -347,7 +349,7 @@ const isSelectedTagNext = (tag: CollapsibleListItem) => {
 const toggleSelection = (item: CollapsibleListItem) => {
   if (item.next?.length) {
     const index = expandedItemIds.value.findIndex(
-      (expandedItemId) => expandedItemId === item.id
+      (expandedItemId : any) => expandedItemId === item.id
     );
 
     if (index === -1) {
@@ -360,7 +362,7 @@ const toggleSelection = (item: CollapsibleListItem) => {
 
   if (isSelected(item.id)) {
     filterStore.currentTags = filterStore.currentTags.filter(
-      (id) => id !== item.id
+      (id:any) => id !== item.id
     );
   } else {
     filterStore.currentTags.push(item.id);
@@ -390,6 +392,18 @@ const checkIfFiltersAreInFacilities = (
   return filters;
 };
 
+watch(
+  () => filterStore.filteredResults,
+  (newValue:any) => {
+    availableItemsForServiceList.value = [
+      ...deepToRaw(itemsForServiceList.value),
+    ];
+    checkIfFiltersAreInFacilities(
+      availableItemsForServiceList.value,
+      newValue.map((facility : any) => facility.tag_category_ids).flat()
+    );
+  }
+);
 
 const emitFiltersUpdated = () => {
   useNuxtApp().$bus.$on("filtersUpdated", () => {
@@ -398,7 +412,7 @@ const emitFiltersUpdated = () => {
     ];
     checkIfFiltersAreInFacilities(
       availableItemsForServiceList.value,
-       filterStore.allResults.map((facility) => facility.tag_category_ids).flat()
+       filterStore.filteredResults.map((facility : any) => facility.tag_category_ids).flat()
     );
   });
 };

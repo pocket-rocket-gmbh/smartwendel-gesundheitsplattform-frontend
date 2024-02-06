@@ -228,6 +228,8 @@ const fields = [
     tooltip: "Einrichtung wurde von einer Admin erstellt."
   },
   {
+    prop: "user?.imported",
+    text: "Erstellt von",
     value: "",
     type: "imported",
     tooltip: "Einrichtung wurde importiert."
