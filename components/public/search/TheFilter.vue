@@ -83,12 +83,12 @@
         Keine weiteren Filter gefunden
       </span>
       <span
-        v-if="filterStore.filteredResults.length && loading"
+        v-if="filterStore.filteredResults.length && !loading"
         class="general-font-size font-weight-medium is-dark-grey"
         >Verfeinere hier deine Suche:
       </span>
-      <v-skeleton-loader v-if="!filterStore.filteredResults.length" :loading="loading" type="article" class="filter-wrapper"> </v-skeleton-loader>
-        <div class="filter-tiles" v-else>
+      <v-skeleton-loader v-if="filterStore.filteredResults.length && loading" :loading="loading" type="article" class="filter-wrapper"> </v-skeleton-loader>
+        <div class="filter-tiles" v-if="filterStore.filteredResults.length !== 0 && !loading">
          
           <div v-for="filter in availableItemsForServiceList" class="filter-group">
             <div v-for="item in filter.next" class="mt-5 filter-selections">
@@ -232,6 +232,8 @@ const itemsForServiceList = ref<CollapsibleListItem[]>([]);
 const availableItemsForServiceList = ref<CollapsibleListItem[]>([]);
 const expandedItemIds = ref([]);
 
+
+
 const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
 api.setEndpoint("tag_categories");
@@ -347,7 +349,7 @@ const isSelectedTagNext = (tag: CollapsibleListItem) => {
 const toggleSelection = (item: CollapsibleListItem) => {
   if (item.next?.length) {
     const index = expandedItemIds.value.findIndex(
-      (expandedItemId) => expandedItemId === item.id
+      (expandedItemId : any) => expandedItemId === item.id
     );
 
     if (index === -1) {
@@ -398,7 +400,7 @@ const emitFiltersUpdated = () => {
     ];
     checkIfFiltersAreInFacilities(
       availableItemsForServiceList.value,
-       filterStore.allResults.map((facility) => facility.tag_category_ids).flat()
+       filterStore.allResults.map((facility : any) => facility.tag_category_ids).flat()
     );
   });
 };
