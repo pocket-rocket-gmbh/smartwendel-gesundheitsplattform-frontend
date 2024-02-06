@@ -239,7 +239,7 @@ const handleSetFilters = async () => {
   filterOptions.value = [];
   allOptions.forEach((options:any, index:any) => {
     const filteredOptions = options.filter((option:any) => {
-      return filterStore.filteredResults.find((filteredResult:any) => {
+      return filterStore.allResults.find((filteredResult:any) => {
         return filteredResult.tag_category_ids.find((tagCategoryId:any) => tagCategoryId === option.id);
       });
     });

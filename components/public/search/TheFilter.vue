@@ -392,7 +392,7 @@ const checkIfFiltersAreInFacilities = (
   return filters;
 };
 
-watch(
+/* watch(
   () => filterStore.filteredResults,
   (newValue:any) => {
     availableItemsForServiceList.value = [
@@ -403,7 +403,7 @@ watch(
       newValue.map((facility : any) => facility.tag_category_ids).flat()
     );
   }
-);
+); */
 
 const emitFiltersUpdated = () => {
   useNuxtApp().$bus.$on("filtersUpdated", () => {
@@ -412,7 +412,7 @@ const emitFiltersUpdated = () => {
     ];
     checkIfFiltersAreInFacilities(
       availableItemsForServiceList.value,
-       filterStore.filteredResults.map((facility : any) => facility.tag_category_ids).flat()
+       filterStore.allResults.map((facility : any) => facility.tag_category_ids).flat()
     );
   });
 };
