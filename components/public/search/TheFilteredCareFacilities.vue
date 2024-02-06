@@ -197,7 +197,7 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
 
   setTimeout(() => {
     filterStore.mapFilter = careFacilityId;
-    filterStore.loadFilteredResults();
+    filterStore.loadAllResults();
   }, 100);
 };
 

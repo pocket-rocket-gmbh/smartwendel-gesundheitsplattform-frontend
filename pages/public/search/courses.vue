@@ -21,13 +21,6 @@ import { useFilterStore } from "~/store/searchFilter";
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
 
-watch(
-  () => filterStore.filterSort,
-  () => {
-    filterStore.loadAllResults();
-  }
-);
-
 const showSearchFilter = computed(() => {
   return breakpoints.width.value > BreakPoints.md;
 });

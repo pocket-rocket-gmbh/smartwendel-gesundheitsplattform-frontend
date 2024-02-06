@@ -1,17 +1,25 @@
 import { defineStore } from "pinia";
+import type { CollapsibleListItem } from "~/types/collapsibleList";
+import { ResultStatus } from "~/types/serverCallResult";
 
 export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
 export type FilterKind = "facility" | "news" | "event" | "course";
 export type FilterType = "filter_facility" | "filter_service" | "certificate" | "documents" | "opening_hours" | "phone";
+type FilterResponse = {
+  id: string;
+  name: string;
+  menu_order: number;
+  parent_id: string;
+  care_facilities_count: string;
+};
 export type FilterTag = {
   id: string;
   menu_order: number;
   name: string;
   scope: string;
 };
-
 export type User = {
   id: string;
   name: string;
@@ -51,9 +59,33 @@ export type Facility = {
   user_care_facility?: Facility;
 };
 
+type FilterOption = {
+  parentId: string;
+  options: {
+    id: string;
+    name: string;
+    care_facilities_active_count: number;
+  }[];
+};
+
+export type MainFilter = {
+  id: string;
+  name: string;
+  options: {
+    id: string;
+    name: string;
+    care_facilities_active_count: number;
+  }[];
+};
+
 export type Filter = {
   currentSearchTerm: string;
-  currentTags: string[];
+  allFacilityMainFilters: MainFilter[];
+  allServiceTags: any[];
+
+  filteredFacilityMainFilters: MainFilter[];
+  currentFacilityTags: any[];
+  currentServiceTags: any[];
   currentZips: string[];
   filterSort: (typeof filterSortingDirections)[number];
   loading: boolean;
@@ -76,7 +108,13 @@ export type Filter = {
 
 const initialFilterState: Filter = {
   currentSearchTerm: "",
-  currentTags: [],
+
+  allFacilityMainFilters: [],
+  allServiceTags: [],
+
+  filteredFacilityMainFilters: [],
+  currentFacilityTags: [],
+  currentServiceTags: [],
   currentZips: [],
   filterSort: "A-Z",
   loading: false,
@@ -105,7 +143,8 @@ export const useFilterStore = defineStore({
       return {
         currentSearchTerm: state.currentSearchTerm,
         currentZips: state.currentZips,
-        currentTags: state.currentTags,
+        currentFacilityTags: state.currentFacilityTags,
+        currentServiceTags: state.currentServiceTags,
         filterSort: state.filterSort,
         currentKinds: state.currentKinds,
       };
@@ -115,7 +154,8 @@ export const useFilterStore = defineStore({
     setFilterInfo(newFilterInfo: typeof this.filterInfo) {
       this.currentSearchTerm = newFilterInfo.currentSearchTerm;
       this.currentZips = newFilterInfo.currentZips;
-      this.currentTags = newFilterInfo.currentTags;
+      this.currentFacilityTags = newFilterInfo.currentFacilityTags;
+      this.currentServiceTags = newFilterInfo.currentServiceTags;
       this.filterSort = newFilterInfo.filterSort;
       this.currentKinds = newFilterInfo.currentKinds;
     },
@@ -146,26 +186,25 @@ export const useFilterStore = defineStore({
     async clearSearch() {
       this.currentSearchTerm = "";
       this.currentZips = [];
-      this.currentTags = [];
+      this.currentFacilityTags = [];
+      this.currentServiceTags = [];
       this.mapFilter = null;
 
-      await this.loadAllResults();
-      this.loadFilteredResults();
+      this.loadAllResults();
     },
     async clearTermSearch() {
       this.currentSearchTerm = "";
-      await this.loadAllResults();
-      this.loadFilteredResults();
+      this.loadAllResults();
     },
-    enableAllTags(tags: string[]) {
-      this.currentTags = [...new Set([...this.currentTags, ...tags])];
-    },
-    disableAllTags(tags: string[]) {
-      tags.forEach((tag) => {
-        const index = this.currentTags.findIndex((item) => item === tag);
-        if (index !== -1) this.currentTags.splice(index, 1);
-      });
-    },
+    // enableAllTags(tags: string[]) {
+    //   this.currentTags = [...new Set([...this.currentTags, ...tags])];
+    // },
+    // disableAllTags(tags: string[]) {
+    //   tags.forEach((tag) => {
+    //     const index = this.currentTags.findIndex((item) => item === tag);
+    //     if (index !== -1) this.currentTags.splice(index, 1);
+    //   });
+    // },
     async loadAllCommunities() {
       if (this.allCommunities) return this.allCommunities;
 
@@ -175,7 +214,7 @@ export const useFilterStore = defineStore({
 
       await api.retrieveCollection();
 
-      this.allCommunities = api.items.value;
+      this.allCommunities = api.items.value.filter((community) => community.care_facilities_active_count > 0);
 
       return this.allCommunities;
     },
@@ -186,6 +225,106 @@ export const useFilterStore = defineStore({
 
       return this.allFilters;
     },
+    async loadAllFacilityFilters() {
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint(`tag_categories`);
+
+      const response = await api.retrieveCollection({ per_page: 1000 } as any);
+      if (response.status === ResultStatus.FAILED) {
+        throw response;
+      }
+
+      const filters: any[] = response?.data?.resources || [];
+      const relevantFilter = filters.find((filter) => filter.filter_type === "filter_facility" && filter.kind === this.currentKinds[0]);
+
+      if (!relevantFilter) return [];
+
+      this.allFacilityMainFilters = await getFilters(relevantFilter.id);
+
+      const allFilters = await this.loadAllFilters();
+      const allOptions = this.allFacilityMainFilters.map((filter: any) => allFilters.filter((item: any) => item.parent_id === filter.id));
+
+      const filterOptions: FilterOption[] = [];
+      allOptions.forEach((options: any, index: any) => {
+        const filteredOptions = options.filter((option: any) => {
+          return this.allUnalteredResults.find((filteredResult: any) => {
+            return filteredResult.tag_category_ids.find((tagCategoryId: any) => tagCategoryId === option.id);
+          });
+        });
+
+        if (!filteredOptions.length) {
+          return;
+        }
+
+        filterOptions.push({
+          parentId: this.allFacilityMainFilters[index].id,
+          options: filteredOptions,
+        });
+      });
+
+      this.allFacilityMainFilters.forEach((mainFilter) => {
+        mainFilter.options = filterOptions.find((filterOption) => filterOption.parentId === mainFilter.id)?.options || [];
+      });
+
+      this.allFacilityMainFilters = this.allFacilityMainFilters.filter((mainFilter) => mainFilter.options.length);
+
+      return this.allFacilityMainFilters;
+    },
+    async loadAllServiceFilters() {
+      const api = useCollectionApi();
+      api.setBaseApi(usePublicApi());
+      api.setEndpoint("tag_categories");
+
+      const result = await api.retrieveCollection({ per_page: 1000 } as any);
+
+      if (result.status === ResultStatus.FAILED) {
+        console.error(result);
+        return;
+      }
+
+      const filters: any[] = result?.data?.resources?.filter((item: Facility) => this.currentKinds[0] === item.kind);
+      if (!filters) {
+        console.error("No filters!");
+        return;
+      }
+
+      const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
+      const allFilters = await this.loadAllFilters();
+
+      const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number, allFilters: FilterResponse[]) => {
+        if (layer === 4) {
+          return;
+        }
+
+        const filterItem: CollapsibleListItem = {
+          id: filter.id,
+          title: filter.name,
+          menuOrder: filter.menu_order,
+          layer,
+          next: [],
+          care_facilities_count: filter.care_facilities_count,
+        };
+
+        arrayToAdd.push(filterItem);
+
+        const childFilterItems: FilterResponse[] = allFilters.filter((item) => item.parent_id === filter.id);
+
+        if (!childFilterItems.length) {
+          return;
+        }
+
+        childFilterItems.forEach((childFilterItem) => getItemsAndNext(childFilterItem, filterItem.next || [], layer + 1, allFilters));
+      };
+
+      const tmpItemsForServiceList: CollapsibleListItem[] = [];
+
+      serviceFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters));
+
+      this.allServiceTags = tmpItemsForServiceList;
+
+      return this.allServiceTags;
+    },
     async loadMainFilters(filterKind: FilterKind) {
       if (this.mainFilters) return this.mainFilters;
 
@@ -194,7 +333,7 @@ export const useFilterStore = defineStore({
       return this.mainFilters;
     },
     async checkIfMultipleFacilityFiltersAreSelected() {
-      if (!this.currentKinds?.length || !this.currentTags?.length) return [];
+      if (!this.currentKinds?.length || !this.currentFacilityTags?.length) return [];
 
       const filterKind = this.currentKinds[0];
 
@@ -205,7 +344,7 @@ export const useFilterStore = defineStore({
 
       const relevantItems = [];
       for (const block of allOptions) {
-        const multipleOccuredInBlock = block.filter((item) => this.currentTags.includes(item.id));
+        const multipleOccuredInBlock = block.filter((item) => this.currentFacilityTags.includes(item.id));
 
         if (multipleOccuredInBlock.length) {
           relevantItems.push(multipleOccuredInBlock);
@@ -266,51 +405,45 @@ export const useFilterStore = defineStore({
         });
       return this.filteredCommunities;
     },
+    loadFilteredFacilityMainFilters() {
+      if (!this.allFacilityMainFilters.length) return;
+      this.filteredFacilityMainFilters = this.allFacilityMainFilters.filter((mainFilter) => {
+        if (!this.filteredResults?.length) return true;
+
+        return this.filteredResults.find((result) =>
+          result.tag_category_ids.some((tagCategoryId) => mainFilter.options.find((option) => option.id === tagCategoryId))
+        );
+      });
+      return this.filteredFacilityMainFilters;
+    },
     async loadAllResults() {
-      this.loading = true;
-
-      const multipleFacilityFiltersSelected = await this.checkIfMultipleFacilityFiltersAreSelected();
-
-      const tagsToFilter = [...this.currentTags];
-
-      if (multipleFacilityFiltersSelected.length) {
-        multipleFacilityFiltersSelected.forEach((item) => {
-          tagsToFilter.splice(
-            tagsToFilter.findIndex((tag) => tag === item.id),
-            1
-          );
-        });
+      if (!this.allUnalteredResults.length) {
+        return;
       }
+
+      console.log("===============================");
+      console.log(" ");
+
+      console.log("allFacilityMainFilters", this.allFacilityMainFilters);
+      console.log("allServiceTags", this.allServiceTags);
+      console.log("allCommunities", this.allCommunities);
+
+      console.log(" ");
+
+      console.log("currentFacilityTags", this.currentFacilityTags);
+      console.log("currentServiceTags", this.currentServiceTags);
+      console.log("currentZips", this.currentZips);
+
+      console.log(" ");
 
       this.allResults = this.allUnalteredResults
         .filter((result) => {
-          return this.currentKinds.length ? this.currentKinds.includes(result.kind) : true;
+          if (!this.currentKinds.length) return true;
+          return this.currentKinds.includes(result.kind);
         })
         .filter((result) => {
-          return this.currentZips?.length ? this.currentZips.includes(result?.zip) : true;
-        })
-        .filter((result) => {
-          if (!tagsToFilter.length) return true;
+          if (!this.currentSearchTerm) return true;
 
-          return tagsToFilter.every((tag) => {
-            return result.tag_category_ids.includes(tag);
-          });
-        });
-
-      useNuxtApp().$bus.$emit("filtersUpdated");
-
-      this.loading = false;
-
-      this.loadFilteredResults(multipleFacilityFiltersSelected);
-    },
-    loadFilteredResults(filterCategories?: { id: string }[]) {
-      if (this.loading || !this.allResults) return;
-
-      const filteredResults: Facility[] = this.allResults
-        .filter((result) => {
-          return this.currentZips?.length ? this.currentZips.includes(result.zip) : true;
-        })
-        .filter((result) => {
           return (
             result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
             (!this.onlySearchInTitle &&
@@ -318,26 +451,44 @@ export const useFilterStore = defineStore({
                 result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
           );
         })
+        .filter((result) => {
+          if (!this.currentZips?.length) return true;
+          return this.currentZips.includes(result?.zip);
+        })
+        .filter((result) => {
+          if (!this.currentFacilityTags.length) return true;
 
+          return this.currentFacilityTags.some((facilityTag) => {
+            return result.tag_category_ids.includes(facilityTag);
+          });
+        })
         .filter((facility) => {
-          if (!filterCategories?.length) return true;
+          if (!this.currentServiceTags?.length) return true;
 
-          return filterCategories.some((category) => facility.tag_category_ids.includes(category.id));
+          return this.currentServiceTags.every((serviceTag) => {
+            return facility.tag_category_ids.includes(serviceTag);
+          });
         });
 
       if (this.mapFilter) {
-        this.filteredResults = filteredResults.filter((facility) => facility.id === this.mapFilter);
+        this.filteredResults = this.allResults.filter((facility) => facility.id === this.mapFilter);
         return;
       }
 
-      this.filteredResults = filteredResults;
+      console.log("this.allResults", this.allResults);
+      console.log("===============================");
+
+      this.filteredResults = this.allResults;
     },
     toggleSort() {
       this.filterSort = this.filterSort === "A-Z" ? "Z-A" : "A-Z";
     },
     resetAllFilters() {
       this.currentSearchTerm = "";
-      this.currentTags = [];
+      this.allFacilityMainFilters = [];
+      this.currentFacilityTags = [];
+      this.filteredFacilityMainFilters = [];
+      this.currentServiceTags = [];
       this.currentZips = [];
       this.filterSort = "A-Z";
       this.loading = false;

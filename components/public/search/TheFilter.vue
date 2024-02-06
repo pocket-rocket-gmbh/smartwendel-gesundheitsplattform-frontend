@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-6" v-if="filterStore.currentTags?.length || filterStore.currentZips?.length">
+    <div class="mb-6" v-if="filterStore.currentFacilityTags?.length || filterStore.currentServiceTags?.length || filterStore.currentZips?.length">
       <div class="general-font-size font-weight-medium is-dark-grey mb-1">
         Deine ausgewählten Filter:
       </div>
@@ -144,7 +144,7 @@
                       :class="{ selected: isSelected(tag.id) }"
                       class="mb-n4"
                       :label="tag.title"
-                      v-model="filterStore.currentTags"
+                      v-model="filterStore.currentServiceTags"
                       :value="tag.id"
                     />
                   </div>
@@ -174,12 +174,14 @@ const props = defineProps<{
 }>();
 
 const filterStore = useFilterStore();
-const snackbar = useSnackbar();
 
 const loading = ref(false);
 
 const removeTagFromStore = (tag: Facility) => {
-  filterStore.currentTags = filterStore.currentTags.filter(
+  filterStore.currentFacilityTags = filterStore.currentFacilityTags.filter(
+    (tagId:any) => tagId !== tag.id
+  );
+  filterStore.currentServiceTags = filterStore.currentServiceTags.filter(
     (tagId:any) => tagId !== tag.id
   );
 };
@@ -194,11 +196,14 @@ const showAllChips = (parentName: string) => {
 const groupedTags = computed(() => {
   const tagGroups = {};
 
-  getCurrentTags.value.forEach((tag) => {
+  getCurrentTags.value.forEach((tag: any) => {
     const parentName = typeof tag === "object" ? tag.parent_name : tag;
+    // @ts-expect-error implicit any
     if (!tagGroups[parentName]) {
+      // @ts-expect-error implicit any
       tagGroups[parentName] = [];
     }
+    // @ts-expect-error implicit any
     tagGroups[parentName].push(tag);
   });
 
@@ -206,12 +211,13 @@ const groupedTags = computed(() => {
 });
 
 const removeAllTags = () => {
-  filterStore.currentTags = [];
+  filterStore.currentFacilityTags = [];
+  filterStore.currentServiceTags = [];
   filterStore.currentZips = [];
 };
 
 const getCurrentTags = computed(() => {
-  return filterStore.currentTags.map((tagId:any) => {
+  return [...filterStore.currentServiceTags, ...filterStore.currentFacilityTags].map((tagId:any) => {
     const tag = filterStore.allFilters.find((filter:any) => filter.id === tagId);
     const tageWithParent = filterStore.allFilters.find(
       (filter : any) => filter.id === tag?.parent_id
@@ -228,7 +234,6 @@ const getCurrentTags = computed(() => {
   });
 });
 
-const itemsForServiceList = ref<CollapsibleListItem[]>([]);
 const availableItemsForServiceList = ref<CollapsibleListItem[]>([]);
 const expandedItemIds = ref([]);
 
@@ -238,52 +243,6 @@ const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
 api.setEndpoint("tag_categories");
 
-type FilterResponse = {
-  id: string;
-  name: string;
-  menu_order: number;
-  parent_id: string;
-  care_facilities_count: string;
-};
-
-const getItemsAndNext = (
-  filter: FilterResponse,
-  arrayToAdd: CollapsibleListItem[],
-  layer: number,
-  allFilters: FilterResponse[]
-) => {
-  if (layer === 4) {
-    return;
-  }
-
-  const filterItem: CollapsibleListItem = {
-    id: filter.id,
-    title: filter.name,
-    menuOrder: filter.menu_order,
-    layer,
-    next: [],
-    care_facilities_count: filter.care_facilities_count,
-  };
-
-  arrayToAdd.push(filterItem);
-
-  const childFilterItems: FilterResponse[] = allFilters.filter(
-    (item) => item.parent_id === filter.id
-  );
-
-  if (!childFilterItems.length) {
-    return;
-  }
-
-  childFilterItems.forEach((childFilterItem) =>
-    getItemsAndNext(
-      childFilterItem,
-      filterItem.next || [],
-      layer + 1,
-      allFilters
-    )
-  );
-};
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
   if(!zips.length) return "";
@@ -293,50 +252,9 @@ const getAllSelectedCommunitiesName = (zips: string[]) => {
   return allSelectedCommunities.map((community:any) => community.name);
 };
 
-const getItems = async () => {
-  api.setEndpoint(`tag_categories`);
-
-  const options = {
-    page: 1,
-    per_page: 999,
-    sort_by: "menu_order",
-    sort_order: "asc",
-    searchQuery: null as any,
-    concat: false,
-    filters: [] as any,
-  };
-
-  const result = await api.retrieveCollection(options);
-
-  if (result.status === ResultStatus.FAILED) {
-    console.error(result);
-    return;
-  }
-
-  const filters: any[] = result?.data?.resources?.filter(
-    (item: Facility) => props.filterKind === item.kind
-  );
-  if (!filters) {
-    console.error("No filters!");
-    return;
-  }
-
-  const serviceFilters = filters.filter(
-    (filter) => filter.filter_type === "filter_service"
-  );
-  const allFilters = await filterStore.loadAllFilters();
-
-  const tmpItemsForServiceList: CollapsibleListItem[] = [];
-
-  serviceFilters.forEach((filter) =>
-    getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters)
-  );
-
-  itemsForServiceList.value = [...tmpItemsForServiceList];
-};
 
 const isSelected = (itemId: string) => {
-  return filterStore.currentTags.includes(itemId);
+  return filterStore.currentServiceTags.includes(itemId);
 };
 
 const isSelectedTagNext = (tag: CollapsibleListItem) => {
@@ -361,11 +279,11 @@ const toggleSelection = (item: CollapsibleListItem) => {
   }
 
   if (isSelected(item.id)) {
-    filterStore.currentTags = filterStore.currentTags.filter(
+    filterStore.currentServiceTags = filterStore.currentServiceTags.filter(
       (id:any) => id !== item.id
     );
   } else {
-    filterStore.currentTags.push(item.id);
+    filterStore.currentServiceTags.push(item.id);
   }
 };
 
@@ -396,19 +314,21 @@ const checkIfFiltersAreInFacilities = (
   () => filterStore.filteredResults,
   (newValue:any) => {
     availableItemsForServiceList.value = [
-      ...deepToRaw(itemsForServiceList.value),
+      ...deepToRaw(filterStore.allServiceTags),
     ];
     checkIfFiltersAreInFacilities(
       availableItemsForServiceList.value,
       newValue.map((facility : any) => facility.tag_category_ids).flat()
     );
+
+    filterStore.loadAllFacilityFilters();
   }
 ); */
 
 const emitFiltersUpdated = () => {
   useNuxtApp().$bus.$on("filtersUpdated", () => {
     availableItemsForServiceList.value = [
-      ...deepToRaw(itemsForServiceList.value),
+      ...deepToRaw(filterStore.allServiceTags),
     ];
     checkIfFiltersAreInFacilities(
       availableItemsForServiceList.value,
@@ -418,12 +338,8 @@ const emitFiltersUpdated = () => {
 };
 
 onMounted(async () => {
-  loading.value = true;
-  await getItems();
-  loading.value = false;
-
   availableItemsForServiceList.value = [
-    ...deepToRaw(itemsForServiceList.value),
+    ...deepToRaw(filterStore.allServiceTags),
   ];
 
   emitFiltersUpdated();

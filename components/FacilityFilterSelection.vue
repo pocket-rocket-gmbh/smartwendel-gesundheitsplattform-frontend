@@ -21,7 +21,7 @@
       v-auto-animate
     >
       <div class="filters filter-wrap">
-        <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
+        <div v-for="filter in filterStore.filteredFacilityMainFilters" :key="filter.id" class="filter-column">
           <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
             {{ filter.name }}
 
@@ -42,9 +42,9 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label class="option ma-n1" v-for="option in filterOptions.find(({ parentId }) => parentId === filter.id)?.options" :key="option.id">
+            <label class="option ma-n1" v-for="option in filter.options" :key="option.id">
               <v-btn
-                v-if="option?.care_facilities_active_count > '0'"
+                v-if="option?.care_facilities_active_count > 0"
                 :model-value="modelValue.includes(option.id)"
                 @click.prevent="handleOptionSelect(option)"
                 hide-details
@@ -89,18 +89,12 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { type FilterKind, useFilterStore } from "~/store/searchFilter";
-import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
+import { useFilterStore, type FilterKind } from "~/store/searchFilter";
 
 type Filter = {
   id: string;
   name: string;
-  care_facilities_active_count: string;
-};
-
-type FilterOption = {
-  parentId: string;
-  options: Filter[];
+  care_facilities_active_count: number;
 };
 
 const props = defineProps<{
@@ -113,8 +107,6 @@ const emit = defineEmits<{
   (event: "update:modelValue", values: string[]): void;
 }>();
 
-const breakpoints = useBreakpoints();
-
 const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
   if (props.filterKind === "facility") {
@@ -125,7 +117,7 @@ const setPlaceholderText = () => {
 };
 
 const hasActiveOptions = (filterId: string) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filterId)?.options;
+  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filterId)?.options;
   return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
 };
 
@@ -134,9 +126,6 @@ const popoverParentRef = ref<HTMLDivElement>();
 const multipleSelections = ref<Filter[]>([]);
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));
-
-const mainFilters = ref([]);
-const filterOptions = ref<FilterOption[]>([]);
 
 const loadingFilters = ref(false);
 const filterStore = useFilterStore();
@@ -161,7 +150,7 @@ const handleOptionSelect = (option: Filter) => {
 };
 
 const handleToggleAll = (filter: any) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
   const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
   const selectAll = !areAllSelected(filter);
@@ -190,7 +179,7 @@ const handleToggleAll = (filter: any) => {
 };
 
 const areAllSelected = (filter: any) => {
-  const options = filterOptions.value.find(({ parentId }) => parentId === filter.id)?.options;
+  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
   const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
   return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
@@ -199,80 +188,15 @@ const areAllSelected = (filter: any) => {
 watch(
   () => props.modelValue,
   () => {
-    multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
+    multipleSelections.value = filterStore.allFacilityMainFilters.reduce((prev, curr) => {
       const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
       return [...prev, ...foundOptions];
     }, [] as Filter[]);
   }
 );
 
-watch(
-  () => filterStore.currentTags,
-  async () => {
-    await filterStore.loadAllResults();
-    filterStore.loadFilteredCommunities();
-    handleSetFilters();
-  },
-  {
-    deep: true,
-  }
-);
-
-watch(
-  () => filterStore.currentZips,
-  async () => {
-    await filterStore.loadAllResults();
-    handleSetFilters();
-  },
-  { deep: true }
-);
-
-
-const handleSetFilters = async () => {
-  loadingFilters.value = true;
-  mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
-
-  const allFilters = await filterStore.loadAllFilters();
-
-  const allOptions = mainFilters.value.map((filter:any) => allFilters.filter((item:any) => item.parent_id === filter.id));
-
-  filterOptions.value = [];
-  allOptions.forEach((options:any, index:any) => {
-    const filteredOptions = options.filter((option:any) => {
-      return filterStore.allResults.find((filteredResult:any) => {
-        return filteredResult.tag_category_ids.find((tagCategoryId:any) => tagCategoryId === option.id);
-      });
-    });
-
-    if (!filteredOptions.length) {
-      return;
-    }
-
-    filterOptions.value.push({
-      parentId: mainFilters.value[index].id,
-      options: filteredOptions,
-    });
-  });
-  loadingFilters.value = false;
-
-  const allAvailableOptions = filterOptions.value.reduce((prev:any, curr:any) => {
-    return [...prev, ...curr.options];
-  }, [] as Filter[]);
-
-  const foundFilters = allAvailableOptions.filter((option:any) => {
-    const doesInclude = props.modelValue.find((item: string) => item === option.id);
-    return doesInclude;
-  });
-
-  if (foundFilters?.length > 1) {
-    multipleSelections.value = foundFilters;
-  }
-
-  setPlaceholderText();
-};
-
 onMounted(async () => {
-  handleSetFilters();
+  setPlaceholderText();
 
   await filterStore.loadAllCommunities();
   filterStore.loadFilteredCommunities();
