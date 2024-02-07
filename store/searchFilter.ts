@@ -395,7 +395,7 @@ export const useFilterStore = defineStore({
       });
     },
     loadFilteredCommunities() {
-      if (!this.allCommunities.length) return;
+      if (!this.allCommunities?.length) return;
       this.filteredCommunities = this.allCommunities
         .filter((community) => community.care_facilities_active_count > 0)
         .filter((community) => {
