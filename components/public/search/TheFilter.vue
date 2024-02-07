@@ -337,6 +337,14 @@ const emitFiltersUpdated = () => {
   });
 };
 
+watch(()=> filterStore.allServiceTags, ()=> {
+  availableItemsForServiceList.value = [
+    ...deepToRaw(filterStore.allServiceTags),
+  ];
+}, {
+  deep: true
+})
+
 onMounted(async () => {
   availableItemsForServiceList.value = [
     ...deepToRaw(filterStore.allServiceTags),

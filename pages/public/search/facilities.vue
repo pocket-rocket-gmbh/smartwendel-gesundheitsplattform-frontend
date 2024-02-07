@@ -179,6 +179,8 @@ onMounted(async () => {
   filterStore.currentKinds = ["facility"];
   filterStore.updateFromUrlQuery();
   await filterStore.loadAllResults();
+
+  await filterStore.loadAllFacilityFilters();
   filterStore.loadFilteredFacilityMainFilters();
   showMap.value = !breakpoints.isMobile.value;
 });
