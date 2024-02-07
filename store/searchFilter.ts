@@ -420,22 +420,6 @@ export const useFilterStore = defineStore({
       if (!this.allUnalteredResults.length) {
         return;
       }
-
-      console.log("===============================");
-      console.log(" ");
-
-      console.log("allFacilityMainFilters", this.allFacilityMainFilters);
-      console.log("allServiceTags", this.allServiceTags);
-      console.log("allCommunities", this.allCommunities);
-
-      console.log(" ");
-
-      console.log("currentFacilityTags", this.currentFacilityTags);
-      console.log("currentServiceTags", this.currentServiceTags);
-      console.log("currentZips", this.currentZips);
-
-      console.log(" ");
-
       this.allResults = this.allUnalteredResults
         .filter((result) => {
           if (!this.currentKinds.length) return true;
@@ -474,9 +458,6 @@ export const useFilterStore = defineStore({
         this.filteredResults = this.allResults.filter((facility) => facility.id === this.mapFilter);
         return;
       }
-
-      console.log("this.allResults", this.allResults);
-      console.log("===============================");
 
       this.filteredResults = this.allResults;
     },
