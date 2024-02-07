@@ -179,6 +179,7 @@ onMounted(async () => {
   filterStore.currentKinds = ["facility"];
   filterStore.updateFromUrlQuery();
   await filterStore.loadAllResults();
+  filterStore.loadAllServiceFilters()
 
   await filterStore.loadAllFacilityFilters();
   filterStore.loadFilteredFacilityMainFilters();

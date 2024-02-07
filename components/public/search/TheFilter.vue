@@ -87,9 +87,8 @@
         class="general-font-size font-weight-medium is-dark-grey"
         >Verfeinere hier deine Suche:
       </span>
-      <v-skeleton-loader v-if="filterStore.filteredResults.length && loading" :loading="loading" type="article" class="filter-wrapper"> </v-skeleton-loader>
-        <div class="filter-tiles" v-if="filterStore.filteredResults.length !== 0 && !loading">
-         
+      <v-skeleton-loader v-if="availableItemsForServiceList.length === 0" type="article" class="filter-wrapper"> </v-skeleton-loader>
+        <div class="filter-tiles" v-else>
           <div v-for="filter in availableItemsForServiceList" class="filter-group">
             <div v-for="item in filter.next" class="mt-5 filter-selections">
               <span
@@ -306,11 +305,10 @@ const checkIfFiltersAreInFacilities = (
 
     return false;
   });
-
   return filters;
 };
 
-/* watch(
+watch(
   () => filterStore.filteredResults,
   (newValue:any) => {
     availableItemsForServiceList.value = [
@@ -322,8 +320,11 @@ const checkIfFiltersAreInFacilities = (
     );
 
     filterStore.loadAllFacilityFilters();
-  }
-); */
+    emitFiltersUpdated();
+  }, {
+  deep: true
+}
+);
 
 const emitFiltersUpdated = () => {
   useNuxtApp().$bus.$on("filtersUpdated", () => {
@@ -336,23 +337,23 @@ const emitFiltersUpdated = () => {
     );
   });
 };
-
-watch(()=> filterStore.allServiceTags, ()=> {
+ watch(()=> filterStore.allServiceTags, ()=> {
+  console.log('uhuhu')
   availableItemsForServiceList.value = [
-    ...deepToRaw(filterStore.allServiceTags),
-  ];
+      ...deepToRaw(filterStore.allServiceTags),
+    ];
+    checkIfFiltersAreInFacilities(
+      availableItemsForServiceList.value,
+       filterStore.allResults.map((facility : any) => facility.tag_category_ids).flat()
+    );
 }, {
   deep: true
-})
+}) 
 
 onMounted(async () => {
-  availableItemsForServiceList.value = [
-    ...deepToRaw(filterStore.allServiceTags),
-  ];
-
   emitFiltersUpdated();
-
 });
+
 </script>
 
 <style lang="scss" scoped>
