@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper d-flex flex-column justify-center">
+  <div class="wrapper is-primary-background d-flex flex-column justify-center">
     <div
       class="d-flex flex-column align-center justify-center text-white"
     >
@@ -18,7 +18,7 @@
               cover
             >
               <div
-                class="pa-3 pr-15 card-heading is-label-medium is-white" 
+                class="pa-3 pr-15 card-heading is-label-medium is-white-color" 
                 v-text="card.content.heading"
               ></div>
             </v-img>
@@ -98,7 +98,6 @@ const items = [
 }
 .wrapper {
   padding: 6.25rem;
-  background: rgb(34, 44, 52);
   @include md {
     padding: 1rem;
   }

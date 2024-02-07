@@ -26,7 +26,7 @@
             <PublicSearchCommunitySelectModal />
           </v-col>
         </v-row>
-        <div class="d-flex align-center justify-center is-white font-weight-medium my-2">oder</div>
+        <div class="d-flex align-center justify-center is-white-color font-weight-medium my-2">oder</div>
         <v-row>
           <v-col>
             <div class="field">

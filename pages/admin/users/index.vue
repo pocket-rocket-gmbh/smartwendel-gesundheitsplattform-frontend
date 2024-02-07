@@ -2,18 +2,22 @@
   <div>
     <v-row v-if="showBar">
       <v-col md="3">
-        <span class="general-font-size is-dark-grey font-weight-bold">Benutzer</span>
+        <span class="general-font-size is-secondary-color font-weight-bold"
+          >Benutzer</span
+        >
       </v-col>
       <v-col class="d-flex justify-end align-center">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+          <span
+            class="pl-1 general-font-size is-secondary-color font-weight-bold"
             >Einrichtung online</span
           >
         </div>
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
+          <span
+            class="pl-1 general-font-size is-secondary-color font-weight-bold"
             >Einrichtung nicht online</span
           >
         </div>

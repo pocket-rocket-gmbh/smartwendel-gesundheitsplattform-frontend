@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mb-6" v-if="filterStore.currentTags?.length || filterStore.currentZips?.length">
-      <div class="general-font-size font-weight-medium is-dark-grey mb-1">
+      <div class="general-font-size font-weight-medium is-secondary-color mb-1">
         Deine ausgewählten Filter:
       </div>
       <div v-if="filterStore.currentZips?.length">
@@ -79,12 +79,12 @@
       </v-btn>
     </div>
     <div>
-      <span v-if="filterStore.filteredResults.length === 0 && !loading" class="general-font-size font-weight-medium is-dark-grey">
+      <span v-if="filterStore.filteredResults.length === 0 && !loading" class="general-font-size font-weight-medium is-secondary-color">
         Keine weiteren Filter gefunden
       </span>
       <span
         v-if="filterStore.filteredResults.length && loading"
-        class="general-font-size font-weight-medium is-dark-grey"
+        class="general-font-size font-weight-medium is-secondary-color"
         >Verfeinere hier deine Suche:
       </span>
       <v-skeleton-loader v-if="filterStore.filteredResults.length" :loading="loading" type="article" class="filter-wrapper">
@@ -99,7 +99,7 @@
                     0
                   )
                 "
-                class="general-font-size font-weight-bold is-dark-grey"
+                class="general-font-size font-weight-bold is-secondary-color"
                 :class="[breakPoints.width.value <= 1280 ? 'd-flex justify-center' : '']"
                 >{{ item.title }}</span
               >

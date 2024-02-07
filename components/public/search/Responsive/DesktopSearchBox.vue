@@ -35,7 +35,7 @@
       <v-row>
         <v-col>
           <div class="field general-font-size">
-            <label class="label is-white">
+            <label class="label is-white-color">
               <div class="search-term general-font-size">
                 <p v-if="filterTitle">{{ filterTitle }}</p>
                 <p v-else class="waiting general-font-size">
@@ -52,7 +52,7 @@
         </v-col>
         <v-col>
           <div class="field general-font-size">
-            <label class="label is-white general-font-size">Gemeinde</label>
+            <label class="label is-white-color general-font-size">Gemeinde</label>
             <div class="select-wrapper">
               <div
                 class="popover general-font-size"
@@ -123,12 +123,12 @@
             </div>
           </div>
         </v-col>
-        <v-col md="1" class="d-flex justify-center align-end is-white mb-4">
+        <v-col md="1" class="d-flex justify-center align-end is-white-color mb-4">
           <div class="label font-weight-medium general-font-size">oder</div>
         </v-col>
         <v-col>
           <div class="field general-font-size">
-            <label class="label is-white">
+            <label class="label is-white-color">
               <div class="search-term">
                 <p class="general-font-size" v-if="searchTitle">{{ searchTitle }}</p>
                 <p v-else class="waiting general-font-size">

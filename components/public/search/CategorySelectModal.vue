@@ -8,7 +8,7 @@
     >
       <template v-slot:activator="{ props }">
         <div class="field">
-          <label class="label is-white">
+          <label class="label is-white-color">
             <div class="search-term">{{ filterTitle }}</div>
           </label>
           <div class="field" v-bind="props" @click="handleClearTermSearch()">

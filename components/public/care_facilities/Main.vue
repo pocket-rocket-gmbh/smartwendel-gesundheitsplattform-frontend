@@ -2,7 +2,10 @@
   <div class="main-wrapper">
     <v-row class="heading">
       <v-col class="d-flex align-center">
-        <span class="general-font-size font-weight-medium is-dark-grey d-md-block d-none text-wrap">{{ careFacility?.name }}</span>
+        <span
+          class="general-font-size font-weight-medium is-secondary-color d-md-block d-none text-wrap"
+          >{{ careFacility?.name }}</span
+        >
         <span v-if="careFacility?.billable_through_health_insurance_approved">
           <v-icon size="x-large" class="pl-8" color="primary"
             >mdi-check-decagram-outline</v-icon
@@ -13,17 +16,24 @@
     <v-divider class="my-5 d-md-block d-none"></v-divider>
     <div class="mt-4">
       <ClientOnly>
-        <PublicTextTooltipWrap class="pr-5 is-dark-grey description text-wrap" :text="careFacility?.description.replace('<p><br></p><p><br></p>', '<p><br></p>')" />
+        <PublicTextTooltipWrap
+          class="pr-5 is-secondary-color description text-wrap"
+          :text="
+            careFacility?.description.replace(
+              '<p><br></p><p><br></p>',
+              '<p><br></p>'
+            )
+          "
+        />
       </ClientOnly>
       <v-divider class="my-10"></v-divider>
-      <div class="genral-font-size is-dark-grey">
+      <div class="genral-font-size is-secondary-color">
         <i
           >Inhaltlich verantwortlich:
           <span v-if="careFacility?.name_responsible_person">{{
             careFacility?.name_responsible_person
           }}</span>
-          </i
-        >
+        </i>
       </div>
       <div
         v-if="

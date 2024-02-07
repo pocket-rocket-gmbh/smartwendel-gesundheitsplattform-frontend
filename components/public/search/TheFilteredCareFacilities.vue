@@ -41,9 +41,9 @@
           <v-row class="item-row">
             <v-col sm="12" md="6" class="mb-0 pb-0">
               <div class="d-flex justify-space-between align-center">
-                <div class="is-dark-grey font-weight-medium is-clickable">
+                <div class="is-label-big font-weight-medium is-clickable">
                   <a
-                    class="is-dark-grey"
+                    class="is-secondary-color"
                     :href="`/public/care_facilities/${careFacility.id}`"
                     >{{ careFacility.name }}</a
                   >
@@ -82,7 +82,7 @@
 
           <v-row class="item-row">
             <v-col cols="12" md="4" sm="4" xl="4" xs="12" class="mb-0 pb-0">
-              <div class="is-dark-grey mt-4">
+              <div class="is-secondary-color mt-4">
                 <div class="d-flex">
                   <img class="mr-2 icon" :src="iconAddress" />
                   <div v-if="careFacility.street">
@@ -102,22 +102,31 @@
               <div class="mt-4">
                 <div v-if="careFacility.phone" class="d-flex align-center">
                   <img class="mr-2 icon" :src="iconPhone" />
-                  <a class="is-dark-grey" :href="`tel:${careFacility.phone}`">{{
-                    careFacility.phone
-                  }}</a>
+                  <a
+                    class="is-secondary-color"
+                    :href="`tel:${careFacility.phone}`"
+                    >{{ careFacility.phone }}</a
+                  >
                 </div>
                 <div v-if="careFacility.email" class="d-flex align-center">
                   <img class="mr-2 icon" :src="iconMail" />
                   <a
-                    class="is-dark-grey"
+                    class="is-secondary-color"
                     :href="`mailto:${careFacility.email}`"
                     >{{ careFacility.email }}</a
                   >
                 </div>
               </div>
             </v-col>
-            <v-col cols="12" md="4" sm="4" xl="4" xs="12" class="mb-0 pb-0 d-flex justify-center">
-              dedeed
+            <v-col
+              cols="12"
+              md="4"
+              sm="4"
+              xl="4"
+              xs="12"
+              class="mb-0 pb-0 d-flex justify-center"
+            >
+              
             </v-col>
           </v-row>
           <v-row>
@@ -177,7 +186,6 @@ const emit = defineEmits<{
 const goToFacility = (careFacility: any) => {
   router.push({ path: `/public/care_facilities/${careFacility.id}` });
 };
-
 
 const filterStore = useFilterStore();
 

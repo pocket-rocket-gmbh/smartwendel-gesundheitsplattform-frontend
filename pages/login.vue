@@ -35,13 +35,16 @@
           <div
             @click="emailAlreadyGiven()"
             align="center"
-            class="mt-2 is-clickable is-dark-grey general-font-size"
+            class="mt-2 is-clickable is-secondary-color general-font-size"
           >
             Passwort vergessen?
           </div>
 
           <nuxt-link to="/register"
-            ><div align="center" class="mt-6 is-dark-grey general-font-size">
+            ><div
+              align="center"
+              class="mt-6 is-secondary-color general-font-size"
+            >
               Noch keinen Account? Jetzt registrieren!
             </div></nuxt-link
           >
@@ -90,9 +93,16 @@ export default defineComponent({
     const auth = async () => {
       loading.value = true;
       errors.value = "";
-      const data = { email: email.value, password: password.value, scope: "health" };
+      const data = {
+        email: email.value,
+        password: password.value,
+        scope: "health",
+      };
 
-      const { data: result } = await axios.post<ServerCallResult>("/api/login", { data });
+      const { data: result } = await axios.post<ServerCallResult>(
+        "/api/login",
+        { data }
+      );
 
       if (result.status === ResultStatus.SUCCESSFUL) {
         const jwt = result.data.jwt_token;

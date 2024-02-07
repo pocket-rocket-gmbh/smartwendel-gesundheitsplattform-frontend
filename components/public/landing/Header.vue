@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <h1 class="is-white word-break title" lang="de">{{ title }}</h1>
+    <h1 class="is-white-color word-break title" lang="de">{{ title }}</h1>
     <PublicLandingChooseCategory class="search-field"/>
-    <p class="is-paragraph is-white word-break title" lang="de">{{ subTitle }}</p>
+    <p class="is-paragraph is-white-color word-break title" lang="de">{{ subTitle }}</p>
     
   </div>
 </template>

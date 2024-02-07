@@ -2,7 +2,7 @@
   <div class="wrapper">
     <v-row>
       <v-col class="d-flex justify-center align-center text-center">
-        <h2
+        <h2 class="is-secondary"
           >Sie haben dringende Fragen <br> und benötigen schnelle Antworten:</h2
         >
       </v-col>
@@ -16,13 +16,13 @@
             <div class="icons d-flex flex-column justify-center align-center">
               <img :src="item.content.image" min-width="50" max-width="50" />
               <h4
-                class="d-flex align-center title"
+                class="d-flex align-center title is-secondary"
               >
                 {{ item.content.heading }}
               </h4>
             </div>
             <div
-              class="is-paragraph"
+              class="is-paragraph is-secondary"
               :class="[breakPoints.width.value > 960 ? 'description' : '']"
             >
               {{ item.content.description }}

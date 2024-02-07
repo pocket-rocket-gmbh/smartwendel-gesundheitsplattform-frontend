@@ -1,11 +1,16 @@
 <template>
-  <div class="sub-categories-wrapper general-font-size" >
+  <div class="sub-categories-wrapper general-font-size">
     <v-row
       class="sub-category text-center align-center justify-center"
       :id="subCategory?.id.replaceAll('-', '')"
     >
-      <v-col class="d-flex flex-column is-dark-grey justify-center">
-        <div :class="[breakPoints.width.value < 960 ? 'mt-4' : '', breakPoints.width.value < 515 ? 'mt-15' : '']">
+      <v-col class="d-flex flex-column is-secondary-color justify-center">
+        <div
+          :class="[
+            breakPoints.width.value < 960 ? 'mt-4' : '',
+            breakPoints.width.value < 515 ? 'mt-15' : '',
+          ]"
+        >
           <span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
         </div>
         <div>

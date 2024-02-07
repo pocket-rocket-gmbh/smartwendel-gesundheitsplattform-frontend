@@ -1,14 +1,25 @@
 <template>
   <div class="main">
-    <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu" height="100px">
+    <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu">
       <v-app-bar-title>
         <div class="d-flex align-center">
           <div class="d-flex align-center">
-            <a href="/" @click.prevent="navigateTo('/')" class="d-flex align-center">
-              <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
+            <a
+              href="/"
+              @click.prevent="navigateTo('/')"
+              class="d-flex align-center"
+            >
+              <img
+                src="~/assets/images/logo.png"
+                class="is-clickable"
+                width="80px"
+              />
             </a>
           </div>
-          <div v-if="breakPoints.width.value >= 1480" class="align-center d-flex mx-2">
+          <div
+            v-if="breakPoints.width.value >= 1480"
+            class="align-center d-flex mx-2"
+          >
             <div
               class="categories-wrapper is-clickable d-flex"
               v-for="(category, index) in categories"
@@ -16,7 +27,7 @@
             >
               <div class="title mx-5 font-weight-medium">
                 <span
-                  class="is-clickable general-font-size is-dark-grey"
+                  class="is-clickable general-font-size is-secondary-color"
                   :class="[
                     currentRoute.includes(currentCategory?.id) &&
                     currentCategory.name === category.name
@@ -32,15 +43,13 @@
                 <v-list>
                   <v-list-item>
                     <div
-                      v-for="(sub_category) in subCategories[category.id]"
+                      v-for="sub_category in subCategories[category.id]"
                       :key="sub_category.id"
                       @click="setItemsAndGo(category, sub_category)"
                     >
                       <div class="list-item">
                         <div>
-                          <span
-                            class="general-font-size"
-                          >
+                          <span class="general-font-size">
                             {{ sub_category.name }}
                           </span>
                         </div>
@@ -50,11 +59,13 @@
                 </v-list>
               </div>
             </div>
-            <div v-if="!loading" class="general-font-size is-dark-grey">
+            <div v-if="!loading" class="general-font-size is-secondary-color">
               <span
                 href="/public/search/facilities"
                 class="is-clickable mx-5"
-                :class="[currentRoute.includes('facilities') ? 'is-primary' : '']"
+                :class="[
+                  currentRoute.includes('facilities') ? 'is-primary' : '',
+                ]"
                 @click.prevent="goTo('/public/search/facilities')"
               >
                 Anbietersuche
@@ -73,7 +84,10 @@
           "
         >
           <v-row class="mx-1 text-center">
-            <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
+            <v-col
+              class="flex-column align-center is-clickable"
+              @click="goToRegister()"
+            >
               <div class="font-weight-medium">Dein Angebot fehlt?</div>
               <div class="font-weight-light">Registriere dich!</div>
             </v-col>
@@ -92,13 +106,18 @@
           <img :src="regiterIcon" />
         </div>
         <div class="pl-3" v-if="!appStore.loading">
-          <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
+          <v-btn
+            v-if="!useUser().loggedIn()"
+            color="primary"
+            icon
+            @click="goToLogin"
+          >
             <img :src="loginIcon" />
           </v-btn>
         </div>
         <div class="d-flex align-center main">
           <span
-            class="mx-3 menu-list general-font-size is-dark-grey pointer"
+            class="mx-3 menu-list general-font-size is-secondary-color pointer"
             v-if="useUser().isAdmin() && breakPoints.width.value >= 1530"
             href="/admin"
             @click.prevent="saveCurrentUrlAndRoute('/admin')"
@@ -106,8 +125,10 @@
             Admin-Bereich
           </span>
           <span
-            class="mx-3 menu-list general-font-size pointer is-dark-grey"
-            v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
+            class="mx-3 menu-list general-font-size pointer is-secondary-color"
+            v-else-if="
+              useUser().isFacilityOwner() && breakPoints.width.value >= 1530
+            "
             href="/admin/care_facilities"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
           >
@@ -118,7 +139,10 @@
             :user-is-admin="userIsAdmin"
             v-if="!appStore.loading"
           />
-          <v-skeleton-loader v-if="appStore.loading" type="avatar"></v-skeleton-loader>
+          <v-skeleton-loader
+            v-if="appStore.loading"
+            type="avatar"
+          ></v-skeleton-loader>
         </div>
       </div>
       <div
@@ -146,7 +170,9 @@
             <div class="general-font-size font-weight-medium mb-1">
               Dein Angebot fehlt?
             </div>
-            <div class="general-font-size font-weight-light">Registriere dich!</div>
+            <div class="general-font-size font-weight-light">
+              Registriere dich!
+            </div>
           </div>
         </div>
         <v-btn
@@ -157,7 +183,10 @@
         >
           Einloggen
         </v-btn>
-        <div v-if="useUser().loggedIn() && currentUser" class="d-flex ml-5 my-2">
+        <div
+          v-if="useUser().loggedIn() && currentUser"
+          class="d-flex ml-5 my-2"
+        >
           <img
             v-if="currentUser.image_url"
             :src="currentUser.image_url"
@@ -232,12 +261,17 @@
             :class="[currentRoute.includes('facilities') ? 'is-visited' : '']"
             @click.prevent="goTo('/public/search/facilities')"
           >
-          <div class="d-flex align-center general-font-size"> <img class="icons-menu mr-5" :src="iconFacility"> <span>Anbieter</span></div>
+            <div class="d-flex align-center general-font-size">
+              <img class="icons-menu mr-5" :src="iconFacility" />
+              <span>Anbieter</span>
+            </div>
           </div>
         </template>
       </div>
       <div class="terms-of-use">
-        <v-icon color="#8AB61D" class="ml-2 py-5">mdi-note-check-outline</v-icon>
+        <v-icon color="#8AB61D" class="ml-2 py-5"
+          >mdi-note-check-outline</v-icon
+        >
         <span
           class="mr-6 is-clickable general-font-size"
           @click.prevent="goTo('/rules_of_conduct')"

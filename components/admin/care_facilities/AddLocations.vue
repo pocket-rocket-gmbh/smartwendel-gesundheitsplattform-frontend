@@ -1,21 +1,33 @@
 <template>
   <div>
     <div>
-      <v-btn class="mt-4 mb-1 ml-n2" size="large" elevation="0" variant="outlined" @click="openLocationDialog(null)">
+      <v-btn
+        class="mt-4 mb-1 ml-n2"
+        size="large"
+        elevation="0"
+        variant="outlined"
+        @click="openLocationDialog(null)"
+      >
         Ort hinzufügen
       </v-btn>
       <template v-if="itemId">
         <v-table v-if="careFacility?.locations.length > 0">
           <thead>
             <tr>
-              <th class="general-font-size is-dark-grey">Adresse</th>
+              <th class="general-font-size is-secondary-color">Adresse</th>
               <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="location in careFacility?.locations" :key="location.id">
-              <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" :item-id="itemId"/></td>
+              <td>
+                <AdminCareFacilitiesLocationName
+                  :lat="location.latitude"
+                  :long="location.longitude"
+                  :item-id="itemId"
+                />
+              </td>
               <td>
                 <v-icon
                   class="is-clickable"
@@ -34,7 +46,13 @@
                   >mdi-pencil</v-icon
                 >
               </td>
-              <td><v-icon class="is-clickable" @click="deleteLocation(location.id)">mdi-delete</v-icon></td>
+              <td>
+                <v-icon
+                  class="is-clickable"
+                  @click="deleteLocation(location.id)"
+                  >mdi-delete</v-icon
+                >
+              </td>
             </tr>
           </tbody>
         </v-table>
@@ -43,17 +61,22 @@
         <v-table v-if="offlineLocations.length > 0">
           <thead>
             <tr>
-              <th class="general-font-size is-dark-grey">Addresse</th>
+              <th class="general-font-size is-secondary-color">Addresse</th>
               <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(location, index) in offlineLocations" :key="index">
-              <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" /></td>
+              <td>
+                <AdminCareFacilitiesLocationName
+                  :lat="location.latitude"
+                  :long="location.longitude"
+                />
+              </td>
               <td>
                 <v-icon
-                  class="is-clickable general-font-size is-dark-grey"
+                  class="is-clickable general-font-size is-secondary-color"
                   @click="
                     openLocationDialog({
                       id: String(index),
@@ -69,7 +92,13 @@
                   >mdi-pencil</v-icon
                 >
               </td>
-              <td><v-icon class="is-clickable general-font-size is-dark-grey" @click="deleteOfflineLocation(index)">mdi-delete</v-icon></td>
+              <td>
+                <v-icon
+                  class="is-clickable general-font-size is-secondary-color"
+                  @click="deleteOfflineLocation(index)"
+                  >mdi-delete</v-icon
+                >
+              </td>
             </tr>
           </tbody>
         </v-table>
@@ -174,7 +203,10 @@ const saveLocationOffline = async (lat: number, long: number) => {
 
     emit("offline", [...props.offlineLocations]);
   } else {
-    emit("offline", [...props.offlineLocations, { latitude: lat, longitude: long }]);
+    emit("offline", [
+      ...props.offlineLocations,
+      { latitude: lat, longitude: long },
+    ]);
   }
 
   location.value = null;

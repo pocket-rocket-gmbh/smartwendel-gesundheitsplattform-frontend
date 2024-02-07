@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="general-font-size is-dark-grey font-weight-bold">Bereiche</div>
+    <div class="general-font-size is-secondary-color font-weight-bold">
+      Bereiche
+    </div>
 
     <v-btn
       elevation="0"
@@ -165,10 +167,15 @@ const getItems = async (endpoint = "categories") => {
       console.error("No subCategories!");
       continue;
     }
-    currentSubCategories.value = [...currentSubCategories.value, ...subCategories];
+    currentSubCategories.value = [
+      ...currentSubCategories.value,
+      ...subCategories,
+    ];
 
     for (const [index, subCategory] of subCategories.entries()) {
-      api.setEndpoint(`categories/${category.id}/sub_categories/${subCategory.id}`);
+      api.setEndpoint(
+        `categories/${category.id}/sub_categories/${subCategory.id}`
+      );
 
       categoryItem.next.push({
         id: subCategory.id,
@@ -196,7 +203,10 @@ const getItems = async (endpoint = "categories") => {
         console.error("No subSubCategories!");
         continue;
       }
-      currentSubSubCategories.value = [...currentSubSubCategories.value, ...subSubCategories];
+      currentSubSubCategories.value = [
+        ...currentSubSubCategories.value,
+        ...subSubCategories,
+      ];
 
       for (const subSubCategory of subSubCategories) {
         categoryItem.next[index].next.push({
@@ -251,7 +261,12 @@ const handleClick = async (
   }
 };
 
-const handleEdit = async (itemIds: string[], layer: number, name: string, description?: string) => {
+const handleEdit = async (
+  itemIds: string[],
+  layer: number,
+  name: string,
+  description?: string
+) => {
   api.setEndpoint(`categories/${itemIds[0]}`);
 
   const result = await api.updateItem(
@@ -266,7 +281,12 @@ const handleEdit = async (itemIds: string[], layer: number, name: string, descri
   }
 };
 
-const handleCreate = async (itemIds: string[], layer: number, name: string, description?: string) => {
+const handleCreate = async (
+  itemIds: string[],
+  layer: number,
+  name: string,
+  description?: string
+) => {
   if (layer === 0) {
     api.setEndpoint(`categories/${itemIds[0]}`);
   } else if (layer === 1) {
@@ -276,7 +296,10 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, desc
     return;
   }
 
-  const result = await api.createItem({ name, description, scope: "care_facility", tags: [] }, `Erfolgreich erstellt`);
+  const result = await api.createItem(
+    { name, description, scope: "care_facility", tags: [] },
+    `Erfolgreich erstellt`
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) getItems();
 };
@@ -328,19 +351,35 @@ const handleMove = async (
   const itemsToUpdate: any[] = [];
 
   if (layer === 0) {
-    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const category = currentCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
+    for (
+      let newIndex = actualStartIndex;
+      newIndex <= actualEndIndex;
+      newIndex++
+    ) {
+      const category = currentCategories.value.find(
+        (category) => category.id === itemsInCategory[newIndex].id
+      );
       if (!category) throw "Category not found";
       itemsToUpdate.push(category);
     }
   } else if (layer === 1) {
-    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const subCategory = currentSubCategories.value.find((category) => category.id === itemsInCategory[newIndex].id);
+    for (
+      let newIndex = actualStartIndex;
+      newIndex <= actualEndIndex;
+      newIndex++
+    ) {
+      const subCategory = currentSubCategories.value.find(
+        (category) => category.id === itemsInCategory[newIndex].id
+      );
       if (!subCategory) throw "SubCategory not found";
       itemsToUpdate.push(subCategory);
     }
   } else if (layer === 2) {
-    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
+    for (
+      let newIndex = actualStartIndex;
+      newIndex <= actualEndIndex;
+      newIndex++
+    ) {
       const subSubCategory = currentSubSubCategories.value.find(
         (category) => category.id === itemsInCategory[newIndex].id
       );
@@ -353,7 +392,10 @@ const handleMove = async (
     const currentItem = itemsToUpdate[i];
 
     api.setEndpoint(`categories/${currentItem.id}`);
-    const result = await api.updateItem({ menu_order: actualStartIndex + i }, null);
+    const result = await api.updateItem(
+      { menu_order: actualStartIndex + i },
+      null
+    );
 
     if (result.status !== ResultStatus.SUCCESSFUL) {
       throw "Something went wrong while moving the items!";

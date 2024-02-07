@@ -4,10 +4,10 @@
   <div class="categories-wrapper">
     <div class="text intro-wraper is-primary">
       <div>
-        <h2 class="is-primary">Finden Sie unter zahlreichen Pflegeanbietern Ihr passendes Angebot!</h2>
+        <h2 class="is-secondary">Finden Sie unter zahlreichen Pflegeanbietern Ihr passendes Angebot!</h2>
       </div>
       <div>
-        <p class="is-paragraph is-primary">
+        <p class="is-paragraph is-secondary">
           At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
           gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
           dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
@@ -33,7 +33,7 @@
         <div @click="goToLink(item.content.link)" class="is-clickable items-content">
           <img class="image" :src="item.content.icon" />
           <h4
-            class="is-primary ml-4"
+            class="is-secondary ml-4"
             v-html="item.content.heading"
           ></h4>
         </div>
@@ -160,7 +160,7 @@ const items = [
 
     .image {
       border-radius: 50%;
-      background-color: white;
+      background-color: $lighter-grey;
       transition: transform 0.5s ease-in-out;
       width: 120px;
       box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);

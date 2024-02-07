@@ -11,46 +11,59 @@
   >
     <template #title>
       <div
-        class="d-flex align-center is-dark-grey"
+        class="d-flex align-center is-secondary-color"
         :class="[handleExpandToggled ? 'text-h5' : 'text-h6']"
       >
-        <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'facility'">
+          Branchenspezifisches Leistungsangebot
+        </div>
         <div class="has-font-size-small-medium ml-3">
           <v-tooltip location="top" width="300px">
             <template v-slot:activator="{ props }">
-              <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
+              <v-icon class="help-tooltip" v-bind="props"
+                >mdi-information-outline</v-icon
+              >
             </template>
             <span v-if="kind === 'facility'">
-              Trage Begriffe ein, die dein individuelles Angebot möglichst präzise
-              beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“ und „Demenz“, wenn
-              es sich um eine Pflegeinrichtung oder „Yoga“, „Les Mills“ und
-              „Krafttraining“, wenn es sich um ein Fitnessstudio handelt). Auf diese Weise
-              gelangen Besucherinnen und Besucher zu deinem Profil, sobald sie nach den
-              entsprechenden Schlagwörtern suchen.
+              Trage Begriffe ein, die dein individuelles Angebot möglichst
+              präzise beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“
+              und „Demenz“, wenn es sich um eine Pflegeinrichtung oder „Yoga“,
+              „Les Mills“ und „Krafttraining“, wenn es sich um ein Fitnessstudio
+              handelt). Auf diese Weise gelangen Besucherinnen und Besucher zu
+              deinem Profil, sobald sie nach den entsprechenden Schlagwörtern
+              suchen.
             </span>
           </v-tooltip>
         </div>
       </div>
       <div v-if="!expand" class="mt-3">
-        <span class="is-dark-grey general-font-size" v-if="preSetTags.length">Bereits ausgewählt:</span>
+        <span
+          class="is-secondary-color general-font-size"
+          v-if="preSetTags.length"
+          >Bereits ausgewählt:</span
+        >
         <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
           {{ tag.name }}
         </v-chip>
       </div>
     </template>
     <template #content>
-      <div class="content general-font-size is-dark-grey">
+      <div class="content general-font-size is-secondary-color">
         <div v-if="kind === 'facility'">
-          Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches Angebot.
+          Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches
+          Angebot.
         </div>
         <div v-if="preSetTags?.length" class="tags my-6">
-          <span class="general-font-size is-dark-grey font-weight-bold mt-1">Bereits ausgewählt:</span>
+          <span
+            class="general-font-size is-secondary-color font-weight-bold mt-1"
+            >Bereits ausgewählt:</span
+          >
           <v-chip
             v-for="tag in preSetTags"
             closable
             @click:close="handleRemoveTag(tag)"
             :key="tag.id"
-            class="is-dark-grey"
+            class="is-secondary-color"
           >
             {{ tag.name }}
           </v-chip>
@@ -74,18 +87,28 @@
           >
             <template v-slot:no-data>
               <v-list-item>
-                <v-list-item-title v-if="currentTagSearch.length <= 2" class="is-dark-grey">
+                <v-list-item-title
+                  v-if="currentTagSearch.length <= 2"
+                  class="is-secondary-color"
+                >
                   Bitte mindestens 3 Zeichen eingeben um Schlagwörter zu finden
                 </v-list-item-title>
-                <v-list-item-title v-else class="is-dark-grey">
-                  Kein Schlagwort mit dem Namen "<strong>{{ currentTagSearch }}</strong
-                  >" gefunden. Drücke auf <b>Hinzufügen</b> um das neue Schlagwort zu
-                  erstellen
+                <v-list-item-title v-else class="is-secondary-color">
+                  Kein Schlagwort mit dem Namen "<strong>{{
+                    currentTagSearch
+                  }}</strong
+                  >" gefunden. Drücke auf <b>Hinzufügen</b> um das neue
+                  Schlagwort zu erstellen
                 </v-list-item-title>
               </v-list-item>
             </template>
           </v-combobox>
-          <v-btn class="add-button" color="grey" variant="flat" @click="handleAddTag">
+          <v-btn
+            class="add-button"
+            color="grey"
+            variant="flat"
+            @click="handleAddTag"
+          >
             Hinzufügen
           </v-btn>
         </div>
@@ -138,7 +161,9 @@ const allTagsWithoutSelected = computed(() => {
 });
 
 const handleRemoveTag = (tag: FilterTag) => {
-  const tagIndex = props.preSetTags.findIndex((preSetTag) => preSetTag.id === tag.id);
+  const tagIndex = props.preSetTags.findIndex(
+    (preSetTag) => preSetTag.id === tag.id
+  );
 
   if (tagIndex === -1) return;
 
@@ -162,9 +187,9 @@ const createTag = async (name: string) => {
 const handleAddTag = async () => {
   if (!currentTag.value) return;
   if (typeof currentTag.value === "string") {
-    if (currentTag.value.includes(',')) {
-      const tagsArray = currentTag.value.split(',');
-      const filteredTags = tagsArray.filter(tag => tag.trim() !== '');
+    if (currentTag.value.includes(",")) {
+      const tagsArray = currentTag.value.split(",");
+      const filteredTags = tagsArray.filter((tag) => tag.trim() !== "");
       for (const tag of filteredTags) {
         const newTag = await createTag(tag.trim());
         if (newTag) {

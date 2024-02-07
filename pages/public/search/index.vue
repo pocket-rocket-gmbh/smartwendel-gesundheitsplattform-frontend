@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-row class="mt-md-4 search-field-search">
-      <v-col class="d-flex align-center is-white">
+      <v-col class="d-flex align-center is-white-color">
         <span
-          class="is-white font-weight-medium general-font-size"
+          class="is-white-color font-weight-medium general-font-size"
           v-if="filterStore.currentSearchTerm"
         >
           Suchbegriff: {{ filterStore.currentSearchTerm }}

@@ -8,14 +8,12 @@
     >
       Zurück zur Suche
     </v-btn>
-    <PublicCareFacilitiesImages
-      :care-facility="careFacility"
-    />
+    <PublicCareFacilitiesImages :care-facility="careFacility" />
     <div
       class="d-md-none d-sm-block"
       :class="[careFacility?.logo_url ? ' mt-10 pt-15' : 'mt-5']"
     >
-      <span class="general-font-size font-weight-medium is-dark-grey">{{
+      <span class="general-font-size font-weight-medium is-secondary-color">{{
         careFacility?.name
       }}</span>
       <v-divider class="my-5"></v-divider>
@@ -23,9 +21,7 @@
 
     <v-row class="row">
       <v-col sm="12" md="8" class="order-last order-md-first">
-        <PublicCareFacilitiesMain
-          :care-facility="careFacility"
-        />
+        <PublicCareFacilitiesMain :care-facility="careFacility" />
         <PublicCareFacilitiesContact :care-facility="careFacility" />
       </v-col>
       <v-col md="4" sm="12">

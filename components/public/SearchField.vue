@@ -1,7 +1,7 @@
 <template>
   <div class="search-field">
     <div
-      class="category-input is-dark-grey"
+      class="category-input is-secondary-color"
       :class="[defaultStyling ? 'default' : 'styled']"
     >
       <div class="form">
@@ -10,7 +10,7 @@
             type="text"
             @keyup.enter="handlePressEnter($event)"
             :value="modelValue"
-            class="input is-dark-grey general-font-size"
+            class="input is-secondary-color general-font-size"
             :placeholder="placeholderText"
             @input="handleInput"
             @click="showPopover = true"
@@ -29,7 +29,7 @@
 
       <div
         v-show="modelValue && showPopover"
-        class="search-results-popover is-dark-grey general-font-size"
+        class="search-results-popover is-secondary-color general-font-size"
         :class="[defaultStyling ? 'default' : 'styled']"
         ref="popoverParentRef"
       >
@@ -55,12 +55,12 @@
             </div>
             <div
               v-if="!filteredItems?.length && kind"
-              class="name is-dark-grey general-font-size"
+              class="name is-secondary-color general-font-size"
             >
               Keine Ergebnisse gefunden
             </div>
             <div
-              class="result is-dark-grey general-font-size"
+              class="result is-secondary-color general-font-size"
               v-for="result in filteredItems"
               :key="result.id"
               @click.stop="
@@ -86,7 +86,11 @@
 import { onClickOutside } from "@vueuse/core";
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import searchIcon from "~/assets/icons/facilityTypes/search.svg";
-import { type Facility, type FilterKind, useFilterStore } from "~/store/searchFilter";
+import {
+  type Facility,
+  type FilterKind,
+  useFilterStore,
+} from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string;
@@ -138,7 +142,7 @@ const routeToResults = (result?: Facility) => {
     router.push({ path: `/public/care_facilities/${result.id}` });
   } else {
     router.push({ path: "/public/search" });
-   }
+  }
 };
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));

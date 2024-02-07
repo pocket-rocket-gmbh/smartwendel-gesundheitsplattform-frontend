@@ -1,7 +1,14 @@
 <template>
   <div>
-    <span class="general-font-size is-dark-grey font-weight-bold">Mein Konto</span>
-    <v-alert type="info" density="compact" closable class="mt-2 general-font-size">
+    <span class="general-font-size is-secondary-color font-weight-bold"
+      >Mein Konto</span
+    >
+    <v-alert
+      type="info"
+      density="compact"
+      closable
+      class="mt-2 general-font-size"
+    >
       Hier kannst du deine Daten vervollständigen und dein Passwort ändern.
     </v-alert>
     <v-alert
@@ -27,7 +34,9 @@
     <v-divider class="my-10"></v-divider>
     <div class="box my-15">
       <div class="main" v-if="item">
-        <span class="general-font-size is-dark-grey font-weight-bold mb-4">Persönliche Daten</span>
+        <span class="general-font-size is-secondary-color font-weight-bold mb-4"
+          >Persönliche Daten</span
+        >
         <v-form ref="form">
           <v-row justify="center">
             <v-col>
@@ -39,44 +48,64 @@
                 label="Telefonnummer*"
                 type="number"
               />
-              <v-alert type="info" density="compact" class="my-2" v-if="editInformations"
-                > Diese Funktion ist noch nicht implementiert, Änderungen werden noch nicht gespeichert</v-alert>
-
-              <v-alert type="warning" density="compact" class="my-2" v-if="emailConfirmation.length"
-                >Aufgrund dieser Änderungen muss dein Benutzer durch den Landkreis neu geprüft und freigegeben werden. So lange stehen deine Inhalte nicht zur Verfügung.</v-alert
-              >
-              <div :class="[
-              editInformations
-                ? 'has-bg-light-red pt-5'
-                : '',
-            ]">
-                <v-text-field
-                v-model="item.email"
-                :rules="[rules.required, rules.email]"
-                label="E-Mail *"
-                :disabled="!editInformations"
-              />
-              <v-text-field
+              <v-alert
+                type="info"
+                density="compact"
+                class="my-2"
                 v-if="editInformations"
-                v-model="emailConfirmation"
-                label="E-Mail Bestätigung *"
-                :disabled="!editInformations"
-                :rules="[
-                  item.email === emailConfirmation ||
-                    'Passwörter stimmen nicht überein',
-                  rules.required,
-                  rules.email,
-                ]"
-              />
-              </div>             
-              <div class="my-5" >
+              >
+                Diese Funktion ist noch nicht implementiert, Änderungen werden
+                noch nicht gespeichert</v-alert
+              >
+
+              <v-alert
+                type="warning"
+                density="compact"
+                class="my-2"
+                v-if="emailConfirmation.length"
+                >Aufgrund dieser Änderungen muss dein Benutzer durch den
+                Landkreis neu geprüft und freigegeben werden. So lange stehen
+                deine Inhalte nicht zur Verfügung.</v-alert
+              >
+              <div :class="[editInformations ? 'has-bg-light-red pt-5' : '']">
+                <v-text-field
+                  v-model="item.email"
+                  :rules="[rules.required, rules.email]"
+                  label="E-Mail *"
+                  :disabled="!editInformations"
+                />
+                <v-text-field
+                  v-if="editInformations"
+                  v-model="emailConfirmation"
+                  label="E-Mail Bestätigung *"
+                  :disabled="!editInformations"
+                  :rules="[
+                    item.email === emailConfirmation ||
+                      'Passwörter stimmen nicht überein',
+                    rules.required,
+                    rules.email,
+                  ]"
+                />
+              </div>
+              <div class="my-5">
                 <span v-if="editInformations">
-                  <v-btn variant="outlined" @click="editInformations = false" :disabled="!item.email.includes('@') || !emailConfirmation.includes('@') || item.email !== emailConfirmation">
+                  <v-btn
+                    variant="outlined"
+                    @click="editInformations = false"
+                    :disabled="
+                      !item.email.includes('@') ||
+                      !emailConfirmation.includes('@') ||
+                      item.email !== emailConfirmation
+                    "
+                  >
                     Neue E-Mail-Adresse speichern
                   </v-btn>
                 </span>
                 <span v-else>
-                  <v-btn variant="outlined" @click="confirmEditDialogOpen = true">
+                  <v-btn
+                    variant="outlined"
+                    @click="confirmEditDialogOpen = true"
+                  >
                     E-Mail-Adresse ändern
                   </v-btn>
                 </span>
@@ -94,7 +123,10 @@
                   editInformations = false;
                 "
               />
-              <span class="general-font-size is-dark-grey font-weight-bold mb-4">Profilbild</span>
+              <span
+                class="general-font-size is-secondary-color font-weight-bold mb-4"
+                >Profilbild</span
+              >
               <PublicUsersProfileImage
                 :preset-image-url="item.image_url"
                 @setImage="setImage"
@@ -117,7 +149,10 @@
         <v-divider class="my-10"></v-divider>
         <v-row>
           <v-col md="6">
-            <span class="general-font-size is-dark-grey font-weight-bold mb-4">Passwort ändern</span>
+            <span
+              class="general-font-size is-secondary-color font-weight-bold mb-4"
+              >Passwort ändern</span
+            >
             <v-text-field
               v-model="password"
               :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
