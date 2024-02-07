@@ -1,5 +1,10 @@
 <template>
-  <v-dialog v-model="open" width="500" transition="dialog-bottom-transition" persistent>
+  <v-dialog
+    v-model="open"
+    width="500"
+    transition="dialog-bottom-transition"
+    persistent
+  >
     <img
       v-if="finished"
       class="close-btn is-clickable"
@@ -10,7 +15,10 @@
     <v-card class="dialog">
       <span id="confetti-elem" class="confetti-effect"></span>
       <v-card-text class="card-text">
-        <div v-if="finished" class="d-flex flex-column align-center justify-center">
+        <div
+          v-if="finished"
+          class="d-flex flex-column align-center justify-center"
+        >
           <v-icon color="primary" size="50" @click="confettiReward()"
             >mdi-party-popper</v-icon
           >
@@ -21,7 +29,7 @@
             <span class="mb-5 text-h5"> Vielen Dank! </span>
             <span>{{ itemKindStep2 }} wurde online geschaltet! </span>
           </div>
-          <div class="is-dark-grey text-h5 font-weight-bold is-clickable">
+          <div class="is-secondary-color text-h5 font-weight-bold is-clickable">
             <a :href="linkToFacility" target="_blank">
               <v-btn
                 v-if="facilityId || item.id"
@@ -34,8 +42,13 @@
             </a>
           </div>
         </div>
-        <div v-else class="text-h5 pa-5 d-flex flex-column justify-center align-center">
-          <span class="mb-5"><v-icon color="primary">mdi-check-outline</v-icon></span>
+        <div
+          v-else
+          class="text-h5 pa-5 d-flex flex-column justify-center align-center"
+        >
+          <span class="mb-5"
+            ><v-icon color="primary">mdi-check-outline</v-icon></span
+          >
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
           <span v-if="user.is_active_on_health_scope"
             >Möchtest du {{ itemKindStep1 }} veröffentlichen?</span
@@ -64,15 +77,16 @@
             </v-btn>
           </v-col>
           <v-col md="6" class="d-flex justify-end">
-            <v-btn variant="flat" color="primary" @click="emitAccept(), confettiReward()">
+            <v-btn
+              variant="flat"
+              color="primary"
+              @click="emitAccept(), confettiReward()"
+            >
               <span> Jetzt veröffentlichen </span>
             </v-btn>
           </v-col>
         </v-row>
-        <v-row
-          no-gutters
-          v-if="!user.is_active_on_health_scope"
-        >
+        <v-row no-gutters v-if="!user.is_active_on_health_scope">
           <v-col class="d-flex justify-center">
             <v-btn
               variant="outlined"
@@ -118,23 +132,11 @@ export default defineComponent({
     const itemKindStep1 = computed(() => {
       if (props.item.kind === "facility") {
         return "deine Einrichtung";
-      } else if (props.item.kind === "course") {
-        return "deinen Kurs";
-      } else if (props.item.kind === "event") {
-        return "deine Veranstaltung";
-      } else if (props.item.kind === "news") {
-        return "deinen Beitrag";
       }
     });
     const itemKindStep2 = computed(() => {
       if (props.item.kind === "facility") {
         return "Deine Einrichtung";
-      } else if (props.item.kind === "course") {
-        return "Dein Kurs";
-      } else if (props.item.kind === "event") {
-        return "Deine Veranstaltung";
-      } else if (props.item.kind === "news") {
-        return "Dein Beitrag";
       }
     });
 
@@ -149,11 +151,8 @@ export default defineComponent({
     };
     const finished = ref(false);
 
-    const { reward: confettiReward, isAnimating: isConfettiAnimating } = useReward(
-      "confetti-elem",
-      "confetti",
-      config
-    );
+    const { reward: confettiReward, isAnimating: isConfettiAnimating } =
+      useReward("confetti-elem", "confetti", config);
 
     const emitAccept = async () => {
       await save();

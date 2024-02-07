@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-menu v-if="useUser().loggedIn()" v-model="menu" :close-on-content-click="false">
+    <v-menu
+      v-if="useUser().loggedIn()"
+      v-model="menu"
+      :close-on-content-click="false"
+    >
       <template v-slot:activator="{ props }">
         <div class="account-button" v-bind="props">
           <!-- <p class="mx-5 menu-list">Mein Account</p> -->
@@ -13,10 +17,13 @@
       <v-card class="mx-auto ma-2" width="300" v-if="currentUser">
         <v-list class="card-header">
           <v-list-item>
-            <v-list-item class="is-dark-grey font-weight-medium pa-0 ma-0">{{
-              currentUser?.name
-            }}</v-list-item>
-            <v-list-item-subtitle class="is-dark-grey">{{ currentUser?.email }}</v-list-item-subtitle>
+            <v-list-item
+              class="is-secondary-color font-weight-medium pa-0 ma-0"
+              >{{ currentUser?.name }}</v-list-item
+            >
+            <v-list-item-subtitle class="is-secondary-color">{{
+              currentUser?.email
+            }}</v-list-item-subtitle>
           </v-list-item>
         </v-list>
         <v-divider></v-divider>
@@ -27,14 +34,14 @@
             @click="closeMenuAndRouteTo(`/admin`)"
           >
             <v-icon class="mr-2">mdi-cog</v-icon>
-            <span class="is-dark-grey"> Admin-Bereich</span>
+            <span class="is-secondary-color"> Admin-Bereich</span>
           </v-list-item>
           <v-list-item
             class="is-clicable"
             @click="closeMenuAndRouteTo('/rules_of_conduct')"
           >
             <v-icon class="mr-2">mdi-note-check-outline</v-icon>
-            <span class="is-dark-grey">Nutzungsbedingungen</span>
+            <span class="is-secondary-color">Nutzungsbedingungen</span>
           </v-list-item>
           <v-list-item
             class="is-clicable"
@@ -45,12 +52,14 @@
             "
           >
             <v-icon class="mr-2">mdi-logout</v-icon>
-            <span class="is-dark-grey">Logout</span>
+            <span class="is-secondary-color">Logout</span>
           </v-list-item>
         </v-list>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="closeMenuAndRouteTo(``)"> schließen </v-btn>
+          <v-btn color="primary" @click="closeMenuAndRouteTo(``)">
+            schließen
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>

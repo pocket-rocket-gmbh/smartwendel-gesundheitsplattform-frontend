@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-if="!loading">
     <ClientOnly>
       <ClientSnackbar />
     </ClientOnly>
@@ -8,7 +8,7 @@
       <PublicCookieBanner />
     </ClientOnly> -->
     <v-main>
-      <slot v-if="!appStore.loading" />
+      <slot />
     </v-main>
     <PublicLayoutsFooter />
   </v-app>
@@ -24,6 +24,14 @@ const tooltipsStore = useTooltipsStore();
 const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
 api.setEndpoint("tooltips");
+
+const loading = ref(true);
+
+const setTimeOutForPageLoad = () => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 100);
+};
 
 const getTooltips = async () => {
   await api.retrieveCollection();
@@ -42,11 +50,13 @@ const initialize = async () => {
     useFilterStore().loadAllFilters(),
     useFilterStore().loadAllCommunities(),
     useFilterStore().loadUnalteredAllResults(),
+    useFilterStore().loadAllCategories(),
     getTooltips(),
   ]);
 };
 
 onMounted(async () => {
+  setTimeOutForPageLoad();
   document.addEventListener("scroll", handleScroll);
 
   appStore.loading = true;

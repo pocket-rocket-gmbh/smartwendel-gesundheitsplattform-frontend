@@ -15,20 +15,24 @@
         </div>
         <div class="results">
           <div class="map-widget">
+            <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
             <ClientMap
               :locations="locations"
-              v-if="showMap && filterStore.filteredResults.length > 0"
+              v-if="showMap && !appStore.loading"
               ref="map"
               :auto-fit="false"
               :center-point="{
-                lng: 7.131735,
-                lat: 49.523656,
+                lat: 50.03646,
+                lng: 12.00258,
               }"
-              :min-zoom="11"
+          
+              :default-zoom="15"
             />
           </div>
 
-          <div class="facilities"><PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" /></div>
+          <div class="facilities">
+            <PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" />
+          </div>
         </div>
       </div>
     </div>
@@ -39,6 +43,9 @@
 import { useFilterStore } from "~/store/searchFilter";
 import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
+import { useAppStore } from "~/store/app";
+
+const appStore = useAppStore();
 
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
@@ -53,20 +60,32 @@ watch(
 
 watch(
   () => filterStore.filteredResults,
-  () => updateLocations(),
+  () => updateLocations()
+);
+
+watch(
+  () => appStore.loading,
+  () => {
+    if (appStore.loading) return;
+    filterStore.loadAllResults();
+  }
 );
 
 const showSearchFilter = computed(() => {
   return breakpoints.width.value > BreakPoints.md;
 });
 
-
 const locations = ref<MapLocation[]>([]);
 const getLocationsFromFacilies = async (facilities: any[]) => {
   locations.value = [];
 
   for (const facility of facilities) {
-    if (facility.geocode_address?.length && facility.geocode_address[0] && facility.geocode_address[0].lon && facility.geocode_address[0].lat) {
+    if (
+      facility.geocode_address?.length &&
+      facility.geocode_address[0] &&
+      facility.geocode_address[0].lon &&
+      facility.geocode_address[0].lat
+    ) {
       locations.value.push({
         id: facility.id,
         latitude: parseFloat(facility.geocode_address[0].lat),
@@ -147,6 +166,5 @@ onBeforeUnmount(() => {
 
 .filter-control
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-
 
 </style>

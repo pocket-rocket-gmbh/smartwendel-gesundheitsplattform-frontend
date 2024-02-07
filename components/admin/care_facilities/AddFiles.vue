@@ -6,12 +6,12 @@
         :disabled="
           tagName === 'insurance' &&
           (itemId
-            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >=
-              1
-            : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance')
+                .length >= 1
+            : offlineDocuments.filter((doc) => doc.tag === 'insurance')
+                .length >= 1)
         "
         class="text-field file-input general-font-size"
-        
         label="Datei auswählen"
         v-model="file"
         @change="handleFile"
@@ -19,15 +19,15 @@
         show-size
       />
       <v-text-field
-        class="text-field is-dark-grey"
+        class="text-field is-secondary-color"
         :disabled="
           tagName === 'insurance' &&
           (itemId
-            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >=
-              1
-            : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance')
+                .length >= 1
+            : offlineDocuments.filter((doc) => doc.tag === 'insurance')
+                .length >= 1)
         "
-       
         label="Bezeichnung*"
         v-model="filename"
       />
@@ -35,15 +35,23 @@
     <div class="errors">
       <div v-if="errorInvalidFileType">
         <span class="warning">
-          <v-alert type="error" density="compact" closable class="mt-2 general-font-size"
+          <v-alert
+            type="error"
+            density="compact"
+            closable
+            class="mt-2 general-font-size"
             >nur (.pdf) Dateien sind erlaubt</v-alert
           >
         </span>
       </div>
       <div v-if="errorFileSizeTooLarge">
-        <v-alert type="warning" density="compact" closable class="mt-2 general-font-size"
-          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 10 MB
-          erlaubt</v-alert
+        <v-alert
+          type="warning"
+          density="compact"
+          closable
+          class="mt-2 general-font-size"
+          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 10
+          MB erlaubt</v-alert
         >
       </div>
     </div>
@@ -58,8 +66,12 @@
     >
       Hinzufügen
     </v-btn>
-    <div class="text-caption is-dark-grey">* Maximal 10 MB, PDF erlaubt</div>
-    <span class="mr-3 is-red is-dark-grey" v-if="loadingItem">wird hochgeladen ....</span>
+    <div class="text-caption is-secondary-color">
+      * Maximal 10 MB, PDF erlaubt
+    </div>
+    <span class="mr-3 is-red is-secondary-color" v-if="loadingItem"
+      >wird hochgeladen ....</span
+    >
 
     <v-list class="mt-5" v-if="tagName === 'insurance'">
       <template v-if="itemId">
@@ -70,7 +82,7 @@
           :key="document.id"
           :title="document.title"
           item-props
-          class="general-font-size is-dark-grey"
+          class="general-font-size is-secondary-color"
         >
           <template v-slot:prepend>
             <v-btn
@@ -84,20 +96,19 @@
             >
             </v-btn>
           </template>
-          <span class="general-font-size is-dark-grey">
+          <span class="general-font-size is-secondary-color">
             <i>{{ document.name.replace("-insurance", ".pdf") }}</i>
           </span>
           <v-divider></v-divider>
           <span v-if="documentAcepted" class="d-flex align-center text-primary">
             <v-icon>mdi-check-decagram-outline</v-icon>
-            <span class="general-font-size is-dark-grey">
+            <span class="general-font-size is-secondary-color">
               <i>Genehmigt</i>
             </span>
-         
           </span>
           <span v-else class="d-flex align-center text-warning">
             <v-icon>mdi-alert-outline</v-icon>
-            <span class="general-font-size is-dark-grey">
+            <span class="general-font-size is-secondary-color">
               <i>Datei wird überprüft</i>
             </span>
           </span>
@@ -119,7 +130,7 @@
           :key="index"
           :title="document.documentname"
           item-props
-          class="general-font-size is-dark-grey"
+          class="general-font-size is-secondary-color"
         >
           <template v-slot:prepend>
             <v-btn
@@ -136,13 +147,13 @@
           <v-divider></v-divider>
           <span v-if="documentAcepted" class="d-flex align-center text-primary">
             <v-icon>mdi-check-decagram-outline</v-icon>
-            <span class="general-font-size is-dark-grey">
+            <span class="general-font-size is-secondary-color">
               <i>Genehmigt</i>
             </span>
           </span>
           <span v-else class="d-flex align-center text-warning">
             <v-icon>mdi-alert-outline</v-icon>
-            <span class="general-font-size is-dark-grey">
+            <span class="general-font-size is-secondary-color">
               <i>Datei wird überprüft</i>
             </span>
           </span>
@@ -165,7 +176,7 @@
           :key="document.id"
           :title="document.title"
           item-props
-          class="general-font-size is-dark-grey"
+          class="general-font-size is-secondary-color"
         >
           <template v-slot:prepend>
             <v-btn
@@ -179,7 +190,7 @@
             >
             </v-btn>
           </template>
-          <span class="general-font-size is-dark-grey">
+          <span class="general-font-size is-secondary-color">
             <i>{{ document.name.replace("-documents", ".pdf") }}</i>
           </span>
           <v-divider></v-divider>
@@ -200,7 +211,7 @@
           :key="index"
           :title="document.documentname"
           item-props
-          class="general-font-size is-dark-grey"
+          class="general-font-size is-secondary-color"
         >
           <template v-slot:prepend>
             <v-btn
@@ -235,7 +246,10 @@ import type { CreateEditFacility } from "~/types/facilities";
 const emit = defineEmits<{
   (event: "offline", docs: CreateEditFacility["offlineDocuments"]): void;
   (event: "documentDeleted"): void;
-  (event: "updatedFiles", docs: CreateEditFacility["sanitized_documents"]): void;
+  (
+    event: "updatedFiles",
+    docs: CreateEditFacility["sanitized_documents"]
+  ): void;
   (event: "areDocumentsSet", isSet: boolean, type: string): void;
 }>();
 
@@ -322,7 +336,10 @@ const save = async () => {
       documentname: filename.value,
       tag: props.tagName,
     };
-    const result = await api.createItem(data, "Dokument erfolgreich hinzugefügt");
+    const result = await api.createItem(
+      data,
+      "Dokument erfolgreich hinzugefügt"
+    );
     fileUrl.value = null;
     if (result.status === ResultStatus.SUCCESSFUL) {
       loadingItem.value = false;
@@ -392,7 +409,10 @@ const deleteFile = async (signedId: string) => {
   }
 };
 
-const deleteOfflineFile = async (tag: typeof props.tagName, docIndex: number) => {
+const deleteOfflineFile = async (
+  tag: typeof props.tagName,
+  docIndex: number
+) => {
   const relevantDocs = props.offlineDocuments.filter((doc) => doc.tag === tag);
   const otherDocs = props.offlineDocuments.filter((doc) => doc.tag !== tag);
 

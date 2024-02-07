@@ -23,3 +23,76 @@
 
 .is-rounded
   border-radius: 50%
+
+
+.popover
+  position: relative
+  min-width: 100%
+
+  .input
+    cursor: pointer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+    width: 100%
+
+    .input-title
+      max-width: 300px
+      overflow: hidden
+      white-space: nowrap
+      text-overflow: ellipsis
+
+
+    .actions
+      display: flex
+      align-items: center
+      justify-content: center
+      gap: 1rem
+
+      .chevron
+        width: 20px
+        height: 20px
+        background-image: url("@/assets/icons/chevron-down.svg")
+        background-repeat: no-repeat
+        background-position: center
+        transition: transform 150ms linear
+
+        &.up
+          transform: rotate(180deg)
+
+  .popover-content
+    background-color: white
+    box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25)
+    padding: 1rem
+    position: absolute
+    left: 0
+    top: calc(100% + 2px)
+    border-radius: 10px
+    z-index: 5
+    .filter-name
+      font-size: 1.4rem
+      margin-bottom: 0.75rem
+      color: #636362
+    .filter-options
+      display: flex
+      flex-wrap: wrap
+      gap: 0.5rem
+
+
+    .option-label
+      cursor: pointer
+      display: flex
+      align-items: center
+      gap: 0.5rem
+
+
+    .clear-button
+      margin-top: 0.5rem
+      margin-left: auto
+
+.options-select
+  gap: 0.5rem
+  min-height: 3rem

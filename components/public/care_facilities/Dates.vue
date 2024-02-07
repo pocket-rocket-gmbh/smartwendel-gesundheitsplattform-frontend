@@ -1,10 +1,13 @@
 <template>
   <div
-    class="box flex-column is-dark-grey font-weight-medium pa-3"
+    class="box flex-column is-secondary-color font-weight-medium pa-3"
     v-if="careFacility?.event_dates.length"
   >
-    <span class="is-primary is-dark-grey general-font-size font-weight-medium is-uppercase">Termine</span>
-    <p class="is-dark-grey general-font-size">
+    <span
+      class="is-primary is-secondary-color general-font-size font-weight-medium is-uppercase"
+      >Termine</span
+    >
+    <p class="is-secondary-color general-font-size">
       <i
         >{{ careFacility?.event_dates.length }}
         <span v-if="careFacility?.event_dates.length === 1">
@@ -13,10 +16,10 @@
         <span v-else> Termine gefunden </span></i
       >
     </p>
-    <div class="my-3 is-dark-grey general-font-size">
+    <div class="my-3 is-secondary-color general-font-size">
       <v-table density="compact" fixed-header>
         <thead>
-          <tr class="is-dark-grey general-font-size">
+          <tr class="is-secondary-color general-font-size">
             <th class="text-center">Datum</th>
             <th class="text-center">Uhrzeit</th>
             <th class="text-center">Dauer</th>

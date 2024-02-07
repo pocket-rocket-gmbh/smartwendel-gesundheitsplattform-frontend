@@ -8,25 +8,43 @@
     >
       <template v-slot:activator="{ props }">
         <div v-bind="props">
-          <div class="is-white d-flex align-end mt-10">
-            <img class="filter-icon" :src="iconFilter">
+          <div class="is-white-color d-flex align-end mt-10">
+            <img class="filter-icon" :src="iconFilter" />
           </div>
         </div>
       </template>
       <v-card>
         <v-toolbar dense fixed dark color="primary" class="modal-toolbar">
-          <v-btn icon v-if="filterStore.currentTags?.length" @click="filterStore.currentTags = []">
+          <v-btn
+            icon
+            v-if="filterStore.currentTags?.length"
+            @click="filterStore.currentTags = []"
+          >
             <v-icon>mdi-reload</v-icon>
           </v-btn>
-          <v-toolbar-title class="d-flex justify-start">Leistung auswählen</v-toolbar-title>
-          <v-btn v-if="filterStore.currentTags?.length" variant="text" @click="dialog = false"> Fertig </v-btn>
-          <v-btn v-else variant="text" @click="dialog = false"> Schließen </v-btn>
+          <v-toolbar-title class="d-flex justify-start"
+            >Leistung auswählen</v-toolbar-title
+          >
+          <v-btn
+            v-if="filterStore.currentTags?.length"
+            variant="text"
+            @click="dialog = false"
+          >
+            Fertig
+          </v-btn>
+          <v-btn v-else variant="text" @click="dialog = false">
+            Schließen
+          </v-btn>
         </v-toolbar>
         <div class="filter-tiles mt-5">
           <template v-if="!loading">
             <div v-for="filter in itemsForServiceList" class="filter-group">
               <div v-for="item in filter.next" class="filter-selections mt-10">
-                <span v-if="item.next.length" class="text-h4 d-flex justify-center is-dark-grey">{{ item.title }}</span>
+                <span
+                  v-if="item.next.length"
+                  class="text-h4 d-flex justify-center is-secondary-color"
+                  >{{ item.title }}</span
+                >
                 <v-row no-gutters class="fill-height item-row">
                   <v-col
                     cols="12"
@@ -48,7 +66,10 @@
                       {{ subItem.title }}
                     </div>
                     <div
-                      v-if="subItem.next.length && expandedItemIds.includes(subItem.id)"
+                      v-if="
+                        subItem.next.length &&
+                        expandedItemIds.includes(subItem.id)
+                      "
                       class="tag-select"
                       v-for="tag in subItem.next"
                     >
@@ -74,7 +95,11 @@
 </template>
 
 <script setup lang="ts">
-import { type Facility, type FilterKind, useFilterStore } from "~/store/searchFilter";
+import {
+  type Facility,
+  type FilterKind,
+  useFilterStore,
+} from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import type { CollapsibleListItem } from "../../../types/collapsibleList";
 import iconFilter from "@/assets/icons/icon_filter.svg";
@@ -131,7 +156,12 @@ const getItemsAndNext = (
   }
 
   childFilterItems.forEach((childFilterItem) =>
-    getItemsAndNext(childFilterItem, filterItem.next || [], layer + 1, allFilters)
+    getItemsAndNext(
+      childFilterItem,
+      filterItem.next || [],
+      layer + 1,
+      allFilters
+    )
   );
 };
 
@@ -205,7 +235,9 @@ const toggleSelection = (item: CollapsibleListItem) => {
   }
 
   if (isSelected(item.id)) {
-    filterStore.currentTags = filterStore.currentTags.filter((id) => id !== item.id);
+    filterStore.currentTags = filterStore.currentTags.filter(
+      (id) => id !== item.id
+    );
   } else {
     filterStore.currentTags.push(item.id);
   }

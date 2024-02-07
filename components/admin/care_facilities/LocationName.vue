@@ -1,14 +1,18 @@
 <template>
-  <div class="component is-dark-grey">
+  <div class="component is-secondary-color">
     <div v-if="loading">
       <LoadingSpinner></LoadingSpinner>
     </div>
     <div v-else>
       <v-icon>mdi-map-marker</v-icon>
       <span v-if="address?.road"> &nbsp; {{ address?.road }}, </span>
-      <span v-if="address?.house_number"> &nbsp; {{ address?.house_number }}, </span>
+      <span v-if="address?.house_number">
+        &nbsp; {{ address?.house_number }},
+      </span>
       <span v-if="address?.postcode"> &nbsp; {{ address?.postcode }}</span>
-      <span v-if="address?.city_district"> &nbsp; {{ address?.city_district }}, </span>
+      <span v-if="address?.city_district">
+        &nbsp; {{ address?.city_district }},
+      </span>
       <span v-if="address?.town"> &nbsp; {{ address?.town }} </span>
     </div>
   </div>
