@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const filterSortingDirections = ["Z-A", "A-Z"] as const;
 
 export type CategoriesFilter = "category" | "subCategory" | "subSubCategory" | "tags";
-export type FilterKind = "facility" | "news" | "event" | "course";
+export type FilterKind = "facility";
 export type FilterType = "filter_facility" | "filter_service" | "certificate" | "documents" | "opening_hours" | "phone";
 export type FilterTag = {
   id: string;
@@ -174,7 +174,7 @@ export const useFilterStore = defineStore({
       return this.allCommunities;
     },
     async loadAllFilters() {
-      if (this.allFilters) return this.allFilters;
+      
 
       this.allFilters = await getAllFilters();
 

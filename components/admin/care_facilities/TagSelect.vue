@@ -1,9 +1,7 @@
 <template>
   <v-checkbox
-    v-if="kind !== 'facility' && kind !== 'course'"
     v-show="false"
     v-bind:model-value="!!preSetTags.length"
-    :rules="[!!preSetTags.length || 'Pflichtangabe']"
   ></v-checkbox>
   <CollapsibleItem
     class="tag-select mt-10"
@@ -17,9 +15,6 @@
         :class="[handleExpandToggled ? 'text-h5' : 'text-h6']"
       >
         <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
-        <div v-if="kind === 'news'">Stich- und Schlagwörter zum Newsbeitrag</div>
-        <div v-if="kind === 'event'">Veranstaltungsangebot</div>
-        <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
         <div class="has-font-size-small-medium ml-3">
           <v-tooltip location="top" width="300px">
             <template v-slot:activator="{ props }">
@@ -32,22 +27,6 @@
               „Krafttraining“, wenn es sich um ein Fitnessstudio handelt). Auf diese Weise
               gelangen Besucherinnen und Besucher zu deinem Profil, sobald sie nach den
               entsprechenden Schlagwörtern suchen.
-            </span>
-            <span v-if="kind === 'course'"
-              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben
-              (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise
-              gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach
-              den entsprechenden Schlagwörtern suchen.
-            </span>
-            <span v-if="kind === 'event'"
-              >„Überlege dir, welche Begriffe den Inhalt deiner Veranstaltung am
-              treffendsten wiedergeben. Trage bspw. den Titel „Fit in der Region“, die
-              Ziele („Gesundheit fördern“) und die Angebote („Gesundheits-Checks“) deiner
-              Veranstaltung ein.
-            </span>
-            <span v-if="kind === 'news'">
-              Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie
-              die entsprechenden Schlagwörter suchen.
             </span>
           </v-tooltip>
         </div>
@@ -63,14 +42,6 @@
       <div class="content general-font-size is-dark-grey">
         <div v-if="kind === 'facility'">
           Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches Angebot.
-        </div>
-        <div v-if="kind === 'course'">
-          Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern
-          individuell zu beschreiben.
-        </div>
-        <div v-if="kind === 'event'">
-          Hier hast du die Möglichkeit, deine Veranstaltung mit Hilfe von Schlagwörtern
-          individuell zu beschreiben.
         </div>
         <div v-if="preSetTags?.length" class="tags my-6">
           <span class="general-font-size is-dark-grey font-weight-bold mt-1">Bereits ausgewählt:</span>
@@ -155,12 +126,6 @@ const handleExpandToggled = () => {
 const placeHolder = computed(() => {
   if (props.kind === "facility") {
     return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
-  } else if (props.kind === "course") {
-    return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
-  } else if (props.kind === "event") {
-    return "Bsp: Titel, Ziel und Angebote deiner Veranstaltung";
-  } else if (props.kind === "news") {
-    return "Bsp: Demenz, Mentale Gesundheit, Ernährung im Alter";
   }
 });
 

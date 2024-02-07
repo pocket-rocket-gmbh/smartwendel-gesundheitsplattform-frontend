@@ -81,7 +81,7 @@
           </v-row>
 
           <v-row class="item-row">
-            <v-col cols="12" md="6" sm="6" xl="6" xs="12" class="mb-0 pb-0">
+            <v-col cols="12" md="4" sm="4" xl="4" xs="12" class="mb-0 pb-0">
               <div class="is-dark-grey mt-4">
                 <div class="d-flex">
                   <img class="mr-2 icon" :src="iconAddress" />
@@ -98,7 +98,7 @@
                 </div>
               </div>
             </v-col>
-            <v-col cols="12" md="6" sm="6" xl="6" xs="12" class="mb-0 pb-0">
+            <v-col cols="12" md="4" sm="4" xl="4" xs="12" class="mb-0 pb-0">
               <div class="mt-4">
                 <div v-if="careFacility.phone" class="d-flex align-center">
                   <img class="mr-2 icon" :src="iconPhone" />
@@ -115,6 +115,9 @@
                   >
                 </div>
               </div>
+            </v-col>
+            <v-col cols="12" md="4" sm="4" xl="4" xs="12" class="mb-0 pb-0 d-flex justify-center">
+              dedeed
             </v-col>
           </v-row>
           <v-row>

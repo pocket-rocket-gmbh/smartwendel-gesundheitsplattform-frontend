@@ -29,7 +29,6 @@
             </div>
           </div>
         </div>
-        <hr v-if="item.kind !== 'facility'" />
       </template>
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
@@ -47,8 +46,6 @@
         :class="[
           breakPoints.width.value > 1420
             ? 'd-flex align-center justify-space-between'
-            : item.kind !== 'facility'
-            ? 'mb-3'
             : '',
         ]"
       >
@@ -69,24 +66,6 @@
             }}</span>
             <span class="general-font-size" v-else> Mehr anzeigen</span>
           </v-btn>
-        </div>
-        <div
-          class="general-font-size d-flex align-center mb-n3"
-          v-if="item.kind === 'event' || item.kind === 'course'"
-        >
-          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1700">
-            <img :src="eventsIcon" class="mr-1" />
-            {{ item?.event_dates?.[0]?.slice(0, 10) }}
-          </span>
-        </div>
-        <div
-          class="general-font-size d-flex align-center mb-n3"
-          v-if="item.kind === 'news'"
-        >
-          <span v-if="breakPoints.width.value >= 1700">
-            <img :src="eventsIcon" class="mr-1" />
-            {{ useDatetime().parseDatetime(item?.created_at) }}
-          </span>
         </div>
       </div>
     </div>
@@ -115,9 +94,6 @@ const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
     if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
   }
 
@@ -146,9 +122,6 @@ const goToMainFacility = (item:any) => {
 const buttonText = computed(() => {
   if (!props.item) return null;
   if (props.item.kind) {
-    if (props.item.kind === "course") return "Zum Kurs";
-    if (props.item.kind === "event") return "Zur Veranstaltung";
-    if (props.item.kind === "news") return "Zum Beitrag";
     if (props.item.kind === "facility") return "Zur Einrichtung";
   }
 });

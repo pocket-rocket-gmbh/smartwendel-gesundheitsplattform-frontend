@@ -13,7 +13,6 @@ export type CreateEditFacility = Partial<
     additional_address_info: string;
     community_id?: string;
     is_active?: boolean;
-    course_outside_facility: boolean;
   }
 >;
 

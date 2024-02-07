@@ -3,12 +3,9 @@
     <div class="background">
       <PublicLandingHeader />
     </div>
-    <PublicLandingCurrentNotes />
-    <div class="divider"></div>
     <PublicLandingCategories />
     <PublicLandingCurrentRecommendations />
-    <PublicLandingCurrentEvents />
-    <div class="divider"></div>
+
     <PublicLandingHelplinks />
   </div>
 </template>
@@ -22,7 +19,10 @@
 .background {
   width: 100vw;
   height: 100vh;
-  background: url("../assets/images/home-2.png") no-repeat center center;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.673)),
+    url("../assets/images/home.svg") no-repeat center center;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.673)),
+    url("../assets/images/home.svg") no-repeat center center;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: right bottom;
@@ -37,7 +37,7 @@
     background-position: center;
     background-size: cover;
     background-position: right top;
-    height: 70vh;
+    height: 50vh;
   }
 }
 

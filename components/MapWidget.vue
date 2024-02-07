@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, onMounted, onUnmounted } from "vue";
+import { type PropType, onMounted, onUnmounted } from "vue";
 import L, { type LatLngExpression, Map } from "leaflet";
 import "../js/leaflet.mask";
 import "leaflet.markercluster";
@@ -219,12 +219,6 @@ const refreshView = async () => {
     marker.on("click", function (marker: any) {
       emit("markerClick", marker.sourceTarget);
     });
-
-    if (location.kind === "event") {
-      eventsClusterlayer.addLayer(marker);
-    } else {
-      facilitiesClusterlayer.addLayer(marker);
-    }
   });
 
   const handleClusterClick = (cluster: any) => {

@@ -150,6 +150,6 @@ const getSubSubCategories = async () => {
 }
 
 a {
-  color: $dark-grey !important;
+  color: red !important;
 }
 </style>

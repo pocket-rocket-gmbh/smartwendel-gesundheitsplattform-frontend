@@ -2,7 +2,10 @@
   <div>
     <v-row class="mt-md-4 search-field-search">
       <v-col class="d-flex align-center is-white">
-        <span class="is-white font-weight-medium general-font-size" v-if="filterStore.currentSearchTerm">
+        <span
+          class="is-white font-weight-medium general-font-size"
+          v-if="filterStore.currentSearchTerm"
+        >
           Suchbegriff: {{ filterStore.currentSearchTerm }}
         </span>
       </v-col>
@@ -39,7 +42,7 @@
         <v-row class="mt-4" v-else>
           <v-col class="kinds">
             <v-btn
-            v-for="(kind, index) in filteredKinds"
+              v-for="(kind, index) in filteredKinds"
               :key="index"
               variant="outlined"
               size="large"
@@ -78,23 +81,14 @@ const goBack = () => {
   router.push({ path: "/" });
 };
 
-const getMappedKindName = (kind: "facility" | "news" | "event" | "course") => {
+const getMappedKindName = (kind: "facility") => {
   if (kind === "facility") return "Zu den Anbietern";
-  if (kind === "news") return "Zu den Beiträgen";
-  if (kind === "event") return "Zu den Veranstaltungen";
-  if (kind === "course") return "Zu den Kursen";
 };
 
-const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
+const routeToFilterPage = (kind: "facility") => {
   switch (kind) {
-    case "event":
-      return router.push({ path: "/public/search/events" });
-    case "course":
-      return router.push({ path: "/public/search/courses" });
     case "facility":
       return router.push({ path: "/public/search/facilities" });
-    case "news":
-      return router.push({ path: "/public/search/news" });
   }
 };
 
@@ -155,7 +149,7 @@ onMounted(async () => {
 }
 
 .search-field-search {
-  background: $green-gradient;
+  background: red;
   padding: 2rem 5rem;
 }
 

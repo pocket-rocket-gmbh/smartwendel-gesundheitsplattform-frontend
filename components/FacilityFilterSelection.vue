@@ -81,8 +81,6 @@ const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
   if (props.filterKind === "facility") {
     placeholderText.value = "Branche wählen";
-  } else if (props.filterKind === "course") {
-    placeholderText.value = "Themengebiet wählen";
   }
 };
 const emit = defineEmits<{
@@ -267,7 +265,7 @@ onMounted(async () => {
     .filter-name {
       font-size: 1.4rem;
       margin-bottom: 0.75rem;
-      color: $dark-grey;
+      color: red;
     }
 
     .filter-options {

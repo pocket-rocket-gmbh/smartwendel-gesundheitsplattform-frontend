@@ -161,7 +161,7 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
       .menu-bar
         border-radius: 20px
         min-height: 60px
-        color: $dark-green
+        //color: $dark-green
         margin: 0 4rem
 
         @include md

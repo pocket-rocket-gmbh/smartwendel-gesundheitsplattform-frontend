@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu">
+    <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu" height="100px">
       <v-app-bar-title>
         <div class="d-flex align-center">
           <div class="d-flex align-center">
@@ -12,7 +12,7 @@
               <img
                 src="~/assets/images/logo.png"
                 class="is-clickable"
-                width="200"
+                
                 v-if="!appStore.loading"
               />
             </a>
@@ -44,7 +44,7 @@
                       :key="sub_category.id"
                       @click="setItemsAndGo(category, sub_category)"
                     >
-                      <div class="list-item main">
+                      <div class="list-item main px-n3">
                         <div>
                           <span
                             class="is-clickable main font-weight-medium is-dark-grey"
@@ -65,20 +65,6 @@
                 @click.prevent="goTo('/public/search/facilities')"
               >
                 Anbietersuche
-              </span>
-              <span
-                href="/public/search/courses"
-                class="is-clickable mx-5"
-                @click.prevent="goTo('/public/search/courses')"
-              >
-                Kurse
-              </span>
-              <span
-                href="/public/search/events"
-                class="is-clickable mx-5"
-                @click.prevent="goTo('/public/search/events')"
-              >
-                Veranstaltungen
               </span>
             </div>
           </div>
@@ -256,22 +242,6 @@
           >
           <div class="d-flex align-center general-font-size"> <img class="icons-menu mr-5" :src="iconFacility"> <span>Anbieter</span></div>
           </div>
-          <div
-            href="/public/search/courses"
-            class="is-clickable categories-wrapper-mobile py-5"
-            :class="[currentRoute.includes('courses') ? 'is-visited' : '']"
-            @click.prevent="goTo('/public/search/courses')"
-          >
-          <div class="d-flex align-center general-font-size"> <img class="icons-menu mr-5" :src="iconCourse"> <span>Kurse</span></div>
-          </div>
-          <div
-            href="/public/search/events"
-            class="is-clickable categories-wrapper-mobile py-5"
-            :class="[currentRoute.includes('events') ? 'is-visited' : '']"
-            @click.prevent="goTo('/public/search/events')"
-          >
-          <div class="d-flex align-center general-font-size"> <img class="icons-menu mr-5" :src="iconEvent"> <span>Veranstaltungen</span></div>
-            </div>
         </template>
       </div>
       <div class="terms-of-use">
@@ -295,12 +265,9 @@ import { useFilterStore } from "~/store/searchFilter";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
 import regiterIcon from "@/assets/icons/registerIcons/icon_registration.svg";
 import loginIcon from "@/assets/icons/registerIcons/icon_login.svg";
-import iconCourse from "~/assets/icons/mobileMenu/icon_course.svg";
-import iconEvent from "~/assets/icons/mobileMenu/icon_event.svg";
 import iconFacility from "~/assets/icons/mobileMenu/icon_facility.svg";
 import iconHealth from "~/assets/icons/mobileMenu/icon_health.svg";
 import iconSick from "~/assets/icons/mobileMenu/icon_sick.svg";
-import iconNews from "~/assets/icons/mobileMenu/icon_news.svg";
 const currentUser = ref(null);
 const router = useRouter();
 const categories = ref([]);

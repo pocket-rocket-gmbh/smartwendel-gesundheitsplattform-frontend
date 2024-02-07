@@ -12,8 +12,7 @@
       class="mt-2 general-font-size"
     >
       Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
-      wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen
-      sowie Beiträge anlegen.
+      wir dich freigegeben haben.
     </v-alert>
     <v-alert
       v-if="!setupFinished && !loading"

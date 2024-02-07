@@ -64,7 +64,7 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
   border-radius: 20px;
   min-height: 60px;
   width: 100%;
-  color: $dark-green;
+  //color: $dark-green;
 
   @include md {
     padding: 0.5rem;

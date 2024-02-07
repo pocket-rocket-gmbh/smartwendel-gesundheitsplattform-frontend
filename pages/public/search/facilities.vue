@@ -21,10 +21,11 @@
               ref="map"
               :auto-fit="false"
               :center-point="{
-                lng: 7.131735,
-                lat: 49.523656,
+                lat: 50.03646,
+                lng: 12.00258,
               }"
-              :min-zoom="11"
+          
+              :default-zoom="15"
             />
           </div>
 

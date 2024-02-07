@@ -1,5 +1,5 @@
 <template>
-  <div class="basic-search-box mt-6">
+  <div class="basic-search-box is-primary-background mt-6">
     <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
       <v-row>
         <v-col class="d-flex">
@@ -28,12 +28,12 @@
             class="general-font-size"
           >
             <span v-if="showMap"> Listenansicht </span>
-            <span v-else> Kartenansicht </span>
+            <span v-else> Kartenansicht </span> 
           </v-btn>
         </v-col>
       </v-row>
       <v-row>
-        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
+        <v-col>
           <div class="field general-font-size">
             <label class="label is-white">
               <div class="search-term font-weight-medium general-font-size">
@@ -43,7 +43,7 @@
             <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" :filter-kind="filterKind" />
           </div>
         </v-col>
-        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
+        <v-col>
           <div class="field general-font-size">
             <label class="label is-white font-weight-medium">Gemeinde</label>
             <div class="select-wrapper">
@@ -56,7 +56,7 @@
             </div>
           </div>
         </v-col>
-        <v-col v-if="filterKind !== 'event' && filterKind !== 'news'" md="1" class="d-flex justify-center align-end is-white mb-4">
+        <v-col md="1" class="d-flex justify-center align-end is-white mb-4">
           <div class="label font-weight-medium general-font-size">oder</div>
         </v-col>
         <v-col>
@@ -151,18 +151,6 @@ const setFilterTitle = () => {
     filterTitle.value = "Branche";
     searchTitle.value = "Anbieter suchen";
   }
-  if (props.filterKind === "event") {
-    filterTitle.value = "Suche nach Veranstaltungen";
-    searchTitle.value = "Veranstaltung suchen";
-  }
-  if (props.filterKind === "news") {
-    filterTitle.value = "Suche nach Neuigkeiten";
-    searchTitle.value = "Nachrichten suchen";
-  }
-  if (props.filterKind === "course") {
-    filterTitle.value = "Themengebiet";
-    searchTitle.value = "Kurs suchen";
-  }
 };
 
 const communities = ref<any[]>([]);
@@ -189,7 +177,6 @@ onMounted(async () => {
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .basic-search-box
-  background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
   padding: 2rem 5rem
 
   @include md

@@ -36,7 +36,6 @@
         :class="[
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
-          item?.kind !== 'facility' ? 'has-normal-bg' : '',
           getCurrentRoute() === 'admin-users' ? '' : '',
           isDraft(item) ? 'draft' : '',
         ]"
@@ -179,9 +178,6 @@
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
-          <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
-            <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
-          </span>
           <span v-else-if="field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'">
             <img :src="logo" width="20" class="ml-2 pt-2" />
           </span>
@@ -252,7 +248,6 @@
 import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
-import { isCompleteFacility } from "~/utils/facility.utils";
 import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
 
@@ -398,13 +393,7 @@ const filteredItems = computed(() => {
       if (column) {
         let searchTerm = props.searchQuery.toUpperCase();
         if (columnProp === "kind") {
-          if ("VERANSTALTUNG".includes(searchTerm)) {
-            searchTerm = "EVENT";
-          } else if ("BERICHT".includes(searchTerm)) {
-            searchTerm = "NEWS";
-          } else if ("KURS".includes(searchTerm)) {
-            searchTerm = "COURSE";
-          } else if ("EINRICHTUNG".includes(searchTerm)) {
+          if ("EINRICHTUNG".includes(searchTerm)) {
             searchTerm = "FACILITY";
           }
         }

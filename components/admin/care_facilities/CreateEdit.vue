@@ -565,16 +565,16 @@
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
           </div>
-          <v-divider class="my-5"></v-divider>
+          <v-divider class="my-10"></v-divider>
         </v-col>
       </v-row>
-      <!--  <div class="missing" v-for="[key, step] in Object.entries(steps)">
+      <div class="missing" v-for="[key, step] in Object.entries(steps)">
         <span
           v-if="isFilled(slotProps, step) === false && step.description.includes('*')"
         >
           {{ step.description }}
         </span>
-      </div> -->
+      </div>
     </v-card-text>
   </CreateEdit>
 </template>

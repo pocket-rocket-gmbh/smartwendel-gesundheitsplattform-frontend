@@ -5,6 +5,10 @@
     display: grid
     grid-template-columns: 48% 48%
     gap: 4%
+  &.three-columns
+    display: grid
+    grid-template-columns: 30% 30% 30%
+    gap: 4%
  
   label.label
     width: 100%
@@ -14,20 +18,20 @@
   .input
     width: 100%
     background: #FFFFFF
-    border: 2px solid $dark-grey
+    border: 2px solid
     border-radius: 10px
     padding: 5px 10px
-    color: $dark-grey
+    
 
 .select
   position: relative
   width: 100%
   select
     background: #FFFFFF
-    border: 2px solid $dark-grey
+    border: 2px solid
     border-radius: 10px
     padding: 5px 10px
-    color: $dark-grey
+    
     width: 100%
     -webkit-appearance: none
     -moz-appearance: none
@@ -41,25 +45,22 @@
     right: 15px
     top: 5px
 
-.field.is-primary
-  label
-    color: $dark-grey
 
 .divider
   border: 1px #00783B solid
 
 .divider-footer
-  border: 1px $dark-grey solid
+  border: 1px solid
   width: 80%
 
 .footer
   background: $light-grey
-  color: $dark-grey
+
   bottom: 0
   width: 100%
   padding: 10px
   &.p
-    color: $dark-grey
+    color: red
 
   &.inactive
     opacity: 0.5

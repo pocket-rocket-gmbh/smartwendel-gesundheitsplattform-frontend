@@ -1,191 +1,87 @@
 <template>
-  <ClientOnly>
-    <div class="wrapper pt-5 general-font-size">
-      <div class="py-5" v-if="!useUser().loggedIn() && currentRoute !== '/register'">
-        <v-row class="has-bg-grey register-hint">
-          <v-col
-            md="8"
-            class="flex-column justify-start text-h4 has-bg-grey is-dark-grey font-weight-medium"
-          >
-            <div>Dein Angebot fehlt?</div>
-            <div>Hier kannst du deine Einrichtung registrieren!</div>
-          </v-col>
-          <v-col
-            class="d-flex justify-start register-button align-end justify-md-start ml-md-13"
-          >
-            <v-btn
-              variant="flat"
-              color="grey"
-              class="general-font-size"
-              rounded="pill"
-              size="large"
-              href="/register"
-            >
-              <span>Jetzt registrieren</span>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </div>
-      <v-divider
-        v-if="!useUser().loggedIn() && currentRoute !== '/register'"
-        class="py-5"
-        thickness="2"
-      ></v-divider>
-      <div class="footer-content">
-        <v-row class="footer-content-row pa-0 ma-0">
-          <v-col md="8">
-            <v-row class="align-center bg-white">
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-                <a href="https://www.landkreis-st-wendel.de/" target="_blank">
-                  <img
-                    src="~/assets/images/sub-footer/logo-footer-wnd.png"
-                    class="is-clickable logo-footer"
-                    :class="[$device?.isMobile ? 'mobile-height' : 'desktop-height']"
-                  />
-                </a>
-              </v-col>
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-                <a href=" https://www.wfg-wnd.de/" target="_blank">
-                  <img
-                    src="~/assets/images/sub-footer/logo-footer-wfg.png"
-                    class="is-clickable logo-footer"
-                    :class="[
-                      $device.isMobile
-                        ? 'mobile-bigger-width'
-                        : 'desktop-height desktop-height-wfg',
-                    ]"
-                  />
-                </a>
-              </v-col>
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-                <a href="https://www.bmwsb.bund.de" target="_blank">
-                  <img
-                    src="~/assets/images/sub-footer/logo-bundesministerium.png"
-                    class="is-clickable logo-footer"
-                    :class="[$device.isMobile ? 'mobile-height' : 'desktop-height']"
-                  />
-                </a>
-              </v-col>
-              <v-col cols="6" md="3" sm="6" class="d-flex justify-center align-center">
-                <a href="https://www.kfw.de/kfw.de.html" target="_blank">
-                  <img
-                    src="~/assets/images/sub-footer/logo-footer-kfw.png"
-                    class="is-clickable logo-footer"
-                    :class="[$device.isMobile ? 'mobile-height' : 'desktop-height-kfw']"
-                  />
-                </a>
-              </v-col>
-            </v-row>
-            <v-row v-if="breakPoints.width.value > 960">
-              <v-col>
-                <div class="disclaimer text-wrap mt-5">
-                  Zur besseren Lesbarkeit wird auf der Gesundheits- und Pflegeplattform
-                  das generische Maskulinum verwendet. Die auf dieser Webseite verwendeten
-                  Personenbezeichnungen sprechen – sofern nicht anders kenntlich gemacht –
-                  alle Geschlechter an. Weibliche und anderweitige Geschlechteridentitäten
-                  werden dabei ausdrücklich mit berücksichtigt.
-                </div>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col class="links d-flex ma-0 pt-0 ml-n2 align-start">
-            <div class="ml-md-15" :class="[breakPoints.width.value <= 960 ? 'mt-10' : '' ]">
-              <span class="general-font-size font-weight-medium is-dark-grey"
-                >Landkreis Sankt Wendel</span
+  <v-footer class="is-primary-background is-white footer-wraper">
+    <v-row justify="center" no-gutters>
+      <v-col class="d-flex flex-column justify-start align-center align-md-start order-2 order-md-first order-sm-2 order-xs-2" cols="12" md="4" sm="12" xl="4" xs="12">
+        <h3 class="mb-3">Landkreis Wunsiedel i. Fichtelgebirge</h3>
+        <div v-for="link in links" class="is-paragraph my-1">
+          {{ link.title }}
+        </div>
+        <div class="mt-3">
+          <v-row>
+            <v-col>
+              <v-btn
+                href="https://www.facebook.com/Landkreis.StWendel/"
+                target="_blank"
+                variant="outlined"
+                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
+                icon
+                class="social-buttons"
               >
-              <div class="footer-links">
-                <p class="is-clickable is-dark-grey">
-                  <span>
-                    <a
-                      class="is-dark-grey"
-                      href="mailto:smartcity@lkwnd.de?subject=kontakt"
-                      >Kontakt</a
-                    >
-                  </span>
-                </p>
-                <p class="is-clickable is-dark-grey">
-                  <router-link class="is-dark-grey" to="/rules_of_conduct"
-                    >Nutzungsbedingungen</router-link
-                  >
-                </p>
-                <p class="is-clickable is-dark-grey">
-                  <router-link class="is-dark-grey" to="/privacy_policy"
-                    >Datenschutzerklärung</router-link
-                  >
-                </p>
-                <p class="is-clickable is-dark-grey">
-                  <router-link class="is-dark-grey" to="/imprint">Impressum</router-link>
-                </p>
-              </div>
-              <div class="socials mt-5">
-                <v-row>
-                  <v-col>
-                    <v-btn
-                      href="https://www.facebook.com/Landkreis.StWendel/"
-                      target="_blank"
-                      variant="outlined"
-                      size="large"
-                      icon
-                      class="social-buttons mr-5"
-                    >
-                      <v-icon>mdi-facebook</v-icon>
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn
-                      href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
-                      target="_blank"
-                      variant="outlined"
-                      size="large"
-                      icon
-                      class="social-buttons mr-5"
-                    >
-                      <v-icon>mdi-instagram</v-icon>
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn
-                      href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
-                      target="_blank"
-                      variant="outlined"
-                      size="large"
-                      icon
-                      class="social-buttons mr-5"
-                    >
-                      <v-icon>mdi-youtube</v-icon>
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn
-                      href="https://www.linkedin.com/showcase/smart-wendeler-land"
-                      target="_blank"
-                      variant="outlined"
-                      size="large"
-                      icon
-                      class="social-buttons"
-                    >
-                      <v-icon>mdi-linkedin</v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row v-if="breakPoints.width.value < 960">
-          <v-col>
-            <div class="disclamer text-wrap is-dark-grey general-font-size mt-5">
-              Zur besseren Lesbarkeit wird auf der Gesundheits- und Pflegeplattform das
-              generische Maskulinum verwendet. Die auf dieser Webseite verwendeten
-              Personenbezeichnungen sprechen – sofern nicht anders kenntlich gemacht –
-              alle Geschlechter an. Weibliche und anderweitige Geschlechteridentitäten
-              werden dabei ausdrücklich mit berücksichtigt.
-            </div>
-          </v-col>
-        </v-row>
-      </div>
-    </div>
-  </ClientOnly>
+                <v-icon>mdi-facebook</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn
+                href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
+                target="_blank"
+                variant="outlined"
+                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
+                icon
+                class="social-buttons"
+              >
+                <v-icon>mdi-instagram</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn
+                href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
+                target="_blank"
+                variant="outlined"
+                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
+                icon
+                class="social-buttons"
+              >
+                <v-icon>mdi-youtube</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn
+                href="https://www.linkedin.com/showcase/smart-wendeler-land"
+                target="_blank"
+                variant="outlined"
+                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
+                icon
+                class="social-buttons"
+              >
+                <v-icon>mdi-linkedin</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+      <v-col class="d-flex justify-center align-start order-md-2 order-sm-first order-1 order-xs-first" cols="12" md="4" sm="12" xl="4" xs="12">
+        <img class="mt-3 ml-4" src="~/assets/images/no-image.svg" width="200" />
+      </v-col>
+      <v-col class="d-flex flex-column justify-start align-center order-3 align-md-end order-sm-3 order-xs-3 mt-sm-10 my-md-0 my-10 " cols="12" md="4" sm="12" xl="4" xs="12">
+        <div class="is-label-big my-md-3 my-5">Ihr Angebot fehlt?</div>
+        <div class="is-paragraph text-md-right text-center mb-md-5 my-5">
+          Sie betreiben eine Pflegeeinrichtung und bieten sonstige Leistungen im Bereich
+          Pflege an? Dann registrieren Sie sich.
+        </div>
+        <div>
+          <v-btn
+            variant="flat"
+            class="is-button-text"
+            color="primary"
+            rounded="pill"
+            size="x-large"
+          >
+            <router-link class="is-white" to="/register"> Registrieren </router-link>
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
+  </v-footer>
 </template>
 
 <script setup lang="ts">
@@ -193,6 +89,25 @@ const route = useRoute();
 import { useBreakpoints } from "~/composables/ui/breakPoints";
 
 const breakPoints = useBreakpoints();
+
+const links = [
+  {
+    title: "Kontakt",
+    link: "/impressum",
+  },
+  {
+    title: "Nutzungsbedinungen",
+    link: "/datenschutz",
+  },
+  {
+    title: "Datenschutz",
+    link: "/kontakt",
+  },
+  {
+    title: "Impressum",
+    link: "/sitemap",
+  },
+];
 
 const currentRoute = computed(() => {
   return route.path as string;
@@ -202,60 +117,15 @@ const currentRoute = computed(() => {
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 
-
+.footer-wraper
+  padding: 6.25rem
+  @include md
+    padding: 2rem 1rem
 .social-buttons
   border: 1px solid
-  color: $dark-grey
+  color: $secondary-color
   &:visited
-    color: $dark-grey
-
-.divider
-  border: 1px $dark-grey solid
-
-.input-field
-  border: 2px solid red
-  border-radius: 25px
-
-.sub-footer
-  background: white
-
-.mobile-height
-  max-width: 100px
-
-.desktop-height
-  max-width: 150px
-
-.desktop-height-kfw
-  max-width: 100px
-
-.mobile-bigger-width
-  max-width: 150px
-
-.footer-links
-  line-height: 1.8rem
-
-.wrapper
-  background-color: $light-grey
-  margin: 5rem 0 0rem 0
-  padding: 0 5rem 2rem
+    color: $secondary-color
   @include md
-    padding: 0 1rem
-
-  .register-hint
-    @include md
-      flex-direction: column
-      justify-content: stretch
-
-      .register-button
-        a
-          flex: 1
-
-.footer-content
-  .footer-content-row
-    @include md
-      flex-direction: column
-
-.disclamer
-  @include md
-    margin-bottom: 5rem
+    padding: 5px
 </style>

@@ -11,13 +11,6 @@
       </v-col>
     </v-row>
     <v-divider class="my-5 d-md-block d-none"></v-divider>
-    <span
-      class="is-primary mr-2"
-      v-if="careFacility?.kind === 'news'"
-      v-for="tags in careFacility.tag_categories"
-    >
-      <span>{{ tags.name }}</span>
-    </span>
     <div class="mt-4">
       <ClientOnly>
         <PublicTextTooltipWrap class="pr-5 is-dark-grey description" :text="careFacility?.description.replace('<p><br></p><p><br></p>', '<p><br></p>')" />
