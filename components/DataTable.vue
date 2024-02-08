@@ -57,12 +57,15 @@
           :class="{ 'is-clickable': field.prop }"
           @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
-          <div class="table-head-item" :class="sortBy === field.prop ? 'selected-sort' : ''">
+          <div
+            class="table-head-item"
+            :class="sortBy === field.prop ? 'selected-sort' : ''"
+          >
             {{ field.text }}
             <div
               v-if="sortBy === field.prop"
               class="chevron"
-              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc'}"
+              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc' }"
             ></div>
             <div v-else-if="field.text">
               <div class="chevron"></div>
@@ -342,6 +345,7 @@ const props = withDefaults(
     defaultSortBy?: string;
     defaultSortOrder?: string;
     draftRequired?: RequiredField[];
+    importFilter?: number;
   }>(),
   {
     defaultSortBy: "created_at",
@@ -500,7 +504,34 @@ const getItems = async () => {
     items.value = Array.isArray(response.data) ? response.data : [];
   }
 
-  if (props.searchQuery) {
+ /*  if (props.importFilter === 2) {
+    items.value = items.value.filter(
+      (item: any) => item?.user?.imported && item?.user?.imported === true
+    );
+    pagination.value.totalItems = items.value.length;
+  }
+
+  if (props.importFilter === 3) {
+    items.value = items.value.filter(
+      (item: any) => item?.user?.imported === true && !item?.user?.onboarding_token
+    );
+    pagination.value.totalItems = items.value.length;
+  }
+
+  if (props.importFilter === 4) {
+    items.value = items.value.filter(
+      (item: any) => item?.user?.imported === true && item?.user?.onboarding_token
+    );
+    pagination.value.totalItems = items.value.length;
+  }
+
+  if (props.importFilter === 5) {
+    items.value = response.data.resources.filter(
+      (item: any) => !item?.user?.imported && !item?.user?.onboarding_token
+    );
+  }
+  */
+  if (props.searchQuery || props.importFilter === 5) {
     pagination.value.totalItems = items.value.length;
   } else {
     pagination.value.totalItems = response.data.total_results;
@@ -510,7 +541,6 @@ const getItems = async () => {
   emit("itemsLoaded", items.value);
   loading.value = false;
 };
-
 
 const paginationValues = ref([
   { text: "10", value: 10 },
@@ -522,7 +552,7 @@ const paginationValues = ref([
 watch(
   () => props.searchQuery,
   debounce(() => {
-    pagination.value.page = 1;
+    pagination.value.page = 31;
     getItems();
   })
 );
@@ -592,12 +622,12 @@ defineExpose({ resetActiveItems, getItems });
     &.up
       background-image: url("@/assets/icons/chevron-down.svg")
       background-color: #E7E8E7
-      
+
     &.down
       background-image: url("@/assets/icons/chevron-up.svg")
       background-color: #E7E8E7
 
-  
+
 .selected-sort
   color: #8ab61d
 

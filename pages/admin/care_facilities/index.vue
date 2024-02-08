@@ -80,6 +80,7 @@
                 :key="index"
                 :label="item.text"
                 :value="item.value"
+                :disabled="item.value !== 1"
               ></v-radio>
             </v-radio-group>
           </v-col>
@@ -353,7 +354,14 @@ const listOptions = ref([
   { text: "Nicht Importiert", value: 5 },
 ]);
 
-const listOptionValue = ref(4);
+const listOptionValue = ref(1);
+
+watch (
+  async () => listOptionValue.value,
+  async () => {
+    await dataTableRef.value?.getItems(listOptionValue);
+  }
+);
 
 const handleItemUpdated = async (item: any) => {
   setupFinished.value = await useUser().setupFinished();
