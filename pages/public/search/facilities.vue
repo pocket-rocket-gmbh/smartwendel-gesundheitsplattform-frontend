@@ -67,7 +67,7 @@ watch(
 const startedAt = ref<null | "facilities" | "services" | "communities">(null);
 
 const handleStartedAt = (origin: "facilities" | "services" | "communities") => {
-  if (!startedAt.value) {
+  if (startedAt.value) {
     startedAt.value = origin;
     return;
   }
@@ -177,6 +177,7 @@ const mapToogle = () => {
 
 onMounted(async () => {
   filterStore.currentKinds = ["facility"];
+  startedAt.value = null;
   filterStore.updateFromUrlQuery();
   await filterStore.loadAllResults();
   filterStore.loadAllServiceFilters()
