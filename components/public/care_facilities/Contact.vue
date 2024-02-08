@@ -1,7 +1,7 @@
 <template>
   <div class="box flex-column is-secondary-color pa-5">
     <span
-      class="is-primary general-font-size is-uppercase font-weight-medium mb-6"
+      class="is-primary-color general-font-size is-uppercase font-weight-medium mb-6"
       >Kontakt und Infos</span
     >
     <div v-if="careFacility?.street || careFacility?.zip || careFacility?.town">
@@ -55,7 +55,7 @@
     </div>
     <div v-if="careFacility?.name_instructor" class="py-4">
       <h3
-        class="is-primary is-uppercase general-font-size font-weight-medium mb-1"
+        class="is-primary-color is-uppercase general-font-size font-weight-medium mb-1"
       >
         <span> Veranstalter </span>
       </h3>
@@ -70,12 +70,12 @@
       <v-table density="compact">
         <tbody>
           <h3
-            class="is-primary is-secondary-color general-font-size font-weight-medium is-uppercase mb-1"
+            class="is-secondary-color general-font-size font-weight-medium is-uppercase mb-1"
           >
             Öffnungszeiten
           </h3>
           <tr v-for="opening in careFacility.opening_hours" :key="opening.day">
-            <td class="py-3 is-primary is-secondary-color general-font-size">
+            <td class="py-3 is-secondary-color general-font-size">
               {{ opening.day }}
             </td>
             <td

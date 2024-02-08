@@ -10,7 +10,7 @@
           <v-row>
             <v-col>
               <v-btn
-                href="https://www.facebook.com/Landkreis.StWendel/"
+                href="https://www.facebook.com/freiraumfichtelgebirge"
                 target="_blank"
                 variant="outlined"
                 :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
@@ -22,7 +22,7 @@
             </v-col>
             <v-col>
               <v-btn
-                href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
+                href="https://www.instagram.com/freiraumfichtelgebirge"
                 target="_blank"
                 variant="outlined"
                 :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
@@ -34,7 +34,7 @@
             </v-col>
             <v-col>
               <v-btn
-                href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
+                href="https://www.youtube.com/channel/UCdwdUZRBXLr-fEZ09YwVINQ"
                 target="_blank"
                 variant="outlined"
                 :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
@@ -42,18 +42,6 @@
                 class="social-buttons"
               >
                 <v-icon>mdi-youtube</v-icon>
-              </v-btn>
-            </v-col>
-            <v-col>
-              <v-btn
-                href="https://www.linkedin.com/showcase/smart-wendeler-land"
-                target="_blank"
-                variant="outlined"
-                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
-                icon
-                class="social-buttons"
-              >
-                <v-icon>mdi-linkedin</v-icon>
               </v-btn>
             </v-col>
           </v-row>
@@ -76,7 +64,7 @@
             rounded="pill"
             size="x-large"
           >
-            <router-link class="is-white-color" to="/register"> Registrieren </router-link>
+            <router-link class="" to="/register"> Registrieren </router-link>
           </v-btn>
         </div>
       </v-col>

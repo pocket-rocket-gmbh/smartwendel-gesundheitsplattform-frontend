@@ -36,7 +36,7 @@
           <div class="py-10">
             <span
               class="general-font-size is-secondary-color facility-kind-description"
-              >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
+              >Als Gesundheitsakteur im Landkreis Wunsiedel können Sie hier ihre
               spezifisches Leistungsangebot in einem eigenen Profil darstellen
               und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je
               spezifischer deine Angaben sind, desto besser können dich Besucher

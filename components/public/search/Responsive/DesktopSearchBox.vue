@@ -66,7 +66,7 @@
                     handleClearTermSearch();
                   "
                 >
-                  <div class="input-title">
+                  <div class="is-paragraph is-dark-grey-color">
                     {{
                       getAllSelectedCommunitiesName(filterStore.currentZips) ||
                       "Gemeinde wählen"
@@ -164,9 +164,9 @@
     </div>
   </div>
   <v-row class="has-bg-darken-grey text-white">
-    <v-col class="d-flex justify-center align-center bottom-actions mx-3">
+    <v-col class="d-flex justify-center align-center bottom-actions is-light-grey-background mx-3">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span class="general-font-size" v-else-if="filterStore.filteredResults.length"
+      <span class="general-font-size is-primary-color" v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }} Treffer</span
       >
       <span v-else-if="!appStore.loading">

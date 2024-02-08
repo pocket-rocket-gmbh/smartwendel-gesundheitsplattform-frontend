@@ -1,6 +1,6 @@
 <template>
   <div class="box flex-column is-secondary-color pa-5">
-    <div class="is-primary general-font-size is-uppercase">Pflegeangebote</div>
+    <div class="is-secondary-color is-label-big general-font-size is-uppercase">Pflegeangebote</div>
     <div class="is-secondary-color general-font-size mb-6">
       zuletzt aktualisiert: 02.12.2023
     </div>

@@ -30,7 +30,7 @@ const appStore = useAppStore();
     url("../assets/images/home.svg") no-repeat center center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: right bottom;
+  background-position: center center;
 
   @include sm {
     background-position: center;

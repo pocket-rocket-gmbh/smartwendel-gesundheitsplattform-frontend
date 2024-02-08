@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" :scrim="false" transition="dialog-bottom-transition">
       <template v-slot:activator="{ props }">
         <div class="field" v-bind="props" @click="handleClearTermSearch()">
-          <label class="label is-white">Gemeinde</label>
+          <label class="label is-white-color">Gemeinde</label>
           <div class="input">{{ activeCommunityName || "Gemeinde wählen" }}</div>
         </div>
       </template>

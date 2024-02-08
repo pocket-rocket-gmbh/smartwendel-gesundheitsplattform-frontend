@@ -13,7 +13,7 @@ import homeImage from "@/assets/images/home.svg";
 
 const filterStore = useFilterStore();
 
-const title = ref('Ihre Pflegeplattform \n im Landkreis Wunsiedel')
+const title = ref('Ihr Pflegeportal \n im Landkreis Wunsiedel')
 const subTitle = ref('Finden Sie  Informationen und Anbieter rund \n um das Thema Pflege in Ihrem Landkreis.')
 
 useHead({

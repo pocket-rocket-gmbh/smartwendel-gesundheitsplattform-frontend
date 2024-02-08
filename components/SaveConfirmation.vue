@@ -51,7 +51,7 @@
           >
           <span class="text-h5 mb-5">Deine Daten wurden gespeichert!</span>
           <span v-if="user.is_active_on_health_scope"
-            >Möchtest du {{ itemKindStep1 }} veröffentlichen?</span
+            >Möchten Sie {{ itemKindStep1 }} veröffentlichen?</span
           >
         </div>
       </v-card-text>
