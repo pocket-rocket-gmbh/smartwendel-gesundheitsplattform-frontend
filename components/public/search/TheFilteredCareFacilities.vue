@@ -5,29 +5,37 @@
     v-if="!(!filterStore.loading && !sortedResults.length)"
   >
     <div class="d-flex actions">
-      <div v-if="!filterStore.currentKinds.includes('facility')"  class="sort-order is-clickable d-flex align-center"
-        @click="toggleFilterSort">
-        <v-icon color="primary" v-show="sortDirection === 'asc' || sortDirection === null"
-          >mdi-sort-calendar-ascending</v-icon
-        >
-        <v-icon  color="primary" v-show="sortDirection === 'desc'"
-          >mdi-sort-calendar-descending</v-icon
-        >
+      <div
+        v-if="!filterStore.currentKinds.includes('facility')"
+        class="sort-order is-clickable d-flex align-center"
+        @click="toggleFilterSort"
+      >
+        <img :src="coursesIcon" class="mr-2 icon is-dark-grey" />
+        <div class="mt-1">Datum:</div>
+        <div>
+          <v-icon v-show="sortDirection === 'asc' || sortDirection === null"
+            >mdi-chevron-down</v-icon
+          >
+          <v-icon v-show="sortDirection === 'desc'">mdi-chevron-up</v-icon>
+        </div>
       </div>
       <div
         v-if="filterStore.currentKinds.includes('facility')"
         class="sort-order is-clickable d-flex align-center"
-        @click="toogleFilterSortFacilities"
+        @click="toggleFilterSort"
       >
-        <span>{{ filterStore.filterSort }}</span>
-        <v-icon v-show="filterStore.filterSort === 'A-Z'"
-          >mdi-chevron-down</v-icon
+        <span v-show="sortDirection === 'asc' || sortDirection === null">
+          A-Z
+          <v-icon>mdi-chevron-down</v-icon></span
         >
-        <v-icon v-show="filterStore.filterSort === 'Z-A'"
-          >mdi-chevron-up</v-icon
+
+        <span v-show="sortDirection === 'desc'">
+          Z-A
+          <v-icon v-show="sortDirection === 'desc'">mdi-chevron-up</v-icon></span
         >
       </div>
     </div>
+
     <template v-if="sortedResults.length > 0">
       <div
         v-if="!filterStore.currentKinds.includes('facility')"
@@ -43,11 +51,7 @@
         />
       </div>
       <div v-else class="boxes">
-        <div
-          class="item"
-          v-for="careFacility in sortedResults"
-          :key="careFacility.id"
-        >
+        <div class="item" v-for="careFacility in sortedResults" :key="careFacility.id">
           <v-row class="item-row">
             <v-col sm="12" md="6" class="mb-0 pb-0">
               <div class="d-flex justify-space-between align-center">
@@ -61,8 +65,7 @@
                 <div class="hidden-md-and-up">
                   <v-icon
                     v-if="
-                      careFacility.geocode_address.length ||
-                      careFacility.locations.length
+                      careFacility.geocode_address.length || careFacility.locations.length
                     "
                     size="x-large"
                     color="primary"
@@ -72,11 +75,7 @@
                 </div>
               </div>
             </v-col>
-            <v-col
-              sm="12"
-              md="6"
-              class="action d-md-flex justify-end hidden-sm-and-down"
-            >
+            <v-col sm="12" md="6" class="action d-md-flex justify-end hidden-sm-and-down">
               <v-btn
                 variant="flat"
                 class="general-font-size"
@@ -99,10 +98,7 @@
                     {{ careFacility.street }}
                   </div>
                 </div>
-                <div
-                  class="d-flex ml-n1"
-                  v-if="careFacility.zip || careFacility.town"
-                >
+                <div class="d-flex ml-n1" v-if="careFacility.zip || careFacility.town">
                   <v-icon></v-icon>
                   {{ careFacility.zip }} {{ careFacility.town }}
                 </div>
@@ -118,11 +114,9 @@
                 </div>
                 <div v-if="careFacility.email" class="d-flex align-center">
                   <img class="mr-2 icon" :src="iconMail" />
-                  <a
-                    class="is-dark-grey"
-                    :href="`mailto:${careFacility.email}`"
-                    >{{ careFacility.email }}</a
-                  >
+                  <a class="is-dark-grey" :href="`mailto:${careFacility.email}`">{{
+                    careFacility.email
+                  }}</a>
                 </div>
               </div>
             </v-col>
@@ -144,10 +138,7 @@
           </v-row>
           <div class="hidden-sm-and-down">
             <v-btn
-              v-if="
-                careFacility.geocode_address.length ||
-                careFacility.locations.length
-              "
+              v-if="careFacility.geocode_address.length || careFacility.locations.length"
               append-icon="mdi-map-marker-outline"
               size="small"
               class="mt-4 pa-1"
@@ -171,6 +162,7 @@ import { useFilterStore, filterSortingDirections } from "~/store/searchFilter";
 import iconPhone from "@/assets/icons/facilities/icon_phone.svg";
 import iconMail from "@/assets/icons/facilities/icon_mail.svg";
 import iconAddress from "@/assets/icons/facilities/icon_address.svg";
+import { default as coursesIcon } from "~/assets/icons/facilityTypes/events.svg";
 
 const router = useRouter();
 
@@ -184,7 +176,6 @@ const emit = defineEmits<{
 const goToFacility = (careFacility: any) => {
   router.push({ path: `/public/care_facilities/${careFacility.id}` });
 };
-
 
 const filterStore = useFilterStore();
 
@@ -201,49 +192,49 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
   }, 100);
 };
 
-
-const sortDirection = ref(null);
+const sortDirection = ref<any>("asc" || "desc");
 
 const sortedResults = computed(() => {
-  return filterStore.filteredResults.sort((a: any, b: any) => {
+  if (filterStore.currentKinds.includes("facility")) {
+    return filterStore.filteredResults.sort((a: any, b: any) => {
+      return sortDirection.value === "asc"
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+    });
+  } else if (filterStore.currentKinds.includes("course")) {
     if (sortDirection.value === "asc") {
-      return (
-        new Date(a.event_dates[0]).valueOf() -
-        new Date(b.event_dates[0]).valueOf()
+      return filterStore.filteredResults.sort(
+        (a: any, b: any) =>
+          new Date(a.event_dates[0]).valueOf() - new Date(b.event_dates[0]).valueOf()
       );
-    } else if (sortDirection.value === "desc") {
-      return (
-        new Date(b.event_dates[0]).valueOf() -
-        new Date(a.event_dates[0]).valueOf()
+    } else {
+      return filterStore.filteredResults.sort(
+        (a: any, b: any) =>
+          new Date(b.event_dates[0]).valueOf() - new Date(a.event_dates[0]).valueOf()
       );
     }
-    return 0;
-  });
+  }
+  return filterStore.filteredResults
 });
 
 const toggleFilterSort = () => {
-  if (sortDirection.value === "asc") {
-    sortDirection.value = "desc";
-  } else {
-    sortDirection.value = "asc";
+  if (filterStore.currentKinds.includes("facility")) {
+    sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
+  } else if (filterStore.currentKinds.includes("course")) {
+    sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
   }
-};
-
-const toogleFilterSortFacilities = () => {
-  filterStore.toggleSort();
 };
 
 onMounted(() => {
   sortDirection.value = "asc";
 });
-
 </script>
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 
 .icon
-  width: 1.25rem
+  width: 1.5rem
 .item
   background: #FFFFFF
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
