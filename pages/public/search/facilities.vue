@@ -51,22 +51,78 @@ const breakpoints = useBreakpoints();
 const showMap = ref(true);
 
 watch(
-  () => filterStore.filterSort,
-  () => {
-    filterStore.loadAllResults();
-  }
-);
-
-watch(
   () => filterStore.filteredResults,
   () => updateLocations()
 );
 
 watch(
   () => appStore.loading,
-  () => {
+  async () => {
     if (appStore.loading) return;
-    filterStore.loadAllResults();
+    await filterStore.loadAllResults();
+    filterStore.loadFilteredFacilityMainFilters();
+  }
+);
+
+const startedAt = ref<null | "facilities" | "services" | "communities">(null);
+
+const handleStartedAt = (origin: "facilities" | "services" | "communities") => {
+  if (!startedAt.value) {
+    startedAt.value = origin;
+    return;
+  }
+
+  if (filterStore.currentFacilityTags.length === 0 && filterStore.currentServiceTags.length === 0 && filterStore.currentZips.length === 0) {
+    if (startedAt.value) {
+      startedAt.value = null;
+      return;
+    }
+    startedAt.value = origin;
+  }
+};
+
+watch(
+  () => filterStore.currentFacilityTags,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("facilities");
+
+    if (startedAt.value !== "services") filterStore.loadAllServiceFilters();
+    if (startedAt.value !== "communities") filterStore.loadFilteredCommunities();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => filterStore.currentZips,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("communities");
+
+    if (startedAt.value !== "services") filterStore.loadAllServiceFilters();
+    if (startedAt.value !== "facilities") filterStore.loadFilteredFacilityMainFilters();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => filterStore.currentServiceTags,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("services");
+
+    if (startedAt.value !== "communities") filterStore.loadFilteredCommunities();
+    if (startedAt.value !== "facilities") filterStore.loadFilteredFacilityMainFilters();
+  },
+  {
+    deep: true,
   }
 );
 
@@ -79,12 +135,7 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
   locations.value = [];
 
   for (const facility of facilities) {
-    if (
-      facility.geocode_address?.length &&
-      facility.geocode_address[0] &&
-      facility.geocode_address[0].lon &&
-      facility.geocode_address[0].lat
-    ) {
+    if (facility.geocode_address?.length && facility.geocode_address[0] && facility.geocode_address[0].lon && facility.geocode_address[0].lat) {
       locations.value.push({
         id: facility.id,
         latitude: parseFloat(facility.geocode_address[0].lat),
@@ -127,7 +178,11 @@ const mapToogle = () => {
 onMounted(async () => {
   filterStore.currentKinds = ["facility"];
   filterStore.updateFromUrlQuery();
-  filterStore.loadAllResults();
+  await filterStore.loadAllResults();
+  filterStore.loadAllServiceFilters()
+
+  await filterStore.loadAllFacilityFilters();
+  filterStore.loadFilteredFacilityMainFilters();
   showMap.value = !breakpoints.isMobile.value;
 });
 
@@ -165,5 +220,4 @@ onBeforeUnmount(() => {
 
 .filter-control
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-
 </style>
