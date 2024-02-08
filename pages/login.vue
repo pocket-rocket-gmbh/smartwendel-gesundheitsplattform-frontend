@@ -3,7 +3,9 @@
     <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
       <v-form @submit.prevent="auth">
         <v-card :class="['pa-6', { shake: animated }]">
-          <img class="is-fullwidth" src="~/assets/images/logo.png" />
+          <div class="d-flex justify-center">
+            <img class="login-image" width="300px" src="~/assets/images/logo.png" />
+          </div>
           <div class="mb-3">
             <v-text-field
               v-model="email"
