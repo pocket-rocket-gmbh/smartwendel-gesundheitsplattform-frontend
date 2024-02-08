@@ -68,6 +68,22 @@
             />
           </v-col>
         </v-row>
+        <v-row v-if="user.isAdmin()">
+          <v-col>
+            <v-radio-group
+              inline
+              class="d-flex justify-end align-center"
+              v-model="listOptionValue"
+            >
+              <v-radio
+                v-for="(item, index) in listOptions"
+                :key="index"
+                :label="item.text"
+                :value="item.value"
+              ></v-radio>
+            </v-radio-group>
+          </v-col>
+        </v-row>
       </div>
 
       <DataTable
@@ -86,6 +102,7 @@
         :disable-delete="true"
         defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
+        :import-filter="listOptionValue"
       />
 
       <div
@@ -228,8 +245,6 @@ const fields = [
     tooltip: "Einrichtung wurde von einer Admin erstellt."
   },
   {
-    prop: "user?.imported",
-    text: "Erstellt von",
     value: "",
     type: "imported",
     tooltip: "Einrichtung wurde importiert."
@@ -329,6 +344,16 @@ const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
 
 const itemStatus = ref(null);
+
+const listOptions = ref([
+  { text: "Alle", value: 1 },
+  { text: "Importiert", value: 2 },
+  { text: "Übernommen", value: 3 },
+  { text: "Nicht übernommen", value: 4 },
+  { text: "Nicht Importiert", value: 5 },
+]);
+
+const listOptionValue = ref(4);
 
 const handleItemUpdated = async (item: any) => {
   setupFinished.value = await useUser().setupFinished();
