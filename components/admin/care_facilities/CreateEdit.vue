@@ -91,7 +91,7 @@
                     >mdi-information-outline</v-icon
                   >
                 </template>
-                <span>Slug ist ein eindeutiger Bezeichner für deine Einrichtung. Er wird in der URL angezeigt.</span>
+                <span>Hier kannst du den letzten Teil deine URL-Adresse individualisieren.</span>
               </v-tooltip>
               <v-text-field
                 disabled

@@ -3,6 +3,7 @@
     <div>
       <PublicSearchTheBasicSearchBox title="Kurse" sub-title="Finde den passenden Kurs!" :filter-kind="'course'" />
       <div class="container">
+        {{ startedAt }}
         <div class="filters" v-if="showSearchFilter">
           <PublicSearchTheFilter :filterKind="'course'" />
         </div>
@@ -37,13 +38,13 @@ watch(
 const startedAt = ref<null | "facilities" | "services" | "communities">(null);
 
 const handleStartedAt = (origin: "facilities" | "services" | "communities") => {
-  if (!startedAt.value) {
+  if (startedAt.value) {
     startedAt.value = origin;
     return;
   }
 
   if (filterStore.currentFacilityTags.length === 0 && filterStore.currentServiceTags.length === 0 && filterStore.currentZips.length === 0) {
-    if (startedAt.value) {
+    if (!startedAt.value) {
       startedAt.value = null;
       return;
     }
@@ -103,6 +104,7 @@ const showSearchFilter = computed(() => {
 
 onMounted(async () => {
   filterStore.currentKinds = ["course"];
+  startedAt.value = null;
   filterStore.updateFromUrlQuery();
   await filterStore.loadAllResults();
   filterStore.loadAllServiceFilters()
