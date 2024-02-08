@@ -2,10 +2,7 @@
   <div>
     <v-row class="mt-md-4 search-field-search">
       <v-col class="d-flex align-center is-white">
-        <span
-          class="is-white font-weight-medium general-font-size"
-          v-if="filterStore.currentSearchTerm"
-        >
+        <span class="is-white font-weight-medium general-font-size" v-if="filterStore.currentSearchTerm">
           Suchbegriff: {{ filterStore.currentSearchTerm }}
         </span>
       </v-col>
@@ -23,15 +20,9 @@
   </div>
   <div class="search-page-wrapper">
     <div>
-      <LoadingSpinner class="loading" v-if="filterStore.loading"
-        >Ergebnisse werden geladen...</LoadingSpinner
-      >
+      <LoadingSpinner class="loading" v-if="filterStore.loading">Ergebnisse werden geladen...</LoadingSpinner>
       <template v-else>
-        <v-row
-          v-if="
-            !filterStore.filteredResults.length && !filterStore.filteredCategories.length
-          "
-        >
+        <v-row v-if="!filterStore.filteredResults.length && !filterStore.filteredCategories.length">
           <v-col class="d-flex flex-column align-center justify-center">
             <div class="flex-column" align="center">
               <div class="general-font-size text-h4">
@@ -62,16 +53,8 @@
       </template>
     </div>
     <div class="container">
-      <PublicContentBox
-        v-for="category in filterStore.filteredResults"
-        :key="category.id"
-        :item="category"
-      />
-      <PublicContentBox
-        v-for="category in filterStore.filteredCategories"
-        :key="category.id"
-        :item="category"
-      />
+      <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
+      <PublicContentBox v-for="category in filterStore.filteredCategories" :key="category.id" :item="category" />
     </div>
   </div>
 </template>
@@ -113,8 +96,10 @@ const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
 onMounted(async () => {
   filterStore.currentKinds = [];
   filterStore.onlySearchInTitle = false;
+
   await filterStore.loadAllResults();
-  filterStore.loadFilteredResults();
+
+  filterStore.loadAllResults();
 });
 </script>
 

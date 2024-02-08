@@ -41,7 +41,7 @@
                 <p v-else class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
               </div>
             </label>
-            <FacilityFilterSelection v-model="filterStore.currentTags" :popover-width="popoverWidth" :filter-kind="filterKind" />
+            <FacilityFilterSelection v-model="filterStore.currentFacilityTags" :popover-width="popoverWidth" :filter-kind="filterKind" />
           </div>
         </v-col>
         <v-col v-if="filterKind !== 'event' && filterKind !== 'news'">
@@ -203,10 +203,6 @@ const updatePopoverWidth = () => {
 
 const handleInput = () => {
   filterStore.onlySearchInTitle = false;
-  filterStore.loadFilteredResults();
-};
-
-const startSearch = () => {
   filterStore.loadAllResults();
 };
 

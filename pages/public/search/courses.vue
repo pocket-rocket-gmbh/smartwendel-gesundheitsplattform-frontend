@@ -17,16 +17,85 @@
 <script setup lang="ts">
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useFilterStore } from "~/store/searchFilter";
+import { useAppStore } from "~/store/app";
+
+const appStore = useAppStore();
 
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
+const showMap = ref(true);
 
 watch(
-  () => filterStore.filterSort,
-  () => {
-    filterStore.loadAllResults();
+  () => appStore.loading,
+  async () => {
+    if (appStore.loading) return;
+    await filterStore.loadAllResults();
+    filterStore.loadFilteredFacilityMainFilters();
   }
 );
+
+const startedAt = ref<null | "facilities" | "services" | "communities">(null);
+
+const handleStartedAt = (origin: "facilities" | "services" | "communities") => {
+  if (!startedAt.value) {
+    startedAt.value = origin;
+    return;
+  }
+
+  if (filterStore.currentFacilityTags.length === 0 && filterStore.currentServiceTags.length === 0 && filterStore.currentZips.length === 0) {
+    if (startedAt.value) {
+      startedAt.value = null;
+      return;
+    }
+    startedAt.value = origin;
+  }
+};
+
+watch(
+  () => filterStore.currentFacilityTags,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("facilities");
+
+    if (startedAt.value !== "services") filterStore.loadAllServiceFilters();
+    if (startedAt.value !== "communities") filterStore.loadFilteredCommunities();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => filterStore.currentZips,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("communities");
+
+    if (startedAt.value !== "services") filterStore.loadAllServiceFilters();
+    if (startedAt.value !== "facilities") filterStore.loadFilteredFacilityMainFilters();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => filterStore.currentServiceTags,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("services");
+
+    if (startedAt.value !== "communities") filterStore.loadFilteredCommunities();
+    if (startedAt.value !== "facilities") filterStore.loadFilteredFacilityMainFilters();
+  },
+  {
+    deep: true,
+  }
+);
+
 
 const showSearchFilter = computed(() => {
   return breakpoints.width.value > BreakPoints.md;
@@ -35,7 +104,11 @@ const showSearchFilter = computed(() => {
 onMounted(async () => {
   filterStore.currentKinds = ["course"];
   filterStore.updateFromUrlQuery();
-  filterStore.loadAllResults();
+  await filterStore.loadAllResults();
+  filterStore.loadAllServiceFilters()
+
+  await filterStore.loadAllFacilityFilters();
+  filterStore.loadFilteredFacilityMainFilters();
 });
 
 onBeforeUnmount(() => {
