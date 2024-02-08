@@ -153,8 +153,4 @@ const getSubSubCategories = async () => {
     }
   }
 }
-
-a {
-  color: red !important;
-}
 </style>

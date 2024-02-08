@@ -27,12 +27,12 @@
             >
               <div class="title mx-5 font-weight-medium">
                 <span
-                  class="is-clickable general-font-size is-secondary-color"
+                  class="is-clickable is-uppercase"
                   :class="[
                     currentRoute.includes(currentCategory?.id) &&
                     currentCategory.name === category.name
-                      ? 'is-primary'
-                      : '',
+                      ? 'is-primary-color'
+                      : 'is-secondary-color',
                   ]"
                   @click="setItemsAndGo(category, null)"
                 >
@@ -49,7 +49,7 @@
                     >
                       <div class="list-item">
                         <div>
-                          <span class="general-font-size">
+                          <span class="general-font-size is-secondary-color">
                             {{ sub_category.name }}
                           </span>
                         </div>
@@ -62,13 +62,23 @@
             <div v-if="!loading" class="general-font-size is-secondary-color">
               <span
                 href="/public/search/facilities"
-                class="is-clickable mx-5"
+                class="is-clickable is-uppercase mx-5"
                 :class="[
-                  currentRoute.includes('facilities') ? 'is-primary' : '',
+                  currentRoute.includes('facilities') ? 'is-primary-color' : '',
                 ]"
                 @click.prevent="goTo('/public/search/facilities')"
               >
-                Anbietersuche
+                Anbieter finden
+              </span>
+              <span
+                href="/public/search/facilities"
+                class="is-clickable mx-5"
+                :class="[
+                  currentRoute.includes('faq') ? 'is-primary-color' : '',
+                ]"
+                @click.prevent="goTo('/public/search/facilities')"
+              >
+                FAQ
               </span>
             </div>
           </div>
@@ -522,7 +532,7 @@ header,
     pointer-events: none;
     z-index: 5;
     top: 100%;
-    width: 100%;
+    width: 120%;
     box-shadow: 0px 5px 10px rgba(black, 0.5);
 
     .list-item {

@@ -3,7 +3,7 @@
     <div
       class="d-flex flex-column align-center justify-center text-white"
     >
-      <h2 class="my-5">Pflege und num?</h2>
+      <h2 class="my-5">Pflege und nun?</h2>
       <h4 class="mb-5">Wir informieren Sie rund um das Thema Pflege</h4>
     </div>
     <v-container fluid>
@@ -97,7 +97,7 @@ const items = [
   }
 }
 .wrapper {
-  padding: 6.25rem;
+  padding: 5rem;
   @include md {
     padding: 1rem;
   }

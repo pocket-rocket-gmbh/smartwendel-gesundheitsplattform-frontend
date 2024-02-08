@@ -4,7 +4,7 @@
     v-if="careFacility?.sanitized_documents?.filter((doc:any) => doc.tag === 'documents')?.length > 0"
   >
     <span
-      class="is-primary is-uppercase general-font-size font-weight-medium mb-6"
+      class="is-secondary-color is-uppercase general-font-size font-weight-medium mb-6"
       >Dokumente</span
     >
     <div class="flex-column">

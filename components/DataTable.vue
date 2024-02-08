@@ -316,7 +316,7 @@ import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
 import type { RequiredField } from "~/types/facilities";
-import logo from "@/assets/images/lk-logo.png";
+import logo from "@/assets/images/logo.png";
 
 const router = useRouter();
 

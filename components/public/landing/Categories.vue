@@ -8,10 +8,7 @@
       </div>
       <div>
         <p class="is-paragraph is-secondary">
-          At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-          gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-          dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-          invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+          Mit dem Thema Pflege kommt man oft auf die verschiedensten Arten in Berührung. Ob als Angehörige oder Betroffene, ob plötzlich oder in einem Prozess – die Erfahrungen sind vielfältig. Unabhängig von der persönlichen Situation stellt sich bei vielen Ratsuchenden dann häufig die Frage, welche nächsten Schritte auf sie zukommen.
         </p>
       </div>
 
