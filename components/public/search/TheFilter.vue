@@ -338,7 +338,6 @@ const emitFiltersUpdated = () => {
   });
 };
  watch(()=> filterStore.allServiceTags, ()=> {
-  console.log('uhuhu')
   availableItemsForServiceList.value = [
       ...deepToRaw(filterStore.allServiceTags),
     ];
