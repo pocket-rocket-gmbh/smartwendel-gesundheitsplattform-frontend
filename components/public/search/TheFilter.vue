@@ -79,9 +79,6 @@
       </v-btn>
     </div>
     <div>
-      <span v-if="filterStore.filteredResults.length === 0 && !loading" class="general-font-size font-weight-medium is-dark-grey">
-        Keine weiteren Filter gefunden
-      </span>
       <span
         v-if="filterStore.filteredResults.length && !loading"
         class="general-font-size font-weight-medium is-dark-grey"

@@ -45,56 +45,48 @@
     </v-container>
     <v-divider class="mx-15"></v-divider>
     <v-container>
-      <span class="font-weight-medium"
-        >3. Verarbeitungsvorgänge, Zwecke und Dauer sowie Rechtsgrundlage der
-        Datenverarbeitung</span
-      >
+      <p class="font-weight-medium">
+        3. Verarbeitungsvorgänge, Zwecke und Dauer sowie Rechtsgrundlage der
+        Datenverarbeitung
+      </p>
       <br />
-      <v-container class="ml-10">
-        <span class="font-weight-medium">
-          3.1 Bereitstellung der Website und Erstellung von Logfiles
-        </span>
-        <v-container>
-          <p>• Informationen über den Browsertyp und die verwendete Version</p>
-          <p>• Betriebssystem des Nutzers</p>
-          <p>• Datum und Uhrzeit des Zugriffs</p>
-          <p>• Websites, die vom System des Nutzers über die Website aufgerufen werden</p>
-          <br />
-          <p>
-            Zweck der Verarbeitung ist Gewährleistung des Verbindungsaufbaus und Nutzung
-            der Internetseite. Rechtsgrundlage für die Datenverarbeitung ist unser
-            berechtigtes Interesse an der Sicherstellung einer funktionsfähigen
-            Internetseite (Art. 6 Abs. 1 S. 1 lit. f DSGVO). Eine Speicherung in Logfiles
-            erfolgt nicht.
-          </p>
-        </v-container>
-      </v-container>
-
-      <v-container class="ml-10">
-        <span class="font-weight-medium"> 3.2 Kontaktaufnahme </span>
-        <v-container>
-          <p>
-            Bei Ihrer Kontaktaufnahme per E-Mail, Fax oder per Telefon werden die von
-            Ihnen mitgeteilten Daten von uns gespeichert.
-          </p>
-          <br />
-          <p>
-            Die Verarbeitung der personenbezogenen Daten, die per E-Mail, per Fax oder
-            telefonisch übermittelt werden, dient der schnellen Kontaktaufnahme und damit
-            einer zügigen Bearbeitung Ihrer Anfrage. Unser berechtigtes Interesse besteht
-            somit in der Wahrnehmung der für unseren Geschäftsbetrieb erforderlichen
-            Kommunikation (Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO).
-          </p>
-          <br />
-          <p>
-            Die Daten werden gelöscht, wenn die Bearbeitung der jeweiligen Anfrage beendet
-            ist. Beendet ist die Bearbeitung dann, wenn sich aus den Umständen entnehmen
-            lässt, dass der betroffene Sachverhalt abschließend geklärt ist, sofern keine
-            gesetzlichen Aufbewahrungspflichten entgegenstehen.
-          </p>
-          <br />
-        </v-container>
-      </v-container>
+      <span class="font-weight-medium">
+        3.1 Bereitstellung der Website und Erstellung von Logfiles
+      </span>
+      <br />
+      <p>• Informationen über den Browsertyp und die verwendete Version</p>
+      <p>• Betriebssystem des Nutzers</p>
+      <p>• Datum und Uhrzeit des Zugriffs</p>
+      <p>• Websites, die vom System des Nutzers über die Website aufgerufen werden</p>
+      <br />
+      <p>
+        Zweck der Verarbeitung ist Gewährleistung des Verbindungsaufbaus und Nutzung der
+        Internetseite. Rechtsgrundlage für die Datenverarbeitung ist unser berechtigtes
+        Interesse an der Sicherstellung einer funktionsfähigen Internetseite (Art. 6 Abs.
+        1 S. 1 lit. f DSGVO). Eine Speicherung in Logfiles erfolgt nicht.
+      </p>
+      <br />
+      <span class="font-weight-medium"> 3.2 Kontaktaufnahme </span>
+      <p>
+        Bei Ihrer Kontaktaufnahme per E-Mail, Fax oder per Telefon werden die von Ihnen
+        mitgeteilten Daten von uns gespeichert.
+      </p>
+      <br />
+      <p>
+        Die Verarbeitung der personenbezogenen Daten, die per E-Mail, per Fax oder
+        telefonisch übermittelt werden, dient der schnellen Kontaktaufnahme und damit
+        einer zügigen Bearbeitung Ihrer Anfrage. Unser berechtigtes Interesse besteht
+        somit in der Wahrnehmung der für unseren Geschäftsbetrieb erforderlichen
+        Kommunikation (Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO).
+      </p>
+      <br />
+      <p>
+        Die Daten werden gelöscht, wenn die Bearbeitung der jeweiligen Anfrage beendet
+        ist. Beendet ist die Bearbeitung dann, wenn sich aus den Umständen entnehmen
+        lässt, dass der betroffene Sachverhalt abschließend geklärt ist, sofern keine
+        gesetzlichen Aufbewahrungspflichten entgegenstehen.
+      </p>
+      <br />
     </v-container>
     <v-divider class="mx-15"></v-divider>
     <v-container>
@@ -307,12 +299,11 @@
         a) Sie haben gegenüber uns folgende Rechte hinsichtlich der Sie betreffenden
         personenbezogenen Daten:
       </p>
-      <v-container class="ml-10">
-        <p>• Recht auf Auskunft,</p>
-        <p>• Recht auf Berichtigung oder Löschung,</p>
-        <p>• Recht auf Einschränkung der Verarbeitung,</p>
-        <p>• Recht auf Datenübertragbarkeit.</p>
-      </v-container>
+      <br />
+      <p>• Recht auf Auskunft,</p>
+      <p>• Recht auf Berichtigung oder Löschung,</p>
+      <p>• Recht auf Einschränkung der Verarbeitung,</p>
+      <p>• Recht auf Datenübertragbarkeit.</p>
       <p>
         Sie haben zudem das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die
         Verarbeitung Ihrer personenbezogenen Daten durch uns zu beschweren.

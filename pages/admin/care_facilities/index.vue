@@ -351,7 +351,7 @@ const listOptions = ref([
   { text: "Importiert", value: 2 },
   { text: "Übernommen", value: 3 },
   { text: "Nicht übernommen", value: 4 },
-  { text: "Nicht Importiert", value: 5 },
+  { text: "Selbst angelegt", value: 5 },
 ]);
 
 const listOptionValue = ref(1);
