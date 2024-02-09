@@ -5,7 +5,7 @@
       :id="subCategory?.id.replaceAll('-', '')"
     >
       <v-col class="d-flex flex-column is-dark-grey justify-center">
-        <div :class="[breakPoints.width.value < 960 ? 'mt-4' : '', breakPoints.width.value < 515 ? 'mt-15' : '']">
+        <div :class="[breakPoints.width.value < 960 ? 'mt-4' : '', breakPoints.width.value < 515 ? 'mt-15' : 'mt-5']">
           <span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
         </div>
         <div>

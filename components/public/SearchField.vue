@@ -101,6 +101,7 @@ const props = defineProps<{
   defaultRouteTo?: string;
   kind?: string;
   isResultPage?: boolean;
+  filteredCategories?: any[];
 }>();
 
 const filterStore = useFilterStore();

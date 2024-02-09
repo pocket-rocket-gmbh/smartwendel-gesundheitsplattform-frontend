@@ -52,6 +52,7 @@ const initialize = async () => {
     useFilterStore().loadUnalteredAllResults(),
     useFilterStore().loadAllCategories(),
     getTooltips(),
+    useFilterStore().resetAllFilters(),
   ]);
 };
 
@@ -61,9 +62,15 @@ onMounted(async () => {
 
   appStore.loading = true;
   await initialize();
-  appStore.loading = false;
-});
+  await useFilterStore().loadAllResults();
 
+  await Promise.allSettled([
+    await useFilterStore().loadAllFacilityFilters(),
+    await useFilterStore().loadAllServiceFilters()
+  ]);
+  appStore.loading = false;
+
+});
 
 onUnmounted(() => {
   document.removeEventListener("wheel", handleScroll);

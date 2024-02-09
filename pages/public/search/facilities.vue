@@ -18,7 +18,9 @@
             <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
             <ClientMap
               :locations="locations"
-              v-if="showMap && !appStore.loading"
+              v-if="
+                showMap && !appStore.loading && filterStore.filteredResults.length > 0
+              "
               ref="map"
               :auto-fit="false"
               :center-point="{
@@ -28,12 +30,21 @@
               :min-zoom="11"
             />
           </div>
-
           <div class="facilities">
             <PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" />
           </div>
         </div>
       </div>
+      <v-row v-if="!filterStore.filteredResults.length">
+        <v-col class="d-flex flex-column align-center justify-center">
+          <div class="flex-column" align="center">
+            <div class="general-font-size text-h4">
+              Leider haben wir kein Suchergebnis zu deiner Anfrage.
+            </div>
+          </div>
+          <img :src="noResults" class="no-results-image mt-10" />
+        </v-col>
+      </v-row>
     </div>
   </ClientOnly>
 </template>
@@ -43,6 +54,7 @@ import { useFilterStore } from "~/store/searchFilter";
 import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useAppStore } from "~/store/app";
+import noResults from "~/assets/images/search_no_results.jpg";
 
 const appStore = useAppStore();
 
@@ -51,22 +63,82 @@ const breakpoints = useBreakpoints();
 const showMap = ref(true);
 
 watch(
-  () => filterStore.filterSort,
-  () => {
-    filterStore.loadAllResults();
-  }
-);
-
-watch(
   () => filterStore.filteredResults,
   () => updateLocations()
 );
 
 watch(
   () => appStore.loading,
-  () => {
+  async () => {
     if (appStore.loading) return;
-    filterStore.loadAllResults();
+    await filterStore.loadAllResults();
+    filterStore.loadFilteredFacilityMainFilters();
+  }
+);
+
+const startedAt = ref<null | "facilities" | "services" | "communities">(null);
+
+const handleStartedAt = (origin: "facilities" | "services" | "communities") => {
+  if (startedAt.value) {
+    startedAt.value = origin;
+    return;
+  }
+
+  if (
+    filterStore.currentFacilityTags.length === 0 &&
+    filterStore.currentServiceTags.length === 0 &&
+    filterStore.currentZips.length === 0
+  ) {
+    if (startedAt.value) {
+      startedAt.value = null;
+      return;
+    }
+    startedAt.value = origin;
+  }
+};
+
+watch(
+  () => filterStore.currentFacilityTags,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("facilities");
+
+    if (startedAt.value !== "services") filterStore.loadAllServiceFilters();
+    if (startedAt.value !== "communities") filterStore.loadFilteredCommunities();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => filterStore.currentZips,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("communities");
+
+    if (startedAt.value !== "services") filterStore.loadAllServiceFilters();
+    if (startedAt.value !== "facilities") filterStore.loadFilteredFacilityMainFilters();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => filterStore.currentServiceTags,
+  async () => {
+    await filterStore.loadAllResults();
+
+    handleStartedAt("services");
+
+    if (startedAt.value !== "communities") filterStore.loadFilteredCommunities();
+    if (startedAt.value !== "facilities") filterStore.loadFilteredFacilityMainFilters();
+  },
+  {
+    deep: true,
   }
 );
 
@@ -126,8 +198,13 @@ const mapToogle = () => {
 
 onMounted(async () => {
   filterStore.currentKinds = ["facility"];
+  startedAt.value = null;
   filterStore.updateFromUrlQuery();
-  filterStore.loadAllResults();
+  await filterStore.loadAllResults();
+  filterStore.loadAllServiceFilters();
+
+  await filterStore.loadAllFacilityFilters();
+  filterStore.loadFilteredFacilityMainFilters();
   showMap.value = !breakpoints.isMobile.value;
 });
 
@@ -166,4 +243,8 @@ onBeforeUnmount(() => {
 .filter-control
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
 
+.no-results-image
+  max-width: 500px
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15)
+  border-radius: 20px
 </style>

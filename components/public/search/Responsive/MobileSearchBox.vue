@@ -15,7 +15,7 @@
       <div v-if="showFilter">
         <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
           <v-col cols="10">
-            <PublicSearchCategorySelectModal v-model="filterStore.currentTags" :filter-kind="filterKind" :filterTitle="filterTitle" />
+            <PublicSearchCategorySelectModal v-model="filterStore.currentFacilityTags" :filter-kind="filterKind" :filterTitle="filterTitle" />
           </v-col>
           <v-col>
             <PublicSearchFilterSelectModal :filter-kind="filterKind" />
@@ -88,7 +88,7 @@ const breakpoints = useBreakpoints();
 
 const handleInput = () => {
   filterStore.onlySearchInTitle = false;
-  filterStore.loadFilteredResults();
+  filterStore.loadAllResults();
 };
 
 const filterTitle = ref("");

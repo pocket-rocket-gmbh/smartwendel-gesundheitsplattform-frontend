@@ -59,10 +59,8 @@
                 />
                 <v-btn
                   variant="flat"
-                  class="general-font-size"
                   color="primary"
                   rounded="pill"
-                  size="large"
                   @click="copyTokenLink(slotProps.item)"
                 >
                   <span> URL kopieren </span>
@@ -70,23 +68,7 @@
               </div>
             </div>
           </div>
-          <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="name">
-            <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">Slug</span>
-            </div>
-            <v-text-field
-              class="text-field is-dark-grey"
-              v-model="slotProps.item.slug"
-              hide-details="auto"
-              label="Slug"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
-            />
-          </div>
-          <v-divider class="my-10"></v-divider>
-
-
+          <v-divider class="my-2"></v-divider>
           <div class="field" id="name">
             <div class="my-2">
               <span class="general-font-size is-dark-grey font-weight-bold">{{
@@ -101,7 +83,76 @@
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
+            <div class="d-flex align-center my-4">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">Link zur Einrichtung: </span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>Hier kannst du den letzten Teil deiner URL-Adresse individualisieren.</span>
+              </v-tooltip>
+              <v-text-field
+                disabled
+                class="text-field is-dark-grey mb-4"
+                label="https://gesundes-wnd.de/public/care_facilities/"
+                hide-details="auto"
+                variant="plain"
+                reverse
+              />
+              <v-text-field
+                :disabled="!slugBeingEdited"
+                class="ttext-right"
+                v-model="slotProps.item.slug"
+                hide-details="auto"
+                :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              />
+            </div>
+            <div class="d-flex justify-end align-center">
+              <v-btn
+                color="primary"
+                rounded="pill"
+                variant="outlined"
+                class="mx-5"
+                @click="copyLink(slotProps.item.slug)"
+              >
+                <span> Link kopieren </span>
+              </v-btn>
+              <span v-if="slugBeingEdited">
+                <v-btn
+                variant="flat"
+                color="primary"
+                rounded="pill"
+                @click="slugBeingEdited = false"
+              >
+                <span v-if="slugBeingEdited"> Fertig </span>
+              </v-btn>
+              </span>
+              <span v-else>
+                <v-btn
+                variant="flat"
+                color="primary"
+                rounded="pill"
+                @click="confirmEditSlugDialogOpen = true"
+              >
+                <span> Link bearbeiten </span>
+              </v-btn>
+              </span>
+            </div>
           </div>
+          <EditItem
+            :open="confirmEditSlugDialogOpen"
+            @accepted="
+              slugBeingEdited = true;
+              confirmEditSlugDialogOpen = false;
+            "
+            @close="
+              confirmEditSlugDialogOpen = false;
+              slugBeingEdited = false;
+            "
+            type="slug"
+          />
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="logo">
@@ -823,6 +874,9 @@ const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
 };
 
+const slugBeingEdited = ref(false);
+const confirmEditSlugDialogOpen = ref(false);
+
 const editInformations = ref(false);
 const confirmEditDialogOpen = ref(false);
 
@@ -869,6 +923,13 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     return slotPropsItem[prop] && slotPropsItem[prop].length;
   });
   return result;
+};
+
+const copyLink = (item: any) => {
+  if (!item) return;
+  const link = `https://gesundes-wnd.de/public/care_facilities/${item}`;
+  navigator.clipboard.writeText(link);
+  snackbar.showSuccess(`Link kopiert`);
 };
 
 const loadingAdress = ref(false);

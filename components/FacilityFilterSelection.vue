@@ -20,7 +20,52 @@
       v-if="showPopover"
       v-auto-animate
     >
-      <v-row>
+      <div class="filters filter-wrap">
+        <div v-for="filter in filterStore.filteredFacilityMainFilters" :key="filter.id" class="filter-column">
+          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
+            {{ filter.name }}
+
+            <v-btn
+              @click="handleToggleAll(filter)"
+              hide-details
+              :color="areAllSelected(filter) ? 'primary' : 'grey'"
+              density="compact"
+              class="ma-2"
+              :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
+            >
+              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
+            </v-btn>
+          </div>
+          <div
+            class="filter-options"
+            :style="{
+              width: popoverWidth ? `${popoverWidth}px` : 'max-content',
+            }"
+          >
+            <label class="option ma-n1" v-for="option in filter.options" :key="option.id">
+              <v-btn
+                v-if="option?.care_facilities_active_count > 0"
+                :model-value="modelValue.includes(option.id)"
+                @click.prevent="handleOptionSelect(option)"
+                hide-details
+                density="compact"
+                class="options-select general-font-size ma-2 text-none font-weight-light"
+                :class="{
+                  'is-selected': modelValue.includes(option.id),
+                }"
+              >
+                <p v-if="loadingFilters" class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
+
+                <span v-else>
+                  {{ option.name }}
+                </span>
+              </v-btn>
+            </label>
+            <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
+          </div>
+        </div>
+      </div>
+      <v-row class="done-button">
         <v-col class="d-flex justify-end">
           <v-btn
             @click="showPopover = false"
@@ -33,64 +78,6 @@
           </v-btn>
         </v-col>
       </v-row>
-      <div class="filters">
-        <div v-for="filter in mainFilters" :key="filter.id" class="filter-column">
-          <div
-            v-if="hasActiveOptions(filter.id)"
-            class="filter-name my-1 font-weight-bold"
-          >
-            {{ filter.name }}
-
-            <v-btn
-              @click="handleToggleAll(filter)"
-              hide-details
-              :color="areAllSelected(filter) ? 'primary' : 'grey'"
-              density="compact"
-              class="ma-2"
-              :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
-            >
-              <span>
-                {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span
-              >
-            </v-btn>
-          </div>
-          <div
-            class="filter-options"
-            :style="{
-              width: popoverWidth ? `${popoverWidth}px` : 'max-content',
-            }"
-          >
-            <label
-              class="option ma-n1"
-              v-for="option in filterOptions.find(
-                ({ parentId }) => parentId === filter.id
-              )?.options"
-              :key="option.id"
-            >
-              <v-btn
-                v-if="option?.care_facilities_active_count > '0'"
-                :model-value="modelValue.includes(option.id)"
-                @click.prevent="handleOptionSelect(option)"
-                hide-details
-                density="compact"
-                class="options-select general-font-size ma-2 text-none font-weight-light"
-                :class="{
-                  'is-selected': modelValue.includes(option.id),
-                }"
-              >
-                <p v-if="loadingFilters" class="waiting general-font-size">
-                  <span>.</span><span>.</span><span>.</span>
-                </p>
-
-                <span v-else>
-                  {{ option.name }}
-                </span>
-              </v-btn>
-            </label>
-            <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
-          </div>
-        </div>
-      </div>
       <v-row v-if="loadingFilters">
         <v-col cols="12" class="d-flex justify-center">
           <LoadingSpinner> Filter werden geladen ... </LoadingSpinner>
@@ -102,18 +89,12 @@
 
 <script setup lang="ts">
 import { onClickOutside } from "@vueuse/core";
-import { type FilterKind, useFilterStore } from "~/store/searchFilter";
-import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
+import { useFilterStore, type FilterKind } from "~/store/searchFilter";
 
 type Filter = {
   id: string;
   name: string;
-  care_facilities_active_count: string;
-};
-
-type FilterOption = {
-  parentId: string;
-  options: Filter[];
+  care_facilities_active_count: number;
 };
 
 const props = defineProps<{
@@ -126,8 +107,6 @@ const emit = defineEmits<{
   (event: "update:modelValue", values: string[]): void;
 }>();
 
-const breakpoints = useBreakpoints();
-
 const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
   if (props.filterKind === "facility") {
@@ -138,13 +117,8 @@ const setPlaceholderText = () => {
 };
 
 const hasActiveOptions = (filterId: string) => {
-  const options = filterOptions.value.find(
-    ({ parentId }) => parentId === filterId
-  )?.options;
-  return (
-    options &&
-    options.some((option) => Number(option?.care_facilities_active_count) > 0)
-  );
+  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filterId)?.options;
+  return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
 };
 
 const showPopover = ref(false);
@@ -152,9 +126,6 @@ const popoverParentRef = ref<HTMLDivElement>();
 const multipleSelections = ref<Filter[]>([]);
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));
-
-const mainFilters = ref([]);
-const filterOptions = ref<FilterOption[]>([]);
 
 const loadingFilters = ref(false);
 const filterStore = useFilterStore();
@@ -165,15 +136,11 @@ const handleClearTermSearch = () => {
   return;
 };
 const handleOptionSelect = (option: Filter) => {
-  const indexOfAlreadySetFilter = props.modelValue.findIndex(
-    (item) => item === option.id
-  );
+  const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
 
   if (indexOfAlreadySetFilter !== -1) {
     props.modelValue.splice(indexOfAlreadySetFilter, 1);
-    multipleSelections.value = multipleSelections.value?.filter(
-      (item) => item.id !== option.id
-    );
+    multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
   } else {
     props.modelValue.push(option.id);
     multipleSelections.value.push(option);
@@ -183,12 +150,8 @@ const handleOptionSelect = (option: Filter) => {
 };
 
 const handleToggleAll = (filter: any) => {
-  const options = filterOptions.value.find(
-    ({ parentId }) => parentId === filter.id
-  )?.options;
-  const relevantOptions = options.filter(
-    (option) => !!option?.care_facilities_active_count
-  );
+  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
+  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
   const selectAll = !areAllSelected(filter);
 
@@ -200,17 +163,13 @@ const handleToggleAll = (filter: any) => {
     });
   } else {
     relevantOptions.forEach((option) => {
-      const indexOfAlreadySetFilter = props.modelValue.findIndex(
-        (item) => item === option.id
-      );
+      const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
       if (indexOfAlreadySetFilter !== -1) {
         props.modelValue.splice(indexOfAlreadySetFilter, 1);
       }
     });
 
-    multipleSelections.value = multipleSelections.value.filter(
-      (item) => !relevantOptions.find((option) => option.id === item.id)
-    );
+    multipleSelections.value = multipleSelections.value.filter((item) => !relevantOptions.find((option) => option.id === item.id));
   }
 
   emit(
@@ -220,92 +179,27 @@ const handleToggleAll = (filter: any) => {
 };
 
 const areAllSelected = (filter: any) => {
-  const options = filterOptions.value.find(
-    ({ parentId }) => parentId === filter.id
-  )?.options;
-  const relevantOptions = options.filter(
-    (option) => !!option?.care_facilities_active_count
-  );
+  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
+  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
 
-  return relevantOptions.every((option) =>
-    multipleSelections.value.find((item) => item.id === option.id)
-  );
+  return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
 };
 
 watch(
   () => props.modelValue,
   () => {
-    multipleSelections.value = filterOptions.value.reduce((prev, curr) => {
-      const foundOptions = curr.options.filter((option) =>
-        props.modelValue.includes(option.id)
-      );
+    multipleSelections.value = filterStore.allFacilityMainFilters.reduce((prev, curr) => {
+      const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
       return [...prev, ...foundOptions];
     }, [] as Filter[]);
   }
 );
 
-
-watch(
-  () => filterStore.currentZips,
-  async () => {
-    await filterStore.loadAllResults();
-    handleSetFilters();
-  },
-  { deep: true }
-)
-
-
-const handleSetFilters = async () => {
-  loadingFilters.value = true;
-  mainFilters.value = await getMainFilters("filter_facility", props.filterKind);
-
-  const allFilters = await filterStore.loadAllFilters();
-
-  const allOptions = mainFilters.value.map((filter) =>
-    allFilters.filter((item) => item.parent_id === filter.id)
-  );
-
-  filterOptions.value = [];
-  allOptions.forEach((options, index) => {
-    const filteredOptions = options.filter((option) => {
-      return filterStore.filteredResults.find((filteredResult) => {
-        return filteredResult.tag_category_ids.find(
-          (tagCategoryId) => tagCategoryId === option.id
-        );
-      });
-    });
-
-    if (!filteredOptions.length) {
-      return;
-    }
-
-    filterOptions.value.push({
-      parentId: mainFilters.value[index].id,
-      options: filteredOptions,
-    });
-  });
-  loadingFilters.value = false;
-
-  const allAvailableOptions = filterOptions.value.reduce((prev, curr) => {
-    return [...prev, ...curr.options];
-  }, [] as Filter[]);
-
-  const foundFilters = allAvailableOptions.filter((option) => {
-    const doesInclude = props.modelValue.find(
-      (item: string) => item === option.id
-    );
-    return doesInclude;
-  });
-
-  if (foundFilters?.length > 1) {
-    multipleSelections.value = foundFilters;
-  }
-
-  setPlaceholderText();
-};
-
 onMounted(async () => {
-  handleSetFilters();
+  setPlaceholderText();
+
+  await filterStore.loadAllCommunities();
+  filterStore.loadFilteredCommunities();
 });
 </script>
 
@@ -340,5 +234,10 @@ onMounted(async () => {
 .is-selected {
   background-color: #8ab61d !important;
   color: white !important;
+}
+
+.filter-wrap {
+  max-height: 500px;
+  overflow-y: auto;
 }
 </style>
