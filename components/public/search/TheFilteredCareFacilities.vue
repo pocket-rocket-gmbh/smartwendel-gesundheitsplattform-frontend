@@ -2,23 +2,23 @@
   <Loading v-if="filterStore.loading" />
   <div
     class="entries general-font-size"
-    v-if="!(!filterStore.loading && !sortedResults.length)"
+    v-if="!(!filterStore.loading && !sortedResults?.length)"
   >
     <div class="d-flex actions">
-      <div
-        v-if="!filterStore.currentKinds.includes('facility')"
+<!--    <div
+        v-if="!filterStore.currentKinds.includes('facility') || !filterStore.currentKinds.includes('news')"
         class="sort-order is-clickable d-flex align-center"
         @click="toggleFilterSort"
       >
         <img :src="coursesIcon" class="mr-2 icon is-dark-grey" />
-        <div class="mt-1">Datum:</div>
+        <div class="mt-1">Datum</div>
         <div>
           <v-icon v-show="sortDirection === 'asc' || sortDirection === null"
             >mdi-chevron-down</v-icon
           >
           <v-icon v-show="sortDirection === 'desc'">mdi-chevron-up</v-icon>
         </div>
-      </div>
+      </div> -->
       <div
         v-if="filterStore.currentKinds.includes('facility')"
         class="sort-order is-clickable d-flex align-center"
@@ -202,20 +202,21 @@ const sortedResults = computed(() => {
         : b.name.localeCompare(a.name);
     });
   } else if (filterStore.currentKinds.includes("course")) {
+    const sortedResultsCopy = [...filterStore.filteredResults]; // Create a shallow copy
     if (sortDirection.value === "asc") {
-      return filterStore.filteredResults.sort(
-        (a: any, b: any) =>
-          new Date(a.event_dates[0]).valueOf() - new Date(b.event_dates[0]).valueOf()
-      );
+        sortedResultsCopy.sort((a: any, b: any) =>
+            new Date(a.event_dates[0]).valueOf() - new Date(b.event_dates[0]).valueOf()
+        );
     } else {
-      return filterStore.filteredResults.sort(
-        (a: any, b: any) =>
-          new Date(b.event_dates[0]).valueOf() - new Date(a.event_dates[0]).valueOf()
-      );
+        sortedResultsCopy.sort((a: any, b: any) =>
+            new Date(b.event_dates[0]).valueOf() - new Date(a.event_dates[0]).valueOf()
+        );
     }
+    return sortedResultsCopy;
   }
-  return filterStore.filteredResults
+  return filterStore.filteredResults;
 });
+
 
 const toggleFilterSort = () => {
   if (filterStore.currentKinds.includes("facility")) {
