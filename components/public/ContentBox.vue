@@ -74,7 +74,7 @@
           class="general-font-size d-flex align-center mb-n3"
           v-if="item.kind === 'event' || item.kind === 'course'"
         >
-          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1700">
+          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1420">
             <img :src="eventsIcon" class="mr-1" />
             {{ item?.event_dates?.[0]?.slice(0, 10) }}
           </span>
