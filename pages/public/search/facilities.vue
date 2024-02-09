@@ -18,7 +18,9 @@
             <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
             <ClientMap
               :locations="locations"
-              v-if="showMap && !appStore.loading"
+              v-if="
+                showMap && !appStore.loading && filterStore.filteredResults.length > 0
+              "
               ref="map"
               :auto-fit="false"
               :center-point="{
@@ -28,12 +30,21 @@
               :min-zoom="11"
             />
           </div>
-
           <div class="facilities">
             <PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" />
           </div>
         </div>
       </div>
+      <v-row v-if="!filterStore.filteredResults.length">
+        <v-col class="d-flex flex-column align-center justify-center">
+          <div class="flex-column" align="center">
+            <div class="general-font-size text-h4">
+              Leider haben wir kein Suchergebnis zu deiner Anfrage.
+            </div>
+          </div>
+          <img :src="noResults" class="no-results-image mt-10" />
+        </v-col>
+      </v-row>
     </div>
   </ClientOnly>
 </template>
@@ -43,6 +54,7 @@ import { useFilterStore } from "~/store/searchFilter";
 import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useAppStore } from "~/store/app";
+import noResults from "~/assets/images/search_no_results.jpg";
 
 const appStore = useAppStore();
 
@@ -72,7 +84,11 @@ const handleStartedAt = (origin: "facilities" | "services" | "communities") => {
     return;
   }
 
-  if (filterStore.currentFacilityTags.length === 0 && filterStore.currentServiceTags.length === 0 && filterStore.currentZips.length === 0) {
+  if (
+    filterStore.currentFacilityTags.length === 0 &&
+    filterStore.currentServiceTags.length === 0 &&
+    filterStore.currentZips.length === 0
+  ) {
     if (startedAt.value) {
       startedAt.value = null;
       return;
@@ -135,7 +151,12 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
   locations.value = [];
 
   for (const facility of facilities) {
-    if (facility.geocode_address?.length && facility.geocode_address[0] && facility.geocode_address[0].lon && facility.geocode_address[0].lat) {
+    if (
+      facility.geocode_address?.length &&
+      facility.geocode_address[0] &&
+      facility.geocode_address[0].lon &&
+      facility.geocode_address[0].lat
+    ) {
       locations.value.push({
         id: facility.id,
         latitude: parseFloat(facility.geocode_address[0].lat),
@@ -180,7 +201,7 @@ onMounted(async () => {
   startedAt.value = null;
   filterStore.updateFromUrlQuery();
   await filterStore.loadAllResults();
-  filterStore.loadAllServiceFilters()
+  filterStore.loadAllServiceFilters();
 
   await filterStore.loadAllFacilityFilters();
   filterStore.loadFilteredFacilityMainFilters();
@@ -221,4 +242,9 @@ onBeforeUnmount(() => {
 
 .filter-control
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
+
+.no-results-image
+  max-width: 500px
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15)
+  border-radius: 20px
 </style>
