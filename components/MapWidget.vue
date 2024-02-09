@@ -1,7 +1,7 @@
 <template>
   <div class="mapwidget" :id="mapWidgetId"></div>
   <div align="right" class="my-2 has-text-white">
-    <p class="general-font-size">© GeoBasis-DE / BKG (2023)</p>
+    <p class="general-font-size">© GeoBasis-DE / BKG (2024)</p>
   </div>
 </template>
 
