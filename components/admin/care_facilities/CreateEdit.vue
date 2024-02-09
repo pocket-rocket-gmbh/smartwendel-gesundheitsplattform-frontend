@@ -91,7 +91,7 @@
                     >mdi-information-outline</v-icon
                   >
                 </template>
-                <span>Hier kannst du den letzten Teil deine URL-Adresse individualisieren.</span>
+                <span>Hier kannst du den letzten Teil deiner URL-Adresse individualisieren.</span>
               </v-tooltip>
               <v-text-field
                 disabled
