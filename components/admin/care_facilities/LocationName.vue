@@ -25,7 +25,7 @@ const props = defineProps<{
 
 const loading = ref(false);
 
-const address = ref("");
+const address = ref<any>({});
 
 watch(props, () => {
   setAddress();
@@ -43,10 +43,12 @@ const getCareFacility = async () => {
 };
 
 const setAddress = async () => {
-  const { data } = await axios.get(
-    `https://geocode.maps.co/reverse?lat=${props.lat}&lon=${props.long}`
-  );
-  address.value = data.address;
+  setTimeout(async () => {
+    const { data } = await axios.get(
+      `https://geocode.maps.co/reverse?lat=${props.lat}&lon=${props.long}&api_key=65cb46b5a5ab0289110035xqze5103b`
+    );
+    address.value = data.address;
+  }, 2000);
 };
 
 onMounted(() => {
