@@ -114,16 +114,19 @@
                   variant="plain"
                   reverse
                 />
-                <v-text-field
-                  :disabled="!slugBeingEdited"
-                  class="text-right"
-                  v-model="slotProps.item.slug"
-                  hide-details="auto"
-                  :error-messages="
-                    useErrors().checkAndMapErrors('name', slotProps.errors)
-                  "
-                  :rules="[rules.noSpecialCharacters]"
-                />
+                <v-form v-model="isFormValid">
+                  <v-text-field
+                    :disabled="!slugBeingEdited"
+                    class="text-right"
+                    v-model="slotProps.item.slug"
+                    :placeholder="slotProps.item.id"
+                    hide-details="auto"
+                    :error-messages="
+                      useErrors().checkAndMapErrors('slug', slotProps.errors)
+                    "
+                    :rules="[rules.noSpecialCharacters]"
+                  />
+                </v-form>
               </div>
             </div>
             <div class="d-flex justify-end align-center">
@@ -132,7 +135,8 @@
                 rounded="pill"
                 variant="outlined"
                 class="mx-5"
-                @click="copyLink(slotProps.item.slug)"
+                :disabled="!isFormValid"
+                @click="copyLink(slotProps.item)"
               >
                 <span> Link kopieren </span>
               </v-btn>
@@ -140,6 +144,7 @@
                 <v-btn
                   variant="flat"
                   color="primary"
+                  :disabled="!isFormValid"
                   rounded="pill"
                   @click="slugBeingEdited = false"
                 >
@@ -936,6 +941,8 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   }
 };
 
+const isFormValid = ref(false);
+
 const isFilled = (slotProps: any, item: CreateEditStep) => {
   const props: string[] = item.props;
   if (!props) return;
@@ -976,8 +983,9 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
 };
 
 const copyLink = (item: any) => {
-  if (!item) return;
-  const link = `https://gesundes-wnd.de/public/care_facilities/${item}`;
+  const link = item?.slug
+    ? `https://gesundes-wnd.de/public/care_facilities/${item?.slug}`
+    : `https://gesundes-wnd.de/public/care_facilities/${item?.id}`;
   navigator.clipboard.writeText(link);
   snackbar.showSuccess(`Link kopiert`);
 };
