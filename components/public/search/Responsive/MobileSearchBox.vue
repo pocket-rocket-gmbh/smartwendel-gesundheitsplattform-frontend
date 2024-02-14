@@ -1,126 +1,85 @@
 <template>
-	<div class="basic-search-box">
-		<div class="content">
-			<v-row>
-				<v-col>
-					<h2 class="is-uppercase text-white">{{ subTitle }}</h2>
-				</v-col>
+  <div class="basic-search-box">
+    <div class="content">
+      <v-row>
+        <v-col>
+          <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
+        </v-col>
 
-				<v-col cols="2" class="d-flex justify-center align-center">
-					<v-icon color="white" size="x-large" v-if="showFilter" @click="toogleShowFilter()">
-						mdi-filter-off-outline
-					</v-icon>
-					<v-icon
-						color="white"
-						size="x-large"
-						v-if="!showFilter && !filterStore.mapFilter?.length"
-						@click="toogleShowFilter()"
-					>
-						mdi-filter-outline
-					</v-icon>
-					<v-icon
-						color="white"
-						size="x-large"
-						v-if="!showFilter && filterStore.mapFilter?.length"
-						@click="handleClearSearch()"
-					>
-						mdi-close-outline
-					</v-icon>
-				</v-col>
-			</v-row>
-			<div v-if="showFilter">
-				<v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
-					<v-col cols="10">
-						<PublicSearchCategorySelectModal
-							v-model="filterStore.currentFacilityTags"
-							:filter-kind="filterKind"
-							:filterTitle="filterTitle"
-						/>
-					</v-col>
-					<v-col>
-						<PublicSearchFilterSelectModal :filter-kind="filterKind" />
-					</v-col>
-				</v-row>
-				<v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
-					<v-col class="d-flex align-center">
-						<PublicSearchCommunitySelectModal />
-					</v-col>
-				</v-row>
-				<div
-					class="d-flex align-center justify-center is-white font-weight-medium my-2"
-					v-if="filterKind !== 'event' && filterKind !== 'news'"
-				>
-					oder
-				</div>
-				<v-row :class="[filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '']">
-					<v-col>
-						<div class="field">
-							<label class="label is-white">
-								<div class="search-term">{{ searchTitle }}</div>
-							</label>
-							<PublicSearchField
-								v-model="filterStore.currentSearchTerm"
-								:filtered-items="filterStore.filteredResults"
-								:default-route-to="'/public/search'"
-								:default-styling="true"
-								@update:model-value="handleInput"
-								:kind="filterKind"
-							/>
-						</div>
-					</v-col>
-				</v-row>
-				<v-row class="buttons">
-					<v-col class="field d-flex justify-center">
-						<v-btn
-							variant="outlined"
-							width="100%"
-							rounded="pill"
-							color="white"
-							@click="filterStore.clearSearch()"
-						>
-							Filter löschen
-						</v-btn>
-					</v-col>
-					<v-col class="d-flex justify-center" v-if="mapControls">
-						<v-btn
-							variant="outlined"
-							width="100%"
-							rounded="pill"
-							color="white"
-							@click="emit('toggleMap')"
-						>
-							<span v-if="showMap">Listenansicht</span>
-							<span v-if="!showMap">Kartenansicht</span>
-						</v-btn>
-					</v-col>
-				</v-row>
-			</div>
-		</div>
-	</div>
-	<v-row class="has-bg-darken-grey text-white font-weight-bold ma-0 pa-0">
-		<v-col class="d-flex justify-center align-center general-font-size">
-			<LoadingSpinner v-if="filterStore.loading" />
-			<span v-else-if="filterStore.filteredResults.length">
-				{{ filterStore.filteredResults.length }} Treffer
-			</span>
-			<span v-else>Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.</span>
-		</v-col>
-	</v-row>
+        <v-col cols="2" class="d-flex justify-center align-center">
+          <v-icon color="white" size="x-large" v-if="showFilter" @click="toogleShowFilter()">mdi-filter-off-outline</v-icon>
+          <v-icon color="white" size="x-large" v-if="!showFilter && !filterStore.mapFilter?.length" @click="toogleShowFilter()">mdi-filter-outline</v-icon>
+          <v-icon color="white" size="x-large" v-if="!showFilter && filterStore.mapFilter?.length" @click="handleClearSearch()">mdi-close-outline</v-icon>
+        </v-col>
+      </v-row>
+      <div v-if="showFilter">
+        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
+          <v-col cols="10">
+            <PublicSearchCategorySelectModal v-model="filterStore.currentFacilityTags" :filter-kind="filterKind" :filterTitle="filterTitle" />
+          </v-col>
+          <v-col>
+            <PublicSearchFilterSelectModal :filter-kind="filterKind" />
+          </v-col>
+        </v-row>
+        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
+          <v-col class="d-flex align-center">
+            <PublicSearchCommunitySelectModal />
+          </v-col>
+        </v-row>
+        <div class="d-flex align-center justify-center is-white font-weight-medium my-2" v-if="filterKind !== 'event' && filterKind !== 'news'">oder</div>
+        <v-row :class="[filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '']">
+          <v-col>
+            <div class="field">
+              <label class="label is-white">
+                <div class="search-term">{{ searchTitle }}</div>
+              </label>
+              <PublicSearchField
+                v-model="filterStore.currentSearchTerm"
+                :filtered-items="filterStore.filteredResults"
+                :default-route-to="'/public/search'"
+                :default-styling="true"
+                @update:model-value="handleInput"
+                :kind="filterKind"
+              />
+            </div>
+          </v-col>
+        </v-row>
+        <v-row class="buttons">
+          <v-col class="field d-flex justify-center">
+            <v-btn variant="outlined" width="100%" rounded="pill" color="white" @click="filterStore.clearSearch()"> Filter löschen </v-btn>
+          </v-col>
+          <v-col class="d-flex justify-center" v-if="mapControls">
+            <v-btn variant="outlined" width="100%" rounded="pill" color="white" @click="emit('toggleMap')">
+              <span v-if="showMap"> Listenansicht </span>
+              <span v-if="!showMap"> Kartenansicht </span>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
+    </div>
+  </div>
+  <v-row class="has-bg-darken-grey text-white font-weight-bold ma-0 pa-0">
+    <v-col class="d-flex justify-center align-center general-font-size">
+      <LoadingSpinner v-if="filterStore.loading" />
+      <span v-else-if="filterStore.filteredResults.length">{{ filterStore.filteredResults.length }} Treffer</span>
+      <span v-else> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
+    </v-col>
+  </v-row>
 </template>
 <script setup lang="ts">
-import { type FilterKind, useFilterStore } from '~/store/searchFilter';
-import { BreakPoints, useBreakpoints } from '~/composables/ui/breakPoints';
+import { type FilterKind, useFilterStore } from "~/store/searchFilter";
+import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 
 const props = defineProps<{
-	title: string;
-	subTitle: string;
-	filterKind: FilterKind;
-	mapControls?: boolean;
-	showMap?: boolean;
+  title: string;
+  subTitle: string;
+  filterKind: FilterKind;
+  mapControls?: boolean;
+  showMap?: boolean;
 }>();
 
 const emit = defineEmits<{
-	(event: 'toggleMap'): void;
+  (event: "toggleMap"): void;
 }>();
 
 const filterStore = useFilterStore();
@@ -128,71 +87,70 @@ const showFilter = ref(true);
 const breakpoints = useBreakpoints();
 
 const handleInput = () => {
-	filterStore.onlySearchInTitle = false;
-	filterStore.loadAllResults();
+  filterStore.onlySearchInTitle = false;
+  filterStore.loadAllResults();
 };
 
-const filterTitle = ref('');
-const searchTitle = ref('');
+const filterTitle = ref("");
+const searchTitle = ref("");
 const setFilterTitle = () => {
-	if (props.filterKind === 'facility') {
-		filterTitle.value = 'Branche';
-		searchTitle.value = 'Anbieter suchen';
-	}
-	if (props.filterKind === 'event') {
-		filterTitle.value = 'Suche nach Veranstaltungen';
-		searchTitle.value = 'Veranstaltung suchen';
-	}
-	if (props.filterKind === 'news') {
-		filterTitle.value = 'Suche nach Neuigkeiten';
-		searchTitle.value = 'Nachrichten suchen';
-	}
-	if (props.filterKind === 'course') {
-		filterTitle.value = 'Themengebiet';
-		searchTitle.value = 'Kurs suchen';
-	}
+  if (props.filterKind === "facility") {
+    filterTitle.value = "Branche";
+    searchTitle.value = "Anbieter suchen";
+  }
+  if (props.filterKind === "event") {
+    filterTitle.value = "Suche nach Veranstaltungen";
+    searchTitle.value = "Veranstaltung suchen";
+  }
+  if (props.filterKind === "news") {
+    filterTitle.value = "Suche nach Neuigkeiten";
+    searchTitle.value = "Nachrichten suchen";
+  }
+  if (props.filterKind === "course") {
+    filterTitle.value = "Themengebiet";
+    searchTitle.value = "Kurs suchen";
+  }
 };
 
 const handleClearSearch = () => {
-	filterStore.clearSearch();
-	showFilter.value = false;
-	emit('toggleMap');
+  filterStore.clearSearch();
+  showFilter.value = false;
+  emit("toggleMap");
 };
 
 const toogleShowFilter = () => {
-	showFilter.value = !showFilter.value;
+  showFilter.value = !showFilter.value;
 };
 
 watch(
-	() => props.showMap,
-	() => {
-		showFilter.value = false;
-	},
-	{
-		deep: true,
-	}
+  () => props.showMap,
+  () => {
+    showFilter.value = false;
+  },
+  {
+    deep: true,
+  }
 );
 
 const isMobilie = computed(() => {
-	if (breakpoints.type.value === 'sm' || breakpoints.type.value === 'xs') {
-		return true;
-	}
-	return false;
+  if (breakpoints.type.value === "sm" || breakpoints.type.value === "xs") {
+    return true;
+  }
+  return false;
 });
 
 onMounted(() => {
-	setFilterTitle();
-	if (isMobilie.value) {
-		showFilter.value = false;
-	}
+  setFilterTitle();
+  if (isMobilie.value) {
+    showFilter.value = false;
+  }
 });
 </script>
 
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 .basic-search-box
-  // background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-  background: $dark-green
+  background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
   padding: 1rem
 
   .more-filters
