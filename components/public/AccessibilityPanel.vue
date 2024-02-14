@@ -1,18 +1,19 @@
 <template>
-  <div class="accessibility-panel">
-    <div class="increase-size is-clickable">
-      <p>A+</p>
-    </div>
-    <div class="divider"></div>
-    <div class="decrease-size is-clickable py-1">
-      <p>A -</p>
-    </div>
-  </div>
+	<div class="accessibility-panel">
+		<div class="increase-size is-clickable">
+			<p>A+</p>
+		</div>
+		<div class="divider"></div>
+		<div class="decrease-size is-clickable py-1">
+			<p>A -</p>
+		</div>
+	</div>
 </template>
 <style style lang="sass" scoped>
 
 .accessibility-panel
-  background: linear-gradient(89.48deg, #91A80D 19.14%, #BAC323 42.28%, #9EA100 83.7%)
+  // background: linear-gradient(89.48deg, #91A80D 19.14%, #BAC323 42.28%, #9EA100 83.7%)
+  background: $dark-green
   box-shadow: -4px 0px 15px rgba(0, 0, 0, 0.25)
   border-radius: 5px 0px 0px 5px
   color: #ffffff
@@ -37,5 +38,4 @@
 
 .decrease-size
   font-size: 1.5em
-
 </style>
