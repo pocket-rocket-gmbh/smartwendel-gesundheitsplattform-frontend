@@ -178,9 +178,9 @@ const fields = [
 			return res;
 		},
 		disabledTooltip:
-			'Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.',
+			'Dein Eintrag wird aktuell nicht auf der Teilhabeplattform angezeigt, da eine Prüfung durch den Plattformadministrator aussteht. Die Prüfung und anschließende Freigabe kann bis zu 48h in Anspruch nehmen, wir bitte um Geduld.',
 		disabledTooltipFacilityImcomplete:
-			'Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.',
+			'Dein Eintrag wird aktuell nicht auf der Teilhabeplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.',
 	},
 	{ prop: 'name', text: 'Name', value: 'name', type: 'string' },
 	{ value: '', type: 'beinEdited' },

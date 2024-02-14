@@ -20,39 +20,6 @@
 					</div>
 					<div v-if="breakPoints.width.value >= 1480" class="align-center d-flex mx-2">
 						<div
-							class="categories-wrapper is-clickable d-flex"
-							v-for="(category, index) in categories"
-							:key="index"
-						>
-							<div class="title mx-5 font-weight-medium">
-								<span
-									class="is-clickable general-font-size is-dark-grey"
-									@click="setItemsAndGo(category, null)"
-								>
-									{{ category.name }}
-								</span>
-							</div>
-							<div class="content">
-								<v-list>
-									<v-list-item>
-										<div
-											v-for="(sub_category, index) in subCategories[category.id]"
-											:key="sub_category.id"
-											@click="setItemsAndGo(category, sub_category)"
-										>
-											<div class="list-item">
-												<div>
-													<span class="general-font-size is-dark-grey">
-														{{ sub_category.name }}
-													</span>
-												</div>
-											</div>
-										</div>
-									</v-list-item>
-								</v-list>
-							</div>
-						</div>
-						<div
 							v-if="!loading"
 							class="general-font-size is-dark-grey"
 							style="display: flex; flex-direction: row; gap: 40px"
@@ -60,13 +27,16 @@
 							<router-link to="/public/news" style="color: inherit; text-transform: uppercase">
 								Neuigkeiten
 							</router-link>
-							<router-link to="/public/news" style="color: inherit; text-transform: uppercase">
+							<router-link
+								to="/public/search/cultural-providers"
+								style="color: inherit; text-transform: uppercase"
+							>
 								Kulturanbieter
 							</router-link>
-							<router-link to="/public/news" style="color: inherit; text-transform: uppercase">
-								Projekte
-							</router-link>
-							<router-link to="/public/news" style="color: inherit; text-transform: uppercase">
+							<router-link
+								to="/public/search/events"
+								style="color: inherit; text-transform: uppercase"
+							>
 								Veranstaltungen
 							</router-link>
 							<router-link to="/public/news" style="color: inherit; text-transform: uppercase">
@@ -294,7 +264,7 @@ import iconEvent from '~/assets/icons/mobileMenu/icon_event.svg';
 import iconFacility from '~/assets/icons/mobileMenu/icon_facility.svg';
 import iconHealth from '~/assets/icons/mobileMenu/icon_health.svg';
 import iconSick from '~/assets/icons/mobileMenu/icon_sick.svg';
-import iconNews from '~/assets/icons/mobileMenu/icon_news.svg';
+
 const currentUser = ref(null);
 const router = useRouter();
 const categories = ref([]);
@@ -309,9 +279,6 @@ const breakPoints = useBreakpoints();
 
 const categoriesApi = useCollectionApi();
 categoriesApi.setBaseApi(usePublicApi());
-
-const currentCategory = ref(null);
-const currentSubCategory = ref(null);
 
 const getCategories = async () => {
 	loading.value = true;

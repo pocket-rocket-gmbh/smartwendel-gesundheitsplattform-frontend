@@ -61,16 +61,11 @@
 						Kursfilter
 					</v-list-item>
 					<v-divider></v-divider>
-					<v-list-item link to="/admin/categories" nuxt class="general-font-size is-dark-grey">
-						Bereiche und Kategorien
-					</v-list-item>
-					<v-divider></v-divider>
 				</template>
 
 				<template v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
 					<v-list-item nuxt to="/admin/news">Neuigkeiten</v-list-item>
 					<v-list-item nuxt to="/admin/cultural-providers">Kulturanbieter</v-list-item>
-					<v-list-item nuxt to="/admin/projects">Projekte</v-list-item>
 					<v-list-item nuxt to="/admin/events">Veranstaltungen</v-list-item>
 					<v-list-item nuxt to="/admin/cultural-exchange">Kulturbörse</v-list-item>
 				</template>
@@ -166,7 +161,6 @@
 import { useAccessPrivileges } from '~/composables';
 import { useUser } from '~/composables';
 import { useAdminStore } from '~/store/admin';
-import logo from '@/assets/images/lk-logo.png';
 
 const user = useUser();
 
