@@ -5,7 +5,7 @@
       :id="subCategory?.id.replaceAll('-', '')"
     >
       <v-col class="d-flex flex-column is-dark-grey justify-center">
-        <div :class="[breakPoints.width.value < 960 ? 'mt-4' : '', breakPoints.width.value < 515 ? 'mt-15' : '']">
+        <div :class="[breakPoints.width.value < 960 ? 'mt-4' : '', breakPoints.width.value < 515 ? 'mt-15' : 'mt-5']">
           <span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
         </div>
         <div>
@@ -28,50 +28,50 @@
 </template>
 
 <script lang="ts" setup>
-import { useBreakpoints } from "~/composables/ui/breakPoints";
+import { useBreakpoints } from '~/composables/ui/breakPoints';
 
 const breakPoints = useBreakpoints();
 const route = useRoute();
 const props = defineProps<{
-  subCategory: any;
-  categoryId: string;
+	subCategory: any;
+	categoryId: string;
 }>();
 
 const subCategoryId = computed(() => {
-  return route.query.sub_category_id as any;
+	return route.query.sub_category_id as any;
 });
 
 const selectedId = ref(subCategoryId.value);
 
 const goToSubCategory = () => {
-  const id = selectedId.value;
+	const id = selectedId.value;
 
-  if (!id) return;
-  const el = document.getElementById(id.replaceAll("-", ""));
+	if (!id) return;
+	const el = document.getElementById(id.replaceAll('-', ''));
 
-  if (!el) return;
+	if (!el) return;
 
-  const scrollToTargetAdjusted = (element: HTMLElement) => {
-    const headerOffset = 225;
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+	const scrollToTargetAdjusted = (element: HTMLElement) => {
+		const headerOffset = 225;
+		const elementPosition = element.getBoundingClientRect().top;
+		const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth",
-    });
-  };
+		window.scrollTo({
+			top: offsetPosition,
+			behavior: 'smooth',
+		});
+	};
 
-  scrollToTargetAdjusted(el);
+	scrollToTargetAdjusted(el);
 };
 
 onMounted(() => {
-  getSubSubCategories();
+	getSubSubCategories();
 
-  useNuxtApp().$bus.$on("setSubCategory", (id: String) => {
-    selectedId.value = id;
-    goToSubCategory();
-  });
+	useNuxtApp().$bus.$on('setSubCategory', (id: String) => {
+		selectedId.value = id;
+		goToSubCategory();
+	});
 });
 
 const loading = ref(false);
@@ -80,76 +80,76 @@ const listApi = useCollectionApi();
 listApi.setBaseApi(usePublicApi());
 
 const getSubSubCategories = async () => {
-  listApi.setEndpoint(
-    `categories/${props.categoryId}/sub_categories/${props.subCategory.id}/sub_sub_categories`
-  );
-  const options = {
-    page: 1,
-    per_page: 999,
-    sort_by: "menu_order",
-    sort_order: "ASC",
-    searchQuery: null as any,
-    concat: false,
-    filters: [] as any,
-  };
-  loading.value = true;
-  await listApi.retrieveCollection(options);
-  loading.value = false;
-  subSubCategories.value = listApi.items.value as any;
+	listApi.setEndpoint(
+		`categories/${props.categoryId}/sub_categories/${props.subCategory.id}/sub_sub_categories`
+	);
+	const options = {
+		page: 1,
+		per_page: 999,
+		sort_by: 'menu_order',
+		sort_order: 'ASC',
+		searchQuery: null as any,
+		concat: false,
+		filters: [] as any,
+	};
+	loading.value = true;
+	await listApi.retrieveCollection(options);
+	loading.value = false;
+	subSubCategories.value = listApi.items.value as any;
 
-  requestAnimationFrame(goToSubCategory);
+	requestAnimationFrame(goToSubCategory);
 
-  if (subCategoryId.value) {
-    useNuxtApp().$bus.$emit("updateSubCategoriesFromUrl", subCategoryId.value);
-  }
+	if (subCategoryId.value) {
+		useNuxtApp().$bus.$emit('updateSubCategoriesFromUrl', subCategoryId.value);
+	}
 };
 </script>
 <style lang="scss">
-@import "@/assets/sass/main.sass";
+@import '@/assets/sass/main.sass';
 
 .sub-categories-wrapper {
-  margin: 5rem 5rem 2rem 5rem;
+	margin: 5rem 5rem 2rem 5rem;
 
-  @include md {
-    margin: 1rem;
-    margin-top: 3rem;
-  }
+	@include md {
+		margin: 1rem;
+		margin-top: 3rem;
+	}
 
-  .sub-category {
-    scroll-margin: -200px;
-  }
+	.sub-category {
+		scroll-margin: -200px;
+	}
 
-  .articles {
-    display: grid;
-    grid-gap: 2rem;
-    grid-template-columns: 1fr 1fr;
+	.articles {
+		display: grid;
+		grid-gap: 2rem;
+		grid-template-columns: 1fr 1fr;
 
-    @include md {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-  }
+		@include md {
+			display: flex;
+			flex-direction: column;
+			gap: 2rem;
+		}
+	}
 }
 
 .sub-category-name {
-  font-size: 26px;
-  font-weight: 500;
+	font-size: 26px;
+	font-weight: 500;
 }
 
 .sub-category-description {
-  line-height: 29px;
-  a {
-    font-weight: 500 !important;
-    text-decoration: underline !important;
-    &:visited {
-      font-weight: 500 !important;
-      text-decoration: underline !important;
-    }
-  }
+	line-height: 29px;
+	a {
+		font-weight: 500 !important;
+		text-decoration: underline !important;
+		&:visited {
+			font-weight: 500 !important;
+			text-decoration: underline !important;
+		}
+	}
 }
 
 a {
-  color: $dark-grey !important;
+	color: $secondary-color !important;
 }
 </style>

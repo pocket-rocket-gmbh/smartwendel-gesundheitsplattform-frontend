@@ -5,6 +5,7 @@
       :filtered-items="filterStore.filteredResults"
       :default-route-to="'/public/search'"
       @update:model-value="handleInput"
+      :filtered-categories="filterStore.filteredCategories" 
     />
   </div>
 </template>
@@ -16,14 +17,17 @@ const filterStore = useFilterStore();
 
 const handleInput = () => {
   filterStore.onlySearchInTitle = true;
-  filterStore.loadFilteredResults();
+  filterStore.loadAllResults();
+  filterStore.loadFilteredCategories();
 };
 
 onMounted(async () => {
   filterStore.currentKinds = [];
-  filterStore.currentTags = [];
-  filterStore.currentZip = null;
+  filterStore.currentFacilityTags= [];
+  filterStore.currentServiceTags = [];
+  filterStore.currentZips = [];
   filterStore.onlySearchInTitle = true;
+
   await filterStore.loadAllResults();
 });
 </script>

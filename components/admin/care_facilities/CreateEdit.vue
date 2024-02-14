@@ -33,12 +33,14 @@
         </v-col>
         <v-col md="9">
           <div class="py-10">
-            <span class="general-font-size is-dark-grey facility-kind-description"
+            <span
+              class="general-font-size is-dark-grey facility-kind-description"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
-              spezifisches Leistungsangebot in einem eigenen Profil darstellen und
-              veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer
-              deine Angaben sind, desto besser können dich Besucher der Webseite finden.
-              Pflichtfelder sind mit einem Sternchen versehen.</span
+              spezifisches Leistungsangebot in einem eigenen Profil darstellen
+              und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je
+              spezifischer deine Angaben sind, desto besser können dich Besucher
+              der Webseite finden. Pflichtfelder sind mit einem Sternchen
+              versehen.</span
             >
           </div>
 
@@ -59,10 +61,8 @@
                 />
                 <v-btn
                   variant="flat"
-                  class="general-font-size"
                   color="primary"
                   rounded="pill"
-                  size="large"
                   @click="copyTokenLink(slotProps.item)"
                 >
                   <span> URL kopieren </span>
@@ -70,23 +70,10 @@
               </div>
             </div>
           </div>
-          <v-divider class="my-10"></v-divider>
-
-          <div class="field" id="name">
-            <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">Slug</span>
-            </div>
-            <v-text-field
-              class="text-field is-dark-grey"
-              v-model="slotProps.item.slug"
-              hide-details="auto"
-              label="Slug"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
-            />
-          </div>
-          <v-divider class="my-10"></v-divider>
-
-
+          <v-divider
+            class="my-2"
+            v-if="slotProps.item?.user?.onboarding_token?.length"
+          ></v-divider>
           <div class="field" id="name">
             <div class="my-2">
               <span class="general-font-size is-dark-grey font-weight-bold">{{
@@ -99,16 +86,103 @@
               hide-details="auto"
               label="Einrichtung/Unternehmen/Behörde/Verein/Verband"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
+            <div class="d-flex align-center my-4">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >Link zur Einrichtung:
+              </span>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span
+                  >Hier kannst du den letzten Teil deiner URL-Adresse
+                  individualisieren.</span
+                >
+              </v-tooltip>
+              <div class="field split">
+                <v-text-field
+                  disabled
+                  class="text-field is-dark-grey mb-4 text-right"
+                  label="https://gesundes-wnd.de/public/care_facilities/"
+                  hide-details="auto"
+                  variant="plain"
+                  reverse
+                />
+                <v-form v-model="isFormValid">
+                  <v-text-field
+                    :disabled="!slugBeingEdited"
+                    class="text-right"
+                    v-model="slotProps.item.slug"
+                    :placeholder="slotProps.item.id"
+                    hide-details="auto"
+                    :error-messages="
+                      useErrors().checkAndMapErrors('slug', slotProps.errors)
+                    "
+                    :rules="[rules.noSpecialCharacters]"
+                  />
+                </v-form>
+              </div>
+            </div>
+            <div class="d-flex justify-end align-center">
+              <v-btn
+                color="primary"
+                rounded="pill"
+                variant="outlined"
+                class="mx-5"
+                :disabled="!isFormValid"
+                @click="copyLink(slotProps.item)"
+              >
+                <span> Link kopieren </span>
+              </v-btn>
+              <span v-if="slugBeingEdited">
+                <v-btn
+                  variant="flat"
+                  color="primary"
+                  :disabled="!isFormValid"
+                  rounded="pill"
+                  @click="slugBeingEdited = false"
+                >
+                  <span v-if="slugBeingEdited"> Fertig </span>
+                </v-btn>
+              </span>
+              <span v-else>
+                <v-btn
+                  variant="flat"
+                  color="primary"
+                  rounded="pill"
+                  @click="confirmEditSlugDialogOpen = true"
+                >
+                  <span> Link bearbeiten </span>
+                </v-btn>
+              </span>
+            </div>
           </div>
+          <EditItem
+            :open="confirmEditSlugDialogOpen"
+            @accepted="
+              slugBeingEdited = true;
+              confirmEditSlugDialogOpen = false;
+            "
+            @close="
+              confirmEditSlugDialogOpen = false;
+              slugBeingEdited = false;
+            "
+            type="slug"
+          />
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="logo">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["logo"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["logo"].label }}</span
+              >
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -132,9 +206,10 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["photo"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["photo"].label }}</span
+              >
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -158,9 +233,10 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["gallery"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["gallery"].label }}</span
+              >
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
@@ -181,7 +257,9 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
+                    'empty-editor': isDescriptionEmpty(
+                      slotProps.item.description
+                    ),
                   }"
                 >
                   <QuillEditor
@@ -203,7 +281,9 @@
                     v-show="false"
                     class="hidden-text-field"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
+                      isDescriptionEmpty(slotProps.item.description)
+                        ? ''
+                        : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -214,9 +294,10 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-3 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["category"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["category"].label }}</span
+              >
               <v-tooltip location="top" width="200px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -239,9 +320,10 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["services"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["services"].label }}</span
+              >
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -289,9 +371,9 @@
               "
             >
               <v-alert type="warning" density="compact" class="mt-2"
-                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die Einrichtung
-                erneut von einem Mitarbeiter verifiziert werden. Vielen Dank für deine
-                Geduld!</v-alert
+                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die
+                Einrichtung erneut von einem Mitarbeiter verifiziert werden.
+                Vielen Dank für deine Geduld!</v-alert
               >
             </span>
             <div class="my-2 d-flex align-center">
@@ -308,11 +390,15 @@
               </v-tooltip>
               <div
                 v-if="
-                  setupFinished && !useUser().isAdmin() && useUser().statusOnHealthScope()
+                  setupFinished &&
+                  !useUser().isAdmin() &&
+                  useUser().statusOnHealthScope()
                 "
               >
                 <span v-if="editInformations">
-                  <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
+                  <v-btn size="small" @click="editInformations = false">
+                    fertig
+                  </v-btn>
                 </span>
                 <span v-else>
                   <v-btn size="small" @click="confirmEditDialogOpen = true">
@@ -394,7 +480,9 @@
                 label="PLZ"
                 :type="'number'"
                 :rules="[rules.required, rules.zip]"
-                :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                :error-messages="
+                  useErrors().checkAndMapErrors('zip', slotProps.errors)
+                "
               />
               <v-select
                 hide-details="auto"
@@ -429,7 +517,9 @@
                 label="Telefonnummer (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.validateNumber]"
                 :type="'tel'"
-                :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
+                :error-messages="
+                  useErrors().checkAndMapErrors('phone', slotProps.errors)
+                "
               />
             </div>
             <div class="field">
@@ -445,7 +535,9 @@
                 hide-details="auto"
                 label="E-Mail (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.email]"
-                :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
+                :error-messages="
+                  useErrors().checkAndMapErrors('email', slotProps.errors)
+                "
               />
             </div>
             <div>
@@ -474,16 +566,21 @@
                 </div>
               </div>
               <div
-                v-else-if="!isValidAddress && isValidAddress !== null && !loadingAdress"
+                v-else-if="
+                  !isValidAddress && isValidAddress !== null && !loadingAdress
+                "
               >
                 <div class="mt-3">
                   <v-alert type="error" class="general-font-size"
-                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr., Gemeinde und
-                    Ort</v-alert
+                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr.,
+                    Gemeinde und Ort</v-alert
                   >
                 </div>
               </div>
-              <div class="mt-3" v-if="isValidAddress === null && editInformations">
+              <div
+                class="mt-3"
+                v-if="isValidAddress === null && editInformations"
+              >
                 <v-alert type="info" class="general-font-size">
                   Neue Adresse bitte eingeben.</v-alert
                 >
@@ -498,8 +595,8 @@
               >
                 <div class="mt-3">
                   <v-alert type="success" class="general-font-size">
-                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese
-                    Adresse auch auf der Webseite angezeigt wird.
+                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte,
+                    dass diese Adresse auch auf der Webseite angezeigt wird.
                   </v-alert>
                 </div>
               </div>
@@ -548,9 +645,10 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["website"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["website"].label }}</span
+              >
               <v-tooltip location="top" width="200px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -566,16 +664,19 @@
               v-model="slotProps.item.website"
               hide-details="auto"
               label="Link eintragen (z.B. www.meine-webseite.de)"
-              :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('link', slotProps.errors)
+              "
               :rules="[rules.isUrl]"
             />
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["documents"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["documents"].label }}</span
+              >
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -598,9 +699,10 @@
           </div>
           <div class="field" id="responsible">
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["responsible"].label
-              }}</span>
+              <span
+                class="general-font-size is-dark-grey font-weight-bold mr-3"
+                >{{ steps["responsible"].label }}</span
+              >
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -608,7 +710,9 @@
               hide-details="auto"
               label="Vor- und Nachname"
               :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('name', slotProps.errors)
+              "
             />
           </div>
           <v-divider class="my-5"></v-divider>
@@ -653,7 +757,7 @@ const stepNames = [
   "documents",
   "responsible",
 ] as const;
-type StepNames = typeof stepNames[number];
+type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Hinterlege den Namen deiner Einrichtung. *",
@@ -823,6 +927,9 @@ const handleTagSelectToggle = () => {
   expandTagSelect.value = !expandTagSelect.value;
 };
 
+const slugBeingEdited = ref(false);
+const confirmEditSlugDialogOpen = ref(false);
+
 const editInformations = ref(false);
 const confirmEditDialogOpen = ref(false);
 
@@ -834,6 +941,8 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   }
 };
 
+const isFormValid = ref(false);
+
 const isFilled = (slotProps: any, item: CreateEditStep) => {
   const props: string[] = item.props;
   if (!props) return;
@@ -844,7 +953,9 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
     } else if (item.specialFilter === "opening_hours") {
-      return slotPropsItem.opening_hours.some((day: any) => day.hours.length > 0);
+      return slotPropsItem.opening_hours.some(
+        (day: any) => day.hours.length > 0
+      );
     } else if (item.specialFilter === "phone") {
       const pattern = /^[0-9]+$/;
       return pattern.test(slotPropsItem.phone);
@@ -869,6 +980,14 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     return slotPropsItem[prop] && slotPropsItem[prop].length;
   });
   return result;
+};
+
+const copyLink = (item: any) => {
+  const link = item?.slug
+    ? `https://gesundes-wnd.de/public/care_facilities/${item?.slug}`
+    : `https://gesundes-wnd.de/public/care_facilities/${item?.id}`;
+  navigator.clipboard.writeText(link);
+  snackbar.showSuccess(`Link kopiert`);
 };
 
 const loadingAdress = ref(false);
@@ -904,10 +1023,14 @@ const copyTokenLink = (item: any) => {
 
 const isValidAddress = ref(null);
 
-const getLatLngFromAddress = async (zipCode: string, street: string, town: string) => {
+const getLatLngFromAddress = async (
+  zipCode: string,
+  street: string,
+  town: string
+) => {
   try {
     const { data } = await axios.get(
-      `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE&city=${town}`
+      `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE&city=${town}&api_key=65cb46b5a5ab0289110035xqze5103b`
     );
     if (!data.length) {
       isValidAddress.value = false;
@@ -1060,7 +1183,9 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find((community: any) => community.id === communityId);
+  const found = communities.value.find(
+    (community: any) => community.id === communityId
+  );
 
   if (found) {
     useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {

@@ -6,6 +6,13 @@ export const rules = {
   Counter: (value: string) => value?.length <= 15 || "Maximal 15 Zeichen",
   counterStreet: (value: string) => value?.length <= 60 || "Maximal 60 Zeichen",
   zip: (value: string) => value.length === 5 || "Maximal 5 Zeichen",
+  noSpecialCharacters: (value: string) => {
+    const pattern = /^[a-zA-Z0-9-]*$/; // Allows only alphanumeric characters and hyphens
+    if (!pattern.test(value)) {
+      return "Keine Leer- oder Sonderzeichen erlaubt, nur alphanumerische Zeichen und Bindestriche";
+    }
+    return true;
+  },
   email: (value: string) => {
     const pattern =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
