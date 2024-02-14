@@ -1,171 +1,173 @@
 <template>
-	<v-row class="my-15">
-		<v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
-			<v-form @submit.prevent="auth">
-				<v-card :class="['pa-6', { shake: animated }]">
-					<img class="is-fullwidth" src="~/assets/images/logo.png" />
-					<div class="mb-3">
-						<v-text-field
-							v-model="email"
-							class="pt-6"
-							label="E-Mail Adresse"
-							hide-details="auto"
-							@keyup.enter="auth"
-						/>
-					</div>
-					<div class="mb-3">
-						<v-text-field
-							v-model="password"
-							label="Passwort"
-							:append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
-							:type="PasswordVisible ? 'text' : 'password'"
-							@click:append-inner="PasswordVisible = !PasswordVisible"
-							:error-messages="useErrors().checkAndMapErrors('email', errors)"
-						/>
-					</div>
-					<v-btn
-						color="primary"
-						block
-						depressed
-						type="submit"
-						class="general-font-size"
-						size="large"
-					>
-						Login
-					</v-btn>
-					<div
-						@click="emailAlreadyGiven()"
-						align="center"
-						class="mt-2 is-clickable is-dark-grey general-font-size"
-					>
-						Passwort vergessen?
-					</div>
+  <v-row class="my-15">
+    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
+      <v-form @submit.prevent="auth">
+        <v-card :class="['pa-6', { shake: animated }]">
+          <img class="is-fullwidth" src="~/assets/images/logo.png" />
+          <div class="mb-3">
+            <v-text-field
+              v-model="email"
+              class="pt-6"
+              label="E-Mail Adresse"
+              hide-details="auto"
+              @keyup.enter="auth"
+            />
+          </div>
+          <div class="mb-3">
+            <v-text-field
+              v-model="password"
+              label="Passwort"
+              :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
+              :type="PasswordVisible ? 'text' : 'password'"
+              @click:append-inner="PasswordVisible = !PasswordVisible"
+              :error-messages="useErrors().checkAndMapErrors('email', errors)"
+            />
+          </div>
+          <v-btn
+            color="primary"
+            block
+            depressed
+            type="submit"
+            class="general-font-size"
+            size="large"
+            >Login</v-btn
+          >
+          <div
+            @click="emailAlreadyGiven()"
+            align="center"
+            class="mt-2 is-clickable is-dark-grey general-font-size"
+          >
+            Passwort vergessen?
+          </div>
 
-					<nuxt-link to="/register">
-						<div align="center" class="mt-6 is-dark-grey general-font-size">
-							Noch keinen Account? Jetzt registrieren!
-						</div>
-					</nuxt-link>
-				</v-card>
-			</v-form>
-		</v-col>
-	</v-row>
+          <nuxt-link to="/register"
+            ><div align="center" class="mt-6 is-dark-grey general-font-size">
+              Noch keinen Account? Jetzt registrieren!
+            </div></nuxt-link
+          >
+        </v-card>
+      </v-form>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
-import { useUserStore } from '@/store/user';
-import { ResultStatus, ServerCallResult } from '@/types/serverCallResult';
-import axios from 'axios';
+import { useUserStore } from "@/store/user";
+import { ResultStatus, ServerCallResult } from "@/types/serverCallResult";
+import axios from "axios";
 
 export default defineComponent({
-	name: 'Login',
-	setup() {
-		const email = ref('');
-		const password = ref('');
-		const loading = ref(false);
-		const animated = ref(false);
-		const errors = ref({});
-		const lastRoute = ref(null);
+  name: "Login",
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    const loading = ref(false);
+    const animated = ref(false);
+    const errors = ref({});
+    const lastRoute = ref(null);
 
-		const router = useRouter();
-		const privateApi = usePrivateApi();
-		const userStore = useUserStore();
-		const PasswordVisible = ref(false);
+    const router = useRouter();
+    const privateApi = usePrivateApi();
+    const userStore = useUserStore();
+    const PasswordVisible = ref(false);
 
-		const emailAlreadyGiven = () => {
-			if (email.value?.length > 0) {
-				router.push({
-					path: '/password_forgotten',
-					query: { email: email.value },
-				});
-			} else {
-				return router.push({
-					path: '/password_forgotten',
-					query: null,
-				});
-			}
-		};
+    const emailAlreadyGiven = () => {
+      if (email.value?.length > 0) {
+        router.push({
+          path: "/password_forgotten",
+          query: { email: email.value },
+        });
+      } else {
+        return router.push({
+          path: "/password_forgotten",
+          query: null,
+        });
+      }
+    };
 
-		console.log(router.options.history);
+    console.log(router.options.history);
 
-		const auth = async () => {
-			loading.value = true;
-			errors.value = '';
-			const data = { email: email.value, password: password.value, scope: 'health' };
+    const auth = async () => {
+      loading.value = true;
+      errors.value = "";
+      const data = { email: email.value, password: password.value, scope: "health" };
 
-			const { data: result } = await axios.post<ServerCallResult>('/api/login', { data });
+      const { data: result } = await axios.post<ServerCallResult>("/api/login", { data });
 
-			if (result.status === ResultStatus.SUCCESSFUL) {
-				const jwt = result.data.jwt_token;
+      if (result.status === ResultStatus.SUCCESSFUL) {
+        const jwt = result.data.jwt_token;
 
-				localStorage.setItem('auth._token.jwt', jwt);
-				localStorage.setItem('wunsiedel_teilhabeplattform._remembered_email', email.value);
+        localStorage.setItem("auth._token.jwt", jwt);
+        localStorage.setItem(
+          "smartwendelerland_gesundheitsplattform._remembered_email",
+          email.value
+        );
 
-				// set user
-				userStore.currentUser = result.data.user;
-				userStore.loggedIn = true;
+        // set user
+        userStore.currentUser = result.data.user;
+        userStore.loggedIn = true;
 
-				if (userStore.currentUser) {
-					// move to Dashboard
-					if (
-						lastRoute.value &&
-						!lastRoute.value.includes('/password_forgotten') &&
-						lastRoute.value !== '/password_reset' &&
-						lastRoute.value !== '/register' &&
-						lastRoute.value !== '/login' &&
-						router.options.history.state.current === '/onboarding'
-					) {
-						router.push({ path: lastRoute.value });
-					} else if (result.data.user.role === 'user') {
-						router.push({ path: '/' });
-					} else if (result.data.user.role === 'admin') {
-						router.push({ path: '/admin' });
-					} else {
-						router.push({ path: '/admin/care_facilities' });
-					}
-				}
-			} else {
-				loading.value = false;
-				errors.value = {
-					errors: [{ field_name: 'email', code: 'ERR_BAD_REQUEST' }],
-				};
-				// animate shake
-				animated.value = true;
-				setTimeout(() => {
-					animated.value = false;
-				}, 2000);
-			}
-		};
+        if (userStore.currentUser) {
+          // move to Dashboard
+          if (
+            lastRoute.value &&
+            !lastRoute.value.includes("/password_forgotten") &&
+            lastRoute.value !== "/password_reset" &&
+            lastRoute.value !== "/register" &&
+            lastRoute.value !== "/login" &&
+            router.options.history.state.current === "/onboarding"
+          ) {
+            router.push({ path: lastRoute.value });
+          } else if (result.data.user.role === "user") {
+            router.push({ path: "/" });
+          } else if (result.data.user.role === "admin") {
+            router.push({ path: "/admin" });
+          } else {
+            router.push({ path: "/admin/care_facilities" });
+          }
+        }
+      } else {
+        loading.value = false;
+        errors.value = {
+          errors: [{ field_name: "email", code: "ERR_BAD_REQUEST" }],
+        };
+        // animate shake
+        animated.value = true;
+        setTimeout(() => {
+          animated.value = false;
+        }, 2000);
+      }
+    };
 
-		onMounted(() => {
-			lastRoute.value = router.options.history.state.back as null;
-			if (process.client) {
-				const rememberedEmail = localStorage.getItem(
-					'wunsiedel_teilhabeplattform._remembered_email'
-				);
-				if (rememberedEmail) {
-					setTimeout(() => {
-						email.value = rememberedEmail;
-					}, 300);
-				}
-			}
-			if (lastRoute.value && lastRoute.value.includes('/password_reset')) {
-				lastRoute.value = '/';
-			}
-		});
+    onMounted(() => {
+      lastRoute.value = router.options.history.state.back as null;
+      if (process.client) {
+        const rememberedEmail = localStorage.getItem(
+          "smartwendelerland_gesundheitsplattform._remembered_email"
+        );
+        if (rememberedEmail) {
+          setTimeout(() => {
+            email.value = rememberedEmail;
+          }, 300);
+        }
+      }
+      if (lastRoute.value && lastRoute.value.includes("/password_reset")) {
+        lastRoute.value = "/";
+      }
+    });
 
-		return {
-			email,
-			password,
-			loading,
-			animated,
-			errors,
-			auth,
-			emailAlreadyGiven,
-			lastRoute,
-			PasswordVisible,
-		};
-	},
+    return {
+      email,
+      password,
+      loading,
+      animated,
+      errors,
+      auth,
+      emailAlreadyGiven,
+      lastRoute,
+      PasswordVisible,
+    };
+  },
 });
 </script>
 
