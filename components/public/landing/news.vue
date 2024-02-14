@@ -28,7 +28,9 @@
 								</div>
 								<div style="display: flex; flex-direction: row; align-items: center; gap: 3px">
 									<IconCalendar :size="18" class="is-primary-color" />
-									<span style="font-size: 10px">{{ article.created_at }}</span>
+									<span style="font-size: 10px">
+										{{ new Date(article.created_at).toLocaleDateString() }}
+									</span>
 								</div>
 							</div>
 							<div style="padding-top: 6px">
