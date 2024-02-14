@@ -1,100 +1,100 @@
 <template>
-  <div class="wrapper">
-    <h1 class="title word-break" lang="de">{{ title }}</h1>
-    <PublicLandingChooseCategory class="search-field"/>
-    <p class="sub-title word-break" lang="de">{{ subTitle }}</p>
-    
-  </div>
+	<div class="wrapper">
+		<h1 class="title word-break" lang="de">{{ title }}</h1>
+		<PublicLandingChooseCategory class="search-field" />
+		<p class="sub-title word-break" lang="de">{{ subTitle }}</p>
+	</div>
 </template>
 
 <script lang="ts" setup>
-import { useFilterStore } from "~/store/searchFilter";
-import homeImage from "@/assets/images/home.jpg";
+import { useFilterStore } from '~/store/searchFilter';
+import homeImage from '@/assets/images/header.png';
 
 const filterStore = useFilterStore();
 
-const title = ref('Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land')
-const subTitle = ref('Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.')
+const title = ref('Deine Teilhabeplattform des Landkreises Wunsiedel');
+const subTitle = ref(
+	'Finde Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreichen Pflegeangeboten.'
+);
 
 useHead({
-  title: title,
-  meta: [
-    { property: "og:type", content: "Webseite" },
-    { name: "description", content: subTitle },
-    { name: "title", content: title },
-    { name: "image", content: homeImage },
-  ],
+	title: title,
+	meta: [
+		{ property: 'og:type', content: 'Webseite' },
+		{ name: 'description', content: subTitle },
+		{ name: 'title', content: title },
+		{ name: 'image', content: homeImage },
+	],
 });
 
 onMounted(() => {
-  filterStore.resetAllFilters();
+	filterStore.resetAllFilters();
 });
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/sass/main.sass";
+@import '@/assets/sass/main.sass';
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 2rem;
-  justify-content: center;
-  width: 50%;
-  padding: 0 0 0 5rem;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	gap: 2rem;
+	justify-content: center;
+	width: 50%;
+	padding: 0 0 0 5rem;
 
-  @include lg {
-    width: 70%;
-    justify-items: center;
-    padding: 2rem;
-  }
+	@include lg {
+		width: 70%;
+		justify-items: center;
+		padding: 2rem;
+	}
 
-  @include md {
-    width: 100%;
-    justify-items: center;
-    padding: 3rem 2rem;
-  }
+	@include md {
+		width: 100%;
+		justify-items: center;
+		padding: 3rem 2rem;
+	}
 
-  @include sm {
-    width: 100%;
-    justify-content: flex-start;
-  }
+	@include sm {
+		width: 100%;
+		justify-content: flex-start;
+	}
 
-  .title {
-    color: white;
-    font-size: 55px;
-    text-transform: uppercase;
-    line-height: 150%;
-    @include md {
-      text-align: center;
-      justify-content: center;
-    }
-    @include sm {
-      font-size: 1.6rem;
-    }
-  }
-  .sub-title {
-    color: white;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 35px;
-    width: 75%;
-    font-size: 27px;
+	.title {
+		color: white;
+		font-size: 55px;
+		line-height: 150%;
+		@include md {
+			text-align: center;
+			justify-content: center;
+		}
+		@include sm {
+			font-size: 1.6rem;
+		}
+	}
+	.sub-title {
+		color: white;
+		font-style: normal;
+		font-weight: 300;
+		line-height: 35px;
+		width: 75%;
+		font-size: 27px;
 
-    @include md {
-      text-align: center;
-      justify-content: center;
-     
-      width: 100%;
-    }
-  }
-  .header {
-    margin-top: 20%;
-  }
+		@include md {
+			text-align: center;
+			justify-content: center;
+
+			width: 100%;
+		}
+	}
+	.header {
+		margin-top: 20%;
+	}
 }
 .search-field {
-  @include md {
-   margin: 1rem 0;
-  }
+	@include md {
+		margin: 1rem 0;
+	}
 }
 </style>

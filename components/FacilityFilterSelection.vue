@@ -98,22 +98,24 @@ type Filter = {
 };
 
 const props = defineProps<{
-  modelValue: string[];
-  filterKind: FilterKind;
-  popoverWidth?: number;
+	modelValue: string[];
+	filterKind: FilterKind;
+	popoverWidth?: number;
 }>();
 
 const emit = defineEmits<{
-  (event: "update:modelValue", values: string[]): void;
+	(event: 'update:modelValue', values: string[]): void;
 }>();
+
+const placeholderText = ref('Laden...');
 
 const placeholderText = ref("Laden...");
 const setPlaceholderText = () => {
-  if (props.filterKind === "facility") {
-    placeholderText.value = "Branche wählen";
-  } else if (props.filterKind === "course") {
-    placeholderText.value = "Themengebiet wählen";
-  }
+	if (props.filterKind === 'facility') {
+		placeholderText.value = 'Branche wählen';
+	} else if (props.filterKind === 'course') {
+		placeholderText.value = 'Themengebiet wählen';
+	}
 };
 
 const hasActiveOptions = (filterId: string) => {
@@ -130,23 +132,23 @@ onClickOutside(popoverParentRef, () => (showPopover.value = false));
 const loadingFilters = ref(false);
 const filterStore = useFilterStore();
 const handleClearTermSearch = () => {
-  if (filterStore.currentSearchTerm) {
-    filterStore.clearTermSearch();
-  }
-  return;
+	if (filterStore.currentSearchTerm) {
+		filterStore.clearTermSearch();
+	}
+	return;
 };
 const handleOptionSelect = (option: Filter) => {
-  const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+	const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
 
-  if (indexOfAlreadySetFilter !== -1) {
-    props.modelValue.splice(indexOfAlreadySetFilter, 1);
-    multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
-  } else {
-    props.modelValue.push(option.id);
-    multipleSelections.value.push(option);
-  }
+	if (indexOfAlreadySetFilter !== -1) {
+		props.modelValue.splice(indexOfAlreadySetFilter, 1);
+		multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
+	} else {
+		props.modelValue.push(option.id);
+		multipleSelections.value.push(option);
+	}
 
-  emit("update:modelValue", props.modelValue);
+	emit('update:modelValue', props.modelValue);
 };
 
 const handleToggleAll = (filter: any) => {
@@ -181,8 +183,9 @@ const handleToggleAll = (filter: any) => {
 const areAllSelected = (filter: any) => {
   const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
   const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
-
-  return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
+	return relevantOptions.every((option) =>
+		multipleSelections.value.find((item) => item.id === option.id)
+	);
 };
 
 watch(
@@ -225,19 +228,5 @@ onMounted(async () => {
 
 .waiting span:nth-child(3) {
   animation-delay: 0.4s;
-}
-</style>
-
-<style lang="scss" scoped>
-@import "@/assets/sass/main.sass";
-
-.is-selected {
-  background-color: #8ab61d !important;
-  color: white !important;
-}
-
-.filter-wrap {
-  max-height: 500px;
-  overflow-y: auto;
 }
 </style>
