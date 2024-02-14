@@ -1,5 +1,11 @@
-@import url("https://use.typekit.net/lbh6wkf.css")
+// @import url("https://use.typekit.net/lbh6wkf.css")
 @import "_breakpoints"
+
+@font-face 
+	font-family: 'Aller'
+	src: url('@/assets/fonts/aller/Aller_Rg.ttf')
+	font-weight: 300
+
 
 //TODO colors
 $primary-color: #8EB72C
@@ -14,8 +20,7 @@ $red: #E00505
 $white: white
 
 //Fonts
-$body-font-family: "open-sans", sans-serif !default
-$font-family-roboto-slab: "roboto-slab", sans-serif
+$body-font-family: "Aller", sans-serif !default
 
 //Fonts sizes - xl
 $font-size-xl-h1: 2.5rem
@@ -93,530 +98,530 @@ $line-height-medium: 160%
 
 //global classes
 h1
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $font-family-roboto-slab
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-h1
-  @include f-sm
-    font-size: $font-size-mobile-h1
-  @include f-md
-    font-size: $font-size-tablet-h1
-  @include f-lg
-    font-size: $font-size-desktop-h1
-  @include f-xl
-    font-size: $font-size-xl-h1
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-h1
+	@include f-sm
+		font-size: $font-size-mobile-h1
+	@include f-md
+		font-size: $font-size-tablet-h1
+	@include f-lg
+		font-size: $font-size-desktop-h1
+	@include f-xl
+		font-size: $font-size-xl-h1
 
 h2 
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $font-family-roboto-slab
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-h2
-  @include f-sm
-    font-size: $font-size-mobile-h2
-  @include f-md
-    font-size: $font-size-tablet-h2
-  @include f-lg
-    font-size: $font-size-desktop-h2
-  @include f-xl
-    font-size: $font-size-xl-h2
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-h2
+	@include f-sm
+		font-size: $font-size-mobile-h2
+	@include f-md
+		font-size: $font-size-tablet-h2
+	@include f-lg
+		font-size: $font-size-desktop-h2
+	@include f-xl
+		font-size: $font-size-xl-h2
 
 h3 
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $font-family-roboto-slab
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-h3
-  @include f-sm
-    font-size: $font-size-mobile-h3
-  @include f-md
-    font-size: $font-size-tablet-h3
-  @include f-lg
-    font-size: $font-size-desktop-h3
-  @include f-xl
-    font-size: $font-size-xl-h3
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-h3
+	@include f-sm
+		font-size: $font-size-mobile-h3
+	@include f-md
+		font-size: $font-size-tablet-h3
+	@include f-lg
+		font-size: $font-size-desktop-h3
+	@include f-xl
+		font-size: $font-size-xl-h3
 
 h4
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $body-font-family
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-h4
-  @include f-sm
-    font-size: $font-size-mobile-h4
-  @include f-md
-    font-size: $font-size-tablet-h4
-  @include f-lg
-    font-size: $font-size-desktop-h4
-  @include f-xl
-    font-size: $font-size-xl-h4
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-h4
+	@include f-sm
+		font-size: $font-size-mobile-h4
+	@include f-md
+		font-size: $font-size-tablet-h4
+	@include f-lg
+		font-size: $font-size-desktop-h4
+	@include f-xl
+		font-size: $font-size-xl-h4
 
 .is-label-small
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $body-font-family
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-label-small
-  @include f-sm
-    font-size: $font-size-mobile-label-small
-  @include f-md
-    font-size: $font-size-tablet-label-small
-  @include f-lg
-    font-size: $font-size-desktop-label-small
-  @include f-xl
-    font-size: $font-size-xl-label-small
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-label-small
+	@include f-sm
+		font-size: $font-size-mobile-label-small
+	@include f-md
+		font-size: $font-size-tablet-label-small
+	@include f-lg
+		font-size: $font-size-desktop-label-small
+	@include f-xl
+		font-size: $font-size-xl-label-small
 
 .is-label-regular
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  text-transform: $font-uppercase
-  font-family: $body-font-family
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-label-regular
-  @include f-sm
-    font-size: $font-size-mobile-label-regular
-  @include f-md
-    font-size: $font-size-tablet-label-regular
-  @include f-lg
-    font-size: $font-size-desktop-label-regular
-  @include f-xl
-    font-size: $font-size-xl-label-regular
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	text-transform: $font-uppercase
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-label-regular
+	@include f-sm
+		font-size: $font-size-mobile-label-regular
+	@include f-md
+		font-size: $font-size-tablet-label-regular
+	@include f-lg
+		font-size: $font-size-desktop-label-regular
+	@include f-xl
+		font-size: $font-size-xl-label-regular
 
 .is-label-medium
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $body-font-family
-  text-transform: $font-uppercase
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-label-medium
-  @include f-sm
-    font-size: $font-size-mobile-label-medium
-  @include f-md
-    font-size: $font-size-tablet-label-medium
-  @include f-lg
-    font-size: $font-size-desktop-label-medium
-  @include f-xl
-    font-size: $font-size-xl-label-medium
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	text-transform: $font-uppercase
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-label-medium
+	@include f-sm
+		font-size: $font-size-mobile-label-medium
+	@include f-md
+		font-size: $font-size-tablet-label-medium
+	@include f-lg
+		font-size: $font-size-desktop-label-medium
+	@include f-xl
+		font-size: $font-size-xl-label-medium
 
 .is-label-big
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  text-transform: $font-uppercase
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-label-big
-  @include f-sm
-    font-size: $font-size-mobile-label-big
-  @include f-md
-    font-size: $font-size-tablet-label-big
-  @include f-lg
-    font-size: $font-size-desktop-label-big
-  @include f-xl
-    font-size: $font-size-xl-label-big
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	text-transform: $font-uppercase
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-label-big
+	@include f-sm
+		font-size: $font-size-mobile-label-big
+	@include f-md
+		font-size: $font-size-tablet-label-big
+	@include f-lg
+		font-size: $font-size-desktop-label-big
+	@include f-xl
+		font-size: $font-size-xl-label-big
 
 .is-paragraph
-  font-weight: $font-weight-medium
-  line-height: $line-height-medium
-  font-family: $body-font-family
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-paragraph
-  @include f-sm
-    font-size: $font-size-mobile-paragraph
-  @include f-md
-    font-size: $font-size-tablet-paragraph
-  @include f-lg
-    font-size: $font-size-desktop-paragraph
-  @include f-xl
-    font-size: $font-size-xl-paragraph
+	font-weight: $font-weight-medium
+	line-height: $line-height-medium
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-paragraph
+	@include f-sm
+		font-size: $font-size-mobile-paragraph
+	@include f-md
+		font-size: $font-size-tablet-paragraph
+	@include f-lg
+		font-size: $font-size-desktop-paragraph
+	@include f-xl
+		font-size: $font-size-xl-paragraph
 
 .is-category
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $body-font-family
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-category
-  @include f-sm
-    font-size: $font-size-mobile-category
-  @include f-md
-    font-size: $font-size-tablet-category
-  @include f-lg
-    font-size: $font-size-desktop-category
-  @include f-xl
-    font-size: $font-size-xl-category
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-category
+	@include f-sm
+		font-size: $font-size-mobile-category
+	@include f-md
+		font-size: $font-size-tablet-category
+	@include f-lg
+		font-size: $font-size-desktop-category
+	@include f-xl
+		font-size: $font-size-xl-category
 
 .is-input
-  font-weight: $font-weight-medium
-  line-height: $line-height-regular
-  font-family: $body-font-family
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-input
-  @include f-sm
-    font-size: $font-size-mobile-input
-  @include f-md
-    font-size: $font-size-tablet-input
-  @include f-lg
-    font-size: $font-size-desktop-input
-  @include f-xl
-    font-size: $font-size-xl-input
+	font-weight: $font-weight-medium
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-input
+	@include f-sm
+		font-size: $font-size-mobile-input
+	@include f-md
+		font-size: $font-size-tablet-input
+	@include f-lg
+		font-size: $font-size-desktop-input
+	@include f-xl
+		font-size: $font-size-xl-input
 
 .is-button-text
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $body-font-family
-  text-transform: $font-uppercase
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-button-text
-  @include f-sm
-    font-size: $font-size-mobile-button-text
-  @include f-md
-    font-size: $font-size-tablet-button-text
-  @include f-lg
-    font-size: $font-size-desktop-button-text
-  @include f-xl
-    font-size: $font-size-xl-button-text
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	text-transform: $font-uppercase
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-button-text
+	@include f-sm
+		font-size: $font-size-mobile-button-text
+	@include f-md
+		font-size: $font-size-tablet-button-text
+	@include f-lg
+		font-size: $font-size-desktop-button-text
+	@include f-xl
+		font-size: $font-size-xl-button-text
 
 .is-button-text-small
-  font-weight: $font-weight-bold
-  line-height: $line-height-regular
-  font-family: $body-font-family
-  text-transform: $font-uppercase
-  &.is-primary
-    color: $primary-color
-  &.is-secondary
-    color: $secondary-color
-  &.is-mid-grey
-    color: $mid-grey
-  &.is-light-grey
-    color: $light-grey
-  &.is-lighter-grey
-    color: $lighter-grey
-  &.is-dark-green
-    color: $dark-green
-  &.is-off-black
-    color: $off-black
-  &.is-orange
-    color: $orange
-  &.is-red
-    color: $red
-  &.is-white
-    color: $white
-  &.is-uppercase
-    text-transform: $font-uppercase
-  @include f-xs
-    font-size: $font-size-mobile-button-text-small
-  @include f-sm
-    font-size: $font-size-mobile-button-text-small
-  @include f-md
-    font-size: $font-size-tablet-button-text-small
-  @include f-lg
-    font-size: $font-size-desktop-button-text-small
-  @include f-xl
-    font-size: $font-size-xl-button-text-small
+	font-weight: $font-weight-bold
+	line-height: $line-height-regular
+	font-family: $body-font-family
+	text-transform: $font-uppercase
+	&.is-primary
+		color: $primary-color
+	&.is-secondary
+		color: $secondary-color
+	&.is-mid-grey
+		color: $mid-grey
+	&.is-light-grey
+		color: $light-grey
+	&.is-lighter-grey
+		color: $lighter-grey
+	&.is-dark-green
+		color: $dark-green
+	&.is-off-black
+		color: $off-black
+	&.is-orange
+		color: $orange
+	&.is-red
+		color: $red
+	&.is-white
+		color: $white
+	&.is-uppercase
+		text-transform: $font-uppercase
+	@include f-xs
+		font-size: $font-size-mobile-button-text-small
+	@include f-sm
+		font-size: $font-size-mobile-button-text-small
+	@include f-md
+		font-size: $font-size-tablet-button-text-small
+	@include f-lg
+		font-size: $font-size-desktop-button-text-small
+	@include f-xl
+		font-size: $font-size-xl-button-text-small
 
 .is-uppercase
-  text-transform: uppercase
+	text-transform: uppercase
 
 .v-application
-  font-family: $body-font-family !important
+	font-family: $body-font-family !important
 
 ul
-  margin-left: 20px
+	margin-left: 20px
 
 ol
-  margin-left: 20px
+	margin-left: 20px
 
 a
-  text-decoration: none
-  &:visited
-    color: inherit
-    text-decoration: none
+	text-decoration: none
+	&:visited
+		color: inherit
+		text-decoration: none
 
 .word-break
-  word-break: break-word
-  -webkit-hyphens: auto
-  -ms-hyphens: auto
-  hyphens: auto
-  
+	word-break: break-word
+	-webkit-hyphens: auto
+	-ms-hyphens: auto
+	hyphens: auto
+	
 .break-text
-  word-break: break-word
-  overflow: hidden
-  display: -webkit-box
-  -webkit-line-clamp: 4
-  line-clamp: 4
-  -webkit-box-orient: vertical
+	word-break: break-word
+	overflow: hidden
+	display: -webkit-box
+	-webkit-line-clamp: 4
+	line-clamp: 4
+	-webkit-box-orient: vertical
 
 .break-title
-  word-break: break-word
-  overflow: hidden
-  display: -webkit-box
-  -webkit-line-clamp: 1
-  line-clamp: 1
-  -webkit-box-orient: vertical
+	word-break: break-word
+	overflow: hidden
+	display: -webkit-box
+	-webkit-line-clamp: 1
+	line-clamp: 1
+	-webkit-box-orient: vertical
 
 .text-wrap
-  text-align: justify
-  display: inline-block
+	text-align: justify
+	display: inline-block
