@@ -8,7 +8,10 @@
 					</div>
 				</v-col>
 				<v-col :cols="8">
-					<div style="color: #565657; display: flex; flex-direction: column; gap: 50px; width: 70%">
+					<div
+						style="display: flex; flex-direction: column; gap: 50px; width: 70%"
+						class="is-dark-green-color"
+					>
 						<h2>Deine lokale Kulturbörse</h2>
 
 						<p>

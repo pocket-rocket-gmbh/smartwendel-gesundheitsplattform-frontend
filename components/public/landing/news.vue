@@ -6,7 +6,7 @@
 					:cols="12"
 					style="display: flex; justify-content: space-between; align-items: center"
 				>
-					<h2>Neuigkeiten</h2>
+					<h2 class="is-dark-green-color">Neuigkeiten</h2>
 					<v-btn color="primary" rounded>Mehr Anzeigen</v-btn>
 				</v-col>
 				<v-col v-for="article of newsArticles" :key="article.id" :cols="4">

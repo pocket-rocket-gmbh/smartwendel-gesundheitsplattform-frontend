@@ -6,7 +6,7 @@
 					:cols="12"
 					style="display: flex; justify-content: space-between; align-items: center"
 				>
-					<h2>Veranstaltungen</h2>
+					<h2 class="is-dark-green-color">Veranstaltungen</h2>
 					<v-btn color="primary" rounded>Mehr Anzeigen</v-btn>
 				</v-col>
 				<v-col v-for="event of events" :key="event.id" :cols="4">

@@ -1,10 +1,10 @@
 <template>
-	<div class="is-dark-green-background is-white-color" style="padding: 75px 0px">
+	<div class="is-white-background is-dark-green-color" style="padding: 75px 0px">
 		<v-container>
 			<v-row>
 				<v-col :cols="12" :md="4">
 					<div style="padding-right: 40px; display: flex; flex-direction: column; gap: 50px">
-						<h2 style="font-weight: 700; font-size: 1.75rem">
+						<h2 style="font-weight: 700; font-size: 1.75rem" class="is-dark-green-color">
 							Theater, Kunstausstellungen, Museen und Co.
 						</h2>
 						<div
@@ -35,13 +35,22 @@
 				<v-col :cols="12" :md="8">
 					<v-row>
 						<v-col :cols="6" v-for="category of categories" :key="category.title">
-							<div style="display: flex; flex-direction: row; gap: 1rem; align-items: center">
+							<div
+								style="
+									display: flex;
+									flex-direction: row;
+									gap: 1rem;
+									align-items: center;
+									padding: 20px 0px;
+								"
+							>
 								<div
-									class="is-dark-green-color"
+									class="is-primary-color"
 									style="
 										width: 80px;
 										aspect-ratio: 1;
-										background-color: white;
+										background-color: #f4f4f4;
+										box-shadow: 5px 5px 20px #dadada;
 										border-radius: 9999px;
 										display: flex;
 										justify-content: center;
@@ -49,7 +58,9 @@
 									"
 									v-html="category.icon"
 								></div>
-								<h4 style="font-size: 1.1875rem; font-weight: 400">{{ category.title }}</h4>
+								<h4 style="font-size: 1.1875rem; font-weight: 400" class="is-dark-green-color">
+									{{ category.title }}
+								</h4>
 							</div>
 						</v-col>
 					</v-row>

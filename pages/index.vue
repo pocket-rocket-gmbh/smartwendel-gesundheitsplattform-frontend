@@ -12,7 +12,11 @@
 			<!-- <div class="divider"></div> -->
 			<!-- <PublicLandingHelplinks /> -->
 			<PublicLandingNews />
+			<v-container style="padding: 0">
+				<div style="border-top: 2px solid #f5f5f5"></div>
+			</v-container>
 			<PublicLandingCategoriesNew />
+			<PublicLandingCta />
 			<PublicLandingEvents />
 			<v-container style="padding: 0">
 				<div style="border-top: 2px solid #f5f5f5"></div>

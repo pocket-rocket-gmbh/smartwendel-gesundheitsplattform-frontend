@@ -42,8 +42,8 @@
 	.social-button {
 		width: 41px;
 		height: 41px;
-		border: 2px solid $dark-green;
-		color: $dark-green !important;
+		border: 2px solid $primary-color;
+		color: $primary-color !important;
 	}
 }
 </style>

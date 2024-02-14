@@ -30,8 +30,8 @@
 @import '@/assets/sass/main.sass';
 
 footer {
-	background-color: #f5f5f5;
-	color: $secondary-color;
+	background-color: $dark-green;
+	color: $white;
 	padding: 46px 80px;
 	font-size: 1rem;
 	@include md {

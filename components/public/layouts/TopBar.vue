@@ -39,7 +39,10 @@
 							>
 								Veranstaltungen
 							</router-link>
-							<router-link to="/public/news" style="color: inherit; text-transform: uppercase">
+							<router-link
+								to="/public/search/cultural-exchange"
+								style="color: inherit; text-transform: uppercase"
+							>
 								Kulturbörse
 							</router-link>
 						</div>

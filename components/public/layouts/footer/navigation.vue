@@ -56,7 +56,7 @@
 		}
 
 		li > a {
-			color: $secondary-color;
+			color: $white;
 			font-weight: 300;
 		}
 	}
