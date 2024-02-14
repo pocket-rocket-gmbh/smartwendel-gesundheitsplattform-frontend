@@ -4,13 +4,15 @@
 			<PublicLandingHeader />
 		</div>
 		<div>
-			<PublicLandingCurrentNotes />
-			<div class="divider"></div>
-			<PublicLandingCategories />
-			<PublicLandingCurrentRecommendations />
-			<PublicLandingCurrentEvents />
-			<div class="divider"></div>
-			<PublicLandingHelplinks />
+			<!-- <PublicLandingCurrentNotes /> -->
+			<!-- <div class="divider"></div> -->
+			<!-- <PublicLandingCategories /> -->
+			<!-- <PublicLandingCurrentRecommendations /> -->
+			<!-- <PublicLandingCurrentEvents /> -->
+			<!-- <div class="divider"></div> -->
+			<!-- <PublicLandingHelplinks /> -->
+			<PublicLandingNews />
+			<PublicLandingCategoriesNew />
 		</div>
 	</div>
 </template>

@@ -108,22 +108,23 @@
 					</v-btn>
 				</div>
 				<div class="d-flex align-center main">
-					<span
-						class="mx-3 menu-list general-font-size is-dark-grey pointer"
+					<nuxt-link
 						v-if="useUser().isAdmin() && breakPoints.width.value >= 1530"
-						href="/admin"
-						@click.prevent="saveCurrentUrlAndRoute('/admin')"
+						class="mx-3 menu-list general-font-size is-dark-grey pointer"
+						to="/admin"
+						@click="saveCurrentUrl"
 					>
 						Admin-Bereich
-					</span>
-					<span
-						class="mx-3 menu-list general-font-size pointer is-dark-grey"
+					</nuxt-link>
+					<nuxt-link
 						v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
-						href="/admin/care_facilities"
-						@click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
+						class="mx-3 menu-list general-font-size pointer is-dark-grey"
+						to="/admin/care_facilities"
+						@click="saveCurrentUrl"
 					>
 						Meine Einrichtung
-					</span>
+					</nuxt-link>
+
 					<PublicLayoutsMiniMenu
 						:current-user="currentUser"
 						:user-is-admin="userIsAdmin"
@@ -413,6 +414,9 @@ const saveCurrentUrlAndRoute = (routeTo: string) => {
 	appStore.dashboardBackLink = window.location.pathname;
 
 	router.push({ path: routeTo });
+};
+const saveCurrentUrl = () => {
+	appStore.dashboardBackLink = window.location.pathname;
 };
 </script>
 
