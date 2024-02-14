@@ -1,26 +1,28 @@
 <template>
 	<footer>
-		<v-row>
-			<v-col :cols="12" class="logo top-logo">
-				<nuxt-link to="/">
-					<img src="~/assets/images/logo.png" alt="logo" />
-				</nuxt-link>
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-col :cols="12" :md="6" :lg="4" class="main">
-				<PublicLayoutsFooterNavigation />
-				<PublicLayoutsFooterSocialButtons />
-			</v-col>
-			<v-col :cols="12" :lg="4" class="logo center-logo">
-				<nuxt-link to="/">
-					<img src="~/assets/images/logo.png" alt="logo" />
-				</nuxt-link>
-			</v-col>
-			<v-col :cols="12" :md="6" :lg="4" class="register">
-				<PublicLayoutsFooterRegister />
-			</v-col>
-		</v-row>
+		<v-container>
+			<v-row>
+				<v-col :cols="12" class="logo top-logo">
+					<nuxt-link to="/">
+						<img src="~/assets/images/logo.png" alt="logo" />
+					</nuxt-link>
+				</v-col>
+			</v-row>
+			<v-row>
+				<v-col :cols="12" :md="6" :lg="4" class="main">
+					<PublicLayoutsFooterNavigation />
+					<PublicLayoutsFooterSocialButtons />
+				</v-col>
+				<v-col :cols="12" :lg="4" class="logo center-logo">
+					<nuxt-link to="/">
+						<img src="~/assets/images/logo.png" alt="logo" />
+					</nuxt-link>
+				</v-col>
+				<v-col :cols="12" :md="6" :lg="4" class="register">
+					<PublicLayoutsFooterRegister />
+				</v-col>
+			</v-row>
+		</v-container>
 	</footer>
 </template>
 
