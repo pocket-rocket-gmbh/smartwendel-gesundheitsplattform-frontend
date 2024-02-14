@@ -14,12 +14,8 @@
 			</div>
 			<v-list-item>
 				<v-list-item-title class="general-font-size is-dark-grey font-weight-bold my-1 mb-5">
-					Gesundheitsplattform
+					Teilhabeplattform
 				</v-list-item-title>
-				<v-list-item-subtitle class="has-lk-logo my-1">
-					<img :src="logo" width="40" />
-					Smart Wendeler Land
-				</v-list-item-subtitle>
 			</v-list-item>
 			<v-divider></v-divider>
 			<div v-if="!useUser().statusOnHealthScope()" class="d-flex align-center">
@@ -70,7 +66,6 @@
 					</v-list-item>
 					<v-divider></v-divider>
 				</template>
-
 
 				<template v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
 					<v-list-item nuxt to="/admin/news">Neuigkeiten</v-list-item>
