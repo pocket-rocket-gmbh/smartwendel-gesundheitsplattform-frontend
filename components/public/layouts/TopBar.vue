@@ -9,7 +9,7 @@
 								src="~/assets/images/logo.png"
 								alt="logo"
 								class="is-clickable"
-								height="120"
+								height="70"
 								style="
 									 {
 										object-fit: contain;
