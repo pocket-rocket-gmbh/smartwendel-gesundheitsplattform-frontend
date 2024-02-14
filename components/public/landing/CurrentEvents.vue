@@ -4,7 +4,6 @@
       <v-row no-gutters>
         <v-col class="d-flex align-center">
           <div>
-            <!-- TODO: Split? -->
             <h2 class="is-primary text-h4 font-weight-medium mb-5">
               Kurse und Veranstaltungen
             </h2>

@@ -2,7 +2,8 @@
   <div class="main-wrapper">
     <v-row class="heading">
       <v-col class="d-flex align-center">
-        <span class="general-font-size font-weight-medium is-dark-grey d-md-block d-none">{{ careFacility?.name }}</span>
+        <span class="general-font-size text-h4
+         font-weight-medium is-dark-grey d-md-block d-none text-wrap">{{ careFacility?.name }}</span>
         <span v-if="careFacility?.billable_through_health_insurance_approved">
           <v-icon size="x-large" class="pl-8" color="primary"
             >mdi-check-decagram-outline</v-icon
@@ -20,7 +21,7 @@
     </span>
     <div class="mt-4">
       <ClientOnly>
-        <PublicTextTooltipWrap class="pr-5 is-dark-grey description" :text="careFacility?.description.replace('<p><br></p><p><br></p>', '<p><br></p>')" />
+        <PublicTextTooltipWrap class="pr-5 is-dark-grey description text-wrap" :text="careFacility?.description.replace('<p><br></p><p><br></p>', '<p><br></p>')" />
       </ClientOnly>
       <v-divider class="my-10"></v-divider>
       <div class="genral-font-size is-dark-grey">

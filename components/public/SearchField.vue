@@ -86,13 +86,14 @@ import searchIcon from '~/assets/icons/facilityTypes/search.svg';
 import { type Facility, type FilterKind, useFilterStore } from '~/store/searchFilter';
 
 const props = defineProps<{
-	modelValue: string;
-	filteredItems: Facility[];
-	defaultStyling?: boolean;
-	loading?: boolean;
-	defaultRouteTo?: string;
-	kind?: string;
-	isResultPage?: boolean;
+  modelValue: string;
+  filteredItems: Facility[];
+  defaultStyling?: boolean;
+  loading?: boolean;
+  defaultRouteTo?: string;
+  kind?: string;
+  isResultPage?: boolean;
+  filteredCategories?: any[];
 }>();
 
 const filterStore = useFilterStore();

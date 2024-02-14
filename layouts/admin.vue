@@ -71,6 +71,7 @@
 					<v-divider></v-divider>
 				</template>
 
+
 				<template v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')">
 					<v-list-item nuxt to="/admin/news">Neuigkeiten</v-list-item>
 					<v-list-item nuxt to="/admin/cultural-providers">Kulturanbieter</v-list-item>

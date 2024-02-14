@@ -46,21 +46,29 @@ const handleScroll = () => {
 };
 
 const initialize = async () => {
-	return Promise.allSettled([
-		useFilterStore().loadAllFilters(),
-		useFilterStore().loadAllCommunities(),
-		useFilterStore().loadUnalteredAllResults(),
-		getTooltips(),
-	]);
+  return Promise.allSettled([
+    useFilterStore().loadAllFilters(),
+    useFilterStore().loadAllCommunities(),
+    useFilterStore().loadUnalteredAllResults(),
+    useFilterStore().loadAllCategories(),
+    getTooltips(),
+    useFilterStore().resetAllFilters(),
+  ]);
 };
 
 onMounted(async () => {
 	setTimeOutForPageLoad();
 	document.addEventListener('scroll', handleScroll);
 
-	appStore.loading = true;
-	await initialize();
-	appStore.loading = false;
+  appStore.loading = true;
+  await initialize();
+  await useFilterStore().loadAllResults();
+
+  await Promise.allSettled([
+    await useFilterStore().loadAllFacilityFilters(),
+    await useFilterStore().loadAllServiceFilters()
+  ]);
+  appStore.loading = false;
 });
 
 onUnmounted(() => {

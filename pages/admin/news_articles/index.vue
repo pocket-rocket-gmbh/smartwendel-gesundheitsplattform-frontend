@@ -34,9 +34,9 @@
       closable
       class="mt-2 general-font-size"
     >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
-      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
-      anlegen.
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
+      wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen
+      sowie Beiträge anlegen.
     </v-alert>
     <v-row align="center" v-if="showBar">
       <v-col md="3">
@@ -113,8 +113,8 @@
 </template>
 <script lang="ts" setup>
 import { isCompleteNews } from "~/utils/facility.utils";
-import type {  Facility } from "~/store/searchFilter";
-import type {  RequiredField } from "~/types/facilities";
+import type { Facility } from "~/store/searchFilter";
+import type { RequiredField } from "~/types/facilities";
 
 definePageMeta({
   layout: "admin",
@@ -153,7 +153,12 @@ const fields = [
   },
   { prop: "name", text: "Titel", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
-  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
+  {
+    prop: "created_at",
+    text: "Erstellt am",
+    value: "created_at",
+    type: "datetime",
+  },
   {
     prop: "user.firstname",
     text: "Erstellt von",
@@ -191,7 +196,8 @@ const draftRequiredFields: RequiredField[] = [
   },
   {
     props: ["description"],
-    checkHandler: (description?: string) => !description || description === "<p><br></p>",
+    checkHandler: (description?: string) =>
+      !description || description === "<p><br></p>",
   },
   {
     props: ["tags"],

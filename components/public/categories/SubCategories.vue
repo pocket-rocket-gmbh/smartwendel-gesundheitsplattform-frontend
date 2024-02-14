@@ -1,35 +1,30 @@
 <template>
-	<div class="sub-categories-wrapper general-font-size">
-		<v-row
-			class="sub-category text-center align-center justify-center"
-			:id="subCategory?.id.replaceAll('-', '')"
-		>
-			<v-col class="d-flex flex-column is-dark-grey justify-center">
-				<div
-					:class="[
-						breakPoints.width.value < 960 ? 'mt-4' : '',
-						breakPoints.width.value < 515 ? 'mt-15' : '',
-					]"
-				>
-					<span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
-				</div>
-				<div>
-					<span
-						class="my-5 text-wrap sub-category-description general-font-size"
-						v-html="subCategory?.description"
-					></span>
-				</div>
-			</v-col>
-		</v-row>
-		<div class="articles mt-15">
-			<PublicContentBox
-				v-for="subSubCategory in subSubCategories"
-				:key="subSubCategory.id"
-				:item="subSubCategory"
-				:item-type="subSubCategory.kind"
-			/>
-		</div>
-	</div>
+  <div class="sub-categories-wrapper general-font-size" >
+    <v-row
+      class="sub-category text-center align-center justify-center"
+      :id="subCategory?.id.replaceAll('-', '')"
+    >
+      <v-col class="d-flex flex-column is-dark-grey justify-center">
+        <div :class="[breakPoints.width.value < 960 ? 'mt-4' : '', breakPoints.width.value < 515 ? 'mt-15' : 'mt-5']">
+          <span class="sub-category-name mt-5">{{ subCategory?.name }}</span>
+        </div>
+        <div>
+          <span
+            class="my-5 text-wrap sub-category-description general-font-size"
+            v-html="subCategory?.description"
+          ></span>
+        </div>
+      </v-col>
+    </v-row>
+    <div class="articles mt-15">
+      <PublicContentBox
+        v-for="subSubCategory in subSubCategories"
+        :key="subSubCategory.id"
+        :item="subSubCategory"
+        :item-type="subSubCategory.kind"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>

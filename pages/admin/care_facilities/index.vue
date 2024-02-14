@@ -68,6 +68,23 @@
             />
           </v-col>
         </v-row>
+        <v-row v-if="user.isAdmin()">
+          <v-col>
+            <v-radio-group
+              inline
+              class="d-flex justify-end align-center"
+              v-model="listOptionValue"
+            >
+              <v-radio
+                v-for="(item, index) in listOptions"
+                :key="index"
+                :label="item.text"
+                :value="item.value"
+                :disabled="item.value !== 1"
+              ></v-radio>
+            </v-radio-group>
+          </v-col>
+        </v-row>
       </div>
 
       <DataTable
@@ -86,6 +103,7 @@
         :disable-delete="true"
         defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
+        :import-filter="listOptionValue"
       />
 
       <div
@@ -149,7 +167,7 @@
 <script lang="ts" setup>
 import { isCompleteFacility } from "~/utils/facility.utils";
 import { type Facility } from "~/store/searchFilter";
-import { type RequiredField } from "~/types/facilities";
+import type { RequiredField } from "~/types/facilities";
 
 definePageMeta({
   layout: "admin",
@@ -199,7 +217,7 @@ const fields = [
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
-  { prop: "", text: "Letzte Änderung", value: "updated_at", type: "datetime" },
+  { prop: "updated_at", text: "Letzte Aktualisierung", value: "updated_at", type: "datetime" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
     prop: "user.firstname",
@@ -327,6 +345,23 @@ const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
 
 const itemStatus = ref(null);
+
+const listOptions = ref([
+  { text: "Alle", value: 1 },
+  { text: "Importiert", value: 2 },
+  { text: "Übernommen", value: 3 },
+  { text: "Nicht übernommen", value: 4 },
+  { text: "Selbst angelegt", value: 5 },
+]);
+
+const listOptionValue = ref(1);
+
+watch (
+  async () => listOptionValue.value,
+  async () => {
+    await dataTableRef.value?.getItems(listOptionValue);
+  }
+);
 
 const handleItemUpdated = async (item: any) => {
   setupFinished.value = await useUser().setupFinished();

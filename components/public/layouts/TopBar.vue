@@ -309,6 +309,9 @@ const breakPoints = useBreakpoints();
 const categoriesApi = useCollectionApi();
 categoriesApi.setBaseApi(usePublicApi());
 
+const currentCategory = ref(null);
+const currentSubCategory = ref(null);
+
 const getCategories = async () => {
 	loading.value = true;
 	categoriesApi.setEndpoint(`categories`);
@@ -400,6 +403,7 @@ onMounted(async () => {
 		subCategories.value[category.id] = await getSubCategories(category.id);
 	}
 });
+
 // watch store changes
 useUserStore().$subscribe((mutation, state) => {
 	currentUser.value = state.currentUser;

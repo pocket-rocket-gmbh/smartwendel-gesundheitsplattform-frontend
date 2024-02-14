@@ -1000,13 +1000,14 @@ onMounted(async () => {
 }
 
 .dp__action_button {
-	margin-top: 30px;
-	height: 50px;
-	width: 200px !important;
-	background-color: #8ab61d !important;
-	justify-content: center;
-	font-weight: bold;
-	text-transform: uppercase;
+  margin-top: 30px;
+  margin-right: 20px;
+  height: 50px;
+  width: 200px !important;
+  background-color: #8ab61d !important;
+  justify-content: center;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .dp__action_button:hover {
