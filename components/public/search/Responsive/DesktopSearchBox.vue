@@ -279,6 +279,7 @@ onMounted(async () => {
 .basic-search-box
   // background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
   background: $dark-green
+  color: white
   padding: 2rem 5rem
 
   @include md
