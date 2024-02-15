@@ -4,7 +4,7 @@
 			<v-row>
 				<v-col :cols="12" class="logo top-logo">
 					<nuxt-link to="/">
-						<img src="~/assets/images/logo-white.png" alt="logo" />
+						<img src="~/assets/images/freiraumlogo.png" alt="logo" />
 					</nuxt-link>
 				</v-col>
 			</v-row>
@@ -15,7 +15,7 @@
 				</v-col>
 				<v-col :cols="12" :lg="4" class="logo center-logo">
 					<nuxt-link to="/">
-						<img src="~/assets/images/logo-white.png" alt="logo" />
+						<img src="~/assets/images/freiraumlogo.png" alt="logo" />
 					</nuxt-link>
 				</v-col>
 				<v-col :cols="12" :md="6" :lg="4" class="register">
@@ -55,7 +55,7 @@ footer {
 		align-items: center;
 
 		img {
-			max-height: 102px;
+			max-height: 150px;
 		}
 	}
 
