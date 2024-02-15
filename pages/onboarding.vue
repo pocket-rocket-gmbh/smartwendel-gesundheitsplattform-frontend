@@ -25,25 +25,31 @@
         >
           <span>Einrichtung "{{ careFacilityName }}" übernehmen</span>
         </div>
-        <div class="mt-5 d-flex flex-column general-font-size" v-if="!registerSuccessful">
+        <div
+          class="mt-5 d-flex flex-column general-font-size"
+          v-if="!registerSuccessful"
+        >
           <span class="">
-            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter und
-            möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
-            veröffentlichen? Dann laden wir dich herzlich zur Registrierung ein! Als
-            Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in
-            wenigen Schritten auf der Plattform darstellen und veröffentlichen.
+            Du bist ein im Landkreis Sankt Wunsiedel ansässiger
+            Gesundheitsanbieter und möchtest dein Angebot auf einer unabhängigen
+            und kostenfreien Plattform veröffentlichen? Dann laden wir dich
+            herzlich zur Registrierung ein! Als Anbieter kannst du dich und
+            deine Gesundheitsleistung ganz einfach und in wenigen Schritten auf
+            der Plattform darstellen und veröffentlichen.
           </span>
           <span class="mt-5">
-            Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
-            dein Angebot und steigerst deine Bekanntheit bei der einheimischen
-            Bevölkerung. Ganz gleich ob es sich um ein behördliches, gemeinnütziges,
-            ehrenamtliches oder gewerbliches Angebot handelt: Auf gesundesWND sind alle
-            Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung
-            der Gesundheit der Landkreisbevölkerung beitragen!
+            Hierdurch erzielst du eine größere Reichweite sowie mehr
+            Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei
+            der einheimischen Bevölkerung. Ganz gleich ob es sich um ein
+            behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches
+            Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter
+            willkommen, deren Angebote zum Erhalt und zur Verbesserung der
+            Gesundheit der Landkreisbevölkerung beitragen!
           </span>
           <span class="mt-5">
-            Durch die Vervollständigung deiner Daten übernimmst du die importierten Daten
-            deiner Einrichtung und kannst weitere Inhalte pflegen.
+            Durch die Vervollständigung deiner Daten übernimmst du die
+            importierten Daten deiner Einrichtung und kannst weitere Inhalte
+            pflegen.
           </span>
         </div>
       </div>
@@ -60,9 +66,9 @@
                 >
               </template>
               <span
-                >Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern verwendet
-                werden, trage bitte eine allg. E-Mail Adresse ein, auf die jeder Nutzer
-                Zugriff hat</span
+                >Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern
+                verwendet werden, trage bitte eine allg. E-Mail Adresse ein, auf
+                die jeder Nutzer Zugriff hat</span
               >
             </v-tooltip>
           </div>
@@ -71,7 +77,9 @@
               v-model="firstname"
               type="text"
               label="Vorname *"
-              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('firstname', errors)
+              "
               :rules="[rules.required]"
               hide-details="auto"
             />
@@ -81,7 +89,9 @@
               v-model="lastname"
               type="text"
               label="Nachname *"
-              :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
+              :error-messages="
+                useErrors().checkAndMapErrors('lastname', errors)
+              "
               :rules="[rules.required]"
               hide-details="auto"
             />
@@ -98,11 +108,20 @@
             />
           </div>
         </div>
-        <v-checkbox v-model="privacyAccepted" :rules="[rules.required]" class="check">
+        <v-checkbox
+          v-model="privacyAccepted"
+          :rules="[rules.required]"
+          class="check"
+        >
           <template #label>
             <div class="general-font-size">
               Ich stimme der
-              <a class="is-dark-grey" target="_blank" href="/privacy_policy" @click.stop>
+              <a
+                class="is-dark-grey"
+                target="_blank"
+                href="/privacy_policy"
+                @click.stop
+              >
                 <u>Datenschutzerklärung</u>
               </a>
               <span> und den </span>
@@ -135,12 +154,14 @@
             Vielen Dank für deine Registrierung!
           </span>
           <span class="general-font-size">
-            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären
-            Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
+            temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
           </span>
         </div>
         <div class="mt-5">
-          <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>
+          <v-btn color="primary" @click="toLogin" block depressed
+            >Jetzt anmelden</v-btn
+          >
         </div>
       </div>
     </div>
@@ -324,7 +345,9 @@ onMounted(async () => {
   getToken();
   await validateToken();
   scrollToTop();
-  const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
+  const rememberedEmail = localStorage.getItem(
+    "health_platform._remembered_email"
+  );
   if (rememberedEmail) {
     setTimeout(() => {
       email.value = rememberedEmail;
