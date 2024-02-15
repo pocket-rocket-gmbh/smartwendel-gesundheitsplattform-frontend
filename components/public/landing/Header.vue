@@ -13,9 +13,7 @@ import homeImage from '@/assets/images/header.png';
 const filterStore = useFilterStore();
 
 const title = ref('Deine Teilhabeplattform des Landkreises Wunsiedel');
-const subTitle = ref(
-	'Finde Informationen zu Gesundheitsthemen, Präventionsmaßnahmen sowie umfangreichen Pflegeangeboten.'
-);
+const subTitle = ref('Suche nach Kulturanbietern für vielfältige kreative Erlebnisse.');
 
 useHead({
 	title: title,

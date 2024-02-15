@@ -15,14 +15,15 @@
 						<h2>Deine lokale Kulturbörse</h2>
 
 						<p>
-							Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-							invidunt
-							<br />
-							<br />
-							At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
-							sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-							consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-							dolore magna aliquyam erat, sed diam voluptua.
+							Willkommen auf unserer lokalen Kulturbörse, dem Herzstück für kulturellen Austausch
+							und Inspiration in unserer Gemeinde. Hier findest du ein reichhaltiges Angebot an
+							kulturellen Veranstaltungen, Workshops, Ausstellungen und vielem mehr, die alle
+							Facetten unseres vielfältigen kulturellen Erbes zum Leben erwecken. Tauche ein in die
+							lebendige Welt der Kunst, Musik, Theater und Literatur, und entdecke neue Horizonte
+							und Perspektiven. Unsere Kulturbörse verbindet Künstler, Kreative und
+							Kulturbegeisterte, um gemeinsam eine lebendige und dynamische kulturelle Landschaft zu
+							gestalten. Mache mit, teile deine Leidenschaften und erlebe die Fülle kultureller
+							Schätze, die unsere Gemeinschaft zu bieten hat.
 						</p>
 
 						<div>

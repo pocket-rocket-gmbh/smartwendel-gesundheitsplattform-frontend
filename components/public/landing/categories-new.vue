@@ -17,14 +17,10 @@
 							"
 						>
 							<p>
-								Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-								tempor invidunt.
-							</p>
-							<p>
-								At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-								no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-								consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-								dolore magna aliquyam erat, sed diam voluptua.
+								Unsere intelligente Suche ermöglicht es dir, mühelos eine Vielzahl faszinierender
+								Kulturstätten zu entdecken. Dank umfangreicher Suchmöglichkeiten findest du schnell
+								und einfach die perfekten Orte für kulturelle Erlebnisse, angepasst an deine
+								Interessen und Vorlieben.
 							</p>
 						</div>
 						<div>
