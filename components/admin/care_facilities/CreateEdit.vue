@@ -35,12 +35,12 @@
           <div class="py-10">
             <span
               class="general-font-size is-dark-grey facility-kind-description"
-              >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
-              spezifisches Leistungsangebot in einem eigenen Profil darstellen
-              und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je
-              spezifischer deine Angaben sind, desto besser können dich Besucher
-              der Webseite finden. Pflichtfelder sind mit einem Sternchen
-              versehen.</span
+              >Als Gesundheitsakteur im Landkreis St. Wunsiedel kannst du hier
+              dein spezifisches Leistungsangebot in einem eigenen Profil
+              darstellen und veröffentlichen. Fülle die Details zu deinem
+              Angebot aus. Je spezifischer deine Angaben sind, desto besser
+              können dich Besucher der Webseite finden. Pflichtfelder sind mit
+              einem Sternchen versehen.</span
             >
           </div>
 
@@ -833,7 +833,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["locations", "offlineLocations"],
     justSome: true,
     tooltip:
-      " Bitte beachte, dass nur Standorte innerhalb des Landkreises Sankt Wendel angegeben werden können.",
+      " Bitte beachte, dass nur Standorte innerhalb des Landkreises Sankt Wunsiedel angegeben werden können.",
   },
   openingHours: {
     label: "10.	Bitte trage hier deine genauen Öffnungszeiten ein.",
