@@ -2,16 +2,13 @@
 	<div style="padding: 100px 0px">
 		<v-container>
 			<v-row>
-				<v-col :cols="4">
+				<v-col :cols="4" class="d-none d-md-block">
 					<div style="margin: -50px">
 						<v-img :src="img"></v-img>
 					</div>
 				</v-col>
-				<v-col :cols="8">
-					<div
-						style="display: flex; flex-direction: column; gap: 50px; width: 70%"
-						class="is-dark-green-color"
-					>
+				<v-col :cols="12" :md="8">
+					<div class="wrapper">
 						<h2>Deine lokale Kulturbörse</h2>
 
 						<p>
@@ -39,3 +36,21 @@
 <script setup lang="ts">
 import img from '@/assets/images/cultural-exchange.png';
 </script>
+
+<style lang="scss">
+@import '@/assets/sass/main.sass';
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+	width: 70%;
+	color: $dark-green;
+
+	@include md {
+		width: 100%;
+		align-items: center;
+		text-align: center;
+	}
+}
+</style>
