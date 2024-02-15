@@ -41,7 +41,7 @@ const getEvents = async () => {
 
 	await api.retrieveCollection({
 		page: 1,
-		per_page: 2,
+		per_page: 3,
 		sort_by: 'menu_order',
 		sort_order: 'ASC',
 		searchQuery: null as any,
