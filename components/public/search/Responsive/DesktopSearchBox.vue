@@ -163,18 +163,6 @@
       </v-row>
     </div>
   </div>
-  <v-row class="has-bg-darken-grey text-white">
-    <v-col class="d-flex justify-center align-center bottom-actions is-light-grey-background mx-3">
-      <LoadingSpinner v-if="filterStore.loading" />
-      <span class="general-font-size is-primary-color" v-else-if="filterStore.filteredResults.length"
-        >{{ filterStore.filteredResults.length }} Treffer</span
-      >
-      <span v-else-if="!appStore.loading">
-        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
-      </span>
-      <span v-else> Bitte warten... </span>
-    </v-col>
-  </v-row>
 </template>
 <script setup lang="ts">
 import { type FilterKind, useFilterStore } from "~/store/searchFilter";
