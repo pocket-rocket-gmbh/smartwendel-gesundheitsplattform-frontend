@@ -3,19 +3,20 @@
     <div>
       <PublicSearchTheBasicSearchBox
         title="Anbietersuche"
-        sub-title="Finden Sie den passenden Anbieter!"
+        sub-title="Kultur erleben - Anbieter finden!"
         :map-controls="true"
         :show-map="showMap"
         @toggle-map="mapToogle"
         :filter-kind="'facility'"
       />
-      <div class="container">
-        <div class="filters" v-if="showSearchFilter">
-          <PublicSearchTheFilter :filterKind="'facility'" />
-        </div>
-        <div class="results">
-          <div class="map-widget">
-            <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
+
+      <v-container fluid>
+        <v-row>
+          <v-col :cols="12" class="d-none d-md-block">
+            <v-skeleton-loader
+              type="card"
+              v-if="appStore.loading"
+            ></v-skeleton-loader>
             <ClientMap
               :locations="locations"
               v-if="showMap && !appStore.loading"
@@ -25,16 +26,31 @@
                 lat: 50.03646,
                 lng: 12.00258,
               }"
-          
-              :default-zoom="15"
+              :min-zoom="11"
             />
-          </div>
+          </v-col>
 
-          <div class="facilities">
-            <PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" />
+          <v-col :cols="12" :md="4">
+            <PublicSearchTheFilter :filterKind="'facility'" />
+          </v-col>
+          <v-col :cols="12" :md="8">
+            <PublicSearchTheFilteredCareFacilities
+              @showOnMap="handleShowOnMap"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <v-row v-if="!filterStore.filteredResults.length && !appStore.loading">
+        <v-col class="d-flex flex-column align-center justify-center">
+          <div class="flex-column" align="center">
+            <div class="general-font-size text-h4">
+              Leider haben wir kein Suchergebnis zu deiner Anfrage.
+            </div>
           </div>
-        </div>
-      </div>
+          <img :src="noResults" class="no-results-image mt-10" />
+        </v-col>
+      </v-row>
     </div>
   </ClientOnly>
 </template>
@@ -44,6 +60,7 @@ import { useFilterStore } from "~/store/searchFilter";
 import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useAppStore } from "~/store/app";
+import noResults from "~/assets/images/search_no_results.jpg";
 
 const appStore = useAppStore();
 
@@ -166,5 +183,4 @@ onBeforeUnmount(() => {
 
 .filter-control
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
-
 </style>

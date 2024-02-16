@@ -963,7 +963,7 @@ const getLatLngFromAddress = async (
 ) => {
   try {
     const { data } = await axios.get(
-      `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE&city=${town}`
+      `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE&city=${town}&api_key=65cb46b5a5ab0289110035xqze5103b`
     );
     if (!data.length) {
       isValidAddress.value = false;

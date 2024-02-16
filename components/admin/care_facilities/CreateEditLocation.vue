@@ -177,7 +177,7 @@ const emitSave = async () => {
 const getLatLngFromAddress = async (zipCode: string, street: string) => {
   try {
     const { data } = await axios.get(
-      `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE`
+      `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE&api_key=65cb46b5a5ab0289110035xqze5103b`
     );
 
     if (!data.length) {
@@ -195,7 +195,7 @@ const getLatLngFromAddress = async (zipCode: string, street: string) => {
 
 const getAddressInfoFromLatLong = async (lat: number, long: number) => {
   const { data } = await axios.get(
-    `https://geocode.maps.co/reverse?lat=${lat}&lon=${long}`
+    `https://geocode.maps.co/reverse?lat=${lat}&lon=${long}&api_key=65cb46b5a5ab0289110035xqze5103b`
   );
 
   return data;
