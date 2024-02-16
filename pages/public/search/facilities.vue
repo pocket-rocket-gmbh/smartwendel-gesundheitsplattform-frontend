@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <v-row v-if="!filterStore.filteredResults.length">
+      <v-row v-if="!filterStore.filteredResults.length && !appStore.loading">
         <v-col class="d-flex flex-column align-center justify-center">
           <div class="flex-column" align="center">
             <div class="general-font-size text-h4">
