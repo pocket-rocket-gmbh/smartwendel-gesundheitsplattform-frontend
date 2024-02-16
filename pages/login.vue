@@ -111,7 +111,7 @@ export default defineComponent({
 
         localStorage.setItem("auth._token.jwt", jwt);
         localStorage.setItem(
-          "smartwendelerland_gesundheitsplattform._remembered_email",
+          "_gesundheitsplattform._remembered_email",
           email.value
         );
 
@@ -155,7 +155,7 @@ export default defineComponent({
       lastRoute.value = router.options.history.state.back as null;
       if (process.client) {
         const rememberedEmail = localStorage.getItem(
-          "smartwendelerland_gesundheitsplattform._remembered_email"
+          "_gesundheitsplattform._remembered_email"
         );
         if (rememberedEmail) {
           setTimeout(() => {

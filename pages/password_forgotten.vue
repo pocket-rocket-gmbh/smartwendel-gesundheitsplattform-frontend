@@ -2,12 +2,14 @@
   <v-row class="my-10 general-font-size">
     <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
       <v-card :class="['pa-6', { shake: animated }]">
-        <img class="is-fullwidth" src="~/assets/images/logo.png" />
+        <div class="d-flex justify-center">
+          <img width="300px" src="~/assets/images/logo.png" />
+        </div>
 
         <div v-if="resetSuccessful" class="mt-3" align="center">
           <span class="general-font-size is-secondary-color"
-            >Das Zurücksetzen Deines Passworts wurde angefragt.<br />Bitte folge
-            den Anweisungen in der E-Mail.</span
+            >Das Zurücksetzen Ihres Passworts wurde angefragt.<br />Bitte folgen
+            Sie den Anweisungen in der E-Mail.</span
           >
           <div class="mt-5">
             <v-btn
@@ -108,7 +110,7 @@ export default defineComponent({
 
     onMounted(() => {
       const rememberedEmail = localStorage.getItem(
-        "smartwendelerland_gesundheitsplattform._remembered_email"
+        "_gesundheitsplattform._remembered_email"
       );
       if (rememberedEmail && !givenEmail) {
         setTimeout(() => {
