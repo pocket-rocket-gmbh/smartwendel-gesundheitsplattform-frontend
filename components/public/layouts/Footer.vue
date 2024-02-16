@@ -1,9 +1,16 @@
 <template>
-  <v-footer class="is-light-grey-background is-white-color footer-wraper">
+  <v-footer class="is-dark-green-background is-white-color footer-wraper">
     <v-row justify="center" no-gutters>
-      <v-col class="d-flex flex-column justify-start align-center align-md-start order-2 order-md-first order-sm-2 order-xs-2" cols="12" md="4" sm="12" xl="4" xs="12">
-        <h3 class="mb-3 is-secondary">Landkreis Wunsiedel i. Fichtelgebirge</h3>
-        <div v-for="link in links" class="is-paragraph is-secondary my-1">
+      <v-col
+        class="d-flex flex-column justify-start align-center align-md-start order-2 order-md-first order-sm-2 order-xs-2"
+        cols="12"
+        md="4"
+        sm="12"
+        xl="4"
+        xs="12"
+      >
+        <h3 class="mb-3">Landkreis Wunsiedel i. Fichtelgebirge</h3>
+        <div v-for="link in links" class="is-paragraph my-1">
           {{ link.title }}
         </div>
         <div class="mt-3">
@@ -13,7 +20,9 @@
                 href="https://www.facebook.com/freiraumfichtelgebirge"
                 target="_blank"
                 variant="outlined"
-                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
+                :size="
+                  [breakPoints.width.value < 600 ? 'small' : 'large'].join('')
+                "
                 icon
                 class="social-buttons"
               >
@@ -25,7 +34,9 @@
                 href="https://www.instagram.com/freiraumfichtelgebirge"
                 target="_blank"
                 variant="outlined"
-                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
+                :size="
+                  [breakPoints.width.value < 600 ? 'small' : 'large'].join('')
+                "
                 icon
                 class="social-buttons"
               >
@@ -37,7 +48,9 @@
                 href="https://www.youtube.com/channel/UCdwdUZRBXLr-fEZ09YwVINQ"
                 target="_blank"
                 variant="outlined"
-                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
+                :size="
+                  [breakPoints.width.value < 600 ? 'small' : 'large'].join('')
+                "
                 icon
                 class="social-buttons"
               >
@@ -47,14 +60,28 @@
           </v-row>
         </div>
       </v-col>
-      <v-col class="d-flex justify-center align-start order-md-2 order-sm-first order-1 order-xs-first" cols="12" md="4" sm="12" xl="4" xs="12">
+      <v-col
+        class="d-flex justify-center align-start order-md-2 order-sm-first order-1 order-xs-first"
+        cols="12"
+        md="4"
+        sm="12"
+        xl="4"
+        xs="12"
+      >
         <img class="mt-3 ml-4" src="~/assets/images/logo.png" width="200" />
       </v-col>
-      <v-col class="d-flex flex-column justify-start align-center order-3 align-md-end order-sm-3 order-xs-3 mt-sm-10 my-md-0 my-10 " cols="12" md="4" sm="12" xl="4" xs="12">
-        <div class="is-label-big is-secondary my-md-3 my-5">Ihr Angebot fehlt?</div>
-        <div class="is-paragraph text-md-right is-secondary text-center mb-md-5 my-5">
-          Sie betreiben eine Pflegeeinrichtung und bieten sonstige Leistungen im Bereich
-          Pflege an? Dann registrieren Sie sich.
+      <v-col
+        class="d-flex flex-column justify-start align-center order-3 align-md-end order-sm-3 order-xs-3 mt-sm-10 my-md-0 my-10"
+        cols="12"
+        md="4"
+        sm="12"
+        xl="4"
+        xs="12"
+      >
+        <div class="is-label-big my-md-3 my-5">Ihr Angebot fehlt?</div>
+        <div class="is-paragraph text-md-right text-center mb-md-5 my-5">
+          Sie betreiben eine Pflegeeinrichtung und bieten sonstige Leistungen im
+          Bereich Pflege an? Dann registrieren Sie sich.
         </div>
         <div>
           <v-btn
@@ -111,9 +138,9 @@ const currentRoute = computed(() => {
     padding: 2rem 1rem
 .social-buttons
   border: 1px solid
-  color: $dark-green
+  color: $primary-color
   &:visited
-    color: $dark-green
+    color: $primary-color
   @include md
     padding: 5px
 </style>
