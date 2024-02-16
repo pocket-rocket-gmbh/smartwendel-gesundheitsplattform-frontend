@@ -66,14 +66,14 @@ const items = [
     content: {
       heading: "Persönliche Beratung",
       image: image1,
-      link: "https://www.sankt-wendeler-land.de/aktiv",
+      link: "",
     },
   },
   {
     content: {
       heading: "Informationen zu Anträgen",
       image: image1,
-      link: "https://www.sankt-wendeler-land.de/aktiv",
+      link: "",
     },
   },
 ];

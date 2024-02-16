@@ -779,7 +779,7 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["locations", "offlineLocations"],
     justSome: true,
     tooltip:
-      " Bitte beachte, dass nur Standorte innerhalb des Landkreises Sankt Wendel angegeben werden können.",
+      " Bitte beachte, dass nur Standorte innerhalb des Landkreises Wunsiedel angegeben werden können.",
   },
   openingHours: {
     label: "10.	Bitte trage hier deine genauen Öffnungszeiten ein.",

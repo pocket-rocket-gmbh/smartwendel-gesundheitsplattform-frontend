@@ -16,21 +16,21 @@
           v-if="!registerSuccessful"
         >
           <span class="">
-            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter
-            und möchtest dein Angebot auf einer unabhängigen und kostenfreien
-            Plattform veröffentlichen? Dann laden wir dich herzlich zur
-            Registrierung ein! Als Anbieter kannst du dich und deine
-            Gesundheitsleistung ganz einfach und in wenigen Schritten auf der
-            Plattform darstellen und veröffentlichen.
+            Sie sind ein Gesundheitsanbieter im Landkreis Wunsiedel und möchten
+            Ihr Angebot auf einer unabhängigen und kostenfreien Plattform
+            veröffentlichen? Dann laden wir Sie herzlich zur Registrierung ein!
+            Als Anbieter können Sie sich und Ihre Gesundheitsleistung ganz
+            einfach und in wenigen Schritten auf der Plattform darstellen und
+            veröffentlichen.
           </span>
           <span class="mt-5">
-            Hierdurch erzielst du eine größere Reichweite sowie mehr
-            Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei
-            der einheimischen Bevölkerung. Ganz gleich ob es sich um ein
+            Hierdurch erzielen Sie eine größere Reichweite sowie mehr
+            Aufmerksamkeit für Ihr Angebot und steigern Ihre Bekanntheit bei der
+            einheimischen Bevölkerung. Ganz gleich ob es sich um ein
             behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches
-            Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter
-            willkommen, deren Angebote zum Erhalt und zur Verbesserung der
-            Gesundheit der Landkreisbevölkerung beitragen!
+            Angebot handelt: Auf dieser Pflegeplattform sind alle
+            Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur
+            Verbesserung der Gesundheit der Landkreisbevölkerung beitragen!
           </span>
         </div>
       </div>

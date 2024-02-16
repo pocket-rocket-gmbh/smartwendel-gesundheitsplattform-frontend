@@ -29,7 +29,7 @@
           class="mt-5 d-flex flex-column general-font-size"
           v-if="!registerSuccessful"
         >
-          <span class="">
+          <!-- <span class="">
             Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter
             und möchtest dein Angebot auf einer unabhängigen und kostenfreien
             Plattform veröffentlichen? Dann laden wir dich herzlich zur
@@ -45,7 +45,7 @@
             Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter
             willkommen, deren Angebote zum Erhalt und zur Verbesserung der
             Gesundheit der Landkreisbevölkerung beitragen!
-          </span>
+          </span> -->
           <span class="mt-5">
             Durch die Vervollständigung deiner Daten übernimmst du die
             importierten Daten deiner Einrichtung und kannst weitere Inhalte
