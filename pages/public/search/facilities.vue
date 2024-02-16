@@ -3,7 +3,7 @@
     <div>
       <PublicSearchTheBasicSearchBox
         title="Anbietersuche"
-        sub-title="Kultur erleben - Anbieter finden!"
+        sub-title="Passende Pflegeanbieter finden!"
         :map-controls="true"
         :show-map="showMap"
         @toggle-map="mapToogle"
