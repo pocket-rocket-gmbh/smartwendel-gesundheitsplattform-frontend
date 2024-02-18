@@ -105,21 +105,36 @@
       </div>
     </div>
   </div>
-  <v-row class="has-bg-darken-grey text-white font-weight-bold ma-0 pa-0">
-    <v-col class="d-flex justify-center align-center general-font-size">
+  <v-row class="has-bg-darken-grey text-white">
+    <v-col class="d-flex justify-center align-center bottom-actions mx-3">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span v-else-if="filterStore.filteredResults.length"
-        >{{ filterStore.filteredResults.length }} Treffer</span
-      >
-      <span v-else>
-        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
+      <span class="general-font-size" v-else-if="filterStore.filteredResults.length"
+        >{{ filterStore.filteredResults.length }}
+        <span v-if="filterStore.currentKinds.includes('facility')"> Anbieter </span>
+        <span v-else-if="filterStore.currentKinds.includes('event')">
+          <span v-if="filterStore.filteredResults.length === 1">Veranstaltung</span>
+          <span v-else>Veranstaltungen</span>
+        </span>
+        <span v-else-if="filterStore.currentKinds.includes('news')">
+          <span v-if="filterStore.filteredResults.length === 1">Beitrag</span>
+          <span v-else>Beiträge</span>
+        </span>
+        <span v-else-if="filterStore.currentKinds.includes('course')">
+          <span v-if="filterStore.filteredResults.length === 1">Kurs</span>
+          <span v-else>Kurse</span>
+        </span>
       </span>
+      <span class="general-font-size" v-else-if="!appStore.loading"> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
+      <span v-else> Bitte warten... </span>
     </v-col>
   </v-row>
 </template>
 <script setup lang="ts">
 import { type FilterKind, useFilterStore } from "~/store/searchFilter";
-import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+import { useAppStore } from "@/store/app";
+
+const appStore = useAppStore();
 
 const props = defineProps<{
   title: string;
