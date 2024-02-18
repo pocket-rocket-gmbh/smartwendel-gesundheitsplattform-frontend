@@ -59,7 +59,7 @@
                   >
                 </v-btn>
               </div>
-              <div class="filter-options">
+              <div class="filter-options ml-1">
                 <label
                   class="option ma-n1"
                   v-for="option in filter.options"
