@@ -16,8 +16,7 @@
           >
           <div class="input">
             {{
-              getAllSelectedCommunitiesName(filterStore.currentZips) ||
-              "Gemeinde wählen"
+              getAllSelectedCommunitiesName(filterStore.currentZips) || "Gemeinde wählen"
             }}
           </div>
         </div>
@@ -31,27 +30,24 @@
           <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
         </v-toolbar>
         <div v-if="filterStore.filteredCommunities?.length">
-          <div class="d-flex community-filter-options">
-            <div
+          <div class="filter-options">
+            <label
+              class="option ma-n1"
               v-for="community in filterStore.filteredCommunities"
               :key="community.id"
             >
-              <label class="option ma-n1">
-                <v-btn
-                  hide-details
-                  @click.prevent="handleOptionSelectCommunity(community)"
-                  density="compact"
-                  class="options-select general-font-size ma-2 text-none font-weight-light"
-                  :class="{
-                    'is-selected': filterStore.currentZips.includes(
-                      community.zip
-                    ),
-                  }"
-                >
-                  {{ community.name }}
-                </v-btn>
-              </label>
-            </div>
+              <v-btn
+                hide-details
+                @click.prevent="handleOptionSelectCommunity(community)"
+                density="compact"
+                class="options-select general-font-size ma-2 text-none font-weight-light"
+                :class="{
+                  'is-selected': filterStore.currentZips.includes(community.zip),
+                }"
+              >
+                {{ community.name }}
+              </v-btn>
+            </label>
           </div>
         </div>
       </v-card>
@@ -67,12 +63,10 @@ const dialog = ref(false);
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
   if (!zips.length) return "";
-  const allSelectedCommunities = filterStore.allCommunities.filter(
-    (community: any) => zips.includes(community.zip)
+  const allSelectedCommunities = filterStore.allCommunities.filter((community: any) =>
+    zips.includes(community.zip)
   );
-  return allSelectedCommunities
-    .map((community: any) => community.name)
-    .join(", ");
+  return allSelectedCommunities.map((community: any) => community.name).join(", ");
 };
 
 const handleOptionSelectCommunity = (community: any) => {
