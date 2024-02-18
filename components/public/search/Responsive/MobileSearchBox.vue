@@ -5,17 +5,41 @@
         <v-col>
           <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
         </v-col>
-
+        <div class="filter-container">
+          <span class="is-white counter">{{ countSelectedFilters }}</span>
+        </div>
         <v-col cols="2" class="d-flex justify-center align-center">
-          <v-icon color="white" size="x-large" v-if="showFilter" @click="toogleShowFilter()">mdi-filter-off-outline</v-icon>
-          <v-icon color="white" size="x-large" v-if="!showFilter && !filterStore.mapFilter?.length" @click="toogleShowFilter()">mdi-filter-outline</v-icon>
-          <v-icon color="white" size="x-large" v-if="!showFilter && filterStore.mapFilter?.length" @click="handleClearSearch()">mdi-close-outline</v-icon>
+          <v-icon
+            color="white"
+            size="x-large"
+            v-if="showFilter"
+            @click="toogleShowFilter()"
+            >mdi-filter-off-outline</v-icon
+          >
+          <v-icon
+            color="white"
+            size="x-large"
+            v-if="!showFilter && !filterStore.mapFilter?.length"
+            @click="toogleShowFilter()"
+            >mdi-filter-outline</v-icon
+          >
+          <v-icon
+            color="white"
+            size="x-large"
+            v-if="!showFilter && filterStore.mapFilter?.length"
+            @click="handleClearSearch()"
+            >mdi-close-outline</v-icon
+          >
         </v-col>
       </v-row>
       <div v-if="showFilter">
         <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
           <v-col cols="10">
-            <PublicSearchCategorySelectModal v-model="filterStore.currentFacilityTags" :filter-kind="filterKind" :filterTitle="filterTitle" />
+            <PublicSearchCategorySelectModal
+              v-model="filterStore.currentFacilityTags"
+              :filter-kind="filterKind"
+              :filterTitle="filterTitle"
+            />
           </v-col>
           <v-col>
             <PublicSearchFilterSelectModal :filter-kind="filterKind" />
@@ -26,8 +50,17 @@
             <PublicSearchCommunitySelectModal />
           </v-col>
         </v-row>
-        <div class="d-flex align-center justify-center is-white font-weight-medium my-2" v-if="filterKind !== 'event' && filterKind !== 'news'">oder</div>
-        <v-row :class="[filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '']">
+        <div
+          class="d-flex align-center justify-center is-white font-weight-medium my-2"
+          v-if="filterKind !== 'event' && filterKind !== 'news'"
+        >
+          oder
+        </div>
+        <v-row
+          :class="[
+            filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '',
+          ]"
+        >
           <v-col>
             <div class="field">
               <label class="label is-white">
@@ -46,10 +79,24 @@
         </v-row>
         <v-row class="buttons">
           <v-col class="field d-flex justify-center">
-            <v-btn variant="outlined" width="100%" rounded="pill" color="white" @click="filterStore.clearSearch()"> Filter löschen </v-btn>
+            <v-btn
+              variant="outlined"
+              width="100%"
+              rounded="pill"
+              color="white"
+              @click="filterStore.clearSearch()"
+            >
+              Filter löschen
+            </v-btn>
           </v-col>
           <v-col class="d-flex justify-center" v-if="mapControls">
-            <v-btn variant="outlined" width="100%" rounded="pill" color="white" @click="emit('toggleMap')">
+            <v-btn
+              variant="outlined"
+              width="100%"
+              rounded="pill"
+              color="white"
+              @click="emit('toggleMap')"
+            >
               <span v-if="showMap"> Listenansicht </span>
               <span v-if="!showMap"> Kartenansicht </span>
             </v-btn>
@@ -61,8 +108,12 @@
   <v-row class="has-bg-darken-grey text-white font-weight-bold ma-0 pa-0">
     <v-col class="d-flex justify-center align-center general-font-size">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span v-else-if="filterStore.filteredResults.length">{{ filterStore.filteredResults.length }} Treffer</span>
-      <span v-else> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
+      <span v-else-if="filterStore.filteredResults.length"
+        >{{ filterStore.filteredResults.length }} Treffer</span
+      >
+      <span v-else>
+        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
+      </span>
     </v-col>
   </v-row>
 </template>
@@ -90,6 +141,23 @@ const handleInput = () => {
   filterStore.onlySearchInTitle = false;
   filterStore.loadAllResults();
 };
+
+const countSelectedFilters = computed(() => {
+  let results = 0;
+  if (filterStore.currentSearchTerm.length) {
+    results += 1;
+  }
+  if (filterStore.currentServiceTags.length) {
+    results += filterStore.currentServiceTags.length;
+  }
+  if (filterStore.currentZips) {
+    results += filterStore.currentZips.length;
+  }
+  if (filterStore.currentFacilityTags.length) {
+    results += filterStore.currentFacilityTags.length;
+  }
+  return results;
+});
 
 const filterTitle = ref("");
 const searchTitle = ref("");
@@ -177,6 +245,22 @@ onMounted(() => {
 .content
   max-width: 1500px
   margin: 0 auto
+
+
+.filter-container
+  display: flex
+  align-items: center
+  position: absolute
+  right: 0
+  margin-right: 1.5rem
+  .counter
+    color: #8ab61d
+    margin-top: 14px
+    font-size: 12px
+    background-color: #ffffff
+    padding: 3px 8px
+    border-radius: 50%
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
 
 .align-end
   display: flex

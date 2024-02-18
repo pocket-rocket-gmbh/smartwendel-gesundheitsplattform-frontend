@@ -1,5 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+  <v-dialog
+    v-model="dialog"
+    fullscreen
+    :scrim="false"
+    transition="dialog-bottom-transition"
+  >
     <v-card>
       <v-toolbar dark color="primary">
         <v-btn icon dark @click="dialog = false">
@@ -10,7 +15,11 @@
       </v-toolbar>
 
       <div class="menu-items">
-        <div v-for="item in props.subCategories" @click="setSubCategoryAndScroll(item?.id)" class="menu-item">
+        <div
+          v-for="item in props.subCategories"
+          @click="setSubCategoryAndScroll(item?.id)"
+          class="menu-item"
+        >
           {{ item?.name }}
         </div>
       </div>
