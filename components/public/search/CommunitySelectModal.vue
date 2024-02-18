@@ -16,23 +16,21 @@
           >
           <div class="input">
             {{
-              getAllSelectedCommunitiesName(filterStore.currentZips) || "Gemeinde wählen"
+              getAllSelectedCommunitiesName(filterStore.currentZips) ||
+              "Gemeinde wählen"
             }}
           </div>
         </div>
       </template>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Gemeinde</v-toolbar-title>
+          <v-toolbar-title>Gemeinde auswählen</v-toolbar-title>
           <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
         </v-toolbar>
         <div v-if="filterStore.filteredCommunities?.length">
           <div class="filter-options">
             <label
-              class="option ma-n1"
+              class="option"
               v-for="community in filterStore.filteredCommunities"
               :key="community.id"
             >
@@ -42,7 +40,9 @@
                 density="compact"
                 class="options-select general-font-size ma-2 text-none font-weight-light"
                 :class="{
-                  'is-selected': filterStore.currentZips.includes(community.zip),
+                  'is-selected': filterStore.currentZips.includes(
+                    community.zip
+                  ),
                 }"
               >
                 {{ community.name }}
@@ -63,10 +63,12 @@ const dialog = ref(false);
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
   if (!zips.length) return "";
-  const allSelectedCommunities = filterStore.allCommunities.filter((community: any) =>
-    zips.includes(community.zip)
+  const allSelectedCommunities = filterStore.allCommunities.filter(
+    (community: any) => zips.includes(community.zip)
   );
-  return allSelectedCommunities.map((community: any) => community.name).join(", ");
+  return allSelectedCommunities
+    .map((community: any) => community.name)
+    .join(", ");
 };
 
 const handleOptionSelectCommunity = (community: any) => {
