@@ -20,12 +20,9 @@
           >
           <v-btn variant="text" @click="dialog = false"> Fertig </v-btn>
         </v-toolbar>
-        <div class="filter-tiles">
-          <div
-            v-for="filter in availableItemsForServiceList"
-            class="filter-group"
-          >
-            <div v-for="item in filter.next" class="mt-5 filter-selections">
+        <div class="mt-12">
+          <div v-for="filter in availableItemsForServiceList" class="">
+            <div v-for="item in filter.next" class="mt-5">
               <span
                 v-if="
                   item.next.length &&
@@ -35,32 +32,41 @@
                     0
                   )
                 "
-                class="general-font-size font-weight-bold is-dark-grey"
+                class="general-font-size font-weight-bold is-dark-grey ml-2"
                 >{{ item.title }}</span
               >
 
               <div
-                class="align-center column-items pr-1 pt-1"
+                class="align-center filter-options d-flex pr-1 pt-1"
                 v-for="subItem in item.next.filter(
                   (subItem) => parseInt(subItem.care_facilities_count) > 0
                 )"
               >
                 <div
                   v-if="subItem"
-                  class="d-flex align-center"
+                  class="align-center"
                   :class="{
                     selected:
                       isSelectedTagNext(subItem) ||
                       expandedItemIds.includes(subItem.id),
                   }"
-                  @click="toggleSelection(subItem)"
                 >
                   <v-btn
+                    @click.prevent="toggleSelection(subItem)"
+                    hide-details
+                    density="compact"
                     class="options-select general-font-size ma-2 text-none font-weight-light"
-                    lang="de"
+                    :class="{
+                      'is-selected': filterStore.currentServiceTags.includes(
+                        subItem.id
+                      ),
+                    }"
                   >
-                    {{ subItem.title }}
+                    <span>
+                      {{ subItem.title }}
+                    </span>
                   </v-btn>
+
                   <span v-if="subItem.next.length">
                     <v-icon
                       class="is-clickable"

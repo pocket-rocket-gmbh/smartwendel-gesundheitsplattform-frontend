@@ -15,7 +15,7 @@
         </div>
         <div class="results">
           <div class="map-widget">
-            <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
+            <v-skeleton-loader type="card" v-if="appStore.loading && !breakPoints.isMobile.value"></v-skeleton-loader>
             <ClientMap
               :locations="locations"
               v-if="
@@ -55,6 +55,8 @@ import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useAppStore } from "~/store/app";
 import noResults from "~/assets/images/search_no_results.jpg";
+
+const breakPoints = useBreakpoints();
 
 const appStore = useAppStore();
 

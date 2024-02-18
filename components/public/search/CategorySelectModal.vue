@@ -9,58 +9,78 @@
       <template v-slot:activator="{ props }">
         <div class="field">
           <label class="label is-white">
-            <div class="search-term">{{ filterTitle }}</div>
+            <div class="search-term">
+              {{ filterTitle }}
+              <span v-if="multipleSelections?.length >= 1"
+                >({{ multipleSelections?.length }})</span
+              >
+            </div>
           </label>
           <div class="field" v-bind="props" @click="handleClearTermSearch()">
-            <div class="input">
-              {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
+            <div class="input break-title">
+              {{
+                multipleSelections?.map((s) => s.name)?.join(", ") ||
+                placeholderText
+              }}
             </div>
           </div>
         </div>
       </template>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Filter</v-toolbar-title>
+          <v-toolbar-title>Branche auswählen</v-toolbar-title>
           <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
         </v-toolbar>
         <div class="all-filters">
           <div v-if="!loadingFilters" class="filters">
-            <div v-for="filter in filterStore.filteredFacilityMainFilters" :key="filter.id">
+            <div
+              v-for="filter in filterStore.filteredFacilityMainFilters"
+              :key="filter.id"
+            >
               <div v-if="hasActiveOptions(filter.id)" class="filter-name ml-2">
                 {{ filter.name }}
                 <v-btn
-              @click="handleToggleAll(filter)"
-              hide-details
-              :color="areAllSelected(filter) ? 'primary' : 'grey'"
-              density="compact"
-              class="ma-2"
-              :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
-            >
-              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
-            </v-btn>
+                  @click="handleToggleAll(filter)"
+                  hide-details
+                  :color="areAllSelected(filter) ? 'primary' : 'grey'"
+                  density="compact"
+                  class="ma-2"
+                  :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
+                >
+                  <span>
+                    {{
+                      areAllSelected(filter)
+                        ? "Alle abwählen"
+                        : "Alle auswählen"
+                    }}</span
+                  >
+                </v-btn>
               </div>
-              <div class="filter-options">
-                <label class="option ma-n1" v-for="option in filter.options" :key="option.id">
+              <div class="filter-options ml-1">
+                <label
+                  class="option ma-n1"
+                  v-for="option in filter.options"
+                  :key="option.id"
+                >
                   <v-btn
-                v-if="option?.care_facilities_active_count > 0"
-                :model-value="modelValue.includes(option.id)"
-                @click.prevent="handleOptionSelect(option)"
-                hide-details
-                density="compact"
-                class="options-select general-font-size ma-2 text-none font-weight-light"
-                :class="{
-                  'is-selected': modelValue.includes(option.id),
-                }"
-              >
-                <p v-if="loadingFilters" class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
+                    v-if="option?.care_facilities_active_count > 0"
+                    :model-value="modelValue.includes(option.id)"
+                    @click.prevent="handleOptionSelect(option)"
+                    hide-details
+                    density="compact"
+                    class="options-select general-font-size ma-2 text-none font-weight-light"
+                    :class="{
+                      'is-selected': modelValue.includes(option.id),
+                    }"
+                  >
+                    <p v-if="loadingFilters" class="waiting general-font-size">
+                      <span>.</span><span>.</span><span>.</span>
+                    </p>
 
-                <span v-else>
-                  {{ option.name }}
-                </span>
-              </v-btn>
+                    <span v-else>
+                      {{ option.name }}
+                    </span>
+                  </v-btn>
                 </label>
                 <v-divider
                   v-if="hasActiveOptions(filter.id)"
@@ -92,7 +112,6 @@ const props = defineProps<{
   filterTitle: string;
 }>();
 
-
 const dialog = ref(false);
 
 const emit = defineEmits<{
@@ -109,8 +128,13 @@ const setPlaceholderText = () => {
 };
 
 const hasActiveOptions = (filterId: string) => {
-  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filterId)?.options;
-  return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
+  const options = filterStore.allFacilityMainFilters.find(
+    ({ id }) => id === filterId
+  )?.options;
+  return (
+    options &&
+    options.some((option) => Number(option?.care_facilities_active_count) > 0)
+  );
 };
 
 const showPopover = ref(false);
@@ -128,11 +152,15 @@ const handleClearTermSearch = () => {
   return;
 };
 const handleOptionSelect = (option: Filter) => {
-  const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+  const indexOfAlreadySetFilter = props.modelValue.findIndex(
+    (item) => item === option.id
+  );
 
   if (indexOfAlreadySetFilter !== -1) {
     props.modelValue.splice(indexOfAlreadySetFilter, 1);
-    multipleSelections.value = multipleSelections.value?.filter((item) => item.id !== option.id);
+    multipleSelections.value = multipleSelections.value?.filter(
+      (item) => item.id !== option.id
+    );
   } else {
     props.modelValue.push(option.id);
     multipleSelections.value.push(option);
@@ -142,8 +170,12 @@ const handleOptionSelect = (option: Filter) => {
 };
 
 const handleToggleAll = (filter: any) => {
-  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
-  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+  const options = filterStore.allFacilityMainFilters.find(
+    ({ id }) => id === filter.id
+  )?.options;
+  const relevantOptions = options.filter(
+    (option) => !!option?.care_facilities_active_count
+  );
 
   const selectAll = !areAllSelected(filter);
 
@@ -155,13 +187,17 @@ const handleToggleAll = (filter: any) => {
     });
   } else {
     relevantOptions.forEach((option) => {
-      const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
+      const indexOfAlreadySetFilter = props.modelValue.findIndex(
+        (item) => item === option.id
+      );
       if (indexOfAlreadySetFilter !== -1) {
         props.modelValue.splice(indexOfAlreadySetFilter, 1);
       }
     });
 
-    multipleSelections.value = multipleSelections.value.filter((item) => !relevantOptions.find((option) => option.id === item.id));
+    multipleSelections.value = multipleSelections.value.filter(
+      (item) => !relevantOptions.find((option) => option.id === item.id)
+    );
   }
 
   emit(
@@ -171,19 +207,30 @@ const handleToggleAll = (filter: any) => {
 };
 
 const areAllSelected = (filter: any) => {
-  const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
-  const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
+  const options = filterStore.allFacilityMainFilters.find(
+    ({ id }) => id === filter.id
+  )?.options;
+  const relevantOptions = options.filter(
+    (option) => !!option?.care_facilities_active_count
+  );
 
-  return relevantOptions.every((option) => multipleSelections.value.find((item) => item.id === option.id));
+  return relevantOptions.every((option) =>
+    multipleSelections.value.find((item) => item.id === option.id)
+  );
 };
 
 watch(
   () => props.modelValue,
   () => {
-    multipleSelections.value = filterStore.allFacilityMainFilters.reduce((prev, curr) => {
-      const foundOptions = curr.options.filter((option) => props.modelValue.includes(option.id));
-      return [...prev, ...foundOptions];
-    }, [] as Filter[]);
+    multipleSelections.value = filterStore.allFacilityMainFilters.reduce(
+      (prev, curr) => {
+        const foundOptions = curr.options.filter((option) =>
+          props.modelValue.includes(option.id)
+        );
+        return [...prev, ...foundOptions];
+      },
+      [] as Filter[]
+    );
   }
 );
 
