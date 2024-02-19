@@ -6,6 +6,10 @@
       :scrim="false"
       transition="dialog-bottom-transition"
     >
+      <v-toolbar dense fixed dark color="primary" style="position: stiky">
+        <v-toolbar-title>Branche auswählen</v-toolbar-title>
+        <v-btn variant="text" @click="dialog = false"> Fertig </v-btn>
+      </v-toolbar>
       <template v-slot:activator="{ props }">
         <div class="field">
           <label class="label is-white">
@@ -18,19 +22,12 @@
           </label>
           <div class="field" v-bind="props" @click="handleClearTermSearch()">
             <div class="input break-title">
-              {{
-                multipleSelections?.map((s) => s.name)?.join(", ") ||
-                placeholderText
-              }}
+              {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
             </div>
           </div>
         </div>
       </template>
       <v-card>
-        <v-toolbar dark color="primary">
-          <v-toolbar-title>Branche auswählen</v-toolbar-title>
-          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
-        </v-toolbar>
         <div class="all-filters">
           <div v-if="!loadingFilters" class="filters">
             <div
@@ -49,9 +46,7 @@
                 >
                   <span>
                     {{
-                      areAllSelected(filter)
-                        ? "Alle abwählen"
-                        : "Alle auswählen"
+                      areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen"
                     }}</span
                   >
                 </v-btn>
@@ -82,10 +77,7 @@
                     </span>
                   </v-btn>
                 </label>
-                <v-divider
-                  v-if="hasActiveOptions(filter.id)"
-                  class="my-2"
-                ></v-divider>
+                <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
               </div>
             </div>
           </div>
