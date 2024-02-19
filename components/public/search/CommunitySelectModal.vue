@@ -25,7 +25,7 @@
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Gemeinde auswählen</v-toolbar-title>
-          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+          <v-btn variant="text" @click="dialog = false"> Fertig </v-btn>
         </v-toolbar>
         <div v-if="filterStore.filteredCommunities?.length">
           <div class="filter-options">

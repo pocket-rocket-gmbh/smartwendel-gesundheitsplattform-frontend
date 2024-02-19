@@ -105,8 +105,8 @@
       </div>
     </div>
   </div>
-  <v-row class="has-bg-darken-grey text-white">
-    <v-col class="d-flex justify-center align-center bottom-actions mx-3">
+  <v-row class="has-bg-darken-grey text-white pa-0 ma-0">
+    <v-col class="d-flex justify-center align-center bottom-actions">
       <LoadingSpinner v-if="filterStore.loading" />
       <span class="general-font-size" v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }}

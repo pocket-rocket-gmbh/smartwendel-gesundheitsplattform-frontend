@@ -29,7 +29,7 @@
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Branche auswählen</v-toolbar-title>
-          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+          <v-btn variant="text" @click="dialog = false"> Fertig </v-btn>
         </v-toolbar>
         <div class="all-filters">
           <div v-if="!loadingFilters" class="filters">

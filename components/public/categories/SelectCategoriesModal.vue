@@ -11,7 +11,7 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>Kategorien</v-toolbar-title>
-        <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+        <v-btn variant="text" @click="dialog = false"> Ferig </v-btn>
       </v-toolbar>
 
       <div class="menu-items">
