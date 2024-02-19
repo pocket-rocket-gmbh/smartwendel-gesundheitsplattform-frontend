@@ -66,7 +66,7 @@
         {{ careFacility.name_instructor }}
       </span>
     </div>
-    <div class="mt-3" v-if="careFacility?.kind === 'facility' && careFacility.location">
+    <div class="mt-3" v-if="careFacility?.kind === 'facility' && careFacility?.opening_hours">
       <v-table density="compact">
         <tbody>
           <h3
@@ -74,12 +74,12 @@
           >
             Öffnungszeiten
           </h3>
-          <tr v-for="opening in careFacility.opening_hours" :key="opening.day">
+          <tr v-for="opening in careFacility?.opening_hours" :key="opening.day">
             <td class="py-3 is-primary is-dark-grey general-font-size">
-              {{ opening.day }}
+              {{ opening?.day }}
             </td>
             <td class="py-3 is-dark-grey general-font-size" v-if="opening.hours.length">
-              {{ opening.hours }}
+              {{ opening?.hours }}
             </td>
             <td class="py-3 is-dark-grey general-font-size" v-else>keine Angabe</td>
           </tr>

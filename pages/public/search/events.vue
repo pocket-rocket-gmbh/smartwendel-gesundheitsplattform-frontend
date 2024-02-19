@@ -11,7 +11,7 @@
           <PublicSearchTheFilteredCareFacilities :doubled="true"/>
         </div>
       </div>
-      <v-row v-if="!filterStore.filteredResults.length">
+      <v-row v-if="!filterStore.filteredResults.length && !appStore.loading">
         <v-col class="d-flex flex-column align-center justify-center">
           <div class="flex-column" align="center">
             <div class="general-font-size text-h4">
@@ -28,10 +28,13 @@
 <script setup lang="ts">
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useFilterStore } from "~/store/searchFilter";
+import { useAppStore } from "~/store/app";
 import noResults from "~/assets/images/search_no_results.jpg";
 
 const filterStore = useFilterStore();
 const breakpoints = useBreakpoints();
+
+const appStore = useAppStore();
 
 const showSearchFilter = computed(() => {
   return breakpoints.width.value > BreakPoints.md;

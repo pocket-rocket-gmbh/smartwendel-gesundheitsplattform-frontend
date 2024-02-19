@@ -1,16 +1,25 @@
 <template>
-  <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
+  <v-dialog
+    v-model="dialog"
+    fullscreen
+    :scrim="false"
+    transition="dialog-bottom-transition"
+  >
     <v-card>
-      <v-toolbar dark color="primary">
+      <v-toolbar dense fixed dark color="primary" style="position: stiky">
         <v-btn icon dark @click="dialog = false">
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>Kategorien</v-toolbar-title>
-        <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
+        <v-btn variant="text" @click="dialog = false"> Ferig </v-btn>
       </v-toolbar>
 
       <div class="menu-items">
-        <div v-for="item in props.subCategories" @click="setSubCategoryAndScroll(item?.id)" class="menu-item">
+        <div
+          v-for="item in props.subCategories"
+          @click="setSubCategoryAndScroll(item?.id)"
+          class="menu-item"
+        >
           {{ item?.name }}
         </div>
       </div>

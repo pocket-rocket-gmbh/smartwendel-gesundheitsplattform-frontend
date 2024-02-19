@@ -1,43 +1,51 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" :scrim="false" transition="dialog-bottom-transition">
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      :scrim="false"
+      transition="dialog-bottom-transition"
+    >
+      <v-toolbar dense fixed dark color="primary" style="position: stiky">
+        <v-toolbar-title>Gemeinde auswählen</v-toolbar-title>
+        <v-btn variant="text" @click="dialog = false"> Fertig </v-btn>
+      </v-toolbar>
       <template v-slot:activator="{ props }">
         <div class="field" v-bind="props" @click="handleClearTermSearch()">
-          <label class="label is-white">Gemeinde</label>
-          <div class="input">{{ activeCommunityName || "Gemeinde wählen" }}</div>
+          <label class="label is-white break-title"
+            >Gemeinde
+            <span v-if="filterStore.currentZips?.length >= 1"
+              >({{ filterStore.currentZips?.length }})</span
+            ></label
+          >
+          <div class="input">
+            {{
+              getAllSelectedCommunitiesName(filterStore.currentZips) || "Gemeinde wählen"
+            }}
+          </div>
         </div>
       </template>
       <v-card>
-        <v-toolbar dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Gemeinde</v-toolbar-title>
-          <v-btn variant="text" @click="dialog = false"> Schließen </v-btn>
-        </v-toolbar>
-        <div class="content">
-          <label class="option">
-            <v-radio
-              :model-value="!filterStore.currentZip"
-              @click.prevent="handleCommunitySelect(null)"
-              hide-details
-              density="compact"
-              :label="'Keine Auswahl'"
-              color="#8AB61D"
-            />
-            <v-divider></v-divider>
-          </label>
-          <label class="option" v-for="(community, index) in communities">
-            <v-radio
-              :model-value="filterStore.currentZip === community.zip"
-              @click.prevent="handleCommunitySelect(community)"
-              hide-details
-              density="compact"
-              :label="community.name"
-              color="#8AB61D"
-            />
-            <v-divider v-if="index !== communities?.length - 1"></v-divider>
-          </label>
+        <div v-if="filterStore.filteredCommunities?.length">
+          <div class="filter-options">
+            <label
+              class="option"
+              v-for="community in filterStore.filteredCommunities"
+              :key="community.id"
+            >
+              <v-btn
+                hide-details
+                @click.prevent="handleOptionSelectCommunity(community)"
+                density="compact"
+                class="options-select general-font-size ma-2 text-none font-weight-light"
+                :class="{
+                  'is-selected': filterStore.currentZips.includes(community.zip),
+                }"
+              >
+                {{ community.name }}
+              </v-btn>
+            </label>
+          </div>
         </div>
       </v-card>
     </v-dialog>
@@ -49,16 +57,25 @@ import { useFilterStore } from "~/store/searchFilter";
 
 const filterStore = useFilterStore();
 const dialog = ref(false);
-const communities = ref<any[]>([]);
 
-const activeCommunityName = computed(() => {
-  return communities.value?.find((community) => community.zip === filterStore.currentZip)?.name;
-});
-
-const handleCommunitySelect = (community: { name: string; zip: string }) => {
-  filterStore.currentZip = community?.zip || null;
+const getAllSelectedCommunitiesName = (zips: string[]) => {
+  if (!zips.length) return "";
+  const allSelectedCommunities = filterStore.allCommunities.filter((community: any) =>
+    zips.includes(community.zip)
+  );
+  return allSelectedCommunities.map((community: any) => community.name).join(", ");
 };
 
+const handleOptionSelectCommunity = (community: any) => {
+  if (filterStore.currentZips.includes(community?.zip)) {
+    filterStore.currentZips = filterStore.currentZips.filter(
+      (item: any) => item !== community.zip
+    );
+  } else {
+    filterStore.currentZips.push(community.zip);
+  }
+  filterStore.loadAllResults();
+};
 const handleClearTermSearch = () => {
   if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
@@ -67,7 +84,7 @@ const handleClearTermSearch = () => {
 };
 
 onMounted(async () => {
-  communities.value = await filterStore.loadAllCommunities();
+  await filterStore.loadAllCommunities();
 });
 </script>
 

@@ -15,7 +15,7 @@
         </div>
         <div class="results">
           <div class="map-widget">
-            <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
+            <v-skeleton-loader type="card" v-if="appStore.loading && !breakPoints.isMobile.value"></v-skeleton-loader>
             <ClientMap
               :locations="locations"
               v-if="
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <v-row v-if="!filterStore.filteredResults.length">
+      <v-row v-if="!filterStore.filteredResults.length && !appStore.loading">
         <v-col class="d-flex flex-column align-center justify-center">
           <div class="flex-column" align="center">
             <div class="general-font-size text-h4">
@@ -55,6 +55,8 @@ import type { MapLocation } from "~/types/MapLocation";
 import { BreakPoints, useBreakpoints } from "~/composables/ui/breakPoints";
 import { useAppStore } from "~/store/app";
 import noResults from "~/assets/images/search_no_results.jpg";
+
+const breakPoints = useBreakpoints();
 
 const appStore = useAppStore();
 

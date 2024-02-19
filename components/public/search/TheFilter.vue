@@ -84,7 +84,7 @@
         class="general-font-size font-weight-medium is-dark-grey"
         >Verfeinere hier deine Suche:
       </span>
-      <v-skeleton-loader v-if="availableItemsForServiceList.length === 0" type="article" class="filter-wrapper"> </v-skeleton-loader>
+      <v-skeleton-loader v-if="availableItemsForServiceList.length === 0 && !breakPoints.isMobile.value" type="article" class="filter-wrapper"> </v-skeleton-loader>
         <div class="filter-tiles" v-else>
           <div v-for="filter in availableItemsForServiceList" class="filter-group">
             <div v-for="item in filter.next" class="mt-5 filter-selections">
