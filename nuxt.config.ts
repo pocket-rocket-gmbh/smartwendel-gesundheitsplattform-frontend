@@ -26,6 +26,7 @@ export default defineNuxtConfig({
 		public: {
 			WEB_SOCKET_URL: process.env.WEB_SOCKET_URL,
 			API_BASE_URL: process.env.API_BASE_URL,
+			MAPTILER_API_KEY: process.env.PUBLIC_MAPTILER_API_KEY,
 		},
 	},
 
