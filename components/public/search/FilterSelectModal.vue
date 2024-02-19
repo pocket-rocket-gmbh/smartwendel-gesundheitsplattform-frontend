@@ -22,8 +22,8 @@
         </v-toolbar>
         <div class="mt-12">
           <div v-for="filter in availableItemsForServiceList" class="">
-            <div v-for="item in filter.next" class="mt-5">
-              <span
+            <div v-for="item in filter.next" class="mt-5 d-flex flex-column">
+              <div
                 v-if="
                   item.next.length &&
                   item.next.reduce(
@@ -33,10 +33,10 @@
                   )
                 "
                 class="general-font-size font-weight-bold is-dark-grey ml-2"
-                >{{ item.title }}</span
+                >{{ item.title }}</div
               >
-
-              <div
+              <div class="d-flex service-filters">
+                <div
                 class="align-center filter-options d-flex pr-1 pt-1"
                 v-for="subItem in item.next.filter(
                   (subItem) => parseInt(subItem.care_facilities_count) > 0
@@ -99,6 +99,8 @@
                   />
                 </div>
               </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -240,6 +242,7 @@ watch(
 
 onMounted(async () => {
   emitFiltersUpdated();
+  await useFilterStore().loadAllServiceFilters();
 });
 </script>
 
@@ -305,5 +308,9 @@ onMounted(async () => {
 .modal-toolbar {
   position: fixed;
   z-index: 99;
+}
+
+.service-filters {
+  flex-wrap: wrap;
 }
 </style>
