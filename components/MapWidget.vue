@@ -396,7 +396,7 @@ div.clustericon {
 					text-decoration: none;
 					color: #212120;
 					font-weight: bold;
-					background-color: #91a80d;
+					background-color: #8eb72c;
 					color: white;
 					border-radius: 1rem;
 					padding: 1rem;

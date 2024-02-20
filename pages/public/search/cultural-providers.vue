@@ -178,5 +178,5 @@ onBeforeUnmount(() => {
     align-self: stretch
 
 .filter-control
-  background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
+  background-color: $dark-green
 </style>

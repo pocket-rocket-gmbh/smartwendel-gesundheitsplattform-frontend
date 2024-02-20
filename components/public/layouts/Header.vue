@@ -125,7 +125,6 @@ useNuxtApp().$bus.$on('updateSubCategoriesFromUrl', (id) => {
     justify-content: center
     flex-direction: column
     gap: 0.5rem
-    // background-image: linear-gradient(89.48deg, #91a80d 19.14%, #bac323 42.28%, #9ea100 83.7%)
     background: $dark-green
     background-position: 0 -35px
 
