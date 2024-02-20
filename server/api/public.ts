@@ -15,22 +15,17 @@ export default defineEventHandler(async (event): Promise<ServerCallResult> => {
 	const config = useRuntimeConfig();
 	const token = `${config.PUBLIC_API_USERNAME}:${config.PUBLIC_API_PASSWORD}`;
 	const encodedToken = Buffer.from(token).toString('base64');
-	const client: AxiosInstance = axios.create();
-
-	const requestConfig: AxiosRequestConfig = {
+	const client: AxiosInstance = axios.create({
 		baseURL: `${config.public.API_BASE_URL}public/`,
-		url: url,
-		method: method,
-		data: data,
 		headers: {
 			Authorization: `Basic ${encodedToken}`,
 			'Request-Source': 'web',
 			'Request-Platform': 'browser',
 		},
-	};
+	});
 
 	try {
-		const response = await client.request(requestConfig);
+		const response = await client.request({ method, url, data });
 		return ServerCallResult.success(response.status, response.data);
 	} catch (error) {
 		if (

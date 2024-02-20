@@ -138,6 +138,7 @@ const mapToogle = () => {
 };
 
 onMounted(async () => {
+	await nextTick();
 	filterStore.currentKinds = ['facility'];
 	filterStore.updateFromUrlQuery();
 	filterStore.loadAllResults();
