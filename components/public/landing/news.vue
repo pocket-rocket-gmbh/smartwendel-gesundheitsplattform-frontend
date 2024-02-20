@@ -14,6 +14,7 @@
 					class="d-none d-md-block"
 				>
 					<PublicContentCard
+						:to="`/public/care_facilities/${article.id}`"
 						:title="article.name"
 						:imageUrl="article.image_url"
 						:tags="article.tags
@@ -30,6 +31,7 @@
 						<v-carousel-item v-for="article of newsArticles" :key="article.id">
 							<div style="padding-bottom: 50px">
 								<PublicContentCard
+									:to="`/public/care_facilities/${article.id}`"
 									:title="article.name"
 									:imageUrl="article.image_url"
 									:tags="article.tags
