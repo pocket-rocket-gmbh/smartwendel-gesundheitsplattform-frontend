@@ -1,7 +1,7 @@
 <template>
-	<v-card style="border-radius: 20px">
+	<v-card style="border-radius: 20px;background-color: #f4f5f7;" class="fill-height" :to="to">
 		<v-img v-if="imageUrl" :src="imageUrl" />
-		<div style="background-color: #f4f5f7; color: #565657; padding: 12px">
+		<div style=" color: #565657; padding: 12px">
 			<template v-if="tags || date">
 				<div style="display: flex; flex-direction: row; justify-content: space-between">
 					<div
@@ -48,8 +48,10 @@
 
 <script setup lang="ts">
 import { IconArrowRight, IconCalendar, IconTag } from '@tabler/icons-vue';
+import type { RouteLocationRaw } from '../../.nuxt/vue-router-stub';
 
 const props = defineProps<{
+  to?:RouteLocationRaw
 	imageUrl?: string;
 	title: string;
 	tags?: string[];

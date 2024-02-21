@@ -12,7 +12,6 @@
 <style style lang="sass" scoped>
 
 .accessibility-panel
-  // background: linear-gradient(89.48deg, #91A80D 19.14%, #BAC323 42.28%, #9EA100 83.7%)
   background: $dark-green
   box-shadow: -4px 0px 15px rgba(0, 0, 0, 0.25)
   border-radius: 5px 0px 0px 5px

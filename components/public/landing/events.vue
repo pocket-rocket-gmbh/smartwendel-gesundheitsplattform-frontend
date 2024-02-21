@@ -9,6 +9,7 @@
 
 				<v-col v-for="event of events" :key="event.id" :cols="4" class="d-none d-md-block">
 					<PublicContentCard
+						:to="`/public/care_facilities/${event.id}`"
 						:title="event.name"
 						:imageUrl="event.image_url"
 						:tags="event.tags
@@ -22,17 +23,18 @@
 				</v-col>
 				<v-col :cols="12" class="d-md-none">
 					<v-carousel height="auto" hideDelimiterBackground :showArrows="false" v-if="events">
-						<v-carousel-item v-for="article of events" :key="article.id">
+						<v-carousel-item v-for="event of events" :key="event.id">
 							<div style="padding-bottom: 50px">
 								<PublicContentCard
-									:title="article.name"
-									:imageUrl="article.image_url"
-									:tags="article.tags
+									:to="`/public/care_facilities/${event.id}`"
+									:title="event.name"
+									:imageUrl="event.image_url"
+									:tags="event.tags
                       .map((x: any) => x.name)"
-									:date="new Date(article.created_at)"
+									:date="new Date(event.created_at)"
 								>
 									<template #content>
-										<p v-html="article.excerpt"></p>
+										<p v-html="event.excerpt"></p>
 									</template>
 								</PublicContentCard>
 							</div>

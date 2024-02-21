@@ -78,6 +78,7 @@
         <span>löschen</span>
       </v-btn>
     </div>
+    
     <div>
       <span
         v-if="filterStore.filteredResults.length && !loading"
