@@ -22,7 +22,10 @@
           </label>
           <div class="field" v-bind="props" @click="handleClearTermSearch()">
             <div class="input break-title">
-              {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
+              {{
+                multipleSelections?.map((s) => s.name)?.join(", ") ||
+                placeholderText
+              }}
             </div>
           </div>
         </div>
@@ -46,7 +49,9 @@
                 >
                   <span>
                     {{
-                      areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen"
+                      areAllSelected(filter)
+                        ? "Alle abwählen"
+                        : "Alle auswählen"
                     }}</span
                   >
                 </v-btn>
@@ -77,7 +82,10 @@
                     </span>
                   </v-btn>
                 </label>
-                <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
+                <v-divider
+                  v-if="hasActiveOptions(filter.id)"
+                  class="my-2"
+                ></v-divider>
               </div>
             </div>
           </div>
