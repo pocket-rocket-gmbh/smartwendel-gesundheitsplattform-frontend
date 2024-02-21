@@ -1,14 +1,14 @@
 <template>
   <div class="basic-search-box">
     <div class="content">
-      <v-row>
+      <v-row no-gutters>
         <v-col>
-          <h2 class="is-uppercase text-white">{{ subTitle }}</h2>
+          <h3 class="is-uppercase text-white">{{ subTitle }}</h3>
         </v-col>
         <div class="filter-container">
           <span class="is-white counter">{{ countSelectedFilters }}</span>
         </div>
-        <v-col cols="2" class="d-flex justify-center align-center">
+        <v-col cols="3" md="3" sm="3" class="d-flex justify-end align-center">
           <v-icon
             color="white"
             size="x-large"
@@ -32,7 +32,7 @@
           >
         </v-col>
       </v-row>
-      <div v-if="showFilter">
+      <div v-show="showFilter">
         <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
           <v-col cols="10">
             <PublicSearchCategorySelectModal
@@ -108,11 +108,17 @@
   <v-row class="has-bg-darken-grey text-white pa-0 ma-0">
     <v-col class="d-flex justify-center align-center bottom-actions">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span class="general-font-size" v-else-if="filterStore.filteredResults.length"
+      <span
+        class="general-font-size"
+        v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }}
-        <span v-if="filterStore.currentKinds.includes('facility')"> Anbieter </span>
+        <span v-if="filterStore.currentKinds.includes('facility')">
+          Anbieter
+        </span>
         <span v-else-if="filterStore.currentKinds.includes('event')">
-          <span v-if="filterStore.filteredResults.length === 1">Veranstaltung</span>
+          <span v-if="filterStore.filteredResults.length === 1"
+            >Veranstaltung</span
+          >
           <span v-else>Veranstaltungen</span>
         </span>
         <span v-else-if="filterStore.currentKinds.includes('news')">
@@ -124,7 +130,9 @@
           <span v-else>Kurse</span>
         </span>
       </span>
-      <span class="general-font-size" v-else-if="!appStore.loading"> Leider keine Ergebnisse gefunden. Bitte passe deine Suche an. </span>
+      <span class="general-font-size" v-else-if="!appStore.loading">
+        Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
+      </span>
       <span v-else> Bitte warten... </span>
     </v-col>
   </v-row>
@@ -215,6 +223,7 @@ watch(
   }
 );
 
+
 const isMobilie = computed(() => {
   if (breakpoints.type.value === "sm" || breakpoints.type.value === "xs") {
     return true;
@@ -267,15 +276,20 @@ onMounted(() => {
   align-items: center
   position: absolute
   right: 0
-  margin-right: 1.5rem
+  margin-right: 1rem
+  @include xs
+    margin-right: 10px
+    margin-top: -3px
+  @include md
+    margin-right: 10px
   .counter
     color: #8ab61d
-    margin-top: 14px
     font-size: 12px
     background-color: #ffffff
     padding: 3px 8px
     border-radius: 50%
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+
 
 .align-end
   display: flex

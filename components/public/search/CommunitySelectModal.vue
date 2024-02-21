@@ -18,7 +18,7 @@
               >({{ filterStore.currentZips?.length }})</span
             ></label
           >
-          <div class="input">
+          <div class="input break-title">
             {{
               getAllSelectedCommunitiesName(filterStore.currentZips) || "Gemeinde wählen"
             }}
