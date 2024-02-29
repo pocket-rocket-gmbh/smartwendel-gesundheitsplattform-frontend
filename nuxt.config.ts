@@ -30,7 +30,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      charset: 'utf-16',
+      charset: 'utf-8',
       meta: [
         { property: 'og:type', content: 'website' },
         { property: 'og:description', content: 'Gesundheitsplattform' }
