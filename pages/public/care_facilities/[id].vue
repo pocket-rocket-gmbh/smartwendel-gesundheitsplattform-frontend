@@ -112,7 +112,13 @@
         </div>
       </v-col>
     </v-row>
+    <PublicCareFacilitiesEvents :care-facility="careFacility"/>
+  <PublicCareFacilitiesNews :care-facility="careFacility"/>
+  <PublicCareFacilitiesCourses :care-facility="careFacility"/>
   </div>
+
+
+ 
 </template>
 
 <script lang="ts" setup>
