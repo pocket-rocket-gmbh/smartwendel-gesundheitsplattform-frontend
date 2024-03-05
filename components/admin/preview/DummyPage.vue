@@ -13,6 +13,15 @@
           <v-col class="column">
             <PublicCareFacilitiesMain :care-facility="item" />
           </v-col>
+          <v-col md="4" v-if="item?.kind !== 'news'">
+            <PublicCareFacilitiesRight :care-facility="item" />
+            <div class="mt-5" v-if="item?.kind === 'course'">
+              <PublicCareFacilitiesDates :care-facility="item" />
+            </div>
+            <div class="mt-5">
+              <PublicCareFacilitiesDocuments :care-facility="item" />
+            </div>
+          </v-col>
         </v-row>
       </v-container>
 

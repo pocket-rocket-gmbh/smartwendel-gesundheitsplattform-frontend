@@ -1,26 +1,16 @@
 <template>
   <v-row class="my-10 general-font-size">
-    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
+    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2" >
       <v-card :class="['pa-6', { shake: animated }]">
-        <div class="d-flex justify-center">
-          <img width="300px" src="~/assets/images/logo.png" />
-        </div>
+        <img class="is-fullwidth" src="~/assets/images/logo.png" />
 
         <div v-if="resetSuccessful" class="mt-3" align="center">
-          <span class="general-font-size is-secondary-color"
-            >Das Zurücksetzen Ihres Passworts wurde angefragt.<br />Bitte folgen
-            Sie den Anweisungen in der E-Mail.</span
+          <span class="general-font-size is-dark-grey"
+            >Das Zurücksetzen Deines Passworts wurde angefragt.<br />Bitte folge den
+            Anweisungen in der E-Mail.</span
           >
           <div class="mt-5">
-            <v-btn
-              color="primary"
-              @click="toLogin"
-              class="general-font-size"
-              size="large"
-              block
-              depressed
-              >Jetzt anmelden</v-btn
-            >
+            <v-btn color="primary" @click="toLogin" class="general-font-size" size="large" block depressed>Jetzt anmelden</v-btn>
           </div>
         </div>
         <div v-else>
@@ -34,19 +24,10 @@
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
-          <v-btn
-            class="mb-6 general-font-size"
-            color="primary"
-            size="large"
-            block
-            depressed
-            @click="auth"
-          >
+          <v-btn class="mb-6 general-font-size" color="primary" size="large" block depressed @click="auth">
             Neues Passwort anfordern
           </v-btn>
-          <v-btn class="general-font-size" block depressed @click="goBack">
-            zurück
-          </v-btn>
+          <v-btn class="general-font-size" block depressed @click="goBack"> zurück </v-btn>
         </div>
       </v-card>
     </v-col>
@@ -81,11 +62,7 @@ export default defineComponent({
       errors.value = {};
       const data = { email: email.value };
 
-      const result = await publicApi.call(
-        "post",
-        "/users/reset-password",
-        data
-      );
+      const result = await publicApi.call("post", "/users/reset-password", data);
 
       if (result.status === ResultStatus.SUCCESSFUL) {
         localStorage.setItem("project_platform._remembered_email", email.value);
@@ -110,7 +87,7 @@ export default defineComponent({
 
     onMounted(() => {
       const rememberedEmail = localStorage.getItem(
-        "_gesundheitsplattform._remembered_email"
+        "smartwendelerland_gesundheitsplattform._remembered_email"
       );
       if (rememberedEmail && !givenEmail) {
         setTimeout(() => {

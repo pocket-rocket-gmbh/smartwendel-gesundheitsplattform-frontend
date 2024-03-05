@@ -1,23 +1,9 @@
 <template>
-  <v-checkbox
-    v-show="false"
-    v-bind:model-value="filterSelected"
-    :rules="[filterSelected || 'Pflichtangabe']"
-  ></v-checkbox>
-  <v-alert
-    class="my-5 general-font-size"
-    v-if="!filterSelected && !loadingFilters"
-    type="info"
-    density="compact"
-    closable
-  >
+  <v-checkbox v-show="false" v-bind:model-value="filterSelected" :rules="[filterSelected || 'Pflichtangabe']"></v-checkbox>
+  <v-alert class="my-5 general-font-size" v-if="!filterSelected && !loadingFilters" type="info" density="compact" closable>
     Bitte mindestens einen Filter auswählen
   </v-alert>
-  <LoadingSpinner
-    v-if="loadingFilters && (!availableFilters || !availableFilters.length)"
-  >
-    Filter werden geladen ...
-  </LoadingSpinner>
+  <LoadingSpinner v-if="loadingFilters && (!availableFilters || !availableFilters.length)"> Filter werden geladen ... </LoadingSpinner>
   <div class="choose-facility-type" v-else>
     <CollapsibleItem
       v-for="mainFilter in availableFilters"
@@ -26,51 +12,29 @@
       @expand-toggled="handleExpandToggle(mainFilter.id)"
     >
       <template #title align="center">
-        <span
-          class="is-secondary-color"
-          :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']"
-        >
+        <span class="is-dark-grey" :class="[expandIds.includes(mainFilter.id) ? 'text-h5' : 'text-h6']">
           {{ mainFilter.name }}
-          <span v-if="mainFilter.name === 'Behandlungsschwerpunkte'"
-            >(nur von ärztlichen und therapeutischen Leistungserbringern
-            auszuwählen)</span
-          >
+          <span v-if="mainFilter.name === 'Behandlungsschwerpunkte'">(nur von ärztlichen und therapeutischen Leistungserbringern auszuwählen)</span>
         </span>
         <div>
-          <span class="is-secondary-color" v-if="filterHasSelected(mainFilter)"
-            >Bereits ausgewählt:
-          </span>
+          <span class="is-dark-grey" v-if="filterHasSelected(mainFilter)">Bereits ausgewählt: </span>
           <span v-for="tag in preSetTags">
-            <v-chip
-              size="small"
-              class="mx-2 my-2 is-secondary-color"
-              v-if="getTagName(mainFilter, tag)"
-            >
+            <v-chip size="small" class="mx-2 my-2 is-dark-grey" v-if="getTagName(mainFilter, tag)">
               {{ getTagName(mainFilter, tag) }}
             </v-chip>
           </span>
         </div>
       </template>
       <template #content>
-        <div
-          v-if="mainFilter.name === 'Tätigkeitsgebiet'"
-          class="mb-3 d-flex align-center"
-        >
+        <div v-if="mainFilter.name === 'Tätigkeitsgebiet'" class="mb-3 d-flex align-center">
           <v-alert color="grey" class="mt-2">
             <div class="d-flex align-center filter-request">
               <div class="py-1">
                 <span class="has-font-size-small-medium mr-3"
-                  >Falls das passende Tätigkeitsgebiet für deine
-                  Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere
-                  uns bitte
+                  >Falls das passende Tätigkeitsgebiet für deine Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere uns bitte
                 </span>
                 <span>
-                  <v-btn
-                    color="primary"
-                    class="iis-white-color"
-                    :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`"
-                    >HIER</v-btn
-                  >
+                  <v-btn color="primary" class="is-white" :href="`mailto:smartcity@lkwnd.de?subject=Anfrage Leistungsfilter`">HIER</v-btn>
                 </span>
               </div>
             </div>
@@ -79,7 +43,7 @@
         <div class="main-class">
           <div class="filter-options" v-for="option in mainFilter.next">
             <div
-              class="filter-tile is-secondary-color"
+              class="filter-tile is-dark-grey"
               :class="{ selected: preSetTags.includes(option.id) }"
               @click.stop="handleSubFilterParentClick(mainFilter, option)"
             >
@@ -99,20 +63,14 @@
             </div>
           </div>
         </div>
-        <LoadingSpinner v-if="loadingFilters"
-          >Leistung wird hinzugefügt...
-        </LoadingSpinner>
+        <LoadingSpinner v-if="loadingFilters">Leistung wird hinzugefügt... </LoadingSpinner>
       </template>
     </CollapsibleItem>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  type FilterKind,
-  type FilterType,
-  useFilterStore,
-} from "~/store/searchFilter";
+import { type FilterKind, type FilterType, useFilterStore } from "~/store/searchFilter";
 import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const props = defineProps<{
@@ -124,11 +82,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
-  (
-    event: "areFiltersSet",
-    areFiltersSet: boolean,
-    filterType: FilterType
-  ): void;
+  (event: "areFiltersSet", areFiltersSet: boolean, filterType: FilterType): void;
 }>();
 
 type Filter = { id: string; name: string; parent_id?: string; next?: Filter[] };
@@ -156,9 +110,7 @@ const flatFilterArray = (filterArray: Filter[]) => {
 
 const filterSelected = computed(() => {
   const flat = flatFilterArray(availableFilters.value);
-  const filterOfCategoryIsSet = flat.some(
-    (item) => !!props.preSetTags.find((tag) => tag === item.id)
-  );
+  const filterOfCategoryIsSet = flat.some((item) => !!props.preSetTags.find((tag) => tag === item.id));
   emit("areFiltersSet", filterOfCategoryIsSet, props.filterType);
   return filterOfCategoryIsSet;
 });
@@ -170,12 +122,7 @@ const expandIds = ref<string[]>([]);
  */
 const getFilterOptions = (parentId: string, allFilters: Filter[]) => {
   const nextItems = allFilters.filter((item) => item.parent_id === parentId);
-  nextItems.forEach(
-    (nextItem) =>
-      (nextItem.next = allFilters.filter(
-        (item) => item.parent_id === nextItem.id
-      ))
-  );
+  nextItems.forEach((nextItem) => (nextItem.next = allFilters.filter((item) => item.parent_id === nextItem.id)));
 
   return nextItems;
 };
@@ -203,13 +150,7 @@ const getTagName = (mainFilter: Filter, filterId: string) => {
 };
 
 const enableAllTags = (filter: Filter) => {
-  const updatedTags = [
-    ...new Set([
-      ...props.preSetTags,
-      filter.id,
-      ...filter.next.map(({ id }) => id),
-    ]),
-  ];
+  const updatedTags = [...new Set([...props.preSetTags, filter.id, ...filter.next.map(({ id }) => id)])];
   emit("setTags", updatedTags);
 };
 
@@ -220,9 +161,7 @@ const disableAllTags = (filter: Filter) => {
   }
 
   filter.next.forEach((nextFilter) => {
-    const nextIndex = props.preSetTags.findIndex(
-      (tag) => tag === nextFilter.id
-    );
+    const nextIndex = props.preSetTags.findIndex((tag) => tag === nextFilter.id);
     if (nextIndex !== -1) {
       props.preSetTags.splice(nextIndex, 1);
     }
@@ -243,16 +182,12 @@ const handleSubFilterParentClick = async (parent: Filter, current: Filter) => {
 const handleSubFilterClick = async (parent: Filter, current: Filter) => {
   selectedFilter.value = current;
 
-  const removeIndex = props.preSetTags.findIndex(
-    (tagId) => tagId === current.id
-  );
+  const removeIndex = props.preSetTags.findIndex((tagId) => tagId === current.id);
   selectedFilter.value = null;
   if (removeIndex !== -1) {
     props.preSetTags.splice(removeIndex, 1);
 
-    const parentIndex = props.preSetTags.findIndex(
-      (item) => item === parent.id
-    );
+    const parentIndex = props.preSetTags.findIndex((item) => item === parent.id);
     if (parentIndex !== -1) props.preSetTags.splice(parentIndex, 1);
 
     emit("setTags", props.preSetTags);
@@ -261,11 +196,7 @@ const handleSubFilterClick = async (parent: Filter, current: Filter) => {
 
   props.preSetTags.push(current.id);
 
-  if (
-    parent.next
-      .map((next) => next.id)
-      .every((id) => props.preSetTags.includes(id))
-  ) {
+  if (parent.next.map((next) => next.id).every((id) => props.preSetTags.includes(id))) {
     props.preSetTags.push(parent.id);
   }
 
@@ -275,9 +206,7 @@ const handleSubFilterClick = async (parent: Filter, current: Filter) => {
 const handleClick = (parent: Filter, current: Filter) => {
   selectedFilter.value = current;
 
-  const removeIndex = props.preSetTags.findIndex(
-    (tagId) => tagId === current.id
-  );
+  const removeIndex = props.preSetTags.findIndex((tagId) => tagId === current.id);
   selectedFilter.value = null;
   if (removeIndex !== -1) {
     props.preSetTags.splice(removeIndex, 1);
@@ -288,9 +217,7 @@ const handleClick = (parent: Filter, current: Filter) => {
   if (!props.enableMultiSelect) {
     const optionsOfMainFilter = parent.next;
 
-    const alreadyInGroupIndex = props.preSetTags.findIndex((tagId) =>
-      optionsOfMainFilter.find((filter) => filter.id === tagId)
-    );
+    const alreadyInGroupIndex = props.preSetTags.findIndex((tagId) => optionsOfMainFilter.find((filter) => filter.id === tagId));
     if (alreadyInGroupIndex !== -1) {
       props.preSetTags.splice(alreadyInGroupIndex, 1);
     }
@@ -313,9 +240,7 @@ const reloadFilters = async () => {
   const mainFilters = await getMainFilters(props.filterType, props.filterKind);
   const allFilters = await useFilterStore().loadAllFilters();
 
-  const allNextFilters = mainFilters.map((mainFilter) =>
-    getFilterOptions(mainFilter.id, allFilters)
-  );
+  const allNextFilters = mainFilters.map((mainFilter) => getFilterOptions(mainFilter.id, allFilters));
 
   availableFilters.value = [];
   allNextFilters.forEach((nextFilters, i) => {

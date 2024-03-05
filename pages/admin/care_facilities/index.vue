@@ -1,18 +1,7 @@
 <template>
   <div>
     <v-row v-if="showBar">
-    <v-row v-if="showBar">
       <v-col>
-        <span
-          class="general-font-size is-secondary-color font-weight-bold"
-          v-if="useUser().isFacilityOwner()"
-          >Meine Einrichtung</span
-        >
-        <span
-          class="general-font-size is-secondary-color font-weight-bold"
-          v-else
-          >Einrichtungen</span
-        >
         <span
           class="general-font-size is-dark-grey font-weight-bold"
           v-if="useUser().isFacilityOwner()"
@@ -26,20 +15,12 @@
       <v-col class="d-flex justify-end align-center">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span
-            class="pl-1 general-font-size is-secondary-color font-weight-bold"
-            >Benutzer Aktiv</span
-          >
           <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
             >Benutzer Aktiv</span
           >
         </div>
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span
-            class="pl-1 general-font-size is-secondary-color font-weight-bold"
-            >Benutzer nicht Aktiv</span
-          >
           <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
             >Benutzer nicht Aktiv</span
           >
@@ -62,7 +43,6 @@
     />
     <div>
       <div v-if="showBar">
-      <div v-if="showBar">
         <v-row align="center">
           <v-col md="3" class="d-flex">
             <v-btn
@@ -72,9 +52,7 @@
               @click="
                 itemId = null;
                 createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(
-                  JSON.stringify(originalItemPlaceholder)
-                );
+                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
               "
             >
               Neue Einrichtung
@@ -122,7 +100,6 @@
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
         @toogle-bar="showBar = !showBar"
-        @toogle-bar="showBar = !showBar"
         :disable-delete="true"
         defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
@@ -141,21 +118,16 @@
       >
         <v-icon>mdi-arrow-up</v-icon>
         <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der
-          Webseite.</span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
         >
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
-        :disabled="
-          (setupFinished && !itemStatus) || !useUser().statusOnHealthScope()
-        "
+        :disabled="(setupFinished && !itemStatus) || !useUser().statusOnHealthScope()"
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="
-          useRouter().push({ path: `/public/care_facilities/${facilityId}` })
-        "
+        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
       >
         Zur Online-Ansicht deiner Einrichtung
       </v-btn>
@@ -196,13 +168,10 @@
 import { isCompleteFacility } from "~/utils/facility.utils";
 import { type Facility } from "~/store/searchFilter";
 import type { RequiredField } from "~/types/facilities";
-import type { RequiredField } from "~/types/facilities";
 
 definePageMeta({
   layout: "admin",
 });
-
-const showBar = ref(true);
 
 const showBar = ref(true);
 
@@ -251,18 +220,6 @@ const fields = [
   { prop: "updated_at", text: "Letzte Aktualisierung", value: "updated_at", type: "datetime" },
   { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
   {
-    prop: "updated_at",
-    text: "Letzte Aktualisierung",
-    value: "updated_at",
-    type: "datetime",
-  },
-  {
-    prop: "created_at",
-    text: "Erstellt am",
-    value: "created_at",
-    type: "datetime",
-  },
-  {
     prop: "user.firstname",
     text: "Erstellt von",
     value: "user.name",
@@ -309,8 +266,7 @@ const draftRequiredFields: RequiredField[] = [
   },
   {
     props: ["description"],
-    checkHandler: (description?: string) =>
-      !description || description === "<p><br></p>",
+    checkHandler: (description?: string) => !description || description === "<p><br></p>",
   },
   {
     props: ["tag_category_ids"],
@@ -375,9 +331,7 @@ const originalItemPlaceholder = ref({
     { day: "Sonntag", placeholder: "z.B. geschlossen", hours: "" },
   ],
 });
-const itemPlaceholder = ref(
-  JSON.parse(JSON.stringify(originalItemPlaceholder.value))
-);
+const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);

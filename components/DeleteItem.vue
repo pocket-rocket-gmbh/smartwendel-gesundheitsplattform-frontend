@@ -7,7 +7,7 @@
   >
     <v-card class="dialog">
       <v-card-title class="text-h5"> Löschen </v-card-title>
-      <v-card-text> Möchten Sie {{ term }} wirklich löschen? </v-card-text>
+      <v-card-text> Möchtest du {{ term }} wirklich löschen? </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
         <v-row>

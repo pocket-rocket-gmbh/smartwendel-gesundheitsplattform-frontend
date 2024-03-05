@@ -1,21 +1,10 @@
 <template>
-  <v-app-bar
-    v-model="appStore.showTopbar"
-    :elevation="0"
-    density="compact"
-    class="title-bar"
-  >
+  <v-app-bar v-model="appStore.showTopbar" :elevation="0" density="compact" class="title-bar">
     <div class="shifted">
-      <div
-        class="menu-bar d-flex is-lighter-grey-background is-uppercase align-center justify-center font-weight-medium"
-      >
-        <div
-          v-for="item in subCategories"
-          @click="setSubCategoryAndScroll(item?.id)"
-          class="is-clickable"
-        >
+      <div class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center font-weight-medium">
+        <div v-for="item in subCategories" @click="setSubCategoryAndScroll(item?.id)" class="is-clickable">
           <span
-            class="px-5 is-secondary-color"
+            class="px-5 is-dark-grey "
             :class="[selectedId === item?.id ? 'text-decoration-underline' : '']"
             v-show="item.sub_sub_categories.length > 0"
             >{{ item?.name }}
@@ -23,6 +12,7 @@
         </div>
       </div>
     </div>
+    
   </v-app-bar>
 </template>
 <script lang="ts" setup>
@@ -74,7 +64,7 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
   border-radius: 20px;
   min-height: 60px;
   width: 100%;
-  //color: $dark-green;
+  color: $dark-green;
 
   @include md {
     padding: 0.5rem;

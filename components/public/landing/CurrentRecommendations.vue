@@ -1,35 +1,33 @@
 <template>
-  <div class="wrapper is-primary-background d-flex flex-column justify-center">
-    <div
-      class="d-flex flex-column align-center justify-center text-white"
-    >
-      <h2 class="my-5">Pflege und nun?</h2>
-      <h4 class="mb-5">Wir informieren Sie rund um das Thema Pflege</h4>
+  <div class="wrapper bg-gradient">
+    <div class="d-flex align-center justify-center">
+      <div class="text-white text-h4 font-weight-medium my-5">
+        Wir zeigen dir, was du Gutes für deine Gesundheit und dein Wohlbefinden tun
+        kannst.
+      </div>
     </div>
-    <v-container fluid>
-      <v-row class="ga-16">
-        <v-col v-for="card in items" :key="card.content.heading" >
-          <v-card>
-            <v-img
-              :src="card.content.image"
-              class="align-end card-body"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              height="300px"
-              cover
-            >
-              <div
-                class="pa-3 pr-15 card-heading is-label-medium is-white-color" 
-                v-text="card.content.heading"
-              ></div>
-            </v-img>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+    <div class="recommendations-wrapper">
+      <div
+        class="recommendation flex-column justify-center text-center text-white align-center my-5"
+        v-for="(item, index) in items"
+        :key="index"
+      >
+        <div @click="goToLink(item.content.link)" class="is-white is-clickable">
+          <img class="is-clickable icons" :src="item.content.image" width="120" />
+          <div class="font-weight-medium general-font-size">
+            {{ item.content.heading }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import image1 from "@/assets/images/current-recommendations/img-recomendation-1.png";
+import image1 from "@/assets/images/current-recommendations/icon_sport.svg";
+import image2 from "@/assets/images/current-recommendations/icon_nutrition.svg";
+import image3 from "@/assets/images/current-recommendations/icon_mental_health.svg";
+import image4 from "@/assets/images/current-recommendations/icon_health_course.svg";
+import image5 from "@/assets/images/current-recommendations/icon_free_time.svg";
 
 const router = useRouter();
 
@@ -40,7 +38,7 @@ const goToLink = (item: string) => {
 const items = [
   {
     content: {
-      heading: "Pflege zuhause organisieren",
+      heading: "Sport und Bewegung",
       image: image1,
       link:
         "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=9b3ed77f-d337-4064-a935-a9e41d6d99a5",
@@ -48,32 +46,32 @@ const items = [
   },
   {
     content: {
-      heading: "Pflege in einer Einrichtung",
-      image: image1,
+      heading: "Ernährung",
+      image: image2,
       link:
         "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=c88b0ce6-e51d-435f-8689-ed4bb193fab1",
     },
   },
   {
     content: {
-      heading: "Wohnangebote für Senioren",
-      image: image1,
+      heading: "Mentale Gesundheit",
+      image: image3,
       link:
         "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=0c2cf2d5-2834-45d6-a912-957a1f8e5153",
     },
   },
   {
     content: {
-      heading: "Persönliche Beratung",
-      image: image1,
-      link: "",
+      heading: "Gesundheitskurse",
+      image: image4,
+      link: "/public/search/courses",
     },
   },
   {
     content: {
-      heading: "Informationen zu Anträgen",
-      image: image1,
-      link: "",
+      heading: "Freizeitgestaltung",
+      image: image5,
+      link: "https://www.sankt-wendeler-land.de/aktiv",
     },
   },
 ];
@@ -82,22 +80,22 @@ const items = [
 <style lang="scss" scoped>
 @import "@/assets/sass/main.sass";
 
-.card-heading {
-  background: $primary-color;
-  width: 70%;
-  margin: 1rem 0;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  white-space: pre-wrap;
+.bg-gradient {
+  background: linear-gradient(85.85deg, #91a80d 5.31%, #bac323 35.73%, #9ea100 77.83%);
+}
+.icons {
+  border-radius: 50%;
+  border: 1px solid white;
   &:hover {
     transform: scale(1.1);
     transition: transform 0.5s ease-in-out;
     cursor: pointer;
   }
 }
+
 .wrapper {
-  padding: 5rem;
+  padding: 2rem 5rem;
+
   @include md {
     padding: 1rem;
   }

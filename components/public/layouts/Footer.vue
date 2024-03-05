@@ -194,25 +194,6 @@ import { useBreakpoints } from "~/composables/ui/breakPoints";
 
 const breakPoints = useBreakpoints();
 
-const links = [
-  {
-    title: "Kontakt",
-    link: "/impressum",
-  },
-  {
-    title: "Nutzungsbedinungen",
-    link: "/datenschutz",
-  },
-  {
-    title: "Datenschutz",
-    link: "/kontakt",
-  },
-  {
-    title: "Impressum",
-    link: "/sitemap",
-  },
-];
-
 const currentRoute = computed(() => {
   return route.path as string;
 });
@@ -221,15 +202,60 @@ const currentRoute = computed(() => {
 <style lang="sass" scoped>
 @import "@/assets/sass/main.sass"
 
-.footer-wraper
-  padding: 6.25rem
-  @include md
-    padding: 2rem 1rem
+
 .social-buttons
   border: 1px solid
-  color: $primary-color
+  color: $dark-grey
   &:visited
-    color: $primary-color
+    color: $dark-grey
+
+.divider
+  border: 1px $dark-grey solid
+
+.input-field
+  border: 2px solid red
+  border-radius: 25px
+
+.sub-footer
+  background: white
+
+.mobile-height
+  max-width: 100px
+
+.desktop-height
+  max-width: 150px
+
+.desktop-height-kfw
+  max-width: 100px
+
+.mobile-bigger-width
+  max-width: 150px
+
+.footer-links
+  line-height: 1.8rem
+
+.wrapper
+  background-color: $light-grey
+  margin: 5rem 0 0rem 0
+  padding: 0 5rem 2rem
   @include md
-    padding: 5px
+    padding: 0 1rem
+
+  .register-hint
+    @include md
+      flex-direction: column
+      justify-content: stretch
+
+      .register-button
+        a
+          flex: 1
+
+.footer-content
+  .footer-content-row
+    @include md
+      flex-direction: column
+
+.disclamer
+  @include md
+    margin-bottom: 5rem
 </style>

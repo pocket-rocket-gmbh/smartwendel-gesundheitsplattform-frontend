@@ -3,11 +3,8 @@
     <Loading v-if="loadingItem" />
     <div class="field mt-3">
       <v-file-input
-        class="text-field general-font-size is-secondary-color"
-        :disabled="
-          item?.sanitized_images?.length >= 6 ||
-          item?.offline_images?.length >= 6
-        "
+        class="text-field general-font-size is-dark-grey"
+        :disabled="item?.sanitized_images?.length >= 6 || item?.offline_images?.length >= 6"
         hide-details="auto"
         v-model="images"
         label="Neues Bild wählen"
@@ -18,25 +15,9 @@
         multiple
         show-size
       />
-      <div class="text-caption is-secondary-color">
-        * Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt
-      </div>
-      <v-alert
-        v-if="
-          item?.sanitized_images?.length >= 6 ||
-          item?.offline_images?.length >= 6
-        "
-        class="my-5 general-font-size"
-        type="error"
-        >Es können maximal 6 Bilder hinzugefügt werden.</v-alert
-      >
-      <v-alert
-        v-if="errorFileSizeTooLarge"
-        class="my-5 general-font-size"
-        type="error"
-        >Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht
-        überschreiten.</v-alert
-      >
+      <div class="text-caption is-dark-grey">* Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt</div>
+      <v-alert v-if="item?.sanitized_images?.length >= 6 || item?.offline_images?.length >= 6" class="my-5 general-font-size" type="error">Es können maximal 6 Bilder hinzugefügt werden.</v-alert>
+      <v-alert v-if="errorFileSizeTooLarge" class="my-5 general-font-size" type="error">Das gewählte Bild ist zu groß. Es darf eine Größe von 5MB nicht überschreiten.</v-alert>
     </div>
     <ImageCropper
       class="mb-5"
@@ -47,49 +28,24 @@
       @crop="setImage"
     />
     <v-row v-if="itemId" class="my-1">
-      <v-col
-        md="2"
-        class="d-flex align-center justify-center"
-        v-if="item?.sanitized_images.length"
-      >
+      <v-col md="2" class="d-flex align-center justify-center" v-if="item?.sanitized_images.length">
         <span>Bereits ausgewählt:</span>
       </v-col>
-      <v-col
-        v-for="(image, index) in item?.sanitized_images"
-        :key="index"
-        md="2"
-      >
+      <v-col v-for="(image, index) in item?.sanitized_images" :key="index" md="2">
         <v-card>
           <v-img :lazy-src="image.url" :src="image.url" max-width="300" />
-          <v-btn
-            size="small"
-            width="100%"
-            color="red"
-            @click="deleteImage(image.signed_id)"
-            >Bild entfernen</v-btn
-          >
+          <v-btn size="small" width="100%" color="red" @click="deleteImage(image.signed_id)">Bild entfernen</v-btn>
         </v-card>
       </v-col>
     </v-row>
-    <v-row
-      v-else-if="item?.offline_images.length || item?.sanitized_images.length"
-      class="my-1"
-    >
+    <v-row v-else-if="item?.offline_images.length || item?.sanitized_images.length" class="my-1">
       <v-col md="2" class="d-flex align-center justify-center">
-        <span class="general-font-size is-secondary-color"
-          >Bereits ausgewählt:</span
-        >
+        <span class="general-font-size is-dark-grey">Bereits ausgewählt:</span>
       </v-col>
       <v-col v-for="(image, index) in item?.offline_images" :key="index" md="2">
         <v-card>
           <v-img :lazy-src="image" :src="image" max-width="200" />
-          <v-btn
-            size="small"
-            width="100%"
-            color="red"
-            @click="deleteImageOffline(index)"
-            >Bild entfernen</v-btn
-          >
+          <v-btn size="small" width="100%" color="red" @click="deleteImageOffline(index)">Bild entfernen</v-btn>
         </v-card>
       </v-col>
     </v-row>
@@ -126,9 +82,7 @@ const setImage = (image: any) => {
 };
 
 const handleRemoveImage = () => {
-  const indexOfItemToRemove = imageUrls.value.findIndex(
-    (item) => item === currentCroppingImageUrl.value
-  );
+  const indexOfItemToRemove = imageUrls.value.findIndex((item) => item === currentCroppingImageUrl.value);
 
   if (indexOfItemToRemove === -1) {
     images.value = [];
@@ -153,7 +107,7 @@ const toBase64 = (file: any): Promise<string> =>
 
 const handleFiles = async () => {
   if (!images.value?.length) return;
-  if (errorFileSizeTooLarge.value === true) {
+  if(errorFileSizeTooLarge.value === true) {
     errorFileSizeTooLarge.value = false;
   }
 
@@ -165,9 +119,7 @@ const handleFiles = async () => {
 
   const imageUrlPromises = validImages.map((image) => toBase64(image));
   const imgUrlResults = await Promise.allSettled(imageUrlPromises);
-  imageUrls.value = imgUrlResults
-    .map((item) => (item.status === "fulfilled" ? item.value : ""))
-    .filter(Boolean);
+  imageUrls.value = imgUrlResults.map((item) => (item.status === "fulfilled" ? item.value : "")).filter(Boolean);
 
   setNextImageForCrop();
 };
