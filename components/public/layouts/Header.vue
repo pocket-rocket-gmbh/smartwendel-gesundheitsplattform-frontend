@@ -3,15 +3,18 @@
     <v-app-bar :elevation="0" density="compact" class="main-layouts-title-bar mb-5">
       <div class="main-toolbar-content">
         <div class="is-uppercase text-h4 d-flex align-center justify-center text my-3">
-          <div class="is-white text-center font-weight-medium text-h4" v-if="category">
+          <div
+            class="is-primary-color text-center font-weight-medium text-h4"
+            v-if="category"
+          >
             {{ category.name }}
           </div>
-          <div class="is-white text-center font-weight-medium text-h4" v-else>
-            {{ title }}
+          <div class="is-primary-color text-center font-weight-medium text-h4" v-else>
+            {{ title }} 
           </div>
         </div>
         <div class="d-flex justify-center category-chips">
-          <v-slide-group size="large" class="text-white" multiple column>
+          <v-slide-group size="large" class="is-primary-color" multiple column>
             <v-chip-group selected-class="chip-selected">
               <v-chip
                 size="large"
@@ -37,14 +40,14 @@
         <div
           class="menu-title is-uppercase text-h4 d-flex align-center justify-center text my-3"
         >
-          <span class="is-white font-weight-medium" v-if="category">{{
+          <span class="is-white-color font-weight-medium" v-if="category">{{
             category.name
           }}</span>
-          <h2 class="is-white" v-else>{{ title }}</h2>
+          <h2 class="is-white-color" v-else>{{ title }}</h2>
         </div>
         <div class="menu-bar-wrapper">
           <div
-            class="menu-bar d-flex has-bg-mid-grey is-uppercase align-center justify-center"
+            class="menu-bar d-flex is-lighter-grey-background is-uppercase align-center justify-center"
           >
             <div
               v-for="item in subCategories"
@@ -52,7 +55,7 @@
               class="is-clickable"
             >
               <span
-                class="px-5 is-dark-grey text-h5 font-weight-medium"
+                class="px-5 is-primary-color text-h5 font-weight-medium"
                 :class="[selectedId === item?.id ? 'text-decoration-underline' : '']"
               >
                 {{ item?.name }}
@@ -130,8 +133,7 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
     justify-content: center
     flex-direction: column
     gap: 0.5rem
-    background-image: linear-gradient(89.48deg, #91a80d 19.14%, #bac323 42.28%, #9ea100 83.7%)
-    background-position: 0 -35px
+    background-color: $primary-color
 
     @include md
       background-position: unset
@@ -164,7 +166,7 @@ useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
       .menu-bar
         border-radius: 20px
         min-height: 60px
-        color: $dark-green
+        //color: $dark-green
         margin: 0 4rem
 
         @include md

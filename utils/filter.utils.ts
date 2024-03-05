@@ -29,7 +29,7 @@ export const getMainFilters = async (filterType: FilterType, filterKind: FilterK
 
   const response = await api.retrieveCollection();
   if (response.status === ResultStatus.FAILED) {
-    throw response;
+    return [];
   }
 
   const filters: any[] = response?.data?.resources || [];
@@ -55,7 +55,7 @@ export const getAllFilters = async () => {
   });
 
   if (response.status === ResultStatus.FAILED) {
-    throw response;
+    return [];
   }
 
   return (response?.data?.resources || []) as any[];

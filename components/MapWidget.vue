@@ -2,6 +2,7 @@
   <div class="mapwidget" :id="mapWidgetId"></div>
   <div align="right" class="my-2 has-text-white">
     <p class="general-font-size">© GeoBasis-DE / BKG (2024)</p>
+    <p class="general-font-size">© GeoBasis-DE / BKG (2024)</p>
   </div>
 </template>
 
@@ -106,8 +107,9 @@ onMounted(async () => {
     //L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=tVi34bM6PTUr9iztZ0dR', { // MapTiler Development for usage on developer workstations.
      L.tileLayer('https://api.maptiler.com/maps/1273b8ef-8485-4e5e-9b5f-0e676ef766c1/256/{z}/{x}/{y}.png?key=ZKYxdvnMOpWy7cmBIb2L', { // MapTiler Production: Commit only with this line active!!!.
       minZoom: props.minZoom,
-      maxZoom: props.maxZoom
-    }).addTo(map);
+      maxZoom: props.maxZoom,
+    }
+  ).addTo(map);
 
   createAttribution();
   if (!props.zoom) {
@@ -140,7 +142,9 @@ onMounted(async () => {
   }
 
   // @ts-expect-error no type
-  L.mask("/LKWND.geojson", { fillOpacity: 0.7, restrictBounds: false }).addTo(map);
+  L.mask("/LKWND.geojson", { fillOpacity: 0.7, restrictBounds: false }).addTo(
+    map
+  );
 
   refreshView();
 });
@@ -191,7 +195,11 @@ const refreshView = async () => {
     const popup = L.popup().setContent(
       `
       <div class="popup">
-  ${location.imageUrl ? '<img class="background" src="' + location.imageUrl + '" />' : ""}
+  ${
+    location.imageUrl
+      ? '<img class="background" src="' + location.imageUrl + '" />'
+      : ""
+  }
   <h2 class="name">
     <div style="text-align: center">
       <span>${location.name}</span>
@@ -302,9 +310,8 @@ const createAttribution = () => {
   }px`;
   map.attributionControl.getContainer().style.paddingRight = "2px";
   map.attributionControl.getContainer().style.paddingLeft = "2px";
-  map.attributionControl.getContainer().style.paddingTop = getTopPaddingFromFontSize(
-    props.attributionFontSize
-  );
+  map.attributionControl.getContainer().style.paddingTop =
+    getTopPaddingFromFontSize(props.attributionFontSize);
   map.attributionControl.getContainer().style.lineHeight = `${props.attributionFontSize}px`;
 };
 

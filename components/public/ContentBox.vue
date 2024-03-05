@@ -18,10 +18,7 @@
             <span class="mr-3">
               <img :src="facilityIcon" />
             </span>
-            <div
-              class="is-dark-grey"
-              @click="goToMainFacility(item)"
-            >
+            <div class="is-secondary-color" @click="goToMainFacility(item)">
               <span
                 class="break-title facility-name general-font-size"
                 v-html="item.user_care_facility?.name"
@@ -29,7 +26,6 @@
             </div>
           </div>
         </div>
-        <hr v-if="item.kind !== 'facility'" />
       </template>
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
@@ -47,8 +43,6 @@
         :class="[
           breakPoints.width.value > 1420
             ? 'd-flex align-center justify-space-between'
-            : item.kind !== 'facility'
-            ? 'mb-3'
             : '',
         ]"
       >
@@ -63,7 +57,9 @@
             rounded="pill"
             :width="breakPoints.width.value > 1420 ? '' : '100%'"
           >
-            <span class="general-font-size" v-if="item.kind">{{ buttonText }}</span>
+            <span class="general-font-size" v-if="item.kind">{{
+              buttonText
+            }}</span>
             <span class="general-font-size" v-else-if="item.url_kind">{{
               item.button_text
             }}</span>
@@ -115,10 +111,8 @@ const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility")
+      return `/public/care_facilities/${props.item.id}`;
   }
 
   if (props.item.url) {
@@ -126,7 +120,10 @@ const buttonHref = computed(() => {
       return props.item.url;
     }
 
-    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
+    if (
+      props.item.url.includes("http://") ||
+      props.item.url.includes("https://")
+    ) {
       return props.item.url;
     } else return "https://" + props.item.url;
   }
@@ -135,20 +132,18 @@ const buttonHref = computed(() => {
 });
 
 const goToFacility = (buttonHref: any) => {
-  router.push({ path: buttonHref }); 
+  router.push({ path: buttonHref });
 };
 
-const goToMainFacility = (item:any) => {
-  router.push({ path:`/public/care_facilities/${item.user_care_facility?.id}` });
+const goToMainFacility = (item: any) => {
+  router.push({
+    path: `/public/care_facilities/${item.user_care_facility?.id}`,
+  });
 };
-
 
 const buttonText = computed(() => {
   if (!props.item) return null;
   if (props.item.kind) {
-    if (props.item.kind === "course") return "Zum Kurs";
-    if (props.item.kind === "event") return "Zur Veranstaltung";
-    if (props.item.kind === "news") return "Zum Beitrag";
     if (props.item.kind === "facility") return "Zur Einrichtung";
   }
 });

@@ -18,24 +18,16 @@
         >
       </span>
     </div>
-    <div v-if="careFacility?.street || careFacility?.zip || careFacility?.town">
-      <div class="py-3">
-        <span class="d-flex align-center">
-          <img class="mr-2 icon" :src="iconAddress" />
-          <span class="is-dark-grey general-font-size">{{ careFacility.street }}</span>
-        </span>
-        <div v-if="careFacility?.additional_address_info" class="aditional-info">
-          <v-icon class="mr-2"></v-icon>
-          <span class="mr-2 is-dark-grey general-font-size">
-            {{ careFacility?.additional_address_info }}
-          </span>
-        </div>
 
-        <div>
-          <v-icon class="mr-2" color="primary"></v-icon>
-          <span class="is-dark-grey general-font-size"
-            >{{ careFacility.zip }} {{ careFacility.town }}</span
-          >
+    <v-row no-gutters v-for="places in freePlaces">
+      <v-col class="d-flex flex-column justify-center align-center">
+        <div class="is-primary general-font-size">{{ places.title }}</div>
+        <div class="is-secondary-color general-font-size">
+          {{ places.description }}
+        </div>
+        <div class="is-primary-color general-font-size mt-5">
+          <v-icon color="success">mdi-circle</v-icon>
+          <span class="ml-2">Plätze verfügbar</span>
         </div>
       </div>
     </div>
@@ -118,10 +110,6 @@
 </template>
 
 <script lang="ts" setup>
-import facilityIcon from "~/assets/icons/facilityTypes/facilities_green.svg";
-import iconPhone from "@/assets/icons/facilities/icon_phone.svg";
-import iconMail from "@/assets/icons/facilities/icon_mail.svg";
-import iconAddress from "@/assets/icons/facilities/icon_address.svg";
 const props = defineProps({
   careFacility: {
     type: Object,
@@ -129,20 +117,20 @@ const props = defineProps({
   },
 });
 
-const buttonHref = computed(() => {
-  if (!props.careFacility) return null;
-
-  if (props.careFacility.website) {
-    if (
-      props.careFacility.website.includes("http://") ||
-      props.careFacility.website.includes("https://")
-    ) {
-      return props.careFacility.website;
-    } else return "https://" + props.careFacility.website;
-  }
-
-  return null;
-});
+const freePlaces = [
+  {
+    title: "Betreutes Wohnen",
+    description: "Rollstuhlgerecht, Einzelappartement",
+  },
+  {
+    title: "Kurzzeitpflege",
+    description: "Rollstuhlgerecht, Einzelzimmer",
+  },
+  {
+    title: "Ambulante Pflege",
+    description: "",
+  },
+];
 </script>
 
 <style lang="sass" scoped>
@@ -151,12 +139,4 @@ const buttonHref = computed(() => {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15)
   border-radius: 20px
   padding: 20px
-
-.icon
-  width: 1.50rem
-
-.aditional-info
-  width: 100%
-  display: flex
-  flex-wrap: nowrap
 </style>

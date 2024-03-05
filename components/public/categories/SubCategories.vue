@@ -1,5 +1,5 @@
 <template>
-  <div class="sub-categories-wrapper general-font-size" >
+  <div class="sub-categories-wrapper general-font-size">
     <v-row
       class="sub-category text-center align-center justify-center"
       :id="subCategory?.id.replaceAll('-', '')"
@@ -147,9 +147,5 @@ const getSubSubCategories = async () => {
       text-decoration: underline !important;
     }
   }
-}
-
-a {
-  color: $dark-grey !important;
 }
 </style>

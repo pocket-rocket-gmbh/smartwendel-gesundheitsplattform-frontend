@@ -3,7 +3,7 @@
     <div>
       <PublicSearchTheBasicSearchBox
         title="Anbietersuche"
-        sub-title="Finde den passenden Anbieter!"
+        sub-title="Passende Pflegeanbieter finden!"
         :map-controls="true"
         :show-map="showMap"
         @toggle-map="mapToogle"
@@ -16,25 +16,38 @@
         <div class="results">
           <div class="map-widget">
             <v-skeleton-loader type="card" v-if="appStore.loading && !breakPoints.isMobile.value"></v-skeleton-loader>
+
+      <v-container fluid>
+        <v-row>
+          <v-col :cols="12" class="d-none d-md-block">
+            <v-skeleton-loader
+              type="card"
+              v-if="appStore.loading"
+            ></v-skeleton-loader>
             <ClientMap
               :locations="locations"
-              v-if="
-                showMap && !appStore.loading && filterStore.filteredResults.length > 0
-              "
+              v-if="showMap && !appStore.loading"
               ref="map"
               :auto-fit="false"
               :center-point="{
-                lng: 7.131735,
-                lat: 49.523656,
+                lat: 50.03646,
+                lng: 12.00258,
               }"
               :min-zoom="11"
             />
-          </div>
-          <div class="facilities">
-            <PublicSearchTheFilteredCareFacilities @showOnMap="handleShowOnMap" />
-          </div>
-        </div>
-      </div>
+          </v-col>
+
+          <v-col :cols="12" :md="4">
+            <PublicSearchTheFilter :filterKind="'facility'" />
+          </v-col>
+          <v-col :cols="12" :md="8">
+            <PublicSearchTheFilteredCareFacilities
+              @showOnMap="handleShowOnMap"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+
       <v-row v-if="!filterStore.filteredResults.length && !appStore.loading">
         <v-col class="d-flex flex-column align-center justify-center">
           <div class="flex-column" align="center">
@@ -153,6 +166,12 @@ const getLocationsFromFacilies = async (facilities: any[]) => {
   locations.value = [];
 
   for (const facility of facilities) {
+    if (
+      facility.geocode_address?.length &&
+      facility.geocode_address[0] &&
+      facility.geocode_address[0].lon &&
+      facility.geocode_address[0].lat
+    ) {
     if (
       facility.geocode_address?.length &&
       facility.geocode_address[0] &&

@@ -1,11 +1,13 @@
 <template>
   <v-app v-if="useUser().currentUser">
     <div @click.stop="drawer = !drawer" class="d-flex justify-start">
-        <v-icon size="x-large" class="is-dark-grey">mdi-menu-close</v-icon>
-      </div>
+      <v-icon size="x-large" class="is-secondary-color">mdi-menu-close</v-icon>
+    </div>
     <v-navigation-drawer v-model="drawer">
       <div @click.stop="drawer = !drawer" class="d-flex justify-end">
-        <v-icon size="x-large" class="is-dark-grey">mdi-backburger</v-icon>
+        <v-icon size="x-large" class="is-secondary-color"
+          >mdi-backburger</v-icon
+        >
       </div>
       <div class="d-flex">
         <router-link to="/">
@@ -13,12 +15,12 @@
         </router-link>
       </div>
       <v-list-item>
-        <v-list-item-title class="general-font-size is-dark-grey font-weight-bold my-1 mb-5">
-          Gesundheitsplattform
+        <v-list-item-title
+          class="general-font-size is-secondary-color font-weight-bold my-1 mb-5"
+        >
+          <div>Gesundheitsplattform</div>
+          <div>Landkreis Wunsiedel</div>
         </v-list-item-title>
-        <v-list-item-subtitle class="has-lk-logo my-1"
-          ><img :src="logo" width="40"  /> Smart Wendeler Land
-        </v-list-item-subtitle>
       </v-list-item>
       <v-divider></v-divider>
       <div v-if="!useUser().statusOnHealthScope()" class="d-flex align-center">
@@ -26,30 +28,46 @@
           Du bist zur Zeit in Prüfung und nicht freigegeben.
           <v-tooltip location="top" width="200">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">mdi-information-outline</v-icon>
+              <v-icon class="is-clickable" v-bind="props"
+                >mdi-information-outline</v-icon
+              >
             </template>
             <span>
-              Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner
-              Einrichtung. Nach erfolgreichem Abschluss wirst du freigeschaltet. Du kannst
-              weiterhin deine Inhalte pflegen.
+              Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten
+              deiner Einrichtung. Nach erfolgreichem Abschluss wirst du
+              freigeschaltet. Du kannst weiterhin deine Inhalte pflegen.
             </span>
           </v-tooltip>
         </v-alert>
       </div>
       <v-list dense nav>
         <template v-if="useUser().isAdmin()">
-          <v-list-item link to="/admin/matomo" nuxt class="general-font-size is-dark-grey">
+          <v-list-item
+            link
+            to="/admin/matomo"
+            nuxt
+            class="general-font-size is-secondary-color"
+          >
             <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken
           </v-list-item>
           <v-divider></v-divider>
           <v-list-item link to="/admin" nuxt class="general-font-size is-dark-grey"> Dashboard </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin/filter/facilities" nuxt class="general-font-size is-dark-grey">
+          <v-list-item
+            link
+            to="/admin/filter/facilities"
+            nuxt
+            class="general-font-size is-secondary-color"
+          >
             Einrichtungsfilter
           </v-list-item>
-          <v-list-item link to="/admin/filter/courses" nuxt class="general-font-size is-dark-grey"> Kursfilter </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin/categories" nuxt class="general-font-size is-dark-grey">
+          <v-list-item
+            link
+            to="/admin/categories"
+            nuxt
+            class="general-font-size is-secondary-color"
+          >
             Bereiche und Kategorien
           </v-list-item>
           <v-divider></v-divider>
@@ -58,52 +76,29 @@
           link
           to="/admin/care_facilities"
           nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-          class="general-font-size is-dark-grey"
+          v-if="
+            useAccessPrivileges().canAccessEndpointAction(
+              'care_facilities',
+              'list'
+            )
+          "
+          class="general-font-size is-secondary-color"
         >
           <span v-if="useUser().isFacilityOwner()">Meine Einrichtung</span>
           <span v-else>Einrichtungen</span>
-        </v-list-item>
-        <v-list-item
-          :disabled="!setupFinished"
-          link
-          to="/admin/courses"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-          class="general-font-size is-dark-grey"
-        >
-          <span v-if="useUser().isFacilityOwner()">Meine Kurse</span>
-          <span v-else>Kurse</span>
-        </v-list-item>
-        <v-list-item
-          :disabled="!setupFinished"
-          link
-          to="/admin/events"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-          class="general-font-size is-dark-grey"
-        >
-          <span v-if="useUser().isFacilityOwner()">Meine Veranstaltungen</span>
-          <span v-else>Veranstaltungen</span>
-        </v-list-item>
-        <v-list-item
-          :disabled="!setupFinished"
-          link
-          to="/admin/news_articles"
-          nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-          class="general-font-size is-dark-grey"
-        >
-          <span v-if="useUser().isFacilityOwner()">Meine Beiträge</span>
-          <span v-else>Beiträge</span>
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item
           link
           to="/admin/user_profile"
           nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
-          class="general-font-size is-dark-grey"
+          v-if="
+            useAccessPrivileges().canAccessEndpointAction(
+              'care_facilities',
+              'list'
+            )
+          "
+          class="general-font-size is-secondary-color"
         >
           <span>Mein Konto</span>
         </v-list-item>
@@ -111,8 +106,10 @@
           link
           to="/admin/tooltips"
           nuxt
-          v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')"
-          class="general-font-size is-dark-grey"
+          v-if="
+            useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')
+          "
+          class="general-font-size is-secondary-color"
         >
           Tooltips
         </v-list-item>
@@ -121,16 +118,18 @@
           to="/admin/users"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')"
-          class="general-font-size is-dark-grey"
+          class="general-font-size is-secondary-color"
         >
           Benutzer
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item @click="handleLogout" class="general-font-size is-dark-grey">
+        <v-list-item
+          @click="handleLogout"
+          class="general-font-size is-secondary-color"
+        >
           <v-icon>mdi-logout</v-icon> Logout
         </v-list-item>
       </v-list>
-    
     </v-navigation-drawer>
     <v-main>
       <v-container :fluid="true" class="container">
@@ -146,7 +145,6 @@
       <ClientSnackbar />
     </ClientOnly>
   </v-app>
-  
 </template>
 
 <script lang="ts" setup>

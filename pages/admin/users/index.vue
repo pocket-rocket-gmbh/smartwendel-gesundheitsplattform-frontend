@@ -51,6 +51,7 @@
       @openDeleteDialog="openDeleteDialog"
       @mailUser="mailUser"
       @toogle-bar="showBar = !showBar"
+      @toogle-bar="showBar = !showBar"
       ref="dataTableRef"
       :disable-delete="false"
     />
@@ -87,6 +88,8 @@ definePageMeta({
 
 const showBar = ref(true);
 
+const showBar = ref(true);
+
 const fields = ref([
   { prop: "firstname", text: "Vorname", value: "firstname", type: "string" },
   { prop: "lastname", text: "Nachname", value: "lastname", type: "string" },
@@ -117,9 +120,11 @@ const fields = ref([
     value: "",
     type: "is-lk",
     tooltip: "Nutzer ist Admin.",
+    tooltip: "Nutzer ist Admin.",
   },
   {
     prop: "last_seen",
+    text: "Zuletzt eingeloggt",
     text: "Zuletzt eingeloggt",
     value: "last_seen",
     type: "datetime",
@@ -162,9 +167,13 @@ const openDeleteDialog = (id: string) => {
 
 const snackbar = useSnackbar();
 
+const snackbar = useSnackbar();
+
 const mailUser = async (id: String) => {
   const user = users.value.find((user) => user.id === id);
   if (process.client && user) {
+    navigator.clipboard.writeText(user.email);
+    snackbar.showSuccess(`E-Mail kopiert`);
     navigator.clipboard.writeText(user.email);
     snackbar.showSuccess(`E-Mail kopiert`);
   }

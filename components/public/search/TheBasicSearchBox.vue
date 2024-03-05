@@ -21,6 +21,27 @@ const emit = defineEmits<{
 
 const breakPoints = useBreakpoints();
 
+const filterStore = useFilterStore();
+
+watch(
+  () => filterStore.currentTags,
+  () => {
+    filterStore.loadAllResults();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => filterStore.currentZips,
+  () => {
+    filterStore.loadAllResults();
+  },
+  {
+    deep: true,
+  }
+);
 </script>
 
 <style lang="sass" scoped></style>

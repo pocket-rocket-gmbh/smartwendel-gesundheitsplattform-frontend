@@ -6,15 +6,22 @@
     width="900px"
   >
     <v-card class="">
-      <v-card-title v-if="location" class="general-font-size is-dark-grey"> Ort bearbeiten </v-card-title>
-      <v-card-title v-else class="general-font-size is-dark-grey"> Ort erstellen </v-card-title>
+      <v-card-title
+        v-if="location"
+        class="general-font-size is-secondary-color"
+      >
+        Ort bearbeiten
+      </v-card-title>
+      <v-card-title v-else class="general-font-size is-secondary-color">
+        Ort erstellen
+      </v-card-title>
       <v-container>
         <v-form ref="form">
           <div class="mb-15">
             <div class="field">
               <v-text-field
                 v-model="street"
-                class="is-dark-grey"
+                class="is-secondary-color"
                 hide-details="auto"
                 label="Straße und Nummer"
                 :rules="[rules.required, rules.counterStreet]"
@@ -25,7 +32,7 @@
                 hide-details="auto"
                 v-model="community"
                 :items="communities"
-                class="is-dark-grey"
+                class="is-secondary-color"
                 item-title="name"
                 item-value="id"
                 label="Gemeinde"
@@ -39,7 +46,7 @@
                 disabled
                 label="PLZ"
                 :type="'number'"
-                class="is-dark-grey"
+                class="is-secondary-color"
                 readonly
                 :rules="[rules.required, rules.zip]"
               />
@@ -50,19 +57,23 @@
                 :items="townsByCommunityId"
                 item-title="name"
                 item-value="name"
-                class="is-dark-grey"
+                class="is-secondary-color"
                 label="Ort"
                 :rules="[rules.required]"
               />
             </div>
           </div>
-          <v-alert class="general-font-size" v-if="error" type="error">{{ error }}</v-alert>
+          <v-alert class="general-font-size" v-if="error" type="error">{{
+            error
+          }}</v-alert>
         </v-form>
       </v-container>
       <v-divider></v-divider>
       <v-card-actions class="d-flex justify-end actions">
         <v-btn variant="outlined" @click="emitClose()">Abbrechen</v-btn>
-        <v-btn color="blue darken-1" variant="outlined" @click="emitSave()">OK</v-btn>
+        <v-btn color="blue darken-1" variant="outlined" @click="emitSave()"
+          >OK</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -99,7 +110,9 @@ const snackbar = useSnackbar();
 const townsByCommunityId = ref([]);
 
 watch(community, () => {
-  const foundCommunity = communities.value.find(({ id }) => id === community.value);
+  const foundCommunity = communities.value.find(
+    ({ id }) => id === community.value
+  );
   if (!foundCommunity) return;
   zip.value = foundCommunity.zip;
 
@@ -156,7 +169,8 @@ const emitSave = async () => {
     snackbar.showError(
       "Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!"
     );
-    error.value = "Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!";
+    error.value =
+      "Adresse konnte nicht gefunden werden. Bitte überprüfe deine Eingabe!";
   }
 };
 
@@ -188,7 +202,9 @@ const getAddressInfoFromLatLong = async (lat: number, long: number) => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find((community: any) => community.id === communityId);
+  const found = communities.value.find(
+    (community: any) => community.id === communityId
+  );
 
   if (found) {
     // useNuxtApp().$bus.$emit('setPayloadFromSlotChild', { name: 'zip', value: found.zip })
@@ -202,5 +218,4 @@ const getTownsByCommunityId = (communityId: string) => {
 <style lang="sass">
 .actions
   gap: 1rem
-
 </style>

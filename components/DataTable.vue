@@ -80,7 +80,6 @@
         :class="[
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
-          item?.kind !== 'facility' ? 'has-normal-bg' : '',
           getCurrentRoute() === 'admin-users' ? '' : '',
           isDraft(item) ? 'draft' : '',
         ]"
@@ -232,9 +231,7 @@
             <img :src="logo" width="20" class="ml-2 pt-2" />
           </span>
           <span
-            v-else-if="
-              field.type === 'imported' && item?.user?.imported && useUser().isAdmin()
-            "
+            v-else-if="field.type === 'imported' && item?.user?.imported && useUser().isAdmin()"
             @click.stop="copyTokenLink(item)"
           >
             <div class="d-flex flex-column">
@@ -318,9 +315,8 @@
 import { useEnums } from "@/composables/data/enums";
 import { pathIntoObject } from "~/utils/path.utils";
 import { useAdminStore } from "~/store/admin";
-import { isCompleteFacility } from "~/utils/facility.utils";
 import type { RequiredField } from "~/types/facilities";
-import logo from "@/assets/images/lk-logo.png";
+import logo from "@/assets/images/logo.png";
 
 const router = useRouter();
 
@@ -475,6 +471,37 @@ api.setEndpoint(props.endpoint);
 const items = api.items;
 
 //limit items to 10
+
+const filteredItems = computed(() => {
+  if (props.searchQuery === undefined || props.searchColumns === undefined)
+    return items.value;
+
+  const itemsFiltered = items.value.filter((item) => {
+    const some = props.searchColumns.some((columnProp) => {
+      let column = pathIntoObject(item, columnProp);
+      if (column) {
+        let searchTerm = props.searchQuery.toUpperCase();
+        if (columnProp === "kind") {
+          if ("EINRICHTUNG".includes(searchTerm)) {
+            searchTerm = "FACILITY";
+          }
+        }
+        if (columnProp === "created_at" || columnProp === "last_seen") {
+          column = useDatetime().parseDatetime(column);
+        }
+        if (typeof column === "string") {
+          return column.toUpperCase().includes(searchTerm);
+        }
+        if (Array.isArray(column)) {
+          // TODO: Right now i only check for the 'name' field on my items, not all
+          return column.find((item) => item.name?.toUpperCase().includes(searchTerm));
+        }
+      }
+    });
+    return some;
+  });
+  return itemsFiltered;
+});
 
 const handleToggled = async (item: any) => {
   emit("itemUpdated", item);

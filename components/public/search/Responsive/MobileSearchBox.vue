@@ -32,8 +32,8 @@
           >
         </v-col>
       </v-row>
-      <div v-show="showFilter">
-        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
+      <div v-if="showFilter">
+        <v-row>
           <v-col cols="10">
             <PublicSearchCategorySelectModal
               v-model="filterStore.currentFacilityTags"
@@ -45,22 +45,13 @@
             <PublicSearchFilterSelectModal :filter-kind="filterKind" />
           </v-col>
         </v-row>
-        <v-row v-if="filterKind !== 'event' && filterKind !== 'news'">
+        <v-row>
           <v-col class="d-flex align-center">
             <PublicSearchCommunitySelectModal />
           </v-col>
         </v-row>
-        <div
-          class="d-flex align-center justify-center is-white font-weight-medium my-2"
-          v-if="filterKind !== 'event' && filterKind !== 'news'"
-        >
-          oder
-        </div>
-        <v-row
-          :class="[
-            filterKind === 'event' || filterKind === 'news' ? 'mt-5' : '',
-          ]"
-        >
+        <div class="d-flex align-center justify-center is-white-color font-weight-medium my-2">oder</div>
+        <v-row>
           <v-col>
             <div class="field">
               <label class="label is-white">
@@ -188,18 +179,6 @@ const setFilterTitle = () => {
   if (props.filterKind === "facility") {
     filterTitle.value = "Branche";
     searchTitle.value = "Anbieter suchen";
-  }
-  if (props.filterKind === "event") {
-    filterTitle.value = "Suche nach Veranstaltungen";
-    searchTitle.value = "Veranstaltung suchen";
-  }
-  if (props.filterKind === "news") {
-    filterTitle.value = "Suche nach Neuigkeiten";
-    searchTitle.value = "Nachrichten suchen";
-  }
-  if (props.filterKind === "course") {
-    filterTitle.value = "Themengebiet";
-    searchTitle.value = "Kurs suchen";
   }
 };
 

@@ -1,20 +1,20 @@
 <template>
   <div class="wrapper">
-    <h1 class="title word-break" lang="de">{{ title }}</h1>
+    <h1 class="is-white-color word-break title" lang="de">{{ title }}</h1>
     <PublicLandingChooseCategory class="search-field"/>
-    <p class="sub-title word-break" lang="de">{{ subTitle }}</p>
+    <p class="is-paragraph is-white-color word-break title" lang="de">{{ subTitle }}</p>
     
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useFilterStore } from "~/store/searchFilter";
-import homeImage from "@/assets/images/home.jpg";
+import homeImage from "@/assets/images/home.svg";
 
 const filterStore = useFilterStore();
 
-const title = ref('Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land')
-const subTitle = ref('Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.')
+const title = ref('Ihr Pflegeportal \n im Landkreis Wunsiedel')
+const subTitle = ref('Finden Sie  Informationen und Anbieter rund \n um das Thema Pflege in Ihrem Landkreis.')
 
 useHead({
   title: title,
@@ -38,10 +38,10 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 2rem;
+  gap: 3rem;
   justify-content: center;
   width: 50%;
-  padding: 0 0 0 5rem;
+  padding: 0 0 0 6.25rem;
 
   @include lg {
     width: 70%;
@@ -60,37 +60,13 @@ onMounted(() => {
     justify-content: flex-start;
   }
 
-  .title {
-    color: white;
-    font-size: 55px;
-    text-transform: uppercase;
-    line-height: 150%;
-    @include md {
-      text-align: center;
-      justify-content: center;
-    }
-    @include sm {
-      font-size: 1.6rem;
-    }
-  }
-  .sub-title {
-    color: white;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 35px;
-    width: 75%;
-    font-size: 27px;
-
-    @include md {
-      text-align: center;
-      justify-content: center;
-     
-      width: 100%;
-    }
-  }
   .header {
     margin-top: 20%;
   }
+}
+
+.title {
+  white-space: pre-line;
 }
 .search-field {
   @include md {

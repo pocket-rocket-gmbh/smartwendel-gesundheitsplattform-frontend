@@ -1,8 +1,7 @@
 <template>
   <div>
     <h2>{{ name }}</h2>
-    <!-- <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn> -->
-    <!-- Einrichtungsfilter -->
+     <v-btn elevation="0" variant="outlined" @click="openCreateDialog">{{ name }} erstellen</v-btn>
     <CollapsibleListRec
       :items="itemsForFacilityList"
       :layer="0"
@@ -14,8 +13,6 @@
       :disable-draggable="false"
     />
     <!-- TODO: Dragging might not work on sub-items because menu_oder is all over the place... Maybe just sort alphabetically? -->
-
-    <!-- Leistungsfilter -->
     <CollapsibleListRec
       :items="itemsForServiceList"
       :layer="0"
@@ -108,6 +105,7 @@ const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem
     menuOrder: filter.menu_order,
     layer,
     next: [],
+    care_facilities_count: "",
   };
 
   arrayToAdd.push(filterItem);
@@ -135,14 +133,14 @@ const getItems = async () => {
   };
   adminStore.loading = true;
   const result = await api.retrieveCollection(options);
-
+  adminStore.loading = false;
   if (result.status === ResultStatus.FAILED) {
     console.error(result);
     return;
   }
 
   const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
-  // const filters: any[] = result?.data?.resources;
+  //const filters: any[] = result?.data?.resources;
   if (!filters) {
     console.error("No filters!");
     return;
@@ -156,55 +154,15 @@ const getItems = async () => {
 
   const allFilters = await useFilterStore().loadAllFilters();
 
+  console.log(allFilters)
+
   facilityFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForFacilityList, 0, allFilters));
   serviceFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters));
 
-  const tags = await loadAllTags();
-
   adminStore.loading = false;
-
-  const transformedTags: CollapsibleListItem[] = tags.map((tag) => ({
-    id: tag.id,
-    title: tag.name,
-    menuOrder: tag.menu_order,
-    specialType: "tag",
-    layer: 0,
-  }));
-
-  tmpItemsForServiceList[0]?.next.push({
-    id: "0",
-    layer: 1,
-    title: "Branchenspezifisches Leistungsangebot",
-    menuOrder: 0,
-    static: true,
-    specialType: "tag",
-    next: [...transformedTags],
-    care_facilities_count: ""
-  });
 
   itemsForFacilityList.value = [...tmpItemsForFacilityList];
   itemsForServiceList.value = [...tmpItemsForServiceList];
-};
-
-const loadAllTags = async () => {
-  api.setEndpoint("tags");
-  const options = {
-    page: 1,
-    per_page: 999,
-    sort_by: "menu_order",
-    sort_order: "asc",
-    searchQuery: null as any,
-    concat: false,
-    filters: [] as any,
-  };
-  const res = await api.retrieveCollection(options);
-  if (res.status !== ResultStatus.SUCCESSFUL) return;
-
-  // const tags: FilterTag[] = res.data.resources;
-  const scope = filterKindToFilterScope(props.filterKind);
-  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => scope === item.scope);
-
-  return tags;
 };
 
 const handleClick = async (action: EmitAction, itemIds: string[], layer: number, name: string, kind: string, specialType: string, filterType: FilterType) => {

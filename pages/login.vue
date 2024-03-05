@@ -1,9 +1,12 @@
 <template>
   <v-row class="my-15">
     <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
+    <v-col cols="12" sm="8" md="6" offset-md="3" offset-sm="2">
       <v-form @submit.prevent="auth">
         <v-card :class="['pa-6', { shake: animated }]">
-          <img class="is-fullwidth" src="~/assets/images/logo.png" />
+          <div class="d-flex justify-center">
+            <img class="login-image" width="300px" src="~/assets/images/logo.png" />
+          </div>
           <div class="mb-3">
             <v-text-field
               v-model="email"
@@ -35,13 +38,16 @@
           <div
             @click="emailAlreadyGiven()"
             align="center"
-            class="mt-2 is-clickable is-dark-grey general-font-size"
+            class="mt-2 is-clickable is-secondary-color general-font-size"
           >
             Passwort vergessen?
           </div>
 
           <nuxt-link to="/register"
-            ><div align="center" class="mt-6 is-dark-grey general-font-size">
+            ><div
+              align="center"
+              class="mt-6 is-secondary-color general-font-size"
+            >
               Noch keinen Account? Jetzt registrieren!
             </div></nuxt-link
           >
@@ -87,6 +93,8 @@ export default defineComponent({
 
     console.log(router.options.history);
 
+    console.log(router.options.history);
+
     const auth = async () => {
       loading.value = true;
       errors.value = "";
@@ -99,7 +107,7 @@ export default defineComponent({
 
         localStorage.setItem("auth._token.jwt", jwt);
         localStorage.setItem(
-          "smartwendelerland_gesundheitsplattform._remembered_email",
+          "_gesundheitsplattform._remembered_email",
           email.value
         );
 
@@ -113,6 +121,9 @@ export default defineComponent({
             lastRoute.value &&
             !lastRoute.value.includes("/password_forgotten") &&
             lastRoute.value !== "/password_reset" &&
+            lastRoute.value !== "/register" &&
+            lastRoute.value !== "/login" &&
+            router.options.history.state.current === "/onboarding"
             lastRoute.value !== "/register" &&
             lastRoute.value !== "/login" &&
             router.options.history.state.current === "/onboarding"
@@ -143,7 +154,7 @@ export default defineComponent({
       lastRoute.value = router.options.history.state.back as null;
       if (process.client) {
         const rememberedEmail = localStorage.getItem(
-          "smartwendelerland_gesundheitsplattform._remembered_email"
+          "_gesundheitsplattform._remembered_email"
         );
         if (rememberedEmail) {
           setTimeout(() => {
@@ -183,18 +194,24 @@ export default defineComponent({
   90%
     transform: translate3d(-1px, 0, 0)
 
+
   20%,
+  80%
   80%
     transform: translate3d(2px, 0, 0)
 
+
   30%,
   50%,
+  70%
   70%
     transform: translate3d(-4px, 0, 0)
 
   40%,
   60%
+  60%
     transform: translate3d(4px, 0, 0)
+
 
 .login
   width: 50%

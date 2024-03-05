@@ -205,6 +205,8 @@ const handleCta = async () => {
   if (!valid) {
     if (!props.enableDraft) {
       const formErrors = await form.value.errors;
+
+      console.log(formErrors);
       errors.value = formErrors.map((err) => err.errorMessages[0]);
       snackbar.showError("Speichern fehlgeschlagen! Es gibt ungültige Felder!");
       return;
@@ -408,6 +410,8 @@ onMounted(async () => {
   if (props.itemPlaceholder && !item.value.id) {
     item.value = { ...props.itemPlaceholder };
   }
+
+  console.log(form.value)
 
   triggerSaveHintTimeout();
   requestAnimationFrame(() => form.value?.validate());
