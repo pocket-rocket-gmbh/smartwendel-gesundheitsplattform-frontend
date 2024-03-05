@@ -1,6 +1,7 @@
 // insert enums in Interface
 export interface Enums {
   facilitiesStatus: EnumValue[],
+  facilitiesKind: EnumValue[],
   userRole: EnumValue[]  // Add the userRole property
 }
 
@@ -18,6 +19,11 @@ export function useEnums() {
     { value: true, name: 'Freigegeben', class: 'is-green' }
   ]
 
+  const facilitiesKind = [
+    { value: 'event', name: 'Veranstaltung', class: '' },
+    { value: 'course', name: 'Kurs', class: '' },
+  ]
+
   const userRole = [
     { value: 'facility_owner', name: 'Einrichtungss', class: '' },
     { value: 'admin', name: 'Adminitrator', class: '' },
@@ -27,12 +33,14 @@ export function useEnums() {
   // insert enums in Interface
   interface Enums {
     facilitiesStatus: EnumValue[],
+    facilitiesKind: EnumValue[],
     userRole: EnumValue[]
   }
   
   // insert enums in JSON
   const enums: Record<keyof Enums, EnumValue[]> = {
     facilitiesStatus,
+    facilitiesKind,
     userRole
   }
 
@@ -63,6 +71,7 @@ export function useEnums() {
   // return enums
   return {
     facilitiesStatus,
+    facilitiesKind,
     userRole,
     getName,
     getClassName,

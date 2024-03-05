@@ -115,11 +115,6 @@ import {
   type FilterKind,
   useFilterStore,
 } from "~/store/searchFilter";
-import {
-  type Facility,
-  type FilterKind,
-  useFilterStore,
-} from "~/store/searchFilter";
 import { ResultStatus } from "~/types/serverCallResult";
 import type { CollapsibleListItem } from "../../../types/collapsibleList";
 import iconFilter from "@/assets/icons/icon_filter.svg";

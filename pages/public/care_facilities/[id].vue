@@ -79,7 +79,7 @@
       class="d-md-none d-sm-block"
       :class="[careFacility?.logo_url ? ' mt-10 pt-15' : 'mt-5']"
     >
-      <span class="general-font-size font-weight-medium is-secondary-color">{{
+      <span class="general-font-size font-weight-medium is-dark-grey">{{
         careFacility?.name
       }}</span>
       <v-divider class="my-5"></v-divider>
@@ -87,12 +87,25 @@
 
     <v-row class="row">
       <v-col sm="12" md="8" class="order-last order-md-first">
-        <PublicCareFacilitiesMain :care-facility="careFacility" />
-        <PublicCareFacilitiesContact :care-facility="careFacility" />
+        <PublicCareFacilitiesMain
+          v-if="careFacility?.kind !== 'news'"
+          :care-facility="careFacility"
+        />
+        <div class="hidden-md-and-up">
+          <div class="mt-5" v-if="(careFacility?.kind === 'course', 'event')">
+            <PublicCareFacilitiesDates :care-facility="careFacility" />
+          </div>
+          <div class="mt-5">
+            <PublicCareFacilitiesDocuments :care-facility="careFacility" />
+          </div>
+        </div>
       </v-col>
-      <v-col md="4" sm="12">
+      <v-col md="4" sm="12" v-if="careFacility?.kind !== 'news'">
         <PublicCareFacilitiesRight :care-facility="careFacility" />
         <div class="hidden-sm-and-down">
+          <div class="mt-5" v-if="(careFacility?.kind === 'course', 'event')">
+            <PublicCareFacilitiesDates :care-facility="careFacility" />
+          </div>
           <div class="mt-5">
             <PublicCareFacilitiesDocuments :care-facility="careFacility" />
           </div>
@@ -111,6 +124,9 @@
 <script lang="ts" setup>
 import type { Facility } from "~/store/searchFilter";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
+import facilityIcon from "~/assets/icons/facilityTypes/facilities_green.svg";
+import eventIcon from "~/assets/icons/facilityTypes/events_green.svg";
+import personIcon from "~/assets/icons/icon_person.svg";
 
 const breakPoints = useBreakpoints();
 
@@ -187,6 +203,20 @@ onMounted(() => {
     }
   }
 }
+
+.news-image {
+  margin: 0 1.25em 0 0;
+  width: 50%;
+  object-fit: cover;
+  border-radius: 20px;
+  float: left;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+  @include md {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+}
+
 .text-description {
   text-align: justify;
 }

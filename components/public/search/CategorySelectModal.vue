@@ -12,8 +12,6 @@
       </v-toolbar>
       <template v-slot:activator="{ props }">
         <div class="field">
-          <label class="label is-white-color">
-            <div class="search-term">{{ filterTitle }}</div>
           <label class="label is-white">
             <div class="search-term">
               {{ filterTitle }}
@@ -277,7 +275,7 @@ onMounted(async () => {
 .filter-name {
   font-size: 1.4rem;
   margin-bottom: 0.75rem;
-  color: red;
+  color: $dark-grey;
 }
 
 .options-select {

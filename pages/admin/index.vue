@@ -1,8 +1,6 @@
 <template>
   <div>
-    <span class="general-font-size is-secondary-color font-weight-bold"
-      >Admin-Bereich</span
-    >
+    <span class="general-font-size is-dark-grey font-weight-bold">Dashboard</span>
   </div>
 </template>
 

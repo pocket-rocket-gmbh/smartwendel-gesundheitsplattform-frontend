@@ -1,7 +1,9 @@
 <template>
   <v-checkbox
+    v-if="kind !== 'facility' && kind !== 'course'"
     v-show="false"
     v-bind:model-value="!!preSetTags.length"
+    :rules="[!!preSetTags.length || 'Pflichtangabe']"
   ></v-checkbox>
   <CollapsibleItem
     class="tag-select mt-10"
@@ -11,59 +13,73 @@
   >
     <template #title>
       <div
-        class="d-flex align-center is-secondary-color"
+        class="d-flex align-center is-dark-grey"
         :class="[handleExpandToggled ? 'text-h5' : 'text-h6']"
       >
-        <div v-if="kind === 'facility'">
-          Branchenspezifisches Leistungsangebot
-        </div>
+        <div v-if="kind === 'facility'">Branchenspezifisches Leistungsangebot</div>
+        <div v-if="kind === 'news'">Stich- und Schlagwörter zum Newsbeitrag</div>
+        <div v-if="kind === 'event'">Veranstaltungsangebot</div>
+        <div v-if="kind === 'course'">Kursspezifische Leistungsangebote</div>
         <div class="has-font-size-small-medium ml-3">
           <v-tooltip location="top" width="300px">
             <template v-slot:activator="{ props }">
-              <v-icon class="help-tooltip" v-bind="props"
-                >mdi-information-outline</v-icon
-              >
+              <v-icon class="help-tooltip" v-bind="props">mdi-information-outline</v-icon>
             </template>
             <span v-if="kind === 'facility'">
-              Trage Begriffe ein, die dein individuelles Angebot möglichst
-              präzise beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“
-              und „Demenz“, wenn es sich um eine Pflegeinrichtung oder „Yoga“,
-              „Les Mills“ und „Krafttraining“, wenn es sich um ein Fitnessstudio
-              handelt). Auf diese Weise gelangen Besucherinnen und Besucher zu
-              deinem Profil, sobald sie nach den entsprechenden Schlagwörtern
-              suchen.
+              Trage Begriffe ein, die dein individuelles Angebot möglichst präzise
+              beschreiben (z. B. „Kurzzeitpflege“, „Betreutes Wohnen“ und „Demenz“, wenn
+              es sich um eine Pflegeinrichtung oder „Yoga“, „Les Mills“ und
+              „Krafttraining“, wenn es sich um ein Fitnessstudio handelt). Auf diese Weise
+              gelangen Besucherinnen und Besucher zu deinem Profil, sobald sie nach den
+              entsprechenden Schlagwörtern suchen.
+            </span>
+            <span v-if="kind === 'course'"
+              >Trage Begriffe ein, die den Inhalt des Kurses möglichst präzise beschreiben
+              (z. B. „Yoga“, „Rückenbeschwerden“, „Beweglichkeit“). Auf diese Weise
+              gelangen Besucherinnen und Besucher zu deinem Kursprofil, sobald sie nach
+              den entsprechenden Schlagwörtern suchen.
+            </span>
+            <span v-if="kind === 'event'"
+              >„Überlege dir, welche Begriffe den Inhalt deiner Veranstaltung am
+              treffendsten wiedergeben. Trage bspw. den Titel „Fit in der Region“, die
+              Ziele („Gesundheit fördern“) und die Angebote („Gesundheits-Checks“) deiner
+              Veranstaltung ein.
+            </span>
+            <span v-if="kind === 'news'">
+              Besucherinnen und Besucher gelangen zu deinem Newsartikel/Beitrag, wenn sie
+              die entsprechenden Schlagwörter suchen.
             </span>
           </v-tooltip>
         </div>
       </div>
       <div v-if="!expand" class="mt-3">
-        <span
-          class="is-secondary-color general-font-size"
-          v-if="preSetTags.length"
-          >Bereits ausgewählt:</span
-        >
+        <span class="is-dark-grey general-font-size" v-if="preSetTags.length">Bereits ausgewählt:</span>
         <v-chip v-for="tag in preSetTags" :key="tag.id" class="mx-2">
           {{ tag.name }}
         </v-chip>
       </div>
     </template>
     <template #content>
-      <div class="content general-font-size is-secondary-color">
+      <div class="content general-font-size is-dark-grey">
         <div v-if="kind === 'facility'">
-          Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches
-          Angebot.
+          Bitte beschreibe ganz konkret mit Schlagwörtern dein spezifisches Angebot.
+        </div>
+        <div v-if="kind === 'course'">
+          Hier hast du die Möglichkeit, deinen Kursinhalt mit Hilfe von Schlagwörtern
+          individuell zu beschreiben.
+        </div>
+        <div v-if="kind === 'event'">
+          Hier hast du die Möglichkeit, deine Veranstaltung mit Hilfe von Schlagwörtern
+          individuell zu beschreiben.
         </div>
         <div v-if="preSetTags?.length" class="tags my-6">
-          <span
-            class="general-font-size is-secondary-color font-weight-bold mt-1"
-            >Bereits ausgewählt:</span
-          >
+          <span class="general-font-size is-dark-grey font-weight-bold mt-1">Bereits ausgewählt:</span>
           <v-chip
             v-for="tag in preSetTags"
             closable
             @click:close="handleRemoveTag(tag)"
             :key="tag.id"
-            class="is-secondary-color"
+            class="is-dark-grey"
           >
             {{ tag.name }}
           </v-chip>
@@ -87,28 +103,18 @@
           >
             <template v-slot:no-data>
               <v-list-item>
-                <v-list-item-title
-                  v-if="currentTagSearch.length <= 2"
-                  class="is-secondary-color"
-                >
+                <v-list-item-title v-if="currentTagSearch.length <= 2" class="is-dark-grey">
                   Bitte mindestens 3 Zeichen eingeben um Schlagwörter zu finden
                 </v-list-item-title>
-                <v-list-item-title v-else class="is-secondary-color">
-                  Kein Schlagwort mit dem Namen "<strong>{{
-                    currentTagSearch
-                  }}</strong
-                  >" gefunden. Drücke auf <b>Hinzufügen</b> um das neue
-                  Schlagwort zu erstellen
+                <v-list-item-title v-else class="is-dark-grey">
+                  Kein Schlagwort mit dem Namen "<strong>{{ currentTagSearch }}</strong
+                  >" gefunden. Drücke auf <b>Hinzufügen</b> um das neue Schlagwort zu
+                  erstellen
                 </v-list-item-title>
               </v-list-item>
             </template>
           </v-combobox>
-          <v-btn
-            class="add-button"
-            color="grey"
-            variant="flat"
-            @click="handleAddTag"
-          >
+          <v-btn class="add-button" color="grey" variant="flat" @click="handleAddTag">
             Hinzufügen
           </v-btn>
         </div>
@@ -149,6 +155,12 @@ const handleExpandToggled = () => {
 const placeHolder = computed(() => {
   if (props.kind === "facility") {
     return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
+  } else if (props.kind === "course") {
+    return "Bsp: Kurzzeitpflege, Wurzelbehandlung, Faszientherapie";
+  } else if (props.kind === "event") {
+    return "Bsp: Titel, Ziel und Angebote deiner Veranstaltung";
+  } else if (props.kind === "news") {
+    return "Bsp: Demenz, Mentale Gesundheit, Ernährung im Alter";
   }
 });
 
@@ -161,9 +173,7 @@ const allTagsWithoutSelected = computed(() => {
 });
 
 const handleRemoveTag = (tag: FilterTag) => {
-  const tagIndex = props.preSetTags.findIndex(
-    (preSetTag) => preSetTag.id === tag.id
-  );
+  const tagIndex = props.preSetTags.findIndex((preSetTag) => preSetTag.id === tag.id);
 
   if (tagIndex === -1) return;
 
@@ -187,9 +197,9 @@ const createTag = async (name: string) => {
 const handleAddTag = async () => {
   if (!currentTag.value) return;
   if (typeof currentTag.value === "string") {
-    if (currentTag.value.includes(",")) {
-      const tagsArray = currentTag.value.split(",");
-      const filteredTags = tagsArray.filter((tag) => tag.trim() !== "");
+    if (currentTag.value.includes(',')) {
+      const tagsArray = currentTag.value.split(',');
+      const filteredTags = tagsArray.filter(tag => tag.trim() !== '');
       for (const tag of filteredTags) {
         const newTag = await createTag(tag.trim());
         if (newTag) {

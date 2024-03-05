@@ -1,82 +1,75 @@
 <template>
   <div class="wrapper">
     <v-row>
-      <v-col class="d-flex justify-center align-center text-center">
-        <h2 class="is-secondary"
-          >Sie haben dringende Fragen <br> und benötigen schnelle Antworten:</h2
-        >
+      <v-col class="d-flex justify-center my-3">
+        <span class="general-font-size is-dark-grey font-weight-medium is-uppercase">Du benötigst dringend Hilfe?</span>
       </v-col>
     </v-row>
     <v-row>
       <v-col v-for="(item, index) in items" :key="index" class="items-nummber">
-        <div
-          class="d-flex flex-column justify-space-between text-center align-center items"
-        >
+        <div class="d-flex flex-column justify-space-between text-center align-center items">
           <div>
             <div class="icons d-flex flex-column justify-center align-center">
               <img :src="item.content.image" min-width="50" max-width="50" />
-              <h4
-                class="d-flex align-center title is-secondary"
-              >
+              <span class="d-flex align-center is-dark-grey font-weight-medium general-font-size title">
                 {{ item.content.heading }}
-              </h4>
+              </span>
             </div>
-            <div
-              class="is-paragraph is-secondary"
-              :class="[breakPoints.width.value > 960 ? 'description' : '']"
-            >
+            <div class="is-dark-grey general-font-size" :class="[breakPoints.width.value > 960 ? 'description' : '']">
               {{ item.content.description }}
             </div>
           </div>
           <div class="items-column">
-            <div class="d-flex flex-column flex-1 buttons-wrapper">
-              <a :href="`tel:${item.content.linkText}`" class="is-clickable is-paragraph is-red">
+            <div class="general-font-size d-flex flex-column flex-1 buttons-wrapper">
+              <a :href="item.content.link" target="_blank" class="is-clickable">
+                <v-btn variant="flat" color="primary" rounded="pill" size="large" class="general-font-size">
                   <span>{{ item.content.linkText }}</span>
+                </v-btn>
               </a>
             </div>
           </div>
         </div>
-        <v-divider v-if="breakPoints.width.value < 960"></v-divider>
+        <v-divider v-if="breakPoints.width.value < 960 "></v-divider>
       </v-col>
     </v-row>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import image1 from "@/assets/images/help-links/icon_care_telephone.svg";
-import image2 from "@/assets/images/help-links/icon_counseling_center.svg";
-import image3 from "@/assets/images/help-links/icon_socio_educational_service.svg";
+import image1 from "@/assets/images/help-links/icon_rescue.svg";
+import image2 from "@/assets/images/help-links/icon_emergency.svg";
+import image3 from "@/assets/images/help-links/icon_grief.svg";
 import { useBreakpoints } from "~/composables/ui/breakPoints";
 export default defineComponent({
   setup() {
     const items = [
       {
         content: {
-          heading: "Pflegetelefon",
+          heading: "Rettungsdienste",
           image: image1,
           description:
-            'Die meisten älteren Menschen wünschen sich, solange wie möglich zuhause leben zu können. Auch dann, wenn der eigene Unterstützungs-bedarf immer größer wird. Oft übernehmen Angehörige die Pflege - und stehen plötzlich vor neuen Herausforderungen. Das Pflegetelefon des Bundesfamilienministeriums soll pflegenden Angehörigen ganz konkrete Hilfe leisten.',
-          linkText: "030 20179131",
+            "Wenn es eine akute Gefahr für das Leben gibt und es nicht ausgeschlossen werden kann, dass bleibende Schäden auftreten, sollte unverzüglich der Notruf gewählt werden.",
+          linkText: "Notruf 112",
           link: "https://www.drk.de/hilfe-in-deutschland/erste-hilfe/notruf-112/",
         },
       },
       {
         content: {
-          heading: "Senioren- und Pflegeberatungsstelle",
+          heading: "Ärztlicher Bereitschaftsdienst",
           image: image2,
           description:
-            'Sie selbst, Ihr Partner, ein Elternteil oder ein anderes Familienmitglied benötigt Unterstützung. Sei es altersbedingt, durch Krankheit oder einen Unfall: es tauchen viele Fragen auf, was als nächstes zu tun ist. Unsere Pflegeberater vor Ort unterstützen Sie eine passgenaue Lösung für Ihre Situation zu finden.',
-          linkText: "09231 9626-63",
+            "Der Bereitschaftsdienst leistet dir auch an Wochenenden, Feiertagen und in der Nacht medizinische Hilfe.",
+          linkText: "116 117",
           link: "https://www.116117.de/de/index.php",
         },
       },
       {
         content: {
-          heading: "Sozialpädagogischer Dienst",
+          heading: "Nummer gegen Kummer",
           image: image3,
           description:
-            'Pflegestützpunkte sind umfassende Beratungsstellen für Betroffene und Angehörige rund um das Thema Pflege und die Leistungen der Pflegeversicherung. Nutzen Sie daher unseren Sozialpädagogischen Dienst, welcher Ihnen Ihre Fragen gerne im Detail beantwortet.',
-          linkText: "09232-80101",
+            'Die "Nummer gegen Kummer" ist eine Anlaufstelle für Kinder und Jugendliche, die mit Sorgen und Problemen zu kämpfen haben. Hier findest du Unterstützung durch psychologisch geschulte Fachkräfte, die ihre Dienste anonym und kostenlos anbieten.',
+          linkText: "116 123",
           link: "https://www.telefonseelsorge.de/",
         },
       },
@@ -86,7 +79,7 @@ export default defineComponent({
 
     return {
       items,
-      breakPoints,
+      breakPoints
     };
   },
 });
@@ -101,9 +94,9 @@ export default defineComponent({
 .items
   height: 100%
 .wrapper
-  margin: 6.25rem
+  margin: 0 5rem
   @include md
-    margin: 1rem 1rem
+    margin: 0 1rem
 
 .items-column
   margin: 1rem 2.5rem

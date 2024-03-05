@@ -33,7 +33,7 @@ const auth = async () => {
     useAuthStore().$patch({
       'authenticated': true
     })
-    localStorage.setItem('_gesundheitsplattform_authenticated', 'true')
+    localStorage.setItem('smartwendel_gesundheitsplattform_authenticated', 'true')
   } else {
     animated.value = true
     setTimeout(() => {

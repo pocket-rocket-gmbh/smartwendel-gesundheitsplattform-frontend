@@ -1,8 +1,6 @@
 <template>
   <div>
-    <span class="general-font-size is-secondary-color font-weight-bold"
-      >Tooltips</span
-    >
+    <span class="general-font-size is-dark-grey font-weight-bold">Tooltips</span>
 
     <div>
       <v-row align="center" v-if="showBar">
