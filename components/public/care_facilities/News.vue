@@ -3,7 +3,7 @@
     <v-divider class="my-10"></v-divider>
     <span
       class="general-font-size text-h4 font-weight-medium is-dark-grey d-md-block d-none text-wrap my-10"
-      >Beiträge Dieser EInrichtung</span
+      >Beiträge Dieser Einrichtung</span
     >
     <div class="boxes doubled">
       <PublicContentBox
