@@ -10,7 +10,7 @@
         <span
           class="general-font-size is-secondary-color font-weight-bold"
           v-else
-          >Einrichtungen</span
+          >Einrichtungens</span
         >
       </v-col>
 
