@@ -2,6 +2,7 @@
   <CreateEdit
     v-slot="slotProps"
     @has-changed="adressChanged = true"
+    @itemLoaded="handleItemLoaded"
     size="100wh"
     ref="createEditRef"
   >
@@ -251,10 +252,9 @@
               filter-type="filter_facility"
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
-              @setTags="setTagCategoryIds"
+              @setTags="setTagCategoryIds($event, slotProps.item)"
               @are-filters-set="setFiltersSet"
               :care-facility="slotProps.item"
-              @updateAvailability="setAvailability"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -279,10 +279,9 @@
               filter-type="filter_service"
               :filter-kind="slotProps.item.kind"
               :enable-multi-select="true"
-              @setTags="setTagCategoryIds"
+              @setTags="setTagCategoryIds($event, slotProps.item)"
               @are-filters-set="setFiltersSet"
               :care-facility="slotProps.item"
-              @updateAvailability="setAvailability"
             />
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
@@ -879,6 +878,15 @@ const handleTagSelectToggle = () => {
 const editInformations = ref(false);
 const confirmEditDialogOpen = ref(false);
 
+const handleItemLoaded = (item: any) => {
+  item.availability = item.care_facility_tag_categories.map((availabilityItem: any)=> {
+    return {
+      category_id: availabilityItem.tag_category.id,
+      amount: availabilityItem.available_capacity,
+    }
+  })
+}
+
 const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   if (filterType === "filter_facility") {
     facilitiesFilterSet.value = isSet;
@@ -983,11 +991,26 @@ const getLatLngFromAddress = async (
   }
 };
 
-const setTagCategoryIds = (tags: any) => {
+const setTagCategoryIds = (tags: any, item: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "tag_category_ids",
     value: tags,
   });
+  
+  const availabilityItems = tags.map((tag: any) => {
+    const foundItem = item.availability.find((item: any) => item.category_id === tag);
+    
+    return {
+      category_id: tag,
+      amount: foundItem?.amount || 3,
+    }
+  })
+  
+  useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
+    name: "availability",
+    value: availabilityItems,
+  });
+
 };
 
 

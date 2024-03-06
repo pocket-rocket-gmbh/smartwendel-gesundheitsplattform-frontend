@@ -148,10 +148,11 @@ const props = defineProps<{
 
 const listOptionValues: Ref<Record<string, number>> = ref({});
 
-const getPreSetTagsFromCareFacility = computed(() => {
-  const tags = (
-    props.careFacility as { care_facility_tag_categories?: any[] }
-  )?.care_facility_tag_categories?.map((tag: any) => tag);
+const preSetTagsFromCareFacility = computed(() => {
+  const tags = (props.careFacility as {
+    availability: { category_id: string; amount: number }[];
+  }).availability
+
   return tags;
 });
 
@@ -167,18 +168,16 @@ const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 
 const updateAvailability = async (optionId: string, value: number) => {
-  await nextTick();
-  const tagCategoryId = getPreSetTagsFromCareFacility.value.find(
-    (tag: any) => tag.tag_category.id === optionId
-  );
- 
 
-  api.setEndpoint(`/care_facility_tag_categories/${tagCategoryId.id}`);
-  const data = {
-    available_capacity: value,
-  };
-  const result = await api.updateItem(data, "Ampel aktualisert");
-  snackbar.showSuccess("Ampel aktualisert");
+  const preSetTags = preSetTagsFromCareFacility.value;
+
+  const found = preSetTags.findIndex((item) => item.category_id === optionId);
+
+  if (found === -1) {
+    preSetTags.push({ category_id: optionId, amount: value });
+  } else {
+    preSetTags[found].amount = value;
+  }
 };
 
 const emit = defineEmits<{
@@ -395,16 +394,26 @@ const handleExpandToggle = (selectedId: string) => {
   expandIds.value.splice(expandIndex, 1);
 };
 
+watch(
+  // @ts-expect-error any
+  () => props.careFacility.availability,
+  async (newValue) => {
+    if (preSetTagsFromCareFacility.value) {
+      preSetTagsFromCareFacility.value.forEach((item) => {
+        const optionId = item.category_id;
+        if (!(optionId in listOptionValues.value)) {
+          listOptionValues.value[optionId] = item.amount ?? 1;
+        }
+      });
+    }
+  }, {
+    deep: true,
+    immediate: true,  
+  }
+);
+
 onMounted(async () => {
   reloadFilters();
-  if (getPreSetTagsFromCareFacility.value) {
-    getPreSetTagsFromCareFacility.value.forEach((item) => {
-      const optionId = item.tag_category.id;
-      if (!(optionId in listOptionValues.value)) {
-        listOptionValues.value[optionId] = item.available_capacity ?? 1;
-      }
-    });
-  }
 });
 </script>
 
