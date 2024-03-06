@@ -66,10 +66,7 @@
           <v-divider class="my-1 mb-3"></v-divider>
         </v-row>
       </div>
-      <p
-        class="general-font-size text-description"
-        v-html="careFacility.description"
-      ></p>
+      <p class="general-font-size text-description" v-html="careFacility.description"></p>
     </div>
     <PublicCareFacilitiesImages
       :care-facility="careFacility"
@@ -112,13 +109,10 @@
         </div>
       </v-col>
     </v-row>
-    <PublicCareFacilitiesEvents :care-facility="careFacility"/>
-  <PublicCareFacilitiesNews :care-facility="careFacility"/>
-  <PublicCareFacilitiesCourses :care-facility="careFacility"/>
+    <PublicCareFacilitiesEvents :care-facility="careFacility" />
+    <PublicCareFacilitiesCourses :care-facility="careFacility" />
+    <PublicCareFacilitiesNews :care-facility="careFacility" />
   </div>
-
-
- 
 </template>
 
 <script lang="ts" setup>
