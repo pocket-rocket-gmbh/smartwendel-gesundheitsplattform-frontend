@@ -4,20 +4,45 @@
     class="entries general-font-size"
     v-if="!(!filterStore.loading && !filterStore.filteredResults.length)"
   >
-    <div class="d-flex actions">
-      <div
-        class="sort-order is-clickable d-flex align-center"
-        @click="toggleFilterSort"
-      >
-        <span>{{ filterStore.filterSort }}</span>
-        <v-icon v-show="filterStore.filterSort === 'A-Z'"
-          >mdi-chevron-down</v-icon
-        >
-        <v-icon v-show="filterStore.filterSort === 'Z-A'"
-          >mdi-chevron-up</v-icon
-        >
-      </div>
-    </div>
+    <v-row class="mb-4">
+      <v-col class="d-flex justify-space-between">
+        <div class="d-flex align-center">
+          {{ filterStore.filteredResults.length }} TREFFER
+        </div>
+        <div class="d-flex align-center">
+          <v-icon size="x-large" color="primary">mdi-circle</v-icon>
+          <div class="px-2">Freie Plätze</div>
+        </div>
+        <div class="d-flex align-center">
+          <v-icon size="x-large" color="orange">mdi-circle</v-icon>
+          <div class="px-2">Plätze auf Anfrage</div>
+        </div>
+        <div class="d-flex align-center">
+          <v-icon size="x-large" color="red">mdi-circle</v-icon>
+          <div class="px-2">Wartezeit bis zu 2 Monate</div>
+        </div>
+        <div class="d-flex align-center">
+          <v-icon size="x-large" color="black">mdi-circle</v-icon>
+          <div class="px-2">Unbekannt</div>
+        </div>
+      </v-col>
+      <v-col md="4" class="d-flex justify-end">
+        <div class="d-flex actions">
+          <div
+            class="sort-order is-clickable d-flex align-center"
+            @click="toggleFilterSort"
+          >
+            <span>{{ filterStore.filterSort }}</span>
+            <v-icon v-show="filterStore.filterSort === 'A-Z'"
+              >mdi-chevron-down</v-icon
+            >
+            <v-icon v-show="filterStore.filterSort === 'Z-A'"
+              >mdi-chevron-up</v-icon
+            >
+          </div>
+        </div>
+      </v-col>
+    </v-row>
     <template v-if="filterStore.filteredResults.length > 0">
       <div
         v-if="!filterStore.currentKinds.includes('facility')"
@@ -124,9 +149,12 @@
               sm="4"
               xl="4"
               xs="12"
-              class="mb-0 pb-0 d-flex justify-center"
+              class="mb-0 pb-0 d-flex justify-top align-top"
             >
-              
+              <PublicCareFacilitiesRight
+                :care-facility="careFacility"
+                :search-page="true"
+              />
             </v-col>
           </v-row>
           <v-row>

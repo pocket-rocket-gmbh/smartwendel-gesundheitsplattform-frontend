@@ -149,9 +149,11 @@ const props = defineProps<{
 const listOptionValues: Ref<Record<string, number>> = ref({});
 
 const preSetTagsFromCareFacility = computed(() => {
-  const tags = (props.careFacility as {
-    availability: { category_id: string; amount: number }[];
-  }).availability
+  const tags = (
+    props.careFacility as {
+      availability: { category_id: string; amount: number }[];
+    }
+  ).availability;
 
   return tags;
 });
@@ -168,7 +170,6 @@ const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 
 const updateAvailability = async (optionId: string, value: number) => {
-
   const preSetTags = preSetTagsFromCareFacility.value;
 
   const found = preSetTags.findIndex((item) => item.category_id === optionId);
@@ -406,9 +407,10 @@ watch(
         }
       });
     }
-  }, {
+  },
+  {
     deep: true,
-    immediate: true,  
+    immediate: true,
   }
 );
 

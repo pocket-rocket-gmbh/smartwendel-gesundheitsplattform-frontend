@@ -311,7 +311,6 @@ const save = async (saveAsDraft = false) => {
     })
 
     await Promise.allSettled(promises);
-    snackbar.showSuccess("Ampel aktualisert");
   }
   loadingItem.value = false;
 

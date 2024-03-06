@@ -1,29 +1,60 @@
 <template>
-  <div class="box flex-column is-secondary-color pa-5">
-    <div class="is-secondary-color is-label-big general-font-size is-uppercase">
+  <div
+    class="flex-column is-secondary-color pa-5"
+    :class="searchPage ? '' : 'box'"
+  >
+    <div
+      class="is-secondary-color is-label-big general-font-size is-uppercase"
+      v-if="!searchPage"
+    >
       Pflegeangebote
     </div>
-    <div class="is-secondary-color general-font-size mb-6">
-      <pre>{{ careFacility.care_facility_tag_categories }}</pre>
+    <div class="is-primary-color general-font-size mb-6" v-if="!searchPage">
+      <span
+        >zuletzt aktualisiert:
+        {{ useDatetime().parseDatetime(careFacility.updated_at) }}
+      </span>
     </div>
 
     <v-row
       no-gutters
-      v-for="(places, index) in careFacility.care_facility_tag_categories"
+      v-for="(places, index) in careFacility.care_facility_tag_categories.filter((place: any) => place?.tag_category?.filter_type === 'filter_facility')"
       :key="index"
     >
-      <v-col class="d-flex flex-column justify-center align-center">
+      <v-col
+        class="d-flex align-center"
+        :class="searchPage ? '' : 'justify-center flex-column'"
+      >
+        <div
+          class="is-primary-color general-font-size my-2 mr-3 d-flex align-center"
+          v-if="searchPage"
+        >
+          <v-icon :color="capacityColor[index]">mdi-circle</v-icon>
+          <span
+            class="ml-2"
+            :style="{ color: capacityColor[index] }"
+            v-if="!searchPage"
+          >
+            {{ capacityText[index] }}
+          </span>
+        </div>
+
         <div class="is-primary general-font-size">
           {{ places?.tag_category?.name }}
         </div>
-        <div class="is-primary-color general-font-size mt-5">
+        <div class="is-primary-color general-font-size" v-if="!searchPage">
           <v-icon :color="capacityColor[index]">mdi-circle</v-icon>
-          <span class="ml-2" :style="{ color: capacityColor[index] }">
+          <span
+            class="ml-2"
+            :style="{ color: capacityColor[index] }"
+            v-if="!searchPage"
+          >
             {{ capacityText[index] }}
           </span>
         </div>
       </v-col>
-      <v-divider class="my-5"></v-divider>
+
+      <v-divider class="my-5" v-if="!searchPage"></v-divider>
     </v-row>
   </div>
 </template>
@@ -33,6 +64,10 @@ const props = defineProps({
   careFacility: {
     type: Object,
     required: true,
+  },
+  searchPage: {
+    type: Boolean,
+    required: false,
   },
 });
 
