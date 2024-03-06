@@ -13,6 +13,18 @@ export type CreateEditFacility = Partial<
     additional_address_info: string;
     community_id?: string;
     is_active?: boolean;
+    care_facility_tag_categories: {
+      id: string;
+      available_capacity: number;
+      tag_category: {
+        id: string;
+        name: string;
+      };
+    }[];
+    availability: {
+      category_id: string;
+      amount: number;
+    }[];
   }
 >;
 

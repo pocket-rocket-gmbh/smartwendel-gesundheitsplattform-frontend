@@ -85,6 +85,29 @@
             >
               {{ option.name }}
             </div>
+            <div
+              class=""
+              v-auto-animate
+              v-if="filterType === 'filter_facility'"
+            >
+              <v-radio-group
+                v-if="preSetTags.includes(option.id)"
+                v-model="listOptionValues[option.id]"
+                @update:model-value="
+                  updateAvailability(option.id, listOptionValues[option.id])
+                "
+                :mandatory="true"
+              >
+                <v-radio
+                  v-for="(item, index) in listOptions"
+                  :key="index"
+                  :label="item.text"
+                  :value="item.value"
+                  :color="item.color"
+                  default
+                ></v-radio>
+              </v-radio-group>
+            </div>
             <div v-if="option.next?.length" class="options">
               <div class="option" v-for="subOption in option.next">
                 <label class="text-subOptions">
@@ -120,7 +143,43 @@ const props = defineProps<{
   filterType: FilterType;
   filterKind: FilterKind;
   enableMultiSelect?: boolean;
+  careFacility: Object;
 }>();
+
+const listOptionValues: Ref<Record<string, number>> = ref({});
+
+const preSetTagsFromCareFacility = computed(() => {
+  const tags = (
+    props.careFacility as {
+      availability: { category_id: string; amount: number }[];
+    }
+  ).availability;
+
+  return tags;
+});
+
+const listOptions = ref([
+  { text: "Nicht vorhanden", value: 1, color: "red" },
+  { text: "Auf Anfrage", value: 2, color: "orange" },
+  { text: "Plätze vorhanden", value: 3, color: "primary" },
+]);
+
+const snackbar = useSnackbar();
+
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
+
+const updateAvailability = async (optionId: string, value: number) => {
+  const preSetTags = preSetTagsFromCareFacility.value;
+
+  const found = preSetTags.findIndex((item) => item.category_id === optionId);
+
+  if (found === -1) {
+    preSetTags.push({ category_id: optionId, amount: value });
+  } else {
+    preSetTags[found].amount = value;
+  }
+};
 
 const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
@@ -165,9 +224,6 @@ const filterSelected = computed(() => {
 
 const expandIds = ref<string[]>([]);
 
-/**
- * Currently limited to max 2 layers more
- */
 const getFilterOptions = (parentId: string, allFilters: Filter[]) => {
   const nextItems = allFilters.filter((item) => item.parent_id === parentId);
   nextItems.forEach(
@@ -338,6 +394,25 @@ const handleExpandToggle = (selectedId: string) => {
   }
   expandIds.value.splice(expandIndex, 1);
 };
+
+watch(
+  // @ts-expect-error any
+  () => props.careFacility.availability,
+  async (newValue) => {
+    if (preSetTagsFromCareFacility.value) {
+      preSetTagsFromCareFacility.value.forEach((item) => {
+        const optionId = item.category_id;
+        if (!(optionId in listOptionValues.value)) {
+          listOptionValues.value[optionId] = item.amount ?? 1;
+        }
+      });
+    }
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 
 onMounted(async () => {
   reloadFilters();

@@ -1,12 +1,5 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    :width="size"
-    transition="dialog-bottom-transition"
-    @click:outside="emitClose()"
-    persistent
-    v-if="!editUserProfile"
-  >
+  <v-dialog v-model="dialog" :width="size" transition="dialog-bottom-transition" @click:outside="emitClose()" persistent v-if="!editUserProfile">
     <Loading v-if="loadingItem" />
     <v-card :class="`dialog-${size}`" :height="`${height}`">
       <SaveConfirmation
@@ -26,24 +19,14 @@
         </v-card-title>
         <slot :item="item" :errors="errors"></slot>
         <v-card-actions class="card-actions d-flex justify-end">
-          <v-alert
-            v-if="showSaveHint"
-            type="info"
-            density="compact"
-            class="save-hint"
-          >
-          Bitte denke daran regelmäßig zu speichern, damit keine Daten verloren gehen!
+          <v-alert v-if="showSaveHint" type="info" density="compact" class="save-hint">
+            Bitte denke daran regelmäßig zu speichern, damit keine Daten verloren gehen!
           </v-alert>
           <v-btn variant="outlined" @click="emitClose()"> Schließen </v-btn>
           <!-- <v-btn v-if="showPreviewButton" color="green" variant="outlined" dark @click="handleShowPreviewClicked()">
             Vorschau anzeigen
           </v-btn> TODO: Testen/Fixen -->
-          <div
-            v-if="
-              !statusLoadingFilter.categoryLoaded &&
-              !statusLoadingFilter.servicesLoaded
-            "
-          >
+          <div v-if="!statusLoadingFilter.categoryLoaded && !statusLoadingFilter.servicesLoaded">
             <v-btn
               v-if="!recentlyCreated"
               color="blue darken-1"
@@ -83,14 +66,7 @@ import { useStatusLoadingFilter } from "@/store/statusLoadingFilter";
 
 const statusLoadingFilter = useStatusLoadingFilter();
 
-const emit = defineEmits([
-  "close",
-  "hasChanged",
-  "save",
-  "showPreview",
-  "updateItems",
-  "created",
-]);
+const emit = defineEmits(["close", "hasChanged", "save", "showPreview", "updateItems", "created", "itemLoaded"]);
 const props = defineProps({
   itemId: {
     type: String,
@@ -235,10 +211,7 @@ const create = async (saveAsDraft = false) => {
   createUpdateApi.setEndpoint(`${props.endpoint}`);
   loadingItem.value = true;
   adminStore.loading = true;
-  const result = await createUpdateApi.createItem(
-    item.value,
-    `${saveAsDraft ? "Entwurf" : "Erfolgreich"} erstellt`
-  );
+  const result = await createUpdateApi.createItem(item.value, `${saveAsDraft ? "Entwurf" : "Erfolgreich"} erstellt`);
   if (!saveAsDraft) {
     confirmSaveDialogOpen.value = true;
   }
@@ -268,13 +241,12 @@ const create = async (saveAsDraft = false) => {
   if (item.value.offlineLocations && item.value.offlineLocations.length) {
     createUpdateApi.setEndpoint(`locations/care_facility/${newFacilityId}`);
 
-    const facilityLocationCreationPromises = item.value.offlineLocations.map(
-      (location) =>
-        createUpdateApi.createItem({
-          careFacility_id: facilityId,
-          longitude: location.longitude,
-          latitude: location.latitude,
-        })
+    const facilityLocationCreationPromises = item.value.offlineLocations.map((location) =>
+      createUpdateApi.createItem({
+        careFacility_id: facilityId,
+        longitude: location.longitude,
+        latitude: location.latitude,
+      })
     );
 
     await Promise.all(facilityLocationCreationPromises);
@@ -322,6 +294,26 @@ const save = async (saveAsDraft = false) => {
 
   useNuxtApp().$bus.$emit("triggerGetItems", null);
   itemHastChanged.value = false;
+
+  loadingItem.value = true;
+  if (item.value.availability && item.value.availability.length) {
+    const promises = item.value.availability.map(availability => {
+      if (!result.data.resource) return;
+
+      const correctId = result.data.resource?.care_facility_tag_categories.find((category: any) => category.tag_category.id === availability.category_id)?.id;
+      if (!correctId) return;
+
+      createUpdateApi.setEndpoint(`/care_facility_tag_categories/${correctId}`);
+      const data = {
+        available_capacity: availability.amount,
+      };
+      return createUpdateApi.updateItem(data, "Ampel aktualisert");
+    })
+
+    await Promise.allSettled(promises);
+  }
+  loadingItem.value = false;
+
   emit("save");
   if (!saveAsDraft && item.value?.is_active === false) {
     confirmSaveDialogOpen.value = true;
@@ -348,9 +340,7 @@ const emitClose = () => {
     return;
   }
 
-  const confirmed = confirm(
-    "Wenn Sie fortfahren, werden Ihre Änderungen verworfen."
-  );
+  const confirmed = confirm("Wenn Sie fortfahren, werden Ihre Änderungen verworfen.");
   if (confirmed) {
     item.value = { ...props.itemPlaceholder };
     emit("close");
@@ -370,31 +360,14 @@ watch(
     () => item.value?.town,
   ],
   (
-    [
-      newPhone,
-      newEmail,
-      newStreet,
-      newAdditionalAddressInfo,
-      newCommunityId,
-      newZip,
-      newTown,
-    ],
-    [
-      oldPhone,
-      oldEmail,
-      oldStreet,
-      oldAdditionalAddressInfo,
-      oldCommunityId,
-      oldZip,
-      oldTown,
-    ]
+    [newPhone, newEmail, newStreet, newAdditionalAddressInfo, newCommunityId, newZip, newTown],
+    [oldPhone, oldEmail, oldStreet, oldAdditionalAddressInfo, oldCommunityId, oldZip, oldTown]
   ) => {
     if (
       (oldPhone && newPhone !== oldPhone) ||
       (oldEmail && newEmail !== oldEmail) ||
       (oldStreet && newStreet !== oldStreet) ||
-      (oldAdditionalAddressInfo &&
-        newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
+      (oldAdditionalAddressInfo && newAdditionalAddressInfo !== oldAdditionalAddressInfo) ||
       (oldCommunityId && newCommunityId !== oldCommunityId) ||
       (oldZip && newZip !== oldZip) ||
       (oldTown && newTown !== oldTown)
@@ -411,22 +384,17 @@ onMounted(async () => {
     item.value = { ...props.itemPlaceholder };
   }
 
-  console.log(form.value)
-
   triggerSaveHintTimeout();
   requestAnimationFrame(() => form.value?.validate());
+
+  emit("itemLoaded", item.value);
 
   const initialItem = deepToRaw(item.value);
 
   watch(
     () => item.value,
     () => {
-      if (
-        !areObjectsEqual(deepToRaw(item.value), initialItem, [
-          "is_active",
-          "updated_at",
-        ])
-      ) {
+      if (!areObjectsEqual(deepToRaw(item.value), initialItem, ["is_active", "updated_at"])) {
         itemHastChanged.value = true;
       }
       form.value?.validate();
