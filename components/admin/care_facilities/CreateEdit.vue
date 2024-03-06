@@ -44,7 +44,6 @@
               versehen.</span
             >
           </div>
-
           <div class="field" v-if="slotProps.item?.user?.onboarding_token">
             <div class="my-2 d-flex align-center">
               <span
@@ -254,6 +253,8 @@
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
+              :care-facility="slotProps.item"
+              @updateAvailability="setAvailability"
             />
           </div>
           <v-divider class="my-10"></v-divider>
@@ -280,6 +281,8 @@
               :enable-multi-select="true"
               @setTags="setTagCategoryIds"
               @are-filters-set="setFiltersSet"
+              :care-facility="slotProps.item"
+              @updateAvailability="setAvailability"
             />
             <AdminCareFacilitiesTagSelect
               :kind="slotProps.item.kind"
@@ -986,6 +989,7 @@ const setTagCategoryIds = (tags: any) => {
     value: tags,
   });
 };
+
 
 const setTagIds = (tags: any) => {
   if (!tags || !Array.isArray(tags)) return;

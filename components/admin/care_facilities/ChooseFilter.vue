@@ -85,6 +85,29 @@
             >
               {{ option.name }}
             </div>
+            <div
+              class=""
+              v-auto-animate
+              v-if="filterType === 'filter_facility'"
+            >
+              <v-radio-group
+                v-if="preSetTags.includes(option.id)"
+                v-model="listOptionValues[option.id]"
+                @update:model-value="
+                  updateAvailability(option.id, listOptionValues[option.id])
+                "
+                :mandatory="true"
+              >
+                <v-radio
+                  v-for="(item, index) in listOptions"
+                  :key="index"
+                  :label="item.text"
+                  :value="item.value"
+                  :color="item.color"
+                  default
+                ></v-radio>
+              </v-radio-group>
+            </div>
             <div v-if="option.next?.length" class="options">
               <div class="option" v-for="subOption in option.next">
                 <label class="text-subOptions">
@@ -120,7 +143,43 @@ const props = defineProps<{
   filterType: FilterType;
   filterKind: FilterKind;
   enableMultiSelect?: boolean;
+  careFacility: Object;
 }>();
+
+const listOptionValues: Ref<Record<string, number>> = ref({});
+
+const getPreSetTagsFromCareFacility = computed(() => {
+  const tags = (
+    props.careFacility as { care_facility_tag_categories?: any[] }
+  )?.care_facility_tag_categories?.map((tag: any) => tag);
+  return tags;
+});
+
+const listOptions = ref([
+  { text: "Nicht vorhanden", value: 1, color: "red" },
+  { text: "Auf Anfrage", value: 2, color: "orange" },
+  { text: "Plätze vorhanden", value: 3, color: "primary" },
+]);
+
+const snackbar = useSnackbar();
+
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
+
+const updateAvailability = async (optionId: string, value: number) => {
+  await nextTick();
+  const tagCategoryId = getPreSetTagsFromCareFacility.value.find(
+    (tag: any) => tag.tag_category.id === optionId
+  );
+ 
+
+  api.setEndpoint(`/care_facility_tag_categories/${tagCategoryId.id}`);
+  const data = {
+    available_capacity: value,
+  };
+  const result = await api.updateItem(data, "Ampel aktualisert");
+  snackbar.showSuccess("Ampel aktualisert");
+};
 
 const emit = defineEmits<{
   (event: "setTags", tags: string[]): void;
@@ -165,9 +224,6 @@ const filterSelected = computed(() => {
 
 const expandIds = ref<string[]>([]);
 
-/**
- * Currently limited to max 2 layers more
- */
 const getFilterOptions = (parentId: string, allFilters: Filter[]) => {
   const nextItems = allFilters.filter((item) => item.parent_id === parentId);
   nextItems.forEach(
@@ -341,6 +397,14 @@ const handleExpandToggle = (selectedId: string) => {
 
 onMounted(async () => {
   reloadFilters();
+  if (getPreSetTagsFromCareFacility.value) {
+    getPreSetTagsFromCareFacility.value.forEach((item) => {
+      const optionId = item.tag_category.id;
+      if (!(optionId in listOptionValues.value)) {
+        listOptionValues.value[optionId] = item.available_capacity ?? 1;
+      }
+    });
+  }
 });
 </script>
 
