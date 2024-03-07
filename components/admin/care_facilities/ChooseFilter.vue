@@ -60,9 +60,8 @@
             <div class="d-flex align-center filter-request">
               <div class="py-1">
                 <span class="has-font-size-small-medium mr-3"
-                  >Falls das passende Tätigkeitsgebiet für deine
-                  Einrichtung/dein Unternehmen nicht zu finden ist, kontaktiere
-                  uns bitte
+                  >Falls das passende Tätigkeitsgebiet für deine Einrichtung/dein
+                  Unternehmen nicht zu finden ist, kontaktiere uns bitte
                 </span>
                 <span>
                   <v-btn
@@ -85,11 +84,7 @@
             >
               {{ option.name }}
             </div>
-            <div
-              class=""
-              v-auto-animate
-              v-if="filterType === 'filter_facility'"
-            >
+            <div class="" v-auto-animate v-if="filterType === 'filter_facility'">
               <v-radio-group
                 v-if="preSetTags.includes(option.id)"
                 v-model="listOptionValues[option.id]"
@@ -122,6 +117,12 @@
             </div>
           </div>
         </div>
+        <v-row>
+          <v-col class="d-flex justify-end">
+            <v-icon class="mr-2" color="primary">mdi-update</v-icon>
+            {{ useDatetime().parseDatetime(careFacility?.updated_at) }}
+          </v-col>
+        </v-row>
         <LoadingSpinner v-if="loadingFilters"
           >Leistung wird hinzugefügt...
         </LoadingSpinner>

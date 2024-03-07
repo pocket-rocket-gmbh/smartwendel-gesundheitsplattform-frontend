@@ -33,12 +33,8 @@
             @click="toggleFilterSort"
           >
             <span>{{ filterStore.filterSort }}</span>
-            <v-icon v-show="filterStore.filterSort === 'A-Z'"
-              >mdi-chevron-down</v-icon
-            >
-            <v-icon v-show="filterStore.filterSort === 'Z-A'"
-              >mdi-chevron-up</v-icon
-            >
+            <v-icon v-show="filterStore.filterSort === 'A-Z'">mdi-chevron-down</v-icon>
+            <v-icon v-show="filterStore.filterSort === 'Z-A'">mdi-chevron-up</v-icon>
           </div>
         </div>
       </v-col>
@@ -76,8 +72,7 @@
                 <div class="hidden-md-and-up">
                   <v-icon
                     v-if="
-                      careFacility.geocode_address.length ||
-                      careFacility.locations.length
+                      careFacility.geocode_address.length || careFacility.locations.length
                     "
                     size="x-large"
                     color="primary"
@@ -87,11 +82,7 @@
                 </div>
               </div>
             </v-col>
-            <v-col
-              sm="12"
-              md="6"
-              class="action d-md-flex justify-end hidden-sm-and-down"
-            >
+            <v-col sm="12" md="6" class="action d-md-flex justify-end hidden-sm-and-down">
               <v-btn
                 variant="flat"
                 class="general-font-size"
@@ -114,10 +105,7 @@
                     {{ careFacility.street }}
                   </div>
                 </div>
-                <div
-                  class="d-flex ml-n1"
-                  v-if="careFacility.zip || careFacility.town"
-                >
+                <div class="d-flex ml-n1" v-if="careFacility.zip || careFacility.town">
                   <v-icon></v-icon>
                   {{ careFacility.zip }} {{ careFacility.town }}
                 </div>
@@ -127,19 +115,15 @@
               <div class="mt-4">
                 <div v-if="careFacility.phone" class="d-flex align-center">
                   <img class="mr-2 icon" :src="iconPhone" />
-                  <a
-                    class="is-secondary-color"
-                    :href="`tel:${careFacility.phone}`"
-                    >{{ careFacility.phone }}</a
-                  >
+                  <a class="is-secondary-color" :href="`tel:${careFacility.phone}`">{{
+                    careFacility.phone
+                  }}</a>
                 </div>
                 <div v-if="careFacility.email" class="d-flex align-center">
                   <img class="mr-2 icon" :src="iconMail" />
-                  <a
-                    class="is-secondary-color"
-                    :href="`mailto:${careFacility.email}`"
-                    >{{ careFacility.email }}</a
-                  >
+                  <a class="is-secondary-color" :href="`mailto:${careFacility.email}`">{{
+                    careFacility.email
+                  }}</a>
                 </div>
               </div>
             </v-col>
@@ -172,24 +156,32 @@
               </v-btn>
             </v-col>
           </v-row>
-          <div class="hidden-sm-and-down">
-            <v-btn
-              v-if="
-                careFacility.geocode_address.length ||
-                careFacility.locations.length
-              "
-              append-icon="mdi-map-marker-outline"
-              size="small"
-              class="mt-4 pa-1"
-              variant="text"
-              color="primary"
-              rounded="pill"
-              @click="showCareFacilityInMap(careFacility.id)"
-            >
-              Auf karte zeigen
-            </v-btn>
-            <div v-else class="mt-4 pa-1"></div>
-          </div>
+          <v-row>
+            <v-col class="d-flex">
+              <div class="hidden-sm-and-down">
+                <v-btn
+                  v-if="
+                    careFacility.geocode_address.length || careFacility.locations.length
+                  "
+                  append-icon="mdi-map-marker-outline"
+                  size="small"
+                  class=""
+                  variant="text"
+                  color="primary"
+                  rounded="pill"
+                  @click="showCareFacilityInMap(careFacility.id)"
+                >
+                  Auf karte zeigen
+                </v-btn>
+              </div>
+            </v-col>
+            <v-col class="d-flex justify-end align-center">
+              <div>
+                <v-icon class="mr-2" color="primary">mdi-update</v-icon>
+              </div>
+              {{ useDatetime().parseDatetime(careFacility.updated_at) }}
+            </v-col>
+          </v-row>
         </div>
       </div>
     </template>
