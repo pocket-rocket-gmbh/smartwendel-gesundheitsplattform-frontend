@@ -3,7 +3,7 @@
     <v-divider class="my-10"></v-divider>
     <span
       class="general-font-size text-h4 font-weight-medium is-dark-grey d-md-block d-none text-wrap my-10"
-      >Kurse Dieser EInrichtung</span
+      >Kurse Dieser Einrichtung</span
     >
     <div class="boxes doubled">
       <PublicContentBox
@@ -28,7 +28,7 @@ const props = defineProps({
 
 const courseCareFacilities = computed(() => {
   return props.careFacility.user.care_facilities.filter(
-    (facility: any) => facility.kind === "courses"
+    (facility: any) => facility.kind === "course"
   );
 });
 </script>
