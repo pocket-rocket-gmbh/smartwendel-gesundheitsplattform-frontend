@@ -20,7 +20,9 @@
           >
           <div class="input break-title">
             {{
-              getAllSelectedCommunitiesName(filterStore.currentZips) || "Gemeinde wählen"
+              getAllSelectedCommunitiesName(filterStore.currentZips).length > 0
+                ? getAllSelectedCommunitiesName(filterStore.currentZips).join(", ")
+                : "Gemeinde wählen"
             }}
           </div>
         </div>
@@ -59,11 +61,11 @@ const filterStore = useFilterStore();
 const dialog = ref(false);
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
-  if (!zips.length) return "";
+  if (!zips.length || !filterStore.allCommunities) return [];
   const allSelectedCommunities = filterStore.allCommunities.filter((community: any) =>
     zips.includes(community.zip)
   );
-  return allSelectedCommunities.map((community: any) => community.name).join(", ");
+  return allSelectedCommunities.map((community: any) => community.name);
 };
 
 const handleOptionSelectCommunity = (community: any) => {
