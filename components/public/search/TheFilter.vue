@@ -14,7 +14,8 @@
             closable
             class="selected-tags mr-2 pa-4 mb-2 general-font-size"
           >
-          {{ (getAllSelectedCommunitiesName([community]) as string[]).join('') }}
+          {{ getAllSelectedCommunitiesName([community]).join(' ') }} 
+
           </v-chip>
         </span>
         <v-divider class="my-3"></v-divider>
@@ -33,7 +34,12 @@
             closable
             class="selected-tags mr-2 pa-4 mb-2 general-font-size"
           >
+          <span v-if="tag">
             {{ tag.name }}
+          </span>
+          <span v-else class="waiting general-font-size">
+            <span>.</span><span>.</span><span>.</span>
+          </span>
           </v-chip>
         </span>
         <span v-if="showAllTagsForParent === parentName">
@@ -213,18 +219,16 @@ const removeAllTags = () => {
 };
 
 const getCurrentTags = computed(() => {
-  return [...filterStore.currentServiceTags, ...filterStore.currentFacilityTags].map((tagId:any) => {
-    const tag = filterStore.allFilters.find((filter:any) => filter.id === tagId);
-    const tageWithParent = filterStore.allFilters.find(
-      (filter : any) => filter.id === tag?.parent_id
-    );
+  return [...(filterStore.currentServiceTags || []), ...(filterStore.currentFacilityTags || [])].map((tagId: any) => {
+    const tag = filterStore.allFilters?.find((filter: any) => filter.id === tagId);
+    const tagWithParent = filterStore.allFilters?.find((filter: any) => filter.id === tag?.parent_id);
     if (!tag) {
       return "";
     }
     return {
       id: tag.id,
       parent_id: tag.parent_id,
-      parent_name: tageWithParent?.name,
+      parent_name: tagWithParent?.name,
       name: tag.name,
     };
   });
@@ -233,19 +237,17 @@ const getCurrentTags = computed(() => {
 const availableItemsForServiceList = ref<CollapsibleListItem[]>([]);
 const expandedItemIds = ref([]);
 
-
-
 const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
 api.setEndpoint("tag_categories");
 
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
-  if(!zips.length) return "";
-  const allSelectedCommunities = filterStore.allCommunities.filter((community:any) =>
+  if (!zips.length || !filterStore.allCommunities) return [];
+  const allSelectedCommunities = filterStore.allCommunities.filter((community: any) =>
     zips.includes(community.zip)
   );
-  return allSelectedCommunities.map((community:any) => community.name);
+  return allSelectedCommunities.map((community: any) => community.name);
 };
 
 
@@ -395,6 +397,22 @@ onMounted(async () => {
       }
     }
   }
+}
+
+.waiting span {
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  min-width: 300px;
+}
+
+.waiting span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.waiting span:nth-child(3) {
+  animation-delay: 0.4s;
 }
 
 .selected-tags {
