@@ -81,7 +81,7 @@
         </div>
         <div
           class="general-font-size d-flex align-center mb-n3"
-          v-if="item.kind === 'news'"
+          v-if="item.kind === 'news' && item?.created_at"
         >
           <span v-if="breakPoints.width.value >= 1700">
             <img :src="eventsIcon" class="mr-1" />
