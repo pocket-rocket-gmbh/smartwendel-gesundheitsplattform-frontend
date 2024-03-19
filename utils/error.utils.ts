@@ -5,7 +5,7 @@ export const getErrorMessage = (error: any) => {
     if (error.response.data && error.response.data.msg) {
       result = error.response.data.msg;
     } else {
-      result = "Ein Fehler ist aufgetreten";
+      return;
     }
   } else if (error.code) {
     result = error.code;

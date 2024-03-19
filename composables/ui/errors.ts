@@ -42,7 +42,7 @@ export function useErrors() {
         result = error.response.data.msg
       }
       else {
-        result = 'Ein Fehler ist aufgetreten'
+        return;
       }
     }
     else if (error.code) {
