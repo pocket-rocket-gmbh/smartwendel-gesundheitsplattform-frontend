@@ -50,7 +50,7 @@
           </thead>
           <tbody>
             <tr v-for="(location, index) in offlineLocations" :key="index">
-              <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" /></td>
+              <td><AdminCareFacilitiesLocationName :lat="location.latitude" :long="location.longitude" :item-id="careFacility.id" /></td>
               <td>
                 <v-icon
                   class="is-clickable general-font-size is-dark-grey"

@@ -12,7 +12,7 @@
         v-for="(item, index) in items"
         :key="index"
       >
-        <div @click="goToLink(item.content.link)" class="is-white is-clickable">
+        <div @click="goToLink(item.content)" class="is-white is-clickable">
           <img class="is-clickable icons" :src="item.content.image" width="120" />
           <div class="font-weight-medium general-font-size">
             {{ item.content.heading }}
@@ -31,33 +31,35 @@ import image5 from "@/assets/images/current-recommendations/icon_free_time.svg";
 
 const router = useRouter();
 
-const goToLink = (item: string) => {
-  router.push({ path: item });
+const goToLink = (item: any) => {
+  if (item.link.includes("http") || item.link.includes("https"))
+    return window.open(item.link, "_blank");
+  router.push({ path: item.link, query: { sub_category_id: item.query } });
 };
 
 const items = [
   {
     content: {
-      heading: "Sport und Bewegung",
+      heading: "Sport und Bewegungss",
       image: image1,
-      link:
-        "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=9b3ed77f-d337-4064-a935-a9e41d6d99a5",
+      link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508",
+      query: "9b3ed77f-d337-4064-a935-a9e41d6d99a5",
     },
   },
   {
     content: {
       heading: "Ernährung",
       image: image2,
-      link:
-        "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=c88b0ce6-e51d-435f-8689-ed4bb193fab1",
+      link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508",
+      query: "c88b0ce6-e51d-435f-8689-ed4bb193fab1",
     },
   },
   {
     content: {
       heading: "Mentale Gesundheit",
       image: image3,
-      link:
-        "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508?sub_category_id=0c2cf2d5-2834-45d6-a912-957a1f8e5153",
+      link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508",
+      query: "0c2cf2d5-2834-45d6-a912-957a1f8e5153",
     },
   },
   {
@@ -65,6 +67,7 @@ const items = [
       heading: "Gesundheitskurse",
       image: image4,
       link: "/public/search/courses",
+      query: "",
     },
   },
   {

@@ -54,14 +54,14 @@
               <div class="name">{{ modelValue }}</div>
             </div>
             <div
-              v-if="!filteredItems?.length && kind"
+              v-if="!searchItems?.length && kind"
               class="name is-dark-grey general-font-size"
             >
               Keine Ergebnisse gefunden
             </div>
             <div
               class="result is-dark-grey general-font-size"
-              v-for="result in filteredItems"
+              v-for="result in searchItems"
               :key="result.id"
               @click.stop="
                 routeToResults(result);
@@ -71,7 +71,7 @@
               <div class="icon">
                 <img :src="getIconSourceFor(result.kind)" />
               </div>
-              <div v-if="filteredItems?.length" class="name">
+              <div v-if="searchItems?.length" class="name">
                 {{ result.name }}
               </div>
             </div>
@@ -91,7 +91,11 @@ import {
 import facilityIcon from "~/assets/icons/facilityTypes/facilities.svg";
 import newsIcon from "~/assets/icons/facilityTypes/news.svg";
 import searchIcon from "~/assets/icons/facilityTypes/search.svg";
-import { type Facility, type FilterKind, useFilterStore } from "~/store/searchFilter";
+import {
+  type Facility,
+  type FilterKind,
+  useFilterStore,
+} from "~/store/searchFilter";
 
 const props = defineProps<{
   modelValue: string;
@@ -102,7 +106,18 @@ const props = defineProps<{
   kind?: string;
   isResultPage?: boolean;
   filteredCategories?: any[];
+  showingEventsCourses?: boolean;
 }>();
+
+const searchItems = computed(() => {
+  if (props.showingEventsCourses) {
+    return props.filteredItems.filter(
+      (item: any) => item.kind === "event" || item.kind === "course"
+    );
+  } else {
+    return props.filteredItems;
+  }
+});
 
 const filterStore = useFilterStore();
 
@@ -129,6 +144,8 @@ const setPlaceholderText = () => {
     placeholderText.value = "Name, Kursinhalt,…";
   } else if (props.kind === "news") {
     placeholderText.value = "Name, Thema,…";
+  } else if (props.showingEventsCourses) {
+    placeholderText.value = "Kursen, Veranstaltungen,…";
   } else {
     placeholderText.value = "Suche nach Themen, Anbietern, Kursen,…";
   }
@@ -150,7 +167,7 @@ const routeToResults = (result?: Facility) => {
     router.push({ path: `/public/care_facilities/${result.id}` });
   } else {
     router.push({ path: "/public/search" });
-   }
+  }
 };
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));

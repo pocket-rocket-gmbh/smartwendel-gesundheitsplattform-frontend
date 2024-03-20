@@ -218,8 +218,8 @@ export const useFilterStore = defineStore({
 
       return this.allCommunities;
     },
-    async loadAllFilters() {
-      if (this.allFilters) return this.allFilters;
+    async loadAllFilters(forceLoad = false) {
+      if (!forceLoad && this.allFilters) return this.allFilters;
 
       this.allFilters = await getAllFilters();
 

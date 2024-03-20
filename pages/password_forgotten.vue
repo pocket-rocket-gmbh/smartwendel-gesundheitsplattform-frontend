@@ -65,7 +65,7 @@ export default defineComponent({
       const result = await publicApi.call("post", "/users/reset-password", data);
 
       if (result.status === ResultStatus.SUCCESSFUL) {
-        localStorage.setItem("project_platform._remembered_email", email.value);
+        localStorage.setItem("smartwendelerland_gesundheitsplattform._remembered_email", email.value);
         resetSuccessful.value = true;
       } else {
         errors.value = {

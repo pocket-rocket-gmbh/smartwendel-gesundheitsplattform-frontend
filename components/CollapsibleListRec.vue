@@ -200,7 +200,7 @@ const editClick = (item: CollapsibleListItem) => {
 
 const deleteClick = (item: CollapsibleListItem) => {
   discard();
-
+  
   handleEmit("DELETE", [item.id], props.layer, null, null, item.specialType);
 };
 

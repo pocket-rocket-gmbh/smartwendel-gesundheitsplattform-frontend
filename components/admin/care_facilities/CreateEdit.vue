@@ -358,7 +358,7 @@
             :class="[
               (adressChanged || editInformations) &&
               user.currentUser.is_active_on_health_scope &&
-              slotProps.item.id
+              slotProps.item.id && !useUser().isAdmin()
                 ? 'has-bg-light-red pa-5'
                 : '',
             ]"
@@ -367,7 +367,7 @@
               v-if="
                 adressChanged &&
                 user.currentUser.is_active_on_health_scope &&
-                slotProps.item.id
+                slotProps.item.id && !useUser().isAdmin()
               "
             >
               <v-alert type="warning" density="compact" class="mt-2"
