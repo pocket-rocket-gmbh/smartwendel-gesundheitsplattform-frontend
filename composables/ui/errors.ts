@@ -11,6 +11,7 @@ const errorCodes: { [key: string]: string } = {
   'register.failed': 'E-Mail falsch oder bereits vergeben.',
   'reset_password.failed': 'E-Mail falsch oder noch nicht registriert.',
   'ERR_BAD_REQUEST': 'Benutzername oder Passwort sind falsch',
+  'user.email.taken': 'E-Mail bereits vergeben',
 }
 
 export function useErrors() {
