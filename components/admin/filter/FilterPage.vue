@@ -241,7 +241,6 @@ const getItems = async () => {
 
   itemsForFacilityList.value = [...tmpItemsForFacilityList];
   itemsForServiceList.value = [...tmpItemsForServiceList];
-  console.log(itemsForFacilityList.value);
 };
 
 const loadAllTags = async () => {

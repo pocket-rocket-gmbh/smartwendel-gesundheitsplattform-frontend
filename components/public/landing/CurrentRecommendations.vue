@@ -40,7 +40,7 @@ const goToLink = (item: any) => {
 const items = [
   {
     content: {
-      heading: "Sport und Bewegungss",
+      heading: "Sport und Bewegung",
       image: image1,
       link: "/public/categories/d586e289-be57-4654-ac1f-3d64bf50c508",
       query: "9b3ed77f-d337-4064-a935-a9e41d6d99a5",
