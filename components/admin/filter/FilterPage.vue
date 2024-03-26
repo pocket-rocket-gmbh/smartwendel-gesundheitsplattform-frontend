@@ -8,7 +8,15 @@
       :layer="0"
       @entry-click="
         (action, itemIds, layer, title, additionalInformation, specialType) =>
-          handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_facility')
+          handleClick(
+            action,
+            itemIds,
+            layer,
+            title,
+            additionalInformation,
+            specialType,
+            'filter_facility'
+          )
       "
       @entry-moved="(itemsInCategory: CollapsibleListItem[], layer: number, startIndex: number, endIndex: number)=>handleMove(itemsInCategory, layer, startIndex, endIndex, 'filter_facility')"
       :disable-draggable="false"
@@ -21,7 +29,15 @@
       :layer="0"
       @entry-click="
         (action, itemIds, layer, title, additionalInformation, specialType) =>
-          handleClick(action, itemIds, layer, title, additionalInformation, specialType, 'filter_service')
+          handleClick(
+            action,
+            itemIds,
+            layer,
+            title,
+            additionalInformation,
+            specialType,
+            'filter_service'
+          )
       "
       @entry-moved="(itemsInCategory: CollapsibleListItem[], layer: number, startIndex: number, endIndex: number)=>handleMove(itemsInCategory, layer, startIndex, endIndex, 'filter_service')"
       :disable-draggable="false"
@@ -37,7 +53,13 @@
       :kind="filterKind"
     />
 
-    <DeleteItem v-if="confirmDeleteDialogOpen" @close="handleItemDeleted" :item-id="itemId" :endpoint="deleteEndpoint" term="diesen Filter" />
+    <DeleteItem
+      v-if="confirmDeleteDialogOpen"
+      @close="handleItemDeleted"
+      :item-id="itemId"
+      :endpoint="deleteEndpoint"
+      term="diesen Filter"
+    />
   </div>
 </template>
 
@@ -47,10 +69,20 @@ import { useAdminStore } from "../../../store/admin";
 import { useSnackbar } from "../../../composables/ui/snackbar";
 import { useCollectionApi } from "../../../composables/api/collectionApi";
 import { usePrivateApi } from "../../../composables/api/private";
-import type { CollapsibleListItem, EmitAction } from "../../../types/collapsibleList";
+import type {
+  CollapsibleListItem,
+  EmitAction,
+} from "../../../types/collapsibleList";
 import { ResultStatus } from "../../../types/serverCallResult";
-import { type Facility, type FilterKind, type FilterTag, type FilterType, useFilterStore } from "../../../store/searchFilter";
+import {
+  type Facility,
+  type FilterKind,
+  type FilterTag,
+  type FilterType,
+  useFilterStore,
+} from "../../../store/searchFilter";
 import { filterKindToFilterScope } from "~/utils/filter.utils";
+import { get } from "@vueuse/core";
 
 const props = defineProps<{
   filterKind: FilterKind;
@@ -97,7 +129,12 @@ type FilterResponse = {
   parent_id: string;
 };
 
-const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem[], layer: number, allFilters: FilterResponse[]) => {
+const getItemsAndNext = (
+  filter: FilterResponse,
+  arrayToAdd: CollapsibleListItem[],
+  layer: number,
+  allFilters: FilterResponse[]
+) => {
   if (layer === 4) {
     return;
   }
@@ -108,17 +145,27 @@ const getItemsAndNext = (filter: FilterResponse, arrayToAdd: CollapsibleListItem
     menuOrder: filter.menu_order,
     layer,
     next: [],
+    care_facilities_count: "",
   };
 
   arrayToAdd.push(filterItem);
 
-  const childFilterItems: FilterResponse[] = allFilters.filter((item) => item.parent_id === filter.id);
+  const childFilterItems: FilterResponse[] = allFilters.filter(
+    (item) => item.parent_id === filter.id
+  );
 
   if (!childFilterItems.length) {
     return;
   }
 
-  childFilterItems.forEach((childFilterItem) => getItemsAndNext(childFilterItem, filterItem.next || [], layer + 1, allFilters));
+  childFilterItems.forEach((childFilterItem) =>
+    getItemsAndNext(
+      childFilterItem,
+      filterItem.next || [],
+      layer + 1,
+      allFilters
+    )
+  );
 };
 
 const getItems = async () => {
@@ -141,23 +188,33 @@ const getItems = async () => {
     return;
   }
 
-  const filters: any[] = result?.data?.resources?.filter((item: Facility) => props.filterKind === item.kind);
+  const filters: any[] = result?.data?.resources?.filter(
+    (item: Facility) => props.filterKind === item.kind
+  );
   // const filters: any[] = result?.data?.resources;
   if (!filters) {
     console.error("No filters!");
     return;
   }
 
-  const facilityFilters = filters.filter((filter) => filter.filter_type === "filter_facility");
-  const serviceFilters = filters.filter((filter) => filter.filter_type === "filter_service");
+  const facilityFilters = filters.filter(
+    (filter) => filter.filter_type === "filter_facility"
+  );
+  const serviceFilters = filters.filter(
+    (filter) => filter.filter_type === "filter_service"
+  );
 
   const tmpItemsForFacilityList: CollapsibleListItem[] = [];
   const tmpItemsForServiceList: CollapsibleListItem[] = [];
 
-  const allFilters = await useFilterStore().loadAllFilters();
+  const allFilters = await useFilterStore().loadAllFilters(true);
 
-  facilityFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForFacilityList, 0, allFilters));
-  serviceFilters.forEach((filter) => getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters));
+  facilityFilters.forEach((filter) =>
+    getItemsAndNext(filter, tmpItemsForFacilityList, 0, allFilters)
+  );
+  serviceFilters.forEach((filter) =>
+    getItemsAndNext(filter, tmpItemsForServiceList, 0, allFilters)
+  );
 
   const tags = await loadAllTags();
 
@@ -179,7 +236,7 @@ const getItems = async () => {
     static: true,
     specialType: "tag",
     next: [...transformedTags],
-    care_facilities_count: ""
+    care_facilities_count: "",
   });
 
   itemsForFacilityList.value = [...tmpItemsForFacilityList];
@@ -202,12 +259,22 @@ const loadAllTags = async () => {
 
   // const tags: FilterTag[] = res.data.resources;
   const scope = filterKindToFilterScope(props.filterKind);
-  const tags: FilterTag[] = res.data.resources?.filter((item: FilterTag) => scope === item.scope);
+  const tags: FilterTag[] = res.data.resources?.filter(
+    (item: FilterTag) => scope === item.scope
+  );
 
   return tags;
 };
 
-const handleClick = async (action: EmitAction, itemIds: string[], layer: number, name: string, kind: string, specialType: string, filterType: FilterType) => {
+const handleClick = async (
+  action: EmitAction,
+  itemIds: string[],
+  layer: number,
+  name: string,
+  kind: string,
+  specialType: string,
+  filterType: FilterType
+) => {
   switch (action) {
     case "CREATE":
       return handleCreate(itemIds, layer, name, filterType, specialType);
@@ -218,11 +285,22 @@ const handleClick = async (action: EmitAction, itemIds: string[], layer: number,
   }
 };
 
-const handleEdit = async (itemIds: string[], layer: number, name: string, kind: string, specialType: string) => {
-  api.setEndpoint(`${specialType === "tag" ? "tags" : "tag_categories"}/${itemIds[0]}`);
+const handleEdit = async (
+  itemIds: string[],
+  layer: number,
+  name: string,
+  kind: string,
+  specialType: string
+) => {
+  api.setEndpoint(
+    `${specialType === "tag" ? "tags" : "tag_categories"}/${itemIds[0]}`
+  );
 
   // Hint: Send kind or scope
-  const result = await api.updateItem({ name, kind: props.filterKind }, "Erfolgreich aktualisiert");
+  const result = await api.updateItem(
+    { name, kind: props.filterKind },
+    "Erfolgreich aktualisiert"
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     console.log("SUCCESS");
@@ -232,7 +310,13 @@ const handleEdit = async (itemIds: string[], layer: number, name: string, kind: 
   }
 };
 
-const handleCreate = async (itemIds: string[], layer: number, name: string, filterType: FilterType, specialType: string) => {
+const handleCreate = async (
+  itemIds: string[],
+  layer: number,
+  name: string,
+  filterType: FilterType,
+  specialType: string
+) => {
   if (specialType === "tag") {
     api.setEndpoint(`tags`);
     const res = await api.createItem({
@@ -252,7 +336,10 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, filt
 
   api.setEndpoint(`tag_categories`);
 
-  const result = await api.createItem({ name, parent_id: itemIds[0], filter_type: filterType }, `Erfolgreich erstellt`);
+  const result = await api.createItem(
+    { name, parent_id: itemIds[0], filter_type: filterType },
+    `Erfolgreich erstellt`
+  );
 
   if (result.status === ResultStatus.SUCCESSFUL) {
     console.log("SUCCESS");
@@ -262,19 +349,32 @@ const handleCreate = async (itemIds: string[], layer: number, name: string, filt
   }
 };
 
-const handleDelete = async (itemIds: string[], layer: number, specialType: string) => {
+const handleDelete = async (
+  itemIds: string[],
+  layer: number,
+  specialType: string
+) => {
   deleteEndpoint.value = specialType === "tag" ? "tags" : "tag_categories";
   openDeleteDialog(itemIds[0]);
 };
 
-const handleMove = async (itemsInFilter: CollapsibleListItem[], layer: number, startIndex: number, endIndex: number, filterType: FilterType) => {
+const handleMove = async (
+  itemsInFilter: CollapsibleListItem[],
+  layer: number,
+  startIndex: number,
+  endIndex: number,
+  filterType: FilterType
+) => {
   /**
    * TODO: Move fix again
    */
 
   if (startIndex === endIndex) return;
 
-  const relevantListItems = filterType === "filter_facility" ? itemsForFacilityList : itemsForServiceList;
+  const relevantListItems =
+    filterType === "filter_facility"
+      ? itemsForFacilityList
+      : itemsForServiceList;
 
   const actualStartIndex = Math.min(startIndex, endIndex);
   const actualEndIndex = Math.max(startIndex, endIndex);
@@ -282,8 +382,14 @@ const handleMove = async (itemsInFilter: CollapsibleListItem[], layer: number, s
   const itemsToUpdate: any[] = [];
 
   if (layer === 0) {
-    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const filter = relevantListItems.value.find((filter) => filter.id === itemsInFilter[newIndex].id);
+    for (
+      let newIndex = actualStartIndex;
+      newIndex <= actualEndIndex;
+      newIndex++
+    ) {
+      const filter = relevantListItems.value.find(
+        (filter) => filter.id === itemsInFilter[newIndex].id
+      );
       if (!filter) throw "Filter not found";
       itemsToUpdate.push(filter);
     }
@@ -291,8 +397,14 @@ const handleMove = async (itemsInFilter: CollapsibleListItem[], layer: number, s
     const subFilters = relevantListItems.value.reduce((prev, curr) => {
       return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
-    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const subFilter = subFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
+    for (
+      let newIndex = actualStartIndex;
+      newIndex <= actualEndIndex;
+      newIndex++
+    ) {
+      const subFilter = subFilters.find(
+        (filter) => filter.id === itemsInFilter[newIndex].id
+      );
       if (!subFilter) throw "SubFilter not found";
       itemsToUpdate.push(subFilter);
     }
@@ -303,8 +415,14 @@ const handleMove = async (itemsInFilter: CollapsibleListItem[], layer: number, s
     const subSubFilters = subFilters.reduce((prev, curr) => {
       return [...prev, ...(curr.next || [])];
     }, [] as CollapsibleListItem[]);
-    for (let newIndex = actualStartIndex; newIndex <= actualEndIndex; newIndex++) {
-      const subSubFilter = subSubFilters.find((filter) => filter.id === itemsInFilter[newIndex].id);
+    for (
+      let newIndex = actualStartIndex;
+      newIndex <= actualEndIndex;
+      newIndex++
+    ) {
+      const subSubFilter = subSubFilters.find(
+        (filter) => filter.id === itemsInFilter[newIndex].id
+      );
       if (!subSubFilter) throw "SubSubFilter not found";
       itemsToUpdate.push(subSubFilter);
     }
@@ -335,6 +453,14 @@ const handleItemDeleted = () => {
   confirmDeleteDialogOpen.value = false;
   getItems();
 };
+
+watch(
+  async () => [
+    itemsForFacilityList.value.length,
+    itemsForServiceList.value.length,
+  ],
+  () => {}
+);
 
 onMounted(async () => {
   getItems();

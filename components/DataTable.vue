@@ -93,9 +93,6 @@
           @click="handleEmitParent(item, field, indexMain)"
           :width="field.width"
         >
-          <span v-if="field.type === 'projectTimeRange'">{{
-            useDatetime().getProjectTimeRangeString(item)
-          }}</span>
           <span v-if="field.type === 'datetime' && item[field.value]">{{
             useDatetime().parseDatetime(item[field.value])
           }}</span>

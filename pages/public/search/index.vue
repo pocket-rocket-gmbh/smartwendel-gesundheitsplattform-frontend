@@ -1,28 +1,55 @@
 <template>
   <div>
     <v-row class="mt-md-4 search-field-search">
-      <v-col class="d-flex align-center is-white">
-        <span class="is-white font-weight-medium general-font-size" v-if="filterStore.currentSearchTerm">
+      <v-row v-if="showingEventsCourses">
+        <v-col class="d-flex align-center is-white">
+          <div>
+            <div class="general-font-size text-h4 text-white">
+              Kurse und Veranstaltungen
+            </div>
+            <div>
+              <span
+                class="is-white font-weight-medium general-font-size mt-3"
+                v-if="filterStore.currentSearchTerm"
+              >
+                Suchbegriff: {{ filterStore.currentSearchTerm }}
+              </span>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+      <v-col class="d-flex align-center is-white" v-if="!showingEventsCourses">
+        <span
+          class="is-white font-weight-medium general-font-size"
+          v-if="filterStore.currentSearchTerm"
+        >
           Suchbegriff: {{ filterStore.currentSearchTerm }}
         </span>
       </v-col>
-
       <v-col>
         <PublicSearchField
           class="search-fields"
           v-model="filterStore.currentSearchTerm"
           :filtered-items="filterStore.filteredResults"
-          @update:model-value="filterStore.currentSearchTerm"
+          @update:model-value="handleInput"
           :isResultPage="true"
+          :showing-events-courses="showingEventsCourses"
         />
       </v-col>
     </v-row>
   </div>
   <div class="search-page-wrapper">
     <div>
-      <LoadingSpinner class="loading" v-if="filterStore.loading">Ergebnisse werden geladen...</LoadingSpinner>
+      <LoadingSpinner class="loading" v-if="filterStore.loading"
+        >Ergebnisse werden geladen...</LoadingSpinner
+      >
       <template v-else>
-        <v-row v-if="!filterStore.filteredResults.length && !filterStore.filteredCategories.length">
+        <v-row
+          v-if="
+            !filterStore.filteredResults.length &&
+            !filterStore.filteredCategories.length
+          "
+        >
           <v-col class="d-flex flex-column align-center justify-center">
             <div class="flex-column" align="center">
               <div class="general-font-size text-h4">
@@ -53,8 +80,16 @@
       </template>
     </div>
     <div class="container">
-      <PublicContentBox v-for="category in filterStore.filteredResults" :key="category.id" :item="category" />
-      <PublicContentBox v-for="category in filterStore.filteredCategories" :key="category.id" :item="category" />
+      <PublicContentBox
+        v-for="category in filterStore.filteredResults"
+        :key="category.id"
+        :item="category"
+      />
+      <PublicContentBox
+        v-for="category in filterStore.filteredCategories"
+        :key="category.id"
+        :item="category"
+      />
     </div>
   </div>
 </template>
@@ -67,7 +102,9 @@ const filterStore = useFilterStore();
 const router = useRouter();
 
 const filteredKinds = computed(() => {
-  return Array.from(new Set(filterStore.filteredResults.map((result) => result.kind)));
+  return Array.from(
+    new Set(filterStore.filteredResults.map((result) => result.kind))
+  );
 });
 const goBack = () => {
   router.push({ path: "/" });
@@ -93,12 +130,22 @@ const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
   }
 };
 
+const handleInput = () => {
+  filterStore.onlySearchInTitle = true;
+  filterStore.loadAllResults();
+};
+
+const showingEventsCourses = ref(false);
+
 onMounted(async () => {
-  filterStore.currentKinds = [];
-  filterStore.onlySearchInTitle = false;
-
+  if (router.currentRoute.value.query.searchType) {
+    filterStore.currentKinds = ["event", "course"];
+    showingEventsCourses.value = true;
+  } else {
+    filterStore.currentKinds = [];
+  }
+  filterStore.onlySearchInTitle = true;
   await filterStore.loadAllResults();
-
   filterStore.loadAllResults();
 });
 </script>

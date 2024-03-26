@@ -94,9 +94,20 @@ const setSubCategoryAndScroll = (id: any) => {
     query: { sub_category_id: id },
   });
 };
+const checkQuery = () => {
+  const subCategoryId = router.currentRoute.value.query.sub_category_id;
+  if (subCategoryId) {
+    selectedId.value = subCategoryId;
+  }
+};
+
 
 useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
   selectedId.value = id;
+});
+
+onMounted(() => {
+  checkQuery();
 });
 </script>
 <style lang="sass">

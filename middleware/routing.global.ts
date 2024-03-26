@@ -29,7 +29,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (isRestrictedPath && (!useUser().isAdmin() && !useUser().isFacilityOwner())) {
       router.replace({ path: '/' })
     }
-
-  
   }
 })
