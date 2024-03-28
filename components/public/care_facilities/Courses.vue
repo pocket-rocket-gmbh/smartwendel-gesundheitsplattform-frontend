@@ -27,7 +27,7 @@ const props = defineProps({
 });
 
 const courseCareFacilities = computed(() => {
-  return props.careFacility.user.care_facilities.filter(
+  return props.careFacility?.user.care_facilities.filter(
     (facility: any) => facility.kind === "course"
   );
 });

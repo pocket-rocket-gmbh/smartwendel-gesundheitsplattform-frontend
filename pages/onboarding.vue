@@ -16,7 +16,7 @@
     <div
       class="register-now elevation-10"
       :class="['card', { shake: animated }]"
-      v-if="hasToken"
+      v-if="hasToken && !owner_requested_maintenance"
     >
       <div>
         <div
@@ -24,6 +24,9 @@
           v-if="!registerSuccessful"
         >
           <span>Einrichtung "{{ careFacilityName }}" übernehmen</span>
+          <v-btn color="primary" class="ml-5" @click="showPreview"
+            >Vorschau</v-btn
+          >
         </div>
         <div
           class="mt-5 d-flex flex-column general-font-size"
@@ -106,6 +109,79 @@
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
             />
           </div>
+          <div class="my-5">
+            <span class="mb-3 general-font-size font-weight-medium"
+              >Meine Einrichtung</span
+            >
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityName"
+                type="text"
+                label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
+                :error-messages="
+                  useErrors().checkAndMapErrors('firstname', errors)
+                "
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityStreet"
+                type="text"
+                label="Straße und Nummer *"
+                :error-messages="
+                  useErrors().checkAndMapErrors('firstname', errors)
+                "
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+            <div class="field">
+              <v-select
+                hide-details="auto"
+                v-model="careFacilityCommunityId"
+                :items="communities"
+                item-title="name"
+                item-value="id"
+                label="Gemeinde *"
+                :rules="[rules.required]"
+              />
+            </div>
+            <div class="field split">
+              <v-text-field
+                v-model="careFacilityZip"
+                hide-details="auto"
+                label="PLZ *"
+                :type="'number'"
+                :rules="[rules.required, rules.zip]"
+                :error-messages="useErrors().checkAndMapErrors('zip', errors)"
+                disabled
+              />
+              <v-select
+                :disabled="careFacilityCommunityId?.length === 0"
+                hide-details="auto"
+                v-model="careFacilityTown"
+                :items="getTownsByCommunityId(careFacilityCommunityId)"
+                item-title="name"
+                item-value="name"
+                label="Ort *"
+                :rules="[rules.required]"
+              />
+            </div>
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityResponsiblePerson"
+                type="text"
+                label="Inhaltlich verantwortliche Person *"
+                :error-messages="
+                  useErrors().checkAndMapErrors('firstname', errors)
+                "
+                :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+          </div>
         </div>
         <v-checkbox
           v-model="privacyAccepted"
@@ -143,6 +219,7 @@
           size="large"
           block
           depressed
+          :disabled="submitButtonDisabledCondition"
           @click="register"
           >Übernehmen</v-btn
         >
@@ -212,7 +289,6 @@
 <script lang="ts" setup>
 import { ResultStatus, ServerCallResult } from "@/types/serverCallResult";
 import { rules } from "../data/validationRules";
-import axios from "axios";
 import { VForm } from "vuetify/lib/components/index.mjs";
 
 import LogoStep1 from "@/assets/icons/registerIcons/icon_step1.png";
@@ -227,6 +303,12 @@ const firstname = ref("");
 const lastname = ref("");
 const email = ref("");
 const careFacilityName = ref("");
+const careFacilityCommunityId = ref("");
+const careFacilityZip = ref("");
+const careFacilityTown = ref("");
+const careFacilityStreet = ref("");
+const careFacilityResponsiblePerson = ref("");
+
 const loading = ref(true);
 const animated = ref(false);
 const errors = ref({});
@@ -275,11 +357,16 @@ const toLogin = () => {
   router.push({ path: "/login" });
 };
 
+const owner_requested_maintenance = ref(false);
+
 const getToken = () => {
   currentToken.value = String(router.currentRoute.value.query.token);
 };
 
+const careFacilityId = ref("");
+
 const publicApi = usePublicApi();
+
 const validateToken = async () => {
   loading.value = true;
   const result = await publicApi.call(
@@ -288,12 +375,22 @@ const validateToken = async () => {
   );
   if (result.status === ResultStatus.SUCCESSFUL) {
     const data = result;
+    console.log(data);
     if (data) {
       hasToken.value = true;
       firstname.value = data?.data?.user?.firstname;
       lastname.value = data?.data?.user?.lastname;
       email.value = data?.data?.user?.email;
+      careFacilityId.value = data?.data?.care_facility?.id;
       careFacilityName.value = data?.data?.care_facility?.name;
+      careFacilityZip.value = data?.data?.care_facility?.zip;
+      careFacilityTown.value = data?.data?.care_facility?.town;
+      careFacilityCommunityId.value = data?.data?.care_facility?.community_id;
+      careFacilityStreet.value = data?.data?.care_facility?.street;
+      careFacilityResponsiblePerson.value =
+        data?.data?.care_facility?.name_responsible_person;
+      owner_requested_maintenance.value =
+        data?.data?.care_facility?.owner_requested_maintenance;
     }
     loading.value = false;
   } else {
@@ -302,7 +399,38 @@ const validateToken = async () => {
   }
 };
 
+const currentPreviewToken = ref("");
+
+const getPreviewToken = async () => {
+  const token = String(router.currentRoute.value.query.previewToken);
+  if (token) {
+    currentPreviewToken.value = token;
+  }
+};
+
 const currentUser = ref<any>(null);
+
+const showPreview = () => {
+  router.push({
+    path: "/public/care_facilities/" + careFacilityId.value,
+    query: { token_id: currentPreviewToken.value },
+  });
+};
+
+const submitButtonDisabledCondition = computed(() => {
+  return (
+    !firstname.value ||
+    !lastname.value ||
+    !email.value ||
+    !careFacilityName.value ||
+    !careFacilityCommunityId.value ||
+    !careFacilityZip.value ||
+    !careFacilityTown.value ||
+    !careFacilityStreet.value ||
+    !careFacilityResponsiblePerson.value ||
+    !privacyAccepted.value
+  );
+});
 
 const register = async () => {
   const { valid } = await registerForm.value.validate();
@@ -312,6 +440,12 @@ const register = async () => {
     email: email.value,
     firstname: firstname.value,
     lastname: lastname.value,
+    care_facility_name: careFacilityName.value,
+    care_facility_zip: careFacilityZip.value,
+    care_facility_town: careFacilityTown.value,
+    care_facility_community_id: careFacilityCommunityId.value,
+    care_facility_street: careFacilityStreet.value,
+    care_facility_name_responsible_person: careFacilityResponsiblePerson.value,
   };
   const result = await publicApi.call(
     "post",
@@ -334,6 +468,38 @@ const register = async () => {
   }
 };
 
+useHead({
+  title: "Einrichtung übernehmen",
+  meta: [
+    { property: "og:type", content: "Webseite" },
+    {
+      name: "title",
+      content: careFacilityName.value + "Einrichtung übernehmen",
+    },
+  ],
+});
+
+const communitiesApi = useCollectionApi();
+communitiesApi.setBaseApi(usePublicApi());
+communitiesApi.setEndpoint(`communities`);
+const communities = communitiesApi.items;
+
+const getCommunities = async () => {
+  await communitiesApi.retrieveCollection();
+};
+
+const getTownsByCommunityId = (communityId: string) => {
+  const found = communities.value.find(
+    (community: any) => community.id === communityId
+  );
+  if (found) {
+    careFacilityZip.value = found.zip;
+    return found.towns;
+  } else {
+    [];
+  }
+};
+
 const api = useCollectionApi();
 api.setBaseApi(usePublicApi());
 
@@ -343,7 +509,9 @@ const scrollToTop = () => {
 onMounted(async () => {
   getToken();
   await validateToken();
+  getPreviewToken();
   scrollToTop();
+  getCommunities();
   const rememberedEmail = localStorage.getItem(
     "health_platform._remembered_email"
   );

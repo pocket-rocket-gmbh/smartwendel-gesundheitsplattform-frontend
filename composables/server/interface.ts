@@ -46,7 +46,7 @@ export function useServerInterface() {
         result = error.response.data.msg
       }
       else {
-        return;
+        result = 'Ein Fehler ist aufgetreten'
       }
     }
     else if (error.code) {

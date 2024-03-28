@@ -32,6 +32,11 @@
           </div>
         </v-col>
         <v-col md="9">
+          <div v-if="slotProps.item?.owner_requested_maintenance" class="mt-3">
+            <v-alert type="info" class="general-font-size"
+              >Diese Einrichtung kann von LK bearbeitet werden
+            </v-alert>
+          </div>
           <div class="py-10">
             <span
               class="general-font-size is-dark-grey facility-kind-description"
@@ -50,12 +55,11 @@
                 >URL zur Einrichtungsübernahme generieren</span
               >
             </div>
-
             <div class="d-flex align-center">
               <div class="field split d-flex align-center">
                 <v-text-field
                   class="text-field is-dark-grey"
-                  :value="slotProps.item?.user?.onboarding_token"
+                  :value="previewUrlWithToken(slotProps.item)"
                   disabled
                   hide-details="auto"
                 />
@@ -73,6 +77,48 @@
           <v-divider
             class="my-2"
             v-if="slotProps.item?.user?.onboarding_token?.length"
+          ></v-divider>
+          <div class="d-flex align-center" v-if="!slotProps.item?.is_active">
+            <span class="general-font-size is-dark-grey font-weight-bold mr-3"
+              >Vorschau</span
+            >
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <v-icon class="is-clickable mr-10" v-bind="props"
+                  >mdi-information-outline</v-icon
+                >
+              </template>
+              <span>
+                Hier kannst du sehen, wie die Profilseite deiner Einrichtung für
+                die Besucher:innen der Gesundheits- und Pflegeplattform
+                aussieht. Bitte beachte: Es handelt sich hierbei nur um eine
+                Vorschau. Wenn du möchtest, dass dein Angebot auf der Plattform
+                erscheint, musst du dein Profil online schalten.</span
+              >
+            </v-tooltip>
+            <div class="field split d-flex align-center">
+              <v-text-field
+                class="text-field is-dark-grey"
+                :value="previewUrl(slotProps.item)"
+                disabled
+                hide-details="auto"
+              />
+              <v-icon @click="goToLink(slotProps.item)" size="x-large"
+                >mdi-open-in-new</v-icon
+              >
+              <v-btn
+                variant="flat"
+                color="primary"
+                rounded="pill"
+                @click="copyPreviewLink(slotProps.item)"
+              >
+                <span> Vorschau LINK kopieren </span>
+              </v-btn>
+            </div>
+          </div>
+          <v-divider
+            class="my-6"
+            v-if="slotProps.item?.preview_token?.length"
           ></v-divider>
           <div class="field" id="name">
             <div class="my-2">
@@ -358,7 +404,8 @@
             :class="[
               (adressChanged || editInformations) &&
               user.currentUser.is_active_on_health_scope &&
-              slotProps.item.id && !useUser().isAdmin()
+              slotProps.item.id &&
+              !useUser().isAdmin()
                 ? 'has-bg-light-red pa-5'
                 : '',
             ]"
@@ -367,7 +414,8 @@
               v-if="
                 adressChanged &&
                 user.currentUser.is_active_on_health_scope &&
-                slotProps.item.id && !useUser().isAdmin()
+                slotProps.item.id &&
+                !useUser().isAdmin()
               "
             >
               <v-alert type="warning" density="compact" class="mt-2"
@@ -687,7 +735,6 @@
               </v-tooltip>
             </div>
             <v-divider class="my-10"></v-divider>
-
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
               tag-name="documents"
@@ -990,6 +1037,11 @@ const copyLink = (item: any) => {
   snackbar.showSuccess(`Link kopiert`);
 };
 
+const goToLink = (item: any) => {
+  const link = `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
+  return window.open(link, "_blank");
+};
+
 const loadingAdress = ref(false);
 
 const handleInitialCheckValidAddress = (slotProps: any) => {
@@ -1016,9 +1068,23 @@ const checkValidAddress = debounce(async (slotProps: any) => {
 const snackbar = useSnackbar();
 
 const copyTokenLink = (item: any) => {
-  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}`;
+  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}&previewToken=${item?.preview_token}`;
   navigator.clipboard.writeText(link);
   snackbar.showSuccess("Übernahme-Link generiert und kopiert.");
+};
+
+const previewUrl = (item: any) => {
+  return `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
+};
+
+const previewUrlWithToken = (item: any) => {
+  return `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}&previewToken=${item?.preview_token}`;
+};
+
+const copyPreviewLink = (item: any) => {
+  const link = previewUrl(item);
+  navigator.clipboard.writeText(link);
+  snackbar.showSuccess("Vorschau-Link kopiert.");
 };
 
 const isValidAddress = ref(null);

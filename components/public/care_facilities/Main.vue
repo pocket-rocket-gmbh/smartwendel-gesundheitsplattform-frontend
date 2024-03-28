@@ -2,8 +2,10 @@
   <div class="main-wrapper">
     <v-row class="heading">
       <v-col class="d-flex align-center">
-        <span class="general-font-size text-h4
-         font-weight-medium is-dark-grey d-md-block d-none text-wrap">{{ careFacility?.name }}</span>
+        <span
+          class="general-font-size text-h4 font-weight-medium is-dark-grey d-md-block d-none text-wrap"
+          >{{ careFacility?.name }}</span
+        >
         <span v-if="careFacility?.billable_through_health_insurance_approved">
           <v-icon size="x-large" class="pl-8" color="primary"
             >mdi-check-decagram-outline</v-icon
@@ -11,7 +13,7 @@
         </span>
       </v-col>
     </v-row>
-    <v-divider class="my-5 d-md-block d-none"></v-divider>
+    <v-divider class="my-5 d-md-block d-none" v-if="careFacility?.description"></v-divider>
     <span
       class="is-primary mr-2"
       v-if="careFacility?.kind === 'news'"
@@ -21,17 +23,29 @@
     </span>
     <div class="mt-4">
       <ClientOnly>
-        <PublicTextTooltipWrap class="pr-5 is-dark-grey description text-wrap" :text="careFacility?.description.replace('<p><br></p><p><br></p>', '<p><br></p>')" />
+        <PublicTextTooltipWrap
+          v-if="careFacility?.description"
+          class="pr-5 is-dark-grey description text-wrap"
+          :text="
+            careFacility?.description.replace(
+              '<p><br></p><p><br></p>',
+              '<p><br></p>'
+            )
+          "
+        />
       </ClientOnly>
-      <v-divider class="my-10"></v-divider>
-      <div class="genral-font-size is-dark-grey">
+      <v-divider
+        class="my-10"
+        v-if="careFacility?.name_responsible_person"
+      ></v-divider>
+      <div
+        class="genral-font-size is-dark-grey"
+        v-if="careFacility?.name_responsible_person"
+      >
         <i
           >Inhaltlich verantwortlich:
-          <span v-if="careFacility?.name_responsible_person">{{
-            careFacility?.name_responsible_person
-          }}</span>
-          </i
-        >
+          <span>{{ careFacility?.name_responsible_person }}</span>
+        </i>
       </div>
       <div
         v-if="
@@ -57,6 +71,27 @@ const props = defineProps({
     required: true,
   },
 });
+
+const getFacilityDescription = async () => {
+  return props.careFacility?.description;
+};
+const getFacilityTitle = async () => {
+  return props.careFacility?.name;
+};
+const getFacilityImage = async () => {
+  return props.careFacility?.image_url;
+};
+
+useHead({
+  title: getFacilityTitle(),
+  meta: [
+    { property: "og:type", content: "Webseite" },
+    { name: "description", content: getFacilityDescription() },
+    { name: "title", content: getFacilityTitle() },
+    { name: "image", content: getFacilityImage() },
+  ],
+});
+
 </script>
 
 <style lang="scss" scoped>
