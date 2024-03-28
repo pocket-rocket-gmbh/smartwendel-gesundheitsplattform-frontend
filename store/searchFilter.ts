@@ -21,6 +21,7 @@ export type FilterTag = {
   scope: string;
 };
 export type User = {
+  [x: string]: any;
   id: string;
   name: string;
   firstname: string;
