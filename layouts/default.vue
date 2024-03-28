@@ -66,10 +66,9 @@ onMounted(async () => {
 
   await Promise.allSettled([
     await useFilterStore().loadAllFacilityFilters(),
-    await useFilterStore().loadAllServiceFilters()
+    await useFilterStore().loadAllServiceFilters(),
   ]);
   appStore.loading = false;
-
 });
 
 onUnmounted(() => {
