@@ -3,13 +3,23 @@
     <div class="d-flex align-center justify-center mt-1">
       <p v-if="props.searchQuery">
         Zeigt
-        {{ Math.min((pagination.page - 1) * pagination.itemsPerPage + 1, items.length) }}-
-        {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }} von
-        {{ items.length }} Einträgen
+        {{
+          Math.min(
+            (pagination.page - 1) * pagination.itemsPerPage + 1,
+            items.length
+          )
+        }}-
+        {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }}
+        von {{ items.length }} Einträgen
       </p>
       <p v-else>
         Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
-        {{ Math.min(pagination.page * pagination.itemsPerPage, pagination.totalItems) }}
+        {{
+          Math.min(
+            pagination.page * pagination.itemsPerPage,
+            pagination.totalItems
+          )
+        }}
         von {{ pagination.totalItems }} Einträgen
       </p>
 
@@ -26,8 +36,12 @@
       />
 
       <span @click="toogleBar">
-        <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
-        <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
+        <v-icon class="is-clickable" v-if="showBar" size="x-large"
+          >mdi-menu-up</v-icon
+        >
+        <v-icon class="is-clickable" v-else size="x-large"
+          >mdi-menu-down</v-icon
+        >
       </span>
     </div>
     <v-pagination
@@ -57,12 +71,15 @@
           :class="{ 'is-clickable': field.prop }"
           @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
-          <div class="table-head-item" :class="sortBy === field.prop ? 'selected-sort' : ''">
+          <div
+            class="table-head-item"
+            :class="sortBy === field.prop ? 'selected-sort' : ''"
+          >
             {{ field.text }}
             <div
               v-if="sortBy === field.prop"
               class="chevron"
-              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc'}"
+              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc' }"
             ></div>
             <div v-else-if="field.text">
               <div class="chevron"></div>
@@ -82,7 +99,9 @@
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'facility' ? 'has-normal-bg' : '',
           getCurrentRoute() === 'admin-users' ? '' : '',
-          isDraft(item) ? 'draft' : '',
+          isDraft(item) || item?.kind !== 'facility'
+            ? 'draft'
+            : 'has-bg-lighten-green',
         ]"
       >
         <td
@@ -101,11 +120,16 @@
           }}</span>
           <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
+              <v-icon class="is-clickable" v-bind="props">{{
+                field.value
+              }}</v-icon>
             </template>
             <span v-if="field.tooltip">{{ field.tooltip }}</span>
           </v-tooltip>
-          <v-tooltip top v-else-if="field.type === 'move_up' && indexMain !== 0">
+          <v-tooltip
+            top
+            v-else-if="field.type === 'move_up' && indexMain !== 0"
+          >
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-arrow-up</v-icon>
             </template>
@@ -113,10 +137,14 @@
           </v-tooltip>
           <v-tooltip
             top
-            v-else-if="field.type === 'move_down' && indexMain !== items.length - 1"
+            v-else-if="
+              field.type === 'move_down' && indexMain !== items.length - 1
+            "
           >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
+              <v-icon class="is-clickable" v-bind="props"
+                >mdi-arrow-down</v-icon
+              >
             </template>
             <span>Nach unten</span>
           </v-tooltip>
@@ -124,11 +152,18 @@
           <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{
             field.value
           }}</v-icon>
-          <span v-else-if="item[field.value] && field.type === 'association_name'">{{
-            item[field.value].name
-          }}</span>
-          <span v-else-if="item[field.value] && field.type === 'associations_name'">
-            <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">
+          <span
+            v-else-if="item[field.value] && field.type === 'association_name'"
+            >{{ item[field.value].name }}</span
+          >
+          <span
+            v-else-if="item[field.value] && field.type === 'associations_name'"
+          >
+            <div
+              v-for="(subItem, index) in item[field.value]"
+              :key="index"
+              class="small"
+            >
               {{ subItem.name }}
             </div>
           </span>
@@ -146,7 +181,9 @@
                     :notification-pre-filled-headline="
                       field.notificationPreFilledHeadline
                     "
-                    :notification-pre-filled-text="field.notificationPreFilledText"
+                    :notification-pre-filled-text="
+                      field.notificationPreFilledText
+                    "
                     :notification-cta-link="field.notificationCtaLink"
                     :disabled="field?.disabledConditions?.(item)"
                     @toggled="handleToggled(item)"
@@ -175,11 +212,21 @@
             :enum-name="field.enum_name"
             :endpoint="field.endpoint"
             :fieldName="field.value"
-            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
+            :field-class="
+              useEnums().getClassName(field.enum_name, item[field.value])
+            "
             :disable-edit="!useUser().isAdmin()"
           />
-          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
-            <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
+          <div
+            v-else-if="
+              item[field.value] && field.enum_name && field.type === 'enum'
+            "
+          >
+            <span
+              :class="
+                useEnums().getClassName(field.enum_name, item[field.value])
+              "
+            >
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
@@ -202,10 +249,16 @@
                         {{ facility.name }}
                       </span>
                       <div class="d-flex align-center">
-                        <v-icon v-if="!facility.is_active" size="x-small" color="error"
+                        <v-icon
+                          v-if="!facility.is_active"
+                          size="x-small"
+                          color="error"
                           >mdi-circle</v-icon
                         >
-                        <v-icon v-if="facility.is_active" size="x-small" color="success"
+                        <v-icon
+                          v-if="facility.is_active"
+                          size="x-small"
+                          color="success"
                           >mdi-circle</v-icon
                         >
                       </div>
@@ -218,41 +271,92 @@
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
-          <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
+          <span
+            v-else-if="field.type === 'has-dates' && !item.event_dates.length"
+          >
             <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
           </span>
           <span
             v-else-if="
-              field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
+              field.type === 'is-lk' &&
+              item?.user?.role === 'care_facility_admin'
             "
           >
             <img :src="logo" width="20" class="ml-2 pt-2" />
           </span>
+
           <span
             v-else-if="
-              field.type === 'imported' && item?.user?.imported && useUser().isAdmin()
+              field.type === 'send-invitation' &&
+              item?.user?.onboarding_token &&
+              useUser().isAdmin() &&
+              !item?.owner_requested_maintenance
+            "
+            @click.stop="openConfirmationDialog(item)"
+          >
+            <span
+              class="d-flex flex-column align-center"
+              :class="
+                item?.user?.notification_after_manual_import_sent_at?.length
+                  ? 'onboard'
+                  : ''
+              "
+            >
+              <span v-if="item?.user?.notification_after_manual_import_sent_at">
+                {{
+                  useDatetime().parseDatetime(
+                    item?.user?.notification_after_manual_import_sent_at
+                  )
+                }}</span
+              >
+              <v-icon>mdi-send-variant-outline</v-icon>
+            </span>
+          </span>
+
+          <span
+            v-else-if="
+              field.type === 'imported' &&
+              item?.user?.imported &&
+              useUser().isAdmin()
             "
             @click.stop="copyTokenLink(item)"
           >
-            <div class="d-flex flex-column">
-              <v-icon :class="[item?.user?.onboarding_token ? 'not-onboard' : 'onboard']"
+            <div class="d-flex ga-3">
+              <v-icon
+                :class="[
+                  item?.user?.onboarding_token ? 'not-onboard' : 'onboard',
+                ]"
                 >mdi-application-import</v-icon
               >
+              <v-icon
+                v-if="!item?.owner_requested_maintenance"
+                class="no-maintenance"
+                >mdi-flag-variant-remove</v-icon
+              >
+              <v-icon
+                v-if="item?.owner_requested_maintenance"
+                class="yes-maintenance"
+              >
+                mdi-flag-variant-plus
+              </v-icon>
             </div>
           </span>
           <span v-else-if="field.type === 'beinEdited' && !item.user"
-            ><i>Nutzer existiert nicht</i></span
+            ><i>Benutzer existiert nicht</i></span
           >
           <span v-else-if="field.type === 'button' && field.action">
             <button
               @click.stop="field.action(item)"
-              v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'"
+              v-if="
+                field.value !== 'mdi-eye' &&
+                field.value !== 'mdi-check-decagram'
+              "
             >
-              <span v-if="pathInto(item, field.value).length > 1">
+              <span v-if="pathInto(item, field.value) !== 'user.name'">
                 {{ pathInto(item, field.value) }}
               </span>
-              <span v-else>
-                <i>keine Nutzerdaten</i>
+              <span v-if="pathInto(item, field.value) === 'user.name'">
+                Benutzer existiert nicht
               </span>
             </button>
             <span v-if="field.value === 'user.name'">
@@ -266,7 +370,12 @@
                   color="success"
                   >mdi-circle</v-icon
                 >
-                <v-icon v-else size="x-small" color="error">mdi-circle</v-icon>
+                <v-icon
+                  v-if="!item?.user?.is_active_on_health_scope"
+                  size="x-small"
+                  color="error"
+                  >mdi-circle</v-icon
+                >
               </span>
             </span>
             <span
@@ -276,7 +385,9 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon class="is-clickable" @click="field.action(item)">mdi-eye</v-icon>
+              <v-icon class="is-clickable" @click="field.action(item)"
+                >mdi-eye</v-icon
+              >
             </span>
             <span
               v-if="
@@ -285,7 +396,10 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon class="is-clickable" color="primary" @click="field.action(item)"
+              <v-icon
+                class="is-clickable"
+                color="primary"
+                @click="field.action(item)"
                 >mdi-check-decagram</v-icon
               >
             </span>
@@ -296,7 +410,9 @@
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit">
-          <v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon>
+          <v-icon class="is-clickable" @click="emitParent(item, null)"
+            >mdi-pencil</v-icon
+          >
         </td>
         <td v-if="useUser().isAdmin() || !disableDelete">
           <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
@@ -355,7 +471,12 @@ const emit = defineEmits([
   "itemsLoaded",
   "itemUpdated",
   "toogleBar",
+  "openConfirmationDialog",
 ]);
+
+const openConfirmationDialog = (item: any) => {
+  emit("openConfirmationDialog", item);
+};
 
 const sortOrder = ref(props.defaultSortOrder);
 const sortBy = ref(props.defaultSortBy);
@@ -417,7 +538,7 @@ const isFilled = (itemToCheck: any, requiredField: RequiredField) => {
 const isDraft = (item: any) => {
   if (!props.draftRequired) return false;
 
-  return !props.draftRequired.every((requiredField) => {
+  return !props.draftRequired.every((requiredField: any) => {
     const isRequiredFieldFilled = isFilled(item, requiredField);
     return isRequiredFieldFilled;
   });
@@ -492,7 +613,9 @@ const getItems = async () => {
   const response = await api.retrieveCollection(options);
 
   if (response.data && response.data.resources) {
-    items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
+    items.value = Array.isArray(response.data.resources)
+      ? response.data.resources
+      : [];
   } else {
     items.value = Array.isArray(response.data) ? response.data : [];
   }
@@ -507,7 +630,6 @@ const getItems = async () => {
   emit("itemsLoaded", items.value);
   loading.value = false;
 };
-
 
 const paginationValues = ref([
   { text: "10", value: 10 },
@@ -589,12 +711,12 @@ defineExpose({ resetActiveItems, getItems });
     &.up
       background-image: url("@/assets/icons/chevron-down.svg")
       background-color: #E7E8E7
-      
+
     &.down
       background-image: url("@/assets/icons/chevron-up.svg")
       background-color: #E7E8E7
 
-  
+
 .selected-sort
   color: #8ab61d
 
@@ -613,4 +735,10 @@ defineExpose({ resetActiveItems, getItems });
 
 .pagination
   position: sticky
+
+.no-maintenance
+  color: red
+
+.yes-maintenance
+  color: #358BBC
 </style>
