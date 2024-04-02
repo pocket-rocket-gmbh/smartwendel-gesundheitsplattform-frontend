@@ -28,7 +28,7 @@ const props = defineProps({
 
 const newsCareFacilities = computed(() => {
   return props.careFacility?.user.care_facilities.filter(
-    (facility: any) => facility.kind === "news"
+    (facility: any) => facility.kind === "news" && facility?.is_active === true
   );
 });
 </script>
