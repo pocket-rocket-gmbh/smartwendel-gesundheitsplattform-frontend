@@ -341,9 +341,7 @@
               </v-icon>
             </div>
           </span>
-          <span v-else-if="field.type === 'beinEdited' && !item.user"
-            ><i>Benutzer existiert nicht</i></span
-          >
+
           <span v-else-if="field.type === 'button' && field.action">
             <button
               @click.stop="field.action(item)"
@@ -357,6 +355,11 @@
               </span>
               <span v-if="pathInto(item, field.value) === 'user.name'">
                 Benutzer existiert nicht
+                <v-icon color="warning">mdi-alert</v-icon>
+              </span>
+              <span v-if="pathInto(item, field.value) === ' '">
+                keine Angaben
+                <v-icon color="warning">mdi-alert</v-icon>
               </span>
             </button>
             <span v-if="field.value === 'user.name'">
@@ -365,13 +368,13 @@
                 v-if="pathInto(item, field.value).length > 1"
               >
                 <v-icon
-                  v-if="item?.user?.is_active_on_health_scope"
+                  v-if="item?.user && item?.user?.is_active_on_health_scope"
                   size="x-small"
                   color="success"
                   >mdi-circle</v-icon
                 >
                 <v-icon
-                  v-if="!item?.user?.is_active_on_health_scope"
+                  v-if="item?.user && !item?.user?.is_active_on_health_scope"
                   size="x-small"
                   color="error"
                   >mdi-circle</v-icon
@@ -545,8 +548,9 @@ const isDraft = (item: any) => {
 };
 
 const copyTokenLink = (item: any) => {
-  if (!item?.user?.onboarding_token) return;
-  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}`;
+  console.log(item);
+  if (!item?.preview_token) return;
+  const link = `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
   navigator.clipboard.writeText(link);
   snackbar.showSuccess(`Link kopiert`);
 };
