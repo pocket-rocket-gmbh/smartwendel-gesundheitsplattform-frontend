@@ -2,7 +2,9 @@
   <div>
     <v-row v-if="showBar">
       <v-col md="3">
-        <span class="general-font-size is-dark-grey font-weight-bold">Benutzer</span>
+        <span class="general-font-size is-dark-grey font-weight-bold"
+          >Benutzer</span
+        >
       </v-col>
       <v-col class="d-flex justify-end align-center">
         <div class="d-flex align-center mx-3">
@@ -64,7 +66,14 @@
         itemId = null;
         dataTableRef?.resetActiveItems();
       "
-      @refreshCollection="getUsers()"
+      @refreshCollection="
+        dataTableRef?.resetActiveItems();
+        getUsers();
+        itemId = null;
+        createEditDialogOpen = false;
+        itemId = null;
+        dataTableRef?.resetActiveItems();
+      "
     />
 
     <DeleteItem
