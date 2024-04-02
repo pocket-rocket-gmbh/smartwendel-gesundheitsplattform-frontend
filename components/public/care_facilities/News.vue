@@ -5,6 +5,7 @@
       class="general-font-size text-h4 font-weight-medium is-dark-grey d-md-block d-none text-wrap my-10"
       >Beiträge Dieser Einrichtung</span
     >
+    <pre>{{ newsCareFacilities }}</pre>
     <div class="boxes doubled">
       <PublicContentBox
         :size="6"
@@ -28,7 +29,7 @@ const props = defineProps({
 
 const newsCareFacilities = computed(() => {
   return props.careFacility?.user.care_facilities.filter(
-    (facility: any) => facility.kind === "news"
+    (facility: any) => facility.kind === "news" && facility?.is_active === true
   );
 });
 </script>
