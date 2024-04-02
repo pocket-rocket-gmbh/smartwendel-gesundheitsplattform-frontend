@@ -13,7 +13,10 @@
         </span>
       </v-col>
     </v-row>
-    <v-divider class="my-5 d-md-block d-none" v-if="careFacility?.description"></v-divider>
+    <v-divider
+      class="my-5 d-md-block d-none"
+      v-if="careFacility?.description"
+    ></v-divider>
     <span
       class="is-primary mr-2"
       v-if="careFacility?.kind === 'news'"
@@ -34,6 +37,42 @@
           "
         />
       </ClientOnly>
+      <div
+        v-if="!careFacility?.description"
+        class="is-dark-grey general-font-size"
+      >
+        <i>
+          <b>Beispieltext: </b>
+          Unsere Gesundheitseinrichtung ist ein Ort, der sich dem Wohlbefinden
+          und der Fürsorge für alle Menschen verschrieben hat. Mit einem
+          ganzheitlichen Ansatz bieten wir eine breite Palette von
+          Dienstleistungen und Einrichtungen, die darauf abzielen, deine
+          Gesundheit und dein Wohlbefinden zu fördern. Unsere hochqualifizierten
+          Fachkräfte, darunter Ärzte, Krankenschwestern, Therapeuten und
+          Pflegepersonal, stehen dir zur Seite, um eine individuelle Betreuung
+          zu gewährleisten. Wir bieten Diagnose, Behandlung und Prävention für
+          eine Vielzahl von Gesundheitsproblemen und Krankheiten, von der
+          Routineuntersuchung bis zur komplexen medizinischen Versorgung. Unser
+          modernes medizinisches Zentrum ist mit fortschrittlicher Technologie
+          und Ausrüstung ausgestattet, um eine präzise Diagnose und effektive
+          Behandlungen zu gewährleisten. Wir legen großen Wert auf Sicherheit,
+          Qualität und deine Zufriedenheit in allem, was wir tun. Unser
+          Engagement für Exzellenz erstreckt sich über alle Bereiche unserer
+          Einrichtung, einschließlich unserer Pflegeabteilungen,
+          Rehabilitationszentren, Labore und Apotheken. Wir arbeiten eng mit
+          lokalen Gemeinden zusammen, um Gesundheitsaufklärung und
+          Präventionsprogramme anzubieten, um deine Gesundheit und dein
+          Wohlbefinden zu fördern. Egal, ob du uns für eine regelmäßige
+          Untersuchung, eine akute Erkrankung oder eine langfristige Pflege
+          aufsuchst, wir sind hier, um dir zu helfen. Dein Wohlbefinden steht
+          bei uns an erster Stelle, und wir sind stolz darauf, dir eine
+          qualitativ hochwertige, mitfühlende und umfassende Versorgung zu
+          bieten. Besuche unsere Gesundheitseinrichtung und lass uns gemeinsam
+          auf dem Weg zu einem gesünderen und glücklicheren Leben gehen. Wir
+          freuen uns darauf, dich zu unterstützen und dir die bestmögliche
+          Betreuung zu bieten.</i
+        >
+      </div>
       <v-divider
         class="my-10"
         v-if="careFacility?.name_responsible_person"
@@ -91,7 +130,6 @@ useHead({
     { name: "image", content: getFacilityImage() },
   ],
 });
-
 </script>
 
 <style lang="scss" scoped>

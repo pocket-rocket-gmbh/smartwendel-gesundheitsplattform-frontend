@@ -13,6 +13,7 @@
           v-if="careFacility?.image_url || careFacility?.file"
           :src="careFacility?.image_url || careFacility?.file"
         />
+        <img v-else class="image" :src="imagePlaceHolder" />
       </v-col>
       <v-col
         v-if="careFacility?.sanitized_images?.[0]"
@@ -56,6 +57,7 @@
 
 <script lang="ts" setup>
 import { useBreakpoints } from "~/composables/ui/breakPoints";
+import imagePlaceHolder from "/images/cover-images-gallery/facility/cover-21.jpg";
 
 const props = defineProps({
   careFacility: {
