@@ -1,11 +1,9 @@
 <template>
   <div>
     <div class="d-flex align-center">
-      <div class="general-font-size is-dark-grey font-weight-bold">
-        Dashboard
-      </div>
+      <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
 
-      <div class="ml-3" v-if="!loading">
+      <div class="ml-3" v-if="!loading && updatedAt">
         <span> Aktualisiert am: {{ updatedAt }}</span>
       </div>
 
@@ -21,7 +19,7 @@
         size="x-large"
         class="ml-3"
         color="primary"
-        v-if="facilitiesFromLocalStorage?.length > 0 && !loading"
+        v-if="!loading"
         @click="deleteFacilitiesFromLocalStorage()"
         >mdi-reload</v-icon
       >
@@ -77,6 +75,8 @@ const facilitiesFromLocalStorage = localStorage.getItem("facilities");
 const updatedAtFromLocalStorage = localStorage.getItem("updatedAt");
 
 const getItems = async () => {
+  setNow();
+  saveUpdatedAt();
   if (facilitiesFromLocalStorage && facilities.value.length === 0) {
     loading.value = true;
     facilities.value = JSON.parse(facilitiesFromLocalStorage);
@@ -100,8 +100,9 @@ const getItems = async () => {
 
   await api.retrieveCollection(options as any);
   facilities.value = api.items.value as any;
-  setNow();
+
   saveFacilities();
+
   loading.value = false;
 };
 
@@ -111,6 +112,9 @@ const setNow = () => {
 
 const saveFacilities = () => {
   localStorage.setItem("facilities", JSON.stringify(facilities.value));
+};
+
+const saveUpdatedAt = () => {
   localStorage.setItem("updatedAt", updatedAt.value);
 };
 
@@ -132,17 +136,15 @@ const items = computed<DashboardItem[]>(() => [
       },
       {
         title: "Aktiv",
-        content: facilities.value.filter(
-          (facility: any) => facility.is_active === true
-        ).length,
+        content: facilities.value.filter((facility: any) => facility.is_active === true)
+          .length,
         type: "facility",
         query: "active_facilities",
       },
       {
         title: "Inaktiv",
-        content: facilities.value.filter(
-          (facility: any) => facility.is_active === false
-        ).length,
+        content: facilities.value.filter((facility: any) => facility.is_active === false)
+          .length,
         type: "facility",
         query: "inactive_facilities",
       },
@@ -165,8 +167,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "erfolgte Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true &&
-            !facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true && !facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "successful_profile_takeovers",
@@ -175,8 +176,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "ausstehende Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true &&
-            facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true && facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "pending_profile_takeovers",
@@ -221,8 +221,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktive Veranstaltungen",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.kind === "event" && facility.is_active === true
+          (facility: any) => facility?.kind === "event" && facility.is_active === true
         ).length,
         type: "event",
         query: "active_events",
@@ -230,8 +229,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktive Kurse",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.kind === "course" && facility.is_active === true
+          (facility: any) => facility?.kind === "course" && facility.is_active === true
         ).length,
         type: "course",
         query: "active_courses",
@@ -239,8 +237,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktive Beiträge",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.kind === "news" && facility.is_active === true
+          (facility: any) => facility?.kind === "news" && facility.is_active === true
         ).length,
         type: "news",
         query: "active_articles",

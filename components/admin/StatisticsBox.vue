@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex flex-column is-dark-grey card" @click="redirectAndFilter">
+  <div
+    class="d-flex flex-column is-dark-grey card is-clickable"
+    @click="redirectAndFilter"
+  >
     <div class="d-flex align-center">
       <div>
         <div class="general-font-size">
@@ -44,7 +47,7 @@ const redirectAndFilter = () => {
       break;
     case "course":
       path.value = "/admin/courses";
-      
+
       break;
     case "event":
       path.value = "/admin/events";
