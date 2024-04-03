@@ -1,14 +1,37 @@
 <template>
   <div>
-    <span class="general-font-size is-dark-grey font-weight-bold"
-      >Dashboard</span
-    >
-    <div v-for="item in items" :key="item.id">
-      <div class="d-flex align-center">
-        <v-icon size="x-large" color="primary">{{ item.icon }}</v-icon>
-        <span class="text-h4 ml-3 is-dark-grey">{{ item.title }}</span>
+    <div class="d-flex align-center">
+      <div class="general-font-size is-dark-grey font-weight-bold">
+        Dashboard
       </div>
 
+      <div class="ml-3" v-if="!loading">
+        <span> Aktualisiert am: {{ updatedAt }}</span>
+      </div>
+
+      <v-skeleton-loader
+        v-if="loading"
+        class="ml-3"
+        :width="300"
+        :height="50"
+        type="text"
+      ></v-skeleton-loader>
+
+      <v-icon
+        size="x-large"
+        class="ml-3"
+        color="primary"
+        v-if="facilitiesFromLocalStorage?.length > 0 && !loading"
+        @click="deleteFacilitiesFromLocalStorage()"
+        >mdi-reload</v-icon
+      >
+    </div>
+
+    <div v-for="item in items" :key="item.id" class="mt-5">
+      <div class="d-flex align-center">
+        <v-icon size="x-large" color="primary">{{ item.icon }}</v-icon>
+        <div class="text-h4 ml-3 is-dark-grey">{{ item.title }}</div>
+      </div>
       <div>
         <v-row>
           <v-col md="3" v-for="sub_item in item?.sub_items">
@@ -40,8 +63,32 @@ type DashboardItem = {
 
 const facilities = ref([]);
 
-const getCoursesArticles = async () => {
+const getFacilitiesFromLocalStorage = () => {
+  return localStorage.getItem("facilities");
+};
+
+const getUpdatedAtFromLocalStorage = () => {
+  return localStorage.getItem("updatedAt");
+};
+
+const updatedAt = ref("");
+
+const facilitiesFromLocalStorage = localStorage.getItem("facilities");
+const updatedAtFromLocalStorage = localStorage.getItem("updatedAt");
+
+const getItems = async () => {
+  if (facilitiesFromLocalStorage && facilities.value.length === 0) {
+    loading.value = true;
+    facilities.value = JSON.parse(facilitiesFromLocalStorage);
+    loading.value = false;
+    return;
+  }
+  if (updatedAtFromLocalStorage) {
+    updatedAt.value = updatedAtFromLocalStorage;
+  }
+
   loading.value = true;
+
   const options = {
     page: 1,
     per_page: 10000,
@@ -53,7 +100,22 @@ const getCoursesArticles = async () => {
 
   await api.retrieveCollection(options as any);
   facilities.value = api.items.value as any;
+  setNow();
+  saveFacilities();
   loading.value = false;
+};
+
+const setNow = () => {
+  updatedAt.value = new Date().toLocaleString();
+};
+
+const saveFacilities = () => {
+  localStorage.setItem("facilities", JSON.stringify(facilities.value));
+  localStorage.setItem("updatedAt", updatedAt.value);
+};
+
+const deleteFacilitiesFromLocalStorage = () => {
+  getItems();
 };
 
 const items = computed<DashboardItem[]>(() => [
@@ -65,18 +127,24 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Angemeldet",
         content: facilities.value?.length,
+        type: "facility",
+        query: "registered_facilities",
       },
       {
         title: "Aktiv",
         content: facilities.value.filter(
           (facility: any) => facility.is_active === true
         ).length,
+        type: "facility",
+        query: "active_facilities",
       },
       {
         title: "Inaktiv",
         content: facilities.value.filter(
           (facility: any) => facility.is_active === false
         ).length,
+        type: "facility",
+        query: "inactive_facilities",
       },
     ],
   },
@@ -90,6 +158,8 @@ const items = computed<DashboardItem[]>(() => [
         content: facilities.value.filter(
           (facility: any) => facility?.user?.imported === true
         ).length,
+        type: "facility",
+        query: "imported_profiles",
       },
       {
         title: "erfolgte Profilübernahmen",
@@ -98,6 +168,8 @@ const items = computed<DashboardItem[]>(() => [
             facility?.user?.imported === true &&
             !facility?.user?.onboarding_token?.length
         ).length,
+        type: "facility",
+        query: "successful_profile_takeovers",
       },
       {
         title: "ausstehende Profilübernahmen",
@@ -106,6 +178,8 @@ const items = computed<DashboardItem[]>(() => [
             facility?.user?.imported === true &&
             facility?.user?.onboarding_token?.length
         ).length,
+        type: "facility",
+        query: "pending_profile_takeovers",
       },
     ],
   },
@@ -121,6 +195,8 @@ const items = computed<DashboardItem[]>(() => [
             facility?.user?.imported === true &&
             facility?.user?.notification_after_manual_import_sent_at?.length
         ).length,
+        type: "facility",
+        query: "sent_verification_requests",
       },
     ],
   },
@@ -128,7 +204,14 @@ const items = computed<DashboardItem[]>(() => [
     title: "Datenaktualität",
     icon: "mdi-playlist-check",
     id: 4,
-    sub_items: [{ title: "Aktuell", content: 0 }],
+    sub_items: [
+      {
+        title: "Aktuell",
+        content: 0,
+        query: "current_up-to-date-data",
+        type: "facility",
+      },
+    ],
   },
   {
     title: "Aktivität",
@@ -141,6 +224,8 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.kind === "event" && facility.is_active === true
         ).length,
+        type: "event",
+        query: "active_events",
       },
       {
         title: "Aktive Kurse",
@@ -148,6 +233,8 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.kind === "course" && facility.is_active === true
         ).length,
+        type: "course",
+        query: "active_courses",
       },
       {
         title: "Aktive Beiträge",
@@ -155,12 +242,21 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.kind === "news" && facility.is_active === true
         ).length,
+        type: "news",
+        query: "active_articles",
       },
     ],
   },
 ]);
 
 onMounted(async () => {
-  await getCoursesArticles();
+  await getItems();
+  getFacilitiesFromLocalStorage();
+  getUpdatedAtFromLocalStorage();
+  updatedAt.value = updatedAtFromLocalStorage;
 });
 </script>
+<style lang="sass">
+.loader
+  margin-right: 50%
+</style>
