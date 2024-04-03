@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column is-dark-grey card">
+  <div class="d-flex flex-column is-dark-grey card" @click="redirectAndFilter">
     <div class="d-flex align-center">
       <div>
         <div class="general-font-size">
@@ -21,13 +21,45 @@
   </div>
 </template>
 <script lang="ts" setup>
+const router = useRouter();
+
 const props = defineProps<{
   loading: boolean;
   item: {
     title: string;
     content: string;
+    type?: string;
+    query?: string;
   };
 }>();
+
+const redirectAndFilter = () => {
+  if (!props.item.type || !props.item.query) {
+    return;
+  }
+  const path = ref<string>("");
+  switch (props.item.type) {
+    case "facility":
+      path.value = "/admin/care_facilities";
+      break;
+    case "course":
+      path.value = "/admin/courses";
+      
+      break;
+    case "event":
+      path.value = "/admin/events";
+      break;
+    case "news":
+      path.value = "/admin/news_articles";
+      break;
+    default:
+      break;
+  }
+  router.push({
+    path: path.value,
+    query: { filter: props.item.query },
+  });
+};
 </script>
 <style lang="scss">
 .card {
