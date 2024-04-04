@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="d-flex align-center">
-      <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
+      <div class="general-font-size is-dark-grey font-weight-bold">
+        Dashboard
+      </div>
 
       <div class="ml-3" v-if="!loading && updatedAt">
         <span> Aktualisiert am: {{ updatedAt }}</span>
@@ -130,21 +132,27 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Angemeldet",
-        content: facilities.value?.length,
+        content: facilities.value.filter(
+          (facility: any) => facility.kind === "facility"
+        ).length,
         type: "facility",
-        query: "registered_facilities",
+        query: "showAll",
       },
       {
         title: "Aktiv",
-        content: facilities.value.filter((facility: any) => facility.is_active === true)
-          .length,
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility.is_active === true && facility.kind === "facility"
+        ).length,
         type: "facility",
         query: "active_facilities",
       },
       {
         title: "Inaktiv",
-        content: facilities.value.filter((facility: any) => facility.is_active === false)
-          .length,
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility.is_active === false && facility.kind === "facility"
+        ).length,
         type: "facility",
         query: "inactive_facilities",
       },
@@ -167,7 +175,8 @@ const items = computed<DashboardItem[]>(() => [
         title: "erfolgte Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && !facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true &&
+            !facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "successful_profile_takeovers",
@@ -176,7 +185,8 @@ const items = computed<DashboardItem[]>(() => [
         title: "ausstehende Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true &&
+            facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "pending_profile_takeovers",
@@ -208,7 +218,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktuell",
         content: 0,
-        query: "current_up-to-date-data",
+        query: "data_up_to_date",
         type: "facility",
       },
     ],
@@ -221,7 +231,8 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktive Veranstaltungen",
         content: facilities.value.filter(
-          (facility: any) => facility?.kind === "event" && facility.is_active === true
+          (facility: any) =>
+            facility?.kind === "event" && facility.is_active === true
         ).length,
         type: "event",
         query: "active_events",
@@ -229,7 +240,8 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktive Kurse",
         content: facilities.value.filter(
-          (facility: any) => facility?.kind === "course" && facility.is_active === true
+          (facility: any) =>
+            facility?.kind === "course" && facility.is_active === true
         ).length,
         type: "course",
         query: "active_courses",
@@ -237,7 +249,8 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktive Beiträge",
         content: facilities.value.filter(
-          (facility: any) => facility?.kind === "news" && facility.is_active === true
+          (facility: any) =>
+            facility?.kind === "news" && facility.is_active === true
         ).length,
         type: "news",
         query: "active_articles",

@@ -49,14 +49,14 @@
           </v-list-item>
           <v-list-item link to="/admin/filter/courses" nuxt class="general-font-size is-dark-grey"> Kursfilter </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin/categories" nuxt class="general-font-size is-dark-grey">
+          <v-list-item link to="/admin/categories?filter=" nuxt class="general-font-size is-dark-grey">
             Bereiche und Kategorien
           </v-list-item>
           <v-divider></v-divider>
         </template>
         <v-list-item
           link
-          to="/admin/care_facilities"
+          to="/admin/care_facilities?filter=showAll"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
           class="general-font-size is-dark-grey"
@@ -67,7 +67,7 @@
         <v-list-item
           :disabled="!setupFinished"
           link
-          to="/admin/courses"
+          to="/admin/courses?filter=showAll"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
           class="general-font-size is-dark-grey"
@@ -78,7 +78,7 @@
         <v-list-item
           :disabled="!setupFinished"
           link
-          to="/admin/events"
+          to="/admin/events?filter=showAll"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
           class="general-font-size is-dark-grey"
@@ -89,7 +89,7 @@
         <v-list-item
           :disabled="!setupFinished"
           link
-          to="/admin/news_articles"
+          to="/admin/news_articles?filter=showAll"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('care_facilities', 'list')"
           class="general-font-size is-dark-grey"
