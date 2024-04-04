@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex flex-column align-center justify-center my-1 pagination">
+  <div
+    class="d-flex flex-column align-center justify-center my-1 pagination"
+    v-if="!noData"
+  >
     <div class="d-flex align-center justify-center mt-1">
       <p v-if="props.searchQuery">
         Zeigt
@@ -53,9 +56,9 @@
       @update:model-value="getItems"
     ></v-pagination>
   </div>
-  <v-divider> </v-divider>
+  <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
   <v-table fixed-header>
-    <thead class="elevation-1 primary">
+    <thead class="elevation-1 primary" v-if="!noData">
       <tr>
         <th
           v-for="field in fields"
@@ -90,6 +93,14 @@
         <th width="15px"></th>
       </tr>
     </thead>
+    <div v-else>
+      <v-alert
+        type="info"
+        class="d-flex justify-center align-center mt-5 mx-10"
+      >
+        keine Ergebnisse gefunden
+      </v-alert>
+    </div>
     <tbody>
       <tr
         v-for="(item, indexMain) in items"
@@ -486,6 +497,8 @@ const sortBy = ref(props.defaultSortBy);
 
 const loading = ref(false);
 
+const noData = ref(false);
+
 const showBar = ref(true);
 
 const toogleBar = () => {
@@ -602,6 +615,73 @@ const handleToggled = async (item: any) => {
   emit("itemUpdated", item);
 };
 
+const filterQuery = ref("");
+
+const getFilterQueryFromUrl = () => {
+  const query = String(router.currentRoute.value.query.filter);
+  if (query) {
+    filterQuery.value = query;
+  }
+};
+
+const filtersMap = {
+  active_facilities: {
+    field: "is_active",
+    value: true,
+  },
+  inactive_facilities: {
+    field: "is_active",
+    value: false,
+  },
+  imported_profiles: {
+    field: "&user.imported",
+    value: true,
+  },
+  successful_profile_takeovers: {
+    field: "&user.onboarding_token", // length
+    value: true,
+  },
+  pending_profile_takeovers: {
+    field: "&user.onboarding_token", // length
+    value: true,
+  },
+  sent_verification_requests: {
+    field: "&user.notification_after_manual_import_sent_at", // length
+    value: true,
+  },
+  data_up_to_date: {
+    field: "&user.data_up_to_date",
+    value: true,
+  },
+  active_events: {
+    field: "is_active",
+    value: true,
+  },
+  active_courses: {
+    field: "is_active",
+    value: true,
+  },
+  active_articles: {
+    field: "is_active",
+    value: true,
+  },
+  showAll: {
+    field: "",
+    value: "",
+  },
+} as const;
+
+const getFilter = <T extends keyof typeof filtersMap>(filter: T) => {
+  const activeFilterFromUrl = filterQuery.value;
+  if (activeFilterFromUrl) {
+    activeFilter.value = [
+      filtersMap[activeFilterFromUrl as keyof typeof filtersMap],
+    ];
+  }
+};
+
+const activeFilter = ref([]);
+
 const getItems = async () => {
   loading.value = true;
   const options = {
@@ -611,10 +691,19 @@ const getItems = async () => {
     sort_order: sortOrder.value,
     searchQuery: props.searchQuery || null,
     concat: false,
-    filters: [] as any[],
+    filters: activeFilter.value !== null ? activeFilter.value : ([] as any[]),
   };
+
   adminStore.loading = true;
   const response = await api.retrieveCollection(options);
+
+  if (response.data.resources.length === 0) {
+    loading.value = false;
+    adminStore.loading = false;
+    noData.value = true;
+
+    return;
+  }
 
   if (response.data && response.data.resources) {
     items.value = Array.isArray(response.data.resources)
@@ -650,6 +739,16 @@ watch(
   })
 );
 
+watch(
+  () => router.currentRoute.value.query.filter,
+  debounce(() => {
+    filterQuery.value = String(router.currentRoute.value.query.filter);
+    getFilterQueryFromUrl();
+    getFilter("active_facilities");
+    getItems();
+  })
+);
+
 const rotateColumnSortOrder = (columnProp: string) => {
   if (sortBy.value !== columnProp) {
     sortOrder.value = "asc";
@@ -661,6 +760,8 @@ const rotateColumnSortOrder = (columnProp: string) => {
 };
 
 onMounted(() => {
+  getFilterQueryFromUrl();
+  getFilter("active_facilities");
   useNuxtApp().$bus.$on("triggerGetItems", () => {
     getItems();
   });
