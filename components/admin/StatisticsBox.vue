@@ -5,7 +5,7 @@
   >
     <div class="d-flex align-center">
       <div>
-        <div class="general-font-size">
+        <div class="general-font-size word-break" lang="de">
           {{ item.title }}
         </div>
         <v-progress-circular

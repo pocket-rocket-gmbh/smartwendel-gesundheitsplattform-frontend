@@ -44,7 +44,7 @@
     <div>
       <div v-if="showBar">
         <v-row align="center">
-          <v-col md="3" class="d-flex">
+          <v-col md="3" class="d-flex align-center">
             <v-btn
               v-if="user.isAdmin() || !itemsExist"
               elevation="0"
@@ -52,15 +52,13 @@
               @click="
                 itemId = null;
                 createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(
-                  JSON.stringify(originalItemPlaceholder)
-                );
+                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
               "
             >
               Neue Einrichtung
             </v-btn>
           </v-col>
-          <v-col v-if="user.isAdmin()">
+          <v-col v-if="user.isAdmin()" class="d-flex align-center">
             <v-text-field
               width="50"
               prepend-icon="mdi-magnify"
@@ -68,23 +66,6 @@
               hide-details="auto"
               label="Einrichtungen durchsuchen"
             />
-          </v-col>
-        </v-row>
-        <v-row v-if="user.isAdmin()">
-          <v-col>
-            <v-radio-group
-              inline
-              class="d-flex justify-end align-center"
-              v-model="listOptionValue"
-            >
-              <v-radio
-                v-for="(item, index) in listOptions"
-                :key="index"
-                :label="item.text"
-                :value="item.value"
-                :disabled="item.value !== 1"
-              ></v-radio>
-            </v-radio-group>
           </v-col>
         </v-row>
       </div>
@@ -106,7 +87,6 @@
         :disable-delete="true"
         defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
-        :import-filter="listOptionValue"
       />
 
       <div
@@ -121,21 +101,16 @@
       >
         <v-icon>mdi-arrow-up</v-icon>
         <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der
-          Webseite.</span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
         >
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
-        :disabled="
-          (setupFinished && !itemStatus) || !useUser().statusOnHealthScope()
-        "
+        :disabled="(setupFinished && !itemStatus) || !useUser().statusOnHealthScope()"
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="
-          useRouter().push({ path: `/public/care_facilities/${facilityId}` })
-        "
+        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
       >
         Zur Online-Ansicht deiner Einrichtung
       </v-btn>
@@ -412,23 +387,6 @@ const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
 
 const itemStatus = ref(null);
-
-const listOptions = ref([
-  { text: "Alle", value: 1 },
-  { text: "Importiert", value: 2 },
-  { text: "Übernommen", value: 3 },
-  { text: "Nicht übernommen", value: 4 },
-  { text: "Selbst angelegt", value: 5 },
-]);
-
-const listOptionValue = ref(1);
-
-watch(
-  async () => listOptionValue.value,
-  async () => {
-    await dataTableRef.value?.getItems(listOptionValue);
-  }
-);
 
 const handleItemUpdated = async (item: any) => {
   setupFinished.value = await useUser().setupFinished();

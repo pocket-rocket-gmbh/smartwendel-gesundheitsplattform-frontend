@@ -1,60 +1,32 @@
 <template>
-  <div
-    class="d-flex flex-column align-center justify-center my-1 pagination"
-    v-if="!noData"
-  >
-    <div class="d-flex align-center justify-center mt-1">
-      <p v-if="props.searchQuery">
-        Zeigt
-        {{
-          Math.min(
-            (pagination.page - 1) * pagination.itemsPerPage + 1,
-            items.length
-          )
-        }}-
-        {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }}
-        von {{ items.length }} Einträgen
-      </p>
-      <p v-else>
-        Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
-        {{
-          Math.min(
-            pagination.page * pagination.itemsPerPage,
-            pagination.totalItems
-          )
-        }}
-        von {{ pagination.totalItems }} Einträgen
-      </p>
-
-      <v-select
-        v-if="!searchQuery"
-        v-model="pagination.itemsPerPage"
-        @update:model-value="getItems"
-        :items="paginationValues"
-        item-title="text"
-        item-value="value"
-        density="compact"
-        hide-details
-        class="mx-1"
-      />
-
-      <span @click="toogleBar">
-        <v-icon class="is-clickable" v-if="showBar" size="x-large"
-          >mdi-menu-up</v-icon
+  <div>
+    <v-row
+      v-if="useUser().isAdmin && endpoint === 'care_facilities?kind=facility'"
+    >
+      <v-col class="d-flex align-center my-5">
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
         >
-        <v-icon class="is-clickable" v-else size="x-large"
-          >mdi-menu-down</v-icon
-        >
-      </span>
-    </div>
-    <v-pagination
-      v-if="!searchQuery"
-      rounded="circle"
-      :total-visible="7"
-      v-model="pagination.page"
-      :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
-      @update:model-value="getItems"
-    ></v-pagination>
+          <v-radio
+            v-for="(item, index) in listOptions"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
+        <span @click="toogleBar">
+          <v-icon class="is-clickable" v-if="showBar" size="x-large"
+            >mdi-menu-up</v-icon
+          >
+          <v-icon class="is-clickable" v-else size="x-large"
+            >mdi-menu-down</v-icon
+          >
+        </span>
+      </v-col>
+    </v-row>
   </div>
   <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
   <v-table fixed-header>
@@ -439,6 +411,52 @@
       </tr>
     </tbody>
   </v-table>
+  <div class="d-flex my-1 justify-space-between pagination" v-if="!noData">
+    <div class="d-flex align-center mt-1">
+      <v-select
+        v-if="!searchQuery"
+        v-model="pagination.itemsPerPage"
+        @update:model-value="getItems"
+        :items="paginationValues"
+        item-title="text"
+        item-value="value"
+        density="compact"
+        hide-details
+        class="mx-1 my-5"
+      />
+      <p v-if="props.searchQuery">
+        Zeigt
+        {{
+          Math.min(
+            (pagination.page - 1) * pagination.itemsPerPage + 1,
+            items.length
+          )
+        }}-
+        {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }}
+        von {{ items.length }} Einträgen
+      </p>
+      <p v-else>
+        Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
+        {{
+          Math.min(
+            pagination.page * pagination.itemsPerPage,
+            pagination.totalItems
+          )
+        }}
+        von {{ pagination.totalItems }} Einträgen
+      </p>
+    </div>
+    <div class="d-flex justify-center align-center">
+      <v-pagination
+        v-if="!searchQuery"
+        rounded="circle"
+        :total-visible="7"
+        v-model="pagination.page"
+        :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
+        @update:model-value="getItems"
+      ></v-pagination>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -500,6 +518,25 @@ const loading = ref(false);
 const noData = ref(false);
 
 const showBar = ref(true);
+
+const listOptionValue = ref("showAll");
+
+const listOptions = ref([
+  { text: "Angemeldet", value: "showAll" },
+  { text: "Aktiv", value: "active_facilities" },
+  { text: "Inaktiv", value: "inactive_facilities" },
+  { text: "Importierte Profile", value: "imported_profiles" },
+  { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
+  { text: "ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
+  { text: "Verifizierungsanfragen", value: "sent_verification_requests" },
+]);
+
+watch(
+  async () => listOptionValue.value,
+  async () => {
+    await getItems();
+  }
+);
 
 const toogleBar = () => {
   showBar.value = !showBar.value;
@@ -638,15 +675,15 @@ const filtersMap = {
     value: true,
   },
   successful_profile_takeovers: {
-    field: "&user.onboarding_token", // length
-    value: true,
+    field: "&user.onboarding_status",
+    value: "completed",
   },
   pending_profile_takeovers: {
-    field: "&user.onboarding_token", // length
-    value: true,
+    field: "&user.onboarding_status",
+    value: "pending",
   },
   sent_verification_requests: {
-    field: "&user.notification_after_manual_import_sent_at", // length
+    field: "&user.notification_after_manual_import_sent",
     value: true,
   },
   data_up_to_date: {
@@ -697,7 +734,7 @@ const getItems = async () => {
   adminStore.loading = true;
   const response = await api.retrieveCollection(options);
 
-  if (response.data.resources.length === 0) {
+  if (response.data.resources?.length === 0) {
     loading.value = false;
     adminStore.loading = false;
     noData.value = true;
@@ -731,6 +768,11 @@ const paginationValues = ref([
   { text: "Alle", value: 9999 },
 ]);
 
+const setFilter = (filter: string) => {
+  filterQuery.value = filter;
+  router.push({ query: { filter } });
+};
+
 watch(
   () => props.searchQuery,
   debounce(() => {
@@ -743,6 +785,7 @@ watch(
   () => router.currentRoute.value.query.filter,
   debounce(() => {
     filterQuery.value = String(router.currentRoute.value.query.filter);
+    pagination.value.page = 1;
     getFilterQueryFromUrl();
     getFilter("active_facilities");
     getItems();
@@ -762,6 +805,7 @@ const rotateColumnSortOrder = (columnProp: string) => {
 onMounted(() => {
   getFilterQueryFromUrl();
   getFilter("active_facilities");
+  listOptionValue.value = filterQuery.value;
   useNuxtApp().$bus.$on("triggerGetItems", () => {
     getItems();
   });
