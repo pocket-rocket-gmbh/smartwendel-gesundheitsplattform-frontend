@@ -638,15 +638,15 @@ const filtersMap = {
     value: true,
   },
   successful_profile_takeovers: {
-    field: "&user.onboarding_token", // length
-    value: true,
+    field: "&user.onboarding_status",
+    value: "completed",
   },
   pending_profile_takeovers: {
-    field: "&user.onboarding_token", // length
-    value: true,
+    field: "&user.onboarding_status",
+    value: "pending",
   },
   sent_verification_requests: {
-    field: "&user.notification_after_manual_import_sent_at", // length
+    field: "&user.notification_after_manual_import_sent",
     value: true,
   },
   data_up_to_date: {
@@ -697,7 +697,7 @@ const getItems = async () => {
   adminStore.loading = true;
   const response = await api.retrieveCollection(options);
 
-  if (response.data.resources.length === 0) {
+  if (response.data.resources?.length === 0) {
     loading.value = false;
     adminStore.loading = false;
     noData.value = true;
