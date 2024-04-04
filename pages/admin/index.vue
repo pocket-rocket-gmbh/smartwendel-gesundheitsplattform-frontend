@@ -16,7 +16,6 @@
         :height="50"
         type="text"
       ></v-skeleton-loader>
-
       <v-icon
         size="x-large"
         class="ml-3"
