@@ -527,7 +527,7 @@ const listOptions = ref([
   { text: "Inaktiv", value: "inactive_facilities" },
   { text: "Importierte Profile", value: "imported_profiles" },
   { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
-  { text: "ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
+  { text: "Ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
   { text: "Verifizierungsanfragen", value: "sent_verification_requests" },
 ]);
 
