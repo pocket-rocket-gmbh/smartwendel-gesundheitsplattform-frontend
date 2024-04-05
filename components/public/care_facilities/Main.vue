@@ -78,15 +78,6 @@
         v-if="careFacility?.name_responsible_person"
       ></v-divider>
       <div
-        class="genral-font-size is-dark-grey"
-        v-if="careFacility?.name_responsible_person"
-      >
-        <i
-          >Inhaltlich verantwortlich:
-          <span>{{ careFacility?.name_responsible_person }}</span>
-        </i>
-      </div>
-      <div
         v-if="
           careFacility?.street &&
           careFacility?.zip &&
