@@ -102,13 +102,13 @@ const getItems = async () => {
   await api.retrieveCollection(options as any);
   facilities.value = api.items.value as any;
 
-  saveFacilities();
+  saveFacilities(); 
 
   loading.value = false;
 };
 
 const setNow = () => {
-  updatedAt.value = new Date().toLocaleString();
+  updatedAt.value = new Date().toLocaleString("de-DE");
 };
 
 const saveFacilities = () => {
@@ -163,7 +163,7 @@ const items = computed<DashboardItem[]>(() => [
     id: 2,
     sub_items: [
       {
-        title: "importierte Profile",
+        title: "Importierte Profile",
         content: facilities.value.filter(
           (facility: any) => facility?.user?.imported === true
         ).length,
@@ -171,7 +171,7 @@ const items = computed<DashboardItem[]>(() => [
         query: "imported_profiles",
       },
       {
-        title: "erfolgte Profilübernahmen",
+        title: "Erfolgte Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.imported === true &&
@@ -181,7 +181,7 @@ const items = computed<DashboardItem[]>(() => [
         query: "successful_profile_takeovers",
       },
       {
-        title: "ausstehende Profilübernahmen",
+        title: "Ausstehende Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.imported === true &&
@@ -198,7 +198,7 @@ const items = computed<DashboardItem[]>(() => [
     id: 3,
     sub_items: [
       {
-        title: " gesendet",
+        title: "Gesendet",
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.imported === true &&
