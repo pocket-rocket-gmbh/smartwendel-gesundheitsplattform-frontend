@@ -588,6 +588,89 @@
                 "
               />
             </div>
+
+            <div>
+              <div class="mt-5">
+                <span class="general-font-size is-dark-grey font-weight-bold"
+                  >Impressum</span
+                >
+                <div class="my-3">
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.authorized_represent_name"
+                      type="text"
+                      label="Vor- und Nachname der vertretungsberechtigen *"
+                      :rules="[rules.required]"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.commercial_register_number"
+                      type="text"
+                      label="Registernummer (z.B. Handelsregister)"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.associated_chamber"
+                      type="text"
+                      label="Zugehörige Kammer"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.doctor_associations"
+                      type="text"
+                      label="Kassenärztliche Vereinigung"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.professional_title"
+                      type="text"
+                      label="Gesetzliche Berufsbezeichnung"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.tax_identification_number"
+                      type="text"
+                      label="Umsatzsteueridentifikationsnummer"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.professional_regulations"
+                      type="text"
+                      label="Bezeichnung der berufsrechtlichen Regelungen"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.professional_designation"
+                      type="text"
+                      label="Berufsrechtliche Regelungen"
+                      hide-details="auto"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div>
               <div class="d-flex mt-5">
                 <span class="general-font-size is-dark-grey font-weight-bold"
@@ -744,25 +827,6 @@
               @document-deleted="updatedFiles(null)"
             />
           </div>
-          <div class="field" id="responsible">
-            <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["responsible"].label }}</span
-              >
-            </div>
-            <v-text-field
-              class="text-field is-dark-grey"
-              v-model="slotProps.item.name_responsible_person"
-              hide-details="auto"
-              label="Vor- und Nachname"
-              :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
-            />
-          </div>
-          <v-divider class="my-5"></v-divider>
         </v-col>
       </v-row>
       <!--  <div class="missing" v-for="[key, step] in Object.entries(steps)">
@@ -802,7 +866,6 @@ const stepNames = [
   "openingHours",
   "website",
   "documents",
-  "responsible",
 ] as const;
 type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
@@ -870,7 +933,7 @@ const steps: CreateEditSteps<StepNames> = {
       "8. Bitte gib hier die Adresse und Kontaktdaten deiner Einrichtung/deines Unternehmens an. *",
     tooltip: "Hauptstandort deines Unternehmens/deiner Einrichtung.",
     description: "Kontaktdaten *",
-    props: ["street", "zip", "community_id", "town", "email", "phone"],
+    props: ["street", "zip", "community_id", "town", "email", "phone", "authorized_represent_name"],
     specialFilter: "phone",
   },
   locations: {
@@ -906,13 +969,6 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
-  },
-  responsible: {
-    label:
-      "13.	Bitte gib hier den inhaltlich Verantwortlichen für die Profilinformationen dieser Einrichtung an. *",
-    tooltip: "Der Name wird in deinem Einrichtungsprofil zu sehen sein.",
-    description: "Verantwortliche Person *",
-    props: ["name_responsible_person"],
   },
 };
 
