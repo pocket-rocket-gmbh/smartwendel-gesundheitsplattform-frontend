@@ -59,7 +59,7 @@
                   Du möchtest nicht, dass dein Profil auf der GPP erscheint?
                   Dann setze dich bitte zwecks Löschung der Daten mit uns in
                   Verbindung:
-                  <a href="mailto:smartcity@lkwn.de">smartcity@lkwn.de</a>
+                  <a href="mailto:smartcity@lkwn.de">smartcity@lkwnd.de</a>
                 </div>
               </div>
             </v-col>

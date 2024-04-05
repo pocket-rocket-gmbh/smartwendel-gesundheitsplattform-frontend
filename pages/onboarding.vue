@@ -24,35 +24,27 @@
           v-if="!registerSuccessful"
         >
           <span>Einrichtung "{{ careFacilityName }}" übernehmen</span>
-          <v-btn color="primary" class="ml-5" @click="showPreview"
-            >Vorschau</v-btn
-          >
+          <v-btn color="primary" class="ml-5" @click="showPreview">Vorschau</v-btn>
         </div>
-        <div
-          class="mt-5 d-flex flex-column general-font-size"
-          v-if="!registerSuccessful"
-        >
+        <div class="mt-5 d-flex flex-column general-font-size" v-if="!registerSuccessful">
           <span class="">
-            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter
-            und möchtest dein Angebot auf einer unabhängigen und kostenfreien
-            Plattform veröffentlichen? Dann laden wir dich herzlich zur
-            Registrierung ein! Als Anbieter kannst du dich und deine
-            Gesundheitsleistung ganz einfach und in wenigen Schritten auf der
-            Plattform darstellen und veröffentlichen.
+            Du bist ein im Landkreis Sankt Wendel ansässiger Gesundheitsanbieter und
+            möchtest dein Angebot auf einer unabhängigen und kostenfreien Plattform
+            veröffentlichen? Dann laden wir dich herzlich zur Registrierung ein! Als
+            Anbieter kannst du dich und deine Gesundheitsleistung ganz einfach und in
+            wenigen Schritten auf der Plattform darstellen und veröffentlichen.
           </span>
           <span class="mt-5">
-            Hierdurch erzielst du eine größere Reichweite sowie mehr
-            Aufmerksamkeit für dein Angebot und steigerst deine Bekanntheit bei
-            der einheimischen Bevölkerung. Ganz gleich ob es sich um ein
-            behördliches, gemeinnütziges, ehrenamtliches oder gewerbliches
-            Angebot handelt: Auf gesundesWND sind alle Gesundheitsanbieter
-            willkommen, deren Angebote zum Erhalt und zur Verbesserung der
-            Gesundheit der Landkreisbevölkerung beitragen!
+            Hierdurch erzielst du eine größere Reichweite sowie mehr Aufmerksamkeit für
+            dein Angebot und steigerst deine Bekanntheit bei der einheimischen
+            Bevölkerung. Ganz gleich ob es sich um ein behördliches, gemeinnütziges,
+            ehrenamtliches oder gewerbliches Angebot handelt: Auf gesundesWND sind alle
+            Gesundheitsanbieter willkommen, deren Angebote zum Erhalt und zur Verbesserung
+            der Gesundheit der Landkreisbevölkerung beitragen!
           </span>
           <span class="mt-5">
-            Durch die Vervollständigung deiner Daten übernimmst du die
-            importierten Daten deiner Einrichtung und kannst weitere Inhalte
-            pflegen.
+            Durch die Vervollständigung deiner Daten übernimmst du die importierten Daten
+            deiner Einrichtung und kannst weitere Inhalte pflegen.
           </span>
         </div>
       </div>
@@ -69,9 +61,9 @@
                 >
               </template>
               <span
-                >Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern
-                verwendet werden, trage bitte eine allg. E-Mail Adresse ein, auf
-                die jeder Nutzer Zugriff hat</span
+                >Sollte das von dir erstellte Benutzerkonto von mehreren Nutzern verwendet
+                werden, trage bitte eine allg. E-Mail Adresse ein, auf die jeder Nutzer
+                Zugriff hat</span
               >
             </v-tooltip>
           </div>
@@ -80,9 +72,7 @@
               v-model="firstname"
               type="text"
               label="Vorname *"
-              :error-messages="
-                useErrors().checkAndMapErrors('firstname', errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
               :rules="[rules.required]"
               hide-details="auto"
             />
@@ -92,9 +82,7 @@
               v-model="lastname"
               type="text"
               label="Nachname *"
-              :error-messages="
-                useErrors().checkAndMapErrors('lastname', errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('lastname', errors)"
               :rules="[rules.required]"
               hide-details="auto"
             />
@@ -118,9 +106,7 @@
                 v-model="careFacilityName"
                 type="text"
                 label="Name der Einrichtung/Unternehmen/Verband/Verein/Behörde *"
-                :error-messages="
-                  useErrors().checkAndMapErrors('firstname', errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
                 :rules="[rules.required]"
                 hide-details="auto"
               />
@@ -130,9 +116,7 @@
                 v-model="careFacilityStreet"
                 type="text"
                 label="Straße und Nummer *"
-                :error-messages="
-                  useErrors().checkAndMapErrors('firstname', errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('firstname', errors)"
                 :rules="[rules.required]"
                 hide-details="auto"
               />
@@ -169,34 +153,90 @@
                 :rules="[rules.required]"
               />
             </div>
+          </div>
+
+          <div class="my-5">
+            <span class="mb-3 general-font-size font-weight-medium">Impressum</span>
+
             <div class="field">
               <v-text-field
-                v-model="careFacilityResponsiblePerson"
+                v-model="careFacilityAuthorizedRepresentName"
                 type="text"
-                label="Inhaltlich verantwortliche Person *"
-                :error-messages="
-                  useErrors().checkAndMapErrors('firstname', errors)
-                "
+                label="Vor- und Nachname der vertretungsberechtigen *"
                 :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityCommercialRegisterNumber"
+                type="text"
+                label="Registernummer (z.B. Handelsregister)"
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityAssociatedChamber"
+                type="text"
+                label="Zugehörige Kammer"
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityDoctorAssociations"
+                type="text"
+                label="Kassenärztliche Vereinigung"
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityProfessionalTitle"
+                type="text"
+                label="Gesetzliche Berufsbezeichnung"
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityTaxIdentificationNumber"
+                type="text"
+                label="Umsatzsteueridentifikationsnummer"
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityProfessionalRegulations"
+                type="text"
+                label="Bezeichnung der berufsrechtlichen Regelungen"
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityProfessionalDesignation"
+                type="text"
+                label="Berufsrechtliche Regelungen"
                 hide-details="auto"
               />
             </div>
           </div>
         </div>
-        <v-checkbox
-          v-model="privacyAccepted"
-          :rules="[rules.required]"
-          class="check"
-        >
+        <v-checkbox v-model="privacyAccepted" :rules="[rules.required]" class="check">
           <template #label>
             <div class="general-font-size">
               Ich stimme der
-              <a
-                class="is-dark-grey"
-                target="_blank"
-                href="/privacy_policy"
-                @click.stop
-              >
+              <a class="is-dark-grey" target="_blank" href="/privacy_policy" @click.stop>
                 <u>Datenschutzerklärung</u>
               </a>
               <span> und den </span>
@@ -230,14 +270,12 @@
             Vielen Dank für deine Registrierung!
           </span>
           <span class="general-font-size">
-            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem
-            temporären Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
+            Wir haben dir soeben eine E-Mail mit weiteren Anweisungen und einem temporären
+            Passwort geschickt (bitte prüfe auch deinen Spam-Ordner).
           </span>
         </div>
         <div class="mt-5">
-          <v-btn color="primary" @click="toLogin" block depressed
-            >Jetzt anmelden</v-btn
-          >
+          <v-btn color="primary" @click="toLogin" block depressed>Jetzt anmelden</v-btn>
         </div>
       </div>
     </div>
@@ -307,7 +345,16 @@ const careFacilityCommunityId = ref("");
 const careFacilityZip = ref("");
 const careFacilityTown = ref("");
 const careFacilityStreet = ref("");
-const careFacilityResponsiblePerson = ref("");
+
+//new fields
+const careFacilityAuthorizedRepresentName = ref("");
+const careFacilityCommercialRegisterNumber = ref("");
+const careFacilityAssociatedChamber = ref("");
+const careFacilityDoctorAssociations = ref("");
+const careFacilityProfessionalTitle = ref("");
+const careFacilityTaxIdentificationNumber = ref("");
+const careFacilityProfessionalRegulations = ref("");
+const careFacilityProfessionalDesignation = ref("");
 
 const loading = ref(true);
 const animated = ref(false);
@@ -387,10 +434,22 @@ const validateToken = async () => {
       careFacilityTown.value = data?.data?.care_facility?.town;
       careFacilityCommunityId.value = data?.data?.care_facility?.community_id;
       careFacilityStreet.value = data?.data?.care_facility?.street;
-      careFacilityResponsiblePerson.value =
-        data?.data?.care_facility?.name_responsible_person;
       owner_requested_maintenance.value =
         data?.data?.care_facility?.owner_requested_maintenance;
+      careFacilityAuthorizedRepresentName.value =
+        data?.data?.care_facility?.authorized_represent_name;
+      careFacilityCommercialRegisterNumber.value =
+        data?.data?.care_facility?.commercial_register_number;
+      careFacilityAssociatedChamber.value = data?.data?.care_facility?.associated_chamber;
+      careFacilityDoctorAssociations.value =
+        data?.data?.care_facility?.doctor_associations;
+      careFacilityProfessionalTitle.value = data?.data?.care_facility?.professional_title;
+      careFacilityTaxIdentificationNumber.value =
+        data?.data?.care_facility?.tax_identification_number;
+      careFacilityProfessionalRegulations.value =
+        data?.data?.care_facility?.professional_regulations;
+      careFacilityProfessionalDesignation.value =
+        data?.data?.care_facility?.professional_designation;
     }
     loading.value = false;
   } else {
@@ -427,8 +486,8 @@ const submitButtonDisabledCondition = computed(() => {
     !careFacilityZip.value ||
     !careFacilityTown.value ||
     !careFacilityStreet.value ||
-    !careFacilityResponsiblePerson.value ||
-    !privacyAccepted.value
+    !privacyAccepted.value ||
+    !careFacilityAuthorizedRepresentName.value
   );
 });
 
@@ -445,7 +504,14 @@ const register = async () => {
     care_facility_town: careFacilityTown.value,
     care_facility_community_id: careFacilityCommunityId.value,
     care_facility_street: careFacilityStreet.value,
-    care_facility_name_responsible_person: careFacilityResponsiblePerson.value,
+    care_facility_authorized_represent_name: careFacilityAuthorizedRepresentName.value,
+    care_facility_commercial_register_number: careFacilityCommercialRegisterNumber.value,
+    care_facility_associated_chamber: careFacilityAssociatedChamber.value,
+    care_facility_doctor_associations: careFacilityDoctorAssociations.value,
+    care_facility_professional_title: careFacilityProfessionalTitle.value,
+    care_facility_tax_identification_number: careFacilityTaxIdentificationNumber.value,
+    care_facility_professional_regulations: careFacilityProfessionalRegulations.value,
+    care_facility_professional_designation: careFacilityProfessionalDesignation.value,
   };
   const result = await publicApi.call(
     "post",
@@ -489,9 +555,7 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find(
-    (community: any) => community.id === communityId
-  );
+  const found = communities.value.find((community: any) => community.id === communityId);
   if (found) {
     careFacilityZip.value = found.zip;
     return found.towns;
@@ -512,9 +576,7 @@ onMounted(async () => {
   getPreviewToken();
   scrollToTop();
   getCommunities();
-  const rememberedEmail = localStorage.getItem(
-    "health_platform._remembered_email"
-  );
+  const rememberedEmail = localStorage.getItem("health_platform._remembered_email");
   if (rememberedEmail) {
     setTimeout(() => {
       email.value = rememberedEmail;

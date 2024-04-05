@@ -237,9 +237,6 @@ const draftRequiredFields: RequiredField[] = [
   {
     props: ["street", "zip", "community_id", "town"],
   },
-  {
-    props: ["name_responsible_person"],
-  },
 ];
 
 const previewItem = ref<Facility>();

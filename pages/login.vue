@@ -84,9 +84,6 @@ export default defineComponent({
         });
       }
     };
-
-    console.log(router.options.history);
-
     const auth = async () => {
       loading.value = true;
       errors.value = "";

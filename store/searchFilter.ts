@@ -30,6 +30,7 @@ export type User = {
   email: string;
   role: string;
   register_token?: string;
+  care_facilities: Facility[];
 };
 
 export type Facility = {

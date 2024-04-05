@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex flex-column is-dark-grey card"
+    class="d-flex flex-column is-dark-grey stats-card"
     :class="hasFilter ? 'is-clickable' : ''"
     @click="redirectAndFilter"
   >
@@ -69,7 +69,7 @@ const redirectAndFilter = () => {
 };
 </script>
 <style lang="scss">
-.card {
+.stats-card {
   background-color: #f5f5f5;
   border-radius: 10px;
   padding: 10px 20px;

@@ -2,7 +2,7 @@
   <div
     :class="[
       'image-area mt-5',
-      { 'has-logo': careFacility?.logo_url || careFacility?.logo || careFacility?.user?.onboarding_token },
+      { 'has-logo': careFacility?.logo_url || careFacility?.logo },
     ]"
   >
     <v-row class="image-row">
@@ -13,17 +13,15 @@
           v-if="careFacility?.image_url || careFacility?.file"
           :src="careFacility?.image_url || careFacility?.file"
         />
-        <img v-else class="image image-placeholder" :src="imagePlaceHolder1" />
       </v-col>
       <v-col
-        v-if="careFacility?.sanitized_images?.[0] || careFacility?.user?.onboarding_token"
+        v-if="careFacility?.sanitized_images?.[0]"
         md="4"
         class="d-flex flex-wrap align-content-center justify-end"
       >
         <v-row v-if="breakPoints.type.value !== 'sm' && breakPoints.type.value !== 'md' && breakPoints.type.value !== 'xs'">
           <v-col class="d-flex flex-wrap align-content-bottom justify-center">
-            <img class="image right-top" v-if="careFacility?.sanitized_images?.length" :src="careFacility?.sanitized_images?.[0].url" />
-            <img v-else class="image right-top image-placeholder" :src="imagePlaceHolder2" />
+            <img class="image right-top" :src="careFacility?.sanitized_images?.[0].url" />
           </v-col>
         </v-row>
         <v-row v-if="breakPoints.type.value !== 'sm' && breakPoints.type.value !== 'md' && breakPoints.type.value !== 'xs'">
@@ -33,7 +31,6 @@
               v-if="careFacility?.sanitized_images?.[1]"
               :src="careFacility?.sanitized_images?.[1].url"
             />
-            <img v-else-if="careFacility?.user?.onboarding_token" class="image right-top image-placeholder" :src="imagePlaceHolder3" />
             <v-btn
               class="show-more general-font-size"
               size="large"
@@ -49,9 +46,6 @@
     <div class="logo" v-if="careFacility?.logo || careFacility?.logo_url">
       <img :src="careFacility?.logo ? careFacility?.logo : careFacility?.logo_url" />
     </div>
-    <div v-else class="logo image-placeholder">
-      <img :src="logo1" />
-    </div>
   </div>
   <PublicCareFacilitiesGallery
     :care-facility="careFacility"
@@ -62,10 +56,6 @@
 
 <script lang="ts" setup>
 import { useBreakpoints } from "~/composables/ui/breakPoints";
-import imagePlaceHolder1 from "/images/cover-images-gallery/facility/cover-21.jpg";
-import imagePlaceHolder2 from "/images/cover-images-gallery/facility/cover-22.jpg";
-import imagePlaceHolder3 from "/images/cover-images-gallery/facility/cover-23.jpg";
-import logo1 from "@/assets/images/logo-gallery/logo_doctor.png";
 
 const props = defineProps({
   careFacility: {
@@ -133,8 +123,4 @@ const careFacility = ref(props.careFacility);
 .image-row
   @include md
     flex-direction: column
-
-.image-placeholder
-  opacity: 0.5
-
 </style>

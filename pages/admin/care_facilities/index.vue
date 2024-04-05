@@ -52,7 +52,9 @@
               @click="
                 itemId = null;
                 createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
+                itemPlaceholder = JSON.parse(
+                  JSON.stringify(originalItemPlaceholder)
+                );
               "
             >
               Neue Einrichtung
@@ -101,16 +103,21 @@
       >
         <v-icon>mdi-arrow-up</v-icon>
         <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der
+          Webseite.</span
         >
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
-        :disabled="(setupFinished && !itemStatus) || !useUser().statusOnHealthScope()"
+        :disabled="
+          (setupFinished && !itemStatus) || !useUser().statusOnHealthScope()
+        "
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
+        @click="
+          useRouter().push({ path: `/public/care_facilities/${facilityId}` })
+        "
       >
         Zur Online-Ansicht deiner Einrichtung
       </v-btn>
@@ -320,7 +327,7 @@ const draftRequiredFields: RequiredField[] = [
     props: ["street", "zip", "community_id", "town", "email", "phone"],
   },
   {
-    props: ["name_responsible_person"],
+    props: ["authorized_represent_name"],
   },
 ];
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row v-if="showBar"> 
+    <v-row v-if="showBar">
       <v-col>
         <span
           class="general-font-size is-dark-grey font-weight-bold"
@@ -224,9 +224,6 @@ const draftRequiredFields: RequiredField[] = [
   },
   {
     props: ["street", "zip", "community_id", "town"],
-  },
-  {
-    props: ["name_responsible_person"],
   },
 ];
 
