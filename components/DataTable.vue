@@ -411,7 +411,7 @@
       </tr>
     </tbody>
   </v-table>
-  <div class="d-flex my-1 justify-space-between pagination" v-if="!noData">
+  <div class="d-flex my-1 justify-space-between pagination" v-if="!noData && !adminStore.loading">
     <div class="d-flex align-center mt-1">
       <v-select
         v-if="!searchQuery"
@@ -765,7 +765,8 @@ const paginationValues = ref([
   { text: "10", value: 10 },
   { text: "20", value: 20 },
   { text: "30", value: 30 },
-  { text: "Alle", value: 9999 },
+  { text: "40", value: 40 },
+  { text: "50", value: 50 },
 ]);
 
 const setFilter = (filter: string) => {
@@ -786,6 +787,7 @@ watch(
   debounce(() => {
     filterQuery.value = String(router.currentRoute.value.query.filter);
     pagination.value.page = 1;
+    pagination.value.itemsPerPage = 20;
     getFilterQueryFromUrl();
     getFilter("active_facilities");
     getItems();
