@@ -1,12 +1,14 @@
 <template>
   <div
-    class="d-flex flex-column is-dark-grey card is-clickable"
+    class="d-flex flex-column is-dark-grey card"
+    :class="hasFilter ? 'is-clickable' : ''"
     @click="redirectAndFilter"
   >
     <div class="d-flex align-center">
       <div>
         <div class="general-font-size word-break" lang="de">
           {{ item.title }}
+          <v-icon size="x-small" v-if="hasFilter">mdi-filter-outline</v-icon>
         </div>
         <v-progress-circular
           :size="70"
@@ -35,6 +37,8 @@ const props = defineProps<{
     query?: string;
   };
 }>();
+
+const hasFilter = computed(() => !!props.item.query && !!props.item.type);
 
 const redirectAndFilter = () => {
   if (!props.item.type || !props.item.query) {

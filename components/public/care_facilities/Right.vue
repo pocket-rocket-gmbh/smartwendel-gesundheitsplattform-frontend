@@ -66,7 +66,10 @@
         {{ careFacility.name_instructor }}
       </span>
     </div>
-    <div class="mt-3" v-if="careFacility?.kind === 'facility' && careFacility?.opening_hours">
+    <div
+      class="mt-3"
+      v-if="careFacility?.kind === 'facility' && careFacility?.opening_hours"
+    >
       <v-table density="compact">
         <tbody>
           <h3
@@ -114,6 +117,38 @@
         Kontakt aufnehmen
       </v-btn>
     </div>
+    <div>
+      <div
+        class="is-primary general-font-size is-uppercase font-weight-medium mb-6 is-clickable"
+      >
+        <v-btn
+          variant="outlined"
+          class="general-font-size"
+          size="large"
+          rounded="pill"
+          color="primary"
+          width="100%"
+          v-auto-animate
+          @click="showImprint = !showImprint"
+        >
+          Impressum <v-icon v-if="showImprint">mdi-chevron-up</v-icon>
+          <v-icon v-else>mdi-chevron-down</v-icon>
+        </v-btn>
+      </div>
+      <div v-auto-animate v-if="showImprint" class="general-font-size">
+        <p>Landkreis Sankt Wendel</p>
+        <p>Landrat Udo Recktenwald</p>
+        <p>Mommstraße 21-31</p>
+        <p>D-66606 St.Wendel</p>
+        <p>Tel.: (0049) 6851-801-0</p>
+        <p>Fax. (0049) 6851-801-2290</p>
+        <p>E-Mail: Info(at)lkwnd.de</p>
+        <p>Internet: www.landkreis-st-wendel.de</p>
+        <p>Körperschaft des Öffentlichen Rechts</p>
+        <p>Steuernummer: 60 144 00 204</p>
+        <p>Ust.-Identifikationsnummer: DE 13 82 44 018</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -128,6 +163,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const showImprint = ref(false);
 
 const buttonHref = computed(() => {
   if (!props.careFacility) return null;

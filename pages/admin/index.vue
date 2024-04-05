@@ -233,8 +233,8 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.kind === "event" && facility.is_active === true
         ).length,
-        type: "event",
-        query: "active_events",
+/*         type: "event",
+        query: "active_events", */
       },
       {
         title: "Aktive Kurse",
@@ -242,8 +242,8 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.kind === "course" && facility.is_active === true
         ).length,
-        type: "course",
-        query: "active_courses",
+/*         type: "course",
+        query: "active_courses", */
       },
       {
         title: "Aktive Beiträge",
@@ -251,8 +251,8 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.kind === "news" && facility.is_active === true
         ).length,
-        type: "news",
-        query: "active_articles",
+/*         type: "news",
+        query: "active_articles", */
       },
     ],
   },
