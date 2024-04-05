@@ -458,22 +458,6 @@
               </div>
             </div>
           </div>
-          <v-divider class="my-10"></v-divider>
-          <div class="field" id="responsible">
-            <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["responsible"].label
-              }}</span>
-            </div>
-            <v-text-field
-              class="text-field is-dark-grey"
-              v-model="slotProps.item.name_responsible_person"
-              hide-details="auto"
-              label="Vor- und Nachname"
-              :rules="[rules.required]"
-              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
-            />
-          </div>
           <v-divider class="my-5"></v-divider>
         </v-col>
       </v-row>
@@ -580,13 +564,6 @@ const steps: CreateEditSteps<StepNames> = {
     tooltip: "",
     description: "Adresse *",
     props: ["street", "zip", "community_id", "town"],
-  },
-  responsible: {
-    label:
-      "11. Bitte gib hier den inhaltlich Verantwortlichen für die Veranstaltungsinformationen an. *",
-    tooltip: "Der Name wird in deinem Veranstaltungsprofil zu sehen sein.",
-    description: "Verantwortliche Person *",
-    props: ["name_responsible_person"],
   },
 };
 
