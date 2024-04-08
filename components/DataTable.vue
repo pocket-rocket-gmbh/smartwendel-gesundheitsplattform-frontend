@@ -676,7 +676,7 @@ const getFilterQueryFromUrl = () => {
 };
 
 const setRouteQuery = () => {
-  if (!filterQuery.value) {
+  if (!filterQuery.value || !router.currentRoute.value.query.filter) {
     router.push({ query: { filter: "showAll" } });
   }
 };
