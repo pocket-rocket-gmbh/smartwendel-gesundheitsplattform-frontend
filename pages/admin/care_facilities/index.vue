@@ -110,7 +110,7 @@
       <v-btn
         v-if="facilityId && !user.isAdmin()"
         :disabled="
-          (setupFinished && !itemStatus) || !useUser().statusOnHealthScope()
+          (setupFinished || !itemStatus) || !useUser().statusOnHealthScope()
         "
         elevation="0"
         variant="outlined"

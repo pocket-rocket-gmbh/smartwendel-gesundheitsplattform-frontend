@@ -30,7 +30,7 @@
   </div>
   <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
   <v-table fixed-header class="my-5">
-    <thead class="elevation-1 primary" v-if="!noData">
+    <thead class="elevation-1 primary">
       <tr>
         <th
           v-for="field in fields"
@@ -65,14 +65,6 @@
         <th width="15px"></th>
       </tr>
     </thead>
-    <div v-else>
-      <v-alert
-        type="info"
-        class="d-flex justify-center align-center mt-5 mx-10"
-      >
-        keine Ergebnisse gefunden
-      </v-alert>
-    </div>
     <tbody>
       <tr
         v-for="(item, indexMain) in items"
@@ -424,7 +416,7 @@
   </v-table>
   <div
     class="d-flex my-1 justify-space-between pagination"
-    v-if="!noData && !adminStore.loading"
+    v-if="!noData && !adminStore.loading && useUser().isAdmin()"
   >
     <div class="d-flex align-center mt-1">
       <v-select
@@ -675,6 +667,12 @@ const getFilterQueryFromUrl = () => {
   }
 };
 
+const setRouteQuery = () => {
+  if (!filterQuery.value || !router.currentRoute.value.query.filter) {
+    router.push({ query: { filter: "showAll" } });
+  }
+};
+
 const filtersMap = {
   active_facilities: {
     field: "is_active",
@@ -820,6 +818,7 @@ const rotateColumnSortOrder = (columnProp: string) => {
 
 onMounted(() => {
   getFilterQueryFromUrl();
+  setRouteQuery();
   getFilter("active_facilities");
   listOptionValue.value = filterQuery.value;
   useNuxtApp().$bus.$on("triggerGetItems", () => {
