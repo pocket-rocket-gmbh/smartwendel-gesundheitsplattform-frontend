@@ -231,7 +231,7 @@
                       <span class="pr-3">
                         {{ facility.name }}
                       </span>
-                      <div class="d-flex align-center">
+                      <div class="d-flex align-center" v-if="useUser().isAdmin()">
                         <v-icon
                           v-if="!facility.is_active"
                           size="x-small"
@@ -348,7 +348,7 @@
             <span v-if="field.value === 'user.name'">
               <span
                 class="align-center ml-2"
-                v-if="pathInto(item, field.value).length > 1"
+                v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
               >
                 <v-icon
                   v-if="item?.user && item?.user?.is_active_on_health_scope"

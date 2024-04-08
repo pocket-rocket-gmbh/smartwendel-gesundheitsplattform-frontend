@@ -11,7 +11,7 @@
           >Veranstaltungen</span
         >
       </v-col>
-      <v-col class="d-flex justify-end align-center">
+      <v-col class="d-flex justify-end align-center" v-if="useUser().isAdmin()">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
           <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
