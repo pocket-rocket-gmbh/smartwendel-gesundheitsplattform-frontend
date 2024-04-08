@@ -21,7 +21,7 @@
     <div v-if="careFacility?.street || careFacility?.zip || careFacility?.town">
       <div class="py-3">
         <span class="d-flex align-center">
-          <img class="mr-2 icon" :src="iconAddress" />
+          <img class="mr-2 icon" :src="iconAddress" v-if="careFacility?.street && careFacility?.zip && careFacility?.town" />
           <span class="is-dark-grey general-font-size">{{ careFacility.street }}</span>
         </span>
         <div v-if="careFacility?.additional_address_info" class="aditional-info">
@@ -146,7 +146,7 @@
               <div>{{ facility.authorized_represent_name }}</div>
             </div>
             <v-divider
-              v-if="facility.commercial_register_number"
+              v-if="facility?.commercial_register_number"
               class="my-2"
             ></v-divider>
             <div v-if="facility.commercial_register_number">
@@ -209,10 +209,10 @@
           </div>
         </div>
         <v-divider
-          v-if="careFacility?.commercial_register_number"
+          v-if="careFacility?.commercial_register_number?.length > 1"
           class="my-2"
         ></v-divider>
-        <div v-if="careFacility?.commercial_register_number">
+        <div v-if="careFacility?.commercial_register_number?.length > 1">
           <span class="is-primary font-weight-bold"
             >Registernummer (z.B. Handelsregister)</span
           >
