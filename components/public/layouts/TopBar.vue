@@ -117,7 +117,7 @@
             class="mx-3 menu-list general-font-size is-dark-grey pointer"
             v-if="useUser().isAdmin() && breakPoints.width.value >= 1530"
             href="/admin"
-            @click.prevent="saveCurrentUrlAndRoute('/admin')"
+            @click.prevent="saveCurrentUrlAndRoute('/admin', '')"
           >
             Admin-Bereich
           </span>
@@ -125,7 +125,7 @@
             class="mx-3 menu-list general-font-size pointer is-dark-grey"
             v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
             href="/admin/care_facilities?filter=showAll"
-            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities?filter=showAll')"
+            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities', 'showAll')"
           >
             Meine Einrichtung
           </span>
@@ -197,7 +197,7 @@
             class="menu-list pointer"
             v-if="useUser().isAdmin()"
             href="/admin"
-            @click.prevent="saveCurrentUrlAndRoute('/admin')"
+            @click.prevent="saveCurrentUrlAndRoute('/admin', '')"
           >
             <v-icon color="#8AB61D" class="mr-2">mdi-cog</v-icon>
             <span class="general-font-size">Admin-Bereich</span>
@@ -206,7 +206,7 @@
             class="menu-list pointer general-font-size"
             v-else-if="useUser().isFacilityOwner()"
             href="/admin/care_facilities?filter=showAll"
-            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities?filter=showAll')"
+            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities', 'showAll')"
           >
             Meine Einrichtung
           </span>
@@ -423,10 +423,10 @@ useUserStore().$subscribe((mutation, state) => {
   currentUser.value = state.currentUser;
 });
 
-const saveCurrentUrlAndRoute = (routeTo: string) => {
+const saveCurrentUrlAndRoute = (routeTo: string, query: string) => {
   appStore.dashboardBackLink = window.location.pathname;
 
-  router.push({ path: routeTo });
+  router.push({ path: routeTo,  query: { filter: query }});
 };
 </script>
 
