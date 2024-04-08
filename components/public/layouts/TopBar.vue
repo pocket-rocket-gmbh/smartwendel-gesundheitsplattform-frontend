@@ -124,8 +124,8 @@
           <span
             class="mx-3 menu-list general-font-size pointer is-dark-grey"
             v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
-            href="/admin/care_facilities"
-            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
+            href="/admin/care_facilities?filter=showAll"
+            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities?filter=showAll')"
           >
             Meine Einrichtung
           </span>
@@ -205,8 +205,8 @@
           <span
             class="menu-list pointer general-font-size"
             v-else-if="useUser().isFacilityOwner()"
-            href="/admin/care_facilities"
-            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities')"
+            href="/admin/care_facilities?filter=showAll"
+            @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities?filter=showAll')"
           >
             Meine Einrichtung
           </span>
