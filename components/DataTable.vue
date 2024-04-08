@@ -675,6 +675,12 @@ const getFilterQueryFromUrl = () => {
   }
 };
 
+const setRouteQuery = () => {
+  if (!filterQuery.value) {
+    router.push({ query: { filter: "showAll" } });
+  }
+};
+
 const filtersMap = {
   active_facilities: {
     field: "is_active",
@@ -820,6 +826,7 @@ const rotateColumnSortOrder = (columnProp: string) => {
 
 onMounted(() => {
   getFilterQueryFromUrl();
+  setRouteQuery();
   getFilter("active_facilities");
   listOptionValue.value = filterQuery.value;
   useNuxtApp().$bus.$on("triggerGetItems", () => {
