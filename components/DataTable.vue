@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row
-      v-if="useUser().isAdmin && endpoint === 'care_facilities?kind=facility'"
+      v-if="useUser().isAdmin() && endpoint === 'care_facilities?kind=facility'"
     >
       <v-col class="d-flex align-center my-5">
         <v-radio-group
