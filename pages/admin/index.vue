@@ -1,14 +1,11 @@
 <template>
-  <div>
+  <div v-if="useUser().isAdmin()">
     <div class="d-flex align-center">
-      <div class="general-font-size is-dark-grey font-weight-bold">
-        Dashboard
-      </div>
+      <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
 
       <div class="ml-3" v-if="!loading && updatedAt">
         <span> Aktualisiert am: {{ updatedAt }}</span>
       </div>
-
       <v-skeleton-loader
         v-if="loading"
         class="ml-3"
@@ -25,7 +22,6 @@
         >mdi-reload</v-icon
       >
     </div>
-
     <div v-for="item in items" :key="item.id" class="mt-5">
       <div class="d-flex align-center">
         <v-icon size="x-large" color="primary">{{ item.icon }}</v-icon>
@@ -41,12 +37,15 @@
       </div>
     </div>
   </div>
+  <div v-else> Du hast keine Berechtigung, diese Seite zu sehen.</div>
 </template>
 
 <script lang="ts" setup>
 definePageMeta({
   layout: "admin",
 });
+
+const router = useRouter();
 
 const loading = ref(false);
 
@@ -102,7 +101,7 @@ const getItems = async () => {
   await api.retrieveCollection(options as any);
   facilities.value = api.items.value as any;
 
-  saveFacilities(); 
+  saveFacilities();
 
   loading.value = false;
 };
@@ -131,17 +130,15 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Angemeldet",
-        content: facilities.value.filter(
-          (facility: any) => facility.kind === "facility"
-        ).length,
+        content: facilities.value.filter((facility: any) => facility.kind === "facility")
+          .length,
         type: "facility",
         query: "showAll",
       },
       {
         title: "Aktiv",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility.is_active === true && facility.kind === "facility"
+          (facility: any) => facility.is_active === true && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "active_facilities",
@@ -149,8 +146,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Inaktiv",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility.is_active === false && facility.kind === "facility"
+          (facility: any) => facility.is_active === false && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "inactive_facilities",
@@ -174,8 +170,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "Erfolgte Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true &&
-            !facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true && !facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "successful_profile_takeovers",
@@ -184,8 +179,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "Ausstehende Profilübernahmen",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true &&
-            facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true && facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "pending_profile_takeovers",
@@ -230,28 +224,25 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Aktive Veranstaltungen",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.kind === "event" && facility.is_active === true
+          (facility: any) => facility?.kind === "event" && facility.is_active === true
         ).length,
-/*         type: "event",
+        /*         type: "event",
         query: "active_events", */
       },
       {
         title: "Aktive Kurse",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.kind === "course" && facility.is_active === true
+          (facility: any) => facility?.kind === "course" && facility.is_active === true
         ).length,
-/*         type: "course",
+        /*         type: "course",
         query: "active_courses", */
       },
       {
         title: "Aktive Beiträge",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.kind === "news" && facility.is_active === true
+          (facility: any) => facility?.kind === "news" && facility.is_active === true
         ).length,
-/*         type: "news",
+        /*         type: "news",
         query: "active_articles", */
       },
     ],
@@ -259,10 +250,14 @@ const items = computed<DashboardItem[]>(() => [
 ]);
 
 onMounted(async () => {
-  await getItems();
-  getFacilitiesFromLocalStorage();
-  getUpdatedAtFromLocalStorage();
-  updatedAt.value = updatedAtFromLocalStorage;
+  if (!useUser().isAdmin()) {
+    router.push({ path: "/" });
+  } else {
+    await getItems();
+    getFacilitiesFromLocalStorage();
+    getUpdatedAtFromLocalStorage();
+    updatedAt.value = updatedAtFromLocalStorage;
+  }
 });
 </script>
 <style lang="sass">
