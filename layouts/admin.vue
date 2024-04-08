@@ -109,7 +109,7 @@
         </v-list-item>
         <v-list-item
           link
-          to="/admin/tooltips"
+          to="/admin/tooltips?filter=showAll"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('tooltips', 'list')"
           class="general-font-size is-dark-grey"
@@ -118,7 +118,7 @@
         </v-list-item>
         <v-list-item
           link
-          to="/admin/users"
+          to="/admin/users?filter=showAll"
           nuxt
           v-if="useAccessPrivileges().canAccessEndpointAction('users', 'list')"
           class="general-font-size is-dark-grey"
