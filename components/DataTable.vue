@@ -29,7 +29,7 @@
     </v-row>
   </div>
   <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
-  <v-table fixed-header>
+  <v-table fixed-header class="my-5">
     <thead class="elevation-1 primary" v-if="!noData">
       <tr>
         <th
@@ -231,7 +231,10 @@
                       <span class="pr-3">
                         {{ facility.name }}
                       </span>
-                      <div class="d-flex align-center" v-if="useUser().isAdmin()">
+                      <div
+                        class="d-flex align-center"
+                        v-if="useUser().isAdmin()"
+                      >
                         <v-icon
                           v-if="!facility.is_active"
                           size="x-small"
@@ -325,7 +328,10 @@
             </div>
           </span>
 
-          <span v-else-if="field.type === 'button' && field.action">
+          <span
+            v-else-if="field.type === 'button' && field.action"
+            class="d-flex align-center"
+          >
             <button
               @click.stop="field.action(item)"
               v-if="
@@ -336,7 +342,10 @@
               <span v-if="pathInto(item, field.value) !== 'user.name'">
                 {{ pathInto(item, field.value) }}
               </span>
-              <span v-if="pathInto(item, field.value) === 'user.name'">
+              <span
+                v-if="pathInto(item, field.value) === 'user.name'"
+                class="break-title"
+              >
                 Benutzer existiert nicht
                 <v-icon color="warning">mdi-alert</v-icon>
               </span>
@@ -348,7 +357,9 @@
             <span v-if="field.value === 'user.name'">
               <span
                 class="align-center ml-2"
-                v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
+                v-if="
+                  pathInto(item, field.value).length > 1 && useUser().isAdmin()
+                "
               >
                 <v-icon
                   v-if="item?.user && item?.user?.is_active_on_health_scope"
@@ -411,7 +422,10 @@
       </tr>
     </tbody>
   </v-table>
-  <div class="d-flex my-1 justify-space-between pagination" v-if="!noData && !adminStore.loading">
+  <div
+    class="d-flex my-1 justify-space-between pagination"
+    v-if="!noData && !adminStore.loading"
+  >
     <div class="d-flex align-center mt-1">
       <v-select
         v-if="!searchQuery"
