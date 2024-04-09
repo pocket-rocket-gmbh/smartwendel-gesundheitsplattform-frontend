@@ -565,7 +565,64 @@
                 :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
             </div>
+            <div>
+              <div class="d-flex mt-5">
+                <span class="general-font-size is-dark-grey font-weight-bold"
+                  >Adresse überprüfen</span
+                >
+                <LoadingSpinner v-if="loadingAdress" />
+              </div>
+              <div class="mt-3">
+                <v-alert color="resecondaryd" v-if="loadingAdress">
+                  <v-progress-linear
+                    color="primary"
+                    rounded
+                    indeterminate
+                    height="6"
+                  ></v-progress-linear>
+                </v-alert>
+              </div>
 
+              <div v-if="!slotProps.item.street || !slotProps.item.town">
+                <div class="mt-3">
+                  <v-alert type="info" class="general-font-size"
+                    >Adresse bitte vervollständigen.</v-alert
+                  >
+                </div>
+              </div>
+              <div
+                v-else-if="!isValidAddress && isValidAddress !== null && !loadingAdress"
+              >
+                <div class="mt-3">
+                  <v-alert type="error" class="general-font-size"
+                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr., Gemeinde und
+                    Ort</v-alert
+                  >
+                </div>
+              </div>
+              <div class="mt-3" v-if="isValidAddress === null && editInformations">
+                <v-alert type="info" class="general-font-size">
+                  Neue Adresse bitte eingeben.</v-alert
+                >
+              </div>
+              <div
+                v-if="
+                  isValidAddress &&
+                  !loadingAdress &&
+                  slotProps.item.street &&
+                  slotProps.item.town
+                "
+              >
+                <div class="mt-3">
+                  <v-alert type="success" class="general-font-size">
+                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese
+                    Adresse auch auf der Webseite angezeigt wird.
+                  </v-alert>
+                </div>
+              </div>
+            </div>
+
+            <v-divider class="my-10"></v-divider>
             <div>
               <div class="mt-5">
                 <span class="general-font-size is-dark-grey font-weight-bold"
@@ -733,63 +790,6 @@
                       <span>Entfällt für einige Berufe.</span>
                     </v-tooltip>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div class="d-flex mt-5">
-                <span class="general-font-size is-dark-grey font-weight-bold"
-                  >Adresse überprüfen</span
-                >
-                <LoadingSpinner v-if="loadingAdress" />
-              </div>
-              <div class="mt-3">
-                <v-alert color="resecondaryd" v-if="loadingAdress">
-                  <v-progress-linear
-                    color="primary"
-                    rounded
-                    indeterminate
-                    height="6"
-                  ></v-progress-linear>
-                </v-alert>
-              </div>
-
-              <div v-if="!slotProps.item.street || !slotProps.item.town">
-                <div class="mt-3">
-                  <v-alert type="info" class="general-font-size"
-                    >Adresse bitte vervollständigen.</v-alert
-                  >
-                </div>
-              </div>
-              <div
-                v-else-if="!isValidAddress && isValidAddress !== null && !loadingAdress"
-              >
-                <div class="mt-3">
-                  <v-alert type="error" class="general-font-size"
-                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr., Gemeinde und
-                    Ort</v-alert
-                  >
-                </div>
-              </div>
-              <div class="mt-3" v-if="isValidAddress === null && editInformations">
-                <v-alert type="info" class="general-font-size">
-                  Neue Adresse bitte eingeben.</v-alert
-                >
-              </div>
-              <div
-                v-if="
-                  isValidAddress &&
-                  !loadingAdress &&
-                  slotProps.item.street &&
-                  slotProps.item.town
-                "
-              >
-                <div class="mt-3">
-                  <v-alert type="success" class="general-font-size">
-                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese
-                    Adresse auch auf der Webseite angezeigt wird.
-                  </v-alert>
                 </div>
               </div>
             </div>
