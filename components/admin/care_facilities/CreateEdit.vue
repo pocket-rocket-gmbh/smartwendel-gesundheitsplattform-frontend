@@ -728,7 +728,7 @@
                     <v-text-field
                       v-model="slotProps.item.awarded_in"
                       type="text"
-                      label="Verliehen in "
+                      label="Verliehen in"
                       hide-details="auto"
                     />
                   </div>
