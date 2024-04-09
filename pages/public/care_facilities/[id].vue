@@ -153,18 +153,17 @@
           <div
             class="is-primary general-font-size is-uppercase font-weight-medium my-6 is-clickable"
           >
-            <v-btn
-              variant="outlined"
-              class="general-font-size"
-              size="large"
-              rounded="pill"
-              color="primary"
-              v-auto-animate
-              @click="showImprint = !showImprint"
-            >
-              Impressum <v-icon v-if="showImprint">mdi-chevron-up</v-icon>
-              <v-icon v-else>mdi-chevron-down</v-icon>
-            </v-btn>
+          <v-btn
+          variant="flat"
+          class="general-font-size"
+          color="primary"
+          rounded="pill"
+          size="large"
+          width="100%"
+          @click="showImprint = !showImprint"
+        >
+          <span> Impressumsangaben der Einrichtung </span>
+        </v-btn>
           </div>
           <div v-auto-animate v-if="showImprint" class="general-font-size">
             <div v-for="(facility, index) in facilityDetails" :key="index">
