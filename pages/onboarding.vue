@@ -156,23 +156,116 @@
           </div>
 
           <div class="my-5">
-            <span class="mb-3 general-font-size font-weight-medium">Impressum</span>
+            <span class="mb-3 general-font-size font-weight-medium"
+              >Impressumsangaben</span
+            >
 
             <div class="field">
               <v-text-field
                 v-model="careFacilityAuthorizedRepresentName"
                 type="text"
-                label="Vor- und Nachname der vertretungsberechtigen *"
+                label="Vertretungsberechtigte Person *"
                 :rules="[rules.required]"
+                hide-details="auto"
+              />
+            </div>
+
+            <span class="my-3 general-font-size font-weight-medium"
+              >Weitere Angaben gemäß § 5 TMG</span
+            >
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityCommercialRegisterNumber"
+                type="text"
+                label="Registernummer"
                 hide-details="auto"
               />
             </div>
 
             <div class="field">
               <v-text-field
-                v-model="careFacilityCommercialRegisterNumber"
+                v-model="careFacilityRegisterCourt"
                 type="text"
-                label="Registernummer (z.B. Handelsregister)"
+                label="Registergericht"
+                hide-details="auto"
+              />
+            </div>
+
+              <div class="field d-flex align-center">
+                <v-text-field
+                  v-model="careFacilityManagementName"
+                  type="text"
+                  label="Geschäftsführung"
+                  hide-details="auto"
+                  class="pr-3"
+                />
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="is-clickable mr-10" v-bind="props"
+                      >mdi-information-outline</v-icon
+                    >
+                  </template>
+                  <span
+                    >Bitte bei Mehreren Personen die Namen mit Komma trennen. Beispiel: Max
+                    Mustermann, Dr. Martina Mustermann.</span
+                  >
+                </v-tooltip>
+              </div>
+            <div class="d-flex align-center">
+              <span class="general-font-size font-weight-medium pr-3"
+                >Für bestimmte Berufe</span
+              >
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span
+                  >Die Angaben in diesen Feldern betreffen sogenannte reglementierte
+                  Berufe. Der Berufszugang- bzw. die Ausübung ist rechtlich an qualitative
+                  Nachweise gebunden bzw. gesetzlich geschützt. Gilt z. B. für Ärzte,
+                  Physiotherapeuten, Masseure, Heilpraktiker etc.</span
+                >
+              </v-tooltip>
+            </div>
+
+            <div class="field d-flex align-center">
+              <v-text-field
+                v-model="careFacilityProfessionalTitle"
+                type="text"
+                label="Gesetzliche Berufsbezeichnung"
+                hide-details="auto"
+                class="pr-3"
+              />
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span
+                  >Bitte die Berufsbezeichnung mit Komma trennen. Beispiel: Facharzt für
+                  Allgemeinmedizin, Fachärztin für Innere Medizin.</span
+                >
+              </v-tooltip>
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityAwardedIn"
+                type="text"
+                label="Verliehen in "
+                hide-details="auto"
+              />
+            </div>
+
+            <div class="field">
+              <v-text-field
+                v-model="careFacilityResponsibleSupervisoryAuthority"
+                type="text"
+                label="Zuständige Aufsichtsbehörde"
                 hide-details="auto"
               />
             </div>
@@ -181,53 +274,58 @@
               <v-text-field
                 v-model="careFacilityAssociatedChamber"
                 type="text"
-                label="Zugehörige Kammer"
+                label="Zuständige Kammer"
                 hide-details="auto"
               />
             </div>
 
-            <div class="field">
-              <v-text-field
-                v-model="careFacilityDoctorAssociations"
-                type="text"
-                label="Kassenärztliche Vereinigung"
-                hide-details="auto"
-              />
-            </div>
-
-            <div class="field">
-              <v-text-field
-                v-model="careFacilityProfessionalTitle"
-                type="text"
-                label="Gesetzliche Berufsbezeichnung"
-                hide-details="auto"
-              />
-            </div>
-
-            <div class="field">
-              <v-text-field
-                v-model="careFacilityTaxIdentificationNumber"
-                type="text"
-                label="Umsatzsteueridentifikationsnummer"
-                hide-details="auto"
-              />
-            </div>
-
-            <div class="field">
+            <div class="field d-flex align-center">
               <v-text-field
                 v-model="careFacilityProfessionalRegulations"
                 type="text"
                 label="Bezeichnung der berufsrechtlichen Regelungen"
                 hide-details="auto"
+                class="pr-3"
               />
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span
+                  >Hier kannst du den Link eintragen, unter dem die Regelungen zu finden
+                  sind und wie diese heißen. Beispiel: Berufsordnung für Ärzte, zu finden
+                  unter www.bundesaerztekammer.de.</span
+                >
+              </v-tooltip>
             </div>
 
-            <div class="field">
+            <div class="field d-flex align-center">
+              <v-text-field
+                v-model="careFacilityTaxIdentificationNumber"
+                type="text"
+                label="Umsatzsteueridentifikationsnummer"
+                hide-details="auto"
+                class="pr-3"
+              />
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable mr-10" v-bind="props"
+                    >mdi-information-outline</v-icon
+                  >
+                </template>
+                <span>Entfällt für einige Berufe.</span>
+              </v-tooltip>
+            </div>
+
+            <div class="field d-flex align-center">
               <v-text-field
                 v-model="careFacilityProfessionalDesignation"
                 type="text"
-                label="Berufsrechtliche Regelungen"
+                label="Umsatzsteueridentifikationsnummer"
                 hide-details="auto"
+                class="pr-3"
               />
             </div>
           </div>
@@ -350,11 +448,15 @@ const careFacilityStreet = ref("");
 const careFacilityAuthorizedRepresentName = ref("");
 const careFacilityCommercialRegisterNumber = ref("");
 const careFacilityAssociatedChamber = ref("");
-const careFacilityDoctorAssociations = ref("");
 const careFacilityProfessionalTitle = ref("");
 const careFacilityTaxIdentificationNumber = ref("");
 const careFacilityProfessionalRegulations = ref("");
 const careFacilityProfessionalDesignation = ref("");
+
+const careFacilityRegisterCourt = ref("");
+const careFacilityAwardedIn = ref("");
+const careFacilityResponsibleSupervisoryAuthority = ref("");
+const careFacilityManagementName = ref("");
 
 const loading = ref(true);
 const animated = ref(false);
@@ -441,8 +543,6 @@ const validateToken = async () => {
       careFacilityCommercialRegisterNumber.value =
         data?.data?.care_facility?.commercial_register_number;
       careFacilityAssociatedChamber.value = data?.data?.care_facility?.associated_chamber;
-      careFacilityDoctorAssociations.value =
-        data?.data?.care_facility?.doctor_associations;
       careFacilityProfessionalTitle.value = data?.data?.care_facility?.professional_title;
       careFacilityTaxIdentificationNumber.value =
         data?.data?.care_facility?.tax_identification_number;
@@ -450,6 +550,11 @@ const validateToken = async () => {
         data?.data?.care_facility?.professional_regulations;
       careFacilityProfessionalDesignation.value =
         data?.data?.care_facility?.professional_designation;
+      careFacilityRegisterCourt.value = data?.data?.care_facility?.register_court;
+      careFacilityAwardedIn.value = data?.data?.care_facility?.awarded_in;
+      careFacilityResponsibleSupervisoryAuthority.value =
+        data?.data?.care_facility?.responsible_supervisory_authority;
+      careFacilityManagementName.value = data?.data?.care_facility?.management_name;
     }
     loading.value = false;
   } else {
@@ -507,11 +612,15 @@ const register = async () => {
     care_facility_authorized_represent_name: careFacilityAuthorizedRepresentName.value,
     care_facility_commercial_register_number: careFacilityCommercialRegisterNumber.value,
     care_facility_associated_chamber: careFacilityAssociatedChamber.value,
-    care_facility_doctor_associations: careFacilityDoctorAssociations.value,
     care_facility_professional_title: careFacilityProfessionalTitle.value,
     care_facility_tax_identification_number: careFacilityTaxIdentificationNumber.value,
     care_facility_professional_regulations: careFacilityProfessionalRegulations.value,
     care_facility_professional_designation: careFacilityProfessionalDesignation.value,
+    care_facility_register_court: careFacilityRegisterCourt.value,
+    care_facility_awarded_in: careFacilityAwardedIn.value,
+    care_facility_responsible_supervisory_authority:
+      careFacilityResponsibleSupervisoryAuthority.value,
+    care_facility_management_name: careFacilityManagementName.value,
   };
   const result = await publicApi.call(
     "post",
