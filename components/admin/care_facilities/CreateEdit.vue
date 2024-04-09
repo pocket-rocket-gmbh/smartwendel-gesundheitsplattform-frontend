@@ -569,7 +569,7 @@
             <div>
               <div class="mt-5">
                 <span class="general-font-size is-dark-grey font-weight-bold"
-                  >Impressum</span
+                  >Impressumsangaben</span
                 >
                 <div class="my-3">
                   <div class="field">
@@ -581,10 +581,11 @@
                       hide-details="auto"
                     />
                   </div>
-
-                  <span class="my-3 general-font-size font-weight-medium"
-                    >Weitere Angaben gemäß § 5 TMG</span
-                  >
+                  <div class="my-3">
+                    <span class="general-font-size is-dark-grey font-weight-bold"
+                      >Weitere Angaben gemäß § 5 TMG</span
+                    >
+                  </div>
 
                   <div class="field">
                     <v-text-field
@@ -626,7 +627,7 @@
                   </div>
 
                   <div class="d-flex align-center my-3">
-                    <span class="general-font-size font-weight-medium pr-3"
+                    <span class="general-font-size is-dark-grey font-weight-bold pr-3"
                       >Für bestimmte Berufe</span
                     >
                     <v-tooltip location="top" width="300px">
