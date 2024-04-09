@@ -680,7 +680,7 @@
                     <v-text-field
                       v-model="slotProps.item.responsible_supervisory_authority"
                       type="text"
-                      label="Geschäftsführung"
+                      label="Zuständige Aufsichtsbehörde"
                       hide-details="auto"
                     />
                   </div>
@@ -698,7 +698,7 @@
                     <v-text-field
                       v-model="slotProps.item.professional_regulations"
                       type="text"
-                      label="Bezeichnung der berufsrechtlichen Regelungen"
+                      label="Berufsrechtliche Regelung"
                       hide-details="auto"
                       class="pr-3"
                     />
@@ -732,15 +732,6 @@
                       </template>
                       <span>Entfällt für einige Berufe.</span>
                     </v-tooltip>
-                  </div>
-
-                  <div class="field">
-                    <v-text-field
-                      v-model="slotProps.item.professional_designation"
-                      type="text"
-                      label="Berufsrechtliche Regelungen"
-                      hide-details="auto"
-                    />
                   </div>
                 </div>
               </div>

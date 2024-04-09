@@ -283,7 +283,7 @@
               <v-text-field
                 v-model="careFacilityProfessionalRegulations"
                 type="text"
-                label="Bezeichnung der berufsrechtlichen Regelungen"
+                label="Berufsrechtliche Regelung"
                 hide-details="auto"
                 class="pr-3"
               />
@@ -317,16 +317,6 @@
                 </template>
                 <span>Entfällt für einige Berufe.</span>
               </v-tooltip>
-            </div>
-
-            <div class="field d-flex align-center">
-              <v-text-field
-                v-model="careFacilityProfessionalDesignation"
-                type="text"
-                label="Umsatzsteueridentifikationsnummer"
-                hide-details="auto"
-                class="pr-3"
-              />
             </div>
           </div>
         </div>
@@ -451,7 +441,6 @@ const careFacilityAssociatedChamber = ref("");
 const careFacilityProfessionalTitle = ref("");
 const careFacilityTaxIdentificationNumber = ref("");
 const careFacilityProfessionalRegulations = ref("");
-const careFacilityProfessionalDesignation = ref("");
 
 const careFacilityRegisterCourt = ref("");
 const careFacilityAwardedIn = ref("");
@@ -544,12 +533,6 @@ const validateToken = async () => {
         data?.data?.care_facility?.commercial_register_number;
       careFacilityAssociatedChamber.value = data?.data?.care_facility?.associated_chamber;
       careFacilityProfessionalTitle.value = data?.data?.care_facility?.professional_title;
-      careFacilityTaxIdentificationNumber.value =
-        data?.data?.care_facility?.tax_identification_number;
-      careFacilityProfessionalRegulations.value =
-        data?.data?.care_facility?.professional_regulations;
-      careFacilityProfessionalDesignation.value =
-        data?.data?.care_facility?.professional_designation;
       careFacilityRegisterCourt.value = data?.data?.care_facility?.register_court;
       careFacilityAwardedIn.value = data?.data?.care_facility?.awarded_in;
       careFacilityResponsibleSupervisoryAuthority.value =
@@ -615,7 +598,6 @@ const register = async () => {
     care_facility_professional_title: careFacilityProfessionalTitle.value,
     care_facility_tax_identification_number: careFacilityTaxIdentificationNumber.value,
     care_facility_professional_regulations: careFacilityProfessionalRegulations.value,
-    care_facility_professional_designation: careFacilityProfessionalDesignation.value,
     care_facility_register_court: careFacilityRegisterCourt.value,
     care_facility_awarded_in: careFacilityAwardedIn.value,
     care_facility_responsible_supervisory_authority:

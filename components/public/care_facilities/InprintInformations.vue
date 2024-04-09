@@ -43,17 +43,9 @@
 
         <div v-if="facility.professional_regulations">
           <span class="is-primary font-weight-bold"
-            >Bezeichnung der berufsrechtlichen Regelungen und wie diese zugänglich
-            sind</span
+            >Berufsrechtliche Regelung</span
           >
           <div>{{ facility.professional_regulations }}</div>
-        </div>
-        <v-divider v-if="facility.professional_designation" class="my-2"></v-divider>
-        <div v-if="facility.professional_designation">
-          <span class="is-primary font-weight-bold">
-            Berufsrechtliche Regelungen (z.B. Berufsordnung für Ärzte als Link)</span
-          >
-          <div>{{ facility.professional_designation }}</div>
         </div>
 
         //
@@ -117,7 +109,6 @@ const facilityDetails = computed(() => {
       professional_title: item.professional_title,
       tax_identification_number: item.tax_identification_number,
       professional_regulations: item.professional_regulations,
-      professional_designation: item.professional_designation,
       register_court: item.register_court,
       awarded_in: item.awarded_in,
       responsible_supervisory_authority: item.responsible_supervisory_authority,
