@@ -61,6 +61,9 @@
                   disabled
                   hide-details="auto"
                 />
+                <v-icon @click="goToLink(slotProps.item)" size="x-large"
+                >mdi-open-in-new</v-icon
+              >
                 <v-btn
                   variant="flat"
                   color="primary"
@@ -74,7 +77,7 @@
           </div>
           <v-divider
             class="my-2"
-            v-if="slotProps.item?.user?.onboarding_token?.length"
+            v-if="slotProps.item?.user?.onboarding_token?.length && !slotProps.item?.is_active"
           ></v-divider>
           <div class="d-flex align-center" v-if="!slotProps.item?.is_active">
             <span class="general-font-size is-dark-grey font-weight-bold mr-3"
