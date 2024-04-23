@@ -77,7 +77,7 @@
             </v-col>
             <v-col>
               <v-btn
-                color="error"
+                color="primary"
                 class="mt-5 general-font-size"
                 size="large"
                 block

@@ -7,7 +7,7 @@
     :width="careFacility?.kind !== 'news' ? '100%' : ''"
     @click="showImprint = !showImprint"
   >
-    <span> Impressumsangaben der Einrichtung </span>
+    <span class="general-font-size"> Impressumsangaben der Einrichtung </span>
   </v-btn>
 
   <div v-auto-animate v-if="showImprint" class="general-font-size mt-3">
