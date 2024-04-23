@@ -20,7 +20,7 @@
     "@mdi/font": "^7.4.47",
     "@nuxtjs/vuetify": "^1.12.3",
     "@pinia/nuxt": "^0.5.1",
-    "@types/leaflet": "^1.9.9",
+    "@types/leaflet": "^1.9.12",
     "@unhead/vue": "^1.9.4",
     "@vuepic/vue-datepicker": "^8.4.0",
     "@vueup/vue-quill": "^1.2.0",
