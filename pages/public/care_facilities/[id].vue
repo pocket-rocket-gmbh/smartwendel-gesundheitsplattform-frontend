@@ -42,7 +42,7 @@
     class="ma-15 facility-alert general-font-size"
     type="info"
   >
-    Hier kannst du sehen, wie die Profilseite deiner Einrichtung für die Besucher:innen
+    Hier kannst du sehen, wie die Profilseite deiner Einrichtung für die Besucher
     der Gesundheits- und Pflegeplattform aussieht. Bitte beachte: Es handelt sich hierbei
     nur um eine Vorschau. Wenn du möchtest, dass dein Angebot auf der Plattform erscheint,
     musst du dein Profil online schalten.

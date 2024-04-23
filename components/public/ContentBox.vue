@@ -60,7 +60,9 @@
             rounded="pill"
             :width="breakPoints.width.value > 1420 ? '' : '100%'"
           >
-            <span class="general-font-size" v-if="item.kind">{{ buttonText }}</span>
+            <span class="general-font-size" v-if="item.kind">{{
+              buttonText
+            }}</span>
             <span class="general-font-size" v-else-if="item.url_kind">{{
               item.button_text
             }}</span>
@@ -71,7 +73,9 @@
           class="general-font-size d-flex align-center mb-n3"
           v-if="item.kind === 'event' || item.kind === 'course'"
         >
-          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1420">
+          <span
+            v-if="item?.event_dates.length && breakPoints.width.value >= 1420"
+          >
             <img :src="eventsIcon" class="mr-1" />
             {{ item?.event_dates?.[0]?.slice(0, 10) }}
           </span>
@@ -139,13 +143,8 @@ const buttonHref = computed(() => {
 });
 
 const goToFacility = (buttonHref: any) => {
-  if (
-      props.item.url.includes("http://") ||
-      props.item.url.includes("https://")
-    ) {
-      return window.open(props.item.url, "_blank");
-    } else return router.push({ path: buttonHref });
-  };
+  router.push({ path: buttonHref });
+};
 
 const goToMainFacility = (item: any) => {
   router.push({
