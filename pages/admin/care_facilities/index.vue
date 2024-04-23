@@ -12,7 +12,7 @@
         >
       </v-col>
 
-      <v-col class="d-flex justify-end align-center">
+      <v-col class="d-flex justify-end align-center" v-if="useUser().isAdmin()">
         <div class="d-flex align-center mx-3">
           <v-icon size="x-small" color="success">mdi-circle</v-icon>
           <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
@@ -44,7 +44,7 @@
     <div>
       <div v-if="showBar">
         <v-row align="center">
-          <v-col md="3" class="d-flex">
+          <v-col md="3" class="d-flex align-center">
             <v-btn
               v-if="user.isAdmin() || !itemsExist"
               elevation="0"
@@ -52,13 +52,15 @@
               @click="
                 itemId = null;
                 createEditDialogOpen = true;
-                itemPlaceholder = JSON.parse(JSON.stringify(originalItemPlaceholder));
+                itemPlaceholder = JSON.parse(
+                  JSON.stringify(originalItemPlaceholder)
+                );
               "
             >
               Neue Einrichtung
             </v-btn>
           </v-col>
-          <v-col v-if="user.isAdmin()">
+          <v-col v-if="user.isAdmin()" class="d-flex align-center">
             <v-text-field
               width="50"
               prepend-icon="mdi-magnify"
@@ -66,23 +68,6 @@
               hide-details="auto"
               label="Einrichtungen durchsuchen"
             />
-          </v-col>
-        </v-row>
-        <v-row v-if="user.isAdmin()">
-          <v-col>
-            <v-radio-group
-              inline
-              class="d-flex justify-end align-center"
-              v-model="listOptionValue"
-            >
-              <v-radio
-                v-for="(item, index) in listOptions"
-                :key="index"
-                :label="item.text"
-                :value="item.value"
-                :disabled="item.value !== 1"
-              ></v-radio>
-            </v-radio-group>
           </v-col>
         </v-row>
       </div>
@@ -99,11 +84,11 @@
         @openAddFilesDialog="openAddFilesDialog"
         @items-loaded="handleItemsLoaded"
         @item-updated="handleItemUpdated"
+        @open-confirmation-dialog="openConfirmationDialog"
         @toogle-bar="showBar = !showBar"
         :disable-delete="true"
         defaultSortBy="created_at"
         :draft-required="draftRequiredFields"
-        :import-filter="listOptionValue"
       />
 
       <div
@@ -118,16 +103,21 @@
       >
         <v-icon>mdi-arrow-up</v-icon>
         <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
+          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der
+          Webseite.</span
         >
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
-        :disabled="(setupFinished && !itemStatus) || !useUser().statusOnHealthScope()"
+        :disabled="
+          (setupFinished || !itemStatus) || !useUser().statusOnHealthScope()
+        "
         elevation="0"
         variant="outlined"
         class="mt-5"
-        @click="useRouter().push({ path: `/public/care_facilities/${facilityId}` })"
+        @click="
+          useRouter().push({ path: `/public/care_facilities/${facilityId}` })
+        "
       >
         Zur Online-Ansicht deiner Einrichtung
       </v-btn>
@@ -160,6 +150,14 @@
         endpoint="care_facilities"
         term="diese Einrichtung"
       />
+      <EditItem
+        v-if="confirmationDialogOpen"
+        :open="confirmationDialogOpen"
+        @close="confirmationDialogOpen = false"
+        type="sendEmail"
+        :item="itemId"
+        @accepted="sendEmail"
+      />
     </div>
   </div>
 </template>
@@ -168,6 +166,8 @@
 import { isCompleteFacility } from "~/utils/facility.utils";
 import { type Facility } from "~/store/searchFilter";
 import type { RequiredField } from "~/types/facilities";
+import { ResultStatus, ServerCallResult } from "@/types/serverCallResult";
+import { usePrivateApi } from "#imports";
 
 definePageMeta({
   layout: "admin",
@@ -175,10 +175,15 @@ definePageMeta({
 
 const showBar = ref(true);
 
+const errors = ref({});
+
 const user = useUser();
 const router = useRouter();
 const loading = ref(false);
 const passwordChanged = ref(false);
+const confirmationDialogOpen = ref(false);
+
+const snackbar = useSnackbar();
 
 const userLoginCount = computed(() => {
   return user.loginCount();
@@ -188,6 +193,33 @@ const handleSaved = async () => {
   passwordChanged.value = true;
   dataTableRef?.value.getItems();
   useUser().reloadUser();
+};
+
+const openConfirmationDialog = (id: string) => {
+  itemId.value = id;
+  confirmationDialogOpen.value = true;
+};
+
+const privateApi = usePrivateApi();
+
+const sendEmail = async () => {
+  const data = {
+    user_id: itemId.value,
+  };
+  const result = await privateApi.call(
+    "post",
+    `/users/${itemId?.value?.user?.id}/send_notification_after_manual_import`,
+    data
+  );
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    snackbar.showSuccess("Email wurde erfolgreich versendet");
+  } else {
+    snackbar.showError("Email konnte nicht versendet werden");
+  }
+  loading.value = false;
+  confirmationDialogOpen.value = false;
+  await dataTableRef.value?.getItems();
+  useNuxtApp().$bus.$emit("facilityUpdate");
 };
 
 const fields = [
@@ -217,8 +249,18 @@ const fields = [
   },
   { prop: "name", text: "Name", value: "name", type: "string" },
   { value: "", type: "beinEdited" },
-  { prop: "updated_at", text: "Letzte Aktualisierung", value: "updated_at", type: "datetime" },
-  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
+  {
+    prop: "updated_at",
+    text: "Letzte Aktualisierung",
+    value: "updated_at",
+    type: "datetime",
+  },
+  {
+    prop: "created_at",
+    text: "Erstellt am",
+    value: "created_at",
+    type: "datetime",
+  },
   {
     prop: "user.firstname",
     text: "Erstellt von",
@@ -243,12 +285,16 @@ const fields = [
   {
     value: "",
     type: "is-lk",
-    tooltip: "Einrichtung wurde von einer Admin erstellt."
+    tooltip: "Einrichtung wurde von einer Admin erstellt.",
   },
   {
     value: "",
+    type: "send-invitation",
+    tooltip: "Einrichtung wurde von einer Admin erstellt.",
+  },
+  {
     type: "imported",
-    tooltip: "Einrichtung wurde importiert."
+    tooltip: "Einrichtung wurde importiert.",
   },
 ];
 
@@ -266,7 +312,8 @@ const draftRequiredFields: RequiredField[] = [
   },
   {
     props: ["description"],
-    checkHandler: (description?: string) => !description || description === "<p><br></p>",
+    checkHandler: (description?: string) =>
+      !description || description === "<p><br></p>",
   },
   {
     props: ["tag_category_ids"],
@@ -280,7 +327,7 @@ const draftRequiredFields: RequiredField[] = [
     props: ["street", "zip", "community_id", "town", "email", "phone"],
   },
   {
-    props: ["name_responsible_person"],
+    props: ["authorized_represent_name"],
   },
 ];
 
@@ -331,7 +378,9 @@ const originalItemPlaceholder = ref({
     { day: "Sonntag", placeholder: "z.B. geschlossen", hours: "" },
   ],
 });
-const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
+const itemPlaceholder = ref(
+  JSON.parse(JSON.stringify(originalItemPlaceholder.value))
+);
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);
@@ -345,23 +394,6 @@ const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
 
 const itemStatus = ref(null);
-
-const listOptions = ref([
-  { text: "Alle", value: 1 },
-  { text: "Importiert", value: 2 },
-  { text: "Übernommen", value: 3 },
-  { text: "Nicht übernommen", value: 4 },
-  { text: "Selbst angelegt", value: 5 },
-]);
-
-const listOptionValue = ref(1);
-
-watch (
-  async () => listOptionValue.value,
-  async () => {
-    await dataTableRef.value?.getItems(listOptionValue);
-  }
-);
 
 const handleItemUpdated = async (item: any) => {
   setupFinished.value = await useUser().setupFinished();

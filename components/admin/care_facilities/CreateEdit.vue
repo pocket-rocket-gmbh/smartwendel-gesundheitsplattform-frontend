@@ -32,15 +32,18 @@
           </div>
         </v-col>
         <v-col md="9">
+          <div v-if="slotProps.item?.owner_requested_maintenance" class="mt-3">
+            <v-alert type="info" class="general-font-size"
+              >Diese Einrichtung kann von LK bearbeitet werden
+            </v-alert>
+          </div>
           <div class="py-10">
-            <span
-              class="general-font-size is-dark-grey facility-kind-description"
+            <span class="general-font-size is-dark-grey facility-kind-description"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
-              spezifisches Leistungsangebot in einem eigenen Profil darstellen
-              und veröffentlichen. Fülle die Details zu deinem Angebot aus. Je
-              spezifischer deine Angaben sind, desto besser können dich Besucher
-              der Webseite finden. Pflichtfelder sind mit einem Sternchen
-              versehen.</span
+              spezifisches Leistungsangebot in einem eigenen Profil darstellen und
+              veröffentlichen. Fülle die Details zu deinem Angebot aus. Je spezifischer
+              deine Angaben sind, desto besser können dich Besucher der Webseite finden.
+              Pflichtfelder sind mit einem Sternchen versehen.</span
             >
           </div>
 
@@ -50,15 +53,17 @@
                 >URL zur Einrichtungsübernahme generieren</span
               >
             </div>
-
             <div class="d-flex align-center">
               <div class="field split d-flex align-center">
                 <v-text-field
                   class="text-field is-dark-grey"
-                  :value="slotProps.item?.user?.onboarding_token"
+                  :value="previewUrlWithToken(slotProps.item)"
                   disabled
                   hide-details="auto"
                 />
+                <v-icon @click="goToLink(slotProps.item)" size="x-large"
+                >mdi-open-in-new</v-icon
+              >
                 <v-btn
                   variant="flat"
                   color="primary"
@@ -72,7 +77,49 @@
           </div>
           <v-divider
             class="my-2"
-            v-if="slotProps.item?.user?.onboarding_token?.length"
+            v-if="slotProps.item?.user?.onboarding_token?.length && !slotProps.item?.is_active"
+          ></v-divider>
+          <div class="d-flex align-center" v-if="!slotProps.item?.is_active">
+            <span class="general-font-size is-dark-grey font-weight-bold mr-3"
+              >Vorschau</span
+            >
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <v-icon class="is-clickable mr-10" v-bind="props"
+                  >mdi-information-outline</v-icon
+                >
+              </template>
+              <span>
+                Hier kannst du sehen, wie die Profilseite deiner Einrichtung für die
+                Besucher:innen der Gesundheits- und Pflegeplattform aussieht. Bitte
+                beachte: Es handelt sich hierbei nur um eine Vorschau. Wenn du möchtest,
+                dass dein Angebot auf der Plattform erscheint, musst du dein Profil online
+                schalten.</span
+              >
+            </v-tooltip>
+            <div class="field split d-flex align-center">
+              <v-text-field
+                class="text-field is-dark-grey"
+                :value="previewUrl(slotProps.item)"
+                disabled
+                hide-details="auto"
+              />
+              <v-icon @click="goToLink(slotProps.item)" size="x-large"
+                >mdi-open-in-new</v-icon
+              >
+              <v-btn
+                variant="flat"
+                color="primary"
+                rounded="pill"
+                @click="copyPreviewLink(slotProps.item)"
+              >
+                <span> Vorschau LINK kopieren </span>
+              </v-btn>
+            </div>
+          </div>
+          <v-divider
+            class="my-6"
+            v-if="slotProps.item?.preview_token?.length"
           ></v-divider>
           <div class="field" id="name">
             <div class="my-2">
@@ -86,9 +133,7 @@
               hide-details="auto"
               label="Einrichtung/Unternehmen/Behörde/Verein/Verband"
               :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
             <div class="d-flex align-center my-4">
               <span class="general-font-size is-dark-grey font-weight-bold mr-3"
@@ -179,10 +224,9 @@
 
           <div class="field" id="logo">
             <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["logo"].label }}</span
-              >
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["logo"].label
+              }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -206,10 +250,9 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="photo">
             <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["photo"].label }}</span
-              >
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["photo"].label
+              }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -233,10 +276,9 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="gallery">
             <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["gallery"].label }}</span
-              >
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["gallery"].label
+              }}</span>
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
@@ -257,9 +299,7 @@
                 <div
                   class="text-editor"
                   :class="{
-                    'empty-editor': isDescriptionEmpty(
-                      slotProps.item.description
-                    ),
+                    'empty-editor': isDescriptionEmpty(slotProps.item.description),
                   }"
                 >
                   <QuillEditor
@@ -281,9 +321,7 @@
                     v-show="false"
                     class="hidden-text-field"
                     :model-value="
-                      isDescriptionEmpty(slotProps.item.description)
-                        ? ''
-                        : 'filled'
+                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
                     "
                     :rules="[rules.required]"
                   />
@@ -294,10 +332,9 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="category">
             <div class="my-3 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["category"].label }}</span
-              >
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["category"].label
+              }}</span>
               <v-tooltip location="top" width="200px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -320,10 +357,9 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="services">
             <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["services"].label }}</span
-              >
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["services"].label
+              }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -358,7 +394,8 @@
             :class="[
               (adressChanged || editInformations) &&
               user.currentUser.is_active_on_health_scope &&
-              slotProps.item.id && !useUser().isAdmin()
+              slotProps.item.id &&
+              !useUser().isAdmin()
                 ? 'has-bg-light-red pa-5'
                 : '',
             ]"
@@ -367,13 +404,14 @@
               v-if="
                 adressChanged &&
                 user.currentUser.is_active_on_health_scope &&
-                slotProps.item.id && !useUser().isAdmin()
+                slotProps.item.id &&
+                !useUser().isAdmin()
               "
             >
               <v-alert type="warning" density="compact" class="mt-2"
-                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die
-                Einrichtung erneut von einem Mitarbeiter verifiziert werden.
-                Vielen Dank für deine Geduld!</v-alert
+                >Es wurden Änderungen vorgenommen! Aufgrund dessen muss die Einrichtung
+                erneut von einem Mitarbeiter verifiziert werden. Vielen Dank für deine
+                Geduld!</v-alert
               >
             </span>
             <div class="my-2 d-flex align-center">
@@ -390,15 +428,11 @@
               </v-tooltip>
               <div
                 v-if="
-                  setupFinished &&
-                  !useUser().isAdmin() &&
-                  useUser().statusOnHealthScope()
+                  setupFinished && !useUser().isAdmin() && useUser().statusOnHealthScope()
                 "
               >
                 <span v-if="editInformations">
-                  <v-btn size="small" @click="editInformations = false">
-                    fertig
-                  </v-btn>
+                  <v-btn size="small" @click="editInformations = false"> fertig </v-btn>
                 </span>
                 <span v-else>
                   <v-btn size="small" @click="confirmEditDialogOpen = true">
@@ -480,9 +514,7 @@
                 label="PLZ"
                 :type="'number'"
                 :rules="[rules.required, rules.zip]"
-                :error-messages="
-                  useErrors().checkAndMapErrors('zip', slotProps.errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
               />
               <v-select
                 hide-details="auto"
@@ -517,9 +549,7 @@
                 label="Telefonnummer (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.validateNumber]"
                 :type="'tel'"
-                :error-messages="
-                  useErrors().checkAndMapErrors('phone', slotProps.errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('phone', slotProps.errors)"
               />
             </div>
             <div class="field">
@@ -535,9 +565,7 @@
                 hide-details="auto"
                 label="E-Mail (Sichtbar auf der Webseite. Wird zur Kontaktaufnahme verwendet.)"
                 :rules="[rules.required, rules.email]"
-                :error-messages="
-                  useErrors().checkAndMapErrors('email', slotProps.errors)
-                "
+                :error-messages="useErrors().checkAndMapErrors('email', slotProps.errors)"
               />
             </div>
             <div>
@@ -566,21 +594,16 @@
                 </div>
               </div>
               <div
-                v-else-if="
-                  !isValidAddress && isValidAddress !== null && !loadingAdress
-                "
+                v-else-if="!isValidAddress && isValidAddress !== null && !loadingAdress"
               >
                 <div class="mt-3">
                   <v-alert type="error" class="general-font-size"
-                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr.,
-                    Gemeinde und Ort</v-alert
+                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr., Gemeinde und
+                    Ort</v-alert
                   >
                 </div>
               </div>
-              <div
-                class="mt-3"
-                v-if="isValidAddress === null && editInformations"
-              >
+              <div class="mt-3" v-if="isValidAddress === null && editInformations">
                 <v-alert type="info" class="general-font-size">
                   Neue Adresse bitte eingeben.</v-alert
                 >
@@ -595,9 +618,181 @@
               >
                 <div class="mt-3">
                   <v-alert type="success" class="general-font-size">
-                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte,
-                    dass diese Adresse auch auf der Webseite angezeigt wird.
+                    Deine Adresse wurde erfolgreich hinterlegt. Bitte beachte, dass diese
+                    Adresse auch auf der Webseite angezeigt wird.
                   </v-alert>
+                </div>
+              </div>
+            </div>
+
+            <v-divider class="my-10"></v-divider>
+            <div>
+              <div class="mt-5">
+                <span class="general-font-size is-dark-grey font-weight-bold"
+                  >Impressumsangaben</span
+                >
+                <div class="my-3">
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.authorized_represent_name"
+                      type="text"
+                      label="Vertretungsberechtigte Person *"
+                      :rules="[rules.required]"
+                      hide-details="auto"
+                    />
+                  </div>
+                  <div class="my-3">
+                    <span class="general-font-size is-dark-grey font-weight-bold"
+                      >Weitere Angaben gemäß § 5 TMG</span
+                    >
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.commercial_register_number"
+                      type="text"
+                      label="Registernummer"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.register_court"
+                      type="text"
+                      label="Registergericht"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field d-flex align-center">
+                    <v-text-field
+                      v-model="slotProps.item.management_name"
+                      type="text"
+                      label="Geschäftsführung"
+                      hide-details="auto"
+                      class="pr-3"
+                    />
+                    <v-tooltip location="top" width="300px">
+                      <template v-slot:activator="{ props }">
+                        <v-icon class="is-clickable mr-10" v-bind="props"
+                          >mdi-information-outline</v-icon
+                        >
+                      </template>
+                      <span
+                        >Bitte bei Mehreren Personen die Namen mit Komma trennen.
+                        Beispiel: Max Mustermann, Dr. Martina Mustermann.</span
+                      >
+                    </v-tooltip>
+                  </div>
+
+                  <div class="d-flex align-center my-3">
+                    <span class="general-font-size is-dark-grey font-weight-bold pr-3"
+                      >Für bestimmte Berufe</span
+                    >
+                    <v-tooltip location="top" width="300px">
+                      <template v-slot:activator="{ props }">
+                        <v-icon class="is-clickable mr-10" v-bind="props"
+                          >mdi-information-outline</v-icon
+                        >
+                      </template>
+                      <span
+                        >Die Angaben in diesen Feldern betreffen sogenannte reglementierte
+                        Berufe. Der Berufszugang- bzw. die Ausübung ist rechtlich an
+                        qualitative Nachweise gebunden bzw. gesetzlich geschützt. Gilt z.
+                        B. für Ärzte, Physiotherapeuten, Masseure, Heilpraktiker
+                        etc.</span
+                      >
+                    </v-tooltip>
+                  </div>
+
+                  <div class="field d-flex align-center">
+                    <v-text-field
+                      v-model="slotProps.item.professional_title"
+                      type="text"
+                      label="Gesetzliche Berufsbezeichnung"
+                      hide-details="auto"
+                      class="pr-3"
+                    />
+                    <v-tooltip location="top" width="300px">
+                      <template v-slot:activator="{ props }">
+                        <v-icon class="is-clickable mr-10" v-bind="props"
+                          >mdi-information-outline</v-icon
+                        >
+                      </template>
+                      <span
+                        >Bitte die Berufsbezeichnung mit Komma trennen. Beispiel: Facharzt
+                        für Allgemeinmedizin, Fachärztin für Innere Medizin.</span
+                      >
+                    </v-tooltip>
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.awarded_in"
+                      type="text"
+                      label="Verliehen in"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.responsible_supervisory_authority"
+                      type="text"
+                      label="Zuständige Aufsichtsbehörde"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <v-text-field
+                      v-model="slotProps.item.associated_chamber"
+                      type="text"
+                      label="Zuständige Kammer"
+                      hide-details="auto"
+                    />
+                  </div>
+
+                  <div class="field d-flex align-center">
+                    <v-text-field
+                      v-model="slotProps.item.professional_regulations"
+                      type="text"
+                      label="Berufsrechtliche Regelung"
+                      hide-details="auto"
+                      class="pr-3"
+                    />
+                    <v-tooltip location="top" width="300px">
+                      <template v-slot:activator="{ props }">
+                        <v-icon class="is-clickable mr-10" v-bind="props"
+                          >mdi-information-outline</v-icon
+                        >
+                      </template>
+                      <span
+                        >Hier kannst du den Link eintragen, unter dem die Regelungen zu
+                        finden sind und wie diese heißen. Beispiel: Berufsordnung für
+                        Ärzte, zu finden unter www.bundesaerztekammer.de.</span
+                      >
+                    </v-tooltip>
+                  </div>
+
+                  <div class="field d-flex align-center">
+                    <v-text-field
+                      v-model="slotProps.item.tax_identification_number"
+                      type="text"
+                      label="Umsatzsteueridentifikationsnummer"
+                      hide-details="auto"
+                      class="pr-3"
+                    />
+                    <v-tooltip location="top" width="300px">
+                      <template v-slot:activator="{ props }">
+                        <v-icon class="is-clickable mr-10" v-bind="props"
+                          >mdi-information-outline</v-icon
+                        >
+                      </template>
+                      <span>Entfällt für einige Berufe.</span>
+                    </v-tooltip>
+                  </div>
                 </div>
               </div>
             </div>
@@ -645,10 +840,9 @@
           <v-divider class="my-10"></v-divider>
           <div class="field" id="website">
             <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["website"].label }}</span
-              >
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["website"].label
+              }}</span>
               <v-tooltip location="top" width="200px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -664,19 +858,16 @@
               v-model="slotProps.item.website"
               hide-details="auto"
               label="Link eintragen (z.B. www.meine-webseite.de)"
-              :error-messages="
-                useErrors().checkAndMapErrors('link', slotProps.errors)
-              "
+              :error-messages="useErrors().checkAndMapErrors('link', slotProps.errors)"
               :rules="[rules.isUrl]"
             />
           </div>
           <v-divider class="my-10"></v-divider>
           <div class="field" id="documents">
             <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["documents"].label }}</span
-              >
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
+                steps["documents"].label
+              }}</span>
               <v-tooltip location="top" width="300px">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable mr-10" v-bind="props"
@@ -687,7 +878,6 @@
               </v-tooltip>
             </div>
             <v-divider class="my-10"></v-divider>
-
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
               tag-name="documents"
@@ -697,25 +887,6 @@
               @document-deleted="updatedFiles(null)"
             />
           </div>
-          <div class="field" id="responsible">
-            <div class="my-2 d-flex align-center">
-              <span
-                class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >{{ steps["responsible"].label }}</span
-              >
-            </div>
-            <v-text-field
-              class="text-field is-dark-grey"
-              v-model="slotProps.item.name_responsible_person"
-              hide-details="auto"
-              label="Vor- und Nachname"
-              :rules="[rules.required]"
-              :error-messages="
-                useErrors().checkAndMapErrors('name', slotProps.errors)
-              "
-            />
-          </div>
-          <v-divider class="my-5"></v-divider>
         </v-col>
       </v-row>
       <!--  <div class="missing" v-for="[key, step] in Object.entries(steps)">
@@ -755,9 +926,8 @@ const stepNames = [
   "openingHours",
   "website",
   "documents",
-  "responsible",
 ] as const;
-type StepNames = (typeof stepNames)[number];
+type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Hinterlege den Namen deiner Einrichtung. *",
@@ -823,7 +993,15 @@ const steps: CreateEditSteps<StepNames> = {
       "8. Bitte gib hier die Adresse und Kontaktdaten deiner Einrichtung/deines Unternehmens an. *",
     tooltip: "Hauptstandort deines Unternehmens/deiner Einrichtung.",
     description: "Kontaktdaten *",
-    props: ["street", "zip", "community_id", "town", "email", "phone"],
+    props: [
+      "street",
+      "zip",
+      "community_id",
+      "town",
+      "email",
+      "phone",
+      "authorized_represent_name",
+    ],
     specialFilter: "phone",
   },
   locations: {
@@ -859,13 +1037,6 @@ const steps: CreateEditSteps<StepNames> = {
     description: "Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
-  },
-  responsible: {
-    label:
-      "13.	Bitte gib hier den inhaltlich Verantwortlichen für die Profilinformationen dieser Einrichtung an. *",
-    tooltip: "Der Name wird in deinem Einrichtungsprofil zu sehen sein.",
-    description: "Verantwortliche Person *",
-    props: ["name_responsible_person"],
   },
 };
 
@@ -953,9 +1124,7 @@ const isFilled = (slotProps: any, item: CreateEditStep) => {
     } else if (item.specialFilter === "filter_service") {
       return servicesFilterSet.value;
     } else if (item.specialFilter === "opening_hours") {
-      return slotPropsItem.opening_hours.some(
-        (day: any) => day.hours.length > 0
-      );
+      return slotPropsItem.opening_hours.some((day: any) => day.hours.length > 0);
     } else if (item.specialFilter === "phone") {
       const pattern = /^[0-9]+$/;
       return pattern.test(slotPropsItem.phone);
@@ -990,6 +1159,11 @@ const copyLink = (item: any) => {
   snackbar.showSuccess(`Link kopiert`);
 };
 
+const goToLink = (item: any) => {
+  const link = `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
+  return window.open(link, "_blank");
+};
+
 const loadingAdress = ref(false);
 
 const handleInitialCheckValidAddress = (slotProps: any) => {
@@ -1016,18 +1190,28 @@ const checkValidAddress = debounce(async (slotProps: any) => {
 const snackbar = useSnackbar();
 
 const copyTokenLink = (item: any) => {
-  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}`;
+  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}&previewToken=${item?.preview_token}`;
   navigator.clipboard.writeText(link);
   snackbar.showSuccess("Übernahme-Link generiert und kopiert.");
 };
 
+const previewUrl = (item: any) => {
+  return `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
+};
+
+const previewUrlWithToken = (item: any) => {
+  return `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}&previewToken=${item?.preview_token}`;
+};
+
+const copyPreviewLink = (item: any) => {
+  const link = previewUrl(item);
+  navigator.clipboard.writeText(link);
+  snackbar.showSuccess("Vorschau-Link kopiert.");
+};
+
 const isValidAddress = ref(null);
 
-const getLatLngFromAddress = async (
-  zipCode: string,
-  street: string,
-  town: string
-) => {
+const getLatLngFromAddress = async (zipCode: string, street: string, town: string) => {
   try {
     const { data } = await axios.get(
       `https://geocode.maps.co/search?postalcode=${zipCode}&street=${street}&country=DE&city=${town}&api_key=65cb46b5a5ab0289110035xqze5103b`
@@ -1183,9 +1367,7 @@ const getCommunities = async () => {
 };
 
 const getTownsByCommunityId = (communityId: string) => {
-  const found = communities.value.find(
-    (community: any) => community.id === communityId
-  );
+  const found = communities.value.find((community: any) => community.id === communityId);
 
   if (found) {
     useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {

@@ -252,7 +252,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "2.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
     tooltip: "",
-    description: "Name der Autorin/des Autors *",
+    description: "Name des Autors *",
     props: ["name_responsible_person"],
   },
   photo: {

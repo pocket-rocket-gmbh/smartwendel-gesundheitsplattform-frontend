@@ -84,9 +84,6 @@ export default defineComponent({
         });
       }
     };
-
-    console.log(router.options.history);
-
     const auth = async () => {
       loading.value = true;
       errors.value = "";
@@ -123,7 +120,7 @@ export default defineComponent({
           } else if (result.data.user.role === "admin") {
             router.push({ path: "/admin" });
           } else {
-            router.push({ path: "/admin/care_facilities" });
+            router.push({ path: "/admin/care_facilities/", query: { filter: "showAll" } });
           }
         }
       } else {

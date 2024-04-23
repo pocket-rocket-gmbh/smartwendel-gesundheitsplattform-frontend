@@ -21,6 +21,7 @@ export type FilterTag = {
   scope: string;
 };
 export type User = {
+  [x: string]: any;
   id: string;
   name: string;
   firstname: string;
@@ -29,6 +30,7 @@ export type User = {
   email: string;
   role: string;
   register_token?: string;
+  care_facilities: Facility[];
 };
 
 export type Facility = {

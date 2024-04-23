@@ -15,7 +15,7 @@ export const isCompleteFacility = (facility: Facility) => {
     facility.town &&
     facility.phone &&
     facility.email &&
-    facility.name_responsible_person
+    facility.authorized_represent_name
   );
 };
 export const isCompleteEvent = (facility: Facility) => {
@@ -31,8 +31,7 @@ export const isCompleteEvent = (facility: Facility) => {
     facility.zip &&
     facility.town &&
     facility.phone &&
-    facility.street &&
-    facility.name_responsible_person
+    facility.street
   );
 };
 export const isCompleteCourse = (facility: Facility) => {
@@ -48,8 +47,7 @@ export const isCompleteCourse = (facility: Facility) => {
     facility.street &&
     facility.community_id &&
     facility.zip &&
-    facility.town &&
-    facility.name_responsible_person
+    facility.town
   );
 };
 

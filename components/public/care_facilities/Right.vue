@@ -21,7 +21,11 @@
     <div v-if="careFacility?.street || careFacility?.zip || careFacility?.town">
       <div class="py-3">
         <span class="d-flex align-center">
-          <img class="mr-2 icon" :src="iconAddress" />
+          <img
+            class="mr-2 icon"
+            :src="iconAddress"
+            v-if="careFacility?.street && careFacility?.zip && careFacility?.town"
+          />
           <span class="is-dark-grey general-font-size">{{ careFacility.street }}</span>
         </span>
         <div v-if="careFacility?.additional_address_info" class="aditional-info">
@@ -66,7 +70,10 @@
         {{ careFacility.name_instructor }}
       </span>
     </div>
-    <div class="mt-3" v-if="careFacility?.kind === 'facility' && careFacility?.opening_hours">
+    <div
+      class="mt-3"
+      v-if="careFacility?.kind === 'facility' && careFacility?.opening_hours"
+    >
       <v-table density="compact">
         <tbody>
           <h3
@@ -114,6 +121,11 @@
         Kontakt aufnehmen
       </v-btn>
     </div>
+
+    <PublicCareFacilitiesInprintInformations
+      v-if="careFacility"
+      :careFacility="careFacility"
+    />
   </div>
 </template>
 

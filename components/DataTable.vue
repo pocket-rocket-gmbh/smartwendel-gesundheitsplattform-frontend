@@ -1,46 +1,35 @@
 <template>
-  <div class="d-flex flex-column align-center justify-center my-1 pagination">
-    <div class="d-flex align-center justify-center mt-1">
-      <p v-if="props.searchQuery">
-        Zeigt
-        {{ Math.min((pagination.page - 1) * pagination.itemsPerPage + 1, items.length) }}-
-        {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }} von
-        {{ items.length }} Einträgen
-      </p>
-      <p v-else>
-        Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
-        {{ Math.min(pagination.page * pagination.itemsPerPage, pagination.totalItems) }}
-        von {{ pagination.totalItems }} Einträgen
-      </p>
-
-      <v-select
-        v-if="!searchQuery"
-        v-model="pagination.itemsPerPage"
-        @update:model-value="getItems"
-        :items="paginationValues"
-        item-title="text"
-        item-value="value"
-        density="compact"
-        hide-details
-        class="mx-1"
-      />
-
-      <span @click="toogleBar">
-        <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
-        <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
-      </span>
-    </div>
-    <v-pagination
-      v-if="!searchQuery"
-      rounded="circle"
-      :total-visible="7"
-      v-model="pagination.page"
-      :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
-      @update:model-value="getItems"
-    ></v-pagination>
+  <div>
+    <v-row
+      v-if="useUser().isAdmin() && endpoint === 'care_facilities?kind=facility'"
+    >
+      <v-col class="d-flex align-center my-5">
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+        >
+          <v-radio
+            v-for="(item, index) in listOptions"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
+        <span @click="toogleBar">
+          <v-icon class="is-clickable" v-if="showBar" size="x-large"
+            >mdi-menu-up</v-icon
+          >
+          <v-icon class="is-clickable" v-else size="x-large"
+            >mdi-menu-down</v-icon
+          >
+        </span>
+      </v-col>
+    </v-row>
   </div>
-  <v-divider> </v-divider>
-  <v-table fixed-header>
+  <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
+  <v-table fixed-header class="my-5">
     <thead class="elevation-1 primary">
       <tr>
         <th
@@ -57,12 +46,15 @@
           :class="{ 'is-clickable': field.prop }"
           @click="field.prop && rotateColumnSortOrder(field.prop)"
         >
-          <div class="table-head-item" :class="sortBy === field.prop ? 'selected-sort' : ''">
+          <div
+            class="table-head-item"
+            :class="sortBy === field.prop ? 'selected-sort' : ''"
+          >
             {{ field.text }}
             <div
               v-if="sortBy === field.prop"
               class="chevron"
-              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc'}"
+              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc' }"
             ></div>
             <div v-else-if="field.text">
               <div class="chevron"></div>
@@ -82,7 +74,9 @@
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'facility' ? 'has-normal-bg' : '',
           getCurrentRoute() === 'admin-users' ? '' : '',
-          isDraft(item) ? 'draft' : '',
+          isDraft(item) || item?.kind !== 'facility'
+            ? 'draft'
+            : 'has-bg-lighten-green',
         ]"
       >
         <td
@@ -101,11 +95,16 @@
           }}</span>
           <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
+              <v-icon class="is-clickable" v-bind="props">{{
+                field.value
+              }}</v-icon>
             </template>
             <span v-if="field.tooltip">{{ field.tooltip }}</span>
           </v-tooltip>
-          <v-tooltip top v-else-if="field.type === 'move_up' && indexMain !== 0">
+          <v-tooltip
+            top
+            v-else-if="field.type === 'move_up' && indexMain !== 0"
+          >
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-arrow-up</v-icon>
             </template>
@@ -113,10 +112,14 @@
           </v-tooltip>
           <v-tooltip
             top
-            v-else-if="field.type === 'move_down' && indexMain !== items.length - 1"
+            v-else-if="
+              field.type === 'move_down' && indexMain !== items.length - 1
+            "
           >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
+              <v-icon class="is-clickable" v-bind="props"
+                >mdi-arrow-down</v-icon
+              >
             </template>
             <span>Nach unten</span>
           </v-tooltip>
@@ -124,11 +127,18 @@
           <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{
             field.value
           }}</v-icon>
-          <span v-else-if="item[field.value] && field.type === 'association_name'">{{
-            item[field.value].name
-          }}</span>
-          <span v-else-if="item[field.value] && field.type === 'associations_name'">
-            <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">
+          <span
+            v-else-if="item[field.value] && field.type === 'association_name'"
+            >{{ item[field.value].name }}</span
+          >
+          <span
+            v-else-if="item[field.value] && field.type === 'associations_name'"
+          >
+            <div
+              v-for="(subItem, index) in item[field.value]"
+              :key="index"
+              class="small"
+            >
               {{ subItem.name }}
             </div>
           </span>
@@ -146,7 +156,9 @@
                     :notification-pre-filled-headline="
                       field.notificationPreFilledHeadline
                     "
-                    :notification-pre-filled-text="field.notificationPreFilledText"
+                    :notification-pre-filled-text="
+                      field.notificationPreFilledText
+                    "
                     :notification-cta-link="field.notificationCtaLink"
                     :disabled="field?.disabledConditions?.(item)"
                     @toggled="handleToggled(item)"
@@ -175,11 +187,21 @@
             :enum-name="field.enum_name"
             :endpoint="field.endpoint"
             :fieldName="field.value"
-            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
+            :field-class="
+              useEnums().getClassName(field.enum_name, item[field.value])
+            "
             :disable-edit="!useUser().isAdmin()"
           />
-          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
-            <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
+          <div
+            v-else-if="
+              item[field.value] && field.enum_name && field.type === 'enum'
+            "
+          >
+            <span
+              :class="
+                useEnums().getClassName(field.enum_name, item[field.value])
+              "
+            >
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
@@ -201,11 +223,20 @@
                       <span class="pr-3">
                         {{ facility.name }}
                       </span>
-                      <div class="d-flex align-center">
-                        <v-icon v-if="!facility.is_active" size="x-small" color="error"
+                      <div
+                        class="d-flex align-center"
+                        v-if="useUser().isAdmin()"
+                      >
+                        <v-icon
+                          v-if="!facility.is_active"
+                          size="x-small"
+                          color="error"
                           >mdi-circle</v-icon
                         >
-                        <v-icon v-if="facility.is_active" size="x-small" color="success"
+                        <v-icon
+                          v-if="facility.is_active"
+                          size="x-small"
+                          color="success"
                           >mdi-circle</v-icon
                         >
                       </div>
@@ -218,55 +249,122 @@
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
-          <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
+          <span
+            v-else-if="field.type === 'has-dates' && !item.event_dates.length"
+          >
             <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
           </span>
           <span
             v-else-if="
-              field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
+              field.type === 'is-lk' &&
+              item?.user?.role === 'care_facility_admin'
             "
           >
             <img :src="logo" width="20" class="ml-2 pt-2" />
           </span>
+
           <span
             v-else-if="
-              field.type === 'imported' && item?.user?.imported && useUser().isAdmin()
+              field.type === 'send-invitation' &&
+              item?.user?.onboarding_token &&
+              useUser().isAdmin() &&
+              !item?.owner_requested_maintenance
+            "
+            @click.stop="openConfirmationDialog(item)"
+          >
+            <span
+              class="d-flex flex-column align-center"
+              :class="
+                item?.user?.notification_after_manual_import_sent_at?.length
+                  ? 'onboard'
+                  : ''
+              "
+            >
+              <span v-if="item?.user?.notification_after_manual_import_sent_at">
+                {{
+                  useDatetime().parseDatetime(
+                    item?.user?.notification_after_manual_import_sent_at
+                  )
+                }}</span
+              >
+              <v-icon>mdi-send-variant-outline</v-icon>
+            </span>
+          </span>
+
+          <span
+            v-else-if="
+              field.type === 'imported' &&
+              item?.user?.imported &&
+              useUser().isAdmin()
             "
             @click.stop="copyTokenLink(item)"
           >
-            <div class="d-flex flex-column">
-              <v-icon :class="[item?.user?.onboarding_token ? 'not-onboard' : 'onboard']"
+            <div class="d-flex ga-3">
+              <v-icon
+                :class="[
+                  item?.user?.onboarding_token ? 'not-onboard' : 'onboard',
+                ]"
                 >mdi-application-import</v-icon
               >
+              <v-icon
+                v-if="!item?.owner_requested_maintenance"
+                class="no-maintenance"
+                >mdi-flag-variant-remove</v-icon
+              >
+              <v-icon
+                v-if="item?.owner_requested_maintenance"
+                class="yes-maintenance"
+              >
+                mdi-flag-variant-plus
+              </v-icon>
             </div>
           </span>
-          <span v-else-if="field.type === 'beinEdited' && !item.user"
-            ><i>Nutzer existiert nicht</i></span
+
+          <span
+            v-else-if="field.type === 'button' && field.action"
+            class="d-flex align-center"
           >
-          <span v-else-if="field.type === 'button' && field.action">
             <button
               @click.stop="field.action(item)"
-              v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'"
+              v-if="
+                field.value !== 'mdi-eye' &&
+                field.value !== 'mdi-check-decagram'
+              "
             >
-              <span v-if="pathInto(item, field.value).length > 1">
+              <span v-if="pathInto(item, field.value) !== 'user.name'">
                 {{ pathInto(item, field.value) }}
               </span>
-              <span v-else>
-                <i>keine Nutzerdaten</i>
+              <span
+                v-if="pathInto(item, field.value) === 'user.name'"
+                class="break-title"
+              >
+                Benutzer existiert nicht
+                <v-icon color="warning">mdi-alert</v-icon>
+              </span>
+              <span v-if="pathInto(item, field.value) === ' '">
+                keine Angaben
+                <v-icon color="warning">mdi-alert</v-icon>
               </span>
             </button>
             <span v-if="field.value === 'user.name'">
               <span
                 class="align-center ml-2"
-                v-if="pathInto(item, field.value).length > 1"
+                v-if="
+                  pathInto(item, field.value).length > 1 && useUser().isAdmin()
+                "
               >
                 <v-icon
-                  v-if="item?.user?.is_active_on_health_scope"
+                  v-if="item?.user && item?.user?.is_active_on_health_scope"
                   size="x-small"
                   color="success"
                   >mdi-circle</v-icon
                 >
-                <v-icon v-else size="x-small" color="error">mdi-circle</v-icon>
+                <v-icon
+                  v-if="item?.user && !item?.user?.is_active_on_health_scope"
+                  size="x-small"
+                  color="error"
+                  >mdi-circle</v-icon
+                >
               </span>
             </span>
             <span
@@ -276,7 +374,9 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon class="is-clickable" @click="field.action(item)">mdi-eye</v-icon>
+              <v-icon class="is-clickable" @click="field.action(item)"
+                >mdi-eye</v-icon
+              >
             </span>
             <span
               v-if="
@@ -285,7 +385,10 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon class="is-clickable" color="primary" @click="field.action(item)"
+              <v-icon
+                class="is-clickable"
+                color="primary"
+                @click="field.action(item)"
                 >mdi-check-decagram</v-icon
               >
             </span>
@@ -296,7 +399,9 @@
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit">
-          <v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon>
+          <v-icon class="is-clickable" @click="emitParent(item, null)"
+            >mdi-pencil</v-icon
+          >
         </td>
         <td v-if="useUser().isAdmin() || !disableDelete">
           <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
@@ -309,6 +414,55 @@
       </tr>
     </tbody>
   </v-table>
+  <div
+    class="d-flex my-1 justify-space-between pagination"
+    v-if="!noData && !adminStore.loading && useUser().isAdmin()"
+  >
+    <div class="d-flex align-center mt-1">
+      <v-select
+        v-if="!searchQuery"
+        v-model="pagination.itemsPerPage"
+        @update:model-value="getItems"
+        :items="paginationValues"
+        item-title="text"
+        item-value="value"
+        density="compact"
+        hide-details
+        class="mx-1 my-5"
+      />
+      <p v-if="props.searchQuery">
+        Zeigt
+        {{
+          Math.min(
+            (pagination.page - 1) * pagination.itemsPerPage + 1,
+            items.length
+          )
+        }}-
+        {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }}
+        von {{ items.length }} Einträgen
+      </p>
+      <p v-else>
+        Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
+        {{
+          Math.min(
+            pagination.page * pagination.itemsPerPage,
+            pagination.totalItems
+          )
+        }}
+        von {{ pagination.totalItems }} Einträgen
+      </p>
+    </div>
+    <div class="d-flex justify-center align-center">
+      <v-pagination
+        v-if="!searchQuery"
+        rounded="circle"
+        :total-visible="7"
+        v-model="pagination.page"
+        :length="Math.ceil(pagination.totalItems / pagination.itemsPerPage)"
+        @update:model-value="getItems"
+      ></v-pagination>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -355,14 +509,40 @@ const emit = defineEmits([
   "itemsLoaded",
   "itemUpdated",
   "toogleBar",
+  "openConfirmationDialog",
 ]);
+
+const openConfirmationDialog = (item: any) => {
+  emit("openConfirmationDialog", item);
+};
 
 const sortOrder = ref(props.defaultSortOrder);
 const sortBy = ref(props.defaultSortBy);
 
 const loading = ref(false);
 
+const noData = ref(false);
+
 const showBar = ref(true);
+
+const listOptionValue = ref("showAll");
+
+const listOptions = ref([
+  { text: "Angemeldet", value: "showAll" },
+  { text: "Aktiv", value: "active_facilities" },
+  { text: "Inaktiv", value: "inactive_facilities" },
+  { text: "Importierte Profile", value: "imported_profiles" },
+  { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
+  { text: "Ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
+  { text: "Verifizierungsanfragen", value: "sent_verification_requests" },
+]);
+
+watch(
+  async () => listOptionValue.value,
+  async () => {
+    await getItems();
+  }
+);
 
 const toogleBar = () => {
   showBar.value = !showBar.value;
@@ -417,15 +597,16 @@ const isFilled = (itemToCheck: any, requiredField: RequiredField) => {
 const isDraft = (item: any) => {
   if (!props.draftRequired) return false;
 
-  return !props.draftRequired.every((requiredField) => {
+  return !props.draftRequired.every((requiredField: any) => {
     const isRequiredFieldFilled = isFilled(item, requiredField);
     return isRequiredFieldFilled;
   });
 };
 
 const copyTokenLink = (item: any) => {
-  if (!item?.user?.onboarding_token) return;
-  const link = `${window.location.origin}/onboarding?token=${item?.user?.onboarding_token}`;
+  console.log(item);
+  if (!item?.preview_token) return;
+  const link = `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
   navigator.clipboard.writeText(link);
   snackbar.showSuccess(`Link kopiert`);
 };
@@ -477,6 +658,79 @@ const handleToggled = async (item: any) => {
   emit("itemUpdated", item);
 };
 
+const filterQuery = ref("");
+
+const getFilterQueryFromUrl = () => {
+  const query = String(router.currentRoute.value.query.filter);
+  if (query) {
+    filterQuery.value = query;
+  }
+};
+
+const setRouteQuery = () => {
+  if (!filterQuery.value || !router.currentRoute.value.query.filter) {
+    router.push({ query: { filter: "showAll" } });
+  }
+};
+
+const filtersMap = {
+  active_facilities: {
+    field: "is_active",
+    value: true,
+  },
+  inactive_facilities: {
+    field: "is_active",
+    value: false,
+  },
+  imported_profiles: {
+    field: "&user.imported",
+    value: true,
+  },
+  successful_profile_takeovers: {
+    field: "&user.onboarding_status",
+    value: "completed",
+  },
+  pending_profile_takeovers: {
+    field: "&user.onboarding_status",
+    value: "pending",
+  },
+  sent_verification_requests: {
+    field: "&user.notification_after_manual_import_sent",
+    value: true,
+  },
+  data_up_to_date: {
+    field: "&user.data_up_to_date",
+    value: true,
+  },
+  active_events: {
+    field: "is_active",
+    value: true,
+  },
+  active_courses: {
+    field: "is_active",
+    value: true,
+  },
+  active_articles: {
+    field: "is_active",
+    value: true,
+  },
+  showAll: {
+    field: "",
+    value: "",
+  },
+} as const;
+
+const getFilter = <T extends keyof typeof filtersMap>(filter: T) => {
+  const activeFilterFromUrl = filterQuery.value;
+  if (activeFilterFromUrl) {
+    activeFilter.value = [
+      filtersMap[activeFilterFromUrl as keyof typeof filtersMap],
+    ];
+  }
+};
+
+const activeFilter = ref([]);
+
 const getItems = async () => {
   loading.value = true;
   const options = {
@@ -486,13 +740,24 @@ const getItems = async () => {
     sort_order: sortOrder.value,
     searchQuery: props.searchQuery || null,
     concat: false,
-    filters: [] as any[],
+    filters: activeFilter.value !== null ? activeFilter.value : ([] as any[]),
   };
+
   adminStore.loading = true;
   const response = await api.retrieveCollection(options);
 
+  if (response.data.resources?.length === 0) {
+    loading.value = false;
+    adminStore.loading = false;
+    noData.value = true;
+
+    return;
+  }
+
   if (response.data && response.data.resources) {
-    items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
+    items.value = Array.isArray(response.data.resources)
+      ? response.data.resources
+      : [];
   } else {
     items.value = Array.isArray(response.data) ? response.data : [];
   }
@@ -508,18 +773,35 @@ const getItems = async () => {
   loading.value = false;
 };
 
-
 const paginationValues = ref([
   { text: "10", value: 10 },
   { text: "20", value: 20 },
   { text: "30", value: 30 },
-  { text: "Alle", value: 9999 },
+  { text: "40", value: 40 },
+  { text: "50", value: 50 },
 ]);
+
+const setFilter = (filter: string) => {
+  filterQuery.value = filter;
+  router.push({ query: { filter } });
+};
 
 watch(
   () => props.searchQuery,
   debounce(() => {
     pagination.value.page = 1;
+    getItems();
+  })
+);
+
+watch(
+  () => router.currentRoute.value.query.filter,
+  debounce(() => {
+    filterQuery.value = String(router.currentRoute.value.query.filter);
+    pagination.value.page = 1;
+    pagination.value.itemsPerPage = 20;
+    getFilterQueryFromUrl();
+    getFilter("active_facilities");
     getItems();
   })
 );
@@ -535,6 +817,10 @@ const rotateColumnSortOrder = (columnProp: string) => {
 };
 
 onMounted(() => {
+  getFilterQueryFromUrl();
+  setRouteQuery();
+  getFilter("active_facilities");
+  listOptionValue.value = filterQuery.value;
   useNuxtApp().$bus.$on("triggerGetItems", () => {
     getItems();
   });
@@ -589,12 +875,12 @@ defineExpose({ resetActiveItems, getItems });
     &.up
       background-image: url("@/assets/icons/chevron-down.svg")
       background-color: #E7E8E7
-      
+
     &.down
       background-image: url("@/assets/icons/chevron-up.svg")
       background-color: #E7E8E7
 
-  
+
 .selected-sort
   color: #8ab61d
 
@@ -613,4 +899,10 @@ defineExpose({ resetActiveItems, getItems });
 
 .pagination
   position: sticky
+
+.no-maintenance
+  color: red
+
+.yes-maintenance
+  color: #358BBC
 </style>
