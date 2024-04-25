@@ -586,27 +586,27 @@ const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deines Kurses ein. *",
     tooltip: "",
-    description: "Name *",
+    description: "1. Name *",
     props: ["name"],
   },
   leader: {
     label: "2.	Bitte gib hier den Namen der Kursleitung an. *",
     tooltip: "Der Name der Kursleitung wird in deinem Kursprofil zu sehen sein.",
-    description: "Name der Kursleitung *",
+    description: "2. Name der Kursleitung *",
     props: ["name_instructor"],
   },
   photo: {
     label: "3. Bitte lade hier ein Titelbild hoch. *",
     tooltip:
       "Das Titelbild wird im Kopfbereich deiner Profilseite für Kurse angezeigt. Wähle hier am besten ein Bild, welches deinen Kurs/die Sportart/die Aktivität gut repräsentiert.",
-    description: "Titelbild *",
+    description: "3. Titelbild *",
     props: ["image_url", "file"],
     justSome: true,
   },
   gallery: {
     label: "4. Hier kannst du weitere Bilder hochladen.",
     tooltip: "",
-    description: "Fotogalerie",
+    description: "4. Fotogalerie",
     props: [
       "sanitized_images",
       "images",
@@ -619,7 +619,7 @@ const steps: CreateEditSteps<StepNames> = {
   description: {
     label: "5. Bitte beschreibe die Inhalte deines Kurses so detailliert wie möglich. *",
     tooltip: "",
-    description: "Beschreibungstext *",
+    description: "5. Beschreibungstext *",
     placeholder:
       "Nutze dieses Feld, um die Inhalte und Ziele deines Kurses näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen des Kursleiters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
@@ -628,7 +628,7 @@ const steps: CreateEditSteps<StepNames> = {
   category: {
     label: "6. Bitte ordne deinen Kurs einem der folgenden Themenbereiche zu. * ",
     tooltip: "Mehrfachauswahl möglich.",
-    description: "Themenbereich *",
+    description: "6. Themenbereich *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
   },
@@ -636,7 +636,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "7. Bitte ordne deinem Kurs passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
       "Wähle alle für das Kursangebot relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, desto leichter können Besucher dein Kursangebot über die Suchfunktion der Webseite finden",
-    description: "Leistungen und Schlagwörter *",
+    description: "7. Leistungen und Schlagwörter *",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
@@ -644,7 +644,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "8.	Bitte gib die Kurstermine, Uhrzeiten und Dauer an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     tooltip: "",
-    description: "Kursdaten *",
+    description: "8. Kursdaten *",
     props: ["event_dates", "event_duration"],
   },
   certificates: {
@@ -652,7 +652,7 @@ const steps: CreateEditSteps<StepNames> = {
       "9.	Bitte lade das Zertifikat der Zentralen Prüfungsstelle Prävention (ZPP) hoch, wenn es sich um einen von der gesetzlichen Krankenkasse geförderten Präventionskurs handelt.",
     tooltip:
       "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
-    description: "Zertifikate",
+    description: "9. Zertifikate",
     props: ["sanitized_documents", "offlineDocuments"],
     specialFilter: "certificate",
   },
@@ -660,21 +660,21 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "10. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
     tooltip: "Falls du keine eigene Website angeben möchtest, kannst du diesen Schritt überspringen.",
-    description: "Link zur Webseite",
+    description: "10. Link zur Webseite",
     props: ["website"],
   },
   documents: {
     label:
       "11. Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen.",
     tooltip: "",
-    description: "Dokumente",
+    description: "11. Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     specialFilter: "documents",
   },
   address: {
     label: "12. Findet der Kurs außerhalb deiner Einrichtung statt?",
     tooltip: "",
-    description: "Adresse *",
+    description: "12. Adresse *",
     props: ["street", "zip", "community_id", "town"],
   },
 };
@@ -714,11 +714,11 @@ const formats = ref([
   "list",
   "align",
   "direction",
+  'underline',
+  'bold',
   //'link',
   //'strike',
-  // 'underline',
   // 'blockquote',
-  //'bold',
   //'color',
   //'font',
   //'code-block',
