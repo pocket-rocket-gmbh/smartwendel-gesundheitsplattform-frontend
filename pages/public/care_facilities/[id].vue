@@ -11,10 +11,10 @@
       >
         <div class="alert-text">
           Hier dargestellt siehst du die von uns angelegte Profilseite deiner Einrichtung
-          bzw. deinem Dienstleistungsangebot. Um Änderungen vorzunehmen, musst du die
-          Inhaberschaft deines Einrichtungsprofils beantragen. Dadurch bist du inhaltlich
-          für die Seite verantwortlich und kannst auch Kurse, Veranstaltungen und Beiträge
-          erstellen.
+          bzw. deinem Dienstleistungsangebot. Um Änderungen vorzunehmen und dein Profil
+          selbstständig zu verwalten, musst die kostenfreie Inhaberschaft deines
+          Einrichtungsprofils beantragen. Dadurch bist du inhaltlich für die Seite
+          verantwortlich und kannst auch Kurse, Veranstaltungen und Beiträge erstellen.
         </div>
       </v-col>
       <v-col
@@ -42,9 +42,9 @@
     class="ma-15 facility-alert general-font-size"
     type="info"
   >
-    Hier kannst du sehen, wie die Profilseite deiner Einrichtung für die Besucher
-    der Gesundheits- und Pflegeplattform aussieht. Bitte beachte: Es handelt sich hierbei
-    nur um eine Vorschau. Wenn du möchtest, dass dein Angebot auf der Plattform erscheint,
+    Hier kannst du sehen, wie die Profilseite deiner Einrichtung für die Besucher der
+    Gesundheits- und Pflegeplattform aussieht. Bitte beachte: Es handelt sich hierbei nur
+    um eine Vorschau. Wenn du möchtest, dass dein Angebot auf der Plattform erscheint,
     musst du dein Profil online schalten.
   </v-alert>
   <div class="facility-wrapper limited offset content-wrapper" v-if="!loading">
@@ -66,7 +66,9 @@
             >
               Du hast keine Berechtigung, diese Seite zu sehen.
             </div>
-            <div v-else class="general-font-size">Profilvorschau nicht möglich / keine Ergebnisse gefunden.</div>
+            <div v-else class="general-font-size">
+              Profilvorschau nicht möglich / keine Ergebnisse gefunden.
+            </div>
             <v-btn
               class="general-font-size mt-3"
               size="large"
