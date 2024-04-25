@@ -692,8 +692,8 @@
                         >
                       </template>
                       <span
-                        >Bitte bei Mehreren Personen die Namen mit Komma trennen.
-                        Beispiel: Max Mustermann, Dr. Martina Mustermann.</span
+                        >Bitte bei mehreren Personen die Namen mit Komma trennen.
+                        Beispiel: Max Mustermann, Dr. Martina Mustermann.  (Hinweis für Ärzte, Physiotherapeuten, Heilpraktiker u. ä.: es sind Angaben zu allen praktizierenden Angestellten zu machen).</span
                       >
                     </v-tooltip>
                   </div>
