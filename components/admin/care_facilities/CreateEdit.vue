@@ -931,12 +931,12 @@ type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Hinterlege den Namen deiner Einrichtung. *",
-    description: "Name *",
+    description: "1. Name *",
     props: ["name"],
   },
   logo: {
     label: "2. Hier kannst du dein Logo hochladen. *",
-    description: "Dein Logo *",
+    description: "2. Dein Logo *",
     props: ["logo_url", "logo"],
     justSome: true,
     tooltip:
@@ -946,13 +946,13 @@ const steps: CreateEditSteps<StepNames> = {
     label: "3.	Bitte lade hier dein Titelbild hoch. *",
     tooltip:
       "Das Titelbild wird zusammen mit deinem Logo im Kopfbereich deiner Profilseite angezeigt. Wähle hier am besten ein Bild, welches dein Unternehmen/deine Einrichtung gut repräsentiert. Falls du kein Titelbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen.",
-    description: "Titelbild *",
+    description: "3. Titelbild *",
     props: ["image_url", "file"],
     justSome: true,
   },
   gallery: {
     label: "4.	Hier kannst du weitere Bilder hochladen.",
-    description: "Fotogalerie",
+    description: "4. Fotogalerie",
     tooltip: "",
     props: [
       "sanitized_images",
@@ -966,7 +966,7 @@ const steps: CreateEditSteps<StepNames> = {
   description: {
     label:
       "5. Bitte beschreibe deine Einrichtung/dein Unternehmen und das damit verbundene Leistungsangebot ausführlich. *",
-    description: "Beschreibungstext *",
+    description: "5. Beschreibungstext *",
     placeholder:
       "Nutze dieses Feld, um deine Einrichtung/dein Unternehmen ausführlich zu präsentieren. Hier kannst du bspw. Informationen zu deinem individuellen Leistungsangebot, deinem Standort, den wichtigsten Ansprechpartnern, Links zu deinen Sozialen Medien und weitere Informationen, die du den Nutzern mitgeben möchtest hinterlegen. Je detaillierter die Beschreibung, desto einfacher können dich Besucher über das Suchfeld der Startseite finden.",
     props: ["description"],
@@ -974,7 +974,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   category: {
     label: "6. Bitte wähle deine Branche aus. *",
-    description: "Branchenzugehörigkeit *",
+    description: "6. Branchenzugehörigkeit *",
     props: ["tag_category_ids"],
     specialFilter: "filter_facility",
     tooltip: "Mehrfachangaben möglich.",
@@ -984,7 +984,7 @@ const steps: CreateEditSteps<StepNames> = {
       "7. Bitte ordne deiner Einrichtung/deinem Unternehmen passende Ausstattungs- und Leistungsfilter zu. *",
     tooltip:
       "Wähle alle für dich relevanten Filter aus. Je genauer deine Angaben zu den einzelnen Filterbereichen, umso leichter können dich Besucher im Rahmen einer benutzerdefinierten Suche finden. ",
-    description: "Leistungen und Schlagwörter *",
+    description: "7. Leistungen und Schlagwörter *",
     props: ["tag_category_ids"],
     specialFilter: "filter_service",
   },
@@ -992,7 +992,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "8. Bitte gib hier die Adresse und Kontaktdaten deiner Einrichtung/deines Unternehmens an. *",
     tooltip: "Hauptstandort deines Unternehmens/deiner Einrichtung.",
-    description: "Kontaktdaten *",
+    description: "8. Kontaktdaten *",
     props: [
       "street",
       "zip",
@@ -1007,7 +1007,7 @@ const steps: CreateEditSteps<StepNames> = {
   locations: {
     label:
       "9. Falls deine Einrichtung mehrere Standorte hat, kannst du diese hier ergänzen.",
-    description: "Weitere Standorte",
+    description: "9. Weitere Standorte",
     props: ["locations", "offlineLocations"],
     justSome: true,
     tooltip:
@@ -1015,7 +1015,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   openingHours: {
     label: "10.	Bitte trage hier deine genauen Öffnungszeiten ein.",
-    description: "Öffnungszeiten",
+    description: "10. Öffnungszeiten",
     props: ["opening_hours"],
     tooltip:
       "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
@@ -1026,7 +1026,7 @@ const steps: CreateEditSteps<StepNames> = {
       "11.	Hier kannst du einen Link zu deiner Webseite oder einem deiner Kanäle in den Sozialen Medien hinterlegen.",
     tooltip:
       "Falls du mehrere Kanäle in den Sozialen Medien hast, kannst du diese auch im Beschreibungstext (Punkt 5) einfügen.",
-    description: "Links",
+    description: "11. Links",
     props: ["website"],
   },
   documents: {
@@ -1034,7 +1034,7 @@ const steps: CreateEditSteps<StepNames> = {
       "12.	Hier kannst du Dokumente zu deiner Einrichtung/deinem Unternehmen hochladen.",
     tooltip:
       "Dokumente können z. B. dein aktueller Kursplan, eine Unternehmenspräsentation oder Anmeldebögen sein.",
-    description: "Weitere Dokumente",
+    description: "12. Weitere Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
   },
