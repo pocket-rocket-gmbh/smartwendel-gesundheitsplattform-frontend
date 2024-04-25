@@ -62,8 +62,8 @@
                   hide-details="auto"
                 />
                 <v-icon @click="goToLink(slotProps.item)" size="x-large"
-                >mdi-open-in-new</v-icon
-              >
+                  >mdi-open-in-new</v-icon
+                >
                 <v-btn
                   variant="flat"
                   color="primary"
@@ -77,7 +77,9 @@
           </div>
           <v-divider
             class="my-2"
-            v-if="slotProps.item?.user?.onboarding_token?.length && !slotProps.item?.is_active"
+            v-if="
+              slotProps.item?.user?.onboarding_token?.length && !slotProps.item?.is_active
+            "
           ></v-divider>
           <div class="d-flex align-center" v-if="!slotProps.item?.is_active">
             <span class="general-font-size is-dark-grey font-weight-bold mr-3"
@@ -135,46 +137,54 @@
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
-            <div class="d-flex align-center my-4">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3"
-                >Link zur Einrichtung:
-              </span>
-              <v-tooltip location="top" width="300px">
-                <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
-                    >mdi-information-outline</v-icon
-                  >
-                </template>
-                <span
-                  >Hier kannst du den letzten Teil deiner URL-Adresse
-                  individualisieren.</span
-                >
-              </v-tooltip>
-              <div class="field split">
-                <v-text-field
-                  disabled
-                  class="text-field is-dark-grey mb-4 text-right"
-                  label="https://gesundes-wnd.de/public/care_facilities/"
-                  hide-details="auto"
-                  variant="plain"
-                  reverse
-                />
-                <v-form v-model="isFormValid">
+            <v-row>
+              <v-col class="d-flex flex-column justify-center">
+                <div class="d-flex align-center my-4">
+                  <span class="general-font-size is-dark-grey font-weight-bold mr-3"
+                    >Link zur Einrichtung:
+                  </span>
+                  <v-tooltip location="top" width="300px">
+                    <template v-slot:activator="{ props }">
+                      <v-icon class="is-clickable mr-10" v-bind="props"
+                        >mdi-information-outline</v-icon
+                      >
+                    </template>
+                    <span
+                      >Hier kannst du den letzten Teil deiner URL-Adresse
+                      individualisieren.</span
+                    >
+                  </v-tooltip>
+                </div>
+              </v-col>
+              <v-col class="d-flex flex-column justify-center">
+                <div class="field split mt-4">
                   <v-text-field
-                    :disabled="!slugBeingEdited"
-                    class="text-right"
-                    v-model="slotProps.item.slug"
-                    :placeholder="slotProps.item.id"
+                    disabled
+                    class="text-field is-dark-grey mb-4 text-right"
+                    label="https://gesundes-wnd.de/public/care_facilities/"
                     hide-details="auto"
-                    :error-messages="
-                      useErrors().checkAndMapErrors('slug', slotProps.errors)
-                    "
-                    :rules="[rules.noSpecialCharacters]"
+                    variant="plain"
+                    reverse
                   />
-                </v-form>
-              </div>
-            </div>
-            <div class="d-flex justify-end align-center">
+                  <v-form v-model="isFormValid">
+                    <v-text-field
+                      :disabled="!slugBeingEdited"
+                      class="text-right"
+                      v-model="slotProps.item.slug"
+                      :placeholder="slotProps.item.id"
+                      hide-details="auto"
+                      :error-messages="
+                        useErrors().checkAndMapErrors('slug', slotProps.errors)
+                      "
+                      :rules="[rules.noSpecialCharacters]"
+                    />
+                  </v-form>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
+          <v-row>
+            <v-col class="d-flex justify-end align-center">
               <v-btn
                 color="primary"
                 rounded="pill"
@@ -206,20 +216,22 @@
                   <span> Link bearbeiten </span>
                 </v-btn>
               </span>
-            </div>
-          </div>
-          <EditItem
-            :open="confirmEditSlugDialogOpen"
-            @accepted="
-              slugBeingEdited = true;
-              confirmEditSlugDialogOpen = false;
-            "
-            @close="
-              confirmEditSlugDialogOpen = false;
-              slugBeingEdited = false;
-            "
-            type="slug"
-          />
+
+              <EditItem
+                :open="confirmEditSlugDialogOpen"
+                @accepted="
+                  slugBeingEdited = true;
+                  confirmEditSlugDialogOpen = false;
+                "
+                @close="
+                  confirmEditSlugDialogOpen = false;
+                  slugBeingEdited = false;
+                "
+                type="slug"
+              />
+            </v-col>
+          </v-row>
+
           <v-divider class="my-10"></v-divider>
 
           <div class="field" id="logo">
