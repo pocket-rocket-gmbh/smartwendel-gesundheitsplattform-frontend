@@ -57,7 +57,7 @@
         <v-col class="d-flex align-center justify-center">
           <v-card
             class="pa-10 d-flex flex-column align-center"
-            max-width="344"
+            max-width="550"
             elevation="3"
           >
             <div
@@ -66,7 +66,7 @@
             >
               Du hast keine Berechtigung, diese Seite zu sehen.
             </div>
-            <div v-else class="general-font-size">ungültig token ID</div>
+            <div v-else class="general-font-size">Profilvorschau nicht möglich / keine Ergebnisse gefunden.</div>
             <v-btn
               class="general-font-size mt-3"
               size="large"
