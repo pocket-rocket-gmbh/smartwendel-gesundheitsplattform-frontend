@@ -51,7 +51,7 @@
       <v-form ref="registerForm" v-show="!registerSuccessful" class="mt-3">
         <div class="my-5">
           <div class="d-flex align-center">
-            <span class="mr-3 general-font-size font-weight-medium"
+            <span class="mr-3 general-font-size text-h4font-weight-medium"
               >Mein Benutzerkonto</span
             >
             <v-tooltip location="top" width="300px">
@@ -156,7 +156,7 @@
           </div>
 
           <div class="my-5">
-            <span class="mb-3 general-font-size font-weight-medium"
+            <span class="mb-3 general-font-size text-h4 font-weight-medium"
               >Impressumsangaben</span
             >
 
@@ -170,7 +170,7 @@
               />
             </div>
 
-            <span class="my-3 general-font-size font-weight-medium"
+            <span class="my-3 general-font-size text-h6 font-weight-medium"
               >Weitere Angaben gemäß § 5 TMG</span
             >
 
@@ -213,7 +213,7 @@
                 </v-tooltip>
               </div>
             <div class="d-flex align-center">
-              <span class="general-font-size font-weight-medium pr-3"
+              <span class="general-font-size text-h6 font-weight-medium pr-3"
                 >Für bestimmte Berufe</span
               >
               <v-tooltip location="top" width="300px">

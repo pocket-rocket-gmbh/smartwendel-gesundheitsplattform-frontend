@@ -485,25 +485,24 @@ const stepNames = [
   "date",
   "leader",
   "address",
-  "responsible",
 ] as const;
 type StepNames = typeof stepNames[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deiner Veranstaltung ein. *",
-    description: "Name *",
+    description: "1. Name *",
     props: ["name"],
   },
   leader: {
     label: "2.	Bitte gib hier den Namen des Veranstalters an. *",
     tooltip:
       "Der Name des Veranstalters wird in deinem Veranstaltungsprofil zu sehen sein.",
-    description: "Name des Veranstalters *",
+    description: "2. Name des Veranstalters *",
     props: ["name_instructor"],
   },
   photo: {
     label: "3. Bitte lade hier ein Titelbild hoch. *",
-    description: "Foto",
+    description: "3. Foto",
     props: ["image_url", "file"],
     tooltip:
       "Das Titelbild wird im Kopfbereich deiner Profilseite die Veranstaltung angezeigt. Wähle hier am besten ein Bild, welches deine Veranstaltung gut repräsentiert",
@@ -511,7 +510,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   gallery: {
     label: "4. Hier kannst du weitere Bilder hochladen.",
-    description: "Galerie Fotos",
+    description: "4. Galerie Fotos",
     props: [
       "sanitized_images",
       "images",
@@ -524,7 +523,7 @@ const steps: CreateEditSteps<StepNames> = {
   description: {
     label:
       "5.	Bitte beschreibe möglichst detailliert, worum es bei dieser Veranstaltung geht und was die Besucher erwarten können. *",
-    description: "Beschreibung *",
+    description: "5. Beschreibung *",
     placeholder:
       "Nutze dieses Feld, um die Inhalte und Ziele deiner Veranstaltung näher zu beschreiben. Hier kannst du bspw. Angaben zur Zielgruppe (z. B. Anfänger, Fortgeschrittene), den trainierten Körperarealen (z. B. Bauch, Beine, Po), dem Vor- und Nachnamen des Veranstalters oder den Trainingszielen (z. B. Beweglichkeit, Ausdauer) machen. Je detaillierter die Beschreibung, desto einfacher können Besucher deinen Kurs über die Suche finden.",
     props: ["description"],
@@ -533,7 +532,7 @@ const steps: CreateEditSteps<StepNames> = {
   services: {
     label:
       "6. Bitte gib die Veranstaltungsinhalte in Form von prägnanten Schlagwörtern wieder. *",
-    description: "Schlagwörter *",
+    description: "6. Schlagwörter *",
     props: ["tags"],
     tooltip:
       "Auf diese Weise gelangen Besucher zu deiner Veranstaltungsseite, sobald sie nach den entsprechenden Schlagwörtern suchen",
@@ -541,7 +540,7 @@ const steps: CreateEditSteps<StepNames> = {
   date: {
     label:
       "7. Bitte gib das Datum, die Uhrzeit und die Dauer deiner Veranstaltung an. Findet deine Veranstaltung regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
-    description: "Veranstaltungsdatum *",
+    description: "7. Veranstaltungsdatum *",
     props: ["event_dates", "event_duration"],
     tooltip: "Mehrfachauswahl möglich.",
   },
@@ -549,20 +548,20 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "8. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten weiter informieren oder anmelden können.",
     tooltip: "Falls du keine eigene Website angeben möchtest, kannst du diesen Schritt überspringen.",
-    description: "Webseite",
+    description: "8. Webseite",
     props: ["website"],
   },
   documents: {
     label:
       "9.	Hier kannst du weitere Dokumente (z. B. Anmeldungsformular, Flyer, Wegbeschreibung) zu deiner Veranstaltung hochladen.",
-    description: "Dokumente",
+    description: "9. Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
   },
   address: {
     label: "10. Findet die Veranstaltung außerhalb deiner Einrichtung statt?",
     tooltip: "",
-    description: "Adresse *",
+    description: "10. Adresse *",
     props: ["street", "zip", "community_id", "town"],
   },
 };
@@ -602,11 +601,11 @@ const formats = ref([
   "list",
   "align",
   "direction",
+  'underline',
+  'bold',
   //'link',
   //'strike',
-  // 'underline',
   // 'blockquote',
-  //'bold',
   //'color',
   //'font',
   //'code-block',

@@ -245,21 +245,21 @@ const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte gib hier den Titel deines Newsartikels/Beitrags an. *",
     tooltip: "",
-    description: "Name *",
+    description: "1. Titel *",
     props: ["name"],
   },
   leader: {
     label:
       "2.	Bitte gib hier den Vor- und Nachnamen des Autors/Verfassers des Beitrages an. *",
     tooltip: "",
-    description: "Name des Autors *",
+    description: "2. Name des Autors *",
     props: ["name_responsible_person"],
   },
   photo: {
     label:
       "3. Falls du kein Titelbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. * ",
     tooltip: "",
-    description: "Titelbild",
+    description: "3. Titelbild",
     props: ["image_url", "file"],
     justSome: true,
   },
@@ -267,7 +267,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "4. Gib deinem Beitrag eine Kurzbeschreibung zur Darstellung in der Suche. *",
     tooltip: "",
-    description: "Kurzbeschreibung *",
+    description: "4. Kurzbeschreibung *",
     placeholder: "Inhalt des Beitrags",
     props: ["excerpt"],
   },
@@ -276,7 +276,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "5. Bitte gib hier den Inhalt deines Newsartikels/Beitrages wieder. *",
     tooltip: "",
-    description: "Beschreibungstext *",
+    description: "5. Beschreibungstext *",
     placeholder: "Inhalt des Beitrags",
     props: ["description"],
     checkHandler: isDescriptionEmpty,
@@ -293,7 +293,7 @@ const steps: CreateEditSteps<StepNames> = {
       "6. Bitte gib die Inhalte deines Newsbeitrages in Form von prägnanten Schlagwörtern wieder. *",
     tooltip:
       "Auf diese Weise gelangen Besucher zu deinem Newsbeitrag, sobald sie nach den entsprechenden Schlagwörtern suchen",
-    description: "Schlagwörter *",
+    description: "6. Schlagwörter *",
     props: ["tags"],
   },
 };
@@ -315,11 +315,11 @@ const formats = ref([
   "list",
   "align",
   "direction",
+  'underline',
+  'bold',
   //'link',
   //'strike',
-  // 'underline',
   // 'blockquote',
-  //'bold',
   //'color',
   //'font',
   //'code-block',
