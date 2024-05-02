@@ -11,9 +11,9 @@
       closable
       class="mt-2 general-font-size"
     >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
-      wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen
-      sowie Beiträge anlegen.
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
+      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
+      anlegen.
     </v-alert>
     <v-alert
       v-if="!setupFinished && !loading"
@@ -28,7 +28,9 @@
     <v-divider class="my-10"></v-divider>
     <div class="box my-15">
       <div class="main" v-if="item">
-        <span class="general-font-size is-dark-grey font-weight-bold mb-4">Persönliche Daten</span>
+        <span class="general-font-size is-dark-grey font-weight-bold mb-4"
+          >Persönliche Daten</span
+        >
         <v-form ref="form">
           <v-row justify="center">
             <v-col>
@@ -38,41 +40,53 @@
                 v-model="item.phone"
                 :rules="[rules.required, rules.validateNumber]"
                 label="Telefonnummer*"
-                type="number"
+                :type="'tel'"
               />
-              <v-alert type="info" density="compact" class="my-2" v-if="editInformations"
-                > Diese Funktion ist noch nicht implementiert, Änderungen werden noch nicht gespeichert</v-alert>
-
-              <v-alert type="warning" density="compact" class="my-2" v-if="emailConfirmation.length"
-                >Aufgrund dieser Änderungen muss dein Benutzer durch den Landkreis neu geprüft und freigegeben werden. So lange stehen deine Inhalte nicht zur Verfügung.</v-alert
+              <v-alert type="info" density="compact" class="my-2" v-if="editInformations">
+                Diese Funktion ist noch nicht implementiert, Änderungen werden noch nicht
+                gespeichert</v-alert
               >
-              <div :class="[
-              editInformations
-                ? 'has-bg-light-red pt-5'
-                : '',
-            ]">
+
+              <v-alert
+                type="warning"
+                density="compact"
+                class="my-2"
+                v-if="emailConfirmation.length"
+                >Aufgrund dieser Änderungen muss dein Benutzer durch den Landkreis neu
+                geprüft und freigegeben werden. So lange stehen deine Inhalte nicht zur
+                Verfügung.</v-alert
+              >
+              <div :class="[editInformations ? 'has-bg-light-red pt-5' : '']">
                 <v-text-field
-                v-model="item.email"
-                :rules="[rules.required, rules.email]"
-                label="E-Mail *"
-                :disabled="!editInformations"
-              />
-              <v-text-field
-                v-if="editInformations"
-                v-model="emailConfirmation"
-                label="E-Mail Bestätigung *"
-                :disabled="!editInformations"
-                :rules="[
-                  item.email === emailConfirmation ||
-                    'Passwörter stimmen nicht überein',
-                  rules.required,
-                  rules.email,
-                ]"
-              />
-              </div>             
-              <div class="my-5" >
+                  v-model="item.email"
+                  :rules="[rules.required, rules.email]"
+                  label="E-Mail *"
+                  :disabled="!editInformations"
+                />
+                <v-text-field
+                  v-if="editInformations"
+                  v-model="emailConfirmation"
+                  label="E-Mail Bestätigung *"
+                  :disabled="!editInformations"
+                  :rules="[
+                    item.email === emailConfirmation ||
+                      'Passwörter stimmen nicht überein',
+                    rules.required,
+                    rules.email,
+                  ]"
+                />
+              </div>
+<!--               <div class="my-5">
                 <span v-if="editInformations">
-                  <v-btn variant="outlined" @click="editInformations = false" :disabled="!item.email.includes('@') || !emailConfirmation.includes('@') || item.email !== emailConfirmation">
+                  <v-btn
+                    variant="outlined"
+                    @click="editInformations = false"
+                    :disabled="
+                      !item.email.includes('@') ||
+                      !emailConfirmation.includes('@') ||
+                      item.email !== emailConfirmation
+                    "
+                  >
                     Neue E-Mail-Adresse speichern
                   </v-btn>
                 </span>
@@ -81,7 +95,7 @@
                     E-Mail-Adresse ändern
                   </v-btn>
                 </span>
-              </div>
+              </div> -->
 
               <EditItem
                 :open="confirmEditDialogOpen"
@@ -95,7 +109,9 @@
                   editInformations = false;
                 "
               />
-              <span class="general-font-size is-dark-grey font-weight-bold mb-4">Profilbild</span>
+              <span class="general-font-size is-dark-grey font-weight-bold mb-4"
+                >Profilbild</span
+              >
               <PublicUsersProfileImage
                 :preset-image-url="item.image_url"
                 @setImage="setImage"
@@ -103,22 +119,19 @@
                 @save="saveUserData"
                 class="my-3"
               />
-              <v-btn
-                elevation="0"
-                variant="outlined"
-                @click="saveUserData()"
-                :disabled="validateFrom"
-              >
+              <v-alert type="error" v-if="showErrorMessage" class="mb-3">Speichern fehlgeschlagen! Es gibt ungültige Felder!</v-alert>
+              <v-btn elevation="0" variant="outlined" @click="saveUserData()">
                 Persönliche Daten Speichern
               </v-btn>
             </v-col>
           </v-row>
         </v-form>
-
         <v-divider class="my-10"></v-divider>
         <v-row>
           <v-col md="6">
-            <span class="general-font-size is-dark-grey font-weight-bold mb-4">Passwort ändern</span>
+            <span class="general-font-size is-dark-grey font-weight-bold mb-4"
+              >Passwort ändern</span
+            >
             <v-text-field
               v-model="password"
               :append-inner-icon="PasswordVisible ? 'mdi-eye-off' : 'mdi-eye'"
@@ -128,15 +141,12 @@
               label="Neues Passwort"
             />
             <v-text-field
-              :append-inner-icon="
-                PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'
-              "
+              :append-inner-icon="PasswordConfirmationVisible ? 'mdi-eye-off' : 'mdi-eye'"
               :type="PasswordConfirmationVisible ? 'text' : 'password'"
               v-model="password_confirmation"
               label="Passwort Bestätigung"
               :rules="[
-                password === password_confirmation ||
-                  'Passwörter stimmen nicht überein',
+                password === password_confirmation || 'Passwörter stimmen nicht überein',
                 rules.required,
                 rules.password,
               ]"
@@ -162,11 +172,7 @@
               <span
                 ><i
                   >Letzte Änderung am:
-                  {{
-                    useDatetime().parseDatetime(
-                      currentUser?.password_changed_at
-                    )
-                  }}</i
+                  {{ useDatetime().parseDatetime(currentUser?.password_changed_at) }}</i
                 >
               </span>
             </div>
@@ -194,12 +200,15 @@ const editInformations = ref(false);
 
 const confirmEditDialogOpen = ref(false);
 
+const showErrorMessage = ref(false);
+
 const form = ref<VForm>();
 
 const validateFrom = computed(() => {
   const allValid = form.value?.isValid;
   if (!allValid) {
     return true;
+    showErrorMessage.value = true;
   }
   return false;
 });
@@ -236,6 +245,12 @@ const setImage = (image: any) => {
 };
 
 const saveUserData = async () => {
+  const { valid } = await form.value.validate();
+  if (!valid) {
+    showErrorMessage.value = true;
+    return;
+  }
+  showErrorMessage.value = false;
   api.setEndpoint(`users/${currentUser.id}`);
   const data = {
     firstname: item.value.firstname,
