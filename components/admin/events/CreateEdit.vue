@@ -373,6 +373,7 @@
                   item-value="id"
                   label="Gemeinde"
                   :rules="[rules.required]"
+                  @update:model-value="checkIfCommunityChangedAndResetTown(slotProps.item)"
                 />
               </div>
               <div class="field split">
@@ -657,6 +658,10 @@ const getTownsByCommunityId = (communityId: string) => {
   } else {
     [];
   }
+};
+
+const checkIfCommunityChangedAndResetTown = (item: any) => {
+  item.town = "";
 };
 
 const onQuillReady = (quill: any) => {

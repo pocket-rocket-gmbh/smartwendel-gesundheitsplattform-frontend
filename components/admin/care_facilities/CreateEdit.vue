@@ -515,6 +515,7 @@
                 item-value="id"
                 label="Gemeinde"
                 :rules="[rules.required]"
+                @update:model-value="checkIfCommunityChangedAndResetTown(slotProps.item)"
               />
             </div>
             <div class="field split">
@@ -693,7 +694,9 @@
                       </template>
                       <span
                         >Bitte bei mehreren Personen die Namen mit Komma trennen.
-                        Beispiel: Max Mustermann, Dr. Martina Mustermann.  (Hinweis für Ärzte, Physiotherapeuten, Heilpraktiker u. ä.: es sind Angaben zu allen praktizierenden Angestellten zu machen).</span
+                        Beispiel: Max Mustermann, Dr. Martina Mustermann. (Hinweis für
+                        Ärzte, Physiotherapeuten, Heilpraktiker u. ä.: es sind Angaben zu
+                        allen praktizierenden Angestellten zu machen).</span
                       >
                     </v-tooltip>
                   </div>
@@ -773,6 +776,7 @@
                       label="Berufsrechtliche Regelung"
                       hide-details="auto"
                       class="pr-3"
+                      placeholder="z. B.: Berufsordnung für Ärzte, zu finden unter https://www.bundesaerztekammer.de/"
                     />
                     <v-tooltip location="top" width="300px">
                       <template v-slot:activator="{ props }">
@@ -1070,8 +1074,8 @@ const formats = ref([
   "list",
   "align",
   "direction",
-  'underline',
-  'bold',
+  "underline",
+  "bold",
   //'link',
   //'strike',
   // 'blockquote',
@@ -1122,6 +1126,10 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   } else if (filterType === "filter_service") {
     servicesFilterSet.value = isSet;
   }
+};
+
+const checkIfCommunityChangedAndResetTown = (item: any) => {
+  item.town = "";
 };
 
 const isFormValid = ref(false);

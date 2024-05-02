@@ -75,7 +75,9 @@
         <v-divider v-if="facility.professional_regulations" class="my-2"></v-divider>
         <div v-if="facility.professional_regulations">
           <span class="is-primary font-weight-bold">Berufsrechtliche Regelung</span>
-          <div>{{ facility.professional_regulations }}</div>
+          <div
+            v-html="transformProfessionalRegulations(facility.professional_regulations)"
+          ></div>
         </div>
         <v-divider v-if="facility.tax_identification_number" class="my-2"></v-divider>
         <div v-if="facility.tax_identification_number">
@@ -115,6 +117,21 @@ const facilityDetails = computed(() => {
       management_name: item.management_name,
     }));
 });
+
+const transformProfessionalRegulations = (text: string): string => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  const transformedText = parts.map((part) => {
+    if (part.match(urlRegex)) {
+      return `<a href="${part}" target="_blank" rel="noopener noreferrer" style="text-decoration: underline; color: #58595e;">${part}</a>`;
+    } else {
+      return part;
+    }
+  }).join('');
+
+  return transformedText;
+};
+
 </script>
 <style lang="sass" scoped>
 @import "@/assets/sass/main"
