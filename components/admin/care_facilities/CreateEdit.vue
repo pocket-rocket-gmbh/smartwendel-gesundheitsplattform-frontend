@@ -515,6 +515,7 @@
                 item-value="id"
                 label="Gemeinde"
                 :rules="[rules.required]"
+                @update:model-value="checkIfCommunityChangedAndResetTown(slotProps.item)"
               />
             </div>
             <div class="field split">
@@ -1124,6 +1125,10 @@ const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
   }
 };
 
+const checkIfCommunityChangedAndResetTown = (item: any) => {
+  item.town = "";
+};
+
 const isFormValid = ref(false);
 
 const isFilled = (slotProps: any, item: CreateEditStep) => {
@@ -1395,6 +1400,7 @@ onMounted(async () => {
   setupFinished.value = await useUser().setupFinished();
   getCommunities();
 });
+
 </script>
 
 <style lang="sass" scoped>

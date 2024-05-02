@@ -467,6 +467,7 @@
                   item-value="id"
                   label="Gemeinde"
                   :rules="[rules.required]"
+                  @update:model-value="checkIfCommunityChangedAndResetTown(slotProps.item)"
                 />
               </div>
               <div class="field split">
@@ -767,6 +768,10 @@ const deleteAllDates = (item: any) => {
   if (confirmed) {
     item.event_dates = [];
   }
+};
+
+const checkIfCommunityChangedAndResetTown = (item: any) => {
+  item.town = "";
 };
 
 const allTimesAreEqual = (event_dates: string[]) => {
