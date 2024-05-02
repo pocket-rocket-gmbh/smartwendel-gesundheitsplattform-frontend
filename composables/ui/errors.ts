@@ -12,6 +12,7 @@ const errorCodes: { [key: string]: string } = {
   'reset_password.failed': 'E-Mail falsch oder noch nicht registriert.',
   'ERR_BAD_REQUEST': 'Benutzername oder Passwort sind falsch',
   'user.email.taken': 'E-Mail bereits vergeben',
+  'carefacility.slug.taken' : 'Einrichtungslink existiert bereits',
 }
 
 export function useErrors() {
