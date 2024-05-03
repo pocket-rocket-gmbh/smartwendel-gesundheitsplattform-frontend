@@ -220,14 +220,26 @@
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
           <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
-            <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <v-icon class="is-yellow" v-bind="props"
+                  >mdi-calendar-alert-outline</v-icon
+                >
+              </template>
+              <span>Kein Datum angegeben.</span>
+            </v-tooltip>
           </span>
           <span
             v-else-if="
               field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
             "
           >
-            <img :src="logo" width="20" class="ml-2 pt-2" />
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <img :src="logo" width="20" class="ml-2 pt-2" v-bind="props" />
+              </template>
+              <span>Diese Einrichtung wurde von Landkreis erstellt.</span>
+            </v-tooltip>
           </span>
 
           <span
@@ -254,7 +266,13 @@
                   )
                 }}</span
               >
-              <v-icon>mdi-send-variant-outline</v-icon>
+
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">mdi-send-variant-outline</v-icon>
+                </template>
+                <span>Email zur Einrichtungsübernahme versenden</span>
+              </v-tooltip>
             </span>
           </span>
 
@@ -265,15 +283,47 @@
             @click.stop="copyTokenLink(item)"
           >
             <div class="d-flex ga-3">
-              <v-icon :class="[item?.user?.onboarding_token ? 'not-onboard' : 'onboard']"
-                >mdi-application-import</v-icon
-              >
-              <v-icon v-if="!item?.owner_requested_maintenance" class="no-maintenance"
-                >mdi-flag-variant-remove</v-icon
-              >
-              <v-icon v-if="item?.owner_requested_maintenance" class="yes-maintenance">
-                mdi-flag-variant-plus
-              </v-icon>
+              <span v-if="item?.user?.onboarding_token">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="not-onboard" v-bind="props"
+                      >mdi-application-import</v-icon
+                    >
+                  </template>
+                  <span>Einrichtung wurde importiert, aber noch nicht übernommen.</span>
+                </v-tooltip>
+              </span>
+
+              <span v-if="!item?.user?.onboarding_token">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="onboard" v-bind="props">mdi-application-import</v-icon>
+                  </template>
+                  <span>Einrichtung wurde importiert und übernommen.</span>
+                </v-tooltip>
+              </span>
+
+              <span v-if="!item?.owner_requested_maintenance">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="no-maintenance" v-bind="props"
+                      >mdi-flag-variant-remove</v-icon
+                    >
+                  </template>
+                  <span>Die Inhaberschaft wurde dem Landkreis nicht übertragen.</span>
+                </v-tooltip>
+              </span>
+
+              <span v-if="item?.owner_requested_maintenance">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="yes-maintenance" v-bind="props"
+                      >mdi-flag-variant-plus</v-icon
+                    >
+                  </template>
+                  <span>Die Inhaberschaft wurde dem Landkreis übertragen.</span>
+                </v-tooltip>
+              </span>
             </div>
           </span>
 
@@ -326,7 +376,14 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon class="is-clickable" @click="field.action(item)">mdi-eye</v-icon>
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable" @click="field.action(item)" v-bind="props"
+                    >mdi-eye</v-icon
+                  >
+                </template>
+                <span>Zur Einrichtungseite wechseln.</span>
+              </v-tooltip>
             </span>
             <span
               v-if="
@@ -335,9 +392,18 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon class="is-clickable" color="primary" @click="field.action(item)"
-                >mdi-check-decagram</v-icon
-              >
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon
+                    class="is-clickable"
+                    color="primary"
+                    v-bind="props"
+                    @click="field.action(item)"
+                    >mdi-check-decagram</v-icon
+                  >
+                </template>
+                <span>Das Zertifikat wurde überprüft.</span>
+              </v-tooltip>
             </span>
             <span v-else>
               <v-icon></v-icon>
