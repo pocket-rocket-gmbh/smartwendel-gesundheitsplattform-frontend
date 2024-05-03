@@ -195,11 +195,10 @@ const items = computed<DashboardItem[]>(() => [
         title: "Gesendet",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true &&
-            facility?.user?.notification_after_manual_import_sent_at?.length
+            facility?.user?.is_active_on_health_scope === false
         ).length,
-        type: "facility",
-        query: "sent_verification_requests",
+        type: "users",
+        query: "pending",
       },
     ],
   },
