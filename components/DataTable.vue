@@ -238,7 +238,7 @@
               <template v-slot:activator="{ props }">
                 <img :src="logo" width="20" class="ml-2 pt-2" v-bind="props" />
               </template>
-              <span>Diese Einrichtung wurde von Landkreis erstellt.</span>
+              <span>Diese Einrichtung wurde vom Landkreis erstellt.</span>
             </v-tooltip>
           </span>
 
