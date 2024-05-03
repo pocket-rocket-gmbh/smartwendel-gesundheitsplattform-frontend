@@ -192,13 +192,22 @@ const items = computed<DashboardItem[]>(() => [
     id: 3,
     sub_items: [
       {
-        title: "Gesendet",
+        title: "In Prüfung",
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false
         ).length,
         type: "users",
         query: "pending",
+      },
+      {
+        title: "Freigeschaltet",
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility?.user?.is_active_on_health_scope === true
+        ).length,
+        type: "users",
+        query: "approved",
       },
     ],
   },
