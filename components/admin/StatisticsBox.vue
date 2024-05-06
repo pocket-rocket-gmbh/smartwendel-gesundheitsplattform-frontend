@@ -51,10 +51,12 @@ const redirectAndFilter = () => {
       break;
     case "course":
       path.value = "/admin/courses";
-
       break;
     case "event":
       path.value = "/admin/events";
+      break;
+      case "users":
+      path.value = "/admin/users";
       break;
     case "news":
       path.value = "/admin/news_articles";

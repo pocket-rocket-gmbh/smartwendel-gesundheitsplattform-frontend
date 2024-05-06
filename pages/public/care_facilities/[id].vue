@@ -12,7 +12,7 @@
         <div class="alert-text">
           Hier dargestellt siehst du die von uns angelegte Profilseite deiner Einrichtung
           bzw. deinem Dienstleistungsangebot. Um Änderungen vorzunehmen und dein Profil
-          selbstständig zu verwalten, musst die kostenfreie Inhaberschaft deines
+          selbstständig zu verwalten, musst du die kostenfreie Inhaberschaft deines
           Einrichtungsprofils beantragen. Dadurch bist du inhaltlich für die Seite
           verantwortlich und kannst auch Kurse, Veranstaltungen und Beiträge erstellen.
         </div>

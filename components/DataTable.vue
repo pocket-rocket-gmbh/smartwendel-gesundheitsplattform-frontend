@@ -1,13 +1,12 @@
 <template>
   <div>
-    <v-row
-      v-if="useUser().isAdmin() && endpoint === 'care_facilities?kind=facility'"
-    >
+    <v-row>
       <v-col class="d-flex align-center my-5">
         <v-radio-group
           inline
           class="d-flex justify-end align-center"
           v-model="listOptionValue"
+          v-if="useUser().isAdmin() && endpoint === 'care_facilities?kind=facility'"
         >
           <v-radio
             v-for="(item, index) in listOptions"
@@ -17,13 +16,23 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group>
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+          v-else-if="endpoint === 'users'"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsUsers"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
         <span @click="toogleBar">
-          <v-icon class="is-clickable" v-if="showBar" size="x-large"
-            >mdi-menu-up</v-icon
-          >
-          <v-icon class="is-clickable" v-else size="x-large"
-            >mdi-menu-down</v-icon
-          >
+          <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
+          <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
         </span>
       </v-col>
     </v-row>
@@ -74,9 +83,7 @@
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'facility' ? 'has-normal-bg' : '',
           getCurrentRoute() === 'admin-users' ? '' : '',
-          isDraft(item) || item?.kind !== 'facility'
-            ? 'draft'
-            : 'has-bg-lighten-green',
+          isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
         ]"
       >
         <td
@@ -95,16 +102,11 @@
           }}</span>
           <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">{{
-                field.value
-              }}</v-icon>
+              <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
             </template>
             <span v-if="field.tooltip">{{ field.tooltip }}</span>
           </v-tooltip>
-          <v-tooltip
-            top
-            v-else-if="field.type === 'move_up' && indexMain !== 0"
-          >
+          <v-tooltip top v-else-if="field.type === 'move_up' && indexMain !== 0">
             <template v-slot:activator="{ props }">
               <v-icon class="is-clickable" v-bind="props">mdi-arrow-up</v-icon>
             </template>
@@ -112,14 +114,10 @@
           </v-tooltip>
           <v-tooltip
             top
-            v-else-if="
-              field.type === 'move_down' && indexMain !== items.length - 1
-            "
+            v-else-if="field.type === 'move_down' && indexMain !== items.length - 1"
           >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props"
-                >mdi-arrow-down</v-icon
-              >
+              <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
             </template>
             <span>Nach unten</span>
           </v-tooltip>
@@ -127,18 +125,11 @@
           <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{
             field.value
           }}</v-icon>
-          <span
-            v-else-if="item[field.value] && field.type === 'association_name'"
-            >{{ item[field.value].name }}</span
-          >
-          <span
-            v-else-if="item[field.value] && field.type === 'associations_name'"
-          >
-            <div
-              v-for="(subItem, index) in item[field.value]"
-              :key="index"
-              class="small"
-            >
+          <span v-else-if="item[field.value] && field.type === 'association_name'">{{
+            item[field.value].name
+          }}</span>
+          <span v-else-if="item[field.value] && field.type === 'associations_name'">
+            <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">
               {{ subItem.name }}
             </div>
           </span>
@@ -156,9 +147,7 @@
                     :notification-pre-filled-headline="
                       field.notificationPreFilledHeadline
                     "
-                    :notification-pre-filled-text="
-                      field.notificationPreFilledText
-                    "
+                    :notification-pre-filled-text="field.notificationPreFilledText"
                     :notification-cta-link="field.notificationCtaLink"
                     :disabled="field?.disabledConditions?.(item)"
                     @toggled="handleToggled(item)"
@@ -187,21 +176,11 @@
             :enum-name="field.enum_name"
             :endpoint="field.endpoint"
             :fieldName="field.value"
-            :field-class="
-              useEnums().getClassName(field.enum_name, item[field.value])
-            "
+            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
             :disable-edit="!useUser().isAdmin()"
           />
-          <div
-            v-else-if="
-              item[field.value] && field.enum_name && field.type === 'enum'
-            "
-          >
-            <span
-              :class="
-                useEnums().getClassName(field.enum_name, item[field.value])
-              "
-            >
+          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
+            <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
@@ -223,20 +202,11 @@
                       <span class="pr-3">
                         {{ facility.name }}
                       </span>
-                      <div
-                        class="d-flex align-center"
-                        v-if="useUser().isAdmin()"
-                      >
-                        <v-icon
-                          v-if="!facility.is_active"
-                          size="x-small"
-                          color="error"
+                      <div class="d-flex align-center" v-if="useUser().isAdmin()">
+                        <v-icon v-if="!facility.is_active" size="x-small" color="error"
                           >mdi-circle</v-icon
                         >
-                        <v-icon
-                          v-if="facility.is_active"
-                          size="x-small"
-                          color="success"
+                        <v-icon v-if="facility.is_active" size="x-small" color="success"
                           >mdi-circle</v-icon
                         >
                       </div>
@@ -249,18 +219,27 @@
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
-          <span
-            v-else-if="field.type === 'has-dates' && !item.event_dates.length"
-          >
-            <v-icon class="is-yellow">mdi-calendar-alert-outline</v-icon>
+          <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <v-icon class="is-yellow" v-bind="props"
+                  >mdi-calendar-alert-outline</v-icon
+                >
+              </template>
+              <span>Kein Datum angegeben.</span>
+            </v-tooltip>
           </span>
           <span
             v-else-if="
-              field.type === 'is-lk' &&
-              item?.user?.role === 'care_facility_admin'
+              field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
             "
           >
-            <img :src="logo" width="20" class="ml-2 pt-2" />
+            <v-tooltip location="top" width="300px">
+              <template v-slot:activator="{ props }">
+                <img :src="logo" width="20" class="ml-2 pt-2" v-bind="props" />
+              </template>
+              <span>Diese Einrichtung wurde vom Landkreis erstellt.</span>
+            </v-tooltip>
           </span>
 
           <span
@@ -287,36 +266,64 @@
                   )
                 }}</span
               >
-              <v-icon>mdi-send-variant-outline</v-icon>
+
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">mdi-send-variant-outline</v-icon>
+                </template>
+                <span>Email zur Einrichtungsübernahme versenden</span>
+              </v-tooltip>
             </span>
           </span>
 
           <span
             v-else-if="
-              field.type === 'imported' &&
-              item?.user?.imported &&
-              useUser().isAdmin()
+              field.type === 'imported' && item?.user?.imported && useUser().isAdmin()
             "
             @click.stop="copyTokenLink(item)"
           >
             <div class="d-flex ga-3">
-              <v-icon
-                :class="[
-                  item?.user?.onboarding_token ? 'not-onboard' : 'onboard',
-                ]"
-                >mdi-application-import</v-icon
-              >
-              <v-icon
-                v-if="!item?.owner_requested_maintenance"
-                class="no-maintenance"
-                >mdi-flag-variant-remove</v-icon
-              >
-              <v-icon
-                v-if="item?.owner_requested_maintenance"
-                class="yes-maintenance"
-              >
-                mdi-flag-variant-plus
-              </v-icon>
+              <span v-if="item?.user?.onboarding_token">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="not-onboard" v-bind="props"
+                      >mdi-application-import</v-icon
+                    >
+                  </template>
+                  <span>Einrichtung wurde importiert, aber noch nicht übernommen.</span>
+                </v-tooltip>
+              </span>
+
+              <span v-if="!item?.user?.onboarding_token">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="onboard" v-bind="props">mdi-application-import</v-icon>
+                  </template>
+                  <span>Einrichtung wurde importiert und übernommen.</span>
+                </v-tooltip>
+              </span>
+
+              <span v-if="!item?.owner_requested_maintenance">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="no-maintenance" v-bind="props"
+                      >mdi-flag-variant-remove</v-icon
+                    >
+                  </template>
+                  <span>Die Inhaberschaft wurde dem Landkreis nicht übertragen.</span>
+                </v-tooltip>
+              </span>
+
+              <span v-if="item?.owner_requested_maintenance">
+                <v-tooltip location="top" width="300px">
+                  <template v-slot:activator="{ props }">
+                    <v-icon class="yes-maintenance" v-bind="props"
+                      >mdi-flag-variant-plus</v-icon
+                    >
+                  </template>
+                  <span>Die Inhaberschaft wurde dem Landkreis übertragen.</span>
+                </v-tooltip>
+              </span>
             </div>
           </span>
 
@@ -326,10 +333,7 @@
           >
             <button
               @click.stop="field.action(item)"
-              v-if="
-                field.value !== 'mdi-eye' &&
-                field.value !== 'mdi-check-decagram'
-              "
+              v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'"
             >
               <span v-if="pathInto(item, field.value) !== 'user.name'">
                 {{ pathInto(item, field.value) }}
@@ -349,9 +353,7 @@
             <span v-if="field.value === 'user.name'">
               <span
                 class="align-center ml-2"
-                v-if="
-                  pathInto(item, field.value).length > 1 && useUser().isAdmin()
-                "
+                v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
               >
                 <v-icon
                   v-if="item?.user && item?.user?.is_active_on_health_scope"
@@ -374,9 +376,14 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon class="is-clickable" @click="field.action(item)"
-                >mdi-eye</v-icon
-              >
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon class="is-clickable" @click="field.action(item)" v-bind="props"
+                    >mdi-eye</v-icon
+                  >
+                </template>
+                <span>Zur Einrichtungseite wechseln.</span>
+              </v-tooltip>
             </span>
             <span
               v-if="
@@ -385,12 +392,18 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-icon
-                class="is-clickable"
-                color="primary"
-                @click="field.action(item)"
-                >mdi-check-decagram</v-icon
-              >
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <v-icon
+                    class="is-clickable"
+                    color="primary"
+                    v-bind="props"
+                    @click="field.action(item)"
+                    >mdi-check-decagram</v-icon
+                  >
+                </template>
+                <span>Das Zertifikat wurde überprüft.</span>
+              </v-tooltip>
             </span>
             <span v-else>
               <v-icon></v-icon>
@@ -399,9 +412,7 @@
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit">
-          <v-icon class="is-clickable" @click="emitParent(item, null)"
-            >mdi-pencil</v-icon
-          >
+          <v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon>
         </td>
         <td v-if="useUser().isAdmin() || !disableDelete">
           <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
@@ -432,23 +443,13 @@
       />
       <p v-if="props.searchQuery">
         Zeigt
-        {{
-          Math.min(
-            (pagination.page - 1) * pagination.itemsPerPage + 1,
-            items.length
-          )
-        }}-
+        {{ Math.min((pagination.page - 1) * pagination.itemsPerPage + 1, items.length) }}-
         {{ Math.min(pagination.page * pagination.itemsPerPage, items.length) }}
         von {{ items.length }} Einträgen
       </p>
       <p v-else>
         Zeigt {{ (pagination.page - 1) * pagination.itemsPerPage + 1 }}-
-        {{
-          Math.min(
-            pagination.page * pagination.itemsPerPage,
-            pagination.totalItems
-          )
-        }}
+        {{ Math.min(pagination.page * pagination.itemsPerPage, pagination.totalItems) }}
         von {{ pagination.totalItems }} Einträgen
       </p>
     </div>
@@ -534,7 +535,12 @@ const listOptions = ref([
   { text: "Importierte Profile", value: "imported_profiles" },
   { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
   { text: "Ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
-  { text: "Verifizierungsanfragen", value: "sent_verification_requests" },
+]);
+
+const listOptionsUsers = ref([
+  { text: "Angemeldet", value: "showAll" },
+  { text: "Freigegeben", value: "approved" },
+  { text: "in Prüfung", value: "pending" },
 ]);
 
 watch(
@@ -718,14 +724,20 @@ const filtersMap = {
     field: "",
     value: "",
   },
+  approved: {
+    field: "&is_active_on_health_scope",
+    value: true,
+  },
+  pending: {
+    field: "&is_active_on_health_scope",
+    value: false,
+  },
 } as const;
 
 const getFilter = <T extends keyof typeof filtersMap>(filter: T) => {
   const activeFilterFromUrl = filterQuery.value;
   if (activeFilterFromUrl) {
-    activeFilter.value = [
-      filtersMap[activeFilterFromUrl as keyof typeof filtersMap],
-    ];
+    activeFilter.value = [filtersMap[activeFilterFromUrl as keyof typeof filtersMap]];
   }
 };
 
@@ -755,9 +767,7 @@ const getItems = async () => {
   }
 
   if (response.data && response.data.resources) {
-    items.value = Array.isArray(response.data.resources)
-      ? response.data.resources
-      : [];
+    items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
   } else {
     items.value = Array.isArray(response.data) ? response.data : [];
   }
