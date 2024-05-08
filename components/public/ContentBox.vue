@@ -28,11 +28,14 @@
         </div>
         <hr v-if="item.kind !== 'facility'" />
       </template>
+
       <div class="content-wrapper">
         <div class="d-flex justify-space-between align-center">
-          <a :href="buttonHref">
-            <span class="title is-clickable break-title">{{ item.name }}</span>
-          </a>
+          <span
+            @click="goToFacility(buttonHref)"
+            class="title is-clickable break-title"
+            >{{ item.name }}</span
+          >
         </div>
         <span
           :class="item.description?.length > 300 ? 'break-text' : ''"
@@ -52,7 +55,7 @@
         <div class="action mb-n2" v-if="buttonHref">
           <v-btn
             @click="goToFacility(buttonHref)"
-            :target="item.url ? '_blank' : ''"
+            :target="item?.url_kind === 'external' ? '_blank' : ''"
             variant="flat"
             color="primary"
             :size="breakPoints.width.value > 960 ? 'large' : 'large'"
@@ -60,9 +63,7 @@
             rounded="pill"
             :width="breakPoints.width.value > 1420 ? '' : '100%'"
           >
-            <span class="general-font-size" v-if="item.kind">{{
-              buttonText
-            }}</span>
+            <span class="general-font-size" v-if="item.kind">{{ buttonText }}</span>
             <span class="general-font-size" v-else-if="item.url_kind">{{
               item.button_text
             }}</span>
@@ -73,9 +74,7 @@
           class="general-font-size d-flex align-center mb-n3"
           v-if="item.kind === 'event' || item.kind === 'course'"
         >
-          <span
-            v-if="item?.event_dates.length && breakPoints.width.value >= 1420"
-          >
+          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1420">
             <img :src="eventsIcon" class="mr-1" />
             {{ item?.event_dates?.[0]?.slice(0, 10) }}
           </span>
@@ -143,7 +142,14 @@ const buttonHref = computed(() => {
 });
 
 const goToFacility = (buttonHref: any) => {
-  router.push({ path: buttonHref });
+  if( buttonHref.includes("http://") ||
+  buttonHref.includes("https://") ) {
+    window.open(buttonHref, "_blank");
+
+  } else {
+    router.push({ path: buttonHref });
+  }
+
 };
 
 const goToMainFacility = (item: any) => {
