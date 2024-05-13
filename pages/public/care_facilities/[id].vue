@@ -81,15 +81,18 @@
         </v-col>
       </v-row>
     </div>
-    <div v-else-if="checkCurrentUserAndToken">
-      <v-btn
-        prepend-icon="mdi-chevron-left"
-        class="general-font-size"
-        size="large"
-        @click="goBack()"
-      >
-        Zurück zur Suche
-      </v-btn>
+    <div v-else-if="checkCurrentUserAndToken" class="d-flex flex-column">
+      <div>
+        <v-btn
+          prepend-icon="mdi-chevron-left"
+          class="general-font-size"
+          size="large"
+          @click="goBack()"
+        >
+          Zurück zur Suche
+        </v-btn>
+      </div>
+
       <div v-if="careFacility?.kind === 'news'" class="mt-8">
         <img :src="careFacility?.image_url" class="news-image" />
         <div class="mb-3">
@@ -133,7 +136,7 @@
               cols="12"
               md="4"
               sm="12"
-              class="bar-content d-flex justify-space-between pa-0 mb-3"
+              class="bar-content d-flex justify-end pa-0 mb-3"
             >
               <div class="bar-item" v-if="careFacility?.name_responsible_person">
                 <div class="d-flex align-center">
