@@ -7,7 +7,7 @@
       class="is-secondary-color is-label-big general-font-size is-uppercase"
       v-if="!searchPage"
     >
-      Pflegeangebote
+      Pflegeangebote test
     </div>
     <div class="is-primary-color general-font-size mb-6" v-if="!searchPage">
       <span
