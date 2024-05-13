@@ -61,6 +61,9 @@ const redirectAndFilter = () => {
     case "news":
       path.value = "/admin/news_articles";
       break;
+    case "complaints":
+      path.value = "/admin/complaints";
+      break;
     default:
       break;
   }

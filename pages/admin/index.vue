@@ -37,7 +37,7 @@
       </div>
     </div>
   </div>
-  <div v-else> Du hast keine Berechtigung, diese Seite zu sehen.</div>
+  <div v-else>Du hast keine Berechtigung, diese Seite zu sehen.</div>
 </template>
 
 <script lang="ts" setup>
@@ -194,8 +194,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "In Prüfung",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === false
+          (facility: any) => facility?.user?.is_active_on_health_scope === false
         ).length,
         type: "users",
         query: "pending",
@@ -203,14 +202,38 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Freigeschaltet",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === true
+          (facility: any) => facility?.user?.is_active_on_health_scope === true
         ).length,
         type: "users",
         query: "approved",
       },
     ],
   },
+
+  {
+    title: "Beschwerden",
+    icon: "mdi-emoticon-angry-outline",
+    id: 3,
+    sub_items: [
+      {
+        title: "Angemeldet",
+        content: facilities.value.filter(
+          (facility: any) => facility?.user?.is_active_on_health_scope === false
+        ).length,
+        type: "complaints",
+        query: "showAll",
+      },
+      {
+        title: "Geantwortet",
+        content: facilities.value.filter(
+          (facility: any) => facility?.user?.is_active_on_health_scope === true
+        ).length,
+        type: "complaints",
+        query: "answered_complaints",
+      },
+    ],
+  },
+
   {
     title: "Datenaktualität",
     icon: "mdi-playlist-check",

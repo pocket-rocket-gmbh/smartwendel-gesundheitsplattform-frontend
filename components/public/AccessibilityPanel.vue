@@ -1,14 +1,20 @@
 <template>
   <div class="accessibility-panel">
-    <div class="increase-size is-clickable">
-      <p>A+</p>
+    <div class="increase-size is-clickable" @click="createEditDialogOpen = true">
+      <v-icon color="red">mdi-emoticon-angry-outline</v-icon>
     </div>
-    <div class="divider"></div>
-    <div class="decrease-size is-clickable py-1">
-      <p>A -</p>
-    </div>
+    <PublicComplaintModal
+      v-if="createEditDialogOpen"
+      @close="createEditDialogOpen = false"
+      @click:outside="createEditDialogOpen = false"
+    />
   </div>
 </template>
+
+<script setup lang="ts">
+const createEditDialogOpen = ref(false);
+</script>
+
 <style style lang="sass" scoped>
 
 .accessibility-panel
@@ -17,7 +23,7 @@
   border-radius: 5px 0px 0px 5px
   color: #ffffff
   width: 50px
-  height: 100px
+  height: 50px
   position: fixed
   top: 30%
   right: 0

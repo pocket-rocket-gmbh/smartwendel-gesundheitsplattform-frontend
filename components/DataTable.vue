@@ -30,7 +30,23 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group>
-        <span @click="toogleBar">
+
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+         
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsComplaints"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
+
+        <span @click="toogleBar" v-if="!noBar">
           <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
           <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
         </span>
@@ -494,6 +510,7 @@ const props = withDefaults(
     defaultSortBy?: string;
     defaultSortOrder?: string;
     draftRequired?: RequiredField[];
+    noBar?: boolean;
   }>(),
   {
     defaultSortBy: "created_at",
@@ -541,6 +558,11 @@ const listOptionsUsers = ref([
   { text: "Angemeldet", value: "showAll" },
   { text: "Freigegeben", value: "approved" },
   { text: "in Prüfung", value: "pending" },
+]);
+
+const listOptionsComplaints = ref([
+  { text: "Angemeldet", value: "showAll" },
+  { text: "Beantwortet", value: "answered" },
 ]);
 
 watch(
@@ -731,6 +753,14 @@ const filtersMap = {
   pending: {
     field: "&is_active_on_health_scope",
     value: false,
+  },
+  all_complaints: {
+    field: "&is_active_on_health_scope",
+    value: false,
+  },
+  answered_complaints: {
+    field: "&is_active_on_health_scope",
+    value: true,
   },
 } as const;
 

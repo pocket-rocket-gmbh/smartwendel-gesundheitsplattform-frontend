@@ -17,6 +17,12 @@
       class="my-5 d-md-block d-none"
       v-if="careFacility?.description"
     ></v-divider>
+    <v-btn @click="createEditDialogOpen = true">beschweren <v-icon class="ml-2" size="x-large" color="red">mdi-emoticon-angry-outline</v-icon></v-btn>
+    <PublicComplaintModal
+      v-if="createEditDialogOpen"
+      @close="createEditDialogOpen = false"
+      @click:outside="createEditDialogOpen = false"
+    />
     <span
       class="is-primary mr-2"
       v-if="careFacility?.kind === 'news'"
@@ -101,6 +107,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const createEditDialogOpen = ref(false);
 
 const getFacilityDescription = async () => {
   return props.careFacility?.description;
