@@ -47,7 +47,7 @@
               v-if="getTagName(mainFilter, tag)"
             >
               {{ getTagName(mainFilter, tag) }}
-              <v-icon :color="getColorClassForAmount(getAmountForTag(tag))"
+              <v-icon v-if="filterType === 'filter_facility'" :color="getColorClassForAmount(getAmountForTag(tag))"
                 >mdi-circle</v-icon
               >
             </v-chip>
@@ -168,19 +168,21 @@ const getAmountForTag = (tagId : any) => {
 };
 const getColorClassForAmount = (amount:any) => {
   if (amount === 1) {
-    return 'error';
+    return 'green';
   } else if (amount === 2) {
-    return 'warning';
+    return 'orange';
   } else if (amount === 3) {
-    return 'success';
+    return 'red';
   }
   return '';
 };
 
 const listOptions = ref([
-  { text: "Nicht vorhanden", value: 1, color: "red" },
+  { text: "Plätze vorhanden", value: 1, color: "primary" },
   { text: "Auf Anfrage", value: 2, color: "orange" },
-  { text: "Plätze vorhanden", value: 3, color: "primary" },
+  { text: "Nicht vorhanden", value: 3, color: "red" },
+ 
+  
 ]);
 
 const snackbar = useSnackbar();

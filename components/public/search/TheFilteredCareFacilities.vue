@@ -9,21 +9,48 @@
         <div class="d-flex align-center">
           {{ filterStore.filteredResults.length }} TREFFER
         </div>
-        <div class="d-flex align-center">
+
+        <div
+          class="d-flex align-center is-clickable"
+          @click="setCurrentAvailableCapacity(1)"
+          :class="[
+            filterStore.currentAvailableCapacity === 1 ||
+            filterStore.currentAvailableCapacity === null
+              ? 'enable-filter'
+              : 'disabled-filter',
+            filterStore.currentAvailableCapacity === 1 ? 'selected-filter' : '',
+          ]"
+        >
           <v-icon size="x-large" color="primary">mdi-circle</v-icon>
           <div class="px-2">Freie Plätze</div>
         </div>
-        <div class="d-flex align-center">
+        <div
+          class="d-flex align-center is-clickable"
+          @click="setCurrentAvailableCapacity(2)"
+          :class="[
+            filterStore.currentAvailableCapacity === 2 ||
+            filterStore.currentAvailableCapacity === null
+              ? 'enable-filter'
+              : 'disabled-filter',
+            filterStore.currentAvailableCapacity === 2 ? 'selected-filter' : '',
+          ]"
+        >
           <v-icon size="x-large" color="orange">mdi-circle</v-icon>
           <div class="px-2">Plätze auf Anfrage</div>
         </div>
-        <div class="d-flex align-center">
+        <div
+          class="d-flex align-center is-clickable"
+          @click="setCurrentAvailableCapacity(3)"
+          :class="[
+            filterStore.currentAvailableCapacity === 3 ||
+            filterStore.currentAvailableCapacity === null
+              ? 'enable-filter'
+              : 'disabled-filter',
+            filterStore.currentAvailableCapacity === 3 ? 'selected-filter' : '',
+          ]"
+        >
           <v-icon size="x-large" color="red">mdi-circle</v-icon>
           <div class="px-2">Wartezeit bis zu 2 Monate</div>
-        </div>
-        <div class="d-flex align-center">
-          <v-icon size="x-large" color="black">mdi-circle</v-icon>
-          <div class="px-2">Unbekannt</div>
         </div>
       </v-col>
       <v-col md="4" class="d-flex justify-end">
@@ -209,6 +236,20 @@ const goToFacility = (careFacility: any) => {
 
 const filterStore = useFilterStore();
 
+const setCurrentAvailableCapacity = (capacity: number) => {
+  if (filterStore.currentAvailableCapacity === capacity) {
+    filterStore.currentAvailableCapacity = null;
+  } else {
+    filterStore.currentAvailableCapacity = capacity;
+  }
+
+  filterStore.loadFilteredResults();
+  if (filterStore.filteredResults.length === 0) {
+    filterStore.currentAvailableCapacity = null;
+  }
+  filterStore.loadFilteredResults();
+};
+
 const showCareFacilityInMap = async (careFacilityId: string) => {
   emit("showOnMap");
   window.scrollTo({
@@ -283,4 +324,14 @@ const toggleFilterSort = () => {
     @include md
       display: flex
       // gap: 0.5rem
+
+.disabled-filter
+  opacity: 0.5
+
+.enable-filter
+  opacity: 1
+
+.selected-filter
+  border: 1px solid $mid-grey
+  border-radius: 20px
 </style>
