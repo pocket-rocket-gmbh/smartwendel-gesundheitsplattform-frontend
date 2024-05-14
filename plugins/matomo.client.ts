@@ -6,7 +6,7 @@ export default defineNuxtPlugin(nuxtApp => {
    
     router: nuxtApp.$router,
     host: 'https://matomo.pocket-rocket.io',
-    siteId: 100,
+    siteId: 12,
     enableLinkTracking: true,
     requireConsent: false,
     trackInitialView: true,

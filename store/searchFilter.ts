@@ -53,6 +53,7 @@ export type Facility = {
 
 export type Filter = {
   currentSearchTerm: string;
+  currentAvailableCapacity: number;
   currentTags: string[];
   currentZips: string[];
   filterSort: (typeof filterSortingDirections)[number];
@@ -74,6 +75,7 @@ export type Filter = {
 
 const initialFilterState: Filter = {
   currentSearchTerm: "",
+  currentAvailableCapacity: null,
   currentTags: [],
   currentZips: [],
   filterSort: "A-Z",
@@ -100,6 +102,7 @@ export const useFilterStore = defineStore({
     filterInfo: (state) => {
       return {
         currentSearchTerm: state.currentSearchTerm,
+        currentAvailableCapacity: state.currentAvailableCapacity,
         currentZips: state.currentZips,
         currentTags: state.currentTags,
         filterSort: state.filterSort,
@@ -110,6 +113,7 @@ export const useFilterStore = defineStore({
   actions: {
     setFilterInfo(newFilterInfo: typeof this.filterInfo) {
       this.currentSearchTerm = newFilterInfo.currentSearchTerm;
+      this.currentAvailableCapacity = newFilterInfo.currentAvailableCapacity;
       this.currentZips = newFilterInfo.currentZips;
       this.currentTags = newFilterInfo.currentTags;
       this.filterSort = newFilterInfo.filterSort;
@@ -141,6 +145,7 @@ export const useFilterStore = defineStore({
     },
     async clearSearch() {
       this.currentSearchTerm = "";
+      this.currentAvailableCapacity = null;
       this.currentZips = [];
       this.currentTags = [];
       this.mapFilter = null;
@@ -247,6 +252,7 @@ export const useFilterStore = defineStore({
       const tagsToFilter = [...this.currentTags];
 
       if (multipleFacilityFiltersSelected.length) {
+
         multipleFacilityFiltersSelected.forEach((item) => {
           tagsToFilter.splice(
             tagsToFilter.findIndex((tag) => tag === item.id),
@@ -297,8 +303,13 @@ export const useFilterStore = defineStore({
           if (!filterCategories?.length) return true;
 
           return filterCategories.some((category) => facility.tag_category_ids.includes(category.id));
+        })
+        .filter((facility) => {
+          if (this.currentAvailableCapacity === null) return true;
+          const filtered = facility.care_facility_tag_categories.filter((facility:any) => facility?.tag_category?.filter_type === 'filter_facility')
+          const result = filtered.some((category:any) => category.available_capacity === this.currentAvailableCapacity);
+            return result;
         });
-
       if (this.mapFilter) {
         this.filteredResults = filteredResults.filter((facility) => facility.id === this.mapFilter);
         return;
@@ -309,6 +320,7 @@ export const useFilterStore = defineStore({
     toggleSort() {
       this.filterSort = this.filterSort === "A-Z" ? "Z-A" : "A-Z";
     },
+
     resetAllFilters() {
       this.currentSearchTerm = "";
       this.currentTags = [];

@@ -47,6 +47,9 @@
               v-if="getTagName(mainFilter, tag)"
             >
               {{ getTagName(mainFilter, tag) }}
+              <v-icon v-if="filterType === 'filter_facility'" :color="getColorClassForAmount(getAmountForTag(tag))"
+                >mdi-circle</v-icon
+              >
             </v-chip>
           </span>
         </div>
@@ -159,10 +162,27 @@ const preSetTagsFromCareFacility = computed(() => {
   return tags;
 });
 
+const getAmountForTag = (tagId : any) => {
+  const tagItem = preSetTagsFromCareFacility.value.find((item: { category_id: string; amount: number }) => item.category_id === tagId);
+  return tagItem ? tagItem.amount : null;
+};
+const getColorClassForAmount = (amount:any) => {
+  if (amount === 1) {
+    return 'green';
+  } else if (amount === 2) {
+    return 'orange';
+  } else if (amount === 3) {
+    return 'red';
+  }
+  return '';
+};
+
 const listOptions = ref([
-  { text: "Nicht vorhanden", value: 1, color: "red" },
+  { text: "Plätze vorhanden", value: 1, color: "primary" },
   { text: "Auf Anfrage", value: 2, color: "orange" },
-  { text: "Plätze vorhanden", value: 3, color: "primary" },
+  { text: "Nicht vorhanden", value: 3, color: "red" },
+ 
+  
 ]);
 
 const snackbar = useSnackbar();
@@ -173,7 +193,7 @@ api.setBaseApi(usePrivateApi());
 const updateAvailability = async (optionId: string, value: number) => {
   const preSetTags = preSetTagsFromCareFacility.value;
 
-  const found = preSetTags.findIndex((item) => item.category_id === optionId);
+  const found = preSetTags.findIndex((item: any) => item.category_id === optionId);
 
   if (found === -1) {
     preSetTags.push({ category_id: optionId, amount: value });

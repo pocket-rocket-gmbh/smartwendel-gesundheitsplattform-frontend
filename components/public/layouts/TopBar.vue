@@ -70,16 +70,6 @@
               >
                 Anbieter finden
               </span>
-              <span
-                href="/public/search/facilities"
-                class="is-clickable mx-5"
-                :class="[
-                  currentRoute.includes('faq') ? 'is-primary-color' : '',
-                ]"
-                @click.prevent="goTo('/public/search/facilities')"
-              >
-                FAQ
-              </span>
             </div>
           </div>
         </div>
@@ -533,13 +523,16 @@ header,
     z-index: 5;
     top: 100%;
     width: 120%;
+    min-width: 200px;
     box-shadow: 0px 5px 10px rgba(black, 0.5);
 
     .list-item {
       padding: 0.75rem 1rem;
+      
 
       &:hover {
         background: #f2f2f2;
+        min-width: 1200px;
       }
     }
   }

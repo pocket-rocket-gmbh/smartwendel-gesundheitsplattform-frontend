@@ -1,56 +1,26 @@
 <template>
-  <div
-    class="flex-column is-secondary-color pa-5"
-    :class="searchPage ? '' : 'box'"
-  >
-    <div
-      class="is-secondary-color is-label-big general-font-size is-uppercase"
-      v-if="!searchPage"
-    >
-      Pflegeangebote test
+  <div class="flex-column is-secondary-color pa-5" :class="searchPage ? '' : 'box'">
+    <div class="is-secondary-color is-label-big general-font-size is-uppercase" v-if="!searchPage">
+      Pflegeangebote
     </div>
     <div class="is-primary-color general-font-size mb-6" v-if="!searchPage">
-      <span
-        >zuletzt aktualisiert:
-        {{ useDatetime().parseDatetime(careFacility.updated_at) }}
-      </span>
+      <span>zuletzt aktualisiert: {{ useDatetime().parseDatetime(careFacility.updated_at) }}</span>
     </div>
-
     <v-row
       no-gutters
-      v-for="(places, index) in careFacility.care_facility_tag_categories.filter((place: any) => place?.tag_category?.filter_type === 'filter_facility')"
+      v-for="(place, index) in sortedPlaces.filter((place) => place?.tag_category?.filter_type === 'filter_facility')"
       :key="index"
     >
-      <v-col
-        class="d-flex align-center"
-        :class="searchPage ? '' : 'justify-center flex-column'"
-      >
-        <div
-          class="is-primary-color general-font-size my-2 mr-3 d-flex align-center"
-          v-if="searchPage"
-        >
-          <v-icon :color="capacityColor[index]">mdi-circle</v-icon>
-          <span
-            class="ml-2"
-            :style="{ color: capacityColor[index] }"
-            v-if="!searchPage"
-          >
-            {{ capacityText[index] }}
-          </span>
+      <v-col class="d-flex align-center" :class="searchPage ? '' : 'justify-center flex-column'">
+        <div class="is-primary-color general-font-size my-2 mr-3 d-flex align-center" v-if="searchPage">
+          <v-icon :color="getCapacityColor(place)">mdi-circle</v-icon>
+          <span class="ml-2" v-if="!searchPage" :style="{ color: getCapacityColor(place) }">{{ getCapacityText(place) }}</span>
         </div>
 
-        <div class="is-primary general-font-size">
-          {{ places?.tag_category?.name }}
-        </div>
+        <div class="is-primary general-font-size">{{ place?.tag_category?.name }}</div>
         <div class="is-primary-color general-font-size" v-if="!searchPage">
-          <v-icon :color="capacityColor[index]">mdi-circle</v-icon>
-          <span
-            class="ml-2"
-            :style="{ color: capacityColor[index] }"
-            v-if="!searchPage"
-          >
-            {{ capacityText[index] }}
-          </span>
+          <v-icon :color="getCapacityColor(place)">mdi-circle</v-icon>
+          <span class="ml-2" :style="{ color: getCapacityColor(place) }">{{ getCapacityText(place) }}</span>
         </div>
       </v-col>
 
@@ -71,34 +41,44 @@ const props = defineProps({
   },
 });
 
-const capacityColor = computed(() => {
-  return props.careFacility.care_facility_tag_categories.map((place: any) => {
-    const capacity = place.available_capacity;
-    if (capacity === 1) {
-      return "red";
-    } else if (capacity === 2) {
-      return "orange";
-    } else if (capacity === 3) {
-      return "green";
-    } else {
-      return "black";
-    }
-  });
-});
+function getCapacityText(place:any) {
+  const capacity = place.available_capacity;
+  if (capacity === 1) {
+    return "Plätze vorhanden";
+  } else if (capacity === 2) {
+    return "Auf Anfrage";
+  } else if (capacity === 3) {
+    return "Nicht vorhanden";
+  } else {
+    return "Plätze unbekannt";
+  }
+}
 
-const capacityText = computed(() => {
-  return props.careFacility.care_facility_tag_categories.map((place: any) => {
-    const capacity = place.available_capacity;
-    if (capacity === 1) {
-      return "Keine Plätze vorhanden";
-    } else if (capacity === 2) {
-      return "Platz auf Nachfrage";
-    } else if (capacity === 3) {
-      return "Plätze vorhanden";
+function getCapacityColor(place:any) {
+  const capacity = place.available_capacity;
+  if (capacity === 1) {
+    return "green";
+  } else if (capacity === 2) {
+    return "orange";
+  } else if (capacity === 3) {
+    return "red";
+  } else {
+    return "black";
+  }
+}
+
+const sortedPlaces = computed(() => {
+  const places = [...props.careFacility.care_facility_tag_categories];
+  places.sort((a, b) => {
+    if (a.available_capacity === 1 && b.available_capacity !== 1) {
+      return -1;
+    } else if (a.available_capacity !== 1 && b.available_capacity === 1) {
+      return 1;
     } else {
-      return "Plätze unbekannt";
+      return 0;
     }
   });
+  return places;
 });
 </script>
 

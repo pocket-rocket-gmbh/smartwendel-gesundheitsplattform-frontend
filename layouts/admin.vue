@@ -75,7 +75,7 @@
             nuxt
             class="general-font-size is-secondary-color"
           >
-            Bereiche und Kategorien
+            Bereiche und FAQS
           </v-list-item>
           <v-divider></v-divider>
         </template>
