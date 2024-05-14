@@ -53,10 +53,10 @@
           <div class="px-2">Wartezeit bis zu 2 Monate</div>
         </div>
       </v-col>
-      <v-col md="4" class="d-flex justify-end">
+      <v-col md="4" class="d-flex justify-end align-center">
         <div class="d-flex actions">
           <div
-            class="sort-order is-clickable d-flex align-center"
+            class="sort-order is-clickable d-flex align-center pt-3"
             @click="toggleFilterSort"
           >
             <span>{{ filterStore.filterSort }}</span>

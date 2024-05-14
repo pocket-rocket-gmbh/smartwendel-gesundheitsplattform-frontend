@@ -11,7 +11,11 @@
       >
         <h3 class="mb-3">Landkreis Wunsiedel i. Fichtelgebirge</h3>
         <div v-for="link in links" class="is-paragraph my-1">
-          {{ link.title }}
+          <p class="is-clickable is-dark-grey">
+            <span>
+              <a class="is-dark-grey" :href="link.link">{{ link.title }}</a>
+            </span>
+          </p>
         </div>
         <div class="mt-3">
           <v-row>
@@ -20,9 +24,7 @@
                 href="https://www.facebook.com/freiraumfichtelgebirge"
                 target="_blank"
                 variant="outlined"
-                :size="
-                  [breakPoints.width.value < 600 ? 'small' : 'large'].join('')
-                "
+                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
                 icon
                 class="social-buttons"
               >
@@ -34,9 +36,7 @@
                 href="https://www.instagram.com/freiraumfichtelgebirge"
                 target="_blank"
                 variant="outlined"
-                :size="
-                  [breakPoints.width.value < 600 ? 'small' : 'large'].join('')
-                "
+                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
                 icon
                 class="social-buttons"
               >
@@ -48,9 +48,7 @@
                 href="https://www.youtube.com/channel/UCdwdUZRBXLr-fEZ09YwVINQ"
                 target="_blank"
                 variant="outlined"
-                :size="
-                  [breakPoints.width.value < 600 ? 'small' : 'large'].join('')
-                "
+                :size="[breakPoints.width.value < 600 ? 'small' : 'large'].join('')"
                 icon
                 class="social-buttons"
               >
@@ -80,8 +78,8 @@
       >
         <div class="is-label-big my-md-3 my-5">Ihr Angebot fehlt?</div>
         <div class="is-paragraph text-md-right text-center mb-md-5 my-5">
-          Sie betreiben eine Pflegeeinrichtung und bieten sonstige Leistungen im
-          Bereich Pflege an? Dann registrieren Sie sich.
+          Sie betreiben eine Pflegeeinrichtung und bieten sonstige Leistungen im Bereich
+          Pflege an? Dann registrieren Sie sich.
         </div>
         <div>
           <v-btn
@@ -108,7 +106,7 @@ const breakPoints = useBreakpoints();
 const links = [
   {
     title: "Kontakt",
-    link: "/impressum",
+    link: "mailto:pflegeportal@landkreis-wunsiedel.de",
   },
   {
     title: "Nutzungsbedinungen",
@@ -143,4 +141,7 @@ const currentRoute = computed(() => {
     color: $primary-color
   @include md
     padding: 5px
+
+a
+  color: white
 </style>
