@@ -111,11 +111,9 @@
             </v-col>
             <v-col sm="12" md="6" class="action d-md-flex justify-end hidden-sm-and-down">
               <v-btn
-                variant="flat"
-                class="general-font-size"
-                color="primary"
-                rounded="pill"
                 size="large"
+                variant="outlined"
+                rounded="pill"
                 @click="goToFacility(careFacility)"
               >
                 <span> Details ansehen </span>
@@ -123,30 +121,49 @@
             </v-col>
           </v-row>
 
-          <v-row class="item-row">
-            <v-col cols="12" md="4" sm="4" xl="4" xs="12" class="mb-0 pb-0">
+          <v-row class="item-row my-5">
+            <v-col
+              cols="12"
+              xs="12"
+              sm="3"
+              md="4"
+              xl="4"
+              class="mb-0 pb-0 d-flex align-center"
+            >
+              <img
+                :src="careFacility?.image_url"
+                height="150px"
+                class="facility-image is-clickable"
+                @click="goToFacility(careFacility)"
+              />
+            </v-col>
+
+            <v-col
+              cols="12"
+              xs="12"
+              sm="3"
+              md="4"
+              xl="4"
+              class="mb-0 pb-0 d-flex align-top"
+            >
               <div class="is-secondary-color mt-4">
-                <div class="d-flex">
+                <div class="d-flex mt-2 mb-3">
                   <img class="mr-2 icon" :src="iconAddress" />
                   <div v-if="careFacility.street">
                     {{ careFacility.street }}
                   </div>
                 </div>
                 <div class="d-flex ml-n1" v-if="careFacility.zip || careFacility.town">
-                  <v-icon></v-icon>
+                  <v-icon class="mr-2"></v-icon>
                   {{ careFacility.zip }} {{ careFacility.town }}
                 </div>
-              </div>
-            </v-col>
-            <v-col cols="12" md="4" sm="4" xl="4" xs="12" class="mb-0 pb-0">
-              <div class="mt-4">
-                <div v-if="careFacility.phone" class="d-flex align-center">
+                <div v-if="careFacility.phone" class="d-flex align-center my-3">
                   <img class="mr-2 icon" :src="iconPhone" />
                   <a class="is-secondary-color" :href="`tel:${careFacility.phone}`">{{
                     careFacility.phone
                   }}</a>
                 </div>
-                <div v-if="careFacility.email" class="d-flex align-center">
+                <div v-if="careFacility.email" class="d-flex align-center my-3">
                   <img class="mr-2 icon" :src="iconMail" />
                   <a class="is-secondary-color" :href="`mailto:${careFacility.email}`">{{
                     careFacility.email
@@ -156,11 +173,11 @@
             </v-col>
             <v-col
               cols="12"
-              md="4"
-              sm="4"
-              xl="4"
               xs="12"
-              class="mb-0 pb-0 d-flex justify-top align-top"
+              sm="3"
+              md="4"
+              xl="4"
+              class="mb-0 pb-0 d-flex align-top"
             >
               <PublicCareFacilitiesRight
                 :care-facility="careFacility"
@@ -333,5 +350,8 @@ const toggleFilterSort = () => {
 
 .selected-filter
   border: 1px solid $mid-grey
+  border-radius: 20px
+
+.facility-image
   border-radius: 20px
 </style>
