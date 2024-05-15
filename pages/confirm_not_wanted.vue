@@ -21,8 +21,12 @@
       <div v-if="!notWantedSuccessful">
         <div
           class="d-flex justify-center align-center text-primary thank-you font-weight-medium"
+          lang="de"
         >
-          <span>Einrichtung "{{ careFacilityName }}" nicht übernehmen</span>
+          <span class="word-break" lang="de"
+            >Profilinhaberschaft für die Einrichtung "{{ careFacilityName }}"
+            übertragen</span
+          >
         </div>
 
         <div>
@@ -32,33 +36,25 @@
                 <v-checkbox
                   v-model="owner_requested_maintenance"
                   class="ma-0 pa-0"
-                  @click="
-                    submitButtonDisabledCondition =
-                      !submitButtonDisabledCondition
-                  "
+                  @click="submitButtonDisabledCondition = !submitButtonDisabledCondition"
                 >
                 </v-checkbox>
               </div>
               <div class="general-font-size">
-                Hiermit erteile ich dem Landkreis Sankt Wendel meine Zustimmung
-                zur Veröffentlichung und Aktualisierung der Profilseite zu
-                meiner Einrichtung und der von mir angebotenen Leistungen auf
-                der Gesundheits- und Pflegeplattform (<a
-                  href="www.gesundes-wnd.de"
-                  >www.gesundes-wnd.de</a
-                >). Eine Vorschau meines Profils inklusive aller dort
-                eingepflegten Informationen und Bilder wurde mir im Vorfeld zur
-                Ansicht zur Verfügung gestellt. Ich habe zur Kenntnis genommen,
-                dass der Landkreis im Falle der Inhaberschaftsübertragung
-                keinerlei Gewähr für die Richtigkeit, Vollständigkeit oder
-                Aktualität der Profildaten übernimmt. Ich habe das Recht meine
-                Einwilligung jederzeit zu widerrufen und dem Landkreis die
-                zugehörige Verarbeitung meiner personenbezogenen Daten zu
-                untersagen.
+                Hiermit erteile ich dem Landkreis Sankt Wendel meine Zustimmung zur
+                Veröffentlichung und Aktualisierung der Profilseite zu meiner Einrichtung
+                und der von mir angebotenen Leistungen auf der Gesundheits- und
+                Pflegeplattform (<a href="www.gesundes-wnd.de">www.gesundes-wnd.de</a>).
+                Eine Vorschau meines Profils inklusive aller dort eingepflegten
+                Informationen und Bilder wurde mir im Vorfeld zur Ansicht zur Verfügung
+                gestellt. Ich habe zur Kenntnis genommen, dass der Landkreis im Falle der
+                Inhaberschaftsübertragung keinerlei Gewähr für die Richtigkeit,
+                Vollständigkeit oder Aktualität der Profildaten übernimmt. Ich habe das
+                Recht meine Einwilligung jederzeit zu widerrufen und dem Landkreis die
+                zugehörige Verarbeitung meiner personenbezogenen Daten zu untersagen.
                 <div class="mt-5">
-                  Du möchtest nicht, dass dein Profil auf der GPP erscheint?
-                  Dann setze dich bitte zwecks Löschung der Daten mit uns in
-                  Verbindung:
+                  Du möchtest nicht, dass dein Profil auf der GPP erscheint? Dann setze
+                  dich bitte zwecks Löschung der Daten mit uns in Verbindung:
                   <a href="mailto:smartcity@lkwn.de">smartcity@lkwnd.de</a>
                 </div>
               </div>
@@ -93,17 +89,13 @@
 
       <div align="center" class="mt-5" v-if="notWantedSuccessful">
         <div class="d-flex flex-column align-center justify-center">
-          <span class="thank-you text-primary font-weight-medium mb-10">
-            Danke
-          </span>
+          <span class="thank-you text-primary font-weight-medium mb-10"> Danke </span>
           <span class="general-font-size">
             Deine Entscheidung wurde erfolgreich übermittelt.
           </span>
         </div>
         <div class="mt-5">
-          <v-btn color="primary" @click="toHome" block depressed
-            >Zur Startseite</v-btn
-          >
+          <v-btn color="primary" @click="toHome" block depressed>Zur Startseite</v-btn>
         </div>
       </div>
     </div>
@@ -319,4 +311,5 @@ onMounted(async () => {
 .thank-you {
   font-size: 55px;
 }
+
 </style>
