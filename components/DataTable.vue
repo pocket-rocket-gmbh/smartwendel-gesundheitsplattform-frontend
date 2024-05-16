@@ -35,7 +35,6 @@
           inline
           class="d-flex justify-end align-center"
           v-model="listOptionValue"
-         
         >
           <v-radio
             v-for="(item, index) in listOptionsComplaints"
@@ -552,6 +551,10 @@ const listOptions = ref([
   { text: "Importierte Profile", value: "imported_profiles" },
   { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
   { text: "Ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
+  {
+    text: "Versandte Verifizierungsanfragen",
+    value: "sent_verification_requests",
+  },
 ]);
 
 const listOptionsUsers = ref([
@@ -564,13 +567,6 @@ const listOptionsComplaints = ref([
   { text: "Angemeldet", value: "showAll" },
   { text: "Beantwortet", value: "answered" },
 ]);
-
-watch(
-  async () => listOptionValue.value,
-  async () => {
-    await getItems();
-  }
-);
 
 const toogleBar = () => {
   showBar.value = !showBar.value;
@@ -711,23 +707,31 @@ const filtersMap = {
     value: false,
   },
   imported_profiles: {
-    field: "&user.imported",
+    field: "user.imported",
     value: true,
   },
   successful_profile_takeovers: {
-    field: "&user.onboarding_status",
+    field: "user.onboarding_status",
     value: "completed",
   },
   pending_profile_takeovers: {
-    field: "&user.onboarding_status",
+    field: "user.onboarding_status",
     value: "pending",
   },
-  sent_verification_requests: {
-    field: "&user.notification_after_manual_import_sent",
-    value: true,
-  },
+  sent_verification_requests: [
+    {
+      field: "user.notification_after_manual_import_sent",
+      value: true,
+    },
+
+    {
+      field: "is_active",
+      value: true,
+    },
+  ],
+
   data_up_to_date: {
-    field: "&user.data_up_to_date",
+    field: "user.data_up_to_date",
     value: true,
   },
   active_events: {
@@ -742,24 +746,21 @@ const filtersMap = {
     field: "is_active",
     value: true,
   },
-  showAll: {
-    field: "",
-    value: "",
-  },
+  showAll:[],
   approved: {
-    field: "&is_active_on_health_scope",
+    field: "is_active_on_health_scope",
     value: true,
   },
   pending: {
-    field: "&is_active_on_health_scope",
+    field: "is_active_on_health_scope",
     value: false,
   },
   all_complaints: {
-    field: "&is_active_on_health_scope",
+    field: "is_active_on_health_scope",
     value: false,
   },
   answered_complaints: {
-    field: "&is_active_on_health_scope",
+    field: "is_active_on_health_scope",
     value: true,
   },
 } as const;
@@ -767,7 +768,11 @@ const filtersMap = {
 const getFilter = <T extends keyof typeof filtersMap>(filter: T) => {
   const activeFilterFromUrl = filterQuery.value;
   if (activeFilterFromUrl) {
-    activeFilter.value = [filtersMap[activeFilterFromUrl as keyof typeof filtersMap]];
+    const filterValues = filtersMap[activeFilterFromUrl as keyof typeof filtersMap];
+
+    const value = Array.isArray(filterValues) ? filterValues : [filterValues];
+
+    activeFilter.value = value;
   }
 };
 
@@ -823,7 +828,7 @@ const paginationValues = ref([
 
 const setFilter = (filter: string) => {
   filterQuery.value = filter;
-  router.push({ query: { filter } });
+  router.replace({ query: { filter } });
 };
 
 watch(
