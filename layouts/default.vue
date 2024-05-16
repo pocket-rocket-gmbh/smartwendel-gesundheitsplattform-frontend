@@ -7,7 +7,7 @@
     <!--     <ClientOnly>
       <PublicCookieBanner />
     </ClientOnly> -->
-    <PublicAccessibilityPanel />
+    <!-- <PublicAccessibilityPanel /> -->
     <v-main>
       <slot />
     </v-main>
