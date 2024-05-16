@@ -28,18 +28,6 @@
           hide-details="auto"
           label="Beschreibung"
         />
-        <div class="field">
-          <v-select
-            :items="listOptions"
-            item-title="text"
-            item-value="id"
-            label="Typ"
-            single-line
-            hide-details="auto"
-            persistent-hint
-            return-object
-          />
-        </div>
       </v-card-text>
       <v-card-actions>
         <v-btn
