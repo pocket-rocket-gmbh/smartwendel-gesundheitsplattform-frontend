@@ -109,7 +109,7 @@ const links = [
     link: "mailto:pflegeportal@landkreis-wunsiedel.de",
   },
   {
-    title: "Nutzungsbedinungen",
+    title: "Nutzungsbedingungen",
     link: "/datenschutz",
   },
   {
