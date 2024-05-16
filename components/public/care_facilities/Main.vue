@@ -17,7 +17,6 @@
       class="my-5 d-md-block d-none"
       v-if="careFacility?.description"
     ></v-divider>
-    <v-btn @click="createEditDialogOpen = true">beschweren <v-icon class="ml-2" size="x-large" color="red">mdi-emoticon-angry-outline</v-icon></v-btn>
     <PublicComplaintModal
       v-if="createEditDialogOpen"
       @close="createEditDialogOpen = false"
@@ -79,6 +78,7 @@
           Betreuung zu bieten.</i
         >
       </div>
+      <v-btn @click="createEditDialogOpen = true">beschweren</v-btn>
       <v-divider
         class="my-10"
         v-if="careFacility?.name_responsible_person"
