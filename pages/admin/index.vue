@@ -1,4 +1,5 @@
 <template>
+<pre>  {{ complaints }}</pre>
   <div v-if="useUser().isAdmin()">
     <div class="d-flex align-center">
       <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
@@ -30,7 +31,7 @@
       <div>
         <v-row>
           <v-col md="3" v-for="sub_item in item?.sub_items">
-            <AdminStatisticsBox :item="sub_item" :loading="loading" />
+            <AdminStatisticsBox :item="sub_item" :loading="loading" :complaints="complaints" />
           </v-col>
         </v-row>
         <v-divider class="my-3 mr-15"></v-divider>
@@ -60,6 +61,7 @@ type DashboardItem = {
 };
 
 const facilities = ref([]);
+const complaints = ref([]);
 
 const getFacilitiesFromLocalStorage = () => {
   return localStorage.getItem("facilities");
@@ -104,6 +106,20 @@ const getItems = async () => {
   saveFacilities();
 
   loading.value = false;
+};
+
+const getCompilants = async () => {
+  const options = {
+    page: 1,
+    per_page: 10000,
+  };
+
+  const api = useCollectionApi();
+  api.setBaseApi(usePrivateApi());
+  api.setEndpoint(`complaints`);
+
+  await api.retrieveCollection(options as any);
+  complaints.value = api.items.value as any;
 };
 
 const setNow = () => {
@@ -217,23 +233,12 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Angemeldet",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === false
-        ).length,
+        content: complaints.value.length,
         type: "complaints",
         query: "showAll",
-      },
-      {
-        title: "Geantwortet",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === true
-        ).length,
-        type: "complaints",
-        query: "answered_complaints",
-      },
+      }
     ],
   },
-
   {
     title: "Datenaktualität",
     icon: "mdi-playlist-check",
@@ -285,6 +290,7 @@ onMounted(async () => {
     router.push({ path: "/" });
   } else {
     await getItems();
+    await getCompilants();
     getFacilitiesFromLocalStorage();
     getUpdatedAtFromLocalStorage();
     updatedAt.value = updatedAtFromLocalStorage;

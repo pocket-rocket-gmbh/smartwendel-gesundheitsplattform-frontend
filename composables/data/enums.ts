@@ -13,11 +13,27 @@ export type EnumValue = {
 
 export function useEnums() {
 
+  const  complaintsStatus = [
+    { value: 'open', name: 'Offen', class: 'is-yellow' },
+    { value: 'in_progress', name: 'In Bearbeitung', class: 'is-blue' },
+    { value: 'closed', name: 'Geschlossen', class: 'is-green'
+    }
+  ]
+
   // Define enums here
   const facilitiesStatus = [
     { value: false, name: 'In Prüfung', class: 'is-yellow' },
     { value: true, name: 'Freigegeben', class: 'is-green' }
   ]
+
+  const complaintsKind = [
+    { value: 'law_break', name: 'sexuellem Missbrauch', class: 'primary' },
+    { value: 'harassment', name: 'sexueller Ausbeutung', class: 'secondary' },
+    { value: 'spam', name: 'Kinderpornografie', class: 'red' },
+    { value: 'terms_violation', name: 'sexuelle Zwecke', class: 'green' },
+    { value: 'other', name: 'Anstiftung', class: 'blue' }
+  ]
+
 
   const facilitiesKind = [
     { value: 'event', name: 'Veranstaltung', class: '' },
@@ -33,6 +49,8 @@ export function useEnums() {
   // insert enums in Interface
   interface Enums {
     facilitiesStatus: EnumValue[],
+    complaintsStatus: EnumValue[],
+    complaintsKind: EnumValue[],
     facilitiesKind: EnumValue[],
     userRole: EnumValue[]
   }
@@ -40,6 +58,8 @@ export function useEnums() {
   // insert enums in JSON
   const enums: Record<keyof Enums, EnumValue[]> = {
     facilitiesStatus,
+    complaintsStatus,
+    complaintsKind,
     facilitiesKind,
     userRole
   }
@@ -71,6 +91,8 @@ export function useEnums() {
   // return enums
   return {
     facilitiesStatus,
+    complaintsKind,
+    complaintsStatus,
     facilitiesKind,
     userRole,
     getName,

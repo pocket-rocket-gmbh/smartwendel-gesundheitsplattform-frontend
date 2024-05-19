@@ -199,6 +199,14 @@
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
+          <div
+            v-else-if="item[field.value] && field.enum_name && field.type === 'enumKinds'"
+          >
+            <v-chip
+              :color="useEnums().getClassName(field.enum_name, item[field.value])"
+              >{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip
+            >
+          </div>
           <span v-else-if="field.type === 'array'">{{
             item[field.value].join(", ")
           }}</span>
@@ -231,6 +239,9 @@
               </div>
             </div>
           </span>
+          <span v-else-if="field.type === 'protocol'">
+            <span><v-icon size="x-large" color="red">mdi-file-pdf-box</v-icon></span>
+          </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
@@ -256,7 +267,6 @@
               <span>Diese Einrichtung wurde vom Landkreis erstellt.</span>
             </v-tooltip>
           </span>
-
           <span
             v-else-if="
               field.type === 'send-invitation' &&
@@ -746,7 +756,7 @@ const filtersMap = {
     field: "is_active",
     value: true,
   },
-  showAll:[],
+  showAll: [],
   approved: {
     field: "is_active_on_health_scope",
     value: true,

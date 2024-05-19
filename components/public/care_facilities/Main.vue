@@ -20,7 +20,7 @@
     <PublicComplaintModal
       v-if="createEditDialogOpen"
       @close="createEditDialogOpen = false"
-      @click:outside="createEditDialogOpen = false"
+      :title="careFacility?.name"
     />
     <span
       class="is-primary mr-2"
@@ -78,7 +78,7 @@
           Betreuung zu bieten.</i
         >
       </div>
-      <v-btn @click="createEditDialogOpen = true">beschweren</v-btn>
+      <v-btn @click="createEditDialogOpen = true">Inhalt melden</v-btn>
       <v-divider
         class="my-10"
         v-if="careFacility?.name_responsible_person"

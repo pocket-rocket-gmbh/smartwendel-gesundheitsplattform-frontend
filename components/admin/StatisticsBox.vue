@@ -36,6 +36,7 @@ const props = defineProps<{
     type?: string;
     query?: string;
   };
+  complaints: any;
 }>();
 
 const hasFilter = computed(() => !!props.item.query && !!props.item.type);
@@ -55,7 +56,7 @@ const redirectAndFilter = () => {
     case "event":
       path.value = "/admin/events";
       break;
-      case "users":
+    case "users":
       path.value = "/admin/users";
       break;
     case "news":
