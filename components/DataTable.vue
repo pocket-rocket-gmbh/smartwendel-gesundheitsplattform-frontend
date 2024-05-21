@@ -30,7 +30,7 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group>
-
+        <!-- 
         <v-radio-group
           inline
           class="d-flex justify-end align-center"
@@ -43,7 +43,7 @@
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
-        </v-radio-group>
+        </v-radio-group> -->
 
         <span @click="toogleBar" v-if="!noBar">
           <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
@@ -112,6 +112,16 @@
           <span v-if="field.type === 'datetime' && item[field.value]">{{
             useDatetime().parseDatetime(item[field.value])
           }}</span>
+          <span v-else-if="field.type === 'is-imported' && item?.imported">
+            <v-tooltip location="top" width="250px">
+              <template v-slot:activator="{ props }">
+                <v-icon color="success" class="ml-2 pt-2" v-bind="props"
+                  >mdi-application-import</v-icon
+                >
+              </template>
+              <span>Benutzer wurde importiert </span>
+            </v-tooltip>
+          </span>
           <span v-else-if="field.type === 'currency' && item[field.value]">{{
             useCurrency().getCurrencyFromNumber(item[field.value])
           }}</span>
@@ -565,18 +575,21 @@ const listOptions = ref([
     text: "Versandte Verifizierungsanfragen",
     value: "sent_verification_requests",
   },
+  { text: "Von Lk verwaltet", value: "managed_by_lk" },
+  { text: "Von Lk erstellt", value: "created_by_lk" },
 ]);
 
 const listOptionsUsers = ref([
   { text: "Angemeldet", value: "showAll" },
   { text: "Freigegeben", value: "approved" },
+  { text: "in Prüfung (importiert)", value: "import_pending" },
   { text: "in Prüfung", value: "pending" },
 ]);
 
-const listOptionsComplaints = ref([
+/* const listOptionsComplaints = ref([
   { text: "Angemeldet", value: "showAll" },
   { text: "Beantwortet", value: "answered" },
-]);
+]); */
 
 const toogleBar = () => {
   showBar.value = !showBar.value;
@@ -721,11 +734,11 @@ const filtersMap = {
     value: true,
   },
   successful_profile_takeovers: {
-    field: "user.onboarding_status",
+    field: "user.onboarding_status-eq",
     value: "completed",
   },
   pending_profile_takeovers: {
-    field: "user.onboarding_status",
+    field: "user.onboarding_status-eq",
     value: "pending",
   },
   sent_verification_requests: [
@@ -735,8 +748,8 @@ const filtersMap = {
     },
 
     {
-      field: "is_active",
-      value: true,
+      field: "user.onboarding_status-eq",
+      value: "pending",
     },
   ],
 
@@ -761,18 +774,49 @@ const filtersMap = {
     field: "is_active_on_health_scope",
     value: true,
   },
-  pending: {
-    field: "is_active_on_health_scope",
-    value: false,
+  pending: [
+    {
+      field: "is_active_on_health_scope",
+      value: false,
+    },
+    {
+      field: "imported",
+      value: false,
+    },
+  ],
+
+  import_pending: [
+    {
+      field: "imported",
+      value: true,
+    },
+    {
+      field: "onboarding_status-eq",
+      value: "pending",
+    },
+    {
+      field: "is_active_on_health_scope",
+      value: false,
+    },
+  ],
+
+  managed_by_lk: {
+    field: "owner_requested_maintenance",
+    value: true,
   },
-  all_complaints: {
+  created_by_lk: {
+    field: "user.role-eq",
+    value: "care_facility_admin",
+  },
+
+  /*   all_complaints: {
     field: "is_active_on_health_scope",
     value: false,
   },
   answered_complaints: {
     field: "is_active_on_health_scope",
     value: true,
-  },
+  }, */
 } as const;
 
 const getFilter = <T extends keyof typeof filtersMap>(filter: T) => {

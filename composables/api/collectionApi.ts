@@ -36,7 +36,7 @@ export function useCollectionApi() {
 
     if (options.filters?.length > 0) {
       options.filters.forEach(element => {
-        filtersParam += '&' + element.field + "=" + element.value        
+        filtersParam += '&' + element.field + "=" + element.value      
       })
     }
 
