@@ -172,17 +172,20 @@ const items = computed<DashboardItem[]>(() => [
         query: "inactive_facilities",
       },
       {
-        title: "Neu registrierte Einrichtungen*",
-        info: "*in der letzten 30 Tage",
-        content:
-          facilities.value.filter(
-            (facility: any) =>
-              !facility.is_active &&
-              facility.kind === "facility" &&
-              new Date(facility.created_at) >= thirtyDaysAgo
-          ).length + 1,
+        title: "Von Lk verwaltet",
+        content: facilities.value.filter(
+          (facility: any) => facility.owner_requested_maintenance === true && facility.kind === "facility"
+        ).length,
         type: "facility",
-        query: "thirty_days_ago",
+        query: "managed_by_lk",
+      },
+      {
+        title: "Von Lk erstellt",
+        content: facilities.value.filter(
+          (facility: any) => facility?.user?.role === 'care_facility_admin' && facility.kind === "facility"
+        ).length,
+        type: "facility",
+        query: "created_by_lk",
       },
     ],
   },
@@ -249,6 +252,15 @@ const items = computed<DashboardItem[]>(() => [
       },
       {
         title: "In Prüfung (importiert)",
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === true
+        ).length,
+        type: "users",
+        query: "import_pending",
+      },
+      {
+        title: "Freigeschaltet",
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
