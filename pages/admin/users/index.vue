@@ -128,6 +128,11 @@ const fields = ref([
     tooltip: "Nutzer ist Admin.",
   },
   {
+    value: "",
+    type: "is-imported",
+    tooltip: "",
+  },
+  {
     prop: "last_seen",
     text: "Zuletzt eingeloggt",
     value: "last_seen",
