@@ -172,7 +172,7 @@ const items = computed<DashboardItem[]>(() => [
         query: "inactive_facilities",
       },
       {
-        title: "Von Lk verwaltet",
+        title: "Übertragene Inhaberschaft",
         content: facilities.value.filter(
           (facility: any) => facility.owner_requested_maintenance === true && facility.kind === "facility"
         ).length,
@@ -180,7 +180,7 @@ const items = computed<DashboardItem[]>(() => [
         query: "managed_by_lk",
       },
       {
-        title: "Von Lk erstellt",
+        title: "Eigen erstellte Profile",
         content: facilities.value.filter(
           (facility: any) => facility?.user?.role === 'care_facility_admin' && facility.kind === "facility"
         ).length,

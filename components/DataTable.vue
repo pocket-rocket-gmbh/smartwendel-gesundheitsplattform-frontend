@@ -601,8 +601,8 @@ const listOptions = ref([
     text: "Versandte Verifizierungsanfragen",
     value: "sent_verification_requests",
   },
-  { text: "Von Lk verwaltet", value: "managed_by_lk" },
-  { text: "Von Lk erstellt", value: "created_by_lk" },
+  { text: "Übertragene Inhaberschaft", value: "managed_by_lk" },
+  { text: "Eigen erstellte Profile", value: "created_by_lk" },
 ]);
 
 const listOptionsUsers = ref([
