@@ -3,11 +3,25 @@
     <div>
       <div class="general-font-size is-dark-grey font-weight-bold">Beschwerde</div>
     </div>
+    <v-row align="center" v-if="showBar">
+      <v-col></v-col>
+ 
+      <v-col md="9" class="d-flex justify-end">
+        <v-text-field
+          width="50"
+          prepend-icon="mdi-magnify"
+          v-model="searchTerm"
+          hide-details="auto"
+          label="Benutzer durchsuchen"
+        />
+      </v-col>
+    </v-row>
 
     <DataTable
       ref="dataTableRef"
       :fields="fields"
       endpoint="complaints"
+      :search-query="searchTerm"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="created_at"
@@ -53,6 +67,7 @@ definePageMeta({
 });
 
 const showBar = ref(true);
+const searchTerm = ref("");
 
 const fields = [
   { prop: "name", text: "Titel", value: "page_title", type: "string",  width:"200" },

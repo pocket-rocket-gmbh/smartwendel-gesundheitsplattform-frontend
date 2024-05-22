@@ -38,7 +38,7 @@
     </v-alert>
     <template v-if="setupFinished">
       <v-row align="center" v-if="showBar">
-        <v-col md="5">
+        <v-col md="3">
           <div class="my-5">
             <v-btn
               elevation="0"
