@@ -23,7 +23,7 @@
           class="d-flex justify-center align-center text-primary thank-you font-weight-medium"
           lang="de"
         >
-          <span class="word-break" lang="de"
+          <span
             >Profilinhaberschaft für die Einrichtung "{{ careFacilityName }}"
             übertragen</span
           >
