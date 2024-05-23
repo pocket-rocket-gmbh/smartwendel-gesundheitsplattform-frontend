@@ -32,13 +32,13 @@
     </v-col>
   </v-row>
   <AdminCareFacilitiesChooseimageFromGallery
-    v-if="openPhotoGallery && kind === 'logo'"
+    v-show="openPhotoGallery && kind === 'logo'"
     :item="item"
     gallery-kind="logo"
     @setImage="setLogo"
   />
   <AdminCareFacilitiesChooseimageFromGallery
-    v-if="openPhotoGallery && kind === 'cover'"
+    v-show="openPhotoGallery && kind === 'cover'"
     :facility-kind="item.kind"
     :item="item"
     gallery-kind="cover"
@@ -46,7 +46,7 @@
   />
   <div class="field">
     <v-file-input
-      v-if="!openPhotoGallery && openImageupload || kind === 'category'"
+      v-show="!openPhotoGallery && openImageupload || kind === 'category'"
       class="text-field my-3 general-font-size is-dark-grey"
       hide-details="auto"
       v-model="image"
