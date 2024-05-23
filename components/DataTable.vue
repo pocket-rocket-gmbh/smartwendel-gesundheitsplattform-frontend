@@ -45,7 +45,7 @@
           ></v-radio>
         </v-radio-group> -->
 
-        <span @click="toogleBar" v-if="!noBar">
+        <span @click="toogleBar" v-if="!noBar || !noData">
           <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
           <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
         </span>
@@ -53,7 +53,8 @@
     </v-row>
   </div>
   <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
-  <v-table fixed-header class="my-5">
+  <v-alert type="error" v-if="noData"> keine Einträg gefunden</v-alert>
+  <v-table fixed-header class="my-5" v-if="!noData">
     <thead class="elevation-1 primary">
       <tr>
         <th
@@ -89,7 +90,9 @@
         <th width="15px"></th>
       </tr>
     </thead>
+  
     <tbody>
+
       <tr
         v-for="(item, indexMain) in items"
         :key="item.id"
@@ -204,7 +207,7 @@
             :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
             :disable-edit="!useUser().isAdmin()"
           />
-          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
+          <div v-else-if=" field.type === 'enum'">
             <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>

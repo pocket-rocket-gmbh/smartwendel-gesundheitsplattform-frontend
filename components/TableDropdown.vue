@@ -42,13 +42,24 @@ updateApi.setBaseApi(usePrivateApi());
 onMounted(() => {
   model.value = props.item[props.fieldName];
   selectedFieldClass.value = props.fieldClass;
+  setSnackbarMessage();
 });
+
+const snackbarMessage = ref("");
+
+const setSnackbarMessage = () => {
+  if (props.endpoint === "complaints") {
+    snackbarMessage.value = "Beschwerde wurde aktualisiert.";
+  } else {
+    snackbarMessage.value = "Nutzer wurde aktualisiert.";
+  }
+};
 
 const save = async () => {
   updateApi.setEndpoint(`${props.endpoint}/${props.item.id}`);
   let data: any = {};
   data[props.fieldName] = model.value;
-  snackbar.showSuccess("Nutzer wurde aktualisiert.");
+  snackbar.showSuccess(snackbarMessage.value);
   await updateApi.updateItem(data, null);
 
   selectedFieldClass.value = useEnums().getClassName(props.enumName, model.value);

@@ -1,5 +1,4 @@
 <template>
-<pre>  {{ complaints }}</pre>
   <div v-if="useUser().isAdmin()">
     <div class="d-flex align-center">
       <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>

@@ -96,7 +96,7 @@
               />
             </div>
             <v-checkbox
-              label="Meine Angabe ist vollständig"
+              label="Meine Angaben sind vollständig"
               class=""
               v-model="informationsAreCompleted"
               :rules="[rules.required]"
@@ -200,6 +200,7 @@ const sendComplaint = async () => {
       reason: reportDescription.value,
       url: reportedUrl.value,
       kind: reportKind.value.value,
+      last_action: 'unchanged'
     };
     const result = await createUpdateApi.createItem(
       data,
@@ -211,7 +212,7 @@ const sendComplaint = async () => {
     }
   } catch (error) {
     loading.value = false;
-    animated.value = true;
+    animated.value = false;
     console.log(error);
     setTimeout(() => {
       animated.value = false;
@@ -251,7 +252,7 @@ const needAdditionalInformation = computed(() => {
 });
 
 const listOptions = ref([
-  { text: "Straftaten im Zusammenhang mit sexuellem Missbrauch", value: 0 },
+  { text: "Verstoß gegen geltendes Recht", value: 0 },
   { text: "Straftaten im Zusammenhang mit sexueller Ausbeutung", value: 1 },
   { text: "Straftaten im Zusammenhang mit Kinderpornografie", value: 2 },
   { text: "Kontaktaufnahme zu Kindern für sexuelle Zwecke", value: 3 },

@@ -15,9 +15,18 @@ export function useEnums() {
 
   const  complaintsStatus = [
     { value: 'open', name: 'Offen', class: 'is-yellow' },
-    { value: 'in_progress', name: 'In Bearbeitung', class: 'is-blue' },
-    { value: 'closed', name: 'Geschlossen', class: 'is-green'
-    }
+    { value: 'pending', name: 'In Bearbeitung', class: 'is-blue' },
+    { value: 'complete', name: 'Geschlossen', class: 'is-green'
+    },
+    { value: 'rejected', name: 'Abgelehnt', class: 'is-red'
+  }
+  ]
+
+  const complaintsActions = [
+    { value: 'blockContent', name: 'Inhalt gesperrt', class: 'is-yellow' },
+    { value: 'blockUser', name: 'Benutzer gesperrt', class: 'is-red' },
+    { value: 'deleteContent', name: 'Inhalt gelöscht', class: 'is-purple' },
+    { value: 'unchanged', name: 'Unverändert', class: '' },
   ]
 
   // Define enums here
@@ -27,11 +36,11 @@ export function useEnums() {
   ]
 
   const complaintsKind = [
-    { value: 'law_break', name: 'sexuellem Missbrauch', class: 'primary' },
-    { value: 'harassment', name: 'sexueller Ausbeutung', class: 'secondary' },
-    { value: 'spam', name: 'Kinderpornografie', class: 'red' },
-    { value: 'terms_violation', name: 'sexuelle Zwecke', class: 'green' },
-    { value: 'other', name: 'Anstiftung', class: 'blue' }
+    { value: 'law_break', name: 'Verstoß gegen geltendes Recht', class: 'primary' },
+    { value: 'harassment', name: 'Belästigung', class: 'secondary' },
+    { value: 'spam', name: 'Spam', class: 'red' },
+    { value: 'terms_violation', name: 'Verstoß gegen die Nutzungsbedingungen ', class: 'green' },
+    { value: 'other', name: 'Andere', class: 'Andere' }
   ]
 
 
@@ -49,6 +58,7 @@ export function useEnums() {
   // insert enums in Interface
   interface Enums {
     facilitiesStatus: EnumValue[],
+    complaintsActions: EnumValue[],
     complaintsStatus: EnumValue[],
     complaintsKind: EnumValue[],
     facilitiesKind: EnumValue[],
@@ -58,6 +68,7 @@ export function useEnums() {
   // insert enums in JSON
   const enums: Record<keyof Enums, EnumValue[]> = {
     facilitiesStatus,
+    complaintsActions,
     complaintsStatus,
     complaintsKind,
     facilitiesKind,
@@ -94,6 +105,7 @@ export function useEnums() {
     complaintsKind,
     complaintsStatus,
     facilitiesKind,
+    complaintsActions,
     userRole,
     getName,
     getClassName,
