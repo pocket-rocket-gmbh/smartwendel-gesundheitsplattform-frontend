@@ -1,4 +1,4 @@
-import { Facility } from "~/store/searchFilter";
+import type { Facility } from "~/store/searchFilter";
 
 export const isCompleteFacility = (facility: Facility) => {
   return !(
