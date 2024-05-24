@@ -30,7 +30,22 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group>
-        <span @click="toogleBar">
+        <!-- 
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsComplaints"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group> -->
+
+        <span @click="toogleBar" v-if="!noBar">
           <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
           <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
         </span>
@@ -97,6 +112,16 @@
           <span v-if="field.type === 'datetime' && item[field.value]">{{
             useDatetime().parseDatetime(item[field.value])
           }}</span>
+          <span v-else-if="field.type === 'is-imported' && item?.imported">
+            <v-tooltip location="top" width="250px">
+              <template v-slot:activator="{ props }">
+                <v-icon color="success" class="ml-2 pt-2" v-bind="props"
+                  >mdi-application-import</v-icon
+                >
+              </template>
+              <span>Benutzer wurde importiert </span>
+            </v-tooltip>
+          </span>
           <span v-else-if="field.type === 'currency' && item[field.value]">{{
             useCurrency().getCurrencyFromNumber(item[field.value])
           }}</span>
@@ -184,6 +209,14 @@
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
+          <div
+            v-else-if="item[field.value] && field.enum_name && field.type === 'enumKinds'"
+          >
+            <v-chip
+              :color="useEnums().getClassName(field.enum_name, item[field.value])"
+              >{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip
+            >
+          </div>
           <span v-else-if="field.type === 'array'">{{
             item[field.value].join(", ")
           }}</span>
@@ -216,6 +249,9 @@
               </div>
             </div>
           </span>
+          <span v-else-if="field.type === 'protocol'">
+            <span><v-icon size="x-large" color="red">mdi-file-pdf-box</v-icon></span>
+          </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
@@ -241,7 +277,6 @@
               <span>Diese Einrichtung wurde vom Landkreis erstellt.</span>
             </v-tooltip>
           </span>
-
           <span
             v-else-if="
               field.type === 'send-invitation' &&
@@ -494,6 +529,7 @@ const props = withDefaults(
     defaultSortBy?: string;
     defaultSortOrder?: string;
     draftRequired?: RequiredField[];
+    noBar?: boolean;
   }>(),
   {
     defaultSortBy: "created_at",
@@ -535,20 +571,25 @@ const listOptions = ref([
   { text: "Importierte Profile", value: "imported_profiles" },
   { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
   { text: "Ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
+  {
+    text: "Versandte Verifizierungsanfragen",
+    value: "sent_verification_requests",
+  },
+  { text: "Übertragene Inhaberschaft", value: "managed_by_lk" },
+  { text: "Eigen erstellte Profile", value: "created_by_lk" },
 ]);
 
 const listOptionsUsers = ref([
   { text: "Angemeldet", value: "showAll" },
   { text: "Freigegeben", value: "approved" },
+  { text: "in Prüfung (importiert)", value: "import_pending" },
   { text: "in Prüfung", value: "pending" },
 ]);
 
-watch(
-  async () => listOptionValue.value,
-  async () => {
-    await getItems();
-  }
-);
+/* const listOptionsComplaints = ref([
+  { text: "Angemeldet", value: "showAll" },
+  { text: "Beantwortet", value: "answered" },
+]); */
 
 const toogleBar = () => {
   showBar.value = !showBar.value;
@@ -689,23 +730,31 @@ const filtersMap = {
     value: false,
   },
   imported_profiles: {
-    field: "&user.imported",
+    field: "user.imported",
     value: true,
   },
   successful_profile_takeovers: {
-    field: "&user.onboarding_status",
+    field: "user.onboarding_status-eq",
     value: "completed",
   },
   pending_profile_takeovers: {
-    field: "&user.onboarding_status",
+    field: "user.onboarding_status-eq",
     value: "pending",
   },
-  sent_verification_requests: {
-    field: "&user.notification_after_manual_import_sent",
-    value: true,
-  },
+  sent_verification_requests: [
+    {
+      field: "user.notification_after_manual_import_sent",
+      value: true,
+    },
+
+    {
+      field: "user.onboarding_status-eq",
+      value: "pending",
+    },
+  ],
+
   data_up_to_date: {
-    field: "&user.data_up_to_date",
+    field: "user.data_up_to_date",
     value: true,
   },
   active_events: {
@@ -720,24 +769,64 @@ const filtersMap = {
     field: "is_active",
     value: true,
   },
-  showAll: {
-    field: "",
-    value: "",
-  },
+  showAll: [],
   approved: {
-    field: "&is_active_on_health_scope",
+    field: "is_active_on_health_scope",
     value: true,
   },
-  pending: {
-    field: "&is_active_on_health_scope",
+  pending: [
+    {
+      field: "is_active_on_health_scope",
+      value: false,
+    },
+    {
+      field: "imported",
+      value: false,
+    },
+  ],
+
+  import_pending: [
+    {
+      field: "imported",
+      value: true,
+    },
+    {
+      field: "onboarding_status-eq",
+      value: "pending",
+    },
+    {
+      field: "is_active_on_health_scope",
+      value: false,
+    },
+  ],
+
+  managed_by_lk: {
+    field: "owner_requested_maintenance",
+    value: true,
+  },
+  created_by_lk: {
+    field: "user.role-eq",
+    value: "care_facility_admin",
+  },
+
+  /*   all_complaints: {
+    field: "is_active_on_health_scope",
     value: false,
   },
+  answered_complaints: {
+    field: "is_active_on_health_scope",
+    value: true,
+  }, */
 } as const;
 
 const getFilter = <T extends keyof typeof filtersMap>(filter: T) => {
   const activeFilterFromUrl = filterQuery.value;
   if (activeFilterFromUrl) {
-    activeFilter.value = [filtersMap[activeFilterFromUrl as keyof typeof filtersMap]];
+    const filterValues = filtersMap[activeFilterFromUrl as keyof typeof filtersMap];
+
+    const value = Array.isArray(filterValues) ? filterValues : [filterValues];
+
+    activeFilter.value = value;
   }
 };
 
@@ -793,7 +882,7 @@ const paginationValues = ref([
 
 const setFilter = (filter: string) => {
   filterQuery.value = filter;
-  router.push({ query: { filter } });
+  router.replace({ query: { filter } });
 };
 
 watch(

@@ -33,7 +33,6 @@ export function useServerInterface() {
       return ServerCallResult.success(response.status, response.data)
     }
     catch (error) {
-      snackbar.showError(getErrorMessage(error))
       return ServerCallResult.error(getErrorMessage(error), error.response?.status, error.response?.data)
     }
   }

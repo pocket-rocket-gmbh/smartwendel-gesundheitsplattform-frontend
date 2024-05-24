@@ -2,7 +2,6 @@
   <div v-if="useUser().isAdmin()">
     <div class="d-flex align-center">
       <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
-
       <div class="ml-3" v-if="!loading && updatedAt">
         <span> Aktualisiert am: {{ updatedAt }}</span>
       </div>
@@ -151,6 +150,22 @@ const items = computed<DashboardItem[]>(() => [
         type: "facility",
         query: "inactive_facilities",
       },
+      {
+        title: "Übertragene Inhaberschaft",
+        content: facilities.value.filter(
+          (facility: any) => facility.owner_requested_maintenance === true && facility.kind === "facility"
+        ).length,
+        type: "facility",
+        query: "managed_by_lk",
+      },
+      {
+        title: "Eigen erstellte Profile",
+        content: facilities.value.filter(
+          (facility: any) => facility?.user?.role === 'care_facility_admin' && facility.kind === "facility"
+        ).length,
+        type: "facility",
+        query: "created_by_lk",
+      },
     ],
   },
   {
@@ -199,6 +214,15 @@ const items = computed<DashboardItem[]>(() => [
         ).length,
         type: "users",
         query: "pending",
+      },
+      {
+        title: "In Prüfung (importiert)",
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === true
+        ).length,
+        type: "users",
+        query: "import_pending",
       },
       {
         title: "Freigeschaltet",
