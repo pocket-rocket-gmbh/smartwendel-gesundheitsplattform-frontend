@@ -259,7 +259,7 @@ const steps: CreateEditSteps<StepNames> = {
     label:
       "3. Falls du kein Titelbild hast, kannst du ein passendes Bild aus unserer Datenbank auswählen. * ",
     tooltip: "",
-    description: "3. Titelbild",
+    description: "3. Titelbild *",
     props: ["image_url", "file"],
     justSome: true,
   },
