@@ -92,16 +92,6 @@ const fields = [
     width: "200",
   },
   {
-    prop: "",
-    text: "Status",
-    type: "enumDropdown",
-    endpoint: "complaints",
-    value: "status",
-    enum_name: "complaintsStatus",
-    condition: "admin",
-    width: "200",
-  },
-  {
     prop: "name",
     text: "Maßnahme",
     endpoint: "complaints",

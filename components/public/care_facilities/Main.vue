@@ -21,6 +21,8 @@
       v-if="createEditDialogOpen"
       @close="createEditDialogOpen = false"
       :title="careFacility?.name"
+      :kind="careFacility?.kind"
+      :id="careFacility?.id"
     />
     <span
       class="is-primary mr-2"

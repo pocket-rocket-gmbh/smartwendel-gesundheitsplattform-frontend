@@ -18,7 +18,7 @@
             {{ reportKind?.text }} <span v-if="successFullySent">gemeldet</span
             ><span v-else>melden</span></span
           >
-          <span v-else>Inhalt melden</span>
+          <span v-else>Inhalt melden</span> 
           </div>
          
         </div>
@@ -170,6 +170,14 @@ const props = defineProps<{
     type: String;
     required: true;
   };
+  kind: {
+    type: String;
+    required: true;
+  };
+  facilityId: {
+    type: String;
+    required: true;
+  };
 }>();
 
 const dialog = ref(true);
@@ -200,7 +208,13 @@ const sendComplaint = async () => {
       reason: reportDescription.value,
       url: reportedUrl.value,
       kind: reportKind.value.value,
-      last_action: 'unchanged'
+      last_action: 'unchanged',
+      action: 'unchanged',
+      meta_data: {
+        id: props.facilityId,
+        kind: props.kind,
+
+      },
     };
     const result = await createUpdateApi.createItem(
       data,
@@ -242,21 +256,20 @@ const submitButtonDisabledCondition = computed(() => {
 
 const needAdditionalInformation = computed(() => {
   if (
-    (reportKind?.value && reportKind?.value?.value === 3) ||
-    reportKind?.value?.value === 4
+    reportKind.value.value === 0
   ) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
 });
 
 const listOptions = ref([
   { text: "Verstoß gegen geltendes Recht", value: 0 },
-  { text: "Straftaten im Zusammenhang mit sexueller Ausbeutung", value: 1 },
-  { text: "Straftaten im Zusammenhang mit Kinderpornografie", value: 2 },
-  { text: "Kontaktaufnahme zu Kindern für sexuelle Zwecke", value: 3 },
-  { text: "Anstiftung, Beihilfe und Versuch", value: 4 },
+  { text: "Belästigung", value: 1 },
+  { text: "Spam", value: 2 },
+  { text: "Verstoß gegen die Nutzungsbedingungen", value: 3 },
+  { text: "Andere", value: 4 },
 ]);
 
 const optionSelect = (option: any) => {

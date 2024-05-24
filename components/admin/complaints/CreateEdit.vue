@@ -15,7 +15,7 @@
         >
         <span>Inhalt melden</span>
         <v-col class="d-flex align-center justify-end">
-          <v-btn prepend-icon="mdi-file-pdf-box">
+          <v-btn prepend-icon="mdi-file-pdf-box" disabled>
             <template v-slot:prepend>
               <v-icon size="x-large" color="red"></v-icon>
             </template>
@@ -113,7 +113,35 @@
               />
             </div>
             <div v-auto-animate>
-              <div>
+              <v-alert v-if="currentStatus === 'rejected'" type="warning">
+                Maßnahmen nicht möglich
+              </v-alert>
+              <v-row v-if="currentStatus !== 'rejected' && currentStatus !== 'open'">
+
+                <div class="my-15 d-flex align-center">
+                  <div class="general-font-size is-dark-grey font-weight-bold mr-3"
+                    >Maßnahmen</div
+                  >
+                </div>
+                <v-col
+                  class="d-flex justify-center my-15"
+                  v-for="action in actions"
+                  :key="action.value"
+                >
+ 
+                  <v-btn
+                    variant="outlined"
+                    dark
+                    :loading="loading"
+                    :disabled="alreadyTakenActions"
+                    :class="selectedAction === action.value ? 'selected' : ''"
+                    @click="setCurrentAction(action.value)"
+                  >
+                    {{ action.label }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <div v-if="currentStatus !== 'open' && selectedAction !== 'unchanged'">
                 <div class="my-2 d-flex align-center">
                   <span class="general-font-size is-dark-grey font-weight-bold mr-3"
                     >Protokoll generieren</span
@@ -126,40 +154,13 @@
                     maxlength="300"
                     hide-details="auto"
                     label="Grund"
-                    :disabled="!currentStatusChanged"
+                    :disabled="!currentStatusChanged && alreadyTakenActions"
                   />
                 </div>
               </div>
-              <div class="my-2 d-flex align-center">
-                <span class="general-font-size is-dark-grey font-weight-bold mr-3"
-                  >Maßnahmen</span
-                >
-              </div>
-
-              <v-alert v-if="currentStatus === 'rejected'" type="warning">
-                Maßnahmen nicht möglich
-              </v-alert>
-              <v-row v-if="currentStatus !== 'rejected'">
-                <v-col
-                  class="d-flex justify-center"
-                  v-for="action in actions"
-                  :key="action.value"
-                >
-                  <v-btn
-                    variant="outlined"
-                    dark
-                    :loading="loading"
-                    :disabled="!currentStatusChanged"
-                    :class="selectedAction === action.value ? 'selected' : ''"
-                    @click="setCurrentAction(action.value)"
-                  >
-                    {{ action.label }}
-                  </v-btn>
-                </v-col>
-              </v-row>
               <div
                 class="d-flex align-center justify-start my-1"
-                v-if="item?.reporter_email"
+                v-if="item?.reporter_email && currentStatus !== 'open' && selectedAction !== 'unchanged'"
               >
                 <v-checkbox
                   v-model="sendNotification"
@@ -239,7 +240,7 @@
       <div
         v-auto-animate
         class="d-flex align-center justify-center my-1 comfirm-actions ga-1"
-        v-if="currentStatusChanged && !alreadyTakenActions && currentTab === 'two'"
+        v-if="currentStatusChanged && !alreadyTakenActions && currentTab === 'two' && selectedAction !== 'unchanged'"
       >
         <v-icon>mdi-alert-circle-outline</v-icon>
         <div>Bestätigen</div>
@@ -279,7 +280,6 @@
 </template>
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
-import { jsPDF } from "jspdf";
 
 const emit = defineEmits(["close", "refreshCollection"]);
 const props = defineProps<{
@@ -299,8 +299,6 @@ const saved = ref(false);
 const currentStatusChanged = ref(false);
 const confirmActions = ref(false);
 
-const showConfirmation = ref(false);
-
 const alreadyTakenActions = ref(false);
 
 const snackbar = useSnackbar();
@@ -308,6 +306,9 @@ const snackbar = useSnackbar();
 const showApi = useCollectionApi();
 showApi.setBaseApi(usePrivateApi());
 const privateApi = usePrivateApi();
+
+const updateApi = useCollectionApi();
+updateApi.setBaseApi(usePrivateApi());
 
 const allRoles = [
   { name: "Verstoß gegen geltendes Recht", id: "law_break" },
@@ -372,6 +373,14 @@ const getItem = async () => {
     concat: false,
     filters: [] as any,
   };
+/* 
+  const saveAction = async () => {
+  updateApi.setEndpoint(`${care_facility}/${props.item.id}`);
+  let data = {};
+  data[props.fieldToSwitch] = switchValue.value;
+
+  await updateApi.updateItem(data, null);
+}; */
 
   const result = await showApi.retrieveCollection(options);
   loading.value = false;
@@ -407,12 +416,16 @@ const sortedHistory = computed(() => {
 });
 
 const saveConditions = computed(() => {
-  return (
-    !historyContent.value ||
-    (sendNotification.value && !notificationMessage.value) ||
-    !confirmActions.value ||
-    !currentStatusChanged.value
-  );
+  if (currentStatus.value === "pending" && selectedAction.value === "unchanged" || currentStatus.value === "rejected") {
+    return false;
+  } else {
+    return (
+      !historyContent.value ||
+      (sendNotification.value && !notificationMessage.value) ||
+      !confirmActions.value ||
+      !currentStatusChanged.value
+    );
+  }
 });
 
 const emitClose = () => {
@@ -467,9 +480,6 @@ watch(
 
 onMounted(async () => {
   await getItem();
-  if (selectedAction.value !== "unchanged") {
-    alreadyTakenActions.value = true;
-  }
 });
 </script>
 <style lang="sass" scoped>
