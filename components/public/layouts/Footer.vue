@@ -123,61 +123,67 @@
               werden dabei ausdrücklich mit berücksichtigt.
             </div>
           </v-col>
-          <v-col cols="12" :md="breakPoints.width.value <= 1300 ? '12' : '4'" class="d-flex flex-column align-start" >
-            <v-row :class="breakPoints.width.value >= 1301 ? 'ml-md-10' : ''">
-             <v-col class="ma-0">
-              <v-btn
-                href="https://www.facebook.com/Landkreis.StWendel/"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-facebook</v-icon>
-              </v-btn>
+          <v-col
+            cols="12"
+            :md="breakPoints.width.value <= 1300 ? '12' : '4'"
+            class="d-flex flex-column align-start"
+          >
+            <v-row :class="breakPoints.width.value >= 1301 ? 'ml-md-9' : ''">
+              <v-col class="ma-0 ">
+                <v-btn
+                  href="https://www.facebook.com/Landkreis.StWendel/"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-facebook</v-icon>
+                </v-btn>
 
-              <v-btn
-                href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-instagram</v-icon>
-              </v-btn>
+                <v-btn
+                  href="https://www.instagram.com/sankt.wendeler.land/?hl=de"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-instagram</v-icon>
+                </v-btn>
 
-              <v-btn
-                href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons mr-5"
-              >
-                <v-icon>mdi-youtube</v-icon>
-              </v-btn>
+                <v-btn
+                  href="https://www.youtube.com/channel/UCF9sq51TlbaRMWx9ePIRzog/about"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons mr-5"
+                >
+                  <v-icon>mdi-youtube</v-icon>
+                </v-btn>
 
-              <v-btn
-                href="https://www.linkedin.com/showcase/smart-wendeler-land"
-                target="_blank"
-                variant="outlined"
-                size="large"
-                icon
-                class="social-buttons"
-              >
-                <v-icon>mdi-linkedin</v-icon>
-              </v-btn>
-             </v-col>
+                <v-btn
+                  href="https://www.linkedin.com/showcase/smart-wendeler-land"
+                  target="_blank"
+                  variant="outlined"
+                  size="large"
+                  icon
+                  class="social-buttons"
+                >
+                  <v-icon>mdi-linkedin</v-icon>
+                </v-btn>
+              </v-col>
             </v-row>
-            <div class="d-flex ga-5 mt-5" style="flex-wrap: wrap;" :class="breakPoints.width.value >= 1301 ? 'ml-md-10' : ''">
+            <div
+              class="d-flex ga-5 mt-5"
+              style="flex-wrap: wrap"
+              :class="breakPoints.width.value >= 1301 ? 'ml-md-10 pl-2' : ''"
+            >
               <v-btn
                 prepend-icon="mdi-apple"
                 variant="outlined"
-        
                 rounded="pill"
-              
                 href="https://apps.apple.com/de/app/id1668891185"
                 target="_blank"
               >
@@ -186,16 +192,13 @@
               <v-btn
                 prepend-icon="mdi-google-play"
                 variant="outlined"
-         
                 rounded="pill"
-             
                 href="https://play.google.com/store/apps/details?id=smartwendel.pocketrocket.io"
                 target="_blank"
               >
                 Download PLayStore
               </v-btn>
             </div>
-            
           </v-col>
           <v-col v-if="breakPoints.width.value <= 1300">
             <div class="disclaimer text-wrap mt-5">
