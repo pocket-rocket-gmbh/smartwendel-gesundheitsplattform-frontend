@@ -8,7 +8,7 @@
               <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
             </a>
           </div>
-          <div v-if="breakPoints.width.value >= 1480" class="align-center d-flex mx-2">
+          <div v-if="breakPoints.width.value >= 1460" class="align-center d-flex mx-2">
             <div
               class="categories-wrapper is-clickable d-flex"
               v-for="(category, index) in categories"
@@ -138,7 +138,7 @@
         </div>
       </div>
       <div
-        v-if="breakPoints.width.value < 1480 && !appStore.loading"
+        v-if="breakPoints.width.value < 1460 && !appStore.loading"
         class="d-flex align-center"
         align="center"
       >
