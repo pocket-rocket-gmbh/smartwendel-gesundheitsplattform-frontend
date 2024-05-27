@@ -172,7 +172,7 @@ const items = computed<DashboardItem[]>(() => [
         query: "inactive_facilities",
       },
       {
-        title: "Neu registrierte Einrichtungen",
+        title: "Neu registrierte Einrichtungen (letzte 30 Tage)",
         content:
           facilities.value.filter(
             (facility: any) =>
