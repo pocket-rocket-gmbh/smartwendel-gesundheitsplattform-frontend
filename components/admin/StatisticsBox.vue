@@ -10,6 +10,10 @@
           {{ item.title }}
           <v-icon size="x-small" v-if="hasFilter">mdi-filter-outline</v-icon>
         </div>
+
+        <span style="font-size: 14px"
+          ><i>{{ item.info }}</i></span
+        >
         <v-progress-circular
           :size="70"
           :width="7"
@@ -18,8 +22,10 @@
           v-if="loading"
           class="mt-2"
         ></v-progress-circular>
-        <div class="text-h2 font-weight-bold stats-item" v-else>
-          {{ item.content }}
+        <div class="stats-item" v-else>
+          <span class="text-h2 font-weight-bold" :class="item.info ? '' : 'pt-6'">
+            {{ item.content }}
+          </span>
         </div>
       </div>
     </div>
@@ -35,6 +41,7 @@ const props = defineProps<{
     content: string;
     type?: string;
     query?: string;
+    info?: string;
   };
 }>();
 
@@ -55,7 +62,7 @@ const redirectAndFilter = () => {
     case "event":
       path.value = "/admin/events";
       break;
-      case "users":
+    case "users":
       path.value = "/admin/users";
       break;
     case "news":
@@ -84,7 +91,6 @@ const redirectAndFilter = () => {
   display: flex;
   flex-direction: column;
   min-width: 100%;
-  padding: 20px 0 10px 0;
 }
 
 @import "@/assets/sass/main.sass";
