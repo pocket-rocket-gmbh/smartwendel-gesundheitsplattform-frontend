@@ -30,7 +30,7 @@
       <div>
         <v-row>
           <v-col md="3" v-for="sub_item in item?.sub_items">
-            <AdminStatisticsBox :item="sub_item" :loading="loading" :complaints="complaints" />
+            <AdminStatisticsBox :item="sub_item" :loading="loading" />
           </v-col>
         </v-row>
         <v-divider v-if="item?.divider" class="my-3 mr-15"></v-divider>
@@ -172,20 +172,16 @@ const items = computed<DashboardItem[]>(() => [
         query: "inactive_facilities",
       },
       {
-        title: "Übertragene Inhaberschaft",
-        content: facilities.value.filter(
-          (facility: any) => facility.owner_requested_maintenance === true && facility.kind === "facility"
-        ).length,
+        title: "Neu registrierte Einrichtungen",
+        content:
+          facilities.value.filter(
+            (facility: any) =>
+              !facility.is_active &&
+              facility.kind === "facility" &&
+              new Date(facility.created_at) >= thirtyDaysAgo
+          ).length + 1,
         type: "facility",
-        query: "managed_by_lk",
-      },
-      {
-        title: "Eigen erstellte Profile",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.role === 'care_facility_admin' && facility.kind === "facility"
-        ).length,
-        type: "facility",
-        query: "created_by_lk",
+        query: "thirty_days_ago",
       },
     ],
   },
@@ -254,15 +250,6 @@ const items = computed<DashboardItem[]>(() => [
         title: "In Prüfung (importiert)",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === true
-        ).length,
-        type: "users",
-        query: "import_pending",
-      },
-      {
-        title: "Freigeschaltet",
-        content: facilities.value.filter(
-          (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
             facility?.user?.imported === true
         ).length,
@@ -272,7 +259,8 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Freigeschaltet",
         content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === true
+          (facility: any) =>
+            facility?.user?.is_active_on_health_scope === true
         ).length,
         type: "users",
         query: "approved",

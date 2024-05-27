@@ -46,6 +46,50 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group> -->
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+          v-else-if="endpoint === 'care_facilities?kind=event'"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsEvents"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
+
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+          v-else-if="endpoint === 'care_facilities?kind=course'"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsCourses"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
+
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+          v-else-if="endpoint === 'care_facilities?kind=news'"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsNews"
+            :key="index"
+            :label="item.text"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
 
         <span @click="toogleBar" v-if="!noBar">
           <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
@@ -595,14 +639,14 @@ const listOptions = ref([
   { text: "Online", value: "active_facilities" },
   { text: "Offline", value: "inactive_facilities" },
   { text: "Importierte Profile", value: "imported_profiles" },
-  { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
-  { text: "Ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
+  { text: "Inhaberschaften LK", value: "successful_profile_takeovers" },
+  { text: "Rückmeldung ausstehend", value: "pending_profile_takeovers" },
   {
     text: "Versandte Verifizierungsanfragen",
     value: "sent_verification_requests",
   },
-  { text: "Übertragene Inhaberschaft", value: "managed_by_lk" },
-  { text: "Eigen erstellte Profile", value: "created_by_lk" },
+  { text: "Neu registrierte Einrichtungen", value: "thirty_days_ago" },
+  { text: "Inhaberschaften Nutzer", value: "user_maintenance_requested" },
 ]);
 
 const listOptionsUsers = ref([
@@ -612,8 +656,26 @@ const listOptionsUsers = ref([
   { text: "in Prüfung", value: "pending" },
 ]);
 
+const listOptionsEvents = ref([
+  { text: "Gesamt", value: "showAll" },
+  { text: "Online", value: "active_events" },
+  { text: "Offline", value: "inactive_events" },
+]);
+
+const listOptionsCourses = ref([
+  { text: "Gesamt", value: "showAll" },
+  { text: "Online", value: "active_courses" },
+  { text: "Offline", value: "inactive_courses" },
+]);
+
+const listOptionsNews = ref([
+  { text: "Gesamt", value: "showAll" },
+  { text: "Online", value: "active_news" },
+  { text: "Offline", value: "inactive_news" },
+]);
+
 /* const listOptionsComplaints = ref([
-  { text: "Angemeldet", value: "showAll" },
+  { text: "Gesamt", value: "showAll" },
   { text: "Beantwortet", value: "answered" },
 ]); */
 
@@ -766,10 +828,26 @@ const filtersMap = {
     field: "user.onboarding_status-eq",
     value: "completed",
   },
-  pending_profile_takeovers: {
-    field: "user.onboarding_status-eq",
-    value: "pending",
-  },
+  user_maintenance_requested: [
+    {
+      field: "user.owner_requested_maintenance",
+      value: false,
+    },
+    {
+      field: "user.imported",
+      value: true,
+    },
+  ],
+  pending_profile_takeovers: [
+    {
+      field: "user.onboarding_status-eq",
+      value: "pending",
+    },
+    {
+      field: "user.notification_after_manual_import_sent",
+      value: true,
+    },
+  ],
   sent_verification_requests: [
     {
       field: "user.notification_after_manual_import_sent",
@@ -806,6 +884,11 @@ const filtersMap = {
     field: "is_active",
     value: true,
   },
+  inactive_news: {
+    field: "is_active",
+    value: false,
+  },
+
   showAll: [],
   approved: {
     field: "is_active_on_health_scope",
@@ -837,13 +920,9 @@ const filtersMap = {
     },
   ],
 
-  managed_by_lk: {
-    field: "owner_requested_maintenance",
-    value: true,
-  },
-  created_by_lk: {
-    field: "user.role-eq",
-    value: "care_facility_admin",
+  thirty_days_ago: {
+    field: "created_at-ge",
+    value: thirtyDaysAgo,
   },
 
   /*   all_complaints: {
