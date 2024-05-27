@@ -9,33 +9,28 @@
         >
         <span class="general-font-size is-dark-grey font-weight-bold" v-else>Kurse</span>
       </v-col>
-      <v-col class="d-flex justify-end align-center" v-if="useUser().isAdmin()">
-        <div class="d-flex align-center mx-3">
-          <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
-            >Benutzer Aktiv</span
-          >
-        </div>
-        <div class="d-flex align-center mx-3">
-          <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
-            >Benutzer nicht Aktiv</span
-          >
-        </div>
-      </v-col>
     </v-row>
 
-    <v-alert type="info" density="compact" closable class="my-2 general-font-size"
+    <v-alert
+      type="info"
+      density="compact"
+      closable
+      class="my-2 general-font-size"
+      v-if="!useUser().isAdmin()"
       >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto
       besser können dich Besucher auf der Webseite finden. Pflichtfelder sind mit einem
       Sternchen versehen.</v-alert
     >
-    <v-alert density="compact" closable class="my-2 general-font-size"
+    <v-alert
+      density="compact"
+      closable
+      class="my-2 general-font-size"
+      v-if="!useUser().isAdmin()"
       >Leg hier deinen Kurs an. Kurse sind wiederkehrende Ereignisse (wöchentlich,
       etc.)</v-alert
     >
-    <template v-if="setupFinished">
-      <v-row align="center" v-if="showBar">
+    <template v-if="setupFinished" >
+      <v-row align="center" v-if="showBar" v-auto-animate>
         <v-col md="3">
           <div class="my-5">
             <v-btn
