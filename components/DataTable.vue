@@ -56,6 +56,7 @@
             v-for="(item, index) in listOptionsEvents"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -71,6 +72,7 @@
             v-for="(item, index) in listOptionsCourses"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -86,6 +88,7 @@
             v-for="(item, index) in listOptionsNews"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
