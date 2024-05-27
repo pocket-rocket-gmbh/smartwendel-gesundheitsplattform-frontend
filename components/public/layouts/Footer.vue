@@ -177,7 +177,7 @@
             </v-row>
             <div
               class="d-flex ga-5 mt-5"
-              style="flex-wrap: wrap"
+              :style="breakPoints.width.value <= 1460 ? 'flex-wrap: wrap' : ''"
               :class="breakPoints.width.value >= 1301 ? 'ml-md-10 pl-2' : ''"
             >
               <v-btn
