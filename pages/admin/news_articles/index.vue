@@ -11,20 +11,6 @@
           >Beiträge</span
         >
       </v-col>
-      <v-col class="d-flex justify-end align-center" v-if="useUser().isAdmin()">
-        <div class="d-flex align-center mx-3">
-          <v-icon size="x-small" color="success">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
-            >Benutzer Aktiv</span
-          >
-        </div>
-        <div class="d-flex align-center mx-3">
-          <v-icon size="x-small" color="error">mdi-circle</v-icon>
-          <span class="pl-1 general-font-size is-dark-grey font-weight-bold"
-            >Benutzer nicht Aktiv</span
-          >
-        </div>
-      </v-col>
     </v-row>
 
     <v-alert
@@ -34,9 +20,9 @@
       closable
       class="mt-2 general-font-size"
     >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und
-      wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen
-      sowie Beiträge anlegen.
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
+      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
+      anlegen.
     </v-alert>
     <v-row align="center" v-if="showBar">
       <v-col md="3">
@@ -196,8 +182,7 @@ const draftRequiredFields: RequiredField[] = [
   },
   {
     props: ["description"],
-    checkHandler: (description?: string) =>
-      !description || description === "<p><br></p>",
+    checkHandler: (description?: string) => !description || description === "<p><br></p>",
   },
   {
     props: ["tags"],

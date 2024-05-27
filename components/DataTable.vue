@@ -12,6 +12,7 @@
             v-for="(item, index) in listOptions"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -26,6 +27,7 @@
             v-for="(item, index) in listOptionsUsers"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -54,6 +56,7 @@
             v-for="(item, index) in listOptionsEvents"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -69,6 +72,7 @@
             v-for="(item, index) in listOptionsCourses"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -84,6 +88,7 @@
             v-for="(item, index) in listOptionsNews"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -280,12 +285,23 @@
                         {{ facility.name }}
                       </span>
                       <div class="d-flex align-center" v-if="useUser().isAdmin()">
-                        <v-icon v-if="!facility.is_active" size="x-small" color="error"
-                          >mdi-circle</v-icon
-                        >
-                        <v-icon v-if="facility.is_active" size="x-small" color="success"
-                          >mdi-circle</v-icon
-                        >
+                        <v-tooltip v-if="!facility.is_active">
+                          <template v-slot:activator="{ props }">
+                            <v-icon size="x-small" color="error" v-bind="props"
+                              >mdi-circle</v-icon
+                            >
+                          </template>
+                          <span>Einrichtung offline</span>
+                        </v-tooltip>
+
+                        <v-tooltip v-else>
+                          <template v-slot:activator="{ props }">
+                            <v-icon size="x-small" color="success" v-bind="props"
+                              >mdi-circle</v-icon
+                            >
+                          </template>
+                          <span>Einrichtung online</span>
+                        </v-tooltip>
                       </div>
                     </v-chip>
                   </v-col>
@@ -300,7 +316,7 @@
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
           <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
-            <v-tooltip location="top" width="300px">
+            <v-tooltip location="top">
               <template v-slot:activator="{ props }">
                 <v-icon class="is-yellow" v-bind="props"
                   >mdi-calendar-alert-outline</v-icon
@@ -314,7 +330,7 @@
               field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
             "
           >
-            <v-tooltip location="top" width="300px">
+            <v-tooltip location="top">
               <template v-slot:activator="{ props }">
                 <img :src="logo" width="20" class="ml-2 pt-2" v-bind="props" />
               </template>
@@ -346,7 +362,7 @@
                 }}</span
               >
 
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">mdi-send-variant-outline</v-icon>
                 </template>
@@ -363,7 +379,7 @@
           >
             <div class="d-flex ga-3">
               <span v-if="item?.user?.onboarding_token">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="not-onboard" v-bind="props"
                       >mdi-application-import</v-icon
@@ -374,7 +390,7 @@
               </span>
 
               <span v-if="!item?.user?.onboarding_token">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="onboard" v-bind="props">mdi-application-import</v-icon>
                   </template>
@@ -383,7 +399,7 @@
               </span>
 
               <span v-if="!item?.owner_requested_maintenance">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="no-maintenance" v-bind="props"
                       >mdi-flag-variant-remove</v-icon
@@ -394,7 +410,7 @@
               </span>
 
               <span v-if="item?.owner_requested_maintenance">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="yes-maintenance" v-bind="props"
                       >mdi-flag-variant-plus</v-icon
@@ -414,13 +430,13 @@
               @click.stop="field.action(item)"
               v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'"
             >
-              <span v-if="pathInto(item, field.value) !== 'user.name'">
+              <span
+                v-if="pathInto(item, field.value) !== 'user.name'"
+                class="break-title text-left"
+              >
                 {{ pathInto(item, field.value) }}
               </span>
-              <span
-                v-if="pathInto(item, field.value) === 'user.name'"
-                class="break-title"
-              >
+              <span v-if="pathInto(item, field.value) === 'user.name'">
                 Benutzer existiert nicht
                 <v-icon color="warning">mdi-alert</v-icon>
               </span>
@@ -434,18 +450,29 @@
                 class="align-center ml-2"
                 v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
               >
-                <v-icon
+                <v-tooltip
+                  location="top"
                   v-if="item?.user && item?.user?.is_active_on_health_scope"
-                  size="x-small"
-                  color="success"
-                  >mdi-circle</v-icon
                 >
-                <v-icon
+                  <template v-slot:activator="{ props }">
+                    <v-icon size="x-small" color="success" v-bind="props"
+                      >mdi-circle</v-icon
+                    >
+                  </template>
+                  <span>Benutzer ist Freigeschaltet.</span>
+                </v-tooltip>
+
+                <v-tooltip
+                  location="top"
                   v-if="item?.user && !item?.user?.is_active_on_health_scope"
-                  size="x-small"
-                  color="error"
-                  >mdi-circle</v-icon
                 >
+                  <template v-slot:activator="{ props }">
+                    <v-icon size="x-small" color="error" v-bind="props"
+                      >mdi-circle</v-icon
+                    >
+                  </template>
+                  <span>Benutzer ist nicht Freigeschaltet</span>
+                </v-tooltip>
               </span>
             </span>
             <span
@@ -455,7 +482,7 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable" @click="field.action(item)" v-bind="props"
                     >mdi-eye</v-icon
@@ -471,7 +498,7 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon
                     class="is-clickable"
@@ -1094,4 +1121,9 @@ defineExpose({ resetActiveItems, getItems });
 
 .yes-maintenance
   color: #358BBC
+
+
+.v-radio .v-icon
+  color: #8ab61d
+  border-radius: 50%
 </style>
