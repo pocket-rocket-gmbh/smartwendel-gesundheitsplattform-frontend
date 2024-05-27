@@ -5,6 +5,7 @@
       <div class="ml-3" v-if="!loading && updatedAt">
         <span> Aktualisiert am: {{ updatedAt }}</span>
       </div>
+
       <v-skeleton-loader
         v-if="loading"
         class="ml-3"
@@ -28,15 +29,15 @@
       </div>
       <div>
         <v-row>
-          <v-col md="3" v-for="sub_item in item?.sub_items">
+          <v-col md="3" v-for="sub_item in item?.sub_items" :class="!item?.divider ? 'mb-n14' : ''">
             <AdminStatisticsBox :item="sub_item" :loading="loading" />
           </v-col>
         </v-row>
-        <v-divider class="my-3 mr-15"></v-divider>
+        <v-divider v-if="item?.divider" class="my-3 mr-15"></v-divider>
       </div>
     </div>
   </div>
-  <div v-else> Du hast keine Berechtigung, diese Seite zu sehen.</div>
+  <div v-else>Du hast keine Berechtigung, diese Seite zu sehen.</div>
 </template>
 
 <script lang="ts" setup>
@@ -52,6 +53,7 @@ type DashboardItem = {
   title: string;
   icon: string;
   id: number;
+  divider?: boolean;
   sub_items: {
     title: string;
     content: any;
@@ -67,6 +69,9 @@ const getFacilitiesFromLocalStorage = () => {
 const getUpdatedAtFromLocalStorage = () => {
   return localStorage.getItem("updatedAt");
 };
+
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
 const updatedAt = ref("");
 
@@ -126,16 +131,17 @@ const items = computed<DashboardItem[]>(() => [
     title: "Einrichtungen",
     icon: "mdi-home",
     id: 1,
+    divider: true,
     sub_items: [
       {
-        title: "Angemeldet",
+        title: "Gesamt",
         content: facilities.value.filter((facility: any) => facility.kind === "facility")
           .length,
         type: "facility",
         query: "showAll",
       },
       {
-        title: "Aktiv",
+        title: "Online",
         content: facilities.value.filter(
           (facility: any) => facility.is_active === true && facility.kind === "facility"
         ).length,
@@ -143,7 +149,7 @@ const items = computed<DashboardItem[]>(() => [
         query: "active_facilities",
       },
       {
-        title: "Inaktiv",
+        title: "Offline",
         content: facilities.value.filter(
           (facility: any) => facility.is_active === false && facility.kind === "facility"
         ).length,
@@ -151,26 +157,23 @@ const items = computed<DashboardItem[]>(() => [
         query: "inactive_facilities",
       },
       {
-        title: "Übertragene Inhaberschaft",
-        content: facilities.value.filter(
-          (facility: any) => facility.owner_requested_maintenance === true && facility.kind === "facility"
-        ).length,
+        title: "Neu registrierte Einrichtungen",
+        content:
+          facilities.value.filter(
+            (facility: any) =>
+              !facility.is_active &&
+              facility.kind === "facility" &&
+              new Date(facility.created_at) >= thirtyDaysAgo
+          ).length + 1,
         type: "facility",
-        query: "managed_by_lk",
-      },
-      {
-        title: "Eigen erstellte Profile",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.role === 'care_facility_admin' && facility.kind === "facility"
-        ).length,
-        type: "facility",
-        query: "created_by_lk",
+        query: "thirty_days_ago",
       },
     ],
   },
   {
     title: "Import",
     icon: "mdi-home-import-outline",
+    divider: true,
     id: 2,
     sub_items: [
       {
@@ -182,19 +185,32 @@ const items = computed<DashboardItem[]>(() => [
         query: "imported_profiles",
       },
       {
-        title: "Erfolgte Profilübernahmen",
+        title: "Inhaberschaften LK",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && !facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true &&
+            facility?.owner_requested_maintenance &&
+            !facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "successful_profile_takeovers",
       },
       {
-        title: "Ausstehende Profilübernahmen",
+        title: "Inhaberschaften Nutzer",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && facility?.user?.onboarding_token?.length
+            facility?.user?.imported === true && !facility?.owner_requested_maintenance
+        ).length,
+        type: "facility",
+        query: "user_maintenance_requested",
+      },
+      {
+        title: "Rückmeldung ausstehend",
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility?.user?.imported === true &&
+            facility?.user?.notification_after_manual_import_sent_at &&
+            facility?.user?.onboarding_token?.length
         ).length,
         type: "facility",
         query: "pending_profile_takeovers",
@@ -205,12 +221,12 @@ const items = computed<DashboardItem[]>(() => [
     title: "Verifizierungsanfragen",
     icon: "mdi-check-decagram-outline",
     id: 3,
+    divider: true,
     sub_items: [
       {
         title: "In Prüfung",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === false
+          (facility: any) => facility?.user?.is_active_on_health_scope === false
         ).length,
         type: "users",
         query: "pending",
@@ -219,7 +235,8 @@ const items = computed<DashboardItem[]>(() => [
         title: "In Prüfung (importiert)",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === true
+            facility?.user?.is_active_on_health_scope === false &&
+            facility?.user?.imported === true
         ).length,
         type: "users",
         query: "import_pending",
@@ -227,8 +244,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Freigeschaltet",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === true
+          (facility: any) => facility?.user?.is_active_on_health_scope === true
         ).length,
         type: "users",
         query: "approved",
@@ -238,13 +254,14 @@ const items = computed<DashboardItem[]>(() => [
   {
     title: "Datenaktualität",
     icon: "mdi-playlist-check",
+    divider: true,
     id: 4,
     sub_items: [
       {
-        title: "Aktuell",
+        title: "Nicht aktuell",
         content: 0,
-        query: "data_up_to_date",
-        type: "facility",
+        /*         query: "data_up_to_date",
+        type: "facility", */
       },
     ],
   },
@@ -258,24 +275,53 @@ const items = computed<DashboardItem[]>(() => [
         content: facilities.value.filter(
           (facility: any) => facility?.kind === "event" && facility.is_active === true
         ).length,
-        /*         type: "event",
-        query: "active_events", */
+        type: "event",
+        query: "active_events",
       },
       {
         title: "Aktive Kurse",
         content: facilities.value.filter(
           (facility: any) => facility?.kind === "course" && facility.is_active === true
         ).length,
-        /*         type: "course",
-        query: "active_courses", */
+        type: "course",
+        query: "active_courses",
       },
       {
         title: "Aktive Beiträge",
         content: facilities.value.filter(
           (facility: any) => facility?.kind === "news" && facility.is_active === true
         ).length,
-        /*         type: "news",
-        query: "active_articles", */
+        type: "news",
+        query: "active_news",
+      },
+    ],
+  },
+  {
+    title: "",
+    icon: "",
+    id: 6,
+    divider: false,
+    sub_items: [
+      {
+        title: "Veranstaltungen gesamt",
+        content: facilities.value.filter(
+          (facility: any) => facility?.kind === "event").length,
+        type: "event",
+        query: "showAll",
+      },
+      {
+        title: "Kurse gesamt",
+        content: facilities.value.filter(
+          (facility: any) => facility?.kind === "course").length,
+        type: "course",
+        query: "showAll",
+      },
+      {
+        title: "Beiträge gesamt",
+        content: facilities.value.filter(
+          (facility: any) => facility?.kind === "news").length,
+        type: "news",
+        query: "showAll",
       },
     ],
   },
