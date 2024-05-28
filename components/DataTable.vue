@@ -139,9 +139,8 @@
         <th width="15px"></th>
       </tr>
     </thead>
-  
-    <tbody>
 
+    <tbody>
       <tr
         v-for="(item, indexMain) in items"
         :key="item.id"
@@ -256,7 +255,7 @@
             :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
             :disable-edit="!useUser().isAdmin()"
           />
-          <div v-else-if=" field.type === 'enum'">
+          <div v-else-if="field.type === 'enum'">
             <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
