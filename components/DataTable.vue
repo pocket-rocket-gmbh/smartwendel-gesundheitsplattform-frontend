@@ -977,8 +977,10 @@ const getItems = async () => {
 
   if (response.data && response.data.resources) {
     items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
+    noData.value = false;
   } else {
     items.value = Array.isArray(response.data) ? response.data : [];
+    noData.value = false;
   }
 
   if (props.searchQuery) {
