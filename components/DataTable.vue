@@ -100,9 +100,10 @@
       </v-col>
     </v-row>
   </div>
+
   <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
-  <v-alert type="error" v-if="noData"> keine Einträg gefunden</v-alert>
-  <v-table fixed-header class="my-5" v-if="!noData">
+  <v-alert v-if="noData" type="warning">keine Ergebnisse gefunden </v-alert>
+  <v-table v-else fixed-header class="my-5">
     <thead class="elevation-1 primary">
       <tr>
         <th
@@ -462,7 +463,6 @@
                   </template>
                   <span>Benutzer ist Freigeschaltet.</span>
                 </v-tooltip>
-
                 <v-tooltip
                   location="top"
                   v-if="item?.user && !item?.user?.is_active_on_health_scope"
@@ -643,10 +643,6 @@ const listOptions = ref([
   { text: "Importierte Profile", value: "imported_profiles" },
   { text: "Inhaberschaften LK", value: "successful_profile_takeovers" },
   { text: "Rückmeldung ausstehend", value: "pending_profile_takeovers" },
-  {
-    text: "Versandte Verifizierungsanfragen",
-    value: "sent_verification_requests",
-  },
   { text: "Neu registrierte Einrichtungen", value: "thirty_days_ago" },
   { text: "Inhaberschaften Nutzer", value: "user_maintenance_requested" },
 ]);
@@ -843,12 +839,16 @@ const filtersMap = {
 
   user_maintenance_requested: [
     {
-      field: "user.owner_requested_maintenance",
+      field: "user.owner_requested_maintenance-eq",
       value: false,
     },
     {
       field: "user.onboarding_status-eq",
-      value: "pending",
+      value: "completed",
+    },
+    {
+      field: "user.imported",
+      value: true,
     },
   ],
   pending_profile_takeovers: [
@@ -861,18 +861,6 @@ const filtersMap = {
       value: true,
     },
   ],
-  sent_verification_requests: [
-    {
-      field: "user.notification_after_manual_import_sent",
-      value: true,
-    },
-
-    {
-      field: "user.onboarding_status-eq",
-      value: "pending",
-    },
-  ],
-
   data_up_to_date: {
     field: "user.data_up_to_date",
     value: true,
@@ -985,9 +973,11 @@ const getItems = async () => {
   }
 
   if (response.data && response.data.resources) {
+    noData.value = false;
     items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
     noData.value = false;
   } else {
+    noData.value = false;
     items.value = Array.isArray(response.data) ? response.data : [];
     noData.value = false;
   }

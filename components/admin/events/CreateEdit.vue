@@ -503,7 +503,7 @@ const steps: CreateEditSteps<StepNames> = {
   },
   photo: {
     label: "3. Bitte lade hier ein Titelbild hoch. *",
-    description: "3. Foto *",
+    description: "3. Titelbild *",
     props: ["image_url", "file"],
     tooltip:
       "Das Titelbild wird im Kopfbereich deiner Profilseite die Veranstaltung angezeigt. Wähle hier am besten ein Bild, welches deine Veranstaltung gut repräsentiert",
