@@ -80,6 +80,7 @@
                 v-model="reporterEmail"
                 :label="needAdditionalInformation ? 'E-Mail (erforderlich)' : 'E-Mail (optional)'"
                 hide-details="auto"
+                id="mail"
                 :rules="
                   needAdditionalInformation
                     ? [rules.required, rules.email]
@@ -87,6 +88,8 @@
                 "
                 :error-messages="useErrors().checkAndMapErrors('email', errors)"
               />
+
+              {{ complaintForm?.items.filter(item => item?.id === 'mail' && !item?.isValid) }}
             </div>
             <div class="field">
               <v-textarea
