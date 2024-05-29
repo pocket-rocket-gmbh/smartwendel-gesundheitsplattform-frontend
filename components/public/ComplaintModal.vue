@@ -10,21 +10,25 @@
     <v-card :class="[{ shake: animated }]" height="auto" style="overflow: hidden">
       <v-card-title class="d-flex align-center justify-space-between pa-0 ma-0 my-2 mx-3">
         <div class="text-h5 d-flex justify-center">
-          <v-icon size="small" v-if="reportKind && !successFullySent" @click="reportKind = null"
+       
+          <v-icon
+            size="small"
+            v-if="reportKind && !successFullySent"
+            @click="goBack()"
             >mdi-chevron-left</v-icon
           >
           <div>
             <span v-if="reportKind">
-            {{ reportKind?.text }} <span v-if="successFullySent">gemeldet</span
-            ><span v-else>melden</span></span
-          >
-          <span v-else>Inhalt melden</span> 
+              {{ reportKind?.text }} <span v-if="successFullySent">gemeldet</span
+              ><span v-else>melden</span></span
+            >
+            <span v-else>Inhalt melden</span>
           </div>
-         
         </div>
         <div class="text-h5 d-flex">
           <v-icon @click="emitClose()" size="small">mdi-close</v-icon>
         </div>
+       
       </v-card-title>
       <v-card-text v-auto-animate>
         <div v-if="!reportKind && !successFullySent">
@@ -42,11 +46,7 @@
             </v-col>
           </v-row>
         </div>
-        <v-form
-          ref="complaintForm"
-          v-if="reportKind && !successFullySent && needAdditionalInformation"
-          class="mt-3"
-        >
+        <v-form ref="complaintForm" v-if="reportKind && !successFullySent" class="mt-3">
           <div>
             <div class="field">
               <v-text-field
@@ -69,18 +69,22 @@
             <div class="field">
               <v-text-field
                 v-model="reporterName"
-                label="Name"
+                :label="needAdditionalInformation ? 'Name (erforderlich)' : 'Name (optional)'"
                 hide-details="auto"
-                :rules="[rules.required]"
+                :rules="needAdditionalInformation ? [rules.required] : []"
                 :error-messages="useErrors().checkAndMapErrors('name', errors)"
               />
             </div>
             <div class="field">
               <v-text-field
                 v-model="reporterEmail"
-                label="E-Mail"
+                :label="needAdditionalInformation ? 'E-Mail (erforderlich)' : 'E-Mail (optional)'"
                 hide-details="auto"
-                :rules="[rules.required, rules.email]"
+                :rules="
+                  needAdditionalInformation
+                    ? [rules.required, rules.email]
+                    : [rules.email]
+                "
                 :error-messages="useErrors().checkAndMapErrors('email', errors)"
               />
             </div>
@@ -90,18 +94,25 @@
                 counter
                 maxlength="300"
                 hide-details="auto"
-                label="Beschreibung"
+                :label="
+                  needAdditionalInformation ? 'Beschreibung (erforderlich)' : 'Beschreibung (optional)'
+                "
                 :error-messages="useErrors().checkAndMapErrors('description', errors)"
-                :rules="[rules.required]"
+                :rules="needAdditionalInformation ? [rules.required] : []"
               />
             </div>
             <v-checkbox
               label="Meine Angaben sind vollständig"
               class=""
               v-model="informationsAreCompleted"
-              :rules="[rules.required]"
+              :disabled="checkboxRules"
+              :rules="needAdditionalInformation ? [rules.required] : []"
             />
-            <v-checkbox v-model="privacyAccepted" :rules="[rules.required]">
+            <v-checkbox
+              v-model="privacyAccepted"
+              :disabled="checkboxRules"
+              :rules="needAdditionalInformation ? [rules.required] : []"
+            >
               <template #label>
                 <div class="">
                   Ich stimme der
@@ -135,18 +146,20 @@
           </v-alert>
         </div>
       </v-card-text>
+
       <v-card-actions>
         <v-row>
           <v-col class="d-flex justify-start">
             <v-btn variant="outlined" dark @click="emitClose()"> Schließen </v-btn>
           </v-col>
+
           <v-col class="d-flex justify-end">
             <v-btn
               v-if="reportKind && !successFullySent"
               color="blue darken-1"
               variant="outlined"
               dark
-              :disabled="submitButtonDisabledCondition"
+                :disabled="submitButtonDisabledCondition || submitButtonDisabledConditionOptional"
               @click="sendComplaint()"
             >
               senden
@@ -208,12 +221,11 @@ const sendComplaint = async () => {
       reason: reportDescription.value,
       url: reportedUrl.value,
       kind: reportKind.value.value,
-      last_action: 'unchanged',
-      action: 'unchanged',
+      last_action: "unchanged",
+      action: "unchanged",
       meta_data: {
         id: props.facilityId,
         kind: props.kind,
-
       },
     };
     const result = await createUpdateApi.createItem(
@@ -236,28 +248,36 @@ const sendComplaint = async () => {
 
 const submitButtonDisabledConditionForm = computed(() => {
   return (
-    !reportKind.value ||
+    (!reportKind.value ||
     !reportedUrl.value ||
     !reporterName.value ||
     !reporterEmail.value ||
     !reportDescription.value ||
     !informationsAreCompleted.value ||
-    !privacyAccepted.value
+    !privacyAccepted.value) ||
+    !complaintForm?.value?.isValid
   );
 });
 
 const submitButtonDisabledCondition = computed(() => {
-  if (submitButtonDisabledConditionForm.value && needAdditionalInformation.value) {
+  if (submitButtonDisabledConditionForm.value && needAdditionalInformation.value ) {
     return true;
   } else {
     return false;
   }
 });
 
+const submitButtonDisabledConditionOptional = computed(() => {
+  if ((reportDescription.value.length || reporterEmail.value.length || reporterName.value.length) && 
+  (informationsAreCompleted.value && privacyAccepted.value )) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
 const needAdditionalInformation = computed(() => {
-  if (
-    reportKind.value.value === 0
-  ) {
+  if (reportKind.value.value === 0) {
     return false;
   } else {
     return true;
@@ -276,9 +296,28 @@ const optionSelect = (option: any) => {
   reportKind.value = option;
 };
 
+const goBack = () => {
+  reportKind.value = null;
+  reportDescription.value = "";
+  reporterEmail.value = "";
+  reporterName.value = "";
+  informationsAreCompleted.value = false;
+  privacyAccepted.value = false;
+};
+
 const getCurrentUrl = () => {
   reportedUrl.value = window.location.href;
 };
+
+const checkboxRules = computed(() => {
+  if (reportDescription.value.length || reporterEmail.value.length || reporterName.value.length) {
+    return false;
+  } else  {
+    return true;
+  }
+
+});
+
 
 const emitClose = () => {
   emit("close");
