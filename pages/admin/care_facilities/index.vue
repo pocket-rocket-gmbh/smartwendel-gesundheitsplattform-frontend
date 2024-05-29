@@ -254,6 +254,7 @@ const fields = [
   {
     text: "",
     value: "mdi-eye",
+    width: "10px",
     type: "button",
     tooltip: "Einrichtung anzehen",
     action: (item: any) => {
@@ -263,15 +264,18 @@ const fields = [
   {
     value: "",
     type: "is-lk",
+    width: "10px",
     tooltip: "Einrichtung wurde von einer Admin erstellt.",
   },
   {
     value: "",
     type: "send-invitation",
+    width: "10px",
     tooltip: "Einrichtung wurde von einer Admin erstellt.",
   },
   {
     type: "imported",
+    width: "10px",
     tooltip: "Einrichtung wurde importiert.",
   },
 ];
