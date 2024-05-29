@@ -162,10 +162,9 @@ const items = computed<DashboardItem[]>(() => [
         content:
           facilities.value.filter(
             (facility: any) =>
-              !facility.is_active &&
               facility.kind === "facility" &&
               new Date(facility.created_at) >= thirtyDaysAgo
-          ).length + 1,
+          ).length ,
         type: "facility",
         query: "thirty_days_ago",
       },
@@ -180,7 +179,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Importierte Profile",
         content: facilities.value.filter(
-          (facility: any) => facility?.user?.imported === true
+          (facility: any) => facility?.user?.imported === true && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "imported_profiles",
@@ -191,7 +190,7 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.user?.imported === true &&
             facility?.owner_requested_maintenance &&
-            !facility?.user?.onboarding_token?.length
+            facility.kind === "facility" 
         ).length,
         type: "facility",
         query: "successful_profile_takeovers",
@@ -200,7 +199,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "Inhaberschaften Nutzer",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && !facility?.owner_requested_maintenance
+            facility?.user?.imported === true && !facility?.owner_requested_maintenance && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "user_maintenance_requested",
@@ -211,7 +210,7 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.user?.imported === true &&
             facility?.user?.notification_after_manual_import_sent_at &&
-            facility?.user?.onboarding_token?.length
+            facility?.user?.onboarding_token?.length && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "pending_profile_takeovers",

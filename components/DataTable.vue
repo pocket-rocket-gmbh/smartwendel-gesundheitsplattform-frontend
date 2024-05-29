@@ -93,7 +93,6 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group>
-
         <span @click="toogleBar" v-if="!noBar">
           <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
           <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
@@ -825,24 +824,35 @@ const filtersMap = {
     field: "user.imported",
     value: true,
   },
-  successful_profile_takeovers: {
-    field: "user.onboarding_status-eq",
-    value: "completed",
-  },
-  user_maintenance_requested: [
+  successful_profile_takeovers: [
     {
-      field: "user.owner_requested_maintenance",
-      value: false,
+      field: "user.onboarding_status-ne",
+      value: "pending",
+    },
+    {
+      field: "owner_requested_maintenance",
+      value: true,
     },
     {
       field: "user.imported",
       value: true,
     },
   ],
-  pending_profile_takeovers: [
+
+  user_maintenance_requested: [
+    {
+      field: "user.owner_requested_maintenance",
+      value: false,
+    },
     {
       field: "user.onboarding_status-eq",
       value: "pending",
+    },
+  ],
+  pending_profile_takeovers: [
+    {
+      field: "user.onboarding_status-ne",
+      value: "completed",
     },
     {
       field: "user.notification_after_manual_import_sent",
