@@ -158,7 +158,7 @@ const items = computed<DashboardItem[]>(() => [
       },
       {
         title: "Neu registrierte Einrichtungen*",
-        info: "*in der letzten 30 Tage",
+        info: "*in den letzten 30 Tagen",
         content:
           facilities.value.filter(
             (facility: any) =>
@@ -226,7 +226,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "In Prüfung",
         content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === false
+          (facility: any) => facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === false
         ).length,
         type: "users",
         query: "pending",
