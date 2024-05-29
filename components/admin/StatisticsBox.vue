@@ -11,7 +11,7 @@
           <v-icon size="x-small" v-if="hasFilter">mdi-filter-outline</v-icon>
         </div>
 
-        <span style="font-size: 14px"
+        <span v-if="!loading" style="font-size: 14px"
           ><i>{{ item.info }}</i></span
         >
         <v-progress-circular
