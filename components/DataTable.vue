@@ -838,7 +838,7 @@ const filtersMap = {
 
   user_maintenance_requested: [
     {
-      field: "user.owner_requested_maintenance-eq",
+      field: "user.owner_requested_maintenance",
       value: false,
     },
     {
