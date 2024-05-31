@@ -5,7 +5,6 @@
       <div class="ml-3" v-if="!loading && updatedAt">
         <span> Aktualisiert am: {{ updatedAt }}</span>
       </div>
-
       <v-skeleton-loader
         v-if="loading"
         class="ml-3"
@@ -214,7 +213,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "Inhaberschaften Nutzer",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && !facility?.owner_requested_maintenance && facility.kind === "facility"
+            facility?.user?.imported === true && facility?.owner_requested_maintenance === false && facility.kind === "facility" && facility?.user?.onboarding_status === "completed"
         ).length,
         type: "facility",
         query: "user_maintenance_requested",
@@ -259,8 +258,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Freigeschaltet",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === true
+          (facility: any) => facility?.user?.is_active_on_health_scope === true && facility.kind === "facility"
         ).length,
         type: "users",
         query: "approved",
