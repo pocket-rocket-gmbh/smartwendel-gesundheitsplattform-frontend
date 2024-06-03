@@ -513,7 +513,6 @@ const validateToken = async () => {
   );
   if (result.status === ResultStatus.SUCCESSFUL) {
     const data = result;
-    console.log(data);
     if (data) {
       hasToken.value = true;
       firstname.value = data?.data?.user?.firstname;
