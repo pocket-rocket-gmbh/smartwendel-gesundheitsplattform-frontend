@@ -32,7 +32,7 @@
         <div>
           <v-row class="my-5">
             <v-col class="general-font-size d-flex ga-8 mt-0 pt-0">
-              <div class="pa-0 ma-0">
+              <div class="pa-0 ma-0 shit-padding">
                 <v-checkbox
                   v-model="owner_requested_maintenance"
                   class="ma-0 pa-0"
@@ -312,4 +312,7 @@ onMounted(async () => {
   font-size: 55px;
 }
 
+.shit-padding {
+  margin-top: -0.65rem !important;
+}
 </style>

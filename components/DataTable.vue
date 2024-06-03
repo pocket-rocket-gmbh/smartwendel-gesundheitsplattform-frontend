@@ -824,10 +824,6 @@ const filtersMap = {
   },
   successful_profile_takeovers: [
     {
-      field: "user.onboarding_status-ne",
-      value: "pending",
-    },
-    {
       field: "owner_requested_maintenance",
       value: true,
     },
@@ -839,7 +835,7 @@ const filtersMap = {
 
   user_maintenance_requested: [
     {
-      field: "user.owner_requested_maintenance",
+      field: "owner_requested_maintenance",
       value: false,
     },
     {
@@ -853,8 +849,16 @@ const filtersMap = {
   ],
   pending_profile_takeovers: [
     {
-      field: "user.onboarding_status-ne",
-      value: "completed",
+      field: "user.onboarding_status-eq",
+      value: "pending",
+    },
+    {
+      field: "user.imported",
+      value: true,
+    },
+    {
+      field: "user.onboarding_token-ne",
+      value: null as any,
     },
     {
       field: "user.notification_after_manual_import_sent",
@@ -891,10 +895,17 @@ const filtersMap = {
   },
 
   showAll: [],
-  approved: {
-    field: "is_active_on_health_scope",
-    value: true,
-  },
+  approved: [
+    {
+      field: "is_active_on_health_scope",
+      value: true,
+    },
+
+    {
+      field: "care_facilities-ne",
+      value: "[]",
+    },
+  ],
   pending: [
     {
       field: "is_active_on_health_scope",

@@ -213,7 +213,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "Inhaberschaften Nutzer",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && facility?.owner_requested_maintenance === false && facility.kind === "facility" && facility?.user?.onboarding_status === "completed"
+            facility?.user?.imported === true && !facility?.owner_requested_maintenance && facility?.user?.onboarding_status === "completed"
         ).length,
         type: "facility",
         query: "user_maintenance_requested",
@@ -223,7 +223,7 @@ const items = computed<DashboardItem[]>(() => [
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.imported === true &&
-            facility?.user?.notification_after_manual_import_sent_at &&
+            facility?.user?.notification_after_manual_import_sent &&
             facility?.user?.onboarding_token?.length && facility.kind === "facility"
         ).length,
         type: "facility",
@@ -258,8 +258,8 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Freigeschaltet",
         content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === true && facility.kind === "facility"
-        ).length,
+          (facility: any) => facility?.user?.is_active_on_health_scope && facility.kind === "facility"
+        ).length + 1, //because of the admin user
         type: "users",
         query: "approved",
       },
