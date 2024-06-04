@@ -12,6 +12,7 @@
             v-for="(item, index) in listOptions"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -26,6 +27,7 @@
             v-for="(item, index) in listOptionsUsers"
             :key="index"
             :label="item.text"
+            class="pl-5"
             :value="item.value"
             @click="setFilter(item.value)"
           ></v-radio>
@@ -44,7 +46,53 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group> -->
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+          v-else-if="endpoint === 'care_facilities?kind=event'"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsEvents"
+            :key="index"
+            :label="item.text"
+            class="pl-5"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
 
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+          v-else-if="endpoint === 'care_facilities?kind=course'"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsCourses"
+            :key="index"
+            :label="item.text"
+            class="pl-5"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
+
+        <v-radio-group
+          inline
+          class="d-flex justify-end align-center"
+          v-model="listOptionValue"
+          v-else-if="endpoint === 'care_facilities?kind=news'"
+        >
+          <v-radio
+            v-for="(item, index) in listOptionsNews"
+            :key="index"
+            :label="item.text"
+            class="pl-5"
+            :value="item.value"
+            @click="setFilter(item.value)"
+          ></v-radio>
+        </v-radio-group>
         <span @click="toogleBar" v-if="!noBar">
           <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
           <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
@@ -52,8 +100,10 @@
       </v-col>
     </v-row>
   </div>
+
   <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
-  <v-table fixed-header class="my-5">
+  <v-alert v-if="noData" type="warning">keine Ergebnisse gefunden </v-alert>
+  <v-table v-else fixed-header class="my-5">
     <thead class="elevation-1 primary">
       <tr>
         <th
@@ -236,12 +286,23 @@
                         {{ facility.name }}
                       </span>
                       <div class="d-flex align-center" v-if="useUser().isAdmin()">
-                        <v-icon v-if="!facility.is_active" size="x-small" color="error"
-                          >mdi-circle</v-icon
-                        >
-                        <v-icon v-if="facility.is_active" size="x-small" color="success"
-                          >mdi-circle</v-icon
-                        >
+                        <v-tooltip v-if="!facility.is_active">
+                          <template v-slot:activator="{ props }">
+                            <v-icon size="x-small" color="error" v-bind="props"
+                              >mdi-circle</v-icon
+                            >
+                          </template>
+                          <span>Einrichtung offline</span>
+                        </v-tooltip>
+
+                        <v-tooltip v-else>
+                          <template v-slot:activator="{ props }">
+                            <v-icon size="x-small" color="success" v-bind="props"
+                              >mdi-circle</v-icon
+                            >
+                          </template>
+                          <span>Einrichtung online</span>
+                        </v-tooltip>
                       </div>
                     </v-chip>
                   </v-col>
@@ -256,7 +317,7 @@
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
           </span>
           <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
-            <v-tooltip location="top" width="300px">
+            <v-tooltip location="top">
               <template v-slot:activator="{ props }">
                 <v-icon class="is-yellow" v-bind="props"
                   >mdi-calendar-alert-outline</v-icon
@@ -270,7 +331,7 @@
               field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
             "
           >
-            <v-tooltip location="top" width="300px">
+            <v-tooltip location="top">
               <template v-slot:activator="{ props }">
                 <img :src="logo" width="20" class="ml-2 pt-2" v-bind="props" />
               </template>
@@ -302,7 +363,7 @@
                 }}</span
               >
 
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">mdi-send-variant-outline</v-icon>
                 </template>
@@ -319,7 +380,7 @@
           >
             <div class="d-flex ga-3">
               <span v-if="item?.user?.onboarding_token">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="not-onboard" v-bind="props"
                       >mdi-application-import</v-icon
@@ -330,7 +391,7 @@
               </span>
 
               <span v-if="!item?.user?.onboarding_token">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="onboard" v-bind="props">mdi-application-import</v-icon>
                   </template>
@@ -339,7 +400,7 @@
               </span>
 
               <span v-if="!item?.owner_requested_maintenance">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="no-maintenance" v-bind="props"
                       >mdi-flag-variant-remove</v-icon
@@ -350,7 +411,7 @@
               </span>
 
               <span v-if="item?.owner_requested_maintenance">
-                <v-tooltip location="top" width="300px">
+                <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
                     <v-icon class="yes-maintenance" v-bind="props"
                       >mdi-flag-variant-plus</v-icon
@@ -370,13 +431,13 @@
               @click.stop="field.action(item)"
               v-if="field.value !== 'mdi-eye' && field.value !== 'mdi-check-decagram'"
             >
-              <span v-if="pathInto(item, field.value) !== 'user.name'">
+              <span
+                v-if="pathInto(item, field.value) !== 'user.name'"
+                class="break-title text-left"
+              >
                 {{ pathInto(item, field.value) }}
               </span>
-              <span
-                v-if="pathInto(item, field.value) === 'user.name'"
-                class="break-title"
-              >
+              <span v-if="pathInto(item, field.value) === 'user.name'">
                 Benutzer existiert nicht
                 <v-icon color="warning">mdi-alert</v-icon>
               </span>
@@ -390,18 +451,28 @@
                 class="align-center ml-2"
                 v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
               >
-                <v-icon
+                <v-tooltip
+                  location="top"
                   v-if="item?.user && item?.user?.is_active_on_health_scope"
-                  size="x-small"
-                  color="success"
-                  >mdi-circle</v-icon
                 >
-                <v-icon
+                  <template v-slot:activator="{ props }">
+                    <v-icon size="x-small" color="success" v-bind="props"
+                      >mdi-circle</v-icon
+                    >
+                  </template>
+                  <span>Benutzer ist Freigeschaltet.</span>
+                </v-tooltip>
+                <v-tooltip
+                  location="top"
                   v-if="item?.user && !item?.user?.is_active_on_health_scope"
-                  size="x-small"
-                  color="error"
-                  >mdi-circle</v-icon
                 >
+                  <template v-slot:activator="{ props }">
+                    <v-icon size="x-small" color="error" v-bind="props"
+                      >mdi-circle</v-icon
+                    >
+                  </template>
+                  <span>Benutzer ist nicht Freigeschaltet</span>
+                </v-tooltip>
               </span>
             </span>
             <span
@@ -411,7 +482,7 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon class="is-clickable" @click="field.action(item)" v-bind="props"
                     >mdi-eye</v-icon
@@ -427,7 +498,7 @@
                 useUser().statusOnHealthScope()
               "
             >
-              <v-tooltip location="top" width="300px">
+              <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon
                     class="is-clickable"
@@ -565,29 +636,43 @@ const showBar = ref(true);
 const listOptionValue = ref("showAll");
 
 const listOptions = ref([
-  { text: "Angemeldet", value: "showAll" },
-  { text: "Aktiv", value: "active_facilities" },
-  { text: "Inaktiv", value: "inactive_facilities" },
+  { text: "Gesamt", value: "showAll" },
+  { text: "Online", value: "active_facilities" },
+  { text: "Offline", value: "inactive_facilities" },
   { text: "Importierte Profile", value: "imported_profiles" },
-  { text: "Erfolgte Profilübernahmen", value: "successful_profile_takeovers" },
-  { text: "Ausstehende Profilübernahmen", value: "pending_profile_takeovers" },
-  {
-    text: "Versandte Verifizierungsanfragen",
-    value: "sent_verification_requests",
-  },
-  { text: "Übertragene Inhaberschaft", value: "managed_by_lk" },
-  { text: "Eigen erstellte Profile", value: "created_by_lk" },
+  { text: "Inhaberschaften LK", value: "successful_profile_takeovers" },
+  { text: "Rückmeldung ausstehend", value: "pending_profile_takeovers" },
+  { text: "Neu registrierte Einrichtungen", value: "thirty_days_ago" },
+  { text: "Inhaberschaften Nutzer", value: "user_maintenance_requested" },
 ]);
 
 const listOptionsUsers = ref([
-  { text: "Angemeldet", value: "showAll" },
+  { text: "Gesamt", value: "showAll" },
   { text: "Freigegeben", value: "approved" },
   { text: "in Prüfung (importiert)", value: "import_pending" },
   { text: "in Prüfung", value: "pending" },
 ]);
 
+const listOptionsEvents = ref([
+  { text: "Gesamt", value: "showAll" },
+  { text: "Online", value: "active_events" },
+  { text: "Offline", value: "inactive_events" },
+]);
+
+const listOptionsCourses = ref([
+  { text: "Gesamt", value: "showAll" },
+  { text: "Online", value: "active_courses" },
+  { text: "Offline", value: "inactive_courses" },
+]);
+
+const listOptionsNews = ref([
+  { text: "Gesamt", value: "showAll" },
+  { text: "Online", value: "active_news" },
+  { text: "Offline", value: "inactive_news" },
+]);
+
 /* const listOptionsComplaints = ref([
-  { text: "Angemeldet", value: "showAll" },
+  { text: "Gesamt", value: "showAll" },
   { text: "Beantwortet", value: "answered" },
 ]); */
 
@@ -699,6 +784,9 @@ api.setBaseApi(usePrivateApi());
 api.setEndpoint(props.endpoint);
 const items = api.items;
 
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
 //limit items to 10
 
 const handleToggled = async (item: any) => {
@@ -733,26 +821,49 @@ const filtersMap = {
     field: "user.imported",
     value: true,
   },
-  successful_profile_takeovers: {
-    field: "user.onboarding_status-eq",
-    value: "completed",
-  },
-  pending_profile_takeovers: {
-    field: "user.onboarding_status-eq",
-    value: "pending",
-  },
-  sent_verification_requests: [
+  successful_profile_takeovers: [
     {
-      field: "user.notification_after_manual_import_sent",
+      field: "owner_requested_maintenance",
       value: true,
     },
+    {
+      field: "user.imported",
+      value: true,
+    },
+  ],
 
+  user_maintenance_requested: [
+    {
+      field: "owner_requested_maintenance",
+      value: false,
+    },
+    {
+      field: "user.onboarding_status-eq",
+      value: "completed",
+    },
+    {
+      field: "user.imported",
+      value: true,
+    },
+  ],
+  pending_profile_takeovers: [
     {
       field: "user.onboarding_status-eq",
       value: "pending",
     },
+    {
+      field: "user.imported",
+      value: true,
+    },
+    {
+      field: "user.onboarding_token-ne",
+      value: null as any,
+    },
+    {
+      field: "user.notification_after_manual_import_sent",
+      value: true,
+    },
   ],
-
   data_up_to_date: {
     field: "user.data_up_to_date",
     value: true,
@@ -761,19 +872,39 @@ const filtersMap = {
     field: "is_active",
     value: true,
   },
+  inactive_events: {
+    field: "is_active",
+    value: false,
+  },
   active_courses: {
     field: "is_active",
     value: true,
   },
-  active_articles: {
+  inactive_courses: {
+    field: "is_active",
+    value: false,
+  },
+  active_news: {
     field: "is_active",
     value: true,
   },
-  showAll: [],
-  approved: {
-    field: "is_active_on_health_scope",
-    value: true,
+  inactive_news: {
+    field: "is_active",
+    value: false,
   },
+
+  showAll: [],
+  approved: [
+    {
+      field: "is_active_on_health_scope",
+      value: true,
+    },
+
+    {
+      field: "care_facilities-ne",
+      value: "[]",
+    },
+  ],
   pending: [
     {
       field: "is_active_on_health_scope",
@@ -800,13 +931,9 @@ const filtersMap = {
     },
   ],
 
-  managed_by_lk: {
-    field: "owner_requested_maintenance",
-    value: true,
-  },
-  created_by_lk: {
-    field: "user.role-eq",
-    value: "care_facility_admin",
+  thirty_days_ago: {
+    field: "created_at-ge",
+    value: thirtyDaysAgo,
   },
 
   /*   all_complaints: {
@@ -856,8 +983,10 @@ const getItems = async () => {
   }
 
   if (response.data && response.data.resources) {
+    noData.value = false;
     items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
   } else {
+    noData.value = false;
     items.value = Array.isArray(response.data) ? response.data : [];
   }
 
@@ -1004,4 +1133,9 @@ defineExpose({ resetActiveItems, getItems });
 
 .yes-maintenance
   color: #358BBC
+
+
+.v-radio .v-icon
+  color: #8ab61d
+  border-radius: 50%
 </style>
