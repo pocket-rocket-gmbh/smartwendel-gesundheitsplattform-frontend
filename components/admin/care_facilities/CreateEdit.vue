@@ -611,8 +611,7 @@
               >
                 <div class="mt-3">
                   <v-alert type="error" class="general-font-size"
-                    >Adresse nicht gefunden. überprüfe deine Straße, Hausnr., Gemeinde und
-                    Ort</v-alert
+                    >Adresse nicht gefunden. Überprüfe deine Straße, Haus-Nr, Gemeinde und Ort.</v-alert
                   >
                 </div>
               </div>
