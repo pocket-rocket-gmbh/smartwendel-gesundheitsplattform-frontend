@@ -114,7 +114,7 @@
               cols="12"
               md="4"
               sm="12"
-              class="bar-content d-flex justify-space-between pa-0 mb-3"
+              class="bar-content d-flex justify-space-between pa-0 mb-3 is-dark-grey"
             >
               <div
                 class="d-flex align-center facility-name is-clickable"
