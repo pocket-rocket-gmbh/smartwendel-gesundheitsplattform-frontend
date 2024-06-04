@@ -39,18 +39,19 @@
     </div>
     <div class="icons mb-2">
       <div v-for="(item, index) in items" :key="index" class="icon">
-        <div @click="goToLink(item.content.link)" class="d-flex">
-          <div class="is-clickable items-content">
-            <img class="image mt-3" :src="item.content.icon" />
-            <div
-              class="is-dark-grey general-font-size font-weight-medium title-content"
-              v-html="item.content.heading"
-            ></div>
-          </div>
-          <div class="d-flex align-center is-clickable">
-            <div class="font-weight-bold"></div>
-          </div>
-        </div>
+        <a class="is-white text-decoration-underline" :href="item.content.link">
+          <div class="d-flex">
+            <div class="is-clickable items-content">
+              <img class="image mt-3" :src="item.content.icon" />
+              <div
+                class="is-dark-grey general-font-size font-weight-medium title-content"
+                v-html="item.content.heading"
+              ></div>
+            </div>
+            <div class="d-flex align-center is-clickable">
+              <div class="font-weight-bold"></div>
+            </div></div
+        ></a>
       </div>
     </div>
   </div>
@@ -79,23 +80,21 @@ const items = [
       heading: "Sportstätten",
       icon: icon1,
       link:
-        '/public/search/facilities',
+        '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["7dcbda4d-a37f-4dd5-8a8e-e59d42be8dac","2af6c174-ded9-4fd2-afae-a93ff36927c1","3f6beacf-1a13-48af-b640-7aa49c72f755"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
     },
   },
   {
     content: {
       heading: "Ärztliche Versorgung",
       icon: icon2,
-      link:
-        '/public/search/facilities',
+      link: "/public/search/facilities",
     },
   },
   {
     content: {
       heading: "Vereine",
       icon: icon3,
-      link:
-        '/public/search/facilities',
+      link: "/public/search/facilities",
     },
   },
   {
@@ -103,7 +102,7 @@ const items = [
       heading: "Pflege",
       icon: icon4,
       link:
-        '/public/search/facilities',
+        '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["75ad08a3-6060-4ef7-9a18-53ec073d7c6e"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
     },
   },
   {
@@ -111,15 +110,14 @@ const items = [
       heading: "Beratung",
       icon: icon5,
       link:
-        '/public/search/facilities',
+        '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["b6ac9f61-0d2d-4a24-81e0-d42520aeab78","f2bfffad-665c-4b43-a9bc-eba787b710a9","55423b7d-1bbf-4c03-8fff-8002df77409c","6903784c-ef1c-4b06-a253-db03c19cbd64","04fc1460-a1e0-47de-a515-dab88d5c1748","6842b72c-f678-4d96-9f48-ba6a21dcda95","ed4b6e4f-7c01-4a58-a09a-6dc3a154a42a"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
     },
   },
   {
     content: {
       heading: "Kliniken",
       icon: icon6,
-      link:
-        '/public/search/facilities',
+      link: "/public/search/facilities",
     },
   },
 ];
@@ -208,5 +206,9 @@ const items = [
   flex-direction: column;
   gap: 0.5rem;
   text-align: center;
+}
+
+a {
+  text-decoration: none !important;
 }
 </style>

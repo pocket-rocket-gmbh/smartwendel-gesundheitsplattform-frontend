@@ -21,8 +21,15 @@
       v-auto-animate
     >
       <div class="filters filter-wrap">
-        <div v-for="filter in filterStore.filteredFacilityMainFilters" :key="filter.id" class="filter-column">
-          <div v-if="hasActiveOptions(filter.id)" class="filter-name my-1 font-weight-bold">
+        <div
+          v-for="filter in filterStore.filteredFacilityMainFilters"
+          :key="filter.id"
+          class="filter-column"
+        >
+          <div
+            v-if="hasActiveOptions(filter.id)"
+            class="filter-name my-1 font-weight-bold"
+          >
             {{ filter.name }}
 
             <v-btn
@@ -33,7 +40,9 @@
               class="ma-2"
               :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
             >
-              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
+              <span>
+                {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span
+              >
             </v-btn>
           </div>
           <div
@@ -54,8 +63,9 @@
                   'is-selected': modelValue.includes(option.id),
                 }"
               >
-                <p v-if="loadingFilters" class="waiting general-font-size"><span>.</span><span>.</span><span>.</span></p>
-
+                <p v-if="loadingFilters" class="waiting general-font-size">
+                  <span>.</span><span>.</span><span>.</span>
+                </p>
                 <span v-else>
                   {{ option.name }}
                 </span>
@@ -195,11 +205,19 @@ watch(
   }
 );
 
+watch(
+  () => filterStore.filteredFacilityMainFilters,
+  () => {
+    multipleSelections.value = filterStore.filteredFacilityMainFilters.map(filter => filter.options).flat().filter(option => props.modelValue.includes(option.id));
+  }
+);
+
 onMounted(async () => {
   setPlaceholderText();
-
   await filterStore.loadAllCommunities();
   filterStore.loadFilteredCommunities();
+
+
 });
 </script>
 
