@@ -645,6 +645,7 @@ const listOptions = ref([
   { text: "Rückmeldung ausstehend", value: "pending_profile_takeovers" },
   { text: "Neu registrierte Einrichtungen", value: "thirty_days_ago" },
   { text: "Inhaberschaften Nutzer", value: "user_maintenance_requested" },
+  { text: "Daten nicht aktuell", value: "data_not_up_to_date" },
 ]);
 
 const listOptionsUsers = ref([
@@ -788,6 +789,9 @@ const items = api.items;
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
+const notUpToDate = new Date();
+notUpToDate.setDate(notUpToDate.getDate() - 120);
+
 //limit items to 10
 
 const handleToggled = async (item: any) => {
@@ -865,9 +869,9 @@ const filtersMap = {
       value: true,
     },
   ],
-  data_up_to_date: {
-    field: "user.data_up_to_date",
-    value: true,
+  data_not_up_to_date: {
+    field: "updated_at-lt",
+    value: notUpToDate,
   },
   active_events: {
     field: "is_active",

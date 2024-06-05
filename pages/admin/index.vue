@@ -73,6 +73,9 @@ const getUpdatedAtFromLocalStorage = () => {
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
+const notUpToDate = new Date();
+notUpToDate.setDate(notUpToDate.getDate() - 120);
+
 const updatedAt = ref("");
 
 const facilitiesFromLocalStorage = localStorage.getItem("facilities");
@@ -282,14 +285,21 @@ const items = computed<DashboardItem[]>(() => [
   {
     title: "Datenaktualität",
     icon: "mdi-playlist-check",
+
     divider: true,
     id: 4,
     sub_items: [
       {
         title: "Nicht aktuell",
-        content: 0,
-        /*         query: "data_up_to_date",
-        type: "facility", */
+        info: "*120 Tagen",
+        content:
+          facilities.value.filter(
+            (facility: any) =>
+              facility.kind === "facility" &&
+              new Date(facility.updated_at) < notUpToDate
+          ).length,
+        query: "data_not_up_to_date",
+        type: "facility",
       },
     ],
   },
