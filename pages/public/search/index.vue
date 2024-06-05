@@ -103,7 +103,7 @@ const router = useRouter();
 
 const filteredKinds = computed(() => {
   return Array.from(
-    new Set(filterStore.filteredResults.map((result) => result.kind))
+    new Set(filterStore.filteredResults.map((result:any) => result.kind))
   );
 });
 const goBack = () => {
@@ -131,7 +131,7 @@ const routeToFilterPage = (kind: "facility" | "news" | "event" | "course") => {
 };
 
 const handleInput = () => {
-  filterStore.onlySearchInTitle = true;
+  filterStore.onlySearchInTitle = false;
   filterStore.loadAllResults();
 };
 
@@ -144,9 +144,8 @@ onMounted(async () => {
   } else {
     filterStore.currentKinds = [];
   }
-  filterStore.onlySearchInTitle = true;
+  filterStore.onlySearchInTitle = false;
   await filterStore.loadAllResults();
-  filterStore.loadAllResults();
 });
 </script>
 
