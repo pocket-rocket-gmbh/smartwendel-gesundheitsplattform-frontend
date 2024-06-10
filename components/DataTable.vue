@@ -147,8 +147,8 @@
         :class="[
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
-          item?.kind !== 'facility' ? 'has-normal-bg' : '',
-          getCurrentRoute() === 'admin-users' ? '' : '',
+          item?.kind !== 'user' ? '' : 'has-normal-bg',
+          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips'? 'has-normal-bg' : '',
           isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
         ]"
       >
