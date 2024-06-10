@@ -59,7 +59,6 @@
         ref="dataTableRef"
         :fields="fields"
         :search-query="facilitySearchTerm"
-        :search-columns="facilitySearchColums"
         endpoint="care_facilities?kind=facility"
         @openCreateEditDialog="openCreateEditDialog"
         @openDeleteDialog="openDeleteDialog"
@@ -372,7 +371,6 @@ const facilityId = ref(null);
 const itemId = ref(null);
 const previewItem = ref<Facility>();
 
-const facilitySearchColums = ref(["name", "user.name"]);
 const facilitySearchTerm = ref("");
 
 const itemStatus = ref(null);
