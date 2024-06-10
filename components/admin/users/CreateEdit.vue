@@ -1,13 +1,28 @@
 <template>
-  <v-dialog v-model="dialog" transition="dialog-top-transition" width="900" @click:outside="emitClose()">
+  <v-dialog
+    v-model="dialog"
+    transition="dialog-top-transition"
+    width="900"
+    @click:outside="emitClose()"
+  >
     <v-card class="dialog-900">
       <v-card-title class="text-h5"> Benutzer </v-card-title>
       <v-card-text>
         <div class="field">
-          <v-text-field v-model="item.firstname" label="Vorname" hide-details="auto" />
+          <v-text-field
+            v-model="item.firstname"
+            label="Vorname"
+            hide-details="auto"
+            :rules="[rules.required]"
+          />
         </div>
         <div class="field">
-          <v-text-field v-model="item.lastname" label="Nachname" hide-details="auto" />
+          <v-text-field
+            v-model="item.lastname"
+            label="Nachname"
+            hide-details="auto"
+            :rules="[rules.required]"
+          />
         </div>
         <div class="field">
           <v-text-field
@@ -15,6 +30,7 @@
             label="Telefonnummer"
             :error-messages="useErrors().checkAndMapErrors('phone', errors)"
             hide-details="auto"
+            :rules="[rules.required, rules.validateNumber]"
           />
         </div>
         <div class="field">
@@ -23,6 +39,7 @@
             label="E-Mail"
             :error-messages="useErrors().checkAndMapErrors('email', errors)"
             hide-details="auto"
+            :rules="[rules.required, rules.email]"
           />
         </div>
         <div class="field">
@@ -34,12 +51,20 @@
             label="Rolle"
             single-line
             hide-details="auto"
+            :rules="[rules.required]"
           />
         </div>
       </v-card-text>
       <v-card-actions>
         <v-btn @click="emitClose()"> Schließen </v-btn>
-        <v-btn color="blue darken-1" variant="outlined" dark @click="handleCta()" :loading="loadingItem">
+        <v-btn
+          color="blue darken-1"
+          variant="outlined"
+          dark
+          @click="handleCta()"
+          :loading="loadingItem"
+          :disabled="subumitCondition"
+        >
           <span v-if="itemId">Speichern</span>
           <span v-else>Einladen</span>
         </v-btn>
@@ -52,6 +77,8 @@
 import { type User } from "~/store/searchFilter";
 import { ResultStatus } from "@/types/serverCallResult";
 import axios from "axios";
+import { rules } from "../../../data/validationRules";
+
 
 const emit = defineEmits(["close", "refreshCollection"]);
 const props = defineProps<{
@@ -96,6 +123,11 @@ const handleCta = () => {
   }
 };
 
+const subumitCondition =  computed(() => {
+  return !item.value.firstname || !item.value.lastname || !item.value.email || !item.value.phone || !item.value.role;
+});
+
+
 const invite = async () => {
   createUpdateApi.setEndpoint(`users/invite`);
   loadingItem.value = true;
@@ -114,6 +146,7 @@ const invite = async () => {
 };
 
 const save = async () => {
+  console.log('uhuhu')
   createUpdateApi.setEndpoint(`users/${props.itemId}`);
   loadingItem.value = true;
   const result = await createUpdateApi.updateItem(item.value, "Benutzer erfolgreich aktualisiert");
