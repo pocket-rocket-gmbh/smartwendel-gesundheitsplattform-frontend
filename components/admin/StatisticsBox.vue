@@ -1,7 +1,7 @@
 <template>
   <div
     class="d-flex flex-column is-dark-grey stats-card"
-    :class="hasFilter ? 'is-clickable' : ''"
+    :class="[hasFilter ? 'is-clickable' : '', item.hasNoSpace ? 'mt-n1' : '']"
     @click="redirectAndFilter"
   >
     <div class="d-flex align-center">
@@ -42,6 +42,7 @@ const props = defineProps<{
     type?: string;
     query?: string;
     info?: string;
+    hasNoSpace?: boolean;
   };
   complaints: any;
 }>();
@@ -85,7 +86,7 @@ const redirectAndFilter = () => {
 .stats-card {
   background-color: #f5f5f5;
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 10px 10px;
   margin: 30px 0;
   border: 2px solid #58595e;
   min-height: 147px;

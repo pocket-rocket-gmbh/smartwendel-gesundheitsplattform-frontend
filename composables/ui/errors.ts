@@ -8,7 +8,7 @@ const errorCodes: { [key: string]: string } = {
   'password.not_filled': 'Ein Passwort muss angegeben werden.',
   'password.too_short': 'Das Passwort muss mindestens 6 Zeichen haben.',
   'password.not_matching': 'Die beiden Passwörter müssen übereinstimmen.',
-  'register.failed': 'E-Mail falsch oder bereits vergeben.',
+  'register.failed': 'Mit dieser Email-Adresse kann kein Benutzerkonto erstellt werden.',
   'reset_password.failed': 'E-Mail falsch oder noch nicht registriert.',
   'ERR_BAD_REQUEST': 'Benutzername oder Passwort sind falsch',
   'user.email.taken': 'E-Mail bereits vergeben',
