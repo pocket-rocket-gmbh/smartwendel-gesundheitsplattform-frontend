@@ -53,7 +53,6 @@
       :fields="fields"
       endpoint="care_facilities?kind=news"
       :search-query="facilitySearchTerm"
-      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @toogle-bar="showBar = !showBar"
@@ -189,7 +188,6 @@ const draftRequiredFields: RequiredField[] = [
   },
 ];
 
-const facilitySearchColums = ref(["name", "user.name", "created_at"]);
 const facilitySearchTerm = ref("");
 
 const createEditDialogOpen = ref(false);
