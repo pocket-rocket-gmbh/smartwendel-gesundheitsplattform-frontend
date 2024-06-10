@@ -645,12 +645,14 @@ const listOptions = ref([
   { text: "Neu registrierte Einrichtungen", value: "thirty_days_ago" },
   { text: "Inhaberschaften Nutzer", value: "user_maintenance_requested" },
   { text: "Daten nicht aktuell", value: "data_not_up_to_date" },
+  { text: "Nicht gesendete Emails", value: "mail_not_sent" },
 ]);
 
 const listOptionsUsers = ref([
   { text: "Gesamt", value: "showAll" },
   { text: "Freigegeben", value: "approved" },
   { text: "in Prüfung (importiert)", value: "import_pending" },
+  { text: "in Prüfung (import abgeschlossen)", value: "imported_pending" },
   { text: "in Prüfung", value: "pending" },
 ]);
 
@@ -932,6 +934,33 @@ const filtersMap = {
     {
       field: "is_active_on_health_scope",
       value: false,
+    },
+  ],
+
+  imported_pending: [
+    {
+      field: "imported",
+      value: true,
+    },
+
+    {
+      field: "is_active_on_health_scope",
+      value: false,
+    },
+    {
+      field: "onboarding_status-eq",
+      value: "completed",
+    },
+  ],
+
+  mail_not_sent: [
+    {
+      field: "user.notification_after_manual_import_sent",
+      value: false,
+    },
+    {
+      field: "user.imported",
+      value: true,
     },
   ],
 
