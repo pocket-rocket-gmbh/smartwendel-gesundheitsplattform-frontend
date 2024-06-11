@@ -74,7 +74,6 @@
       :fields="fields"
       endpoint="care_facilities?kind=course"
       :search-query="facilitySearchTerm"
-      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       defaultSortBy="created_at"
@@ -236,7 +235,6 @@ const draftRequiredFields: RequiredField[] = [
 
 const previewItem = ref<Facility>();
 
-const facilitySearchColums = ref(["name", "user.name", "kind"]);
 const facilitySearchTerm = ref("");
 
 const dataTableRef = ref();

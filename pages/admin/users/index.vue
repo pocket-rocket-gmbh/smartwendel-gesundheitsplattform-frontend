@@ -32,7 +32,6 @@
       :fields="fields"
       endpoint="users"
       :search-query="facilitySearchTerm"
-      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @mailUser="mailUser"
@@ -140,12 +139,6 @@ const filter = ref({
 });
 const dataTableRef = ref();
 
-const facilitySearchColums = ref([
-  "firstname",
-  "lastname",
-  "last_seen",
-  "care_facilities",
-]);
 const facilitySearchTerm = ref("");
 
 const openCreateEditDialog = (item: any) => {
