@@ -273,7 +273,7 @@ const items = computed<DashboardItem[]>(() => [
             facility?.user?.onboarding_status === "completed"
         ).length,
         type: "users",
-        query: " imported_pending",
+        query: "imported_pending",
       },
       {
         title: "Freigeschaltet",
