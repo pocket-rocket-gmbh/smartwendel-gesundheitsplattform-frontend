@@ -89,7 +89,7 @@
                 :error-messages="useErrors().checkAndMapErrors('email', errors)"
               />
 
-              {{ complaintForm?.items.filter(item => item?.id === 'mail' && !item?.isValid) }}
+            <!--   {{ complaintForm?.items.filter(item => item?.id === 'mail' && !item?.isValid) }} -->
             </div>
             <div class="field">
               <v-textarea
