@@ -31,7 +31,6 @@
       :fields="fields"
       endpoint="tooltips"
       :search-query="facilitySearchTerm"
-      :search-columns="facilitySearchColums"
       @openCreateEditDialog="openCreateEditDialog"
       @openDeleteDialog="openDeleteDialog"
       @toogle-bar="showBar = !showBar"
@@ -82,7 +81,6 @@ const itemPlaceholder = ref({
 
 const showBar = ref(true);
 
-const facilitySearchColums = ref(["name", "content", "url"]);
 const facilitySearchTerm = ref("");
 
 const dialog = ref(false);

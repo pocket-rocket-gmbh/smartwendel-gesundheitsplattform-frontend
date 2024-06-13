@@ -28,7 +28,11 @@
       </div>
       <div>
         <v-row>
-          <v-col md="3" v-for="sub_item in item?.sub_items" :class="!item?.divider ? 'mb-n14' : ''">
+          <v-col
+            md="3"
+            v-for="sub_item in item?.sub_items"
+            :class="!item?.divider ? 'mb-n14' : ''"
+          >
             <AdminStatisticsBox :item="sub_item" :loading="loading" />
           </v-col>
         </v-row>
@@ -71,6 +75,9 @@ const getUpdatedAtFromLocalStorage = () => {
 
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+const notUpToDate = new Date();
+notUpToDate.setDate(notUpToDate.getDate() - 120);
 
 const updatedAt = ref("");
 
@@ -158,12 +165,10 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Neu registrierte Einrichtungen*",
         info: "*in den letzten 30 Tagen",
-        content:
-          facilities.value.filter(
-            (facility: any) =>
-              facility.kind === "facility" &&
-              new Date(facility.created_at) >= thirtyDaysAgo
-          ).length ,
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility.kind === "facility" && new Date(facility.created_at) >= thirtyDaysAgo
+        ).length,
         type: "facility",
         query: "thirty_days_ago",
       },
@@ -178,7 +183,8 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Importierte Profile",
         content: facilities.value.filter(
-          (facility: any) => facility?.user?.imported === true && facility.kind === "facility"
+          (facility: any) =>
+            facility?.user?.imported === true && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "imported_profiles",
@@ -189,7 +195,7 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.user?.imported === true &&
             facility?.owner_requested_maintenance &&
-            facility.kind === "facility" 
+            facility.kind === "facility"
         ).length,
         type: "facility",
         query: "successful_profile_takeovers",
@@ -198,7 +204,9 @@ const items = computed<DashboardItem[]>(() => [
         title: "Inhaberschaften Nutzer",
         content: facilities.value.filter(
           (facility: any) =>
-            facility?.user?.imported === true && !facility?.owner_requested_maintenance && facility?.user?.onboarding_status === "completed"
+            facility?.user?.imported === true &&
+            !facility?.owner_requested_maintenance &&
+            facility?.user?.onboarding_status === "completed"
         ).length,
         type: "facility",
         query: "user_maintenance_requested",
@@ -209,10 +217,24 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.user?.imported === true &&
             facility?.user?.notification_after_manual_import_sent &&
-            facility?.user?.onboarding_token?.length && facility.kind === "facility"
+            facility?.user?.onboarding_token?.length &&
+            facility.kind === "facility"
         ).length,
         type: "facility",
         query: "pending_profile_takeovers",
+      },
+      {
+        title: "Nicht gesendete Emails",
+        hasNoSpace: true,
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility?.user?.imported === true &&
+            !facility?.user?.notification_after_manual_import_sent &&
+            facility?.user?.onboarding_token?.length &&
+            facility.kind === "facility"
+        ).length,
+        type: "facility",
+        query: "mail_not_sent",
       },
     ],
   },
@@ -225,7 +247,9 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "In Prüfung",
         content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === false
+          (facility: any) =>
+            facility?.user?.is_active_on_health_scope === false &&
+            facility?.user?.imported === false
         ).length,
         type: "users",
         query: "pending",
@@ -241,10 +265,23 @@ const items = computed<DashboardItem[]>(() => [
         query: "import_pending",
       },
       {
-        title: "Freigeschaltet",
+        title: "in Prüfung (import abgeschlossen)",
         content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope && facility.kind === "facility"
-        ).length + 1, //because of the admin user
+          (facility: any) =>
+            facility?.user?.is_active_on_health_scope === false &&
+            facility?.user?.imported === true &&
+            facility?.user?.onboarding_status === "completed"
+        ).length,
+        type: "users",
+        query: "imported_pending",
+      },
+      {
+        title: "Freigeschaltet",
+        content:
+          facilities.value.filter(
+            (facility: any) =>
+              facility?.user?.is_active_on_health_scope && facility.kind === "facility"
+          ).length + 1, //because of the admin user
         type: "users",
         query: "approved",
       },
@@ -253,14 +290,19 @@ const items = computed<DashboardItem[]>(() => [
   {
     title: "Datenaktualität",
     icon: "mdi-playlist-check",
+
     divider: true,
     id: 4,
     sub_items: [
       {
         title: "Nicht aktuell",
-        content: 0,
-        /*         query: "data_up_to_date",
-        type: "facility", */
+        info: "*120 Tagen",
+        content: facilities.value.filter(
+          (facility: any) =>
+            facility.kind === "facility" && new Date(facility.updated_at) < notUpToDate
+        ).length,
+        query: "data_not_up_to_date",
+        type: "facility",
       },
     ],
   },
@@ -303,22 +345,22 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Veranstaltungen gesamt",
-        content: facilities.value.filter(
-          (facility: any) => facility?.kind === "event").length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "event")
+          .length,
         type: "event",
         query: "showAll",
       },
       {
         title: "Kurse gesamt",
-        content: facilities.value.filter(
-          (facility: any) => facility?.kind === "course").length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "course")
+          .length,
         type: "course",
         query: "showAll",
       },
       {
         title: "Beiträge gesamt",
-        content: facilities.value.filter(
-          (facility: any) => facility?.kind === "news").length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "news")
+          .length,
         type: "news",
         query: "showAll",
       },
