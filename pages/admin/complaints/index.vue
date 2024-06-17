@@ -27,6 +27,7 @@
       defaultSortBy="created_at"
       :disable-delete="false"
       @toogle-bar="showBar = !showBar"
+      @generatePdf="generatePdf"
     />
 
     <AdminComplaintsCreateEdit
@@ -62,9 +63,31 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { ResultStatus } from "@/types/serverCallResult";
+
+
+const snackbar = useSnackbar();
+const privateApi = usePrivateApi();
+
 definePageMeta({
   layout: "admin",
 });
+
+const pdfUrl = ref("");
+
+const generatePdf = async (item: any) => {
+  const result = await privateApi.call("get", `/complaints/${item.id}/history_pdf`);
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    pdfUrl.value = result.data.resource.history_pdf_url;
+    openPdf();
+  } else {
+    snackbar.showError("Ein Fehler ist aufgetreten");
+  }
+};
+
+const openPdf = () => {
+  return window.open(pdfUrl.value, "_blank");
+};
 
 const showBar = ref(true);
 const searchTerm = ref("");
@@ -132,9 +155,6 @@ const handleCreateEditClose = () => {
   dataTableRef.value?.resetActiveItems();
 };
 
-const handleUpdateItems = () => {
-  dataTableRef.value?.getItems();
-};
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"

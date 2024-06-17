@@ -148,7 +148,7 @@
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'user' ? '' : 'has-normal-bg',
-          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips'? 'has-normal-bg' : '',
+          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' || getCurrentRoute() === 'admin-complaints' ? 'has-normal-bg' : '',
           isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
         ]"
       >
@@ -312,7 +312,7 @@
             </div>
           </span>
           <span v-else-if="field.type === 'protocol'">
-            <span><v-icon size="x-large" color="red">mdi-file-pdf-box</v-icon></span>
+            <span><v-icon size="x-large" color="red" @click.stop="emitGeneratePdf(item)">mdi-file-pdf-box</v-icon></span>
           </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
@@ -619,7 +619,12 @@ const emit = defineEmits([
   "itemUpdated",
   "toogleBar",
   "openConfirmationDialog",
+  "generatePdf",
 ]);
+
+const emitGeneratePdf = (item: any) => {
+  emit("generatePdf", item);
+};
 
 const openConfirmationDialog = (item: any) => {
   emit("openConfirmationDialog", item);

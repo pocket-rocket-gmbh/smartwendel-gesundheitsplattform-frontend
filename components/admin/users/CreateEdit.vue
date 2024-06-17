@@ -146,7 +146,6 @@ const invite = async () => {
 };
 
 const save = async () => {
-  console.log('uhuhu')
   createUpdateApi.setEndpoint(`users/${props.itemId}`);
   loadingItem.value = true;
   const result = await createUpdateApi.updateItem(item.value, "Benutzer erfolgreich aktualisiert");

@@ -15,7 +15,7 @@
         >
         <span>Inhalt melden</span>
         <v-col class="d-flex align-center justify-end">
-          <v-btn prepend-icon="mdi-file-pdf-box" disabled>
+          <v-btn prepend-icon="mdi-file-pdf-box" @click="generatePdf(itemId)">
             <template v-slot:prepend>
               <v-icon size="x-large" color="red"></v-icon>
             </template>
@@ -414,6 +414,26 @@ const sortedHistory = computed(() => {
     return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
   });
 });
+
+const pdfUrl = ref("");
+
+const generatePdf = async (itemId: any) => {
+  const result = await privateApi.call(
+    "get",
+    `/complaints/${itemId}/history_pdf`
+  );
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    pdfUrl.value = result.data.resource.history_pdf_url;
+    console.log(result.data.resource)
+    openPdf();
+  } else {
+    snackbar.showError("Ein Fehler ist aufgetreten");
+  }
+};
+
+const openPdf = () => {
+  return window.open(pdfUrl.value, "_blank");
+};
 
 const saveConditions = computed(() => {
   if (currentStatus.value === "pending" && selectedAction.value === "unchanged" || currentStatus.value === "rejected") {
