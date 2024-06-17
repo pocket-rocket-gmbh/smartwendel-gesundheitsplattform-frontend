@@ -44,7 +44,6 @@ const props = defineProps<{
     info?: string;
     hasNoSpace?: boolean;
   };
-  complaints: any;
 }>();
 
 const hasFilter = computed(() => !!props.item.query && !!props.item.type);
@@ -69,9 +68,6 @@ const redirectAndFilter = () => {
       break;
     case "news":
       path.value = "/admin/news_articles";
-      break;
-    case "complaints":
-      path.value = "/admin/complaints";
       break;
     default:
       break;
