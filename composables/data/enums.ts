@@ -25,7 +25,7 @@ export function useEnums() {
   const complaintsActions = [
     { value: 'blockContent', name: 'Inhalt gesperrt', class: 'is-yellow' },
     { value: 'blockUser', name: 'Benutzer gesperrt', class: 'is-red' },
-    { value: 'deleteContent', name: 'Inhalt gelöscht', class: 'is-purple' },
+    { value: 'deleteContent', name: 'Inhalt gelöscht', class: 'is-red' },
     { value: 'unchanged', name: 'Unverändert', class: '' },
   ]
 

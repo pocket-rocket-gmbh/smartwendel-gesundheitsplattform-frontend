@@ -200,17 +200,20 @@
                     </v-col>
                     <v-col class="d-flex flex-column align-end justify-end">
                       <div class="is-dark-grey font-weight-bold">
-                        {{ translateAction(history.action) }}
+                        <span v-if="!history.action">Erstellt</span>
+                        <span v-else>   {{ translateAction(history.action) }}</span>                      
                       </div>
                       <div>
-                        <i>{{ history?.user?.name }}</i>
+                        <span v-if="history?.user?.name"><img :src="logo" width="20" class="mr-2"><i>{{ history?.user?.name }}</i></span>
+                        <span v-else><i>{{ item?.reporter_name }}</i></span>
+                        
                       </div>
                     </v-col>
                   </v-row>
                   <div class="general-font-size">Grund: {{ history.content }}</div>
                   <div class="general-font-size">
                     Status: {{ translateSatus(history.status) }}
-                    <div class="general-font-size" v-auto-animate>
+                    <div class="general-font-size" v-auto-animate v-if="history?.user?.name">
                       Email gesendet:
                       {{ history.action_notification_sent ? "Ja" : "Nein" }}
                       <v-icon
@@ -242,8 +245,8 @@
         class="d-flex align-center justify-center my-1 comfirm-actions ga-1"
         v-if="currentStatusChanged && !alreadyTakenActions && currentTab === 'two' && selectedAction !== 'unchanged'"
       >
-        <v-icon>mdi-alert-circle-outline</v-icon>
-        <div>Bestätigen</div>
+        <v-icon class="is-dark-grey">mdi-alert-circle-outline</v-icon>
+        <div class="general-font-size">Bestätigen</div>
         <div>
           <v-checkbox v-model="confirmActions" :value="true" hide-details />
         </div>
@@ -280,6 +283,7 @@
 </template>
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
+import logo from "@/assets/images/lk-logo.png";
 
 const emit = defineEmits(["close", "refreshCollection"]);
 const props = defineProps<{
@@ -355,6 +359,7 @@ const save = async () => {
     selectedAction.value = "unchanged";
     notificationMessage.value = "";
     historyContent.value = "";
+    getItem();
   } else {
     snackbar.showError("Ein Fehler ist aufgetreten");
   }
@@ -373,14 +378,6 @@ const getItem = async () => {
     concat: false,
     filters: [] as any,
   };
-/* 
-  const saveAction = async () => {
-  updateApi.setEndpoint(`${care_facility}/${props.item.id}`);
-  let data = {};
-  data[props.fieldToSwitch] = switchValue.value;
-
-  await updateApi.updateItem(data, null);
-}; */
 
   const result = await showApi.retrieveCollection(options);
   loading.value = false;
@@ -462,8 +459,6 @@ const translateAction = (action: string) => {
       return "Inhalt gelöscht";
     case "unchanged":
       return "Unverändert";
-    default:
-      return "Unbekannt";
   }
 };
 

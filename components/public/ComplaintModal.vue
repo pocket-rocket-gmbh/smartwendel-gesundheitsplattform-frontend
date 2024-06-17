@@ -10,11 +10,7 @@
     <v-card :class="[{ shake: animated }]" height="auto" style="overflow: hidden">
       <v-card-title class="d-flex align-center justify-space-between pa-0 ma-0 my-2 mx-3">
         <div class="text-h5 d-flex justify-center">
-       
-          <v-icon
-            size="small"
-            v-if="reportKind && !successFullySent"
-            @click="goBack()"
+          <v-icon size="small" v-if="reportKind && !successFullySent" @click="goBack()"
             >mdi-chevron-left</v-icon
           >
           <div>
@@ -28,7 +24,6 @@
         <div class="text-h5 d-flex">
           <v-icon @click="emitClose()" size="small">mdi-close</v-icon>
         </div>
-       
       </v-card-title>
       <v-card-text v-auto-animate>
         <div v-if="!reportKind && !successFullySent">
@@ -47,7 +42,18 @@
           </v-row>
         </div>
         <v-form ref="complaintForm" v-if="reportKind && !successFullySent" class="mt-3">
-          <div>
+          <div class="mt-2 d-flex flex-column is-dark-grey general-font-size ml-2" v-if="!showForm">
+            {{ reportKind?.description }}
+          </div>
+          <div class="d-flex align-center justify-center my-2">
+            <v-btn color="primary" variant="outlined" dark @click="toogleForm">
+              <span 
+                ><span class="d-flex align-center" v-if="showForm">Zurück<v-icon>mdi-chevron-double-up</v-icon></span>
+                <span class="d-flex align-center" v-else>Weiter<v-icon>mdi-chevron-double-down</v-icon></span></span
+              >
+            </v-btn>
+          </div>
+          <div class="mt-3" v-if="showForm" v-auto-animate>
             <div class="field">
               <v-text-field
                 label="Titel"
@@ -66,44 +72,66 @@
                 disabled
               />
             </div>
-            <div class="field">
+            <div class="field" v-if="needAdditionalInformation">
               <v-text-field
                 v-model="reporterName"
-                :label="needAdditionalInformation ? 'Name (erforderlich)' : 'Name (optional)'"
+                label="'Name (erforderlich)"
                 hide-details="auto"
-                :rules="needAdditionalInformation ? [rules.required] : []"
+                :rules="[rules.required]"
                 :error-messages="useErrors().checkAndMapErrors('name', errors)"
               />
             </div>
-            <div class="field">
+            <div class="field" v-else>
+              <v-text-field
+                v-model="reporterName"
+                label="Name (optional)"
+                hide-details="auto"
+                :error-messages="useErrors().checkAndMapErrors('name', errors)"
+              />
+            </div>
+            <div class="field" v-if="needAdditionalInformation">
               <v-text-field
                 v-model="reporterEmail"
-                :label="needAdditionalInformation ? 'E-Mail (erforderlich)' : 'E-Mail (optional)'"
+                label="E-Mail (erforderlich)"
                 hide-details="auto"
                 id="mail"
-                :rules="
-                  needAdditionalInformation
-                    ? [rules.required, rules.email]
-                    : [rules.email]
-                "
+                :rules="[rules.required, rules.email]"
                 :error-messages="useErrors().checkAndMapErrors('email', errors)"
               />
-
-            <!--   {{ complaintForm?.items.filter(item => item?.id === 'mail' && !item?.isValid) }} -->
             </div>
-            <div class="field">
+            <div class="field" v-else>
+              <v-text-field
+                v-model="reporterEmail"
+                label="E-Mail (optional)"
+                hide-details="auto"
+                id="mail"
+                :rules="reporterEmail.length ? [rules.email] : []"
+                :error-messages="useErrors().checkAndMapErrors('email', errors)"
+              />
+            </div>
+            <div class="field" v-if="needAdditionalInformation">
               <v-textarea
                 v-model="reportDescription"
                 counter
                 maxlength="300"
                 hide-details="auto"
-                :label="
-                  needAdditionalInformation ? 'Beschreibung (erforderlich)' : 'Beschreibung (optional)'
-                "
+                label="Beschreibung (erforderlich)"
                 :error-messages="useErrors().checkAndMapErrors('description', errors)"
-                :rules="needAdditionalInformation ? [rules.required] : []"
+                :rules="[rules.required]"
               />
             </div>
+
+            <div class="field" v-else>
+              <v-textarea
+                v-model="reportDescription"
+                counter
+                maxlength="300"
+                hide-details="auto"
+                label="Beschreibung (optional)"
+                :error-messages="useErrors().checkAndMapErrors('description', errors)"
+              />
+            </div>
+
             <v-checkbox
               label="Meine Angaben sind vollständig"
               class=""
@@ -158,11 +186,13 @@
 
           <v-col class="d-flex justify-end">
             <v-btn
-              v-if="reportKind && !successFullySent"
+              v-if="reportKind && !successFullySent && showForm"
               color="blue darken-1"
               variant="outlined"
               dark
-                :disabled="submitButtonDisabledCondition || submitButtonDisabledConditionOptional"
+              :disabled="
+                submitButtonDisabledCondition || submitButtonDisabledConditionOptional
+              "
               @click="sendComplaint()"
             >
               senden
@@ -209,6 +239,7 @@ const reporterName = ref("");
 const reporterEmail = ref("");
 const reportDescription = ref("");
 const privacyAccepted = ref(false);
+const showForm = ref(false);
 
 const createUpdateApi = useCollectionApi();
 createUpdateApi.setBaseApi(usePublicApi());
@@ -251,19 +282,19 @@ const sendComplaint = async () => {
 
 const submitButtonDisabledConditionForm = computed(() => {
   return (
-    (!reportKind.value ||
+    !reportKind.value ||
     !reportedUrl.value ||
     !reporterName.value ||
     !reporterEmail.value ||
     !reportDescription.value ||
     !informationsAreCompleted.value ||
-    !privacyAccepted.value) ||
+    !privacyAccepted.value ||
     !complaintForm?.value?.isValid
   );
 });
 
 const submitButtonDisabledCondition = computed(() => {
-  if (submitButtonDisabledConditionForm.value && needAdditionalInformation.value ) {
+  if (submitButtonDisabledConditionForm.value && needAdditionalInformation.value) {
     return true;
   } else {
     return false;
@@ -271,8 +302,13 @@ const submitButtonDisabledCondition = computed(() => {
 });
 
 const submitButtonDisabledConditionOptional = computed(() => {
-  if ((reportDescription.value.length || reporterEmail.value.length || reporterName.value.length) && 
-  (informationsAreCompleted.value && privacyAccepted.value )) {
+  if (
+    (reportDescription.value.length ||
+      reporterEmail.value.length ||
+      reporterName.value.length) &&
+    informationsAreCompleted.value &&
+    privacyAccepted.value
+  ) {
     return false;
   } else {
     return true;
@@ -287,12 +323,41 @@ const needAdditionalInformation = computed(() => {
   }
 });
 
+const toogleForm = () => {
+  showForm.value = !showForm.value;
+};
+
 const listOptions = ref([
-  { text: "Verstoß gegen geltendes Recht", value: 0 },
-  { text: "Belästigung", value: 1 },
-  { text: "Spam", value: 2 },
-  { text: "Verstoß gegen die Nutzungsbedingungen", value: 3 },
-  { text: "Andere", value: 4 },
+  {
+    text: "Verstoß gegen geltendes Recht",
+    description:
+      "Ein Verstoß gegen geltendes Recht liegt vor, wenn eine Handlung oder ein Unterlassen gegen bestehende gesetzliche Bestimmungen verstößt. Dies kann in verschiedenen Rechtsbereichen geschehen: Im Strafrecht handelt es sich um Delikte wie Diebstahl, Betrug oder Körperverletzung. Im Zivilrecht betrifft es Vertragsverletzungen oder unerlaubte Handlungen. Im Verwaltungsrecht sind es Verstöße gegen Bauvorschriften oder Umweltauflagen. Im Arbeitsrecht umfassen sie Verstöße gegen das Arbeitszeitgesetz oder das Mindestlohngesetz. Konsequenzen können Geldbußen, Schadensersatz, Freiheitsstrafen oder administrative Maßnahmen sein. Ein Beispiel ist ein Unternehmen, das gegen Umweltauflagen verstößt, indem es gefährliche Abfälle unsachgemäß entsorgt.",
+    value: 0,
+  },
+  {
+    text: "Belästigung",
+    description:
+      "Belästigung bezeichnet ein Verhalten, das eine Person in unangemessener Weise bedrängt, stört oder erniedrigt. Dies kann verbal, physisch oder psychisch geschehen und zielt darauf ab, das Opfer zu verunsichern oder zu verletzen. Im beruflichen Umfeld umfasst Belästigung oft sexuelle Anspielungen, unerwünschte Berührungen oder anstößige Kommentare. Auch im öffentlichen Raum kann Belästigung auftreten, beispielsweise durch aufdringliche Ansprachen oder Drohungen. Die Konsequenzen von Belästigung reichen von Abmahnungen und Geldstrafen bis hin zu gerichtlichen Verfahren. Ein Beispiel ist ein Mitarbeiter, der eine Kollegin wiederholt mit unangemessenen Bemerkungen bedrängt.",
+    value: 1,
+  },
+  {
+    text: "Spam",
+    description:
+      "Spam bezeichnet unerwünschte und massenhaft versendete Nachrichten, die oft Werbung oder betrügerische Inhalte enthalten. Diese Nachrichten werden ohne Zustimmung des Empfängers verschickt und können per E-Mail, SMS oder über soziale Netzwerke verbreitet werden. Spam kann nicht nur lästig sein, sondern auch Sicherheitsrisiken bergen, da er oft Links zu schädlichen Websites oder Anhänge mit Malware enthält. Die Konsequenzen von Spam können von der Blockierung des Absenders bis hin zu rechtlichen Maßnahmen wie Geldstrafen reichen. Ein Beispiel ist das massenhafte Versenden von Werbe-E-Mails für fragwürdige Produkte an eine große Anzahl von Empfängern ohne deren Einwilligung.",
+    value: 2,
+  },
+  {
+    text: "Verstoß gegen die Nutzungsbedingungen",
+    description:
+      "Ein Verstoß gegen die Nutzungsbedingungen liegt vor, wenn eine Person die festgelegten Regeln und Richtlinien eines Dienstes oder einer Plattform missachtet. Dies kann verschiedene Formen annehmen, wie z.B. das Veröffentlichen unangemessener Inhalte, das Betreiben illegaler Aktivitäten oder das Missbrauchen von Diensten für Spam oder Betrug. Die Nutzungsbedingungen dienen dazu, ein sicheres und respektvolles Umfeld zu gewährleisten. Konsequenzen eines solchen Verstoßes können die Sperrung des Nutzerkontos, der Entzug von Zugangsrechten oder rechtliche Schritte sein. Ein Beispiel ist ein Nutzer, der auf einer Social-Media-Plattform wiederholt Hassreden postet, obwohl dies ausdrücklich verboten ist.",
+    value: 3,
+  },
+  {
+    text: "Andere",
+    description:
+      "Der Begriff 'Andere' bezeichnet Handlungen oder Verhaltensweisen, die nicht in die spezifischen Kategorien der geltenden Regelungen oder typischen Verstöße passen. Diese Kategorie dient als Sammelbegriff für diverse und nicht näher definierte Verstöße, die dennoch gegen bestimmte Richtlinien oder Normen verstoßen. Die Konsequenzen solcher Verstöße können je nach Schwere und Kontext variieren und reichen von milden Verwarnungen bis hin zu strengeren Sanktionen. Ein Beispiel ist das Missachten einer internen Richtlinie eines Unternehmens, die nicht ausdrücklich in den Hauptkategorien der Verhaltensregeln aufgeführt ist.",
+    value: 4,
+  },
 ]);
 
 const optionSelect = (option: any) => {
@@ -306,6 +371,7 @@ const goBack = () => {
   reporterName.value = "";
   informationsAreCompleted.value = false;
   privacyAccepted.value = false;
+  showForm.value = false;
 };
 
 const getCurrentUrl = () => {
@@ -313,14 +379,16 @@ const getCurrentUrl = () => {
 };
 
 const checkboxRules = computed(() => {
-  if (reportDescription.value.length || reporterEmail.value.length || reporterName.value.length) {
+  if (
+    reportDescription.value.length ||
+    reporterEmail.value.length ||
+    reporterName.value.length
+  ) {
     return false;
-  } else  {
+  } else {
     return true;
   }
-
 });
-
 
 const emitClose = () => {
   emit("close");
