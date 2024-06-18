@@ -5,7 +5,7 @@
         <div class="d-flex align-center">
           <div class="d-flex align-center">
             <a href="/" @click.prevent="navigateTo('/')" class="d-flex align-center">
-              <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
+              <img src="~/assets/images/logo.png" class="is-clickable":width="breakPoints.width.value <= 380 ? '130' : '200'" />
             </a>
           </div>
           <div v-if="breakPoints.width.value >= 1460" class="align-center d-flex mx-2">
@@ -275,12 +275,12 @@
           </div>
         </template>
       </div>
-      <div class="terms-of-use">
+      <div class="terms-of-use d-flex justify-start ga-7">
         <v-icon color="#8AB61D" class="ml-2 py-5">mdi-note-check-outline</v-icon>
-        <span
-          class="mr-6 is-clickable general-font-size"
+        <div
+          class="is-clickable general-font-size"
           @click.prevent="goTo('/rules_of_conduct')"
-          >Nutzungsbedingungen</span
+          >Nutzungsbedingungen</div
         >
         <v-icon></v-icon>
       </div>
