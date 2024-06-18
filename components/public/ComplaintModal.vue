@@ -25,6 +25,13 @@
           <v-icon @click="emitClose()" size="small">mdi-close</v-icon>
         </div>
       </v-card-title>
+
+      <div v-if="isFacilityAlreadyReported && !showForm" v-auto-animate>
+        <v-alert type="info" class="my-3 mx-3 general-font-size tex-bold" icon="mdi-information">
+          Sie haben bereits eine Beschwerde <i>"{{ alreadyReportedKind }}"</i> zu diesem Inhalt
+          eingereicht
+        </v-alert>
+      </div>
       <v-card-text v-auto-animate>
         <div v-if="!reportKind && !successFullySent">
           <v-row
@@ -41,7 +48,7 @@
             </v-col>
           </v-row>
         </div>
-        <v-form ref="complaintForm" v-if="reportKind && !successFullySent" class="mt-3">
+        <v-form ref="complaintForm" v-if="reportKind && !successFullySent" class="mt-3" v-auto-animate>
           <div
             class="mt-2 d-flex flex-column is-dark-grey general-font-size ml-2"
             v-if="!showForm"
@@ -247,8 +254,19 @@ const reportDescription = ref("");
 const privacyAccepted = ref(false);
 const showForm = ref(false);
 
+const alreadyReportedKind = ref(null);
+const alreadyReportedFacilityId = ref(null);
+
 const createUpdateApi = useCollectionApi();
 createUpdateApi.setBaseApi(usePublicApi());
+
+const isFacilityAlreadyReported = computed(() => {
+  if (alreadyReportedFacilityId.value === props.facilityId) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 const sendComplaint = async () => {
   createUpdateApi.setEndpoint("complaints");
@@ -275,6 +293,7 @@ const sendComplaint = async () => {
     if (result.status === ResultStatus.SUCCESSFUL) {
       successFullySent.value = true;
       loading.value = false;
+      setAlreadyReported();
     }
   } catch (error) {
     loading.value = false;
@@ -415,12 +434,28 @@ const checkboxRules = computed(() => {
   }
 });
 
+const setAlreadyReported = () => {
+  localStorage.setItem(
+    "alreadyReported",
+    JSON.stringify([reportKind.value.text, props.facilityId])
+  );
+};
+
+const getAlreadyReported = () => {
+  const alreadyReported = localStorage.getItem("alreadyReported");
+  if (alreadyReported) {
+    alreadyReportedKind.value = JSON.parse(alreadyReported)[0];
+    alreadyReportedFacilityId.value = JSON.parse(alreadyReported)[1];
+  }
+};
+
 const emitClose = () => {
   emit("close");
 };
 
-onMounted(() => {
+onMounted(async () => {
   getCurrentUrl();
+  getAlreadyReported();
 });
 </script>
 <style lang="sass" scoped>
