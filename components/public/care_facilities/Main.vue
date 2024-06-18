@@ -17,13 +17,6 @@
       class="my-5 d-md-block d-none"
       v-if="careFacility?.description"
     ></v-divider>
-    <PublicComplaintModal
-      v-if="createEditDialogOpen"
-      @close="createEditDialogOpen = false"
-      :title="careFacility?.name"
-      :kind="careFacility?.kind"
-      :id="careFacility?.id"
-    />
     <span
       class="is-primary mr-2"
       v-if="careFacility?.kind === 'news'"
@@ -76,7 +69,6 @@
           bieten.</i
         >
       </div>
-      <v-btn @click="createEditDialogOpen = true">Inhalt melden</v-btn>
       <v-divider
         class="my-10"
         v-if="careFacility?.name_responsible_person"
@@ -107,8 +99,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const createEditDialogOpen = ref(false);
 
 const getFacilityDescription = async () => {
   return props.careFacility?.description;
