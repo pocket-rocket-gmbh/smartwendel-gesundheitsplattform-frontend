@@ -148,7 +148,11 @@
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'user' ? '' : 'has-normal-bg',
-          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' || getCurrentRoute() === 'admin-complaints' ? 'has-normal-bg' : '',
+          getCurrentRoute() === 'admin-users' ||
+          getCurrentRoute() === 'admin-tooltips' ||
+          getCurrentRoute() === 'admin-complaints'
+            ? 'has-normal-bg'
+            : '',
           isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
         ]"
       >
@@ -210,51 +214,93 @@
             </div>
           </span>
           <template v-else-if="field.type === 'switch'">
-            <v-tooltip top>
-              <template v-slot:activator="{ props }">
-                <div v-bind="props">
-                  <TableSwitch
-                    :item="item"
-                    :endpoint="field.endpoint"
-                    :field-to-switch="field.fieldToSwitch"
-                    :ask-notification="field.askNotification"
-                    :notification-kind="field.notificationKind"
-                    :notification-kind-explicit="field.notificationKindExplicit"
-                    :notification-pre-filled-headline="
-                      field.notificationPreFilledHeadline
-                    "
-                    :notification-pre-filled-text="field.notificationPreFilledText"
-                    :notification-cta-link="field.notificationCtaLink"
-                    :disabled="field?.disabledConditions?.(item)"
-                    @toggled="handleToggled(item)"
-                  />
-                </div>
-              </template>
-              <div v-if="!useUser().statusOnHealthScope()" class="tooltip">
-                {{
-                  field?.disabledConditions?.(item)
-                    ? field.disabledTooltip
-                    : field.tooltip
-                }}
+            <div class="d-flex align-center ga-2">
+              <div>
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <div v-bind="props">
+                      <TableSwitch
+                        :item="item"
+                        :endpoint="field.endpoint"
+                        :field-to-switch="field.fieldToSwitch"
+                        :ask-notification="field.askNotification"
+                        :notification-kind="field.notificationKind"
+                        :notification-kind-explicit="field.notificationKindExplicit"
+                        :notification-pre-filled-headline="
+                          field.notificationPreFilledHeadline
+                        "
+                        :notification-pre-filled-text="field.notificationPreFilledText"
+                        :notification-cta-link="field.notificationCtaLink"
+                        :disabled="
+                          field?.disabledConditions?.(item) ||
+                          item?.blocked ||
+                          item?.user?.status === 'disabled'
+                        "
+                        @toggled="handleToggled(item)"
+                      />
+                    </div>
+                  </template>
+                  <div v-if="!useUser().statusOnHealthScope()" class="tooltip">
+                    {{
+                      field?.disabledConditions?.(item)
+                        ? field.disabledTooltip
+                        : field.tooltip
+                    }}
+                  </div>
+                  <div v-else class="tooltip">
+                    {{
+                      field?.disabledConditions?.(item)
+                        ? field.disabledTooltipFacilityImcomplete
+                        : field.tooltip
+                    }}
+                  </div>
+                </v-tooltip>
               </div>
-              <div v-else class="tooltip">
-                {{
-                  field?.disabledConditions?.(item)
-                    ? field.disabledTooltipFacilityImcomplete
-                    : field.tooltip
-                }}
+              <div>
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <v-icon
+                      color="error"
+                      v-if="item?.blocked || item?.status === 'disabled'"
+                      v-bind="props"
+                      >mdi-exclamation</v-icon
+                    >
+                  </template>
+                  <span
+                    >Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt.
+                  </span>
+                </v-tooltip>
               </div>
-            </v-tooltip>
+            </div>
           </template>
-          <TableDropdown
-            v-else-if="field.type === 'enumDropdown'"
-            :item="item"
-            :enum-name="field.enum_name"
-            :endpoint="field.endpoint"
-            :fieldName="field.value"
-            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
-            :disable-edit="!useUser().isAdmin()"
-          />
+
+          <div v-else-if="field.type === 'enumDropdown'" class="d-flex align-center">
+            <div>
+              <TableDropdown
+                :item="item"
+                :enum-name="field.enum_name"
+                :endpoint="field.endpoint"
+                :fieldName="field.value"
+                :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
+                :disable-edit="!useUser().isAdmin()"
+              />
+            </div>
+            <div>
+              <span v-if="item?.status === 'disabled'">
+                <div>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                      <v-icon color="error" v-bind="props">mdi-exclamation</v-icon>
+                    </template>
+                    <span
+                      >Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt.
+                    </span>
+                  </v-tooltip>
+                </div></span
+              >
+            </div>
+          </div>
+
           <div v-else-if="field.type === 'enum'">
             <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
@@ -274,7 +320,7 @@
           <span v-else-if="field.type === 'pathIntoObject'">{{
             pathInto(item, field.value)
           }}</span>
-          <span v-else-if="field.type === 'facilities'">
+          <span v-else-if="field.type === 'facilities'" @click.stop="field.action(item)">
             <div v-if="Array.isArray(item[field.value])">
               <div v-for="facility in item[field.value]">
                 <v-row v-if="facility.kind === 'facility'">
@@ -304,6 +350,24 @@
                           </template>
                           <span>Einrichtung online</span>
                         </v-tooltip>
+
+                        <div>
+                          <span v-if="item?.care_facilities[0].blocked">
+                            <div>
+                              <v-tooltip top>
+                                <template v-slot:activator="{ props }">
+                                  <v-icon color="error" v-bind="props"
+                                    >mdi-exclamation</v-icon
+                                  >
+                                </template>
+                                <span
+                                  >Dieser Inhalt wurde durch eine Beschwerdemaßnahme
+                                  gesperrt.
+                                </span>
+                              </v-tooltip>
+                            </div></span
+                          >
+                        </div>
                       </div>
                     </v-chip>
                   </v-col>
@@ -312,7 +376,11 @@
             </div>
           </span>
           <span v-else-if="field.type === 'protocol'">
-            <span><v-icon size="x-large" color="red" @click.stop="emitGeneratePdf(item)">mdi-file-pdf-box</v-icon></span>
+            <span
+              ><v-icon size="x-large" color="red" @click.stop="emitGeneratePdf(item)"
+                >mdi-file-pdf-box</v-icon
+              ></span
+            >
           </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
@@ -449,7 +517,7 @@
             </button>
             <span v-if="field.value === 'user.name'">
               <span
-                class="align-center ml-2"
+                class="align-center ml-2 d-flex"
                 v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
               >
                 <v-tooltip
@@ -474,6 +542,20 @@
                   </template>
                   <span>Benutzer ist nicht Freigeschaltet</span>
                 </v-tooltip>
+                <div>
+                  <span v-if="item?.user?.status && item?.user?.status === 'disabled'">
+                    <div>
+                      <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                          <v-icon color="error" v-bind="props">mdi-exclamation</v-icon>
+                        </template>
+                        <span
+                          >Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt.
+                        </span>
+                      </v-tooltip>
+                    </div></span
+                  >
+                </div>
               </span>
             </span>
             <span

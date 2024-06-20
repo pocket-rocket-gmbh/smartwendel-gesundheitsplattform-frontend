@@ -12,6 +12,7 @@
     label="Status"
     single-line
     @update:model-value="save"
+    :disabled="item?.status === 'disabled'"
   />
   <div v-else :class="selectedFieldClass">
     {{ selectedEnum.find((item) => item.value === model)?.name || model }}

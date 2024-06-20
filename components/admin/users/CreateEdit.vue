@@ -6,6 +6,15 @@
     @click:outside="emitClose()"
   >
     <v-card class="dialog-900">
+      <div v-if="item?.status !== 'confirmed'" class="my-5 mx-5">
+        <v-alert type="warning" class="general-font-size mt-3"
+          >Dieser Benutzer wurde durch eine Beschwerdemaßnahme gesperrt.</v-alert
+        >
+        <div class="d-flex justify-center align-center mt-5 ga-5">
+          <v-btn color="error" @click="unblockUser(item?.id)">entsperren</v-btn>
+          <v-btn color="primary" @click="goToComplaints">Beschwerde ansehen</v-btn>
+        </div>
+      </div>
       <v-card-title class="text-h5"> Benutzer </v-card-title>
       <v-card-text>
         <div class="field">
@@ -89,9 +98,15 @@ const loadingItem = ref(false);
 const dialog = ref(true);
 const errors = ref([]);
 
+const router = useRouter();
+
 const item = ref<User>({} as User);
 
 const user = useUser();
+
+const goToComplaints = () => {
+  router.push({ path: "/admin/complaints" });
+};
 
 const allRoles = [
   { name: "Einrichtung", id: "facility_owner" },
@@ -126,6 +141,16 @@ const handleCta = () => {
 const subumitCondition =  computed(() => {
   return !item.value.firstname || !item.value.lastname || !item.value.email || !item.value.phone || !item.value.role;
 });
+
+const unblockUser = async (id : any) => {
+  createUpdateApi.setEndpoint(`users/${id}`);
+  let data = {
+    is_active_on_health_scope: true,
+    status: "confirmed",
+  };
+  await createUpdateApi.updateItem(data, null);
+  getItem();
+};
 
 
 const invite = async () => {

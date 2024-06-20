@@ -78,6 +78,7 @@ definePageMeta({
 });
 
 const showBar = ref(true);
+const router = useRouter();
 
 const fields = ref([
   { prop: "firstname", text: "Vorname", value: "firstname", type: "string" },
@@ -88,6 +89,9 @@ const fields = ref([
     endpoint: "users",
     value: "care_facilities",
     type: "facilities",
+    action: (item: any) => {
+      router.push({ path: "/admin/care_facilities", query: { facility: item?.care_facilities[0]?.id } });
+    },
   },
   {
     prop: "email",
@@ -104,7 +108,9 @@ const fields = ref([
     value: "is_active_on_health_scope",
     enum_name: "facilitiesStatus",
     condition: "admin",
+    width: "200px",
   },
+  { prop: "", text: "", type: "block" },
   {
     value: "",
     type: "is-lk",

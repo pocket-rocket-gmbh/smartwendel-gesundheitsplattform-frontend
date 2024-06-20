@@ -237,6 +237,10 @@ const props = defineProps<{
     type: String;
     required: true;
   };
+  userId: {
+    type: String;
+    required: true;
+  };
 }>();
 
 const dialog = ref(true);
@@ -282,8 +286,9 @@ const sendComplaint = async () => {
       last_action: "unchanged",
       action: "unchanged",
       meta_data: {
-        id: props.facilityId,
+        facility_id: props.facilityId,
         kind: props.kind,
+        user_id: props.userId,
       },
     };
     const result = await createUpdateApi.createItem(

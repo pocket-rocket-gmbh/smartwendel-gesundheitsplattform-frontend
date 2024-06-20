@@ -19,7 +19,8 @@ export function useEnums() {
     { value: 'complete', name: 'Geschlossen', class: 'is-green'
     },
     { value: 'rejected', name: 'Abgelehnt', class: 'is-red'
-  }
+  },
+  { value: 'objection', name: 'answered', class: 'is-red'}
   ]
 
   const complaintsActions = [

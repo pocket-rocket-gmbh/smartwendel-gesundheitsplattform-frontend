@@ -207,6 +207,7 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deine Einrichtung Online oder Offline schalten",
     fieldToSwitch: "is_active",
+    wuidth: "100px",
     disabledConditions: (item: any) => {
       const res = [
         isCompleteFacility,
@@ -455,11 +456,17 @@ const handleUpdateItems = () => {
 const handleCreated = (createdItemId: string) => {
   itemId.value = createdItemId;
 };
+const route = useRoute();
 
 onMounted(async () => {
   loading.value = true;
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
+
+  const facility = route.query.facility;
+  if (!facility) return;
+  openCreateEditDialog({ id: facility });
+
 });
 </script>
 <style lang="sass">

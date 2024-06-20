@@ -65,7 +65,6 @@
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
 
-
 const snackbar = useSnackbar();
 const privateApi = usePrivateApi();
 
@@ -92,8 +91,16 @@ const openPdf = () => {
 const showBar = ref(true);
 const searchTerm = ref("");
 
+const router = useRouter();
+
 const fields = [
-  { prop: "name", text: "Titel", value: "page_title", type: "string", width: "200" },
+  {
+    prop: "name",
+    text: "Titel",
+    value: "page_title",
+    type: "string",
+    width: "200",
+  },
   { prop: "name", text: "Inhalt URL", value: "url", type: "string", width: "100" },
   {
     prop: "created_at",
@@ -155,6 +162,13 @@ const handleCreateEditClose = () => {
   dataTableRef.value?.resetActiveItems();
 };
 
+const route = useRoute();
+
+onMounted(async () => {
+  const complaint = route.query.complaint;
+  if (!complaint) return;
+  openCreateEditDialog({ id: complaint });
+});
 </script>
 <style lang="sass">
 @import "@/assets/sass/main.sass"

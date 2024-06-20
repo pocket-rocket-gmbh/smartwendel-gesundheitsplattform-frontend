@@ -13,8 +13,15 @@
         <v-icon v-if="currentTab === 'three'" @click="currentTab = 'two'" size="small"
           >mdi-chevron-left</v-icon
         >
-        <span>Inhalt melden</span>
-        <v-col class="d-flex align-center justify-end">
+        <span>Beschwerde</span>
+        <v-col class="d-flex align-center justify-end ga-5">
+          <v-btn prepend-icon="mdi-form-select" @click="openFormPage(itemId)">
+            <template v-slot:prepend>
+              <v-icon size="x-large" color="red"></v-icon>
+            </template>
+            Form
+          </v-btn>
+
           <v-btn prepend-icon="mdi-file-pdf-box" @click="generatePdf(itemId)">
             <template v-slot:prepend>
               <v-icon size="x-large" color="red"></v-icon>
@@ -23,6 +30,7 @@
           </v-btn>
         </v-col>
       </v-card-title>
+
       <v-tabs v-model="currentTab" align-tabs="center" class="tabs mb-3">
         <v-tab value="one">Inhalt</v-tab>
         <v-tab :disabled="alreadyTakenActions" value="two">Maßnahmen</v-tab>
@@ -30,8 +38,9 @@
       </v-tabs>
       <v-card-text v-auto-animate>
         <v-alert v-if="alreadyTakenActions" type="warning" class="mb-2"
-          >Schon bearbeitet</v-alert
-        >
+          ><span v-if="isBlockedFacility"> Schon bearbeitet: Inhalt gesperrt </span>
+          <span v-else> Schon bearbeitet: Benutzer gesperrt </span>
+        </v-alert>
         <v-tabs-window v-model="currentTab" v-auto-animate>
           <v-tabs-window-item v-if="currentTab === 'one'" value="one">
             <div>
@@ -117,18 +126,16 @@
                 Maßnahmen nicht möglich
               </v-alert>
               <v-row v-if="currentStatus !== 'rejected' && currentStatus !== 'open'">
-
                 <div class="my-15 d-flex align-center">
-                  <div class="general-font-size is-dark-grey font-weight-bold mr-3"
-                    >Maßnahmen</div
-                  >
+                  <div class="general-font-size is-dark-grey font-weight-bold mr-3">
+                    Maßnahmen
+                  </div>
                 </div>
                 <v-col
                   class="d-flex justify-center my-15"
                   v-for="action in actions"
                   :key="action.value"
                 >
- 
                   <v-btn
                     variant="outlined"
                     dark
@@ -160,7 +167,11 @@
               </div>
               <div
                 class="d-flex align-center justify-start my-1"
-                v-if="item?.reporter_email && currentStatus !== 'open' && selectedAction !== 'unchanged'"
+                v-if="
+                  item?.reporter_email &&
+                  currentStatus !== 'open' &&
+                  selectedAction !== 'unchanged'
+                "
               >
                 <v-checkbox
                   v-model="sendNotification"
@@ -201,19 +212,28 @@
                     <v-col class="d-flex flex-column align-end justify-end">
                       <div class="is-dark-grey font-weight-bold">
                         <span v-if="!history.action">Erstellt</span>
-                        <span v-else>   {{ translateAction(history.action) }}</span>                      
+                        <span v-else> {{ translateAction(history.action) }}</span>
                       </div>
                       <div>
-                        <span v-if="history?.user?.name"><img :src="logo" width="20" class="mr-2"><i>{{ history?.user?.name }}</i></span>
-                        <span v-else><i>{{ item?.reporter_name }}</i></span>
-                        
+                        <span v-if="history?.user?.name"
+                          ><img :src="logo" width="20" class="mr-2" /><i>{{
+                            history?.user?.name
+                          }}</i></span
+                        >
+                        <span v-else
+                          ><i>{{ item?.reporter_name }}</i></span
+                        >
                       </div>
                     </v-col>
                   </v-row>
                   <div class="general-font-size">Grund: {{ history.content }}</div>
                   <div class="general-font-size">
                     Status: {{ translateSatus(history.status) }}
-                    <div class="general-font-size" v-auto-animate v-if="history?.user?.name">
+                    <div
+                      class="general-font-size"
+                      v-auto-animate
+                      v-if="history?.user?.name"
+                    >
                       Email gesendet:
                       {{ history.action_notification_sent ? "Ja" : "Nein" }}
                       <v-icon
@@ -243,7 +263,12 @@
       <div
         v-auto-animate
         class="d-flex align-center justify-center my-1 comfirm-actions ga-1"
-        v-if="currentStatusChanged && !alreadyTakenActions && currentTab === 'two' && selectedAction !== 'unchanged'"
+        v-if="
+          currentStatusChanged &&
+          !alreadyTakenActions &&
+          currentTab === 'two' &&
+          selectedAction !== 'unchanged'
+        "
       >
         <v-icon class="is-dark-grey">mdi-alert-circle-outline</v-icon>
         <div class="general-font-size">Bestätigen</div>
@@ -303,6 +328,9 @@ const saved = ref(false);
 const currentStatusChanged = ref(false);
 const confirmActions = ref(false);
 
+const isBlockedFacility = ref(null);
+const isBlockedUser = ref(null);
+
 const alreadyTakenActions = ref(false);
 
 const snackbar = useSnackbar();
@@ -333,7 +361,6 @@ const actions = [
   { label: "keine maßnahmen", value: "unchanged" },
   { label: "Inhalt sperren", value: "blockContent" },
   { label: "Benutzer sperren", value: "blockUser" },
-  { label: "Inhalt Löschen", value: "deleteContent" },
 ];
 
 const save = async () => {
@@ -349,7 +376,8 @@ const save = async () => {
   loading.value = true;
   const result = await privateApi.call("put", `/complaints/${item.value.id}`, data);
   if (result.status === ResultStatus.SUCCESSFUL) {
-    getItem();
+    await takeAction();
+    await getItem();
     saved.value = true;
     setTimeout(() => {
       saved.value = false;
@@ -398,6 +426,64 @@ const showEmail = (index: any) => {
   expandedItems.value[index] = !expandedItems.value[index];
 };
 
+const takeAction = async () => {
+  if (selectedAction.value === "blockContent") {
+    await blockFacility();
+  } else if (selectedAction.value === "blockUser") {
+    await blockUser();
+  } else {
+    return;
+  }
+};
+
+const blockUser = async () => {
+  updateApi.setEndpoint(`users/${item.value?.meta_data?.user_id}`);
+  let data = {
+    is_active_on_health_scope: false,
+    status: "disabled",
+  };
+  await updateApi.updateItem(data, null);
+  disableFacility();
+};
+
+const disableFacility = async () => {
+  updateApi.setEndpoint(`care_facilities/${item.value.meta_data.facility_id}`);
+  let data = {
+    is_active: false,
+  };
+  await updateApi.updateItem(data, null);
+};
+
+const blockFacility = async () => {
+  updateApi.setEndpoint(`care_facilities/${item.value.meta_data.facility_id}`);
+  let data = {
+    is_active: false,
+    blocked: true,
+  };
+  await updateApi.updateItem(data, null);
+};
+
+const getFacility = async () => {
+  const result = await privateApi.call(
+    "get",
+    `/care_facilities/${item.value.meta_data.facility_id}`
+  );
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    isBlockedFacility.value = result.data.resource.blocked;
+  } else {
+    snackbar.showError("Ein Fehler ist aufgetreten");
+  }
+};
+
+const getUser = async () => {
+  const result = await privateApi.call("get", `/users/${item.value?.meta_data?.user_id}`);
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    isBlockedUser.value = result.data.resource.is_active_on_health_scope;
+  } else {
+    snackbar.showError("Ein Fehler ist aufgetreten");
+  }
+};
+
 const setCurrentAction = (action: string) => {
   if (selectedAction.value === action) {
     selectedAction.value = "unchanged";
@@ -415,17 +501,17 @@ const sortedHistory = computed(() => {
 const pdfUrl = ref("");
 
 const generatePdf = async (itemId: any) => {
-  const result = await privateApi.call(
-    "get",
-    `/complaints/${itemId}/history_pdf`
-  );
+  const result = await privateApi.call("get", `/complaints/${itemId}/history_pdf`);
   if (result.status === ResultStatus.SUCCESSFUL) {
     pdfUrl.value = result.data.resource.history_pdf_url;
-    console.log(result.data.resource)
     openPdf();
   } else {
     snackbar.showError("Ein Fehler ist aufgetreten");
   }
+};
+
+const openFormPage = (itemId: any) => {
+  return window.open(`/complaints?token=${itemId}`, "_blank");
 };
 
 const openPdf = () => {
@@ -433,7 +519,10 @@ const openPdf = () => {
 };
 
 const saveConditions = computed(() => {
-  if (currentStatus.value === "pending" && selectedAction.value === "unchanged" || currentStatus.value === "rejected") {
+  if (
+    (currentStatus.value === "pending" && selectedAction.value === "unchanged") ||
+    currentStatus.value === "rejected"
+  ) {
     return false;
   } else {
     return (
@@ -495,6 +584,8 @@ watch(
 
 onMounted(async () => {
   await getItem();
+  await getFacility();
+  await getUser();
 });
 </script>
 <style lang="sass" scoped>

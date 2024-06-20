@@ -140,6 +140,7 @@
       :title="careFacility?.name"
       :kind="careFacility?.kind"
       :facility-id="careFacility?.id"
+      :user-id="careFacility?.user?.id"
     />
   </div>
 </template>
