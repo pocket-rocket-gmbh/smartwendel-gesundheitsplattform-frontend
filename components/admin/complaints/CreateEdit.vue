@@ -33,14 +33,19 @@
 
       <v-tabs v-model="currentTab" align-tabs="center" class="tabs mb-3">
         <v-tab value="one">Inhalt</v-tab>
-        <v-tab :disabled="alreadyTakenActions" value="two">Maßnahmen</v-tab>
+        <v-tab :disabled="alreadyTakenActions || !wereObjected" value="two"
+          >Maßnahmen</v-tab
+        >
         <v-tab value="three">History</v-tab>
       </v-tabs>
       <v-card-text v-auto-animate>
-        <v-alert v-if="alreadyTakenActions" type="warning" class="mb-2"
+        <v-alert v-if="alreadyTakenActions" type="info" class="mb-2"
           ><span v-if="isBlockedFacility"> Schon bearbeitet: Inhalt gesperrt </span>
           <span v-else> Schon bearbeitet: Benutzer gesperrt </span>
         </v-alert>
+        <v-alert type="warning" class="mb-2" v-if="wereObjected"
+          >Dieser Beschwerde wurde widersprochen</v-alert
+        >
         <v-tabs-window v-model="currentTab" v-auto-animate>
           <v-tabs-window-item v-if="currentTab === 'one'" value="one">
             <div>
@@ -202,7 +207,7 @@
           <v-tabs-window-item v-if="currentTab === 'three'" value="three">
             <div class="histories mt-n4">
               <div v-for="(history, index) in sortedHistory" :key="history.timestamp">
-                <div class="history">
+                <div class="history" :class="history.status === 'objection' ? 'has-objection' : ''">
                   <v-row>
                     <v-col class="d-flex align-start justify-start">
                       <span class="is-dark-grey font-weight-bold">{{
@@ -220,15 +225,17 @@
                             history?.user?.name
                           }}</i></span
                         >
-                        <span v-else
+                        <span v-else-if="item?.reporter_name"
                           ><i>{{ item?.reporter_name }}</i></span
                         >
+                        <span v-else>Unbekannt</span>
                       </div>
                     </v-col>
                   </v-row>
                   <div class="general-font-size">Grund: {{ history.content }}</div>
                   <div class="general-font-size">
                     Status: {{ translateSatus(history.status) }}
+                    <span v-if="history.status === 'objection'"><v-icon color="warning">mdi-alert</v-icon></span>
                     <div
                       class="general-font-size"
                       v-auto-animate
@@ -351,6 +358,7 @@ const allRoles = [
 ];
 
 const status = [
+  { name: "Einspruch", value: "objection" },
   { name: "Offen", value: "open" },
   { name: "In Bearbeitung", value: "pending" },
   { name: "Geschlossen", value: "complete" },
@@ -416,7 +424,6 @@ const getItem = async () => {
   if (selectedAction.value !== "unchanged" && item.value.status === "complete") {
     alreadyTakenActions.value = true;
   }
-
   currentStatus.value = item.value.status;
 };
 
@@ -435,6 +442,10 @@ const takeAction = async () => {
     return;
   }
 };
+
+const wereObjected = computed(() => {
+  return item.value?.status === "objection";
+});
 
 const blockUser = async () => {
   updateApi.setEndpoint(`users/${item.value?.meta_data?.user_id}`);
@@ -561,6 +572,8 @@ const translateSatus = (status: string) => {
       return "In Bearbeitung";
     case "complete":
       return "Geschlossen";
+    case "objection":
+      return "Einspruch";
     default:
       return "Unbekannt";
   }
@@ -621,4 +634,10 @@ onMounted(async () => {
   padding: 10px
   border-radius: 25px
   margin: 20px 20px
+
+.has-objection
+  background-color: #FFCDCD
+  padding: 15px
+  border-radius: 25px
+  margin: 20px 0
 </style>

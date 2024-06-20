@@ -376,11 +376,21 @@
             </div>
           </span>
           <span v-else-if="field.type === 'protocol'">
-            <span
-              ><v-icon size="x-large" color="red" @click.stop="emitGeneratePdf(item)"
+            <div class="d-flex align-center ga-2">
+              <v-icon size="x-large" color="red" @click.stop="emitGeneratePdf(item)"
                 >mdi-file-pdf-box</v-icon
-              ></span
-            >
+              >
+              <div v-if="item?.status === 'objection'">
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <v-icon size="x-large" color="warning" v-bind="props"
+                      >mdi-alert</v-icon
+                    >
+                  </template>
+                  <span>Dieser Beschwerde wurde widersprochen</span>
+                </v-tooltip>
+              </div>
+            </div>
           </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>

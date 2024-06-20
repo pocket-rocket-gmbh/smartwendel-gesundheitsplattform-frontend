@@ -1,6 +1,7 @@
 <template>
-  <div class="register-wrapper is-dark-grey" v-if="loading">
+  <div class="register-wrapper is-dark-grey">
     <div
+      v-if="loading"
       class="register-now elevation-10 d-flex flex-column justify-center align-center text-primary text-h4 font-weight-medium"
     >
       <span class="mb-10">Token wird überprüft</span>
@@ -11,18 +12,16 @@
         height="10"
       ></v-progress-linear>
     </div>
-  </div>
-  <div class="register-wrapper is-dark-grey" v-else>
-    <div
-      class="register-now elevation-10"
-      :class="['card', { shake: animated }]"
-      v-if="hasToken"
-    >
-      <div>
+    <div v-else v-auto-animate>
+      <div
+        v-if="hasToken && !success && complaint?.status !== 'objection'"
+        :class="['register-now elevation-10 card', { shake: animated }]"
+      >
+        <div class="text-h4 d-flex justify-center mb-4">Beschwerde</div>
         <div>
           <div class="field">
             <v-select
-              :model-value="complaint?.kind"
+              v-model="complaint.kind"
               label="Titel"
               :items="allRoles"
               item-title="name"
@@ -34,23 +33,24 @@
           </div>
           <div class="field">
             <v-text-field
+              v-model="complaint.page_title"
               label="Titel"
               hide-details="auto"
               disabled
-              :model-value="complaint?.page_title"
             />
           </div>
           <div class="field d-flex align-center ga-5">
             <v-text-field
+              v-model="complaint.url"
               label="URL"
               hide-details="auto"
               disabled
-              :model-value="complaint?.url"
             />
-            <v-icon @click="goToLink(complaint?.url)">mdi-open-in-new</v-icon>
+            <v-icon @click="goToLink(complaint.url)">mdi-open-in-new</v-icon>
           </div>
           <v-textarea
-            :model-value="complaint?.reason"
+            v-if="complaint.reason"
+            v-model="complaint.reason"
             disabled
             counter
             maxlength="300"
@@ -58,25 +58,45 @@
             label="Beschreibung"
           />
         </div>
-        <div>warum ?</div>
-
+        <div class="text-h4 d-flex mb-4">Grund</div>
         <div class="field">
-          <v-textarea label="Text" hide-details="auto" :model="text" />
+          <v-textarea v-model="text" label="beschreiben" hide-details="auto" />
+        </div>
+        <div class="d-flex justify-end align-center">
+          <v-btn @click="save">Senden</v-btn>
         </div>
       </div>
-      <div class="d-flex justify-end align-center">
-        <v-btn @click="save">Senden</v-btn>
+      <div
+        v-else-if="!success && complaint?.status !== 'objection'"
+        class="register-now elevation-10 d-flex flex-column justify-center align-center text-primary text-h4 font-weight-medium card"
+        :class="{ shake: animated }"
+      >
+        <div class="d-flex align-center">
+          <v-icon class="mr-3">mdi-alert-circle-outline</v-icon>
+          <span>Das Token ist ungültig.</span>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="register-now elevation-10 d-flex flex-column justify-center align-center text-primary text-h4 font-weight-medium"
-      :class="['card', { shake: animated }]"
-      v-else
-    >
-      <div class="d-flex align-center">
-        <v-icon class="mr-3">mdi-alert-circle-outline</v-icon
-        ><span>Das Token ist ungültig.</span>
+      <div
+        v-if="success"
+        class="register-now elevation-10 d-flex flex-column justify-center align-center text-primary text-h4 font-weight-medium card"
+        :class="{ shake: animated }"
+      >
+        <div class="d-flex align-center">
+          <v-icon class="mr-3">mdi-check</v-icon>
+          <span>Gesendet</span>
+        </div>
+      </div>
+
+      <div
+        v-if="complaint?.status === 'objection'"
+        class="register-now elevation-10 d-flex flex-column justify-center align-center text-primary text-h4 font-weight-medium card"
+        :class="{ shake: animated }"
+      >
+        <div class="d-flex align-center">
+          <v-icon class="mr-3">mdi-check</v-icon>
+          <span>schon bearteitet, bitte warten</span>
+        </div>
       </div>
     </div>
   </div>
@@ -103,9 +123,8 @@ const getToken = () => {
 const complaint = ref({});
 const publicApi = usePublicApi();
 
-const goToLink = (item: any) => {
-  const link = item;
-  return window.open(link, "_blank");
+const goToLink = (url: string) => {
+  window.open(url, "_blank");
 };
 
 const validateToken = async () => {
@@ -114,14 +133,11 @@ const validateToken = async () => {
   if (result.status === ResultStatus.SUCCESSFUL) {
     const data = result.data.resource;
     complaint.value = data;
-    if (data) {
-      hasToken.value = true;
-    }
-    loading.value = false;
+    hasToken.value = !!data;
   } else {
     hasToken.value = false;
-    loading.value = false;
   }
+  loading.value = false;
 };
 
 const allRoles = [
@@ -132,38 +148,24 @@ const allRoles = [
   { name: "Andere", id: "other" },
 ];
 
-
 const error = ref(false);
 const success = ref(false);
 
-const createUpdateApi = useCollectionApi();
-createUpdateApi.setBaseApi(usePublicApi());
-
-
 const save = async () => {
-  createUpdateApi.setEndpoint(`/complaints/${currentToken.value}/objection/`);
-  try {
-    loading.value = true;
-    const data = {
-      
-    };
-    const result = await createUpdateApi.createItem(
-      data,
-      "Beschwerde erfolgreich gesendet"
-    );
-    if (result.status === ResultStatus.SUCCESSFUL) {
-      loading.value = false;
-    }
-  } catch (error) {
-    loading.value = false;
-    animated.value = false;
-    console.log(error);
-    setTimeout(() => {
-      animated.value = false;
-    }, 1000);
+  const data = {
+    objection: text.value,
+  };
+  const result = await publicApi.call(
+    "put",
+    `/complaints/${currentToken.value}/objection/`,
+    data
+  );
+  if (result.status === ResultStatus.SUCCESSFUL) {
+    success.value = true;
+  } else {
+    error.value = true;
   }
 };
-
 
 onMounted(async () => {
   getToken();
@@ -203,6 +205,7 @@ onMounted(async () => {
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     transform: translate3d(0, 0, 0);
   }
+
   @keyframes shake {
     10%,
     90% {
