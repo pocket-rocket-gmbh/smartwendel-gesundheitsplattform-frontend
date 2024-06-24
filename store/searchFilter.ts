@@ -59,6 +59,7 @@ export type Facility = {
   community_id?: string;
   tag_category_ids?: string[];
   user_care_facility?: Facility;
+  tag_categories: FilterTag[];
 };
 
 type FilterOption = {
@@ -434,7 +435,8 @@ export const useFilterStore = defineStore({
             result.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
             (!this.onlySearchInTitle &&
               (result.description?.toUpperCase().includes(this.currentSearchTerm.toUpperCase()) ||
-                result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
+                result.tags.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase())) ||
+                result.tag_categories.find((tag) => tag.name.toUpperCase().includes(this.currentSearchTerm.toUpperCase()))))
           );
         })
         .filter((result) => {
@@ -455,6 +457,7 @@ export const useFilterStore = defineStore({
             return facility.tag_category_ids.includes(serviceTag);
           });
         });
+
 
       if (this.mapFilter) {
         this.filteredResults = this.allResults.filter((facility) => facility.id === this.mapFilter);
