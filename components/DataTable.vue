@@ -739,7 +739,6 @@ const isDraft = (item: any) => {
 };
 
 const copyTokenLink = (item: any) => {
-  console.log(item);
   if (!item?.preview_token) return;
   const link = `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
   navigator.clipboard.writeText(link);
