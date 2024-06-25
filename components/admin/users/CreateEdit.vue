@@ -6,7 +6,7 @@
     @click:outside="emitClose()"
   >
     <v-card class="dialog-900">
-      <div v-if="item?.status !== 'confirmed'" class="my-5 mx-5">
+      <div v-if="item?.status && item?.status !== 'confirmed'" class="my-5 mx-5">
         <v-alert type="warning" class="general-font-size mt-3"
           >Dieser Benutzer wurde durch eine Beschwerdemaßnahme gesperrt.</v-alert
         >
