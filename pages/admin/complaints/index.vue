@@ -12,7 +12,7 @@
           prepend-icon="mdi-magnify"
           v-model="searchTerm"
           hide-details="auto"
-          label="Benutzer durchsuchen"
+          label="Beschwerde durchsuchen"
         />
       </v-col>
     </v-row>
