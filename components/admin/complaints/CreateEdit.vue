@@ -8,14 +8,21 @@
     :persistent="!!historyContent.length"
     :class="loading ? 'blurred-background' : ''"
   >
-    <v-card height="auto" style="overflow: hidden">
+    <v-card height="auto">
       <v-card-title class="text-h5 d-flex align-center pa-0 ma-0 my-2 mx-3">
-        <v-icon v-if="currentTab === 'three'" @click="currentTab = 'two'" size="small"
+        <v-icon
+          v-if="currentTab === 'three'"
+          @click="currentTab = 'two'"
+          size="small"
           >mdi-chevron-left</v-icon
         >
         <span>Beschwerde</span>
         <v-col class="d-flex align-center justify-end ga-5">
-          <v-btn prepend-icon="mdi-form-select" @click="openFormPage(itemId)" :disabled="!alreadyTakenActions">
+          <v-btn
+            prepend-icon="mdi-form-select"
+            @click="openFormPage(itemId)"
+            :disabled="!alreadyTakenActions"
+          >
             <template v-slot:prepend>
               <v-icon size="x-large" color="red"></v-icon>
             </template>
@@ -33,14 +40,14 @@
 
       <v-tabs v-model="currentTab" align-tabs="center" class="tabs mb-3">
         <v-tab value="one">Inhalt</v-tab>
-        <v-tab :disabled="alreadyTakenActions " value="two"
-          >Maßnahmen</v-tab
-        >
+        <v-tab value="two">Maßnahmen</v-tab>
         <v-tab value="three">History</v-tab>
       </v-tabs>
       <v-card-text v-auto-animate>
         <v-alert v-if="alreadyTakenActions" type="info" class="mb-2"
-          ><span v-if="isBlockedFacility"> Schon bearbeitet: Inhalt gesperrt </span>
+          ><span v-if="isBlockedFacility">
+            Schon bearbeitet: Inhalt gesperrt
+          </span>
           <span v-else> Schon bearbeitet: Benutzer gesperrt </span>
         </v-alert>
         <v-alert type="warning" class="mb-2" v-if="wereObjected"
@@ -86,7 +93,10 @@
                   :model-value="item?.reporter_name"
                 />
               </div>
-              <div class="field d-flex align-center ga-5" v-if="item?.reporter_email">
+              <div
+                class="field d-flex align-center ga-5"
+                v-if="item?.reporter_email"
+              >
                 <v-text-field
                   label="E-Mail"
                   hide-details="auto"
@@ -122,7 +132,6 @@
                 item-value="value"
                 single-line
                 hide-details="auto"
-                :disabled="alreadyTakenActions"
                 @update:model-value="currentStatus = $event"
               />
             </div>
@@ -130,9 +139,13 @@
               <v-alert v-if="currentStatus === 'rejected'" type="warning">
                 Maßnahmen nicht möglich
               </v-alert>
-              <v-row v-if="currentStatus !== 'rejected' && currentStatus !== 'open'">
+              <v-row
+                v-if="currentStatus !== 'rejected' && currentStatus !== 'open'"
+              >
                 <div class="my-15 d-flex align-center">
-                  <div class="general-font-size is-dark-grey font-weight-bold mr-3">
+                  <div
+                    class="general-font-size is-dark-grey font-weight-bold mr-3"
+                  >
                     Maßnahmen
                   </div>
                 </div>
@@ -145,7 +158,6 @@
                     variant="outlined"
                     dark
                     :loading="loading"
-                    :disabled="alreadyTakenActions"
                     :class="selectedAction === action.value ? 'selected' : ''"
                     @click="setCurrentAction(action.value)"
                   >
@@ -153,9 +165,14 @@
                   </v-btn>
                 </v-col>
               </v-row>
-              <div v-if="currentStatus !== 'open' && selectedAction !== 'unchanged'">
+              <div
+                v-if="
+                  currentStatus !== 'open' && selectedAction !== 'unchanged'
+                "
+              >
                 <div class="my-2 d-flex align-center">
-                  <span class="general-font-size is-dark-grey font-weight-bold mr-3"
+                  <span
+                    class="general-font-size is-dark-grey font-weight-bold mr-3"
                     >Protokoll generieren</span
                   >
                 </div>
@@ -166,7 +183,7 @@
                     maxlength="300"
                     hide-details="auto"
                     label="Grund"
-                    :disabled="!currentStatusChanged && alreadyTakenActions"
+                    :disabled="!currentStatusChanged"
                   />
                 </div>
               </div>
@@ -182,7 +199,7 @@
                   v-model="sendNotification"
                   :disabled="!currentStatusChanged"
                   :value="true"
-                  label="Email Senden"
+                  label="Soll eine zusätzliche Email gesendet werden?"
                   hide-details
                 />
               </div>
@@ -206,7 +223,10 @@
           </v-tabs-window-item>
           <v-tabs-window-item v-if="currentTab === 'three'" value="three">
             <div class="histories mt-n4">
-              <div v-for="(history, index) in sortedHistory" :key="history.timestamp">
+              <div
+                v-for="(history, index) in sortedHistory"
+                :key="history.timestamp"
+              >
                 <div
                   class="history"
                   :class="history.status === 'objection' ? 'has-objection' : ''"
@@ -220,7 +240,9 @@
                     <v-col class="d-flex flex-column align-end justify-end">
                       <div class="is-dark-grey font-weight-bold">
                         <span v-if="!history.action">Erstellt</span>
-                        <span v-else> {{ translateAction(history.action) }}</span>
+                        <span v-else>
+                          {{ translateAction(history.action) }}</span
+                        >
                       </div>
                       <div>
                         <span v-if="history?.user?.name"
@@ -235,7 +257,9 @@
                       </div>
                     </v-col>
                   </v-row>
-                  <div class="general-font-size">Grund: {{ history.content }}</div>
+                  <div class="general-font-size">
+                    Grund: {{ history.content }}
+                  </div>
                   <div class="general-font-size">
                     Status: {{ translateSatus(history.status) }}
                     <span v-if="history.status === 'objection'"
@@ -274,7 +298,7 @@
       </v-card-text>
       <div
         v-auto-animate
-        class="d-flex align-center justify-center my-1 comfirm-actions ga-1"
+        class="d-flex align-center"
         v-if="
           currentStatusChanged &&
           !alreadyTakenActions &&
@@ -282,10 +306,10 @@
           selectedAction !== 'unchanged'
         "
       >
-        <v-icon class="is-dark-grey">mdi-alert-circle-outline</v-icon>
-        <div class="general-font-size">Bestätigen</div>
-        <div>
-          <v-checkbox v-model="confirmActions" :value="true" hide-details />
+        
+        
+        <div class="field ml-5">
+          <v-checkbox v-model="confirmActions" label="Hiermit bestätige ich, dass meine Angaben zur getätigten Maßnahme korrekt sind" :value="true" hide-details />
         </div>
       </div>
       <v-card-actions>
@@ -387,7 +411,11 @@ const save = async () => {
     action_notification_message: notificationMessage.value,
   };
   loading.value = true;
-  const result = await privateApi.call("put", `/complaints/${item.value.id}`, data);
+  const result = await privateApi.call(
+    "put",
+    `/complaints/${item.value.id}`,
+    data
+  );
   if (result.status === ResultStatus.SUCCESSFUL) {
     await takeAction();
     await getItem();
@@ -427,7 +455,10 @@ const getItem = async () => {
   item.value = result.data.resource;
   selectedAction.value = item.value.last_action || "unchanged";
 
-  if (selectedAction.value !== "unchanged" && item.value.status === "complete") {
+  if (
+    selectedAction.value !== "unchanged" &&
+    item.value.status === "complete"
+  ) {
     alreadyTakenActions.value = true;
   }
   currentStatus.value = item.value.status;
@@ -493,7 +524,10 @@ const getFacility = async () => {
 };
 
 const getUser = async () => {
-  const result = await privateApi.call("get", `/users/${item.value?.meta_data?.user_id}`);
+  const result = await privateApi.call(
+    "get",
+    `/users/${item.value?.meta_data?.user_id}`
+  );
   if (result.status === ResultStatus.SUCCESSFUL) {
     isBlockedUser.value = result.data.resource.is_active_on_health_scope;
   } else {
@@ -518,7 +552,10 @@ const sortedHistory = computed(() => {
 const pdfUrl = ref("");
 
 const generatePdf = async (itemId: any) => {
-  const result = await privateApi.call("get", `/complaints/${itemId}/history_pdf`);
+  const result = await privateApi.call(
+    "get",
+    `/complaints/${itemId}/history_pdf`
+  );
   if (result.status === ResultStatus.SUCCESSFUL) {
     pdfUrl.value = result.data.resource.history_pdf_url;
     openPdf();
@@ -537,8 +574,10 @@ const openPdf = () => {
 
 const saveConditions = computed(() => {
   if (
-    (currentStatus.value === "pending" && selectedAction.value === "unchanged") ||
-    currentStatus.value === "rejected" || currentStatus.value === "objection"
+    (currentStatus.value === "pending" &&
+      selectedAction.value === "unchanged") ||
+    currentStatus.value === "rejected" ||
+    currentStatus.value === "objection"
   ) {
     return false;
   } else {
@@ -546,7 +585,7 @@ const saveConditions = computed(() => {
       !historyContent.value ||
       (sendNotification.value && !notificationMessage.value) ||
       !confirmActions.value ||
-      !currentStatusChanged.value 
+      !currentStatusChanged.value
     );
   }
 });
@@ -639,7 +678,7 @@ onMounted(async () => {
   background-color: $yellow
   padding: 10px
   border-radius: 25px
-  margin: 20px 20px
+  margin: 5px 5px
 
 .has-objection
   background-color: #FFCDCD

@@ -70,7 +70,7 @@
           <div class="mt-3" v-if="showForm" v-auto-animate>
             <div class="field">
               <v-text-field
-                label="Titel"
+                label="Beschwerdegund"
                 v-model="reportKind.text"
                 :error-messages="useErrors().checkAndMapErrors('title', errors)"
                 hide-details="auto"
@@ -79,7 +79,7 @@
             </div>
             <div class="field">
               <v-text-field
-                label="Titel"
+                label="Seitentitel"
                 :model-value="title"
                 :error-messages="useErrors().checkAndMapErrors('title', errors)"
                 hide-details="auto"
@@ -151,12 +151,14 @@
               v-if="!checkboxRules"
               label="Meine Angaben sind vollständig"
               class=""
+              hide-details
               v-model="informationsAreCompleted"
               :disabled="checkboxRules"
               :rules="needAdditionalInformation ? [rules.required] : []"
             />
             <v-checkbox
               v-if="!checkboxRules"
+              hide-details
               v-model="privacyAccepted"
               :disabled="checkboxRules"
               :rules="needAdditionalInformation ? [rules.required] : []"
@@ -495,4 +497,5 @@ onMounted(async () => {
 
 .blurred-background
   filter: blur(3.5px)
+
 </style>
