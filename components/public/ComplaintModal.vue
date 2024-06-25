@@ -7,7 +7,7 @@
     :class="loading ? 'blurred-background' : ''"
     persistent
   >
-    <v-card :class="[{ shake: animated }]" height="auto" style="overflow: hidden">
+    <v-card :class="[{ shake: animated }]" height="auto" >
       <v-card-title class="d-flex align-center justify-space-between pa-0 ma-0 my-2 mx-3">
         <div class="text-h5 d-flex justify-center">
           <v-icon size="small" v-if="reportKind && !successFullySent" @click="goBack()"
@@ -28,7 +28,7 @@
 
       <div v-if="isFacilityAlreadyReported && !showForm" v-auto-animate>
         <v-alert type="info" class="my-3 mx-3 general-font-size tex-bold" icon="mdi-information">
-          Sie haben bereits eine Beschwerde <i>"{{ alreadyReportedKind }}"</i> zu diesem Inhalt
+          Du hast bereits eine Beschwerde <i>"{{ alreadyReportedKind }}"</i> zu diesem Inhalt
           eingereicht
         </v-alert>
       </div>
@@ -74,7 +74,7 @@
                 v-model="reportKind.text"
                 :error-messages="useErrors().checkAndMapErrors('title', errors)"
                 hide-details="auto"
-                disabled
+                readonly
               />
             </div>
             <div class="field">
@@ -83,7 +83,7 @@
                 :model-value="title"
                 :error-messages="useErrors().checkAndMapErrors('title', errors)"
                 hide-details="auto"
-                disabled
+                readonly
               />
             </div>
             <div class="field" v-if="needAdditionalInformation">
@@ -142,6 +142,7 @@
                 maxlength="300"
                 hide-details="auto"
                 label="Beschreibung (optional)"
+                placeholder="Warum wird dieser Inhalt gemeldet?"
                 :error-messages="useErrors().checkAndMapErrors('description', errors)"
               />
             </div>
@@ -189,7 +190,7 @@
 
         <div v-else-if="successFullySent">
           <v-alert type="success" elevation="2" icon="mdi-check">
-            Beschwerde erfolgreich gesendet
+            Beschwerde eingereicht. Du erhältst eine Bestätigung per E-Mail mit der Angabe zu weiteren Schritten.
           </v-alert>
         </div>
       </v-card-text>

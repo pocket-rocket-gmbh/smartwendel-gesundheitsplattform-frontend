@@ -14,10 +14,16 @@
     </div>
     <div v-else v-auto-animate>
       <div
-        v-if="hasToken && !success && complaint?.status !== 'objection'"
+        v-if="
+          hasToken && !success && complaint?.status !== 'objection' && !statusStillOpen
+        "
         :class="['register-now elevation-10 card', { shake: animated }]"
       >
-        <div class="text-h4 d-flex justify-center mb-4">Beschwerde</div>
+        <div class="text-h4 d-flex justify-center mb-4">Wiederrufsformular</div>
+
+        <div class="text-h5 general-font-size">
+          Informationen zur eingereichten Inhalts-Beschwerde:
+        </div>
         <div>
           <div class="field">
             <v-select
@@ -28,7 +34,7 @@
               item-value="id"
               single-line
               hide-details="auto"
-              disabled
+              readonly
             />
           </div>
           <div class="field">
@@ -36,7 +42,7 @@
               v-model="complaint.page_title"
               label="Titel"
               hide-details="auto"
-              disabled
+              readonly
             />
           </div>
           <div class="field d-flex align-center ga-5">
@@ -44,26 +50,68 @@
               v-model="complaint.url"
               label="URL"
               hide-details="auto"
-              disabled
+              readonly
             />
             <v-icon @click="goToLink(complaint.url)">mdi-open-in-new</v-icon>
           </div>
           <v-textarea
             v-if="complaint.reason"
             v-model="complaint.reason"
-            disabled
+            readonly
             counter
             maxlength="300"
             hide-details="auto"
             label="Beschreibung"
           />
         </div>
-        <div class="text-h4 d-flex mb-4">Grund</div>
+        <div class="my-4 text-h5 general-font-size">Getroffene Maßnahme:</div>
+        <v-card elevated elevation="3" tonal>
+          <div
+            v-for="(item, index) in complaint.history.filter(
+              (item) => item.status === 'complete'
+            )"
+            :key="index"
+            class="general-font-size px-5 py-3"
+          >
+          <v-divider class="py-3"></v-divider>
+            <v-row>
+              <v-col cols="3"> Datum der Meldung: </v-col>
+              <v-col cols="3">
+                <span>{{ useDatetime().parseDatetime(complaint.created_at) }}</span>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="3"> Datum der Maßnahme: </v-col>
+              <v-col cols="3">
+                <span>{{ useDatetime().parseDatetime(item.timestamp) }}</span>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="3"> Maßnahme: </v-col>
+              <v-col cols="3">
+                <span>{{ translateAction(item.action) }}</span>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="3"> Begründung: </v-col>
+              <v-col cols="3">
+                <span>{{ item.content }}</span>
+              </v-col>
+            </v-row>
+          </div>
+        </v-card>
+
+        <div class="text-h5 d-flex my-4 general-font-size">
+          Aus welchem Grund soll die getroffene Maßnahme überprüft werden?
+        </div>
         <div class="field">
-          <v-textarea v-model="text" label="beschreiben" hide-details="auto" />
+          <v-textarea v-model="text" hide-details="auto" />
         </div>
         <div class="d-flex justify-end align-center">
-          <v-btn @click="save">Senden</v-btn>
+          <v-btn @click="save" :disabled="!text.length">Senden</v-btn>
         </div>
       </div>
       <div
@@ -73,7 +121,10 @@
       >
         <div class="d-flex align-center">
           <v-icon class="mr-3">mdi-alert-circle-outline</v-icon>
-          <span>Das Token ist ungültig.</span>
+          <span v-if="complaint?.status === 'open'">
+            Die Beschwerde ist noch offen. Bitte warte auf die Maßnahmen.
+          </span>
+          <span v-else>Das Token ist ungültig.</span>
         </div>
       </div>
 
@@ -95,7 +146,10 @@
       >
         <div class="d-flex align-center">
           <v-icon class="mr-3">mdi-check</v-icon>
-          <span>schon bearteitet, bitte warten</span>
+          <span
+            >Widerruf wurde eingelegt. Über die weiteren Maßnahmen werden wir dich
+            informieren.
+          </span>
         </div>
       </div>
     </div>
@@ -120,12 +174,22 @@ const getToken = () => {
   currentToken.value = String(router.currentRoute.value.query.token);
 };
 
-const complaint = ref({});
+const complaint = ref({
+  status: "",
+  history: [],
+  reason: "",
+  url: "",
+  page_title: "",
+  kind: "",
+  created_at: "",
+});
 const publicApi = usePublicApi();
 
 const goToLink = (url: string) => {
   window.open(url, "_blank");
 };
+
+const statusStillOpen = ref(false);
 
 const validateToken = async () => {
   loading.value = true;
@@ -134,6 +198,9 @@ const validateToken = async () => {
     const data = result.data.resource;
     complaint.value = data;
     hasToken.value = !!data;
+    if (data.status === "open") {
+      statusStillOpen.value = true;
+    }
   } else {
     hasToken.value = false;
   }
@@ -147,6 +214,19 @@ const allRoles = [
   { name: "Verstoß gegen die Nutzungsbedingungen", id: "terms_violation" },
   { name: "Andere", id: "other" },
 ];
+
+const translateAction = (action: string) => {
+  switch (action) {
+    case "blockContent":
+      return "Inhalt blockiert";
+    case "blockUser":
+      return "Nutzer blockiert";
+    case "unchanged":
+      return "keine maßnahmen";
+    default:
+      return action;
+  }
+};
 
 const error = ref(false);
 const success = ref(false);

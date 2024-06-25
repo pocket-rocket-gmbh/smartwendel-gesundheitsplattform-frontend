@@ -15,11 +15,11 @@
         >
         <span>Beschwerde</span>
         <v-col class="d-flex align-center justify-end ga-5">
-          <v-btn prepend-icon="mdi-form-select" @click="openFormPage(itemId)">
+          <v-btn prepend-icon="mdi-form-select" @click="openFormPage(itemId)" :disabled="!alreadyTakenActions">
             <template v-slot:prepend>
               <v-icon size="x-large" color="red"></v-icon>
             </template>
-            Form
+            Einspruchsformular
           </v-btn>
 
           <v-btn prepend-icon="mdi-file-pdf-box" @click="generatePdf(itemId)">
@@ -33,7 +33,7 @@
 
       <v-tabs v-model="currentTab" align-tabs="center" class="tabs mb-3">
         <v-tab value="one">Inhalt</v-tab>
-        <v-tab :disabled="alreadyTakenActions || !wereObjected" value="two"
+        <v-tab :disabled="alreadyTakenActions " value="two"
           >Maßnahmen</v-tab
         >
         <v-tab value="three">History</v-tab>
@@ -58,14 +58,14 @@
                   item-value="id"
                   single-line
                   hide-details="auto"
-                  disabled
+                  readonly
                 />
               </div>
               <div class="field">
                 <v-text-field
                   label="Titel"
                   hide-details="auto"
-                  disabled
+                  readonly
                   :model-value="item.page_title"
                 />
               </div>
@@ -73,7 +73,7 @@
                 <v-text-field
                   label="URL"
                   hide-details="auto"
-                  disabled
+                  readonly
                   :model-value="item?.url"
                 />
                 <v-icon @click="goToLink(item?.url)">mdi-open-in-new</v-icon>
@@ -82,7 +82,7 @@
                 <v-text-field
                   label="Name"
                   hide-details="auto"
-                  disabled
+                  readonly
                   :model-value="item?.reporter_name"
                 />
               </div>
@@ -90,7 +90,7 @@
                 <v-text-field
                   label="E-Mail"
                   hide-details="auto"
-                  disabled
+                  readonly
                   :model-value="item?.reporter_email"
                 />
                 <v-icon @click="openMail(item?.reporter_email)">mdi-at</v-icon>
@@ -98,7 +98,7 @@
               <v-textarea
                 v-if="item?.reason"
                 :model-value="item?.reason"
-                disabled
+                readonly
                 counter
                 maxlength="300"
                 hide-details="auto"
@@ -207,7 +207,10 @@
           <v-tabs-window-item v-if="currentTab === 'three'" value="three">
             <div class="histories mt-n4">
               <div v-for="(history, index) in sortedHistory" :key="history.timestamp">
-                <div class="history" :class="history.status === 'objection' ? 'has-objection' : ''">
+                <div
+                  class="history"
+                  :class="history.status === 'objection' ? 'has-objection' : ''"
+                >
                   <v-row>
                     <v-col class="d-flex align-start justify-start">
                       <span class="is-dark-grey font-weight-bold">{{
@@ -235,7 +238,9 @@
                   <div class="general-font-size">Grund: {{ history.content }}</div>
                   <div class="general-font-size">
                     Status: {{ translateSatus(history.status) }}
-                    <span v-if="history.status === 'objection'"><v-icon color="warning">mdi-alert</v-icon></span>
+                    <span v-if="history.status === 'objection'"
+                      ><v-icon color="warning">mdi-alert</v-icon></span
+                    >
                     <div
                       class="general-font-size"
                       v-auto-animate
@@ -395,6 +400,7 @@ const save = async () => {
     selectedAction.value = "unchanged";
     notificationMessage.value = "";
     historyContent.value = "";
+    currentTab.value = "one";
     getItem();
   } else {
     snackbar.showError("Ein Fehler ist aufgetreten");
@@ -532,7 +538,7 @@ const openPdf = () => {
 const saveConditions = computed(() => {
   if (
     (currentStatus.value === "pending" && selectedAction.value === "unchanged") ||
-    currentStatus.value === "rejected"
+    currentStatus.value === "rejected" || currentStatus.value === "objection"
   ) {
     return false;
   } else {
@@ -540,7 +546,7 @@ const saveConditions = computed(() => {
       !historyContent.value ||
       (sendNotification.value && !notificationMessage.value) ||
       !confirmActions.value ||
-      !currentStatusChanged.value
+      !currentStatusChanged.value 
     );
   }
 });
