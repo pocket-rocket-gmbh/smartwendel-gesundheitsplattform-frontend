@@ -19,7 +19,7 @@
         "
         :class="['register-now elevation-10 card', { shake: animated }]"
       >
-        <div class="text-h4 d-flex justify-center mb-4">Wiederrufsformular</div>
+        <div class="text-h4 d-flex justify-center mb-4">Widerrufsformular</div>
 
         <div class="text-h5 general-font-size">
           Informationen zur eingereichten Inhalts-Beschwerde:
