@@ -26,7 +26,7 @@
           Suchbegriff: {{ filterStore.currentSearchTerm }}
         </span>
         <span class="ml-10 general-font-size">
-          {{ filterStore.filteredResults.length}} Ergebnisse gefunden
+          {{ filterStore.filteredResults.length + filterStore.filteredCategories.length}} Ergebnisse gefunden
         </span>
       </v-col>
       <v-col>
