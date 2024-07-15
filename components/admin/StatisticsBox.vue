@@ -6,12 +6,21 @@
   >
     <div class="d-flex align-center">
       <div>
-        <div class="general-font-size word-break" lang="de">
+        <div
+          class="general-font-size word-break"
+          lang="de"
+        >
           {{ item.title }}
-          <v-icon size="x-small" v-if="hasFilter">mdi-filter-outline</v-icon>
+          <v-icon
+            size="x-small"
+            v-if="hasFilter"
+            >mdi-filter-outline</v-icon
+          >
         </div>
 
-        <span v-if="!loading" style="font-size: 14px"
+        <span
+          v-if="!loading"
+          style="font-size: 14px"
           ><i>{{ item.info }}</i></span
         >
         <v-progress-circular
@@ -22,8 +31,14 @@
           v-if="loading"
           class="mt-2"
         ></v-progress-circular>
-        <div class="stats-item" v-else>
-          <span class="text-h2 font-weight-bold" :class="item.info ? '' : 'pt-6'">
+        <div
+          class="stats-item"
+          v-else
+        >
+          <span
+            class="text-h2 font-weight-bold"
+            :class="item.info ? '' : 'pt-6'"
+          >
             {{ item.content }}
           </span>
         </div>
@@ -36,15 +51,17 @@ const router = useRouter();
 
 const props = defineProps<{
   loading: boolean;
-  item: {
-    title: string;
-    content: string;
-    type?: string;
-    query?: string;
-    info?: string;
-    hasNoSpace?: boolean;
-  };
+  item: Item;
 }>();
+
+type Item = {
+  title: string;
+  content?: string;
+  type?: 'facility' | 'course' | 'event' | 'users' | 'news';
+  query?: string;
+  info?: string;
+  hasNoSpace?: boolean;
+};
 
 const hasFilter = computed(() => !!props.item.query && !!props.item.type);
 

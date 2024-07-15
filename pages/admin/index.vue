@@ -21,6 +21,7 @@
         >mdi-reload</v-icon
       >
     </div>
+    <pre>{{ facilities.filter(facility => facility?.user?.is_active_on_health_scope && facility.kind === "facility" && facility.user?.care_facilities?.length).length }}</pre>
     <div v-for="item in items" :key="item.id" class="mt-5">
       <div class="d-flex align-center">
         <v-icon size="x-large" color="primary">{{ item.icon }}</v-icon>
@@ -44,13 +45,24 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { setItem, getItem } from '@/utils/indexedDB';
+
 definePageMeta({
   layout: "admin",
 });
 
 const router = useRouter();
-
 const loading = ref(false);
+const updatedAt = ref('');
+const facilities = ref([]);
+
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+const notUpToDate = new Date();
+notUpToDate.setDate(notUpToDate.getDate() - 120);
 
 type DashboardItem = {
   title: string;
@@ -63,73 +75,66 @@ type DashboardItem = {
   }[];
 };
 
-const facilities = ref([]);
-
-const getFacilitiesFromLocalStorage = () => {
-  return localStorage.getItem("facilities");
-};
-
-const getUpdatedAtFromLocalStorage = () => {
-  return localStorage.getItem("updatedAt");
-};
-
-const thirtyDaysAgo = new Date();
-thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-const notUpToDate = new Date();
-notUpToDate.setDate(notUpToDate.getDate() - 120);
-
-const updatedAt = ref("");
-
-const facilitiesFromLocalStorage = localStorage.getItem("facilities");
-const updatedAtFromLocalStorage = localStorage.getItem("updatedAt");
-
 const getItems = async () => {
-  setNow();
-  saveUpdatedAt();
-  if (facilitiesFromLocalStorage && facilities.value.length === 0) {
+  try {
+    setNow();
+    await saveUpdatedAt();
+
+    const facilitiesFromDB = await getItem('facilities', 'all');
+    if (facilitiesFromDB && facilities.value.length === 0) {
+      loading.value = true;
+      facilities.value = facilitiesFromDB;
+      loading.value = false;
+      return;
+    }
+
+    const updatedAtFromDB = await getItem('metadata', 'updatedAt');
+    if (updatedAtFromDB) {
+      updatedAt.value = updatedAtFromDB;
+    }
+
     loading.value = true;
-    facilities.value = JSON.parse(facilitiesFromLocalStorage);
+    const options = {
+      page: 1,
+      per_page: 10000,
+    };
+
+    const api = useCollectionApi();
+    api.setBaseApi(usePrivateApi());
+    api.setEndpoint(`care_facilities`);
+
+    await api.retrieveCollection(options as any);
+    facilities.value = api.items.value as any;
+
+    await saveFacilities();
     loading.value = false;
-    return;
+  } catch (error) {
+    console.error("Error fetching items:", error);
   }
-  if (updatedAtFromLocalStorage) {
-    updatedAt.value = updatedAtFromLocalStorage;
-  }
-
-  loading.value = true;
-
-  const options = {
-    page: 1,
-    per_page: 10000,
-  };
-
-  const api = useCollectionApi();
-  api.setBaseApi(usePrivateApi());
-  api.setEndpoint(`care_facilities`);
-
-  await api.retrieveCollection(options as any);
-  facilities.value = api.items.value as any;
-
-  saveFacilities();
-
-  loading.value = false;
 };
 
 const setNow = () => {
   updatedAt.value = new Date().toLocaleString("de-DE");
 };
 
-const saveFacilities = () => {
-  localStorage.setItem("facilities", JSON.stringify(facilities.value));
+const saveFacilities = async () => {
+  try {
+    await setItem('facilities', 'all', facilities.value);
+  } catch (error) {
+    console.error("Error saving facilities:", error);
+  }
 };
 
-const saveUpdatedAt = () => {
-  localStorage.setItem("updatedAt", updatedAt.value);
+const saveUpdatedAt = async () => {
+  try {
+    await setItem('metadata', 'updatedAt', updatedAt.value);
+  } catch (error) {
+    console.error("Error saving updated at:", error);
+  }
 };
 
-const deleteFacilitiesFromLocalStorage = () => {
-  getItems();
+const deleteFacilitiesFromLocalStorage = async () => {
+  await getItems();
 };
 
 const items = computed<DashboardItem[]>(() => [
@@ -141,8 +146,7 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Gesamt",
-        content: facilities.value.filter((facility: any) => facility.kind === "facility")
-          .length,
+        content: facilities.value.filter((facility: any) => facility.kind === "facility").length,
         type: "facility",
         query: "showAll",
       },
@@ -166,8 +170,7 @@ const items = computed<DashboardItem[]>(() => [
         title: "Neu registrierte Einrichtungen*",
         info: "*in den letzten 30 Tagen",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility.kind === "facility" && new Date(facility.created_at) >= thirtyDaysAgo
+          (facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= thirtyDaysAgo
         ).length,
         type: "facility",
         query: "thirty_days_ago",
@@ -183,8 +186,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Importierte Profile",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.imported === true && facility.kind === "facility"
+          (facility: any) => facility?.user?.imported === true && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "imported_profiles",
@@ -205,7 +207,7 @@ const items = computed<DashboardItem[]>(() => [
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.imported === true &&
-            !facility?.owner_requested_maintenance &&
+            facility?.owner_requested_maintenance === false &&
             facility?.user?.onboarding_status === "completed"
         ).length,
         type: "facility",
@@ -281,7 +283,7 @@ const items = computed<DashboardItem[]>(() => [
           facilities.value.filter(
             (facility: any) =>
               facility?.user?.is_active_on_health_scope && facility.kind === "facility"
-          ).length + 1, //because of the admin user
+          ).length, //because of the admin user
         type: "users",
         query: "approved",
       },
@@ -290,7 +292,6 @@ const items = computed<DashboardItem[]>(() => [
   {
     title: "Datenaktualität",
     icon: "mdi-playlist-check",
-
     divider: true,
     id: 4,
     sub_items: [
@@ -349,6 +350,7 @@ const items = computed<DashboardItem[]>(() => [
           .length,
         type: "event",
         query: "showAll",
+        hasNoSpace: true,
       },
       {
         title: "Kurse gesamt",
@@ -356,6 +358,7 @@ const items = computed<DashboardItem[]>(() => [
           .length,
         type: "course",
         query: "showAll",
+        hasNoSpace: true,
       },
       {
         title: "Beiträge gesamt",
@@ -363,6 +366,7 @@ const items = computed<DashboardItem[]>(() => [
           .length,
         type: "news",
         query: "showAll",
+        hasNoSpace: true,
       },
     ],
   },
@@ -370,16 +374,24 @@ const items = computed<DashboardItem[]>(() => [
 
 onMounted(async () => {
   if (!useUser().isAdmin()) {
-    router.push({ path: "/" });
+    router.push({ path: '/' });
   } else {
     await getItems();
-    getFacilitiesFromLocalStorage();
-    getUpdatedAtFromLocalStorage();
-    updatedAt.value = updatedAtFromLocalStorage;
   }
 });
 </script>
-<style lang="sass">
-.loader
-  margin-right: 50%
+
+<style scoped>
+.ml-3 {
+  margin-left: 1rem;
+}
+.ml-5 {
+  margin-left: 3rem;
+}
+.mb-n14 {
+  margin-bottom: -14px !important;
+}
+.mt-5 {
+  margin-top: 3rem;
+}
 </style>
