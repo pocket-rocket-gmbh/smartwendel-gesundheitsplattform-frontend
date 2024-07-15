@@ -1007,7 +1007,6 @@ const filtersMap = {
       field: "is_active_on_health_scope",
       value: true,
     },
-
     {
       field: "care_facilities-ne",
       value: "[]",
