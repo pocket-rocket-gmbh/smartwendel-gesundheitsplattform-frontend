@@ -142,12 +142,14 @@ const buttonHref = computed(() => {
 });
 
 const goToFacility = (buttonHref: any) => {
+  const url = new URL(buttonHref, window.location.origin);
+  console.log(url)
   if( buttonHref.includes("http://") ||
   buttonHref.includes("https://") ) {
     window.open(buttonHref, "_blank");
 
   } else {
-    router.push({ path: buttonHref });
+    router.push(url.pathname + url.search);
   }
 
 };
