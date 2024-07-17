@@ -11,7 +11,7 @@ export default defineEventHandler(async (event): Promise<ServerCallResult> => {
 
   try {
     const response = await axios.post(
-      `${config.public.API_BASE_URL}users/login-by-magic-token`,
+      `${config.public.API_BASE_URL}public/users/login-by-magic-token`,
       data
     );
     return ServerCallResult.success(response.data.status, response.data);
