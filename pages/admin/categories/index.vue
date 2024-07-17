@@ -149,7 +149,7 @@ const getItems = async (endpoint = "categories") => {
       },
       specialActionOnEditClick: "openMainModal",
       canAddAdditionalData: false,
-      next: [],
+      next: []
     };
 
     tmpItemsForList.push(categoryItem);
@@ -298,6 +298,10 @@ const handleNewAreaAdded = () => {
 };
 
 const handleItemSaved = () => {
+  itemId.value = null;
+  createEditDialogOpen.value = false;
+  createEditCategoryDialogOpen.value = false;
+  createEditSubDialogOpen.value = false;
   getItems();
 };
 
