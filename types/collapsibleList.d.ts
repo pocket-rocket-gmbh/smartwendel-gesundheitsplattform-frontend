@@ -26,5 +26,5 @@ export type CollapsibleListItem = {
   specialActionOnEditClick?: string;
   static?: boolean;
   next?: CollapsibleListItem[];
-  care_facilities_count: string;
+  care_facilities_count?: string;
 };

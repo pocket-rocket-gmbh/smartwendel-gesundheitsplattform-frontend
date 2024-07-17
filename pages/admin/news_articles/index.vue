@@ -7,7 +7,9 @@
           v-if="useUser().isFacilityOwner()"
           >Meine Beiträge</span
         >
-        <span class="general-font-size is-dark-grey font-weight-bold" v-else
+        <span
+          class="general-font-size is-dark-grey font-weight-bold"
+          v-else
           >Beiträge</span
         >
       </v-col>
@@ -20,11 +22,13 @@
       closable
       class="mt-2 general-font-size"
     >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
-      freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie Beiträge
-      anlegen.
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse und Veranstaltungen sowie
+      Beiträge anlegen.
     </v-alert>
-    <v-row align="center" v-if="showBar">
+    <v-row
+      align="center"
+      v-if="showBar"
+    >
       <v-col md="3">
         <v-btn
           v-if="setupFinished"
@@ -119,6 +123,7 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deinen Beitrag Online oder Offline schalten",
     fieldToSwitch: "is_active",
+    hasFilterFunction: true,
     disabledConditions: (item: any) => {
       const res = [
         isCompleteNews,
@@ -136,13 +141,14 @@ const fields = [
     disabledTooltipFacilityImcomplete:
       "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.",
   },
-  { prop: "name", text: "Titel", value: "name", type: "string" },
+  { prop: "name", text: "Titel", value: "name", type: "string", hasFilterFunction: true },
   { value: "", type: "beinEdited" },
   {
     prop: "created_at",
     text: "Erstellt am",
     value: "created_at",
     type: "datetime",
+    hasFilterFunction: true,
   },
   {
     prop: "user.firstname",

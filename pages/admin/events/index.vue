@@ -7,7 +7,9 @@
           v-if="useUser().isFacilityOwner()"
           >Meine Veranstaltungen</span
         >
-        <span class="general-font-size is-dark-grey font-weight-bold" v-else
+        <span
+          class="general-font-size is-dark-grey font-weight-bold"
+          v-else
           >Veranstaltungen</span
         >
       </v-col>
@@ -19,20 +21,21 @@
       closable
       class="my-2 general-font-size"
       v-if="!useUser().isAdmin()"
-      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind,
-      desto besser können dich Besucher auf der Webseite finden. Pflichtfelder sind mit
-      einem Sternchen versehen.</v-alert
+      >Hier kannst du deine Veranstaltung anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucher auf der Webseite finden. Pflichtfelder
+      sind mit einem Sternchen versehen.</v-alert
     >
     <v-alert
       density="compact"
       closable
       class="my-2 general-font-size"
       v-if="!useUser().isAdmin()"
-      >Leg hier deine Veranstaltung an. Veranstaltungen sind einmalige Ereignisse, die
-      sich über mehrere Tage verteilen können.
+      >Leg hier deine Veranstaltung an. Veranstaltungen sind einmalige Ereignisse, die sich über mehrere Tage verteilen können.
     </v-alert>
     <template v-if="setupFinished">
-      <v-row align="center" v-if="showBar">
+      <v-row
+        align="center"
+        v-if="showBar"
+      >
         <v-col md="3">
           <div class="my-5">
             <v-btn
@@ -66,8 +69,8 @@
       closable
       class="mt-2 general-font-size"
     >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
-      freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie Beiträge anlegen.
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie
+      Beiträge anlegen.
     </v-alert>
 
     <DataTable
@@ -142,6 +145,7 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deine Veranstaltung Online oder Offline schalten",
     fieldToSwitch: "is_active",
+    hasFilterFunction: true,
     disabledConditions: (item: any) => {
       const res = [
         isCompleteEvent,
@@ -159,13 +163,14 @@ const fields = [
     disabledTooltipFacilityImcomplete:
       "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.",
   },
-  { prop: "name", text: "Titel", value: "name", type: "string" },
+  { prop: "name", text: "Titel", value: "name", type: "string", hasFilterFunction: true },
   { value: "", type: "beinEdited" },
   {
     prop: "created_at",
     text: "Erstellt am",
     value: "created_at",
     type: "datetime",
+    hasFilterFunction: true,
   },
   {
     prop: "user.firstname",

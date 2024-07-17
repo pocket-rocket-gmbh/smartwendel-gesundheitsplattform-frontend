@@ -7,7 +7,9 @@
           v-if="useUser().isFacilityOwner()"
           >Meine Einrichtung</span
         >
-        <span class="general-font-size is-dark-grey font-weight-bold" v-else
+        <span
+          class="general-font-size is-dark-grey font-weight-bold"
+          v-else
           >Einrichtungen</span
         >
       </v-col>
@@ -27,9 +29,12 @@
       @changed="handleSaved()"
     />
     <div>
-      <div v-if="showBar" >
+      <div v-if="showBar">
         <v-row align="center">
-          <v-col md="3" class="d-flex align-center">
+          <v-col
+            md="3"
+            class="d-flex align-center"
+          >
             <v-btn
               v-if="user.isAdmin() || !itemsExist"
               elevation="0"
@@ -43,7 +48,10 @@
               Neue Einrichtung
             </v-btn>
           </v-col>
-          <v-col v-if="user.isAdmin()" class="d-flex align-center">
+          <v-col
+            v-if="user.isAdmin()"
+            class="d-flex align-center"
+          >
             <v-text-field
               width="50"
               prepend-icon="mdi-magnify"
@@ -75,18 +83,10 @@
 
       <div
         class="px-5"
-        v-if="
-          facilityId &&
-          setupFinished &&
-          !itemStatus &&
-          !user.isAdmin() &&
-          useUser().statusOnHealthScope()
-        "
+        v-if="facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope()"
       >
         <v-icon>mdi-arrow-up</v-icon>
-        <span
-          >Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span
-        >
+        <span>Erst mit Aktivierung des Buttons erscheint dein Profil auf der Webseite.</span>
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
@@ -183,11 +183,7 @@ const sendEmail = async () => {
   const data = {
     user_id: itemId.value,
   };
-  const result = await privateApi.call(
-    "post",
-    `/users/${itemId?.value?.user?.id}/send_notification_after_manual_import`,
-    data
-  );
+  const result = await privateApi.call("post", `/users/${itemId?.value?.user?.id}/send_notification_after_manual_import`, data);
   if (result.status === ResultStatus.SUCCESSFUL) {
     snackbar.showSuccess("Email wurde erfolgreich versendet");
   } else {
@@ -207,6 +203,7 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deine Einrichtung Online oder Offline schalten",
     fieldToSwitch: "is_active",
+    hasFilterFunction: true,
     disabledConditions: (item: any) => {
       const res = [
         isCompleteFacility,
@@ -224,19 +221,21 @@ const fields = [
     disabledTooltipFacilityImcomplete:
       "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.",
   },
-  { prop: "name", text: "Name", value: "name", type: "string" },
+  { prop: "name", text: "Name", value: "name", type: "string", hasFilterFunction: true },
   { value: "", type: "beinEdited" },
   {
     prop: "updated_at",
     text: "Letzte Aktualisierung",
     value: "updated_at",
     type: "datetime",
+    hasFilterFunction: true,
   },
   {
     prop: "created_at",
     text: "Erstellt am",
     value: "created_at",
     type: "datetime",
+    hasFilterFunction: true,
   },
   {
     prop: "user.firstname",
@@ -293,8 +292,7 @@ const draftRequiredFields: RequiredField[] = [
   },
   {
     props: ["description"],
-    checkHandler: (description?: string) =>
-      !description || description === "<p><br></p>",
+    checkHandler: (description?: string) => !description || description === "<p><br></p>",
   },
   {
     props: ["tag_category_ids"],
@@ -359,9 +357,7 @@ const originalItemPlaceholder = ref({
     { day: "Sonntag", placeholder: "z.B. geschlossen", hours: "" },
   ],
 });
-const itemPlaceholder = ref(
-  JSON.parse(JSON.stringify(originalItemPlaceholder.value))
-);
+const itemPlaceholder = ref(JSON.parse(JSON.stringify(originalItemPlaceholder.value)));
 
 const createEditDialogOpen = ref(false);
 const confirmDeleteDialogOpen = ref(false);

@@ -1075,15 +1075,15 @@ const formats = ref([
   "direction",
   "underline",
   "bold",
-  //'link',
-  //'strike',
-  // 'blockquote',
-  //'color',
-  //'font',
-  //'code-block',
-  //'formula'
-  // 'image'
-  // 'video'
+  "link",
+  // "strike",
+  // "blockquote",
+  // "color",
+  // "font",
+  // "code-block",
+  // "formula"
+  // "image"
+  // "video"
 ]);
 const textOptions = ref({
   debug: false,
