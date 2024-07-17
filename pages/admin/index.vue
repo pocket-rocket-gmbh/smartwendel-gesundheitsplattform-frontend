@@ -22,7 +22,6 @@
         >mdi-reload</v-icon
       >
     </div>
-    <pre>{{ facilities.filter(facility => facility?.user?.is_active_on_health_scope && facility.kind === "facility" && facility.user?.care_facilities?.length).length }}</pre>
     <div v-for="item in items" :key="item.id" class="mt-5">
       <div class="d-flex align-center">
         <v-icon size="x-large" color="primary">{{ item.icon }}</v-icon>
