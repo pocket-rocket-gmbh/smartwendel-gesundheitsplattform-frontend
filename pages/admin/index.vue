@@ -5,6 +5,7 @@
       <div class="ml-3" v-if="!loading && updatedAt">
         <span> Aktualisiert am: {{ updatedAt }}</span>
       </div>
+
       <v-skeleton-loader
         v-if="loading"
         class="ml-3"
@@ -21,7 +22,6 @@
         >mdi-reload</v-icon
       >
     </div>
-    <pre>{{ facilities.filter(facility => facility?.user?.is_active_on_health_scope && facility.kind === "facility" && facility.user?.care_facilities?.length).length }}</pre>
     <div v-for="item in items" :key="item.id" class="mt-5">
       <div class="d-flex align-center">
         <v-icon size="x-large" color="primary">{{ item.icon }}</v-icon>
@@ -209,6 +209,7 @@ const items = computed<DashboardItem[]>(() => [
             facility?.user?.imported === true &&
             facility?.owner_requested_maintenance === false &&
             facility?.user?.onboarding_status === "completed"
+            && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "user_maintenance_requested",
@@ -251,7 +252,7 @@ const items = computed<DashboardItem[]>(() => [
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
-            facility?.user?.imported === false
+            facility?.user?.imported === false && facility.kind === "facility"
         ).length,
         type: "users",
         query: "pending",
@@ -261,7 +262,7 @@ const items = computed<DashboardItem[]>(() => [
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
-            facility?.user?.imported === true
+            facility?.user?.imported === true && facility?.user?.onboarding_status !== "completed" && facility.kind === "facility" && facility?.user?.care_facilities?.length !== 0
         ).length,
         type: "users",
         query: "import_pending",
@@ -273,6 +274,7 @@ const items = computed<DashboardItem[]>(() => [
             facility?.user?.is_active_on_health_scope === false &&
             facility?.user?.imported === true &&
             facility?.user?.onboarding_status === "completed"
+            && facility.kind === "facility"
         ).length,
         type: "users",
         query: "imported_pending",
@@ -282,8 +284,8 @@ const items = computed<DashboardItem[]>(() => [
         content:
           facilities.value.filter(
             (facility: any) =>
-              facility?.user?.is_active_on_health_scope && facility.kind === "facility"
-          ).length, //because of the admin user
+              facility?.user?.is_active_on_health_scope === true && facility.kind === "facility" && facility?.user?.care_facilities?.length > 0
+          ).length,
         type: "users",
         query: "approved",
       },
