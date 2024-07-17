@@ -30,17 +30,17 @@ const formats = ref([
   "list",
   "align",
   "direction",
-  //'link',
-  //'strike',
-  // 'underline',
-  // 'blockquote',
-  //'bold',
-  //'color',
-  //'font',
-  //'code-block',
-  //'formula'
-  // 'image'
-  // 'video'
+  "link",
+  // "strike",
+  // "underline",
+  // "blockquote",
+  // "bold",
+  // "color",
+  // "font",
+  // "code-block",
+  // "formula"
+  // "image"
+  // "video"
 ]);
 
 const textOptions = ref({
