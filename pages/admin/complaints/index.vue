@@ -101,7 +101,9 @@ const fields = [
     type: "string",
     width: "200",
   },
-  { prop: "name", text: "Inhalt URL", value: "url", type: "string", width: "100" },
+  { prop: "name", text: "Inhalt URL", value: "url", width: "300", type: "string", break_text: true, action: (item: any) => {
+      handleButtonClick(item);
+    }, },
   {
     prop: "created_at",
     text: "Erstellt am",
@@ -111,6 +113,13 @@ const fields = [
   },
   { prop: "name", text: "Name", value: "reporter_name", type: "string" },
   { prop: "name", text: "E-Mail", value: "reporter_email", type: "string" },
+  {
+    prop: "meta_data",
+    text: "Plattform",
+    condition: "admin",
+    type: "button",
+    width: "100",
+  },
   {
     prop: "kind",
     text: "Typ",
@@ -122,7 +131,6 @@ const fields = [
     width: "200",
   },
   {
-    prop: "name",
     text: "Maßnahme",
     endpoint: "complaints",
     value: "last_action",
@@ -131,12 +139,12 @@ const fields = [
     width: "100",
   },
   {
-    prop: "name",
     text: "Protokol",
     value: "reporter_email",
     type: "protocol",
     width: "100",
   },
+
 ];
 
 const dataTableRef = ref();
@@ -163,6 +171,17 @@ const handleCreateEditClose = () => {
 };
 
 const route = useRoute();
+
+const handleButtonClick = (link: string) => {
+  event.stopPropagation();
+  goToLink(link);
+};
+
+const goToLink = (item: any) => {
+  console.log(item)
+  const link = `${window.location.origin}/public/care_facilities/${item?.meta_data?.facility_id}`;
+  return window.open(link, "_blank");
+};
 
 onMounted(async () => {
   const complaint = route.query.complaint;

@@ -165,8 +165,12 @@
           :width="field.width"
         >
           <span v-if="field.type === 'datetime' && item[field.value]">{{
-            useDatetime().parseDatetime(item[field.value])
-          }}</span>
+            useDatetime().parseDatetime(item[field.value])}}</span>
+          <span @click.stop="field.action(item)" v-else-if="field.break_text" class="break-title"> {{ item[field.value] }} </span>
+          <span v-else-if="field.text === 'Plattform'" class="d-flex justify-center">
+            <v-icon v-if="item.meta_data.plattform === 'app'">mdi-cellphone</v-icon>
+            <v-icon v-else>mdi-laptop</v-icon>          
+          </span>
           <span v-else-if="field.type === 'is-imported' && item?.imported">
             <v-tooltip location="top" width="250px">
               <template v-slot:activator="{ props }">
@@ -672,6 +676,7 @@ import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
 import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
+import { fi } from "date-fns/locale";
 
 const router = useRouter();
 
