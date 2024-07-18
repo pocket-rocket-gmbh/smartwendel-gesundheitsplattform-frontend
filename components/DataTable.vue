@@ -186,6 +186,7 @@
             <v-icon v-if="item.meta_data.plattform === 'app'">mdi-cellphone</v-icon>
             <v-icon v-else>mdi-laptop</v-icon>          
           </span>
+          <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
           <span v-else-if="field.type === 'is-imported' && item?.imported">
             <v-tooltip
               location="top"
@@ -441,6 +442,13 @@
                 </v-tooltip>
               </div>
             </div>
+            <span
+              ><v-icon
+                size="x-large"
+                color="red"
+                >mdi-file-pdf-box</v-icon
+              ></span
+            >
           </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
@@ -765,6 +773,7 @@ const emit = defineEmits([
   "openConfirmationDialog",
   "generatePdf",
 ]);
+
 
 const emitGeneratePdf = (item: any) => {
   emit("generatePdf", item);
