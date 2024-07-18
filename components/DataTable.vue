@@ -167,11 +167,7 @@
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'user' ? '' : 'has-normal-bg',
-          getCurrentRoute() === 'admin-users' ||
-          getCurrentRoute() === 'admin-tooltips' ||
-          getCurrentRoute() === 'admin-complaints'
-            ? 'has-normal-bg'
-            : '',
+          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' || getCurrentRoute() === 'admin-complaints' ? 'has-normal-bg' : '',
           isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
         ]"
       >
@@ -1298,7 +1294,6 @@ defineExpose({ resetActiveItems, getItems });
 
 .selected-sort
   color: #8ab61d
-
 
 .onboard
   color: #8ab61d
