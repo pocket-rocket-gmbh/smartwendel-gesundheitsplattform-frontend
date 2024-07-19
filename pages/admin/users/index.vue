@@ -17,7 +17,7 @@
           >Neuer Benutzer</v-btn
         >
       </v-col>
-      <v-col>
+      <v-col class="d-flex align-center">
         <v-text-field
           width="50"
           prepend-icon="mdi-magnify"
@@ -79,6 +79,18 @@ definePageMeta({
 
 const showBar = ref(true);
 
+const api = useCollectionApi();
+api.setBaseApi(usePrivateApi());
+api.setEndpoint("users");
+const users = api.items;
+
+const getUsers = async () => {
+  loading.value = true;
+  await api.retrieveCollection(filter.value);
+  dataTableRef.value?.getItems();
+  loading.value = false;
+};
+
 const fields = ref([
   { prop: "firstname", text: "Vorname", value: "firstname", type: "string" },
   { prop: "lastname", text: "Nachname", value: "lastname", type: "string" },
@@ -121,6 +133,17 @@ const fields = ref([
     value: "last_seen",
     type: "datetime",
   },
+  {
+    prop: "last_care_facility_updated_at",
+    text: "Letzte aktualisierung",
+    value: "last_care_facility_updated_at",
+    type: "datetime",
+  },
+  {
+    value: "last_care_facility_updated_at",
+    type: "updated",
+    width: "100px",
+  },
 ]);
 
 const route = useRoute();
@@ -153,6 +176,7 @@ const openDeleteDialog = (id: string) => {
 
 const snackbar = useSnackbar();
 
+
 const mailUser = async (id: String) => {
   const user = users.value.find((user) => user.id === id);
   if (process.client && user) {
@@ -161,17 +185,7 @@ const mailUser = async (id: String) => {
   }
 };
 
-const api = useCollectionApi();
-api.setBaseApi(usePrivateApi());
-api.setEndpoint("users");
-const users = api.items;
 
-const getUsers = async () => {
-  loading.value = true;
-  await api.retrieveCollection(filter.value);
-  dataTableRef.value?.getItems();
-  loading.value = false;
-};
 
 onMounted(async () => {
   await getUsers();
