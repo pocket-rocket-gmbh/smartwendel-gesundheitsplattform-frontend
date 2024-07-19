@@ -61,8 +61,17 @@ const facilities = ref([]);
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-const notUpToDate = new Date();
-notUpToDate.setDate(notUpToDate.getDate() - 120);
+const notUpToDate1 = new Date();
+notUpToDate1.setDate(notUpToDate1.getDate() - 120);
+
+const notUpToDate2 = new Date();
+notUpToDate2.setDate(notUpToDate2.getDate() - 134);
+
+const notUpToDate3 = new Date();
+notUpToDate3.setDate(notUpToDate3.getDate() - 226);
+
+const notUpToDate4 = new Date();
+notUpToDate4.setDate(notUpToDate4.getDate() - 240);
 
 type DashboardItem = {
   title: string;
@@ -299,13 +308,43 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Nicht aktuell",
-        info: "*120 Tagen",
+        info: "+ 120 Tagen",
         content: facilities.value.filter(
           (facility: any) =>
-            facility.kind === "facility" && new Date(facility.updated_at) < notUpToDate
+           new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate1
         ).length,
-        query: "data_not_up_to_date",
-        type: "facility",
+        query: "data_not_up_to_date_1",
+        type: "users",
+      },
+      {
+        title: "Nicht aktuell",
+        info: "+ 134 Tagen",
+        content: facilities.value.filter(
+          (facility: any) =>
+            new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate2
+        ).length,
+        query: "data_not_up_to_date_2",
+        type: "users",
+      },
+      {
+        title: "Nicht aktuell",
+        info: "+ 226 Tagen",
+        content: facilities.value.filter(
+          (facility: any) =>
+           new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate3
+        ).length,
+        query: "data_not_up_to_date_3",
+        type: "users",
+      },
+      {
+        title: "Nicht aktuell",
+        info: "+ 240 Tagen",
+        content: facilities.value.filter(
+          (facility: any) =>
+           new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate4
+        ).length,
+        query: "data_not_up_to_date_4",
+        type: "users",
       },
     ],
   },

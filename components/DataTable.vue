@@ -203,6 +203,25 @@
               <span>Benutzer wurde importiert </span>
             </v-tooltip>
           </span>
+          <span v-else-if="field.type === 'updated'">
+            <span v-if="daysNotUpdated(item[field.value]) > 120">
+              <v-tooltip location="top" width="300px">
+                <template v-slot:activator="{ props }">
+                  <span
+                    v-bind="props"
+                    class="d-flex flex-column align-center justify-center"
+                  >
+                    <img
+                      :src="alertIcon"
+                      width="20"
+                    />
+                    <span>{{ daysNotUpdated(item[field.value]) }}</span>
+                  </span>
+                </template>
+                <span>Diese Benutzer hat seit über {{ daysNotUpdated(item[field.value]) }} Tagen keine Aktualisierung vorgenommen.</span>
+              </v-tooltip>
+            </span>
+          </span>
           <span v-else-if="field.type === 'currency' && item[field.value]">{{ useCurrency().getCurrencyFromNumber(item[field.value]) }}</span>
           <v-tooltip
             top
@@ -732,6 +751,9 @@ import { isCompleteFacility } from "~/utils/facility.utils";
 import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
 import { fi } from "date-fns/locale";
+import alert from "@/assets/icons/alert-icon.svg";
+
+const alertIcon = alert;
 
 const router = useRouter();
 
@@ -803,7 +825,6 @@ const listOptions = ref([
   { text: "Rückmeldung ausstehend", value: "pending_profile_takeovers" },
   { text: "Neu registrierte Einrichtungen", value: "thirty_days_ago" },
   { text: "Inhaberschaften Nutzer", value: "user_maintenance_requested" },
-  { text: "Daten nicht aktuell", value: "data_not_up_to_date" },
   { text: "Nicht gesendete Emails", value: "mail_not_sent" },
 ]);
 
@@ -813,6 +834,10 @@ const listOptionsUsers = ref([
   { text: "in Prüfung (importiert)", value: "import_pending" },
   { text: "in Prüfung (import abgeschlossen)", value: "imported_pending" },
   { text: "in Prüfung", value: "pending" },
+  { text: "Daten nicht aktuell + 120", value: "data_not_up_to_date_1" },
+  { text: "Daten nicht aktuell + 134", value: "data_not_up_to_date_2" },
+  { text: "Daten nicht aktuell + 226", value: "data_not_up_to_date_3" },
+  { text: "Daten nicht aktuell + 240", value: "data_not_up_to_date_4" },
 ]);
 
 const listOptionsEvents = ref([
@@ -948,10 +973,27 @@ const items = api.items;
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-const notUpToDate = new Date();
-notUpToDate.setDate(notUpToDate.getDate() - 120);
+const notUpToDate1 = new Date();
+notUpToDate1.setDate(notUpToDate1.getDate() - 120);
 
-//limit items to 10
+const notUpToDate2 = new Date();
+notUpToDate2.setDate(notUpToDate2.getDate() - 134);
+
+const notUpToDate3 = new Date();
+notUpToDate3.setDate(notUpToDate3.getDate() - 226);
+
+const notUpToDate4 = new Date();
+notUpToDate4.setDate(notUpToDate4.getDate() - 240);
+
+const daysNotUpdated = (date: any) => {
+  const lastUpdated = date;
+  if (!lastUpdated) return 0;
+  const lastUpdatedDate = new Date(lastUpdated);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate.getTime() - lastUpdatedDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+};
 
 const handleToggled = async (item: any) => {
   emit("itemUpdated", item);
@@ -1028,9 +1070,21 @@ const filtersMap = {
       value: true,
     },
   ],
-  data_not_up_to_date: {
-    field: "updated_at-lt",
-    value: notUpToDate,
+  data_not_up_to_date_1: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate1,
+  },
+  data_not_up_to_date_2: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate2,
+  },
+  data_not_up_to_date_3: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate3,
+  },
+  data_not_up_to_date_4: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate4,
   },
   active_events: {
     field: "is_active",

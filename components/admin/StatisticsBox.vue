@@ -1,7 +1,7 @@
 <template>
   <div
     class="d-flex flex-column is-dark-grey stats-card"
-    :class="[hasFilter ? 'is-clickable' : '', item.hasNoSpace ? 'mt-n1' : '']"
+    :class="[hasFilter && item.content > 0 ? 'is-clickable' : 'opacity-60', item.hasNoSpace ? 'mt-n1' : '']"
     @click="redirectAndFilter"
   >
     <div class="d-flex align-center">
@@ -13,8 +13,14 @@
           {{ item.title }}
           <v-icon
             size="x-small"
-            v-if="hasFilter"
+            v-if="hasFilter && item.content > 0"
             >mdi-filter-outline</v-icon
+          >
+          <v-icon         
+            size="x-small"
+            v-if="hasFilter && item.content === 0"
+            disabled
+            >mdi-filter-remove-outline</v-icon
           >
         </div>
 
@@ -37,7 +43,7 @@
         >
           <span
             class="text-h2 font-weight-bold"
-            :class="item.info ? '' : 'pt-6'"
+             :class="[item.info ? '' : 'pt-6']"
           >
             {{ item.content }}
           </span>
@@ -56,7 +62,7 @@ const props = defineProps<{
 
 type Item = {
   title: string;
-  content?: string;
+  content?: number;
   type?: 'facility' | 'course' | 'event' | 'users' | 'news';
   query?: string;
   info?: string;
@@ -66,7 +72,7 @@ type Item = {
 const hasFilter = computed(() => !!props.item.query && !!props.item.type);
 
 const redirectAndFilter = () => {
-  if (!props.item.type || !props.item.query) {
+  if (!props.item.type || !props.item.query || props.item.content === 0) {
     return;
   }
   const path = ref<string>("");
