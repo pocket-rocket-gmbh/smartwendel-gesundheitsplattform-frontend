@@ -14,7 +14,6 @@
         >
       </v-col>
     </v-row>
-
     <v-alert
       v-if="!setupFinished && !loading"
       type="info"
@@ -27,6 +26,9 @@
     <ChangePassword
       :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
       @changed="handleSaved()"
+    />
+    <ReminderUpdateInformations
+      v-model:open="upToDateDialogOpen"
     />
     <div>
       <div v-if="showBar">
@@ -145,6 +147,7 @@ import { type Facility } from "~/store/searchFilter";
 import type { RequiredField } from "~/types/facilities";
 import { ResultStatus, ServerCallResult } from "@/types/serverCallResult";
 import { usePrivateApi } from "#imports";
+import { set } from "date-fns";
 
 definePageMeta({
   layout: "admin",
@@ -159,6 +162,7 @@ const router = useRouter();
 const loading = ref(false);
 const passwordChanged = ref(false);
 const confirmationDialogOpen = ref(false);
+const upToDateDialogOpen = ref(false);
 
 const snackbar = useSnackbar();
 
@@ -171,6 +175,24 @@ const handleSaved = async () => {
   dataTableRef?.value.getItems();
   useUser().reloadUser();
 };
+
+const careFacilitiesLastUpdated = computed(() => {
+  return user.currentUser?.last_care_facility_updated_at;
+});
+
+const notUpToDate = new Date();
+notUpToDate.setDate(notUpToDate.getDate() - 120);
+
+const checkifUpToDate = () => {
+  if (new Date(careFacilitiesLastUpdated.value) < notUpToDate) {
+    setTimeout(() => {
+      upToDateDialogOpen.value = true;
+    }, 1000);
+  } else {
+    upToDateDialogOpen.value = false;
+  }
+};
+
 
 const openConfirmationDialog = (id: string) => {
   itemId.value = id;
@@ -453,6 +475,7 @@ const handleCreated = (createdItemId: string) => {
 };
 
 onMounted(async () => {
+  checkifUpToDate();
   loading.value = true;
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;

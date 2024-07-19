@@ -51,7 +51,7 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col>
+        <v-col class="d-flex align-center">
           <v-text-field
             width="50"
             prepend-icon="mdi-magnify"

@@ -31,6 +31,7 @@
         <span class="general-font-size is-dark-grey font-weight-bold mb-4"
           >Persönliche Daten</span
         >
+        <pre>{{ item }}</pre>
         <v-form ref="form">
           <v-row justify="center">
             <v-col>

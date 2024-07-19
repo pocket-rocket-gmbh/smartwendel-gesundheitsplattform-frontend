@@ -1,55 +1,137 @@
 <template>
   <v-app v-if="useUser().currentUser">
-    <div @click.stop="drawer = !drawer" class="d-flex justify-start">
-        <v-icon size="x-large" class="is-dark-grey">mdi-menu-close</v-icon>
-      </div>
+    <div
+      @click.stop="drawer = !drawer"
+      class="d-flex justify-start"
+    >
+      <v-icon
+        size="x-large"
+        class="is-dark-grey"
+        >mdi-menu-close</v-icon
+      >
+    </div>
     <v-navigation-drawer v-model="drawer">
-      <div @click.stop="drawer = !drawer" class="d-flex justify-end">
-        <v-icon size="x-large" class="is-dark-grey">mdi-backburger</v-icon>
+      <div
+        @click.stop="drawer = !drawer"
+        class="d-flex justify-end"
+      >
+        <v-icon
+          size="x-large"
+          class="is-dark-grey"
+          >mdi-backburger</v-icon
+        >
       </div>
       <div class="d-flex">
         <router-link to="/">
-          <img class="mt-3 ml-4" src="~/assets/images/logo.png" width="200" />
+          <img
+            class="mt-3 ml-4"
+            src="~/assets/images/logo.png"
+            width="200"
+          />
         </router-link>
       </div>
       <v-list-item>
-        <v-list-item-title class="general-font-size is-dark-grey font-weight-bold my-1 mb-5">
-          Gesundheitsplattform
-        </v-list-item-title>
+        <v-list-item-title class="general-font-size is-dark-grey font-weight-bold my-1 mb-5"> Gesundheitsplattform </v-list-item-title>
         <v-list-item-subtitle class="has-lk-logo my-1"
-          ><img :src="logo" width="40"  /> Smart Wendeler Land
+          ><img
+            :src="logo"
+            width="40"
+          />
+          Smart Wendeler Land
         </v-list-item-subtitle>
       </v-list-item>
       <v-divider></v-divider>
-      <div v-if="!useUser().statusOnHealthScope()" class="d-flex align-center">
-        <v-alert type="info" density="compact" color="grey">
+      <div
+        v-if="!useUser().statusOnHealthScope()"
+        class="d-flex align-center"
+      >
+        <v-alert
+          type="info"
+          density="compact"
+          color="grey"
+        >
           Du bist zur Zeit in Prüfung und nicht freigegeben.
-          <v-tooltip location="top" width="200">
+          <v-tooltip
+            location="top"
+            width="200"
+          >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">mdi-information-outline</v-icon>
+              <v-icon
+                class="is-clickable"
+                v-bind="props"
+                >mdi-information-outline</v-icon
+              >
             </template>
             <span>
-              Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner
-              Einrichtung. Nach erfolgreichem Abschluss wirst du freigeschaltet. Du kannst
-              weiterhin deine Inhalte pflegen.
+              Der Landkreis prüft momentan deine Kontaktdaten, sowie die Daten deiner Einrichtung. Nach erfolgreichem Abschluss wirst du freigeschaltet. Du
+              kannst weiterhin deine Inhalte pflegen.
             </span>
           </v-tooltip>
         </v-alert>
       </div>
-      <v-list dense nav>
+      <div
+        class="d-flex align-center"
+        v-if="daysNotUpdated >= 120"
+      >
+        <v-alert
+          type="info"
+          density="compact"
+          :color="daysNotUpdated >= 233 ? 'red' : daysNotUpdated >= 134 ? 'error' : daysNotUpdated >= 120 ? 'warning' : 'grey'"
+        >
+          <p>
+            Deine Daten wurden seit {{ useDatetime().parseDatetime(careFacilitiesLastUpdated) }} nicht aktualisiert. Deine Inhalte werden in
+            {{ daysLeftBeforeOffline }} Tagen nicht mehr angezeigt, da wir den Benutzern der Gesundheitsplattform Datenaktualität garantieren.
+          </p>
+          <br />
+          <p>Bitte aktulisiere zeitnah deine Daten.</p>
+        </v-alert>
+      </div>
+      <v-list
+        dense
+        nav
+      >
         <template v-if="useUser().isAdmin()">
-          <v-list-item link to="/admin/matomo" nuxt class="general-font-size is-dark-grey">
+          <v-list-item
+            link
+            to="/admin/matomo"
+            nuxt
+            class="general-font-size is-dark-grey"
+          >
             <v-icon>mdi-arrow-left</v-icon> Zu den Statistiken
           </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin" nuxt class="general-font-size is-dark-grey"> Dashboard </v-list-item>
+          <v-list-item
+            link
+            to="/admin"
+            nuxt
+            class="general-font-size is-dark-grey"
+          >
+            Dashboard
+          </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin/filter/facilities" nuxt class="general-font-size is-dark-grey">
+          <v-list-item
+            link
+            to="/admin/filter/facilities"
+            nuxt
+            class="general-font-size is-dark-grey"
+          >
             Einrichtungsfilter
           </v-list-item>
-          <v-list-item link to="/admin/filter/courses" nuxt class="general-font-size is-dark-grey"> Kursfilter </v-list-item>
+          <v-list-item
+            link
+            to="/admin/filter/courses"
+            nuxt
+            class="general-font-size is-dark-grey"
+          >
+            Kursfilter
+          </v-list-item>
           <v-divider></v-divider>
-          <v-list-item link to="/admin/categories?filter=" nuxt class="general-font-size is-dark-grey">
+          <v-list-item
+            link
+            to="/admin/categories?filter="
+            nuxt
+            class="general-font-size is-dark-grey"
+          >
             Bereiche und Kategorien
           </v-list-item>
           <v-divider></v-divider>
@@ -126,16 +208,24 @@
           Benutzer
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item @click="handleLogout" class="general-font-size is-dark-grey">
+        <v-list-item
+          @click="handleLogout"
+          class="general-font-size is-dark-grey"
+        >
           <v-icon>mdi-logout</v-icon> Logout
         </v-list-item>
       </v-list>
-    
     </v-navigation-drawer>
     <v-main>
-      <v-container :fluid="true" class="container">
+      <v-container
+        :fluid="true"
+        class="container"
+      >
         <slot />
-        <div v-if="adminStore.loading" class="loading">
+        <div
+          v-if="adminStore.loading"
+          class="loading"
+        >
           <div class="spinner"></div>
           Daten werden geladen...
         </div>
@@ -146,7 +236,6 @@
       <ClientSnackbar />
     </ClientOnly>
   </v-app>
-  
 </template>
 
 <script lang="ts" setup>
@@ -165,6 +254,25 @@ const setupFinished = ref(false);
 const handleLogout = () => {
   user.logout();
 };
+
+const careFacilitiesLastUpdated = computed(() => {
+  return user.currentUser?.last_care_facility_updated_at;
+});
+
+const daysNotUpdated = computed(() => {
+  const lastUpdated = user.currentUser?.last_care_facility_updated_at;
+  if (!lastUpdated) return 0;
+  const lastUpdatedDate = new Date(lastUpdated);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate.getTime() - lastUpdatedDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+});
+
+const daysLeftBeforeOffline = computed(() => {
+  const offlineThreshold = 240;
+  return offlineThreshold - daysNotUpdated.value;
+});
 
 const checkSetupFinished = async () => {
   adminStore.loading = true;
