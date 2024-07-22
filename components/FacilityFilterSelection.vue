@@ -6,14 +6,24 @@
     <div
       class="input"
       @click="
-        showPopover = !showPopover;
+        filterStore.filteredFacilityMainFilters.length === 0
+          ? null
+          : showPopover = !showPopover;
         handleClearTermSearch();
       "
       :class="filterStore.filteredFacilityMainFilters.length ? '' : 'cursor-wait'"
       disabled
     >
       <div class="input-title">
-        {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
+        <p
+          class="waiting general-font-size"
+          v-if="filterStore.filteredFacilityMainFilters.length === 0"
+        >
+          <span>.</span><span>.</span><span>.</span>
+        </p>
+        <span v-else>
+          {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
+        </span>
       </div>
       <div class="actions">
         <div
@@ -249,7 +259,10 @@ watch(
 watch(
   () => filterStore.filteredFacilityMainFilters,
   () => {
-    multipleSelections.value = filterStore.filteredFacilityMainFilters.map(filter => filter.options).flat().filter(option => props.modelValue.includes(option.id));
+    multipleSelections.value = filterStore.filteredFacilityMainFilters
+      .map((filter) => filter.options)
+      .flat()
+      .filter((option) => props.modelValue.includes(option.id));
   }
 );
 
