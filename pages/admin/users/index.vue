@@ -37,6 +37,7 @@
       @mailUser="mailUser"
       @toogle-bar="showBar = !showBar"
       ref="dataTableRef"
+      defaultSortBy="is_active_on_health_scope"
       :disable-delete="false"
     />
 
@@ -116,6 +117,7 @@ const fields = ref([
     value: "is_active_on_health_scope",
     enum_name: "facilitiesStatus",
     condition: "admin",
+    width: "300px",
   },
   {
     value: "",
