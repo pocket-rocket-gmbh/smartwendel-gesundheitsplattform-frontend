@@ -5,20 +5,21 @@
     v-if="!(!filterStore.loading && !sortedResults?.length)"
   >
     <div class="d-flex actions">
-<!--    <div
-        v-if="!filterStore.currentKinds.includes('facility') || !filterStore.currentKinds.includes('news')"
+      <div
+        v-if="filterStore.currentKinds.includes('course') || filterStore.currentKinds.includes('event')"
         class="sort-order is-clickable d-flex align-center"
         @click="toggleFilterSort"
       >
-        <img :src="coursesIcon" class="mr-2 icon is-dark-grey" />
+        <img
+          :src="coursesIcon"
+          class="mr-2 icon is-dark-grey"
+        />
         <div class="mt-1">Datum</div>
         <div>
-          <v-icon v-show="sortDirection === 'asc' || sortDirection === null"
-            >mdi-chevron-down</v-icon
-          >
+          <v-icon v-show="sortDirection === 'asc' || sortDirection === null">mdi-chevron-down</v-icon>
           <v-icon v-show="sortDirection === 'desc'">mdi-chevron-up</v-icon>
         </div>
-      </div> -->
+      </div>
       <div
         v-if="filterStore.currentKinds.includes('facility')"
         class="sort-order is-clickable d-flex align-center"
@@ -35,7 +36,6 @@
         >
       </div>
     </div>
-
     <template v-if="sortedResults.length > 0">
       <div
         v-if="!filterStore.currentKinds.includes('facility')"
@@ -50,10 +50,21 @@
           :item="category"
         />
       </div>
-      <div v-else class="boxes">
-        <div class="item" v-for="careFacility in sortedResults" :key="careFacility.id">
-          <v-row class="item-row">
-            <v-col sm="12" md="6" class="mb-0 pb-0">
+      <div
+        v-else
+        class="boxes"
+      >
+        <div
+          class="item"
+          v-for="careFacility in sortedResults"
+          :key="careFacility.id"
+        >
+          <v-row class="item-row mb-0 pb-0">
+            <v-col
+              sm="12"
+              md="6"
+              class="mb-0 pb-0"
+            >
               <div class="d-flex justify-space-between align-center">
                 <div class="is-dark-grey font-weight-medium is-clickable">
                   <a
@@ -64,9 +75,7 @@
                 </div>
                 <div class="hidden-md-and-up">
                   <v-icon
-                    v-if="
-                      careFacility.geocode_address.length || careFacility.locations.length
-                    "
+                    v-if="careFacility.geocode_address.length || careFacility.locations.length"
                     size="x-large"
                     color="primary"
                     @click="showCareFacilityInMap(careFacility.id)"
@@ -75,7 +84,11 @@
                 </div>
               </div>
             </v-col>
-            <v-col sm="12" md="6" class="action d-md-flex justify-end hidden-sm-and-down">
+            <v-col
+              sm="12"
+              md="6"
+              class="action d-md-flex justify-end hidden-sm-and-down"
+            >
               <v-btn
                 variant="flat"
                 class="general-font-size"
@@ -90,39 +103,80 @@
           </v-row>
 
           <v-row class="item-row">
-            <v-col cols="12" md="6" sm="6" xl="6" xs="12" class="mb-0 pb-0">
+            <v-col
+              cols="12"
+              md="6"
+              sm="6"
+              xl="6"
+              xs="12"
+              class="mb-0 pb-0"
+            >
               <div class="is-dark-grey mt-4">
                 <div class="d-flex">
-                  <img class="mr-2 icon" :src="iconAddress" />
+                  <img
+                    class="mr-2 icon"
+                    :src="iconAddress"
+                  />
                   <div v-if="careFacility.street">
                     {{ careFacility.street }}
                   </div>
                 </div>
-                <div class="d-flex ml-n1" v-if="careFacility.zip || careFacility.town">
+                <div
+                  class="d-flex ml-n1"
+                  v-if="careFacility.zip || careFacility.town"
+                >
                   <v-icon></v-icon>
                   {{ careFacility.zip }} {{ careFacility.town }}
                 </div>
               </div>
             </v-col>
-            <v-col cols="12" md="6" sm="6" xl="6" xs="12" class="mb-0 pb-0">
+            <v-col
+              cols="12"
+              md="6"
+              sm="6"
+              xl="6"
+              xs="12"
+              class="mb-0 pb-0"
+            >
               <div class="mt-4">
-                <div v-if="careFacility.phone" class="d-flex align-center">
-                  <img class="mr-2 icon" :src="iconPhone" />
-                  <a class="is-dark-grey" :href="`tel:${careFacility.phone}`">{{
-                    careFacility.phone
-                  }}</a>
+                <div
+                  v-if="careFacility.phone"
+                  class="d-flex align-center"
+                >
+                  <img
+                    class="mr-2 icon"
+                    :src="iconPhone"
+                  />
+                  <a
+                    class="is-dark-grey"
+                    :href="`tel:${careFacility.phone}`"
+                    >{{ careFacility.phone }}</a
+                  >
                 </div>
-                <div v-if="careFacility.email" class="d-flex align-center">
-                  <img class="mr-2 icon" :src="iconMail" />
-                  <a class="is-dark-grey" :href="`mailto:${careFacility.email}`">{{
-                    careFacility.email
-                  }}</a>
+                <div
+                  v-if="careFacility.email"
+                  class="d-flex align-center"
+                >
+                  <img
+                    class="mr-2 icon"
+                    :src="iconMail"
+                  />
+                  <a
+                    class="is-dark-grey"
+                    :href="`mailto:${careFacility.email}`"
+                    >{{ careFacility.email }}</a
+                  >
                 </div>
               </div>
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12" sm="12" md="12" class="action hidden-md-and-up">
+            <v-col
+              cols="12"
+              sm="12"
+              md="12"
+              class="action hidden-md-and-up"
+            >
               <v-btn
                 variant="flat"
                 width="100%"
@@ -136,7 +190,7 @@
               </v-btn>
             </v-col>
           </v-row>
-          <div class="hidden-sm-and-down">
+          <div class="hidden-sm-and-down mt-5">
             <v-btn
               v-if="careFacility.geocode_address.length || careFacility.locations.length"
               append-icon="mdi-map-marker-outline"
@@ -149,7 +203,10 @@
             >
               Auf karte zeigen
             </v-btn>
-            <div v-else class="mt-4 pa-1"></div>
+            <div
+              v-else
+              class="mt-4 pa-1"
+            ></div>
           </div>
         </div>
       </div>
@@ -194,34 +251,35 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
 
 const sortDirection = ref<any>("asc" || "desc");
 
+function parseCustomDateFormat(dateString: any) {
+  const [datePart, timePart] = dateString.split(' ');
+  const [day, month, year] = datePart.split('.').map(Number);
+  const [hours, minutes] = timePart.split(':').map(Number);
+
+  return new Date(year, month - 1, day, hours, minutes);
+}
+
 const sortedResults = computed(() => {
   if (filterStore.currentKinds.includes("facility")) {
     return filterStore.filteredResults.sort((a: any, b: any) => {
-      return sortDirection.value === "asc"
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name);
+      return sortDirection.value === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     });
-  } else if (filterStore.currentKinds.includes("course")) {
-    const sortedResultsCopy = [...filterStore.filteredResults]; // Create a shallow copy
+  } else if (filterStore.currentKinds.includes("course") || filterStore.currentKinds.includes("event") ) {
+    const sortedResultsCopy = [...filterStore.filteredResults];
     if (sortDirection.value === "asc") {
-        sortedResultsCopy.sort((a: any, b: any) =>
-            new Date(a.event_dates[0]).valueOf() - new Date(b.event_dates[0]).valueOf()
-        );
+      sortedResultsCopy.sort((a: any, b: any) => parseCustomDateFormat(a.event_dates[0]).valueOf() - parseCustomDateFormat(b.event_dates[0]).valueOf());
     } else {
-        sortedResultsCopy.sort((a: any, b: any) =>
-            new Date(b.event_dates[0]).valueOf() - new Date(a.event_dates[0]).valueOf()
-        );
+      sortedResultsCopy.sort((a: any, b: any) => parseCustomDateFormat(b.event_dates[0]).valueOf() - parseCustomDateFormat(a.event_dates[0]).valueOf());
     }
     return sortedResultsCopy;
   }
   return filterStore.filteredResults;
 });
 
-
 const toggleFilterSort = () => {
   if (filterStore.currentKinds.includes("facility")) {
     sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
-  } else if (filterStore.currentKinds.includes("course")) {
+  } else if (filterStore.currentKinds.includes("course") || filterStore.currentKinds.includes("event")) {
     sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
   }
 };
