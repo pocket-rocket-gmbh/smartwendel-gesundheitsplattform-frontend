@@ -1,26 +1,47 @@
 <template>
-  <div class="popover general-font-size" ref="popoverParentRef" v-auto-animate>
+  <div
+    class="popover general-font-size"
+    ref="popoverParentRef"
+  >
     <div
       class="input"
       @click="
-        showPopover = !showPopover;
+        filterStore.filteredFacilityMainFilters.length === 0
+          ? null
+          : showPopover = !showPopover;
         handleClearTermSearch();
       "
+      :class="filterStore.filteredFacilityMainFilters.length ? '' : 'cursor-wait'"
+      disabled
     >
       <div class="input-title">
-        {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
+        <p
+          class="waiting general-font-size"
+          v-if="filterStore.filteredFacilityMainFilters.length === 0"
+        >
+          <span>.</span><span>.</span><span>.</span>
+        </p>
+        <span v-else>
+          {{ multipleSelections?.map((s) => s.name)?.join(", ") || placeholderText }}
+        </span>
       </div>
       <div class="actions">
-        <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
+        <div
+          class="chevron"
+          :class="[showPopover ? 'up' : 'down']"
+        ></div>
       </div>
     </div>
     <div
       class="popover-content general-font-size loading-filters"
       :width="popoverWidth ? `${popoverWidth}px` : 'max-content'"
-      v-if="showPopover"
+      v-if="showPopover && filterStore.filteredFacilityMainFilters.length"
       v-auto-animate
     >
-      <div class="filters filter-wrap">
+      <div
+        class="filters filter-wrap"
+        ref="popoverChildRef"
+      >
         <div
           v-for="filter in filterStore.filteredFacilityMainFilters"
           :key="filter.id"
@@ -40,9 +61,7 @@
               class="ma-2"
               :append-icon="areAllSelected(filter) ? 'mdi-delete' : ''"
             >
-              <span>
-                {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span
-              >
+              <span> {{ areAllSelected(filter) ? "Alle abwählen" : "Alle auswählen" }}</span>
             </v-btn>
           </div>
           <div
@@ -51,7 +70,11 @@
               width: popoverWidth ? `${popoverWidth}px` : 'max-content',
             }"
           >
-            <label class="option ma-n1" v-for="option in filter.options" :key="option.id">
+            <label
+              class="option ma-n1"
+              v-for="option in filter.options"
+              :key="option.id"
+            >
               <v-btn
                 v-if="option?.care_facilities_active_count > 0"
                 :model-value="modelValue.includes(option.id)"
@@ -63,7 +86,10 @@
                   'is-selected': modelValue.includes(option.id),
                 }"
               >
-                <p v-if="loadingFilters" class="waiting general-font-size">
+                <p
+                  v-if="loadingFilters"
+                  class="waiting general-font-size"
+                >
                   <span>.</span><span>.</span><span>.</span>
                 </p>
                 <span v-else>
@@ -71,9 +97,23 @@
                 </span>
               </v-btn>
             </label>
-            <v-divider v-if="hasActiveOptions(filter.id)" class="my-2"></v-divider>
+            <v-divider
+              v-if="hasActiveOptions(filter.id)"
+              class="my-2"
+            ></v-divider>
           </div>
         </div>
+      </div>
+      <div
+        v-if="!bottom"
+        class="d-flex justify-center align-end"
+      >
+        <v-icon
+          size="x-large"
+          color="primary"
+          class="show-more-arrow"
+          >mdi-chevron-double-down</v-icon
+        >
       </div>
       <v-row class="done-button">
         <v-col class="d-flex justify-end">
@@ -89,7 +129,10 @@
         </v-col>
       </v-row>
       <v-row v-if="loadingFilters">
-        <v-col cols="12" class="d-flex justify-center">
+        <v-col
+          cols="12"
+          class="d-flex justify-center"
+        >
           <LoadingSpinner> Filter werden geladen ... </LoadingSpinner>
         </v-col>
       </v-row>
@@ -98,8 +141,24 @@
 </template>
 
 <script setup lang="ts">
-import { onClickOutside } from "@vueuse/core";
+import { onClickOutside, useScroll } from "@vueuse/core";
 import { useFilterStore, type FilterKind } from "~/store/searchFilter";
+import { ref, computed, onMounted, watch } from "vue";
+
+const showPopover = ref(false);
+const popoverParentRef = ref<HTMLDivElement>(null);
+
+const popoverChildRef = ref<HTMLDivElement>(null);
+
+const multipleSelections = ref<Filter[]>([]);
+
+onClickOutside(popoverParentRef, () => (showPopover.value = false));
+
+const { arrivedState } = useScroll(popoverChildRef, {
+  offset: { bottom: 60 },
+});
+
+const { bottom } = toRefs(arrivedState);
 
 type Filter = {
   id: string;
@@ -131,19 +190,12 @@ const hasActiveOptions = (filterId: string) => {
   return options && options.some((option) => Number(option?.care_facilities_active_count) > 0);
 };
 
-const showPopover = ref(false);
-const popoverParentRef = ref<HTMLDivElement>();
-const multipleSelections = ref<Filter[]>([]);
-
-onClickOutside(popoverParentRef, () => (showPopover.value = false));
-
 const loadingFilters = ref(false);
 const filterStore = useFilterStore();
 const handleClearTermSearch = () => {
   if (filterStore.currentSearchTerm) {
     filterStore.clearTermSearch();
   }
-  return;
 };
 const handleOptionSelect = (option: Filter) => {
   const indexOfAlreadySetFilter = props.modelValue.findIndex((item) => item === option.id);
@@ -162,7 +214,6 @@ const handleOptionSelect = (option: Filter) => {
 const handleToggleAll = (filter: any) => {
   const options = filterStore.allFacilityMainFilters.find(({ id }) => id === filter.id)?.options;
   const relevantOptions = options.filter((option) => !!option?.care_facilities_active_count);
-
   const selectAll = !areAllSelected(filter);
 
   if (selectAll) {
@@ -208,7 +259,10 @@ watch(
 watch(
   () => filterStore.filteredFacilityMainFilters,
   () => {
-    multipleSelections.value = filterStore.filteredFacilityMainFilters.map(filter => filter.options).flat().filter(option => props.modelValue.includes(option.id));
+    multipleSelections.value = filterStore.filteredFacilityMainFilters
+      .map((filter) => filter.options)
+      .flat()
+      .filter((option) => props.modelValue.includes(option.id));
   }
 );
 
@@ -216,8 +270,6 @@ onMounted(async () => {
   setPlaceholderText();
   await filterStore.loadAllCommunities();
   filterStore.loadFilteredCommunities();
-
-
 });
 </script>
 
@@ -257,5 +309,21 @@ onMounted(async () => {
 .filter-wrap {
   max-height: 500px;
   overflow-y: auto;
+}
+
+.show-more-arrow {
+  animation: MoveUpDown 1s linear infinite;
+  left: 0;
+  bottom: 0;
+}
+
+@keyframes MoveUpDown {
+  0%,
+  100% {
+    bottom: 0;
+  }
+  50% {
+    bottom: 20px;
+  }
 }
 </style>
