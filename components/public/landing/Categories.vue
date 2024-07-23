@@ -87,14 +87,14 @@ const items = [
     content: {
       heading: "Ärztliche Versorgung",
       icon: icon2,
-      link: "/public/search/facilities",
+      link: '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["e5d73dc1-919d-486f-b430-64df4bd4b031","a8b27c4e-0c2a-44f6-a13b-f41892636449","4cd91627-3ea3-4956-87b8-c0ad9e0ef898","20948809-40fd-4857-9101-c84874e1537e"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
     },
   },
   {
     content: {
       heading: "Vereine",
       icon: icon3,
-      link: "/public/search/facilities",
+      link: '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["2d957fd0-c79f-411b-a826-037f99551d39"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
     },
   },
   {
@@ -102,7 +102,7 @@ const items = [
       heading: "Pflege",
       icon: icon4,
       link:
-        '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["75ad08a3-6060-4ef7-9a18-53ec073d7c6e"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
+        '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["e0face48-e5b3-44e4-ba4a-c8a11693fc9d","75ad08a3-6060-4ef7-9a18-53ec073d7c6e"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
     },
   },
   {
@@ -117,7 +117,7 @@ const items = [
     content: {
       heading: "Kliniken",
       icon: icon6,
-      link: "/public/search/facilities",
+      link: '/public/search/facilities?filter={"currentSearchTerm":"","currentZips":[],"currentFacilityTags":["8a534452-bdc1-4f9e-b8da-5597cce5d50b","23d0d5cf-71b2-49fd-a000-1727fc0fe7cf","38ab9a5d-9e9b-4bd2-b287-4a73576c1c98"],"currentServiceTags":[],"filterSort":"A-Z","currentKinds":["facility"]}',
     },
   },
 ];

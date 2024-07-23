@@ -89,16 +89,22 @@
               md="6"
               class="action d-md-flex justify-end hidden-sm-and-down"
             >
-              <v-btn
-                variant="flat"
-                class="general-font-size"
-                color="primary"
-                rounded="pill"
-                size="large"
-                @click="goToFacility(careFacility)"
+              <a
+                :href="careFacility.url"
+                :target="careFacility.url_kind === 'external' ? '_blank' : ''"
+                @click.prevent="goToFacility(careFacility)"
+                class="d-inline-block"
               >
-                <span> Details ansehen </span>
-              </v-btn>
+                <v-btn
+                  variant="flat"
+                  class="general-font-size"
+                  color="primary"
+                  rounded="pill"
+                  size="large"
+                >
+                  <span> Details ansehen </span>
+                </v-btn>
+              </a>
             </v-col>
           </v-row>
 
@@ -177,17 +183,23 @@
               md="12"
               class="action hidden-md-and-up"
             >
-              <v-btn
-                variant="flat"
-                width="100%"
-                class="general-font-size"
-                color="primary"
-                rounded="pill"
-                size="large"
-                @click="goToFacility(careFacility)"
+              <a
+                :href="careFacility.url"
+                :target="careFacility.url_kind === 'external' ? '_blank' : ''"
+                @click.prevent="goToFacility(careFacility)"
+                style="display: block; width: 100%"
               >
-                <span> Details ansehen </span>
-              </v-btn>
+                <v-btn
+                  variant="flat"
+                  width="100%"
+                  class="general-font-size"
+                  color="primary"
+                  rounded="pill"
+                  size="large"
+                >
+                  <span> Details ansehen </span>
+                </v-btn>
+              </a>
             </v-col>
           </v-row>
           <div class="hidden-sm-and-down mt-5">
@@ -252,9 +264,9 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
 const sortDirection = ref<any>("asc" || "desc");
 
 function parseCustomDateFormat(dateString: any) {
-  const [datePart, timePart] = dateString.split(' ');
-  const [day, month, year] = datePart.split('.').map(Number);
-  const [hours, minutes] = timePart.split(':').map(Number);
+  const [datePart, timePart] = dateString.split(" ");
+  const [day, month, year] = datePart.split(".").map(Number);
+  const [hours, minutes] = timePart.split(":").map(Number);
 
   return new Date(year, month - 1, day, hours, minutes);
 }
@@ -264,7 +276,7 @@ const sortedResults = computed(() => {
     return filterStore.filteredResults.sort((a: any, b: any) => {
       return sortDirection.value === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
     });
-  } else if (filterStore.currentKinds.includes("course") || filterStore.currentKinds.includes("event") ) {
+  } else if (filterStore.currentKinds.includes("course") || filterStore.currentKinds.includes("event")) {
     const sortedResultsCopy = [...filterStore.filteredResults];
     if (sortDirection.value === "asc") {
       sortedResultsCopy.sort((a: any, b: any) => parseCustomDateFormat(a.event_dates[0]).valueOf() - parseCustomDateFormat(b.event_dates[0]).valueOf());

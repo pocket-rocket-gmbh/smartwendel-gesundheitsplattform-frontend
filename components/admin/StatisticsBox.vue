@@ -16,7 +16,7 @@
             v-if="hasFilter && item.content > 0"
             >mdi-filter-outline</v-icon
           >
-          <v-icon         
+          <v-icon
             size="x-small"
             v-if="hasFilter && item.content === 0"
             disabled
