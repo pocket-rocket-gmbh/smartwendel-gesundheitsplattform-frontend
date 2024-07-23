@@ -28,6 +28,7 @@
       :disable-delete="false"
       @toogle-bar="showBar = !showBar"
       @generatePdf="generatePdf"
+      :noBar="true"
     />
 
     <AdminComplaintsCreateEdit

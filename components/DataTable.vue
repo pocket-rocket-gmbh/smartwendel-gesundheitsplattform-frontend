@@ -169,6 +169,7 @@
           item?.kind !== 'user' ? '' : 'has-normal-bg',
           getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' || getCurrentRoute() === 'admin-complaints' ? 'has-normal-bg' : '',
           isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
+          item?.status === 'completed' ? 'has-bg-lighten-green' : '',
         ]"
       >
         <td
@@ -189,12 +190,26 @@
           >
           <span
             v-else-if="field.text === 'Plattform'"
-            class="d-flex justify-center"
+            class="d-flex justify-center mr-5"
           >
-            <v-icon v-if="item.meta_data.plattform === 'app'">mdi-cellphone</v-icon>
-            <v-icon v-else>mdi-laptop</v-icon>
+            <v-tooltip top>
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
+                  <v-icon v-if="item.meta_data.plattform === 'app'">mdi-cellphone</v-icon>
+                </span>
+              </template>
+              <span>Beschwerde über die App</span>
+            </v-tooltip>
+
+            <v-tooltip top>
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
+                  <v-icon v-if="item.meta_data.plattform !== 'app'">mdi-laptop</v-icon>
+                </span>
+              </template>
+              <span>Beschwerde über die Webseite</span>
+            </v-tooltip>
           </span>
-          <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
           <span v-else-if="field.type === 'is-imported' && item?.imported">
             <v-tooltip
               location="top"

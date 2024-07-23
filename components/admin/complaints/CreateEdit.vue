@@ -144,7 +144,7 @@
               >
                 <div class="my-15 d-flex align-center">
                   <div
-                    class="general-font-size is-dark-grey font-weight-bold mr-3"
+                    class="general-font-size is-dark-grey font-weight-bold ml-3"
                   >
                     Maßnahmen
                   </div>
