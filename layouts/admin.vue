@@ -83,7 +83,7 @@
             {{ daysLeftBeforeOffline }} Tagen nicht mehr angezeigt, da wir den Benutzern der Gesundheitsplattform Datenaktualität garantieren.
           </p>
           <br />
-          <p>Bitte aktulisiere zeitnah deine Daten.</p>
+          <p>Bitte aktualisiere zeitnah deine Daten.</p>
         </v-alert>
       </div>
       <v-list

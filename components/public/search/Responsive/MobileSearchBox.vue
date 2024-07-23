@@ -85,6 +85,7 @@
               rounded="pill"
               color="white"
               @click="filterStore.clearSearch()"
+              :disabled="deleteFilterDisabledCondition"
             >
               Filter löschen
             </v-btn>
@@ -208,6 +209,14 @@ const handleClearSearch = () => {
   showFilter.value = false;
   emit("toggleMap");
 };
+
+const deleteFilterDisabledCondition = computed(() => {
+  return (
+    !filterStore.currentFacilityTags.length &&
+    !filterStore.currentZips.length &&
+    !filterStore.currentSearchTerm
+  );
+});
 
 const toogleShowFilter = () => {
   showFilter.value = !showFilter.value;
