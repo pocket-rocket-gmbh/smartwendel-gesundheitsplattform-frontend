@@ -458,11 +458,12 @@
           <div id="address">
             <div class="my-2">
               <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["address"].label }}</span>
+              {{ handleInitialCheckValidAddress(slotProps.item) }}
               <v-checkbox
                 hide-details
                 density="compact"
                 :model-value="slotProps.item.course_outside_facility"
-                @click="setCourseOutsideFacility(slotProps.item)"
+                @click="courseIsOutsideFacility(slotProps.item)"
                 label="Ja, der Kurs findet außerhalb meiner Einrichtung statt."
               />
             </div>
@@ -704,8 +705,21 @@ const servicesFilterSet = ref(false);
 
 const currentUserFacility = await getCurrentUserFacilities();
 
-const setCourseOutsideFacility = (item: CreateEditFacility) => {
+const initialLoaded = ref(false);
+
+const handleInitialCheckValidAddress = (slotProps: any) => {
+  if (initialLoaded.value) return;
+  initialLoaded.value = true;
+  setCourseOutsideFacility(slotProps);
+};
+
+const courseIsOutsideFacility = (item: CreateEditFacility) => {
   item.course_outside_facility = !item.course_outside_facility;
+  setCourseOutsideFacility(item);
+};
+
+const setCourseOutsideFacility = (item: CreateEditFacility) => {
+  if(!initialLoaded.value) return;
   if (item?.course_outside_facility) {
     item.street = item.street || "";
     item.zip = item.zip || "";
@@ -713,11 +727,11 @@ const setCourseOutsideFacility = (item: CreateEditFacility) => {
     item.town = item.town || "";
     item.additional_address_info = item.additional_address_info || "";
   } else {
-    item.street = currentUserFacility.street;
-    item.zip = currentUserFacility.zip;
-    item.community_id = currentUserFacility.community_id;
-    item.town = currentUserFacility.town;
-    item.additional_address_info = currentUserFacility.additional_address_info;
+    item.street = currentUserFacility?.street;
+    item.zip = currentUserFacility?.zip;
+    item.community_id = currentUserFacility?.community_id;
+    item.town = currentUserFacility?.town;
+    item.additional_address_info = currentUserFacility?.additional_address_info;
   }
 };
 const formats = ref([
