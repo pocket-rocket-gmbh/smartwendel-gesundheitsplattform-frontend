@@ -20,7 +20,7 @@
       />
 
       <v-form ref="form">
-        <v-card-title class="text-h5 has-bg-primary py-5 text-white"> uhuh {{isCategory}}
+        <v-card-title class="text-h5 has-bg-primary py-5 text-white">
           <span v-if="itemId">{{ conceptName }} bearbeiten</span>
           <span v-else>{{ conceptName }} erstellen </span>
         </v-card-title>
