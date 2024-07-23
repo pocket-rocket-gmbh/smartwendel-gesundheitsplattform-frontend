@@ -28,6 +28,7 @@
       :disable-delete="false"
       @toogle-bar="showBar = !showBar"
       @generatePdf="generatePdf"
+      :noBar="true"
     />
 
     <AdminComplaintsCreateEdit
@@ -64,6 +65,7 @@
 </template>
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
+import { no } from "vuetify/locale";
 
 const snackbar = useSnackbar();
 const privateApi = usePrivateApi();
