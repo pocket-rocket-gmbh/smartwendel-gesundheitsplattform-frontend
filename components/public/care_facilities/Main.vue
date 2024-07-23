@@ -69,7 +69,10 @@
           bieten.</i
         >
       </div>
-
+      <v-divider
+        class="my-10"
+        v-if="careFacility?.name_responsible_person"
+      ></v-divider>
       <div
         v-if="
           careFacility?.street &&

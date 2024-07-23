@@ -1,8 +1,16 @@
 <template>
   <div class="box flex-column is-dark-grey pa-5">
-    <span class="is-primary general-font-size is-uppercase font-weight-medium mb-6"
+    <v-row>
+      <v-col>
+        <span class="is-primary general-font-size is-uppercase font-weight-medium mb-6"
       >Kontakt und Infos</span
     >
+      </v-col>
+      <v-col class="d-flex justify-end">
+        <v-btn @click="complaintModalOpen = true" variant="outlined" color="warning">Inhalt melden</v-btn>
+      </v-col>
+    </v-row>
+   
     <div
       class="py-3 d-flex flex-column justify-center"
       v-if="careFacility?.kind !== 'facility'"
@@ -126,6 +134,14 @@
       v-if="careFacility"
       :careFacility="careFacility"
     />
+    <PublicComplaintModal
+      v-if="complaintModalOpen"
+      @close="complaintModalOpen = false"
+      :title="careFacility?.name"
+      :kind="careFacility?.kind"
+      :facility-id="careFacility?.id"
+      :user-id="careFacility?.user?.id"
+    />
   </div>
 </template>
 
@@ -140,6 +156,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const complaintModalOpen = ref(false);
 
 const buttonHref = computed(() => {
   if (!props.careFacility) return null;

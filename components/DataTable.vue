@@ -158,6 +158,7 @@
         <th width="15px"></th>
       </tr>
     </thead>
+
     <tbody>
       <tr
         v-for="(item, indexMain) in items"
@@ -166,7 +167,7 @@
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'user' ? '' : 'has-normal-bg',
-          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' ? 'has-normal-bg' : '',
+          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' || getCurrentRoute() === 'admin-complaints' ? 'has-normal-bg' : '',
           isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
         ]"
       >
@@ -178,6 +179,21 @@
           @click="handleEmitParent(item, field, indexMain)"
           :width="field.width"
         >
+          <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
+          <span
+            @click.stop="field.action(item)"
+            v-else-if="field.break_text"
+            class="break-title"
+          >
+            {{ item[field.value] }}</span
+          >
+          <span
+            v-else-if="field.text === 'Plattform'"
+            class="d-flex justify-center"
+          >
+            <v-icon v-if="item.meta_data.plattform === 'app'">mdi-cellphone</v-icon>
+            <v-icon v-else>mdi-laptop</v-icon>
+          </span>
           <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
           <span v-else-if="field.type === 'is-imported' && item?.imported">
             <v-tooltip
@@ -197,7 +213,10 @@
           </span>
           <span v-else-if="field.type === 'updated'">
             <span v-if="daysNotUpdated(item[field.value]) > 120">
-              <v-tooltip location="top" width="300px">
+              <v-tooltip
+                location="top"
+                width="300px"
+              >
                 <template v-slot:activator="{ props }">
                   <span
                     v-bind="props"
@@ -267,48 +286,89 @@
             </div>
           </span>
           <template v-else-if="field.type === 'switch'">
-            <v-tooltip top>
-              <template v-slot:activator="{ props }">
-                <div v-bind="props">
-                  <TableSwitch
-                    :item="item"
-                    :endpoint="field.endpoint"
-                    :field-to-switch="field.fieldToSwitch"
-                    :ask-notification="field.askNotification"
-                    :notification-kind="field.notificationKind"
-                    :notification-kind-explicit="field.notificationKindExplicit"
-                    :notification-pre-filled-headline="field.notificationPreFilledHeadline"
-                    :notification-pre-filled-text="field.notificationPreFilledText"
-                    :notification-cta-link="field.notificationCtaLink"
-                    :disabled="field?.disabledConditions?.(item)"
-                    @toggled="handleToggled(item)"
-                  />
-                </div>
-              </template>
-              <div
-                v-if="!useUser().statusOnHealthScope()"
-                class="tooltip"
-              >
-                {{ field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip }}
+            <div class="d-flex align-center ga-2">
+              <div>
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <div v-bind="props">
+                      <TableSwitch
+                        :item="item"
+                        :endpoint="field.endpoint"
+                        :field-to-switch="field.fieldToSwitch"
+                        :ask-notification="field.askNotification"
+                        :notification-kind="field.notificationKind"
+                        :notification-kind-explicit="field.notificationKindExplicit"
+                        :notification-pre-filled-headline="field.notificationPreFilledHeadline"
+                        :notification-pre-filled-text="field.notificationPreFilledText"
+                        :notification-cta-link="field.notificationCtaLink"
+                        :disabled="field?.disabledConditions?.(item) || item?.blocked || item?.user?.status === 'disabled'"
+                        @toggled="handleToggled(item)"
+                      />
+                    </div>
+                  </template>
+                  <div
+                    v-if="!useUser().statusOnHealthScope()"
+                    class="tooltip"
+                  >
+                    {{ field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip }}
+                  </div>
+                  <div
+                    v-else
+                    class="tooltip"
+                  >
+                    {{ field?.disabledConditions?.(item) ? field.disabledTooltipFacilityImcomplete : field.tooltip }}
+                  </div>
+                </v-tooltip>
               </div>
-              <div
-                v-else
-                class="tooltip"
-              >
-                {{ field?.disabledConditions?.(item) ? field.disabledTooltipFacilityImcomplete : field.tooltip }}
+              <div>
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <v-icon
+                      color="error"
+                      v-if="item?.blocked || item?.status === 'disabled'"
+                      v-bind="props"
+                      >mdi-exclamation</v-icon
+                    >
+                  </template>
+                  <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                </v-tooltip>
               </div>
-            </v-tooltip>
+            </div>
           </template>
-          <TableDropdown
+
+          <div
             v-else-if="field.type === 'enumDropdown'"
-            :item="item"
-            :enum-name="field.enum_name"
-            :endpoint="field.endpoint"
-            :fieldName="field.value"
-            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
-            :disable-edit="!useUser().isAdmin()"
-          />
-          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
+            class="d-flex align-center"
+          >
+            <div>
+              <TableDropdown
+                :item="item"
+                :enum-name="field.enum_name"
+                :endpoint="field.endpoint"
+                :fieldName="field.value"
+                :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
+                :disable-edit="!useUser().isAdmin()"
+              />
+            </div>
+            <div>
+              <span v-if="item?.status === 'disabled'">
+                <div>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                      <v-icon
+                        color="error"
+                        v-bind="props"
+                        >mdi-exclamation</v-icon
+                      >
+                    </template>
+                    <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                  </v-tooltip>
+                </div></span
+              >
+            </div>
+          </div>
+
+          <div v-else-if="field.type === 'enum'">
             <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
@@ -318,7 +378,10 @@
           </div>
           <span v-else-if="field.type === 'array'">{{ item[field.value].join(", ") }}</span>
           <span v-else-if="field.type === 'pathIntoObject'">{{ pathInto(item, field.value) }}</span>
-          <span v-else-if="field.type === 'facilities'">
+          <span
+            v-else-if="field.type === 'facilities'"
+            @click.stop="field.action(item)"
+          >
             <div v-if="Array.isArray(item[field.value])">
               <div v-for="facility in item[field.value]">
                 <v-row v-if="facility.kind === 'facility'">
@@ -362,6 +425,23 @@
                           </template>
                           <span>Einrichtung online</span>
                         </v-tooltip>
+
+                        <div>
+                          <span v-if="item?.care_facilities[0].blocked">
+                            <div>
+                              <v-tooltip top>
+                                <template v-slot:activator="{ props }">
+                                  <v-icon
+                                    color="error"
+                                    v-bind="props"
+                                    >mdi-exclamation</v-icon
+                                  >
+                                </template>
+                                <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                              </v-tooltip>
+                            </div></span
+                          >
+                        </div>
                       </div>
                     </v-chip>
                   </v-col>
@@ -370,13 +450,27 @@
             </div>
           </span>
           <span v-else-if="field.type === 'protocol'">
-            <span
-              ><v-icon
+            <div class="d-flex align-center ga-2">
+              <v-icon
                 size="x-large"
                 color="red"
+                @click.stop="emitGeneratePdf(item)"
                 >mdi-file-pdf-box</v-icon
-              ></span
-            >
+              >
+              <div v-if="item?.status === 'objection'">
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <v-icon
+                      size="x-large"
+                      color="warning"
+                      v-bind="props"
+                      >mdi-alert</v-icon
+                    >
+                  </template>
+                  <span>Dieser Beschwerde wurde widersprochen</span>
+                </v-tooltip>
+              </div>
+            </div>
           </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
@@ -511,7 +605,7 @@
             </button>
             <span v-if="field.value === 'user.name'">
               <span
-                class="align-center ml-2"
+                class="align-center ml-2 d-flex"
                 v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
               >
                 <v-tooltip
@@ -542,6 +636,22 @@
                   </template>
                   <span>Benutzer ist nicht Freigeschaltet</span>
                 </v-tooltip>
+                <div>
+                  <span v-if="item?.user?.status && item?.user?.status === 'disabled'">
+                    <div>
+                      <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                          <v-icon
+                            color="error"
+                            v-bind="props"
+                            >mdi-exclamation</v-icon
+                          >
+                        </template>
+                        <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                      </v-tooltip>
+                    </div></span
+                  >
+                </div>
               </span>
             </span>
             <span v-if="field.value === 'mdi-eye' && item.is_active && useUser().statusOnHealthScope()">
@@ -645,6 +755,7 @@ import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
 import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
+import { fi } from "date-fns/locale";
 import alert from "@/assets/icons/alert-icon.svg";
 
 const alertIcon = alert;
@@ -679,7 +790,20 @@ const props = withDefaults(
 
 const snackbar = useSnackbar();
 
-const emit = defineEmits(["close", "openCreateEditDialog", "openDeleteDialog", "itemsLoaded", "itemUpdated", "toogleBar", "openConfirmationDialog"]);
+const emit = defineEmits([
+  "close",
+  "openCreateEditDialog",
+  "openDeleteDialog",
+  "itemsLoaded",
+  "itemUpdated",
+  "toogleBar",
+  "openConfirmationDialog",
+  "generatePdf",
+]);
+
+const emitGeneratePdf = (item: any) => {
+  emit("generatePdf", item);
+};
 
 const openConfirmationDialog = (item: any) => {
   emit("openConfirmationDialog", item);
@@ -1109,9 +1233,11 @@ const getItems = async () => {
   if (response.data && response.data.resources) {
     noData.value = false;
     items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
+    noData.value = false;
   } else {
     noData.value = false;
     items.value = Array.isArray(response.data) ? response.data : [];
+    noData.value = false;
   }
 
   if (props.searchQuery) {
@@ -1235,7 +1361,6 @@ defineExpose({ resetActiveItems, getItems });
 
 .selected-sort
   color: #8ab61d
-
 
 .onboard
   color: #8ab61d

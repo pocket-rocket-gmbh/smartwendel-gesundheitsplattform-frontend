@@ -79,6 +79,7 @@ definePageMeta({
 });
 
 const showBar = ref(true);
+const router = useRouter();
 
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
@@ -101,6 +102,9 @@ const fields = ref([
     endpoint: "users",
     value: "care_facilities",
     type: "facilities",
+    action: (item: any) => {
+      router.push({ path: "/admin/care_facilities", query: { facility: item?.care_facilities[0]?.id } });
+    },
   },
   {
     prop: "email",
@@ -119,6 +123,7 @@ const fields = ref([
     condition: "admin",
     width: "300px",
   },
+  { prop: "", text: "", type: "block" },
   {
     value: "",
     type: "is-lk",

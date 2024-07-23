@@ -473,12 +473,18 @@ const handleUpdateItems = () => {
 const handleCreated = (createdItemId: string) => {
   itemId.value = createdItemId;
 };
+const route = useRoute();
 
 onMounted(async () => {
   checkifUpToDate();
   loading.value = true;
   setupFinished.value = await useUser().setupFinished();
   loading.value = false;
+
+  const facility = route.query.facility;
+  if (!facility) return;
+  openCreateEditDialog({ id: facility });
+
 });
 </script>
 <style lang="sass">
