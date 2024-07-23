@@ -3,7 +3,7 @@
     <div class="d-flex align-center">
       <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
       <div class="ml-3" v-if="!loading && updatedAt">
-        <span> Aktualisiert am: {{ updatedAt  }}</span>
+        <span> Letzte Aktualisierung: {{ updatedAt }}</span>
       </div>
 
       <v-skeleton-loader

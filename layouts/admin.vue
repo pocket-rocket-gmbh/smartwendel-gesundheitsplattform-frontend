@@ -134,6 +134,9 @@
           >
             Bereiche und Kategorien
           </v-list-item>
+          <v-list-item link to="/admin/complaints?filter=" nuxt class="general-font-size is-dark-grey">
+            Beschwerde
+          </v-list-item>
           <v-divider></v-divider>
         </template>
         <v-list-item

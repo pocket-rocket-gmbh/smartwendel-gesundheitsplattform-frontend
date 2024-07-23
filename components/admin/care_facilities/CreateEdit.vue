@@ -37,6 +37,15 @@
               >Diese Einrichtung kann von LK bearbeitet werden
             </v-alert>
           </div>
+          <div v-if="slotProps.item?.blocked">
+            <v-alert type="warning" class="general-font-size mt-3" 
+              >Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt.</v-alert
+            >
+            <div class="d-flex justify-center align-center mt-5 ga-5" >
+              <v-btn color="error" @click="unblockFacility(slotProps.item?.id)">entsperren</v-btn>
+              <v-btn color="primary" @click="goToComplaints">Beschwerde ansehen</v-btn>
+            </div>
+          </div>
           <div class="py-10">
             <span class="general-font-size is-dark-grey facility-kind-description"
               >Als Gesundheitsakteur im Landkreis St. Wendel kannst du hier dein
@@ -46,7 +55,6 @@
               Pflichtfelder sind mit einem Sternchen versehen.</span
             >
           </div>
-
           <div class="field" v-if="slotProps.item?.user?.onboarding_token">
             <div class="my-2 d-flex align-center">
               <span class="general-font-size is-dark-grey font-weight-bold mr-3"
@@ -611,7 +619,8 @@
               >
                 <div class="mt-3">
                   <v-alert type="error" class="general-font-size"
-                    >Adresse nicht gefunden. Überprüfe deine Straße, Haus-Nr, Gemeinde und Ort.</v-alert
+                    >Adresse nicht gefunden. Überprüfe deine Straße, Haus-Nr, Gemeinde und
+                    Ort.</v-alert
                   >
                 </div>
               </div>
@@ -927,6 +936,7 @@ import { rules } from "../../../data/validationRules";
 import axios from "axios";
 
 const initialLoaded = ref(false);
+const router = useRouter();
 
 const stepNames = [
   "name",
@@ -1053,6 +1063,10 @@ const steps: CreateEditSteps<StepNames> = {
     props: ["sanitized_documents", "offlineDocuments"],
     justSome: true,
   },
+};
+
+const goToComplaints = () => {
+  router.push({ path: "/admin/complaints" });
 };
 
 const user = useUser();
@@ -1249,6 +1263,21 @@ const getLatLngFromAddress = async (zipCode: string, street: string, town: strin
     loadingAdress.value = false;
   }
 };
+
+
+const updateApiFacility = useCollectionApi();
+updateApiFacility.setBaseApi(usePrivateApi());
+
+const unblockFacility = async (id: string) => {
+  updateApiFacility.setEndpoint(`care_facilities/${id}`);
+  let data = {
+    blocked: false,
+  };
+  await updateApiFacility.updateItem(data, null);
+  reloadItem();
+  snackbar.showSuccess("Einrichtung entsperrt!");
+};;
+
 
 const setTagCategoryIds = (tags: any) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
