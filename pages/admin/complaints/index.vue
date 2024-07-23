@@ -65,7 +65,6 @@
 </template>
 <script lang="ts" setup>
 import { ResultStatus } from "@/types/serverCallResult";
-import { no } from "vuetify/locale";
 
 const snackbar = useSnackbar();
 const privateApi = usePrivateApi();
