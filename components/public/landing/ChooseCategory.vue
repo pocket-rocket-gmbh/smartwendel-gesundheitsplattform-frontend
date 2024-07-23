@@ -5,7 +5,7 @@
       :filtered-items="filterStore.filteredResults"
       :default-route-to="'/public/search'"
       @update:model-value="handleInput"
-      :filtered-categories="filterStore.filteredCategories" 
+      :filtered-categories="filterStore.filteredCategories"
     />
   </div>
 </template>
@@ -38,6 +38,7 @@ onMounted(async () => {
 .choose-category {
   position: relative;
   flex-direction: row;
+  width: 70%;
 
   @include md {
     width: 100%;
