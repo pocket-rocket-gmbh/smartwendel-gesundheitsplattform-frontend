@@ -525,6 +525,7 @@ header,
   }
 }
 .v-toolbar__content {
+  overflow: visible;
   .v-toolbar-title {
     margin-inline-start: 0;
   }
@@ -581,6 +582,7 @@ header,
     opacity: 1;
     transform: scale(1);
     pointer-events: all;
+    width: max-content;
   }
   .title {
     position: relative;
