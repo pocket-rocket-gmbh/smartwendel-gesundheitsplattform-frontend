@@ -20,7 +20,7 @@
       />
 
       <v-form ref="form">
-        <v-card-title class="text-h5 has-bg-primary py-5 text-white">
+        <v-card-title class="text-h5 has-bg-primary py-5 text-white"> uhuh {{isCategory}}
           <span v-if="itemId">{{ conceptName }} bearbeiten</span>
           <span v-else>{{ conceptName }} erstellen </span>
         </v-card-title>
@@ -134,6 +134,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isCategory: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const confirmSaveDialogOpen = ref(false);
@@ -217,7 +221,7 @@ const handleCta = async () => {
     save(saveAsDraft);
   } else {
     create(saveAsDraft);
-    if (!saveAsDraft) {
+    if (!saveAsDraft && !props.isCategory) {
       confirmSaveDialogOpen.value = true;
     }
   }
@@ -237,11 +241,12 @@ const create = async (saveAsDraft = false) => {
     item.value,
     `${saveAsDraft ? "Entwurf" : "Erfolgreich"} erstellt`
   );
-  if (!saveAsDraft) {
+  if (!saveAsDraft && !props.isCategory) {
     confirmSaveDialogOpen.value = true;
   }
   adminStore.loading = false;
   loadingItem.value = false;
+  
   if (result.status !== ResultStatus.SUCCESSFUL) {
     errors.value = result.data;
     return;

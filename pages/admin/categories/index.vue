@@ -295,6 +295,7 @@ const deleteItemComplete = () => {
 const handleNewAreaAdded = () => {
   itemId.value = null;
   createEditDialogOpen.value = false;
+  getItems();
 };
 
 const handleItemSaved = () => {
@@ -310,12 +311,14 @@ const handleSubCategoryClose = () => {
   subCategoryId.value = null;
   subSubCategoryId.value = null;
   createEditSubDialogOpen.value = false;
+  getItems();
 };
 
 const handleCategoryClose = () => {
   itemId.value = null;
   subCategoryId.value = null;
   createEditCategoryDialogOpen.value = false;
+  getItems();
 };
 
 const handleMove = async (
