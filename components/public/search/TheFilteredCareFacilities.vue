@@ -91,8 +91,7 @@
             >
               <a
                 :href="careFacility.url"
-                :target="careFacility.url_kind === 'external' ? '_blank' : ''"
-                @click.prevent="goToFacility(careFacility)"
+                @click="goToFacility(careFacility)"
                 class="d-inline-block"
               >
                 <v-btn
