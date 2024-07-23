@@ -2,9 +2,9 @@
   <div>
     <v-row class="mt-md-4 search-field-search">
       <v-row v-if="showingEventsCourses">
-        <v-col class="d-flex align-center is-white">
+        <v-col class="d-flex align-center is-white" :class="breakPoints.width.value < 960 ? 'justify-center' : ''">
           <div>
-            <div class="general-font-size text-h4 text-white">
+            <div class="general-font-size text-h4 text-white word-break" lang="de">
               Kurse und Veranstaltungen
             </div>
             <div>
@@ -21,6 +21,7 @@
       <v-col class="d-flex align-center is-white" v-if="!showingEventsCourses">
         <span
           class="is-white font-weight-medium general-font-size"
+          :class="breakPoints.width.value < 960 ? 'd-flex align-center justify-center' : ''"
           v-if="filterStore.currentSearchTerm"
         >
           Suchbegriff: {{ filterStore.currentSearchTerm }}
@@ -100,6 +101,9 @@
 <script setup lang="ts">
 import { useFilterStore } from "~/store/searchFilter";
 import noResults from "~/assets/images/search_no_results.jpg";
+import { useBreakpoints } from "~/composables/ui/breakPoints";
+
+const breakPoints = useBreakpoints();
 
 const filterStore = useFilterStore();
 const router = useRouter();
@@ -203,6 +207,9 @@ onMounted(async () => {
 .search-field-search {
   background: $green-gradient;
   padding: 2rem 5rem;
+  @include md {
+    padding: 2rem 2rem;
+  }
 }
 
 .search-fields {

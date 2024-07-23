@@ -3,7 +3,7 @@
     <div class="d-flex align-center">
       <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
       <div class="ml-3" v-if="!loading && updatedAt">
-        <span> Aktualisiert am: {{ updatedAt }}</span>
+        <span> Aktualisiert am: {{ updatedAt  }}</span>
       </div>
 
       <v-skeleton-loader
@@ -84,7 +84,10 @@ type DashboardItem = {
   }[];
 };
 
+const isBrowser = typeof window !== 'undefined';
+
 const getItems = async () => {
+  if (!isBrowser) return;
   try {
     setNow();
     await saveUpdatedAt();
@@ -127,6 +130,7 @@ const setNow = () => {
 };
 
 const saveFacilities = async () => {
+  if (!isBrowser) return;
   try {
     await setItem('facilities', 'all', facilities.value);
   } catch (error) {
@@ -135,6 +139,7 @@ const saveFacilities = async () => {
 };
 
 const saveUpdatedAt = async () => {
+  if (!isBrowser) return;
   try {
     await setItem('metadata', 'updatedAt', updatedAt.value);
   } catch (error) {

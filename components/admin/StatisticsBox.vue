@@ -1,7 +1,7 @@
 <template>
   <div
     class="d-flex flex-column is-dark-grey stats-card"
-    :class="[hasFilter && item.content > 0 ? 'is-clickable' : 'opacity-60 cursor-not-allowed', item.hasNoSpace ? 'mt-n1' : '']"
+    :class="[hasFilter && item.content > 0 ? 'is-clickable' : 'opacity-60 cursor-not-allowed', item.hasNoSpace ? 'mt-n1' : '', loading ? 'cursor-progress' : '']"
     @click="redirectAndFilter"
   >
     <div class="d-flex align-center">
