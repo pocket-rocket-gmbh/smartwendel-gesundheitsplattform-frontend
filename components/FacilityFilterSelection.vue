@@ -105,7 +105,7 @@
         </div>
       </div>
       <div
-        v-if="!bottom"
+        v-if="!bottom && currentPopoverHeight > 499"
         class="d-flex justify-center align-end"
       >
         <v-icon
@@ -154,11 +154,20 @@ const multipleSelections = ref<Filter[]>([]);
 
 onClickOutside(popoverParentRef, () => (showPopover.value = false));
 
-const { arrivedState } = useScroll(popoverChildRef, {
+const { arrivedState, y } = useScroll(popoverChildRef, {
   offset: { bottom: 60 },
 });
 
 const { bottom } = toRefs(arrivedState);
+
+const currentPopoverHeight = computed(() => getPopoverHeight());
+
+const getPopoverHeight = () => {
+  if (popoverChildRef.value) {
+    return popoverChildRef.value.clientHeight;
+  }
+  return 0;
+};
 
 type Filter = {
   id: string;
@@ -270,6 +279,7 @@ onMounted(async () => {
   setPlaceholderText();
   await filterStore.loadAllCommunities();
   filterStore.loadFilteredCommunities();
+  getPopoverHeight();
 });
 </script>
 
