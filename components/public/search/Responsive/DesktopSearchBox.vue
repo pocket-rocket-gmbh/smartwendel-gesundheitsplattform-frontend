@@ -152,6 +152,7 @@
             size="large"
             variant="outlined"
             rounded="pill"
+            :disabled="deleteFilterDisabledCondition"
             color="white"
             @click="filterStore.clearSearch()"
           >
@@ -241,6 +242,14 @@ const updatePopoverWidth = () => {
   if (!contentWrapperRef.value) return;
   popoverWidth.value = contentWrapperRef.value.getBoundingClientRect().width;
 };
+
+const deleteFilterDisabledCondition = computed(() => {
+  return (
+    !filterStore.currentFacilityTags.length &&
+    !filterStore.currentZips.length &&
+    !filterStore.currentSearchTerm
+  );
+});
 
 const handleInput = () => {
   filterStore.onlySearchInTitle = false;

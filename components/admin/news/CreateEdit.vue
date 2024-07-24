@@ -315,17 +315,17 @@ const formats = ref([
   "list",
   "align",
   "direction",
-  'underline',
-  'bold',
-  //'link',
-  //'strike',
-  // 'blockquote',
-  //'color',
-  //'font',
-  //'code-block',
-  //'formula'
-  // 'image'
-  // 'video'
+  "underline",
+  "bold",
+  "link",
+  // "strike",
+  // "blockquote",
+  // "color",
+  // "font",
+  // "code-block",
+  // "formula"
+  // "image"
+  // "video"
 ]);
 
 const textOptions = ref({

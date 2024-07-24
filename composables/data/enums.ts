@@ -13,11 +13,37 @@ export type EnumValue = {
 
 export function useEnums() {
 
+  const  complaintsStatus = [
+    { value: 'open', name: 'Offen', class: 'is-yellow' },
+    { value: 'pending', name: 'In Bearbeitung', class: 'is-blue' },
+    { value: 'complete', name: 'Geschlossen', class: 'is-green'
+    },
+    { value: 'rejected', name: 'Abgelehnt', class: 'is-red'
+  },
+  { value: 'objection', name: 'answered', class: 'is-red'}
+  ]
+
+  const complaintsActions = [
+    { value: 'blockContent', name: 'Inhalt gesperrt', class: 'is-yellow' },
+    { value: 'blockUser', name: 'Benutzer gesperrt', class: 'is-red' },
+    { value: 'deleteContent', name: 'Inhalt gelöscht', class: 'is-red' },
+    { value: 'unchanged', name: 'Unverändert', class: '' },
+  ]
+
   // Define enums here
   const facilitiesStatus = [
     { value: false, name: 'In Prüfung', class: 'is-yellow' },
     { value: true, name: 'Freigegeben', class: 'is-green' }
   ]
+
+  const complaintsKind = [
+    { value: 'law_break', name: 'Verstoß gegen geltendes Recht', class: 'primary' },
+    { value: 'harassment', name: 'Belästigung', class: 'secondary' },
+    { value: 'spam', name: 'Spam', class: 'red' },
+    { value: 'terms_violation', name: 'Verstoß gegen die Nutzungsbedingungen ', class: 'green' },
+    { value: 'other', name: 'Andere', class: 'Andere' }
+  ]
+
 
   const facilitiesKind = [
     { value: 'event', name: 'Veranstaltung', class: '' },
@@ -33,6 +59,9 @@ export function useEnums() {
   // insert enums in Interface
   interface Enums {
     facilitiesStatus: EnumValue[],
+    complaintsActions: EnumValue[],
+    complaintsStatus: EnumValue[],
+    complaintsKind: EnumValue[],
     facilitiesKind: EnumValue[],
     userRole: EnumValue[]
   }
@@ -40,6 +69,9 @@ export function useEnums() {
   // insert enums in JSON
   const enums: Record<keyof Enums, EnumValue[]> = {
     facilitiesStatus,
+    complaintsActions,
+    complaintsStatus,
+    complaintsKind,
     facilitiesKind,
     userRole
   }
@@ -71,7 +103,10 @@ export function useEnums() {
   // return enums
   return {
     facilitiesStatus,
+    complaintsKind,
+    complaintsStatus,
     facilitiesKind,
+    complaintsActions,
     userRole,
     getName,
     getClassName,

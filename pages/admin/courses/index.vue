@@ -7,7 +7,11 @@
           v-if="useUser().isFacilityOwner()"
           >Meine Kurse</span
         >
-        <span class="general-font-size is-dark-grey font-weight-bold" v-else>Kurse</span>
+        <span
+          class="general-font-size is-dark-grey font-weight-bold"
+          v-else
+          >Kurse</span
+        >
       </v-col>
     </v-row>
 
@@ -17,20 +21,22 @@
       closable
       class="my-2 general-font-size"
       v-if="!useUser().isAdmin()"
-      >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto
-      besser können dich Besucher auf der Webseite finden. Pflichtfelder sind mit einem
-      Sternchen versehen.</v-alert
+      >Hier kannst du deine Kurse anlegen. Je spezifischer deine Angaben sind, desto besser können dich Besucher auf der Webseite finden. Pflichtfelder sind mit
+      einem Sternchen versehen.</v-alert
     >
     <v-alert
       density="compact"
       closable
       class="my-2 general-font-size"
       v-if="!useUser().isAdmin()"
-      >Leg hier deinen Kurs an. Kurse sind wiederkehrende Ereignisse (wöchentlich,
-      etc.)</v-alert
+      >Leg hier deinen Kurs an. Kurse sind wiederkehrende Ereignisse (wöchentlich, etc.)</v-alert
     >
-    <template v-if="setupFinished" >
-      <v-row align="center" v-if="showBar" v-auto-animate>
+    <template v-if="setupFinished">
+      <v-row
+        align="center"
+        v-if="showBar"
+        v-auto-animate
+      >
         <v-col md="3">
           <div class="my-5">
             <v-btn
@@ -47,7 +53,7 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col>
+        <v-col class="d-flex align-center">
           <v-text-field
             width="50"
             prepend-icon="mdi-magnify"
@@ -65,8 +71,8 @@
       closable
       class="mt-2 general-font-size"
     >
-      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich
-      freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie Beiträge anlegen.
+      Bitte kontrolliere zunächst, dass du deine Einrichtung angelegt hast und wir dich freigegeben haben. Danach kannst du Kurse, Veranstaltungen sowie
+      Beiträge anlegen.
     </v-alert>
 
     <DataTable
@@ -140,6 +146,7 @@ const fields = [
     type: "switch",
     tooltip: "Hiermit kannst du deinen Kurs Online oder Offline schalten",
     fieldToSwitch: "is_active",
+    hasFilterFunction: true,
     disabledConditions: (item: any) => {
       const res = [
         isCompleteCourse,
@@ -157,9 +164,9 @@ const fields = [
     disabledTooltipFacilityImcomplete:
       "Dein Eintrag wird aktuell nicht auf der Gesundheitsplattform angezeigt, da du noch nicht alle Pflichtfelder ausgefüllt hast.",
   },
-  { prop: "name", text: "Titel", value: "name", type: "string" },
+  { prop: "name", text: "Titel", value: "name", type: "string", hasFilterFunction: true },
   { value: "", type: "beinEdited" },
-  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime" },
+  { prop: "created_at", text: "Erstellt am", value: "created_at", type: "datetime", hasFilterFunction: true },
   {
     prop: "user.firstname",
     text: "Erstellt von",

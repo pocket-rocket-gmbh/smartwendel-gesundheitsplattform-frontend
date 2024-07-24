@@ -1,5 +1,5 @@
 <template>
-  <CreateEdit v-slot="slotProps" :size="800" :height="700">
+  <CreateEdit v-slot="slotProps" :size="800" :height="700" :is-category="true">
     <v-card-text>
       <div class="field mt-5">
         <v-text-field

@@ -1,12 +1,22 @@
 <template>
-  <div ref="contentBoxRef" class="content-box" v-resize="handleResize">
+  <div
+    ref="contentBoxRef"
+    class="content-box"
+    v-resize="handleResize"
+  >
     <div
       class="image is-clickable"
       @click="goToFacility(buttonHref)"
       v-if="showImage && breakPoints.width.value >= 1420"
     >
-      <img v-if="item.image_url" :src="item.image_url" />
-      <img v-else :src="noImage" />
+      <img
+        v-if="item.image_url"
+        :src="item.image_url"
+      />
+      <img
+        v-else
+        :src="noImage"
+      />
     </div>
     <div class="text">
       <template v-if="item.user">
@@ -18,7 +28,10 @@
             <span class="mr-3">
               <img :src="facilityIcon" />
             </span>
-            <div class="is-dark-grey" @click="goToMainFacility(item)">
+            <div
+              class="is-dark-grey"
+              @click="goToMainFacility(item)"
+            >
               <span
                 class="break-title facility-name general-font-size"
                 v-html="item.user_care_facility?.name"
@@ -43,39 +56,55 @@
           v-html="item.description"
         ></span>
       </div>
-      <div
-        :class="[
-          breakPoints.width.value > 1420
-            ? 'd-flex align-center justify-space-between'
-            : item.kind !== 'facility'
-            ? 'mb-3'
-            : '',
-        ]"
-      >
-        <div class="action mb-n2" v-if="buttonHref">
-          <v-btn
-            @click="goToFacility(buttonHref)"
+      <div :class="[breakPoints.width.value > 1420 ? 'd-flex align-center justify-space-between' : item.kind !== 'facility' ? 'mb-3' : '']">
+        <div
+          class="action mb-n2"
+          v-if="buttonHref"
+        >
+          <a
+            :href="buttonHref"
             :target="item?.url_kind === 'external' ? '_blank' : ''"
-            variant="flat"
-            color="primary"
-            :size="breakPoints.width.value > 960 ? 'large' : 'large'"
-            class="general-font-size"
-            rounded="pill"
-            :width="breakPoints.width.value > 1420 ? '' : '100%'"
+            @click.prevent="goToFacility(buttonHref)"
+            class="d-inline-block"
+            :style="{ width: breakPoints.width.value > 1420 ? '' : '100%' }"
           >
-            <span class="general-font-size" v-if="item.kind">{{ buttonText }}</span>
-            <span class="general-font-size" v-else-if="item.url_kind">{{
-              item.button_text
-            }}</span>
-            <span class="general-font-size" v-else> Mehr anzeigen</span>
-          </v-btn>
+            <v-btn
+              variant="flat"
+              color="primary"
+              :size="breakPoints.width.value > 960 ? 'large' : 'large'"
+              class="general-font-size"
+              rounded="pill"
+              block
+            >
+              <span
+                class="general-font-size"
+                v-if="item.kind"
+                >{{ buttonText }}</span
+              >
+              <span
+                class="general-font-size"
+                v-else-if="item.url_kind"
+              >
+                {{ item.button_text }}
+              </span>
+              <span
+                class="general-font-size"
+                v-else
+              >
+                Mehr anzeigen</span
+              >
+            </v-btn>
+          </a>
         </div>
         <div
           class="general-font-size d-flex align-center mb-n3"
           v-if="item.kind === 'event' || item.kind === 'course'"
         >
           <span v-if="item?.event_dates.length && breakPoints.width.value >= 1420">
-            <img :src="eventsIcon" class="mr-1" />
+            <img
+              :src="eventsIcon"
+              class="mr-1"
+            />
             {{ item?.event_dates?.[0]?.slice(0, 10) }}
           </span>
         </div>
@@ -84,7 +113,10 @@
           v-if="item.kind === 'news' && item?.created_at"
         >
           <span v-if="breakPoints.width.value >= 1630">
-            <img :src="eventsIcon" class="mr-1" />
+            <img
+              :src="eventsIcon"
+              class="mr-1"
+            />
             {{ useDatetime().parseDatetime(item?.created_at) }}
           </span>
         </div>
@@ -115,14 +147,10 @@ const buttonHref = computed(() => {
   if (!props.item) return null;
 
   if (props.item.kind) {
-    if (props.item.kind === "course")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "event")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "news")
-      return `/public/care_facilities/${props.item.id}`;
-    if (props.item.kind === "facility")
-      return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "course") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "event") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "news") return `/public/care_facilities/${props.item.id}`;
+    if (props.item.kind === "facility") return `/public/care_facilities/${props.item.id}`;
   }
 
   if (props.item.url) {
@@ -130,10 +158,7 @@ const buttonHref = computed(() => {
       return props.item.url;
     }
 
-    if (
-      props.item.url.includes("http://") ||
-      props.item.url.includes("https://")
-    ) {
+    if (props.item.url.includes("http://") || props.item.url.includes("https://")) {
       return props.item.url;
     } else return "https://" + props.item.url;
   }
@@ -142,14 +167,13 @@ const buttonHref = computed(() => {
 });
 
 const goToFacility = (buttonHref: any) => {
-  if( buttonHref.includes("http://") ||
-  buttonHref.includes("https://") ) {
+  const url = new URL(buttonHref, window.location.origin);
+  console.log(url);
+  if (buttonHref.includes("http://") || buttonHref.includes("https://")) {
     window.open(buttonHref, "_blank");
-
   } else {
-    router.push({ path: buttonHref });
+    router.push(url.pathname + url.search);
   }
-
 };
 
 const goToMainFacility = (item: any) => {
@@ -190,8 +214,7 @@ $min-width: 200px;
   width: 100%;
   height: $max-height;
   border-radius: 2rem;
-  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-    0 1px 8px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
   overflow: hidden;
   display: flex;
   @include md {

@@ -149,7 +149,7 @@ const getItems = async (endpoint = "categories") => {
       },
       specialActionOnEditClick: "openMainModal",
       canAddAdditionalData: false,
-      next: [],
+      next: []
     };
 
     tmpItemsForList.push(categoryItem);
@@ -295,9 +295,14 @@ const deleteItemComplete = () => {
 const handleNewAreaAdded = () => {
   itemId.value = null;
   createEditDialogOpen.value = false;
+  getItems();
 };
 
 const handleItemSaved = () => {
+  itemId.value = null;
+  createEditDialogOpen.value = false;
+  createEditCategoryDialogOpen.value = false;
+  createEditSubDialogOpen.value = false;
   getItems();
 };
 
@@ -306,12 +311,14 @@ const handleSubCategoryClose = () => {
   subCategoryId.value = null;
   subSubCategoryId.value = null;
   createEditSubDialogOpen.value = false;
+  getItems();
 };
 
 const handleCategoryClose = () => {
   itemId.value = null;
   subCategoryId.value = null;
   createEditCategoryDialogOpen.value = false;
+  getItems();
 };
 
 const handleMove = async (

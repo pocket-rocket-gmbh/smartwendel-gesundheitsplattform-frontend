@@ -1,80 +1,96 @@
 <template>
   <div class="main">
-    <v-app-bar v-model="appStore.showTopbar" :elevation="5" class="hero-menu">
+    <v-app-bar
+      v-model="appStore.showTopbar"
+      :elevation="5"
+      class="hero-menu"
+    >
       <v-app-bar-title>
         <div class="d-flex align-center">
           <div class="d-flex align-center">
-            <a href="/" @click.prevent="navigateTo('/')" class="d-flex align-center">
-              <img src="~/assets/images/logo.png" class="is-clickable" width="200" />
+            <a
+              href="/"
+              @click.prevent="navigateTo('/')"
+              class="d-flex align-center"
+            >
+              <img
+                src="~/assets/images/logo.png"
+                class="is-clickable"
+                :width="breakPoints.width.value <= 380 ? '130' : '200'"
+              />
             </a>
           </div>
-          <div v-if="breakPoints.width.value >= 1460" class="align-center d-flex mx-2">
+          <div
+            v-if="breakPoints.width.value >= 1460"
+            class="align-center d-flex mx-2"
+          >
             <div
               class="categories-wrapper is-clickable d-flex"
               v-for="(category, index) in categories"
               :key="index"
             >
               <div class="title mx-5 font-weight-medium">
-                <span
+                <a
+                  :href="getItemsAndGo(category, null)"
                   class="is-clickable general-font-size is-dark-grey"
-                  :class="[
-                    currentRoute.includes(currentCategory?.id) &&
-                    currentCategory.name === category.name
-                      ? 'is-primary'
-                      : '',
-                  ]"
-                  @click="setItemsAndGo(category, null)"
+                  :class="[currentRoute.includes(currentCategory?.id) && currentCategory.name === category.name ? 'is-primary' : '']"
+                  @click.prevent="setItemsAndGo(category, null)"
+                  style="text-decoration: none"
                 >
                   {{ category.name }}
-                </span>
+                </a>
               </div>
               <div class="content">
                 <v-list>
                   <v-list-item>
-                    <div
-                      v-for="(sub_category) in subCategories[category.id]"
+                    <a
+                      v-for="sub_category in subCategories[category.id]"
                       :key="sub_category.id"
-                      @click="setItemsAndGo(category, sub_category)"
+                      :href="getSubCategoryUrl(category, sub_category)"
+                      @click.prevent="setItemsAndGo(category, sub_category)"
+                      class="list-item-link"
+                      style="text-decoration: none; display: block"
                     >
                       <div class="list-item">
                         <div>
-                          <span
-                            class="general-font-size"
-                          >
+                          <span class="general-font-size">
                             {{ sub_category.name }}
                           </span>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   </v-list-item>
                 </v-list>
               </div>
             </div>
-            <div v-if="!loading" class="general-font-size is-dark-grey">
-              <span
+            <div
+              v-if="!loading"
+              class="general-font-size is-dark-grey"
+            >
+              <a
                 href="/public/search/facilities"
                 class="is-clickable mx-5"
                 :class="[currentRoute.includes('facilities') ? 'is-primary' : '']"
                 @click.prevent="goTo('/public/search/facilities')"
               >
                 Anbietersuche
-              </span>
-              <span
+              </a>
+              <a
                 href="/public/search/courses"
                 class="is-clickable mx-5"
                 :class="[currentRoute.includes('courses') ? 'is-primary' : '']"
                 @click.prevent="goTo('/public/search/courses')"
               >
                 Kurse
-              </span>
-              <span
+              </a>
+              <a
                 href="/public/search/events"
                 class="is-clickable mx-5"
                 :class="[currentRoute.includes('events') ? 'is-primary' : '']"
                 @click.prevent="goTo('/public/search/events')"
               >
                 Veranstaltungen
-              </span>
+              </a>
             </div>
           </div>
         </div>
@@ -82,14 +98,13 @@
       <div class="align-center d-flex">
         <div
           class="has-bg-primary text-white offer py-1"
-          v-if="
-            !useUser().loggedIn() &&
-            breakPoints.width.value >= 1610 &&
-            currentRoute !== '/register'
-          "
+          v-if="!useUser().loggedIn() && breakPoints.width.value >= 1610 && currentRoute !== '/register'"
         >
           <v-row class="mx-1 text-center">
-            <v-col class="flex-column align-center is-clickable" @click="goToRegister()">
+            <v-col
+              class="flex-column align-center is-clickable"
+              @click="goToRegister()"
+            >
               <div class="font-weight-medium">Dein Angebot fehlt?</div>
               <div class="font-weight-light">Registriere dich!</div>
             </v-col>
@@ -97,44 +112,52 @@
         </div>
         <div
           class="align-center d-flex is-clickable"
-          v-if="
-            breakPoints.width.value <= 1619 &&
-            currentRoute !== '/register' &&
-            !useUser().loggedIn() &&
-            !appStore.loading
-          "
+          v-if="breakPoints.width.value <= 1619 && currentRoute !== '/register' && !useUser().loggedIn() && !appStore.loading"
           @click="goToRegister()"
         >
           <img :src="regiterIcon" />
         </div>
-        <div class="pl-3" v-if="!appStore.loading">
-          <v-btn v-if="!useUser().loggedIn()" color="primary" icon @click="goToLogin">
+        <div
+          class="pl-3"
+          v-if="!appStore.loading"
+        >
+          <v-btn
+            v-if="!useUser().loggedIn()"
+            color="primary"
+            icon
+            @click="goToLogin"
+          >
             <img :src="loginIcon" />
           </v-btn>
         </div>
         <div class="d-flex align-center main">
-          <span
+          <a
             class="mx-3 menu-list general-font-size is-dark-grey pointer"
             v-if="useUser().isAdmin() && breakPoints.width.value >= 1530"
-            href="/admin"
+            href="admin?filter="
             @click.prevent="saveCurrentUrlAndRoute('/admin', '')"
+            style="text-decoration: none"
           >
             Admin-Bereich
-          </span>
-          <span
+          </a>
+          <a
             class="mx-3 menu-list general-font-size pointer is-dark-grey"
             v-else-if="useUser().isFacilityOwner() && breakPoints.width.value >= 1530"
             href="/admin/care_facilities?filter=showAll"
             @click.prevent="saveCurrentUrlAndRoute('/admin/care_facilities', 'showAll')"
+            style="text-decoration: none"
           >
             Meine Einrichtung
-          </span>
+          </a>
           <PublicLayoutsMiniMenu
             :current-user="currentUser"
             :user-is-admin="userIsAdmin"
             v-if="!appStore.loading"
           />
-          <v-skeleton-loader v-if="appStore.loading" type="avatar"></v-skeleton-loader>
+          <v-skeleton-loader
+            v-if="appStore.loading"
+            type="avatar"
+          ></v-skeleton-loader>
         </div>
       </div>
       <div
@@ -158,10 +181,11 @@
           class="has-bg-primary text-white offer d-flex align-center justify-center py-2 my-5"
           v-if="!useUser().loggedIn() && currentRoute !== '/register'"
         >
-          <div @click="goToRegister()" class="text-center">
-            <div class="general-font-size font-weight-medium mb-1">
-              Dein Angebot fehlt?
-            </div>
+          <div
+            @click="goToRegister()"
+            class="text-center"
+          >
+            <div class="general-font-size font-weight-medium mb-1">Dein Angebot fehlt?</div>
             <div class="general-font-size font-weight-light">Registriere dich!</div>
           </div>
         </div>
@@ -173,7 +197,10 @@
         >
           Einloggen
         </v-btn>
-        <div v-if="useUser().loggedIn() && currentUser" class="d-flex ml-5 my-2">
+        <div
+          v-if="useUser().loggedIn() && currentUser"
+          class="d-flex ml-5 my-2"
+        >
           <img
             v-if="currentUser.image_url"
             :src="currentUser.image_url"
@@ -199,7 +226,11 @@
             href="/admin"
             @click.prevent="saveCurrentUrlAndRoute('/admin', '')"
           >
-            <v-icon color="#8AB61D" class="mr-2">mdi-cog</v-icon>
+            <v-icon
+              color="#8AB61D"
+              class="mr-2"
+              >mdi-cog</v-icon
+            >
             <span class="general-font-size">Admin-Bereich</span>
           </span>
           <span
@@ -214,7 +245,11 @@
             v-if="useUser().currentUser"
             @click="useUser().logout(), (drawer = !drawer), reload()"
           >
-            <v-icon color="#8AB61D" class="mr-2">mdi-logout</v-icon>
+            <v-icon
+              color="#8AB61D"
+              class="mr-2"
+              >mdi-logout</v-icon
+            >
             <span class="general-font-size">Logout</span>
           </div>
         </div>
@@ -232,7 +267,11 @@
               class="icons-menu mr-5"
               :src="iconHealth"
             />
-            <img v-else class="icons-menu mr-5" :src="iconSick" />
+            <img
+              v-else
+              class="icons-menu mr-5"
+              :src="iconSick"
+            />
             <span
               class="is-clickable general-font-size"
               @click="setItemsAndGo(category, null)"
@@ -241,7 +280,10 @@
             </span>
           </div>
         </div>
-        <template v-if="!loading" class="main">
+        <template
+          v-if="!loading"
+          class="main"
+        >
           <div
             href="/public/search/facilities"
             class="is-clickable categories-wrapper-mobile py-5"
@@ -249,7 +291,11 @@
             @click.prevent="goTo('/public/search/facilities')"
           >
             <div class="d-flex align-center general-font-size">
-              <img class="icons-menu mr-5" :src="iconFacility" /> <span>Anbieter</span>
+              <img
+                class="icons-menu mr-5"
+                :src="iconFacility"
+              />
+              <span>Anbieter</span>
             </div>
           </div>
           <div
@@ -259,7 +305,11 @@
             @click.prevent="goTo('/public/search/courses')"
           >
             <div class="d-flex align-center general-font-size">
-              <img class="icons-menu mr-5" :src="iconCourse" /> <span>Kurse</span>
+              <img
+                class="icons-menu mr-5"
+                :src="iconCourse"
+              />
+              <span>Kurse</span>
             </div>
           </div>
           <div
@@ -269,19 +319,27 @@
             @click.prevent="goTo('/public/search/events')"
           >
             <div class="d-flex align-center general-font-size">
-              <img class="icons-menu mr-5" :src="iconEvent" />
+              <img
+                class="icons-menu mr-5"
+                :src="iconEvent"
+              />
               <span>Veranstaltungen</span>
             </div>
           </div>
         </template>
       </div>
-      <div class="terms-of-use">
-        <v-icon color="#8AB61D" class="ml-2 py-5">mdi-note-check-outline</v-icon>
-        <span
-          class="mr-6 is-clickable general-font-size"
-          @click.prevent="goTo('/rules_of_conduct')"
-          >Nutzungsbedingungen</span
+      <div class="terms-of-use d-flex justify-start ga-7">
+        <v-icon
+          color="#8AB61D"
+          class="ml-2 py-5"
+          >mdi-note-check-outline</v-icon
         >
+        <div
+          class="is-clickable general-font-size"
+          @click.prevent="goTo('/rules_of_conduct')"
+        >
+          Nutzungsbedingungen
+        </div>
         <v-icon></v-icon>
       </div>
     </v-navigation-drawer>
@@ -393,13 +451,21 @@ const setItemsAndGo = (category: any, sub_category: any) => {
   useNuxtApp().$bus.$emit("setSubCategory", sub_category.id);
 };
 
+const getItemsAndGo = (category: any, sub_category: any) => {
+  if (sub_category) {
+    return `/public/categories/${category.id}?sub_category_id=${sub_category.id}`;
+  } else {
+    return `/public/categories/${category.id}`;
+  }
+};
+
+const getSubCategoryUrl = (category: any, sub_category: any) => {
+  return `/public/categories/${category.id}?sub_category_id=${sub_category.id}`;
+};
+
 const userIsAdmin = computed(() => {
   if (currentUser.value) {
-    return (
-      currentUser.value.role === "root" ||
-      currentUser.value.role === "admin" ||
-      currentUser.value.role === "care_facility_admin"
-    );
+    return currentUser.value.role === "root" || currentUser.value.role === "admin" || currentUser.value.role === "care_facility_admin";
   }
   return false;
 });
@@ -426,7 +492,7 @@ useUserStore().$subscribe((mutation, state) => {
 const saveCurrentUrlAndRoute = (routeTo: string, query: string) => {
   appStore.dashboardBackLink = window.location.pathname;
 
-  router.push({ path: routeTo,  query: { filter: query }});
+  router.push({ path: routeTo, query: { filter: query } });
 };
 </script>
 
@@ -459,6 +525,7 @@ header,
   }
 }
 .v-toolbar__content {
+  overflow: visible;
   .v-toolbar-title {
     margin-inline-start: 0;
   }
@@ -515,6 +582,7 @@ header,
     opacity: 1;
     transform: scale(1);
     pointer-events: all;
+    width: max-content;
   }
   .title {
     position: relative;
@@ -580,5 +648,9 @@ header,
 
 .icons-menu {
   width: 40px;
+}
+
+a {
+  color: $dark-grey !important;
 }
 </style>

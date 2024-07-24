@@ -93,52 +93,72 @@
             @click="setFilter(item.value)"
           ></v-radio>
         </v-radio-group>
-        <span @click="toogleBar" v-if="!noBar">
-          <v-icon class="is-clickable" v-if="showBar" size="x-large">mdi-menu-up</v-icon>
-          <v-icon class="is-clickable" v-else size="x-large">mdi-menu-down</v-icon>
+        <span
+          @click="toogleBar"
+          v-if="!noBar"
+        >
+          <v-icon
+            class="is-clickable"
+            v-if="showBar"
+            size="x-large"
+            >mdi-menu-up</v-icon
+          >
+          <v-icon
+            class="is-clickable"
+            v-else
+            size="x-large"
+            >mdi-menu-down</v-icon
+          >
         </span>
       </v-col>
     </v-row>
   </div>
 
   <v-divider :class="noData ? 'mt-10' : ''"> </v-divider>
-  <v-alert v-if="noData" type="warning">keine Ergebnisse gefunden </v-alert>
-  <v-table v-else fixed-header class="my-5">
+  <v-alert
+    v-if="noData"
+    type="warning"
+    >keine Ergebnisse gefunden
+  </v-alert>
+  <v-table
+    v-else
+    fixed-header
+    class="my-5"
+  >
     <thead class="elevation-1 primary">
       <tr>
         <th
           v-for="field in fields"
           :key="field.text"
-          :width="[
-            field.type === 'move_up' ||
-            field.type === 'move_down' ||
-            field.type === 'icon' ||
-            field.type === 'switch'
-              ? '30px'
-              : field.width,
-          ]"
+          :width="[field.type === 'move_up' || field.type === 'move_down' || field.type === 'icon' || field.type === 'switch' ? '30px' : field.width]"
           :class="{ 'is-clickable': field.prop }"
-          @click="field.prop && rotateColumnSortOrder(field.prop)"
+          @click="field.hasFilterFunction ? field.prop && rotateColumnSortOrder(field.prop) : null"
         >
           <div
             class="table-head-item"
             :class="sortBy === field.prop ? 'selected-sort' : ''"
           >
             {{ field.text }}
-            <div
-              v-if="sortBy === field.prop"
-              class="chevron"
-              :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc' }"
-            ></div>
-            <div v-else-if="field.text">
-              <div class="chevron"></div>
+            <div v-if="field.hasFilterFunction">
+              <div
+                v-if="sortBy === field.prop"
+                class="chevron"
+                :class="{ up: sortOrder === 'desc', down: sortOrder === 'asc' }"
+              ></div>
+              <div v-else-if="field.text">
+                <div class="chevron"></div>
+              </div>
             </div>
           </div>
         </th>
-        <th width="15px" v-if="!disableEdit"></th>
+        <th
+          width="15px"
+          v-if="!disableEdit"
+        ></th>
         <th width="15px"></th>
       </tr>
     </thead>
+
     <tbody>
       <tr
         v-for="(item, indexMain) in items"
@@ -147,8 +167,9 @@
           item === activeItems ? 'activeItems' : '',
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'user' ? '' : 'has-normal-bg',
-          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips'? 'has-normal-bg' : '',
+          getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' || getCurrentRoute() === 'admin-complaints' ? 'has-normal-bg' : '',
           isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
+          item?.status === 'completed' ? 'has-bg-lighten-green' : '',
         ]"
       >
         <td
@@ -159,31 +180,98 @@
           @click="handleEmitParent(item, field, indexMain)"
           :width="field.width"
         >
-          <span v-if="field.type === 'datetime' && item[field.value]">{{
-            useDatetime().parseDatetime(item[field.value])
-          }}</span>
-          <span v-else-if="field.type === 'is-imported' && item?.imported">
-            <v-tooltip location="top" width="250px">
+          <span v-if="field.type === 'datetime' && item[field.value]">{{ useDatetime().parseDatetime(item[field.value]) }}</span>
+          <span
+            @click.stop="field.action(item)"
+            v-else-if="field.break_text"
+            class="break-title"
+          >
+            {{ item[field.value] }}</span
+          >
+          <span
+            v-else-if="field.text === 'Plattform'"
+            class="d-flex justify-center mr-5"
+          >
+            <v-tooltip top>
               <template v-slot:activator="{ props }">
-                <v-icon color="success" class="ml-2 pt-2" v-bind="props"
+                <span v-bind="props">
+                  <v-icon v-if="item.meta_data.plattform === 'app'">mdi-cellphone</v-icon>
+                </span>
+              </template>
+              <span>Beschwerde über die App</span>
+            </v-tooltip>
+
+            <v-tooltip top>
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
+                  <v-icon v-if="item.meta_data.plattform !== 'app'">mdi-laptop</v-icon>
+                </span>
+              </template>
+              <span>Beschwerde über die Webseite</span>
+            </v-tooltip>
+          </span>
+          <span v-else-if="field.type === 'is-imported' && item?.imported">
+            <v-tooltip
+              location="top"
+              width="250px"
+            >
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  color="success"
+                  class="ml-2 pt-2"
+                  v-bind="props"
                   >mdi-application-import</v-icon
                 >
               </template>
               <span>Benutzer wurde importiert </span>
             </v-tooltip>
           </span>
-          <span v-else-if="field.type === 'currency' && item[field.value]">{{
-            useCurrency().getCurrencyFromNumber(item[field.value])
-          }}</span>
-          <v-tooltip top v-else-if="field.type === 'icon' && field.tooltip">
+          <span v-else-if="field.type === 'updated'">
+            <span v-if="daysNotUpdated(item[field.value]) > 120">
+              <v-tooltip
+                location="top"
+                width="300px"
+              >
+                <template v-slot:activator="{ props }">
+                  <span
+                    v-bind="props"
+                    class="d-flex flex-column align-center justify-center"
+                  >
+                    <img
+                      :src="alertIcon"
+                      width="20"
+                    />
+                    <span>{{ daysNotUpdated(item[field.value]) }}</span>
+                  </span>
+                </template>
+                <span>Diese Benutzer hat seit über {{ daysNotUpdated(item[field.value]) }} Tagen keine Aktualisierung vorgenommen.</span>
+              </v-tooltip>
+            </span>
+          </span>
+          <span v-else-if="field.type === 'currency' && item[field.value]">{{ useCurrency().getCurrencyFromNumber(item[field.value]) }}</span>
+          <v-tooltip
+            top
+            v-else-if="field.type === 'icon' && field.tooltip"
+          >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">{{ field.value }}</v-icon>
+              <v-icon
+                class="is-clickable"
+                v-bind="props"
+                >{{ field.value }}</v-icon
+              >
             </template>
             <span v-if="field.tooltip">{{ field.tooltip }}</span>
           </v-tooltip>
-          <v-tooltip top v-else-if="field.type === 'move_up' && indexMain !== 0">
+          <v-tooltip
+            top
+            v-else-if="field.type === 'move_up' && indexMain !== 0"
+          >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">mdi-arrow-up</v-icon>
+              <v-icon
+                class="is-clickable"
+                v-bind="props"
+                >mdi-arrow-up</v-icon
+              >
             </template>
             <span>Nach oben</span>
           </v-tooltip>
@@ -192,103 +280,149 @@
             v-else-if="field.type === 'move_down' && indexMain !== items.length - 1"
           >
             <template v-slot:activator="{ props }">
-              <v-icon class="is-clickable" v-bind="props">mdi-arrow-down</v-icon>
+              <v-icon
+                class="is-clickable"
+                v-bind="props"
+                >mdi-arrow-down</v-icon
+              >
             </template>
             <span>Nach unten</span>
           </v-tooltip>
 
-          <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{
-            field.value
-          }}</v-icon>
-          <span v-else-if="item[field.value] && field.type === 'association_name'">{{
-            item[field.value].name
-          }}</span>
+          <v-icon v-else-if="field.type === 'icon' && !field.tooltip">{{ field.value }}</v-icon>
+          <span v-else-if="item[field.value] && field.type === 'association_name'">{{ item[field.value].name }}</span>
           <span v-else-if="item[field.value] && field.type === 'associations_name'">
-            <div v-for="(subItem, index) in item[field.value]" :key="index" class="small">
+            <div
+              v-for="(subItem, index) in item[field.value]"
+              :key="index"
+              class="small"
+            >
               {{ subItem.name }}
             </div>
           </span>
           <template v-else-if="field.type === 'switch'">
-            <v-tooltip top>
-              <template v-slot:activator="{ props }">
-                <div v-bind="props">
-                  <TableSwitch
-                    :item="item"
-                    :endpoint="field.endpoint"
-                    :field-to-switch="field.fieldToSwitch"
-                    :ask-notification="field.askNotification"
-                    :notification-kind="field.notificationKind"
-                    :notification-kind-explicit="field.notificationKindExplicit"
-                    :notification-pre-filled-headline="
-                      field.notificationPreFilledHeadline
-                    "
-                    :notification-pre-filled-text="field.notificationPreFilledText"
-                    :notification-cta-link="field.notificationCtaLink"
-                    :disabled="field?.disabledConditions?.(item)"
-                    @toggled="handleToggled(item)"
-                  />
-                </div>
-              </template>
-              <div v-if="!useUser().statusOnHealthScope()" class="tooltip">
-                {{
-                  field?.disabledConditions?.(item)
-                    ? field.disabledTooltip
-                    : field.tooltip
-                }}
+            <div class="d-flex align-center ga-2">
+              <div>
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <div v-bind="props">
+                      <TableSwitch
+                        :item="item"
+                        :endpoint="field.endpoint"
+                        :field-to-switch="field.fieldToSwitch"
+                        :ask-notification="field.askNotification"
+                        :notification-kind="field.notificationKind"
+                        :notification-kind-explicit="field.notificationKindExplicit"
+                        :notification-pre-filled-headline="field.notificationPreFilledHeadline"
+                        :notification-pre-filled-text="field.notificationPreFilledText"
+                        :notification-cta-link="field.notificationCtaLink"
+                        :disabled="field?.disabledConditions?.(item) || item?.blocked || item?.user?.status === 'disabled'"
+                        @toggled="handleToggled(item)"
+                      />
+                    </div>
+                  </template>
+                  <div
+                    v-if="!useUser().statusOnHealthScope()"
+                    class="tooltip"
+                  >
+                    {{ field?.disabledConditions?.(item) ? field.disabledTooltip : field.tooltip }}
+                  </div>
+                  <div
+                    v-else
+                    class="tooltip"
+                  >
+                    {{ field?.disabledConditions?.(item) ? field.disabledTooltipFacilityImcomplete : field.tooltip }}
+                  </div>
+                </v-tooltip>
               </div>
-              <div v-else class="tooltip">
-                {{
-                  field?.disabledConditions?.(item)
-                    ? field.disabledTooltipFacilityImcomplete
-                    : field.tooltip
-                }}
+              <div>
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <v-icon
+                      color="error"
+                      v-if="item?.blocked || item?.status === 'disabled'"
+                      v-bind="props"
+                      >mdi-exclamation</v-icon
+                    >
+                  </template>
+                  <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                </v-tooltip>
               </div>
-            </v-tooltip>
+            </div>
           </template>
-          <TableDropdown
+
+          <div
             v-else-if="field.type === 'enumDropdown'"
-            :item="item"
-            :enum-name="field.enum_name"
-            :endpoint="field.endpoint"
-            :fieldName="field.value"
-            :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
-            :disable-edit="!useUser().isAdmin()"
-          />
-          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enum'">
+            class="d-flex align-center"
+          >
+            <div>
+              <TableDropdown
+                :item="item"
+                :enum-name="field.enum_name"
+                :endpoint="field.endpoint"
+                :fieldName="field.value"
+                :field-class="useEnums().getClassName(field.enum_name, item[field.value])"
+                :disable-edit="!useUser().isAdmin()"
+              />
+            </div>
+            <div>
+              <span v-if="item?.status === 'disabled'">
+                <div>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ props }">
+                      <v-icon
+                        color="error"
+                        v-bind="props"
+                        >mdi-exclamation</v-icon
+                      >
+                    </template>
+                    <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                  </v-tooltip>
+                </div></span
+              >
+            </div>
+          </div>
+
+          <div v-else-if="field.type === 'enum'">
             <span :class="useEnums().getClassName(field.enum_name, item[field.value])">
               {{ useEnums().getName(field.enum_name, item[field.value]) }}
             </span>
           </div>
-          <div
-            v-else-if="item[field.value] && field.enum_name && field.type === 'enumKinds'"
-          >
-            <v-chip
-              :color="useEnums().getClassName(field.enum_name, item[field.value])"
-              >{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip
-            >
+          <div v-else-if="item[field.value] && field.enum_name && field.type === 'enumKinds'">
+            <v-chip :color="useEnums().getClassName(field.enum_name, item[field.value])">{{ useEnums().getName(field.enum_name, item[field.value]) }}</v-chip>
           </div>
-          <span v-else-if="field.type === 'array'">{{
-            item[field.value].join(", ")
-          }}</span>
-          <span v-else-if="field.type === 'pathIntoObject'">{{
-            pathInto(item, field.value)
-          }}</span>
-          <span v-else-if="field.type === 'facilities'">
+          <span v-else-if="field.type === 'array'">{{ item[field.value].join(", ") }}</span>
+          <span v-else-if="field.type === 'pathIntoObject'">{{ pathInto(item, field.value) }}</span>
+          <span
+            v-else-if="field.type === 'facilities'"
+            @click.stop="field.action(item)"
+          >
             <div v-if="Array.isArray(item[field.value])">
               <div v-for="facility in item[field.value]">
                 <v-row v-if="facility.kind === 'facility'">
                   <v-col>
-                    <v-chip class="mx-2 mt-2" color="grey">
-                      <v-icon v-if="facility.kind === 'facility'" class="mr-2"
+                    <v-chip
+                      class="mx-2 mt-2"
+                      color="grey"
+                    >
+                      <v-icon
+                        v-if="facility.kind === 'facility'"
+                        class="mr-2"
                         >mdi-home-city-outline</v-icon
                       >
                       <span class="pr-3">
                         {{ facility.name }}
                       </span>
-                      <div class="d-flex align-center" v-if="useUser().isAdmin()">
+                      <div
+                        class="d-flex align-center"
+                        v-if="useUser().isAdmin()"
+                      >
                         <v-tooltip v-if="!facility.is_active">
                           <template v-slot:activator="{ props }">
-                            <v-icon size="x-small" color="error" v-bind="props"
+                            <v-icon
+                              size="x-small"
+                              color="error"
+                              v-bind="props"
                               >mdi-circle</v-icon
                             >
                           </template>
@@ -297,12 +431,32 @@
 
                         <v-tooltip v-else>
                           <template v-slot:activator="{ props }">
-                            <v-icon size="x-small" color="success" v-bind="props"
+                            <v-icon
+                              size="x-small"
+                              color="success"
+                              v-bind="props"
                               >mdi-circle</v-icon
                             >
                           </template>
                           <span>Einrichtung online</span>
                         </v-tooltip>
+
+                        <div>
+                          <span v-if="item?.care_facilities[0].blocked">
+                            <div>
+                              <v-tooltip top>
+                                <template v-slot:activator="{ props }">
+                                  <v-icon
+                                    color="error"
+                                    v-bind="props"
+                                    >mdi-exclamation</v-icon
+                                  >
+                                </template>
+                                <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                              </v-tooltip>
+                            </div></span
+                          >
+                        </div>
                       </div>
                     </v-chip>
                   </v-col>
@@ -311,7 +465,27 @@
             </div>
           </span>
           <span v-else-if="field.type === 'protocol'">
-            <span><v-icon size="x-large" color="red">mdi-file-pdf-box</v-icon></span>
+            <div class="d-flex align-center ga-2">
+              <v-icon
+                size="x-large"
+                color="red"
+                @click.stop="emitGeneratePdf(item)"
+                >mdi-file-pdf-box</v-icon
+              >
+              <div v-if="item?.status === 'objection'">
+                <v-tooltip top>
+                  <template v-slot:activator="{ props }">
+                    <v-icon
+                      size="x-large"
+                      color="warning"
+                      v-bind="props"
+                      >mdi-alert</v-icon
+                    >
+                  </template>
+                  <span>Dieser Beschwerde wurde widersprochen</span>
+                </v-tooltip>
+              </div>
+            </div>
           </span>
           <span v-else-if="field.type === 'beinEdited' && item.user">
             <span v-if="isDraft(item)"><i>Bearbeitung fortsetzen</i></span>
@@ -319,48 +493,38 @@
           <span v-else-if="field.type === 'has-dates' && !item.event_dates.length">
             <v-tooltip location="top">
               <template v-slot:activator="{ props }">
-                <v-icon class="is-yellow" v-bind="props"
+                <v-icon
+                  class="is-yellow"
+                  v-bind="props"
                   >mdi-calendar-alert-outline</v-icon
                 >
               </template>
               <span>Kein Datum angegeben.</span>
             </v-tooltip>
           </span>
-          <span
-            v-else-if="
-              field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'
-            "
-          >
+          <span v-else-if="field.type === 'is-lk' && item?.user?.role === 'care_facility_admin'">
             <v-tooltip location="top">
               <template v-slot:activator="{ props }">
-                <img :src="logo" width="20" class="ml-2 pt-2" v-bind="props" />
+                <img
+                  :src="logo"
+                  width="20"
+                  class="ml-2 pt-2"
+                  v-bind="props"
+                />
               </template>
               <span>Diese Einrichtung wurde vom Landkreis erstellt.</span>
             </v-tooltip>
           </span>
           <span
-            v-else-if="
-              field.type === 'send-invitation' &&
-              item?.user?.onboarding_token &&
-              useUser().isAdmin() &&
-              !item?.owner_requested_maintenance
-            "
+            v-else-if="field.type === 'send-invitation' && item?.user?.onboarding_token && useUser().isAdmin() && !item?.owner_requested_maintenance"
             @click.stop="openConfirmationDialog(item)"
           >
             <span
               class="d-flex flex-column align-center"
-              :class="
-                item?.user?.notification_after_manual_import_sent_at?.length
-                  ? 'onboard'
-                  : ''
-              "
+              :class="item?.user?.notification_after_manual_import_sent_at?.length ? 'onboard' : ''"
             >
               <span v-if="item?.user?.notification_after_manual_import_sent_at">
-                {{
-                  useDatetime().parseDatetime(
-                    item?.user?.notification_after_manual_import_sent_at
-                  )
-                }}</span
+                {{ useDatetime().parseDatetime(item?.user?.notification_after_manual_import_sent_at) }}</span
               >
 
               <v-tooltip location="top">
@@ -373,16 +537,16 @@
           </span>
 
           <span
-            v-else-if="
-              field.type === 'imported' && item?.user?.imported && useUser().isAdmin()
-            "
+            v-else-if="field.type === 'imported' && item?.user?.imported && useUser().isAdmin()"
             @click.stop="copyTokenLink(item)"
           >
             <div class="d-flex ga-3">
               <span v-if="item?.user?.onboarding_token">
                 <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
-                    <v-icon class="not-onboard" v-bind="props"
+                    <v-icon
+                      class="not-onboard"
+                      v-bind="props"
                       >mdi-application-import</v-icon
                     >
                   </template>
@@ -393,7 +557,11 @@
               <span v-if="!item?.user?.onboarding_token">
                 <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
-                    <v-icon class="onboard" v-bind="props">mdi-application-import</v-icon>
+                    <v-icon
+                      class="onboard"
+                      v-bind="props"
+                      >mdi-application-import</v-icon
+                    >
                   </template>
                   <span>Einrichtung wurde importiert und übernommen.</span>
                 </v-tooltip>
@@ -402,7 +570,9 @@
               <span v-if="!item?.owner_requested_maintenance">
                 <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
-                    <v-icon class="no-maintenance" v-bind="props"
+                    <v-icon
+                      class="no-maintenance"
+                      v-bind="props"
                       >mdi-flag-variant-remove</v-icon
                     >
                   </template>
@@ -413,7 +583,9 @@
               <span v-if="item?.owner_requested_maintenance">
                 <v-tooltip location="top">
                   <template v-slot:activator="{ props }">
-                    <v-icon class="yes-maintenance" v-bind="props"
+                    <v-icon
+                      class="yes-maintenance"
+                      v-bind="props"
                       >mdi-flag-variant-plus</v-icon
                     >
                   </template>
@@ -448,7 +620,7 @@
             </button>
             <span v-if="field.value === 'user.name'">
               <span
-                class="align-center ml-2"
+                class="align-center ml-2 d-flex"
                 v-if="pathInto(item, field.value).length > 1 && useUser().isAdmin()"
               >
                 <v-tooltip
@@ -456,7 +628,10 @@
                   v-if="item?.user && item?.user?.is_active_on_health_scope"
                 >
                   <template v-slot:activator="{ props }">
-                    <v-icon size="x-small" color="success" v-bind="props"
+                    <v-icon
+                      size="x-small"
+                      color="success"
+                      v-bind="props"
                       >mdi-circle</v-icon
                     >
                   </template>
@@ -467,37 +642,47 @@
                   v-if="item?.user && !item?.user?.is_active_on_health_scope"
                 >
                   <template v-slot:activator="{ props }">
-                    <v-icon size="x-small" color="error" v-bind="props"
+                    <v-icon
+                      size="x-small"
+                      color="error"
+                      v-bind="props"
                       >mdi-circle</v-icon
                     >
                   </template>
                   <span>Benutzer ist nicht Freigeschaltet</span>
                 </v-tooltip>
+                <div>
+                  <span v-if="item?.user?.status && item?.user?.status === 'disabled'">
+                    <div>
+                      <v-tooltip top>
+                        <template v-slot:activator="{ props }">
+                          <v-icon
+                            color="error"
+                            v-bind="props"
+                            >mdi-exclamation</v-icon
+                          >
+                        </template>
+                        <span>Dieser Inhalt wurde durch eine Beschwerdemaßnahme gesperrt. </span>
+                      </v-tooltip>
+                    </div></span
+                  >
+                </div>
               </span>
             </span>
-            <span
-              v-if="
-                field.value === 'mdi-eye' &&
-                item.is_active &&
-                useUser().statusOnHealthScope()
-              "
-            >
+            <span v-if="field.value === 'mdi-eye' && item.is_active && useUser().statusOnHealthScope()">
               <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable" @click="field.action(item)" v-bind="props"
+                  <v-icon
+                    class="is-clickable"
+                    @click="field.action(item)"
+                    v-bind="props"
                     >mdi-eye</v-icon
                   >
                 </template>
                 <span>Zur Einrichtungseite wechseln.</span>
               </v-tooltip>
             </span>
-            <span
-              v-if="
-                field.value === 'mdi-check-decagram' &&
-                item.billable_through_health_insurance_approved &&
-                useUser().statusOnHealthScope()
-              "
-            >
+            <span v-if="field.value === 'mdi-check-decagram' && item.billable_through_health_insurance_approved && useUser().statusOnHealthScope()">
               <v-tooltip location="top">
                 <template v-slot:activator="{ props }">
                   <v-icon
@@ -518,10 +703,16 @@
           <span v-else>{{ item[field.value] }}</span>
         </td>
         <td v-if="!disableEdit">
-          <v-icon class="is-clickable" @click="emitParent(item, null)">mdi-pencil</v-icon>
+          <v-icon
+            class="is-clickable"
+            @click="emitParent(item, null)"
+            >mdi-pencil</v-icon
+          >
         </td>
         <td v-if="useUser().isAdmin() || !disableDelete">
-          <v-icon class="is-clickable" @click="emitopenDeleteDialog(item.id)"
+          <v-icon
+            class="is-clickable"
+            @click="emitopenDeleteDialog(item.id)"
             >mdi-delete</v-icon
           >
         </td>
@@ -579,6 +770,10 @@ import { useAdminStore } from "~/store/admin";
 import { isCompleteFacility } from "~/utils/facility.utils";
 import type { RequiredField } from "~/types/facilities";
 import logo from "@/assets/images/lk-logo.png";
+import { fi } from "date-fns/locale";
+import alert from "@/assets/icons/alert-icon.svg";
+
+const alertIcon = alert;
 
 const router = useRouter();
 
@@ -618,7 +813,12 @@ const emit = defineEmits([
   "itemUpdated",
   "toogleBar",
   "openConfirmationDialog",
+  "generatePdf",
 ]);
+
+const emitGeneratePdf = (item: any) => {
+  emit("generatePdf", item);
+};
 
 const openConfirmationDialog = (item: any) => {
   emit("openConfirmationDialog", item);
@@ -644,7 +844,6 @@ const listOptions = ref([
   { text: "Rückmeldung ausstehend", value: "pending_profile_takeovers" },
   { text: "Neu registrierte Einrichtungen", value: "thirty_days_ago" },
   { text: "Inhaberschaften Nutzer", value: "user_maintenance_requested" },
-  { text: "Daten nicht aktuell", value: "data_not_up_to_date" },
   { text: "Nicht gesendete Emails", value: "mail_not_sent" },
 ]);
 
@@ -654,6 +853,10 @@ const listOptionsUsers = ref([
   { text: "in Prüfung (importiert)", value: "import_pending" },
   { text: "in Prüfung (import abgeschlossen)", value: "imported_pending" },
   { text: "in Prüfung", value: "pending" },
+  { text: "Daten nicht aktuell + 120", value: "data_not_up_to_date_1" },
+  { text: "Daten nicht aktuell + 134", value: "data_not_up_to_date_2" },
+  { text: "Daten nicht aktuell + 226", value: "data_not_up_to_date_3" },
+  { text: "Daten nicht aktuell + 240", value: "data_not_up_to_date_4" },
 ]);
 
 const listOptionsEvents = ref([
@@ -739,7 +942,6 @@ const isDraft = (item: any) => {
 };
 
 const copyTokenLink = (item: any) => {
-  console.log(item);
   if (!item?.preview_token) return;
   const link = `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
   navigator.clipboard.writeText(link);
@@ -790,10 +992,27 @@ const items = api.items;
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-const notUpToDate = new Date();
-notUpToDate.setDate(notUpToDate.getDate() - 120);
+const notUpToDate1 = new Date();
+notUpToDate1.setDate(notUpToDate1.getDate() - 120);
 
-//limit items to 10
+const notUpToDate2 = new Date();
+notUpToDate2.setDate(notUpToDate2.getDate() - 134);
+
+const notUpToDate3 = new Date();
+notUpToDate3.setDate(notUpToDate3.getDate() - 226);
+
+const notUpToDate4 = new Date();
+notUpToDate4.setDate(notUpToDate4.getDate() - 240);
+
+const daysNotUpdated = (date: any) => {
+  const lastUpdated = date;
+  if (!lastUpdated) return 0;
+  const lastUpdatedDate = new Date(lastUpdated);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate.getTime() - lastUpdatedDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+};
 
 const handleToggled = async (item: any) => {
   emit("itemUpdated", item);
@@ -870,9 +1089,21 @@ const filtersMap = {
       value: true,
     },
   ],
-  data_not_up_to_date: {
-    field: "updated_at-lt",
-    value: notUpToDate,
+  data_not_up_to_date_1: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate1,
+  },
+  data_not_up_to_date_2: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate2,
+  },
+  data_not_up_to_date_3: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate3,
+  },
+  data_not_up_to_date_4: {
+    field: "last_care_facility_updated_at-lt",
+    value: notUpToDate4,
   },
   active_events: {
     field: "is_active",
@@ -905,7 +1136,6 @@ const filtersMap = {
       field: "is_active_on_health_scope",
       value: true,
     },
-
     {
       field: "care_facilities-ne",
       value: "[]",
@@ -1018,9 +1248,11 @@ const getItems = async () => {
   if (response.data && response.data.resources) {
     noData.value = false;
     items.value = Array.isArray(response.data.resources) ? response.data.resources : [];
+    noData.value = false;
   } else {
     noData.value = false;
     items.value = Array.isArray(response.data) ? response.data : [];
+    noData.value = false;
   }
 
   if (props.searchQuery) {
@@ -1144,7 +1376,6 @@ defineExpose({ resetActiveItems, getItems });
 
 .selected-sort
   color: #8ab61d
-
 
 .onboard
   color: #8ab61d

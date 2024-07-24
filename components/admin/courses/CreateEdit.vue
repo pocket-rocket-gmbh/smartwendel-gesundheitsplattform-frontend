@@ -1,5 +1,9 @@
 <template>
-  <CreateEdit v-slot="slotProps" size="100wh" ref="createEditRef">
+  <CreateEdit
+    v-slot="slotProps"
+    size="100wh"
+    ref="createEditRef"
+  >
     <v-card-text
       v-if="slotProps.item && Object.entries(slotProps.item).length"
       class="mb-15"
@@ -21,26 +25,24 @@
                 >{{ step.description }}</span
               >
             </div>
-            <span class="general-font-size is-dark-grey d-flex justify-end"
-              >* Pflichtangaben</span
-            >
+            <span class="general-font-size is-dark-grey d-flex justify-end">* Pflichtangaben</span>
           </div>
         </v-col>
         <v-col md="9">
           <div class="py-10">
             <div>
               <span class="general-font-size is-dark-grey facility-kind-description"
-                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn möglich alle
-                Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen
+                >Hier kannst du eigene Kurse anlegen. Bitte fülle dazu wenn möglich alle Felder sorgfältig aus. Pflichtfelder sind mit einem Sternchen
                 versehen.</span
               >
             </div>
           </div>
-          <div class="field" id="name">
+          <div
+            class="field"
+            id="name"
+          >
             <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">{{
-                steps["name"].label
-              }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["name"].label }}</span>
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -52,14 +54,20 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="leader">
+          <div
+            class="field"
+            id="leader"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["leader"].label
-              }}</span>
-              <v-tooltip location="top" width="300px">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["leader"].label }}</span>
+              <v-tooltip
+                location="top"
+                width="300px"
+              >
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
+                  <v-icon
+                    class="is-clickable mr-10"
+                    v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
@@ -76,14 +84,20 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="photo">
+          <div
+            class="field"
+            id="photo"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["photo"].label
-              }}</span>
-              <v-tooltip location="top" width="300px">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["photo"].label }}</span>
+              <v-tooltip
+                location="top"
+                width="300px"
+              >
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
+                  <v-icon
+                    class="is-clickable mr-10"
+                    v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
@@ -102,11 +116,12 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="gallery">
+          <div
+            class="field"
+            id="gallery"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["gallery"].label
-              }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["gallery"].label }}</span>
             </div>
             <AdminCareFacilitiesAddImages
               :item-id="slotProps.item.id"
@@ -116,11 +131,12 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="description">
+          <div
+            class="field"
+            id="description"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["description"].label
-              }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["description"].label }}</span>
             </div>
             <div class="editor">
               <ClientOnly>
@@ -148,9 +164,7 @@
                   <v-text-field
                     v-show="false"
                     class="hidden-text-field is-dark-grey"
-                    :model-value="
-                      isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'
-                    "
+                    :model-value="isDescriptionEmpty(slotProps.item.description) ? '' : 'filled'"
                     :rules="[rules.required]"
                   />
                 </div>
@@ -158,14 +172,20 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="category">
+          <div
+            class="field"
+            id="category"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["category"].label
-              }}</span>
-              <v-tooltip location="top" width="200px">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["category"].label }}</span>
+              <v-tooltip
+                location="top"
+                width="200px"
+              >
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
+                  <v-icon
+                    class="is-clickable mr-10"
+                    v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
@@ -182,14 +202,20 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="services">
+          <div
+            class="field"
+            id="services"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["services"].label
-              }}</span>
-              <v-tooltip location="top" width="300px">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["services"].label }}</span>
+              <v-tooltip
+                location="top"
+                width="300px"
+              >
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-10" v-bind="props"
+                  <v-icon
+                    class="is-clickable mr-10"
+                    v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
@@ -234,19 +260,21 @@
             v-bind:model-value="!!slotProps.item?.event_dates?.length"
             :rules="[!!slotProps.item?.event_dates?.length || 'Pflichtangabe']"
           ></v-checkbox>
-          <div class="field" id="date">
+          <div
+            class="field"
+            id="date"
+          >
             <div class="my-2">
-              <span class="general-font-size is-dark-grey mr-2 font-weight-bold">{{
-                steps["date"].label
-              }}</span>
+              <span class="general-font-size is-dark-grey mr-2 font-weight-bold">{{ steps["date"].label }}</span>
             </div>
             <div class="mb-15">
               <v-row>
-                <v-col md="4" class="d-flex flex-column">
+                <v-col
+                  md="4"
+                  class="d-flex flex-column"
+                >
                   <div class="my-5">
-                    <span class="general-font-size is-dark-grey mr-2 font-weight-bold">
-                      Datum und Uhrzeit:
-                    </span>
+                    <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Datum und Uhrzeit: </span>
                   </div>
                   <Datepicker
                     inline
@@ -269,8 +297,16 @@
                     :update:model-value="handleEventDatesChanged(slotProps.item)"
                   />
                 </v-col>
-                <v-col md="7" v-if="slotProps.item.event_dates?.length" class="my-8">
-                  <v-table density="compact" fixed-header height="440px">
+                <v-col
+                  md="7"
+                  v-if="slotProps.item.event_dates?.length"
+                  class="my-8"
+                >
+                  <v-table
+                    density="compact"
+                    fixed-header
+                    height="440px"
+                  >
                     <thead>
                       <tr>
                         <th></th>
@@ -320,9 +356,7 @@
                 </v-col>
               </v-row>
               <div class="mt-5">
-                <span class="general-font-size is-dark-grey mr-2 font-weight-bold">
-                  Dauer:
-                </span>
+                <span class="general-font-size is-dark-grey mr-2 font-weight-bold"> Dauer: </span>
               </div>
               <div class="field split mt-5">
                 <v-text-field
@@ -338,14 +372,20 @@
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="certificates">
+          <div
+            class="field"
+            id="certificates"
+          >
             <div class="my-2 d-flex">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["certificates"].label
-              }}</span>
-              <v-tooltip location="top" width="300px">
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["certificates"].label }}</span>
+              <v-tooltip
+                location="top"
+                width="300px"
+              >
                 <template v-slot:activator="{ props }">
-                  <v-icon class="is-clickable mr-15 mt-1" v-bind="props"
+                  <v-icon
+                    class="is-clickable mr-15 mt-1"
+                    v-bind="props"
                     >mdi-information-outline</v-icon
                   >
                 </template>
@@ -356,9 +396,7 @@
               <AdminCareFacilitiesAddFiles
                 :item-id="slotProps.item.id"
                 tag-name="insurance"
-                :document-acepted="
-                  slotProps.item.billable_through_health_insurance_approved
-                "
+                :document-acepted="slotProps.item.billable_through_health_insurance_approved"
                 :offline-documents="slotProps.item.offlineDocuments"
                 @offline="handleDocumentsOffline"
                 @updated-files="updatedFiles"
@@ -366,12 +404,7 @@
                 @are-documents-set="setDocumentsIsSet"
               />
               <div class="d-flex align-center">
-                <span
-                  v-if="
-                    slotProps.item.billable_through_health_insurance &&
-                    useUser().isAdmin()
-                  "
-                >
+                <span v-if="slotProps.item.billable_through_health_insurance && useUser().isAdmin()">
                   <v-icon color="primary">mdi-check-decagram-outline</v-icon>
                 </span>
                 <v-checkbox
@@ -380,20 +413,18 @@
                   hide-details
                   density="compact"
                   label="Bitte prüfe, ob das Zertifikat gültig ist. Wenn ja, bestätige es hier."
-                  @click="
-                    slotProps.item.billable_through_health_insurance_approved = !slotProps
-                      .item.billable_through_health_insurance_approved
-                  "
+                  @click="slotProps.item.billable_through_health_insurance_approved = !slotProps.item.billable_through_health_insurance_approved"
                 />
               </div>
             </div>
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="website">
+          <div
+            class="field"
+            id="website"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["website"].label
-              }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["website"].label }}</span>
             </div>
             <v-text-field
               class="text-field is-dark-grey"
@@ -406,11 +437,12 @@
             />
           </div>
           <v-divider class="my-10"></v-divider>
-          <div class="field" id="documents">
+          <div
+            class="field"
+            id="documents"
+          >
             <div class="my-2 d-flex align-center">
-              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{
-                steps["documents"].label
-              }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold mr-3">{{ steps["documents"].label }}</span>
             </div>
             <AdminCareFacilitiesAddFiles
               :item-id="slotProps.item.id"
@@ -425,14 +457,13 @@
           <v-divider class="my-10"></v-divider>
           <div id="address">
             <div class="my-2">
-              <span class="general-font-size is-dark-grey font-weight-bold">{{
-                steps["address"].label
-              }}</span>
+              <span class="general-font-size is-dark-grey font-weight-bold">{{ steps["address"].label }}</span>
+              {{ handleInitialCheckValidAddress(slotProps.item) }}
               <v-checkbox
                 hide-details
                 density="compact"
                 :model-value="slotProps.item.course_outside_facility"
-                @click="setCourseOutsideFacility(slotProps.item)"
+                @click="courseIsOutsideFacility(slotProps.item)"
                 label="Ja, der Kurs findet außerhalb meiner Einrichtung statt."
               />
             </div>
@@ -444,9 +475,7 @@
                   hide-details="auto"
                   label="Straße und Nummer"
                   :rules="[rules.required, rules.counterStreet]"
-                  :error-messages="
-                    useErrors().checkAndMapErrors('street', slotProps.errors)
-                  "
+                  :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
                 />
               </div>
               <div class="field">
@@ -502,9 +531,7 @@
                   v-model="slotProps.item.street"
                   hide-details="auto"
                   label="Straße und Nummer"
-                  :error-messages="
-                    useErrors().checkAndMapErrors('street', slotProps.errors)
-                  "
+                  :error-messages="useErrors().checkAndMapErrors('street', slotProps.errors)"
                 />
               </div>
               <div class="field">
@@ -563,7 +590,7 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { de } from "date-fns/locale";
 import { type FilterType } from "~/store/searchFilter";
-import type {  CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
+import type { CreateEditFacility, CreateEditStep, CreateEditSteps } from "~/types/facilities";
 import { rules } from "../../../data/validationRules";
 import { getCurrentUserFacilities } from "~/utils/filter.utils";
 import { set } from "date-fns";
@@ -582,7 +609,7 @@ const stepNames = [
   "leader",
   "address",
 ] as const;
-type StepNames = typeof stepNames[number];
+type StepNames = (typeof stepNames)[number];
 const steps: CreateEditSteps<StepNames> = {
   name: {
     label: "1. Bitte trage hier den Namen deines Kurses ein. *",
@@ -608,13 +635,7 @@ const steps: CreateEditSteps<StepNames> = {
     label: "4. Hier kannst du weitere Bilder hochladen.",
     tooltip: "",
     description: "4. Fotogalerie",
-    props: [
-      "sanitized_images",
-      "images",
-      "offline_images",
-      "offlineImages",
-      "offlineImageFiles",
-    ],
+    props: ["sanitized_images", "images", "offline_images", "offlineImages", "offlineImageFiles"],
     justSome: true,
   },
   description: {
@@ -642,8 +663,7 @@ const steps: CreateEditSteps<StepNames> = {
     specialFilter: "filter_service",
   },
   date: {
-    label:
-      "8.	Bitte gib die Kurstermine, Uhrzeiten und Dauer an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
+    label: "8.	Bitte gib die Kurstermine, Uhrzeiten und Dauer an. Findet dein Kurs regelmäßig statt, kannst du auch mehrere Termine auswählen. *",
     tooltip: "",
     description: "8. Kursdaten *",
     props: ["event_dates", "event_duration"],
@@ -651,22 +671,19 @@ const steps: CreateEditSteps<StepNames> = {
   certificates: {
     label:
       "9.	Bitte lade das Zertifikat der Zentralen Prüfungsstelle Prävention (ZPP) hoch, wenn es sich um einen von der gesetzlichen Krankenkasse geförderten Präventionskurs handelt.",
-    tooltip:
-      "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
+    tooltip: "Nachdem wir das Zertifikat geprüft haben, wird als Hinweis für die Förderfähigkeit ein grünes Häkchen neben dem Namen deines Kurses erscheinen.",
     description: "9. Zertifikate",
     props: ["sanitized_documents", "offlineDocuments"],
     specialFilter: "certificate",
   },
   website: {
-    label:
-      "10. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
+    label: "10. Hier kannst du einen Link zu deiner Webseite oder einem Social-Media-Kanal hinterlegen, über den sich Interessenten anmelden können.",
     tooltip: "Falls du keine eigene Website angeben möchtest, kannst du diesen Schritt überspringen.",
     description: "10. Link zur Webseite",
     props: ["website"],
   },
   documents: {
-    label:
-      "11. Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen.",
+    label: "11. Hier kannst du weitere Dokumente (z. B. Kurspläne) zu deinen Angeboten hochladen.",
     tooltip: "",
     description: "11. Dokumente",
     props: ["sanitized_documents", "offlineDocuments"],
@@ -688,8 +705,21 @@ const servicesFilterSet = ref(false);
 
 const currentUserFacility = await getCurrentUserFacilities();
 
-const setCourseOutsideFacility = (item: CreateEditFacility) => {
+const initialLoaded = ref(false);
+
+const handleInitialCheckValidAddress = (slotProps: any) => {
+  if (initialLoaded.value) return;
+  initialLoaded.value = true;
+  setCourseOutsideFacility(slotProps);
+};
+
+const courseIsOutsideFacility = (item: CreateEditFacility) => {
   item.course_outside_facility = !item.course_outside_facility;
+  setCourseOutsideFacility(item);
+};
+
+const setCourseOutsideFacility = (item: CreateEditFacility) => {
+  if(!initialLoaded.value) return;
   if (item?.course_outside_facility) {
     item.street = item.street || "";
     item.zip = item.zip || "";
@@ -697,11 +727,11 @@ const setCourseOutsideFacility = (item: CreateEditFacility) => {
     item.town = item.town || "";
     item.additional_address_info = item.additional_address_info || "";
   } else {
-    item.street = currentUserFacility.street;
-    item.zip = currentUserFacility.zip;
-    item.community_id = currentUserFacility.community_id;
-    item.town = currentUserFacility.town;
-    item.additional_address_info = currentUserFacility.additional_address_info;
+    item.street = currentUserFacility?.street;
+    item.zip = currentUserFacility?.zip;
+    item.community_id = currentUserFacility?.community_id;
+    item.town = currentUserFacility?.town;
+    item.additional_address_info = currentUserFacility?.additional_address_info;
   }
 };
 const formats = ref([
@@ -715,17 +745,17 @@ const formats = ref([
   "list",
   "align",
   "direction",
-  'underline',
-  'bold',
-  //'link',
-  //'strike',
-  // 'blockquote',
-  //'color',
-  //'font',
-  //'code-block',
-  //'formula'
-  // 'image'
-  // 'video'
+  "underline",
+  "bold",
+  "link",
+  // "strike",
+  // "blockquote",
+  // "color",
+  // "font",
+  // "code-block",
+  // "formula"
+  // "image"
+  // "video"
 ]);
 
 const textOptions = ref({
@@ -792,9 +822,7 @@ const handleEventDatesChanged = (item: { event_dates: string[] }) => {
     return;
   }
   const correctTime = item.event_dates.at(-1).split(" ")[1];
-  item.event_dates = item.event_dates.map(
-    (date) => date.split(" ")[0] + " " + correctTime
-  );
+  item.event_dates = item.event_dates.map((date) => date.split(" ")[0] + " " + correctTime);
 };
 
 const setFiltersSet = (isSet: boolean, filterType: FilterType) => {
@@ -912,9 +940,7 @@ const updatedFiles = (docs: any) => {
   });
 };
 
-const handleDocumentsOffline = (
-  newOfflineDocuments: CreateEditFacility["offlineDocuments"]
-) => {
+const handleDocumentsOffline = (newOfflineDocuments: CreateEditFacility["offlineDocuments"]) => {
   useNuxtApp().$bus.$emit("setPayloadFromSlotChild", {
     name: "offlineDocuments",
     value: newOfflineDocuments,

@@ -21,6 +21,7 @@
       <div v-if="!notWantedSuccessful">
         <div
           class="d-flex justify-center align-center text-primary thank-you font-weight-medium"
+          lang="de"
         >
           <span
             >Profilinhaberschaft für die Einrichtung "{{ careFacilityName }}"

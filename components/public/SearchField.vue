@@ -232,7 +232,7 @@ onMounted(() => {
       border-radius: 50px;
       cursor: pointer;
       color: grey;
-      width: 70%;
+      width: 100%;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -284,6 +284,7 @@ onMounted(() => {
     padding: 0.5rem;
     z-index: 10;
     margin: 0 -10px;
+    width: 100%;
     border: 1px solid #8ab61d;
 
     .wrapper {
@@ -350,7 +351,6 @@ onMounted(() => {
     }
 
     &.styled {
-      width: 70%;
       border-radius: 1.5rem;
     }
 
