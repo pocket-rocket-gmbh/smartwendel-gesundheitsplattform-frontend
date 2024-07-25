@@ -95,7 +95,7 @@
         </v-radio-group>
         <span
           @click="toogleBar"
-          v-if="!noBar"
+          v-if="!noBar && useUser().isAdmin()"
         >
           <v-icon
             class="is-clickable"
