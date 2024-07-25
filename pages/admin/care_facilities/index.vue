@@ -92,7 +92,7 @@
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
-        :disabled="setupFinished || !itemStatus || !useUser().statusOnHealthScope()"
+        :disabled="(facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope())"
         elevation="0"
         variant="outlined"
         class="mt-5"

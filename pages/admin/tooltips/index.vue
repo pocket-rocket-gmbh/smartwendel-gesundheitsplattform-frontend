@@ -15,7 +15,7 @@
             >Tooltip erstellen</v-btn
           >
         </v-col>
-        <v-col>
+        <v-col class="d-flex align-center">
           <v-text-field
             width="50"
             prepend-icon="mdi-magnify"
@@ -35,6 +35,8 @@
       @openDeleteDialog="openDeleteDialog"
       @toogle-bar="showBar = !showBar"
       ref="dataTableRef"
+      :noBar="true"
+      :disable-delete="false"
     />
 
     <AdminTooltipsCreateEdit

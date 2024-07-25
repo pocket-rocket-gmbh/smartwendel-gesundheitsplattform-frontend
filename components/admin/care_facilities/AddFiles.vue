@@ -249,7 +249,7 @@ const props = defineProps<{
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 
-const file = ref({}) as any;
+const file =  ref([]);
 const filename = ref("");
 const tag = ref("");
 const errorInvalidFileType = ref(false);
@@ -265,7 +265,7 @@ const item = ref({
 const handleFile = async () => {
   if (file.value && file.value[0] && file.value[0].size / 1000000 > 10) {
     errorFileSizeTooLarge.value = true;
-    file.value = {};
+    file.value = [];
     return;
   } else if (file.value && file.value[0]) {
     const selectedFile = file.value[0];
@@ -273,7 +273,7 @@ const handleFile = async () => {
     const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
     if (fileExtension !== "pdf") {
       errorInvalidFileType.value = true;
-      file.value = {};
+      file.value = [];
       return;
     } else {
       errorInvalidFileType.value = false;
@@ -328,7 +328,7 @@ const save = async () => {
       loadingItem.value = false;
       filename.value = "";
       tag.value = props.tagName;
-      file.value = {};
+      file.value = [];
       getCareFacility();
     } else {
       errors.value = result.data;

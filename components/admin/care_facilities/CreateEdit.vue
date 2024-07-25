@@ -89,7 +89,7 @@
               slotProps.item?.user?.onboarding_token?.length && !slotProps.item?.is_active
             "
           ></v-divider>
-          <div class="d-flex align-center" v-if="!slotProps.item?.is_active">
+          <div class="d-flex align-center" v-if="!slotProps.item?.is_active && slotProps.item?.id">
             <span class="general-font-size is-dark-grey font-weight-bold mr-3"
               >Vorschau</span
             >
@@ -145,7 +145,7 @@
               :rules="[rules.required]"
               :error-messages="useErrors().checkAndMapErrors('name', slotProps.errors)"
             />
-            <v-row>
+            <v-row v-if="slotProps.item?.id">
               <v-col class="d-flex flex-column justify-center">
                 <div class="d-flex align-center my-4">
                   <span class="general-font-size is-dark-grey font-weight-bold mr-3"
