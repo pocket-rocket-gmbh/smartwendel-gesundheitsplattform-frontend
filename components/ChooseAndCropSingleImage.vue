@@ -1,6 +1,12 @@
 <template>
-  <v-row class="mb-10 mt-5" v-if="kind !== 'category'">
-    <v-col md="2" class="d-flex align-center justify-start">
+  <v-row
+    class="mb-10 mt-5"
+    v-if="kind !== 'category'"
+  >
+    <v-col
+      md="2"
+      class="d-flex align-center justify-start"
+    >
       <v-btn
         size="large"
         class="px-5"
@@ -9,13 +15,14 @@
           openImageupload = !openImageupload;
           openPhotoGallery = false;
         "
-        >
-        <span class="general-font-size is-dark-grey">
-          Hochladen
-        </span>
+      >
+        <span class="general-font-size is-dark-grey"> Hochladen </span>
       </v-btn>
     </v-col>
-    <v-col md="2" class="d-flex align-center justify-start">
+    <v-col
+      md="2"
+      class="d-flex align-center justify-start"
+    >
       <v-btn
         size="large"
         class="px-5"
@@ -24,10 +31,8 @@
           openPhotoGallery = !openPhotoGallery;
           openImageupload = false;
         "
-        >
-        <span class="general-font-size is-dark-grey">
-          aus der Galerie
-        </span>
+      >
+        <span class="general-font-size is-dark-grey"> aus der Galerie </span>
       </v-btn>
     </v-col>
   </v-row>
@@ -44,21 +49,25 @@
     gallery-kind="cover"
     @setImage="setCoverBild"
   />
+
   <div class="field">
     <v-file-input
-      v-show="!openPhotoGallery && openImageupload || kind === 'category'"
+      v-show="(!openPhotoGallery && openImageupload) || kind === 'category'"
       class="text-field my-3 general-font-size is-dark-grey"
       hide-details="auto"
       v-model="image"
       :label="`${labelText} ${tempImage || preSetImageUrl ? 'aktualisieren' : 'wählen'}`"
       filled
       prepend-icon="mdi-camera"
-      @change="handleFile()"
-      @click:clear="removeFile()"
+      @change="handleFile"
+      @click:clear="removeFile"
       :rules="[isImageSet()]"
       accept="image/*"
     />
-    <div class="text-caption is-dark-grey" v-if="!openPhotoGallery && openImageupload">
+    <div
+      class="text-caption is-dark-grey"
+      v-if="!openPhotoGallery && openImageupload"
+    >
       * Maximal 5 MB, SVG/PNG/JPG/JPEG erlaubt
     </div>
     <div
@@ -77,24 +86,43 @@
     :min-height="minHeight"
     @close="
       imgUrl = null;
-      image = {};
+      image = [];
     "
     @crop="setImage"
   />
   <template v-else-if="croppedImage || tempImage || preSetImageUrl">
     <v-row class="my-1">
-      <v-col md="2" class="d-flex align-center justify-center">
+      <v-col
+        md="2"
+        class="d-flex align-center justify-center"
+      >
         <span class="general-font-size is-dark-grey">Bereits ausgewählt:</span>
       </v-col>
       <v-col>
         <v-card max-width="200">
           <div>
-            <v-img v-if="tempImage" :src="tempImage" max-width="200" />
-            <v-img v-else-if="croppedImage" :src="croppedImage" max-width="200" />
-            <v-img v-else-if="preSetImageUrl" :src="preSetImageUrl" max-width="200" />
+            <v-img
+              v-if="tempImage"
+              :src="tempImage"
+              max-width="200"
+            />
+            <v-img
+              v-else-if="croppedImage"
+              :src="croppedImage"
+              max-width="200"
+            />
+            <v-img
+              v-else-if="preSetImageUrl"
+              :src="preSetImageUrl"
+              max-width="200"
+            />
           </div>
           <div class="d-flex align-center">
-            <v-btn size="small" width="100%" color="red" @click="deleteImage"
+            <v-btn
+              size="small"
+              width="100%"
+              color="red"
+              @click="deleteImage"
               >Bild entfernen</v-btn
             >
           </div>
@@ -155,7 +183,7 @@ const setLogo = (image: any) => {
   });
 };
 
-const image = ref({}) as any;
+const image = ref([]);
 const imgUrl = ref(null);
 const aspectRatioValue = ref(props.aspectRatio);
 const labelText = ref(props.label);
@@ -166,25 +194,30 @@ const isImageSet = () => {
   return !!props.preSetImageUrl || !!props.tempImage || "Pflichtangabe";
 };
 
+const handleFile = async () => {
+  if (image.value && image.value.length > 0) {
+    const file = image.value[0];
+    if (file.size / 1000000 > 5) {
+      errorFileSizeTooLarge.value = true;
+      image.value = [];
+    } else {
+      errorFileSizeTooLarge.value = false;
+      imgUrl.value = await toBase64(file);
+    }
+  }
+};
+
 const toBase64 = (file: any) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
   });
-
-const handleFile = async () => {
-  if (image && image.value[0] && image.value[0].size / 1000000 > 5) {
-    errorFileSizeTooLarge.value = true;
-    image.value = {};
-    return;
-  } else if (image && image.value[0]) {
-    errorFileSizeTooLarge.value = false;
-    imgUrl.value = await toBase64(image.value[0]);
-    return;
-  }
-};
 
 const removeFile = () => {
   imgUrl.value = null;
