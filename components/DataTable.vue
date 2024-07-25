@@ -316,7 +316,7 @@
                         :notification-pre-filled-headline="field.notificationPreFilledHeadline"
                         :notification-pre-filled-text="field.notificationPreFilledText"
                         :notification-cta-link="field.notificationCtaLink"
-                        :disabled="field?.disabledConditions?.(item) || item?.blocked || item?.user?.status === 'disabled'"
+                        :disabled="field?.disabledConditions?.(item) || item?.blocked || item?.user?.status === 'disabled' || !item?.user?.is_active_on_health_scope"
                         @toggled="handleToggled(item)"
                       />
                     </div>
