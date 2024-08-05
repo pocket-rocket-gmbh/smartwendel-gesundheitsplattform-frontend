@@ -79,7 +79,7 @@
         @open-confirmation-dialog="openConfirmationDialog"
         @toogle-bar="showBar = !showBar"
         :disable-delete="true"
-        defaultSortBy="created_at"
+        defaultSortBy="updated_at"
         :draft-required="draftRequiredFields"
       />
 
