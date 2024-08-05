@@ -273,6 +273,7 @@ const items = computed<DashboardItem[]>(() => [
       },
       {
         title: "In Prüfung (importiert)",
+        info: "*in den letzten 7 Tagen",
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
