@@ -58,6 +58,9 @@ const loading = ref(false);
 const updatedAt = ref('');
 const facilities = ref([]);
 
+const sevenDaysAgo = new Date();
+sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -274,11 +277,15 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "In Prüfung (importiert)",
         info: "*in den letzten 7 Tagen",
+        info_content: facilities.value.filter(
+          (facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= sevenDaysAgo
+        ).length,
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
             facility?.user?.imported === true && facility?.user?.onboarding_status !== "completed" && facility.kind === "facility" && facility?.user?.care_facilities?.length !== 0
         ).length,
+
         type: "users",
         query: "import_pending",
       },
