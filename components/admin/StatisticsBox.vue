@@ -1,7 +1,11 @@
 <template>
   <div
     class="d-flex flex-column is-dark-grey stats-card"
-    :class="[hasFilter && item.content > 0 ? 'is-clickable' : 'opacity-60 cursor-not-allowed', item.hasNoSpace ? 'mt-n1' : '', loading ? 'cursor-progress' : '']"
+    :class="[
+      hasFilter && item.content > 0 ? 'is-clickable' : 'opacity-60 cursor-not-allowed',
+      item.hasNoSpace ? 'mt-n1' : '',
+      loading ? 'cursor-progress' : '',
+    ]"
     @click="redirectAndFilter"
   >
     <div class="d-flex align-center">
@@ -25,13 +29,13 @@
         </div>
 
         <span
-          v-if="!loading"
+          v-if="!loading && item.info"
           style="font-size: 14px"
-          ><i>{{ item.info }}</i></span
+          ><i>{{ item.info }} {{ '= ' + item.info_content }}</i></span
         >
         <v-progress-circular
           :size="70"
-          :width="7"
+          :width="7"  
           color="primary"
           indeterminate
           v-if="loading"
@@ -43,7 +47,7 @@
         >
           <span
             class="text-h2 font-weight-bold"
-             :class="[item.info ? '' : 'pt-6']"
+            :class="[item.info ? '' : 'pt-6']"
           >
             {{ item.content }}
           </span>
@@ -63,10 +67,11 @@ const props = defineProps<{
 type Item = {
   title: string;
   content?: number;
-  type?: 'facility' | 'course' | 'event' | 'users' | 'news';
+  type?: "facility" | "course" | "event" | "users" | "news";
   query?: string;
   info?: string;
   hasNoSpace?: boolean;
+  info_content?: number;
 };
 
 const hasFilter = computed(() => !!props.item.query && !!props.item.type);

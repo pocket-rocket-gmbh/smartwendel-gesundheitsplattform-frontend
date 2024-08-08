@@ -37,7 +37,7 @@
       @mailUser="mailUser"
       @toogle-bar="showBar = !showBar"
       ref="dataTableRef"
-      defaultSortBy="is_active_on_health_scope"
+      defaultSortBy="last_seen"
       :disable-delete="false"
     />
 
@@ -94,8 +94,8 @@ const getUsers = async () => {
 };
 
 const fields = ref([
-  { prop: "firstname", text: "Vorname", value: "firstname", type: "string" },
-  { prop: "lastname", text: "Nachname", value: "lastname", type: "string" },
+  { prop: "firstname", text: "Vorname", value: "firstname", type: "string", hasFilterFunction: true },
+  { prop: "lastname", text: "Nachname", value: "lastname", type: "string", hasFilterFunction: true },
   {
     prop: "",
     text: "Einrichtung",
@@ -122,6 +122,7 @@ const fields = ref([
     enum_name: "facilitiesStatus",
     condition: "admin",
     width: "300px",
+    hasFilterFunction: true,
   },
   { prop: "", text: "", type: "block" },
   {
@@ -139,17 +140,20 @@ const fields = ref([
     text: "Zuletzt eingeloggt",
     value: "last_seen",
     type: "datetime",
+    hasFilterFunction: true,
   },
   {
     prop: "last_care_facility_updated_at",
     text: "Letzte aktualisierung",
     value: "last_care_facility_updated_at",
     type: "datetime",
+    hasFilterFunction: true,
   },
   {
     value: "last_care_facility_updated_at",
     type: "updated",
     width: "100px",
+    hasFilterFunction: true,
   },
 ]);
 
