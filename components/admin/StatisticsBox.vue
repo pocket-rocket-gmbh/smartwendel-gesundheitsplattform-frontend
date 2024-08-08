@@ -27,15 +27,19 @@
             >mdi-filter-remove-outline</v-icon
           >
         </div>
-
-        <span
+        <div
           v-if="!loading && item.info"
           style="font-size: 14px"
-          ><i>{{ item.info }} {{ '= ' + item.info_content }}</i></span
         >
+          <span
+            ><i
+              >{{ item.info }} <span v-if="item.info_content !== undefined">{{ "= " + item.info_content }}</span></i
+            ></span
+          >
+        </div>
         <v-progress-circular
           :size="70"
-          :width="7"  
+          :width="7"
           color="primary"
           indeterminate
           v-if="loading"
