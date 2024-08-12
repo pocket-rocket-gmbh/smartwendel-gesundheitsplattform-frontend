@@ -168,7 +168,7 @@
           item?.user ? '' : 'user-deleted',
           item?.kind !== 'user' ? '' : 'has-normal-bg',
           getCurrentRoute() === 'admin-users' || getCurrentRoute() === 'admin-tooltips' || getCurrentRoute() === 'admin-complaints' ? 'has-normal-bg' : '',
-          isDraft(item) || item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
+          isDraft(item) && item?.kind !== 'facility' ? 'draft' : 'has-bg-lighten-green',
           item?.status === 'completed' ? 'has-bg-lighten-green' : '',
         ]"
       >
