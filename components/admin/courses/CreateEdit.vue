@@ -366,7 +366,6 @@
                   label="Kursdauer (HH:MM)"
                   placeholder="z.B. 01:30"
                   :rules="[rules.required]"
-                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
                 />
               </div>
             </div>
