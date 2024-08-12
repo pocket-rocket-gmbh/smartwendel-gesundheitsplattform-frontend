@@ -313,9 +313,8 @@
                   v-model="slotProps.item.event_duration"
                   hide-details="auto"
                   label="Veranstaltungsdauer (HH:MM)"
-                  placeholder="z.B. 60"
-                  :rules="[rules.required, rules.validateEventDuration]"
-                  :error-messages="useErrors().checkAndMapErrors('zip', slotProps.errors)"
+                  placeholder="z.B. 01:30"
+                  :rules="[rules.required]"
                 />
               </div>
             </div>
@@ -591,7 +590,7 @@ const eventIsOutsideFacility = (item: CreateEditFacility) => {
 };
 
 const setEventOutsideFacility = (item: CreateEditFacility) => {
-  if(!initialLoaded.value) return;
+  if (!initialLoaded.value) return;
   if (item?.course_outside_facility) {
     item.street = item.street || "";
     item.zip = item.zip || "";
