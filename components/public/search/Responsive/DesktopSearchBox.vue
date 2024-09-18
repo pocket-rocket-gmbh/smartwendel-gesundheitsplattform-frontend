@@ -297,7 +297,7 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import "@/assets/sass/main.sass"
 .basic-search-box
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
