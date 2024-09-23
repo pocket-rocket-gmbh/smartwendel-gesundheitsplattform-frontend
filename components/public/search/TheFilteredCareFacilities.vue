@@ -78,7 +78,7 @@
                     v-if="careFacility.geocode_address.length || careFacility.locations.length"
                     size="x-large"
                     color="primary"
-                    @click="showCareFacilityInMap(careFacility.id)"
+                    @click="showCareFacilityInMap(careFacility.id, careFacility.name)"
                     >mdi-map-marker-outline</v-icon
                   >
                 </div>
@@ -210,7 +210,7 @@
               variant="text"
               color="primary"
               rounded="pill"
-              @click="showCareFacilityInMap(careFacility.id)"
+              @click="showCareFacilityInMap(careFacility.id, careFacility.name)"
             >
               Auf karte zeigen
             </v-btn>
@@ -247,7 +247,7 @@ const goToFacility = (careFacility: any) => {
 
 const filterStore = useFilterStore();
 
-const showCareFacilityInMap = async (careFacilityId: string) => {
+const showCareFacilityInMap = async (careFacilityId: string, careFacilityName: string) => {
   emit("showOnMap");
   window.scrollTo({
     behavior: "smooth",
@@ -256,6 +256,7 @@ const showCareFacilityInMap = async (careFacilityId: string) => {
 
   setTimeout(() => {
     filterStore.mapFilter = careFacilityId;
+    filterStore.mapFilterName = careFacilityName;
     filterStore.loadAllResults();
   }, 100);
 };
