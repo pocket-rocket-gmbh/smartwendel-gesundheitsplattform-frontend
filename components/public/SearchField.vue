@@ -14,6 +14,8 @@
             :placeholder="placeholderText"
             @input="handleInput"
             @click="showPopover = true"
+            :disabled="filterStore.mapFilter?.length ? true : false"
+            :class="filterStore.mapFilter?.length ? 'cursor-not-allowed opacity-60' : ''"
           />
           <img
             v-if="!kind"
