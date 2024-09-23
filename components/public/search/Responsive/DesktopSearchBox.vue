@@ -1,5 +1,5 @@
 <template>
-  <div class="basic-search-box mt-6">
+  <div class="basic-search-box">
     <div
       class="content"
       ref="contentWrapperRef"

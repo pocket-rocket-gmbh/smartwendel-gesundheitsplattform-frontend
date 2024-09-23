@@ -35,7 +35,7 @@
     >
       <div class="main-toolbar-content">
         <div
-          class="menu-title is-uppercase text-h4 d-flex align-center justify-center text my-3"
+          class="menu-title is-uppercase text-h4 d-flex align-center justify-center text my-8"
         >
           <span class="is-white font-weight-medium" v-if="category">{{
             category.name

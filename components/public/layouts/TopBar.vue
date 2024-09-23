@@ -520,6 +520,7 @@ header,
 }
 .v-toolbar {
   background: white;
+  padding: 0 80px;
   @include md {
     padding: 0;
   }

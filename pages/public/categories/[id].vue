@@ -100,4 +100,25 @@ onMounted(() => {
 .categories-wrapper {
   padding: 0.5rem;
 }
+
+.v-toolbar__title {
+  font-size: 1.5rem !important;
+}
+.v-toolbar {
+  background: white;
+  margin-top: 0px;
+  padding: 0;
+  @include md {
+    padding: 0;
+  }
+}
+.v-toolbar__content {
+  overflow: visible;
+  .v-toolbar-title {
+    margin-inline-start: 0;
+  }
+  @include md {
+    padding: 1rem;
+  }
+}
 </style>
