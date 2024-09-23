@@ -40,7 +40,7 @@ onMounted(() => {
   height: 100%;
   gap: 2rem;
   justify-content: center;
-  width: 50%;
+  width: 70%;
   padding: 0 0 0 5rem;
 
   @include lg {

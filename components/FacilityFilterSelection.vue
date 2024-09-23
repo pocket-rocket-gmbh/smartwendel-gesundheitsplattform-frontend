@@ -5,14 +5,13 @@
   >
     <div
       class="input"
+      :class="filterStore.mapFilter?.length ? 'cursor-not-allowed opacity-60' : ''"
       @click="
-        filterStore.filteredFacilityMainFilters.length === 0
+        filterStore.filteredFacilityMainFilters.length === 0 || filterStore.mapFilter?.length
           ? null
           : showPopover = !showPopover;
         handleClearTermSearch();
       "
-      :class="filterStore.filteredFacilityMainFilters.length ? '' : 'cursor-wait'"
-      disabled
     >
       <div class="input-title">
         <p
@@ -317,7 +316,7 @@ onMounted(async () => {
 }
 
 .filter-wrap {
-  max-height: 500px;
+  max-height: 360px;
   overflow-y: auto;
 }
 

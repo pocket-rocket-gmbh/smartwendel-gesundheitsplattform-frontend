@@ -1,8 +1,21 @@
 <template>
   <div>
-    <div class="mb-6" v-if="filterStore.currentFacilityTags?.length || filterStore.currentServiceTags?.length || filterStore.currentZips?.length">
+    <div class="mb-6" v-if="filterStore.currentFacilityTags?.length || filterStore.currentServiceTags?.length || filterStore.currentZips?.length || filterStore.mapFilter?.length">
       <div class="general-font-size font-weight-medium is-dark-grey mb-1">
         Deine ausgewählten Filter:
+      </div>
+      <div v-if="filterStore.mapFilter">
+        <h2>Karte</h2>
+        <v-chip
+          color="white"
+          close-icon="mdi-delete"
+          @click:close="deselectFacilityInMap()"
+          closable
+          class="selected-tags mr-2 pa-4 mb-2 general-font-size"
+        >
+          {{ cutFacilityName(filterStore.mapFilterName) }}
+        </v-chip>
+        <v-divider class="my-3"></v-divider>
       </div>
       <div v-if="filterStore.currentZips?.length">
         <h2>Gemeinde:</h2>
@@ -50,7 +63,7 @@
             close-icon="mdi-delete"
             @click:close="removeTagFromStore(tag)"
             closable
-            class="selected-tags mr-2 pa-4 mb-2 general-font-size"
+            class="selected-tags mr-2 pa-4 mb-2 general-font-size break-title"
           >
             {{ tag.name }}
           </v-chip>
@@ -218,6 +231,8 @@ const removeAllTags = () => {
   filterStore.currentFacilityTags = [];
   filterStore.currentServiceTags = [];
   filterStore.currentZips = [];
+  filterStore.mapFilter = null;
+  filterStore.mapFilterName = null;
 };
 
 const getCurrentTags = computed(() => {
@@ -285,6 +300,18 @@ const toggleSelection = (item: CollapsibleListItem) => {
   } else {
     filterStore.currentServiceTags.push(item.id);
   }
+};
+
+const cutFacilityName = (facilityName: string) => {
+  return facilityName.length > 30
+    ? facilityName.slice(0, 30) + "..."
+    : facilityName;
+};
+
+const deselectFacilityInMap = () => {
+  filterStore.mapFilter = null;
+  filterStore.mapFilterName = null;
+  filterStore.loadAllResults();
 };
 
 const checkIfFiltersAreInFacilities = (

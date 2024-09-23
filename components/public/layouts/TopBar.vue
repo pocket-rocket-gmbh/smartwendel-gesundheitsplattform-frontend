@@ -29,7 +29,7 @@
               v-for="(category, index) in categories"
               :key="index"
             >
-              <div class="title mx-5 font-weight-medium">
+              <div class="mx-5 font-weight-medium">
                 <a
                   :href="getItemsAndGo(category, null)"
                   class="is-clickable general-font-size is-dark-grey"
