@@ -5,7 +5,7 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    style: "inline" | "full-screen";
+    style?: "inline" | "full-screen";
   }>(),
   {
     style: "inline",

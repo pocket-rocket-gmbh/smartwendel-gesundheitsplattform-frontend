@@ -119,7 +119,7 @@
                 :class="[breakPoints.width.value <= 1280 ? 'd-flex justify-center' : '']"
                 >{{ item.title }}</span
               >
-              <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1"  >
+              <v-row no-gutters class="mt-3 fill-height mr-1 mt-n1">
                 <v-col
                   cols="12"
                   lg="6"
@@ -139,7 +139,7 @@
                     @click="toggleSelection(subItem)"
                   >
                     <span class="word-break sub-item-title general-font-size" lang="de">
-                      {{ subItem.title }} 
+                      {{ subItem.title }}
                     </span>
                     <span v-if="subItem.next.length">
                       <v-icon class="is-clickable" v-if=" expandedItemIds.includes(subItem.id)" size="x-large">mdi-menu-up</v-icon>

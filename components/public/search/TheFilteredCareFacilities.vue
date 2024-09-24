@@ -203,7 +203,7 @@
           </v-row>
           <div class="hidden-sm-and-down mt-5">
             <v-btn
-              v-if="careFacility.geocode_address.length || careFacility.locations.length"
+              v-if="careFacility.geocode_address.length || careFacility.locations.length || !filterStore.mapFilter"
               append-icon="mdi-map-marker-outline"
               size="small"
               class="mt-4 pa-1"
