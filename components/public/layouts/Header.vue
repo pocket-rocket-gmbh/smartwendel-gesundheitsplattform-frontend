@@ -101,6 +101,12 @@ const checkQuery = () => {
   }
 };
 
+watch(
+  () => router.currentRoute.value.query.sub_category_id,
+  (newValue) => {
+    selectedId.value = newValue;
+  }
+);
 
 useNuxtApp().$bus.$on("updateSubCategoriesFromUrl", (id) => {
   selectedId.value = id;
