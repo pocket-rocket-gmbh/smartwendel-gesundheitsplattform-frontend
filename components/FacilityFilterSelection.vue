@@ -104,7 +104,7 @@
         </div>
       </div>
       <div
-        v-if="!bottom && currentPopoverHeight > 100"
+        v-if="!bottom && currentPopoverHeight > 300"
         class="d-flex justify-center align-end"
       >
         <v-icon
