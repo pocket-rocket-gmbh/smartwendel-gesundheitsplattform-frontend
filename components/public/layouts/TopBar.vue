@@ -4,6 +4,7 @@
       v-model="appStore.showTopbar"
       :elevation="5"
       class="hero-menu"
+      :class="{ 'py-2': appStore.showTopbar }"
     >
       <v-app-bar-title>
         <div class="d-flex align-center">
