@@ -408,7 +408,7 @@ onMounted(async () => {
   animation-delay: .4s
 
 .community-filter-options
-  width: 50vh
+  width: 80vh
   flex-wrap: wrap
   gap: .5rem
 </style>
