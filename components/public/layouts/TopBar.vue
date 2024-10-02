@@ -112,19 +112,24 @@
           </v-row>
         </div>
         <div
-          class="align-center d-flex is-clickable"
-          v-if="breakPoints.width.value <= 1619 && currentRoute !== '/register' && !useUser().loggedIn() && !appStore.loading"
-          @click="goToRegister()"
-        >
-          <img :src="regiterIcon" />
-        </div>
-        <div
           class="pl-3"
           v-if="!appStore.loading"
         >
+          <!-- Register  -->
           <v-btn
             v-if="!useUser().loggedIn()"
             color="primary"
+            title="Registrieren"
+            icon
+            @click="goToRegister"
+          >            
+            <img :src="regiterIcon" />
+          </v-btn>
+          <!-- Login -->
+          <v-btn
+            v-if="!useUser().loggedIn()"
+            color="primary"
+            title="Login"
             icon
             @click="goToLogin"
           >
