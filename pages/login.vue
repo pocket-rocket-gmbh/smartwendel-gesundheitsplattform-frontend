@@ -11,6 +11,7 @@
               label="E-Mail Adresse"
               hide-details="auto"
               @keyup.enter="auth"
+              data-test-id="login-email"
             />
           </div>
           <div class="mb-3">
@@ -21,6 +22,7 @@
               :type="PasswordVisible ? 'text' : 'password'"
               @click:append-inner="PasswordVisible = !PasswordVisible"
               :error-messages="useErrors().checkAndMapErrors('email', errors)"
+              data-test-id="login-password"
             />
           </div>
           <v-btn
@@ -87,9 +89,16 @@ export default defineComponent({
     const auth = async () => {
       loading.value = true;
       errors.value = "";
-      const data = { email: email.value, password: password.value, scope: "health" };
+      const data = {
+        email: email.value,
+        password: password.value,
+        scope: "health",
+      };
 
-      const { data: result } = await axios.post<ServerCallResult>("/api/login", { data });
+      const { data: result } = await axios.post<ServerCallResult>(
+        "/api/login",
+        { data }
+      );
 
       if (result.status === ResultStatus.SUCCESSFUL) {
         const jwt = result.data.jwt_token;
@@ -120,7 +129,10 @@ export default defineComponent({
           } else if (result.data.user.role === "admin") {
             router.push({ path: "/admin" });
           } else {
-            router.push({ path: "/admin/care_facilities/", query: { filter: "showAll" } });
+            router.push({
+              path: "/admin/care_facilities/",
+              query: { filter: "showAll" },
+            });
           }
         }
       } else {

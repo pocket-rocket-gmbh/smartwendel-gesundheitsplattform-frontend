@@ -23,3 +23,20 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+//
+Cypress.Commands.add("login", () => {
+  const userName = Cypress.env("CYPRESS_USER");
+  const password = Cypress.env("CYPRESS_PASSWORD");
+
+  cy.visit("/login");
+  cy.get('[data-test-id="login-email"]').type(userName);
+  cy.get('[data-test-id="login-password"]').type(password);
+  cy.get('button[type="submit"]').click();
+  cy.location("pathname").should("contain", "/admin");
+
+  cy.window().then((win) => {
+    const authToken = win.localStorage.getItem("auth._token.jwt");
+    expect(authToken).to.exist;
+  });
+});
