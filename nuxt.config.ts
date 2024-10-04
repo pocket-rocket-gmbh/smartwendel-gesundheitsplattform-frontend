@@ -13,6 +13,15 @@ export default defineNuxtConfig({
     '@sentry/nuxt/module',
   ],
 
+  // @ts-ignore
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: "pocket-rocket-gmbh",
+      project: "javascript-nuxt",
+      authToken: "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",
+    },
+  },
+
   experimental: {
     treeshakeClientOnly: false
   },
