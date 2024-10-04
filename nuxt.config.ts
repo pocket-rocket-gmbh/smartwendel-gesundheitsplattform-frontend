@@ -9,7 +9,8 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     'nuxt-icons',
-    '@nuxtjs/device'
+    '@nuxtjs/device',
+    '@sentry/nuxt/module',
   ],
 
   experimental: {
