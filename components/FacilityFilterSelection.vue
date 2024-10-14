@@ -5,14 +5,13 @@
   >
     <div
       class="input"
+      :class="filterStore.mapFilter?.length ? 'cursor-not-allowed opacity-60' : ''"
       @click="
-        filterStore.filteredFacilityMainFilters.length === 0
+        filterStore.filteredFacilityMainFilters.length === 0 || filterStore.mapFilter?.length
           ? null
           : showPopover = !showPopover;
         handleClearTermSearch();
       "
-      :class="filterStore.filteredFacilityMainFilters.length ? '' : 'cursor-wait'"
-      disabled
     >
       <div class="input-title">
         <p
@@ -105,7 +104,7 @@
         </div>
       </div>
       <div
-        v-if="!bottom && currentPopoverHeight > 499"
+        v-if="!bottom && currentPopoverHeight > 300"
         class="d-flex justify-center align-end"
       >
         <v-icon
@@ -317,7 +316,7 @@ onMounted(async () => {
 }
 
 .filter-wrap {
-  max-height: 500px;
+  max-height: 360px;
   overflow-y: auto;
 }
 

@@ -52,17 +52,16 @@
 
   <div class="field">
     <v-file-input
-      v-show="(!openPhotoGallery && openImageupload) || kind === 'category'"
-      class="text-field my-3 general-font-size is-dark-grey"
-      hide-details="auto"
+      v-if="(!openPhotoGallery && openImageupload) || kind === 'category'"
       v-model="image"
+      accept="image/*"
+      hide-details="auto"
       :label="`${labelText} ${tempImage || preSetImageUrl ? 'aktualisieren' : 'wählen'}`"
-      filled
       prepend-icon="mdi-camera"
-      @change="handleFile"
+      @change="handleFile()"
       @click:clear="removeFile"
       :rules="[isImageSet()]"
-      accept="image/*"
+      class="text-field my-3 general-font-size is-dark-grey"
     />
     <div
       class="text-caption is-dark-grey"
@@ -84,6 +83,7 @@
     :min-size="minSize"
     :min-width="minWidth"
     :min-height="minHeight"
+    cta="Bild speichern"
     @close="
       imgUrl = null;
       image = [];
@@ -183,23 +183,24 @@ const setLogo = (image: any) => {
   });
 };
 
-const image = ref([]);
-const imgUrl = ref(null);
+const image = ref<File | null>(null); // Treat image as a single File or null
+const imgUrl = ref<string | null>(null);
 const aspectRatioValue = ref(props.aspectRatio);
 const labelText = ref(props.label);
 const errorFileSizeTooLarge = ref(false);
-const croppedImage = ref(null);
+const croppedImage = ref<string | null>(null);
 
 const isImageSet = () => {
   return !!props.preSetImageUrl || !!props.tempImage || "Pflichtangabe";
 };
 
 const handleFile = async () => {
-  if (image.value && image.value.length > 0) {
-    const file = image.value[0];
+  if (image.value) {
+    const file = image.value; // Now image.value is directly the file object
     if (file.size / 1000000 > 5) {
       errorFileSizeTooLarge.value = true;
-      image.value = [];
+      image.value = null; // Set to null instead of empty array
+      console.log("File too large:", file);
     } else {
       errorFileSizeTooLarge.value = false;
       imgUrl.value = await toBase64(file);
@@ -207,11 +208,11 @@ const handleFile = async () => {
   }
 };
 
-const toBase64 = (file: any) =>
-  new Promise((resolve, reject) => {
+const toBase64 = (file: File) =>
+  new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
-      resolve(reader.result);
+      resolve(reader.result as string);
     };
     reader.onerror = (error) => {
       reject(error);
@@ -222,13 +223,14 @@ const toBase64 = (file: any) =>
 const removeFile = () => {
   imgUrl.value = null;
   croppedImage.value = null;
+  image.value = null; // Set to null instead of []
   emit("setImage", null);
 };
 
-const setImage = (image: any) => {
+const setImage = (croppedImg: string) => {
   imgUrl.value = null;
-  croppedImage.value = image;
-  emit("setImage", image);
+  croppedImage.value = croppedImg;
+  emit("setImage", croppedImg);
 };
 
 const deleteImage = () => {

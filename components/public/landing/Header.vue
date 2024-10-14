@@ -1,9 +1,18 @@
 <template>
   <div class="wrapper">
-    <h1 class="title word-break" lang="de">{{ title }}</h1>
-    <PublicLandingChooseCategory class="search-field"/>
-    <p class="sub-title word-break" lang="de">{{ subTitle }}</p>
-    
+    <h1
+      class="title word-break"
+      lang="de"
+    >
+      {{ title }}
+    </h1>
+    <PublicLandingChooseCategory class="search-field" />
+    <p
+      class="sub-title word-break"
+      lang="de"
+    >
+      {{ subTitle }}
+    </p>
   </div>
 </template>
 
@@ -13,8 +22,8 @@ import homeImage from "@/assets/images/home.jpg";
 
 const filterStore = useFilterStore();
 
-const title = ref('Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land')
-const subTitle = ref('Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.')
+const title = ref("Gemeinsam für deine Gesundheit: Die Gesundheitsplattform für das Smart Wendeler Land");
+const subTitle = ref("Finde hier Informationen zu Gesundheitsthemen, Präventions- und Pflegeangeboten im Landkreis Sankt Wendel.");
 
 useHead({
   title: title,
@@ -40,7 +49,7 @@ onMounted(() => {
   height: 100%;
   gap: 2rem;
   justify-content: center;
-  width: 50%;
+  width: 70%;
   padding: 0 0 0 5rem;
 
   @include lg {
@@ -65,6 +74,7 @@ onMounted(() => {
     font-size: 55px;
     text-transform: uppercase;
     line-height: 150%;
+    text-align: left;
     @include md {
       text-align: center;
       justify-content: center;
@@ -84,7 +94,7 @@ onMounted(() => {
     @include md {
       text-align: center;
       justify-content: center;
-     
+
       width: 100%;
     }
   }
@@ -94,7 +104,7 @@ onMounted(() => {
 }
 .search-field {
   @include md {
-   margin: 1rem 0;
+    margin: 1rem 0;
   }
 }
 </style>

@@ -1,6 +1,10 @@
 <template>
-  <div class="basic-search-box mt-6">
-    <div class="content" ref="contentWrapperRef" v-resize="updatePopoverWidth">
+  <div class="basic-search-box">
+    <div
+      class="content"
+      ref="contentWrapperRef"
+      v-resize="updatePopoverWidth"
+    >
       <v-row>
         <v-col class="d-flex">
           <span class="general-font-size text-h4 text-white">{{ subTitle }}</span>
@@ -16,7 +20,11 @@
             Such-Filter kopieren
           </v-btn>
         </v-col>
-        <v-col v-if="filterKind === 'facility'" md="2" class="d-flex justify-end">
+        <v-col
+          v-if="filterKind === 'facility'"
+          md="2"
+          class="d-flex justify-end"
+        >
           <v-btn
             variant="outlined"
             min-width="250px"
@@ -38,7 +46,10 @@
             <label class="label is-white">
               <div class="search-term general-font-size">
                 <p v-if="filterTitle">{{ filterTitle }}</p>
-                <p v-else class="waiting general-font-size">
+                <p
+                  v-else
+                  class="waiting general-font-size"
+                >
                   <span>.</span><span>.</span><span>.</span>
                 </p>
               </div>
@@ -61,23 +72,25 @@
               >
                 <div
                   class="input"
+                  :class="filterStore.mapFilter?.length ? 'cursor-not-allowed opacity-60' : ''"
                   @click="
-                    showPopover = !showPopover;
+                    filterStore.filteredFacilityMainFilters.length === 0 || filterStore.mapFilter?.length ? null : (showPopover = !showPopover);
                     handleClearTermSearch();
                   "
                 >
                   <div class="input-title">
                     {{
                       getAllSelectedCommunitiesName(filterStore.currentZips).length > 0
-                        ? getAllSelectedCommunitiesName(filterStore.currentZips).join(
-                            ", "
-                          )
+                        ? getAllSelectedCommunitiesName(filterStore.currentZips).join(", ")
                         : "Gemeinde wählen"
                     }}
                   </div>
 
                   <div class="actions">
-                    <div class="chevron" :class="[showPopover ? 'up' : 'down']"></div>
+                    <div
+                      class="chevron"
+                      :class="[showPopover ? 'up' : 'down']"
+                    ></div>
                   </div>
                 </div>
                 <div
@@ -99,9 +112,7 @@
                             density="compact"
                             class="options-select general-font-size ma-2 text-none font-weight-light"
                             :class="{
-                              'is-selected': filterStore.currentZips.includes(
-                                community.zip
-                              ),
+                              'is-selected': filterStore.currentZips.includes(community.zip),
                             }"
                           >
                             {{ community.name }}
@@ -109,6 +120,20 @@
                         </label>
                       </div>
                     </div>
+                    <v-divider class="my-2"></v-divider>
+                    <v-row>
+                      <v-col class="d-flex justify-end">
+                        <v-btn
+                          @click="showPopover = false"
+                          hide-details
+                          density="compact"
+                          color="primary"
+                          class="options-select general-font-size ma-2 text-none font-weight-light"
+                        >
+                          <span>Fertig</span>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
                   </div>
                 </div>
               </div>
@@ -126,10 +151,16 @@
           <div class="field general-font-size">
             <label class="label is-white">
               <div class="search-term">
-                <p class="general-font-size" v-if="searchTitle">
+                <p
+                  class="general-font-size"
+                  v-if="searchTitle"
+                >
                   {{ searchTitle }}
                 </p>
-                <p v-else class="waiting general-font-size">
+                <p
+                  v-else
+                  class="waiting general-font-size"
+                >
                   <span>.</span><span>.</span><span>.</span>
                 </p>
               </div>
@@ -165,7 +196,9 @@
   <v-row class="has-bg-darken-grey text-white">
     <v-col class="d-flex justify-center align-center bottom-actions mx-3">
       <LoadingSpinner v-if="filterStore.loading" />
-      <span class="general-font-size" v-else-if="filterStore.filteredResults.length"
+      <span
+        class="general-font-size"
+        v-else-if="filterStore.filteredResults.length"
         >{{ filterStore.filteredResults.length }}
         <span v-if="filterStore.currentKinds.includes('facility')"> Anbieter </span>
         <span v-else-if="filterStore.currentKinds.includes('event')">
@@ -181,7 +214,10 @@
           <span v-else>Kurse</span>
         </span>
       </span>
-      <span class="general-font-size" v-else-if="!appStore.loading">
+      <span
+        class="general-font-size"
+        v-else-if="!appStore.loading"
+      >
         Leider keine Ergebnisse gefunden. Bitte passe deine Suche an.
       </span>
       <span v-else> Bitte warten... </span>
@@ -219,17 +255,13 @@ onClickOutside(popoverParentRef2, () => (showPopover.value = false));
 
 const getAllSelectedCommunitiesName = (zips: string[]) => {
   if (!zips.length || !filterStore.allCommunities) return [];
-  const allSelectedCommunities = filterStore.allCommunities.filter((community: any) =>
-    zips.includes(community.zip)
-  );
+  const allSelectedCommunities = filterStore.allCommunities.filter((community: any) => zips.includes(community.zip));
   return allSelectedCommunities.map((community: any) => community.name);
 };
 
 const handleOptionSelectCommunity = (community: any) => {
   if (filterStore.currentZips.includes(community?.zip)) {
-    filterStore.currentZips = filterStore.currentZips.filter(
-      (item) => item !== community.zip
-    );
+    filterStore.currentZips = filterStore.currentZips.filter((item) => item !== community.zip);
   } else {
     filterStore.currentZips.push(community.zip);
   }
@@ -244,11 +276,7 @@ const updatePopoverWidth = () => {
 };
 
 const deleteFilterDisabledCondition = computed(() => {
-  return (
-    !filterStore.currentFacilityTags.length &&
-    !filterStore.currentZips.length &&
-    !filterStore.currentSearchTerm
-  );
+  return !filterStore.currentFacilityTags.length && !filterStore.currentZips.length && !filterStore.currentSearchTerm && !filterStore.mapFilter?.length;
 });
 
 const handleInput = () => {
@@ -297,7 +325,7 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import "@/assets/sass/main.sass"
 .basic-search-box
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
@@ -380,7 +408,7 @@ onMounted(async () => {
   animation-delay: .4s
 
 .community-filter-options
-  width: 50vh
+  width: 80vh
   flex-wrap: wrap
   gap: .5rem
 </style>

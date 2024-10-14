@@ -100,7 +100,7 @@
           class="general-font-size d-flex align-center mb-n3"
           v-if="item.kind === 'event' || item.kind === 'course'"
         >
-          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1420">
+          <span v-if="item?.event_dates.length && breakPoints.width.value >= 1650">
             <img
               :src="eventsIcon"
               class="mr-1"
@@ -206,8 +206,8 @@ const handleResize = () => {
 }
 
 $max-height: 315px;
-$max-width: 300px;
-$min-width: 200px;
+$max-width: 280px;
+$min-width: 180px;
 
 .content-box {
   background-color: #f5f5f5;

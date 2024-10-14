@@ -93,6 +93,7 @@ export type Filter = {
   filterSort: (typeof filterSortingDirections)[number];
   loading: boolean;
   mapFilter: string;
+  mapFilterName: string;
   currentKinds: FilterKind[];
   allCategories: any[];
   filteredCategories: any[];
@@ -122,6 +123,7 @@ const initialFilterState: Filter = {
   filterSort: "A-Z",
   loading: false,
   mapFilter: null,
+  mapFilterName: null,
   currentKinds: [],
   allCategories: [],
   filteredCategories: [],
@@ -192,6 +194,7 @@ export const useFilterStore = defineStore({
       this.currentFacilityTags = [];
       this.currentServiceTags = [];
       this.mapFilter = null;
+      this.mapFilterName = null;
 
       this.loadAllResults();
     },
@@ -479,6 +482,7 @@ export const useFilterStore = defineStore({
       this.filterSort = "A-Z";
       this.loading = false;
       this.mapFilter = null;
+      this.mapFilterName = null;
       this.currentKinds = [];
       this.allResults = [];
       this.filteredResults = [];

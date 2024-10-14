@@ -4,6 +4,7 @@
       v-model="appStore.showTopbar"
       :elevation="5"
       class="hero-menu"
+      :class="{ 'py-2': appStore.showTopbar }"
     >
       <v-app-bar-title>
         <div class="d-flex align-center">
@@ -29,7 +30,7 @@
               v-for="(category, index) in categories"
               :key="index"
             >
-              <div class="title mx-5 font-weight-medium">
+              <div class="mx-5 font-weight-medium">
                 <a
                   :href="getItemsAndGo(category, null)"
                   class="is-clickable general-font-size is-dark-grey"
@@ -111,19 +112,24 @@
           </v-row>
         </div>
         <div
-          class="align-center d-flex is-clickable"
-          v-if="breakPoints.width.value <= 1619 && currentRoute !== '/register' && !useUser().loggedIn() && !appStore.loading"
-          @click="goToRegister()"
-        >
-          <img :src="regiterIcon" />
-        </div>
-        <div
           class="pl-3"
           v-if="!appStore.loading"
         >
+          <!-- Register  -->
           <v-btn
             v-if="!useUser().loggedIn()"
             color="primary"
+            title="Registrieren"
+            icon
+            @click="goToRegister"
+          >            
+            <img :src="regiterIcon" />
+          </v-btn>
+          <!-- Login -->
+          <v-btn
+            v-if="!useUser().loggedIn()"
+            color="primary"
+            title="Login"
             icon
             @click="goToLogin"
           >
@@ -520,6 +526,7 @@ header,
 }
 .v-toolbar {
   background: white;
+  padding: 0 80px;
   @include md {
     padding: 0;
   }

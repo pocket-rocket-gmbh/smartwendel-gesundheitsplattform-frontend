@@ -6,12 +6,10 @@
         :disabled="
           tagName === 'insurance' &&
           (itemId
-            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >=
-              1
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
         class="text-field file-input general-font-size"
-        
         label="Datei auswählen"
         v-model="file"
         @change="handleFile"
@@ -23,11 +21,9 @@
         :disabled="
           tagName === 'insurance' &&
           (itemId
-            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >=
-              1
+            ? item?.sanitized_documents.filter((doc) => doc.tag === 'insurance').length >= 1
             : offlineDocuments.filter((doc) => doc.tag === 'insurance').length >= 1)
         "
-       
         label="Bezeichnung*"
         v-model="filename"
       />
@@ -35,15 +31,22 @@
     <div class="errors">
       <div v-if="errorInvalidFileType">
         <span class="warning">
-          <v-alert type="error" density="compact" closable class="mt-2 general-font-size"
+          <v-alert
+            type="error"
+            density="compact"
+            closable
+            class="mt-2 general-font-size"
             >nur (.pdf) Dateien sind erlaubt</v-alert
           >
         </span>
       </div>
       <div v-if="errorFileSizeTooLarge">
-        <v-alert type="warning" density="compact" closable class="mt-2 general-font-size"
-          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 10 MB
-          erlaubt</v-alert
+        <v-alert
+          type="warning"
+          density="compact"
+          closable
+          class="mt-2 general-font-size"
+          >die ausgewählte Datei ist zu groß, es sind nur Dateien von maximal 10 MB erlaubt</v-alert
         >
       </div>
     </div>
@@ -51,22 +54,24 @@
       class="mt-5"
       @click="save"
       v-if="!loadingItem"
-      :disabled="
-        (filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge) ||
-        !fileUrl?.length
-      "
+      :disabled="(filename === '' && !errorInvalidFileType && !errorFileSizeTooLarge) || !fileUrl?.length"
     >
       Hinzufügen
     </v-btn>
     <div class="text-caption is-dark-grey">* Maximal 10 MB, PDF erlaubt</div>
-    <span class="mr-3 is-red is-dark-grey" v-if="loadingItem">wird hochgeladen ....</span>
+    <span
+      class="mr-3 is-red is-dark-grey"
+      v-if="loadingItem"
+      >wird hochgeladen ....</span
+    >
 
-    <v-list class="mt-5" v-if="tagName === 'insurance'">
+    <v-list
+      class="mt-5"
+      v-if="tagName === 'insurance'"
+    >
       <template v-if="itemId">
         <v-list-item
-          v-for="document in item.sanitized_documents.filter(
-            (doc) => doc.tag === 'insurance'
-          )"
+          v-for="document in item.sanitized_documents.filter((doc) => doc.tag === 'insurance')"
           :key="document.id"
           :title="document.title"
           item-props
@@ -88,14 +93,19 @@
             <i>{{ document.name.replace("-insurance", ".pdf") }}</i>
           </span>
           <v-divider></v-divider>
-          <span v-if="documentAcepted" class="d-flex align-center text-primary">
+          <span
+            v-if="documentAcepted"
+            class="d-flex align-center text-primary"
+          >
             <v-icon>mdi-check-decagram-outline</v-icon>
             <span class="general-font-size is-dark-grey">
               <i>Genehmigt</i>
             </span>
-         
           </span>
-          <span v-else class="d-flex align-center text-warning">
+          <span
+            v-else
+            class="d-flex align-center text-warning"
+          >
             <v-icon>mdi-alert-outline</v-icon>
             <span class="general-font-size is-dark-grey">
               <i>Datei wird überprüft</i>
@@ -113,9 +123,7 @@
       </template>
       <template v-else>
         <v-list-item
-          v-for="(document, index) in offlineDocuments.filter(
-            (doc) => doc.tag === 'insurance'
-          )"
+          v-for="(document, index) in offlineDocuments.filter((doc) => doc.tag === 'insurance')"
           :key="index"
           :title="document.documentname"
           item-props
@@ -134,13 +142,19 @@
             </v-btn>
           </template>
           <v-divider></v-divider>
-          <span v-if="documentAcepted" class="d-flex align-center text-primary">
+          <span
+            v-if="documentAcepted"
+            class="d-flex align-center text-primary"
+          >
             <v-icon>mdi-check-decagram-outline</v-icon>
             <span class="general-font-size is-dark-grey">
               <i>Genehmigt</i>
             </span>
           </span>
-          <span v-else class="d-flex align-center text-warning">
+          <span
+            v-else
+            class="d-flex align-center text-warning"
+          >
             <v-icon>mdi-alert-outline</v-icon>
             <span class="general-font-size is-dark-grey">
               <i>Datei wird überprüft</i>
@@ -156,12 +170,13 @@
         </v-list-item>
       </template>
     </v-list>
-    <v-list class="mt-5" v-else>
+    <v-list
+      class="mt-5"
+      v-else
+    >
       <template v-if="itemId">
         <v-list-item
-          v-for="document in item.sanitized_documents.filter(
-            (doc) => doc.tag !== 'insurance'
-          )"
+          v-for="document in item.sanitized_documents.filter((doc) => doc.tag !== 'insurance')"
           :key="document.id"
           :title="document.title"
           item-props
@@ -194,9 +209,7 @@
       </template>
       <template v-else>
         <v-list-item
-          v-for="(document, index) in offlineDocuments.filter(
-            (doc) => doc.tag !== 'insurance'
-          )"
+          v-for="(document, index) in offlineDocuments.filter((doc) => doc.tag !== 'insurance')"
           :key="index"
           :title="document.documentname"
           item-props
@@ -249,13 +262,14 @@ const props = defineProps<{
 const api = useCollectionApi();
 api.setBaseApi(usePrivateApi());
 
-const file =  ref([]);
+const file = ref({}) as any;
 const filename = ref("");
 const tag = ref("");
 const errorInvalidFileType = ref(false);
 const loadingItem = ref(false);
 const fileUrl = ref(null);
 const errors = ref([]);
+const fileSelected = ref(false);
 
 const errorFileSizeTooLarge = ref(false);
 const item = ref({
@@ -263,27 +277,32 @@ const item = ref({
 });
 
 const handleFile = async () => {
-  if (file.value && file.value[0] && file.value[0].size / 1000000 > 10) {
-    errorFileSizeTooLarge.value = true;
-    file.value = [];
-    return;
-  } else if (file.value && file.value[0]) {
-    const selectedFile = file.value[0];
-    errorFileSizeTooLarge.value = false;
-    const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
-    if (fileExtension !== "pdf") {
-      errorInvalidFileType.value = true;
-      file.value = [];
-      return;
-    } else {
-      errorInvalidFileType.value = false;
-      fileUrl.value = await getBase64File();
-    }
+  const selectedFile = Array.isArray(file.value) ? file.value[0] : file.value;
+  if (selectedFile) {
+    fileSelected.value = true;
   }
+
+  if (selectedFile && selectedFile.size / 1000000 > 10) {
+    errorFileSizeTooLarge.value = true;
+    file.value = {};
+    return;
+  }
+
+  const fileExtension = selectedFile?.name.split(".").pop().toLowerCase();
+  if (fileExtension !== "pdf") {
+    errorInvalidFileType.value = true;
+    file.value = {};
+    return;
+  }
+
+  errorInvalidFileType.value = false;
+  errorFileSizeTooLarge.value = false;
+
+  fileUrl.value = await getBase64File(selectedFile);
 };
 
-const getBase64File = async () => {
-  const data = await file.value[0].arrayBuffer();
+const getBase64File = async (file: any) => {
+  const data = await file.arrayBuffer();
   const base64 = arrayBufferToBase64(data, "application/octet");
   return base64;
 };
@@ -307,9 +326,7 @@ const getCareFacility = async () => {
   emit("updatedFiles", api.item.value?.sanitized_documents);
   loadingItem.value = false;
   item.value = api.item.value;
-  const typeSet = item.value?.sanitized_documents?.some(
-    (item) => item.tag === props.tagName
-  );
+  const typeSet = item.value?.sanitized_documents?.some((item) => item.tag === props.tagName);
   emit("areDocumentsSet", typeSet, props.tagName);
 };
 
@@ -328,7 +345,7 @@ const save = async () => {
       loadingItem.value = false;
       filename.value = "";
       tag.value = props.tagName;
-      file.value = [];
+      file.value = {};
       getCareFacility();
     } else {
       errors.value = result.data;
