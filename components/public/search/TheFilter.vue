@@ -63,7 +63,7 @@
             close-icon="mdi-delete"
             @click:close="removeTagFromStore(tag)"
             closable
-            class="selected-tags mr-2 pa-4 mb-2 general-font-size break-title"
+            class="selected-tags mr-2 pa-4 mb-2 general-font-size"
           >
             {{ tag.name }}
           </v-chip>
@@ -446,6 +446,7 @@ onMounted(async () => {
 
 .selected-tags {
   background-color: $primary-color;
+  max-width: min-content;
 }
 
 .sub-filter {
