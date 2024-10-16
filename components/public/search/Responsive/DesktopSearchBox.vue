@@ -342,7 +342,6 @@ onMounted(async () => {
 .title
   text-transform: uppercase
   font-size: 3rem
-  text-align: center
   color: white
 
 .no-entries
