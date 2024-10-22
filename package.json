@@ -38,7 +38,7 @@
     "mitt": "^3.0.1",
     "nuxt-icons": "^3.2.1",
     "pinia": "^2.2.4",
-    "sass": "^1.79.5",
+    "sass": "^1.80.3",
     "vue-advanced-cropper": "^2.8.9",
     "vue-matomo": "^4.2.0",
     "vue-rewards": "^1.0.1",
