@@ -5,7 +5,7 @@ export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(VueMatomo, {
    
     router: nuxtApp.$router,
-    host: 'https://matomo.pocket-rocket.io',
+    host: 'https://rocketinsights.de',
     siteId: 10,
     enableLinkTracking: true,
     requireConsent: false,
@@ -15,8 +15,8 @@ export default defineNuxtPlugin(nuxtApp => {
     enableHeartBeatTimer: true,
     heartBeatTimerInterval: 5,
     trackerFileName: 'piwik',
-    trackerUrl: 'https://matomo.pocket-rocket.io/matomo.php',
-    trackerScriptUrl: 'https://matomo.pocket-rocket.io/matomo.js',
+    trackerUrl: 'https://rocketinsights.de/matomo.php',
+    trackerScriptUrl: 'https://rocketinsights.de/matomo.js',
     userId: ''
   })
 })

@@ -71,7 +71,7 @@
       </div>
       <div
         class="d-flex align-center"
-        v-if="daysNotUpdated >= 120"
+        v-if="daysNotUpdated >= 120 && !useUser().isAdmin()"
       >
         <v-alert
           type="info"
@@ -134,7 +134,12 @@
           >
             Bereiche und Kategorien
           </v-list-item>
-          <v-list-item link to="/admin/complaints?filter=" nuxt class="general-font-size is-dark-grey">
+          <v-list-item
+            link
+            to="/admin/complaints?filter="
+            nuxt
+            class="general-font-size is-dark-grey"
+          >
             Beschwerde
           </v-list-item>
           <v-divider></v-divider>
