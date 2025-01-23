@@ -316,7 +316,9 @@
                         :notification-pre-filled-headline="field.notificationPreFilledHeadline"
                         :notification-pre-filled-text="field.notificationPreFilledText"
                         :notification-cta-link="field.notificationCtaLink"
-                        :disabled="field?.disabledConditions?.(item) || item?.blocked || item?.user?.status === 'disabled' || !item?.user?.is_active_on_health_scope"
+                        :disabled="
+                          field?.disabledConditions?.(item) || item?.blocked || item?.user?.status === 'disabled' || !item?.user?.is_active_on_health_scope
+                        "
                         @toggled="handleToggled(item)"
                       />
                     </div>
@@ -669,17 +671,36 @@
                 </div>
               </span>
             </span>
-            <span v-if="field.value === 'mdi-eye' && item.is_active && useUser().statusOnHealthScope()">
-              <v-tooltip location="top">
+            <span v-if="field.value === 'mdi-eye'">
+              <v-tooltip
+                top
+                v-if="item.is_active"
+              >
                 <template v-slot:activator="{ props }">
                   <v-icon
+                    v-if="item.is_active"
                     class="is-clickable"
-                    @click="field.action(item)"
                     v-bind="props"
+                    @click="field.action(item)"
                     >mdi-eye</v-icon
                   >
                 </template>
-                <span>Zur Einrichtungseite wechseln.</span>
+                <span> Profilseite ansehen </span>
+              </v-tooltip>
+
+              <v-tooltip
+                top
+                v-else
+              >
+                <template v-slot:activator="{ props }">
+                  <v-icon
+                    class="is-clickable"
+                    v-bind="props"
+                    @click="field.action(item)"
+                    >mdi-eye-lock-outline</v-icon
+                  >
+                </template>
+                <span> Vorschau ansehen </span>
               </v-tooltip>
             </span>
             <span v-if="field.value === 'mdi-check-decagram' && item.billable_through_health_insurance_approved && useUser().statusOnHealthScope()">

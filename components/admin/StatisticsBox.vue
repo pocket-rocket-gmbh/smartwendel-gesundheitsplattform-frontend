@@ -1,4 +1,14 @@
 <template>
+  <v-progress-linear
+    v-model="skill"
+    color="primary"
+    height="10"
+    rounded
+    v-if="loading"
+    :indeterminate="loading"
+    class="mt-3"
+  ></v-progress-linear>
+
   <div
     class="d-flex flex-column is-dark-grey stats-card"
     :class="[
@@ -77,6 +87,11 @@ type Item = {
   hasNoSpace?: boolean;
   info_content?: number;
 };
+
+const skill = computed(() => {
+  if (!props.item.content) return 0; // Default to 0 if no content
+  return (props.item.content / 100) * 100; // Example calculation
+});
 
 const hasFilter = computed(() => !!props.item.query && !!props.item.type);
 
