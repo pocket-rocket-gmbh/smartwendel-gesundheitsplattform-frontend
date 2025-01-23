@@ -2,7 +2,10 @@
   <div v-if="useUser().isAdmin()">
     <div class="d-flex align-center">
       <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
-      <!-- <div class="ml-3" v-if="!loading && updatedAt">
+      <div
+        class="ml-3"
+        v-if="!loading && updatedAt"
+      >
         <span> Letzte Aktualisierung: {{ updatedAt }}</span>
       </div>
 
@@ -22,9 +25,20 @@
         >mdi-reload</v-icon
       >
     </div>
-    <div v-for="item in items" :key="item.id" class="mt-5">
+    <div v-if="!loading && loadingTime > 0">
+      <i> Ladezeit: {{ loadingTime }} ms</i>
+    </div>
+    <div
+      v-for="item in items"
+      :key="item.id"
+      class="mt-5"
+    >
       <div class="d-flex align-center">
-        <v-icon size="x-large" color="primary">{{ item.icon }}</v-icon>
+        <v-icon
+          size="x-large"
+          color="primary"
+          >{{ item.icon }}</v-icon
+        >
         <div class="text-h4 ml-3 is-dark-grey">{{ item.title }}</div>
       </div>
       <div>
@@ -34,51 +48,32 @@
             v-for="sub_item in item?.sub_items"
             :class="!item?.divider ? 'mb-n14' : ''"
           >
-            <AdminStatisticsBox :item="sub_item" :loading="loading" />
+            <AdminStatisticsBox
+              :item="sub_item"
+              :loading="loading"
+            />
           </v-col>
         </v-row>
-        <v-divider v-if="item?.divider" class="my-3 mr-15"></v-divider>
-      </div> -->
+        <v-divider
+          v-if="item?.divider"
+          class="my-3 mr-15"
+        ></v-divider>
+      </div>
     </div>
   </div>
 
   <div v-else>Du hast keine Berechtigung, diese Seite zu sehen.</div>
-  <div class="d-flex align-center justify-center mt-15">
-    <div class="text-h2">Dashboard wird überarbeitet und ist bald wieder verfügbar.</div>
-  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { setItem, getItem } from "@/utils/indexedDB";
+import { openDB } from "idb";
 
 definePageMeta({
   layout: "admin",
 });
-
-const router = useRouter();
-const loading = ref(false);
-const updatedAt = ref("");
-const facilities = ref([]);
-
-const sevenDaysAgo = new Date();
-sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-const thirtyDaysAgo = new Date();
-thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-const notUpToDate1 = new Date();
-notUpToDate1.setDate(notUpToDate1.getDate() - 120);
-
-const notUpToDate2 = new Date();
-notUpToDate2.setDate(notUpToDate2.getDate() - 134);
-
-const notUpToDate3 = new Date();
-notUpToDate3.setDate(notUpToDate3.getDate() - 226);
-
-const notUpToDate4 = new Date();
-notUpToDate4.setDate(notUpToDate4.getDate() - 240);
 
 type DashboardItem = {
   title: string;
@@ -91,315 +86,162 @@ type DashboardItem = {
   }[];
 };
 
-const isBrowser = typeof window !== "undefined";
+const router = useRouter();
+const loading = ref(false);
+const statistics = ref<any>(null);
+const updatedAt = ref("");
+const STATISTICS_KEY = "statistics";
+const UPDATED_AT_KEY = "statisticsUpdatedAt";
+const STORE_NAME = "facilities";
+const loadingTime = ref(0);
 
-const getItems = async () => {
-  if (!isBrowser) return;
+const deleteFacilitiesFromLocalStorage = async () => {
   try {
-    setNow();
-    await saveUpdatedAt();
+    if (!loading.value) {
+      const db = await openDB("facilitiesDb", 1);
+      await db.clear(STORE_NAME);
+      await getStatistics();
+    }
+  } catch (error) {
+    console.error("Error clearing facilities data from IndexedDB:", error);
+  }
+};
 
-    const facilitiesFromDB = await getItem("facilities", "all");
-    if (facilitiesFromDB && facilities.value.length === 0) {
-      loading.value = true;
-      facilities.value = facilitiesFromDB;
+const getStatistics = async () => {
+  try {
+    loading.value = true;
+    const startTime = performance.now();
+    const cachedStatistics = await getItem(STORE_NAME, STATISTICS_KEY);
+    const cachedUpdatedAt = await getItem(STORE_NAME, UPDATED_AT_KEY);
+
+    if (cachedStatistics && cachedUpdatedAt) {
+      statistics.value = cachedStatistics;
+      updatedAt.value = cachedUpdatedAt;
+      const endTime = performance.now();
+      loadingTime.value = Math.round(endTime - startTime);
       loading.value = false;
       return;
     }
 
-    const updatedAtFromDB = await getItem("metadata", "updatedAt");
-    if (updatedAtFromDB) {
-      updatedAt.value = updatedAtFromDB;
-    }
-
-    loading.value = true;
-    const options = {
-      page: 1,
-      per_page: 10000,
-    };
-
     const api = useCollectionApi();
     api.setBaseApi(usePrivateApi());
-    api.setEndpoint(`care_facilities`);
+    api.setEndpoint(`statistics`);
 
-    await api.retrieveCollection(options as any);
-    facilities.value = api.items.value as any;
+    const response = await api.retrieveCollection();
+    statistics.value = response.data;
 
-    await saveFacilities();
+    const now = new Date().toLocaleString();
+    updatedAt.value = now;
+    await setItem(STORE_NAME, STATISTICS_KEY, response.data);
+    await setItem(STORE_NAME, UPDATED_AT_KEY, now);
+    const endTime = performance.now(); // End time for API call
+    loadingTime.value = Math.round(endTime - startTime);
     loading.value = false;
   } catch (error) {
-    console.error("Error fetching items:", error);
+    console.error("Error fetching statistics:", error);
+    loading.value = false;
   }
 };
 
-const setNow = () => {
-  updatedAt.value = new Date().toLocaleString("de-DE");
-};
+const items = computed<DashboardItem[]>(() => {
+  if (!statistics.value) return [];
 
-const saveFacilities = async () => {
-  if (!isBrowser) return;
-  try {
-    await setItem("facilities", "all", facilities.value);
-  } catch (error) {
-    console.error("Error saving facilities:", error);
-  }
-};
-
-const saveUpdatedAt = async () => {
-  if (!isBrowser) return;
-  try {
-    await setItem("metadata", "updatedAt", updatedAt.value);
-  } catch (error) {
-    console.error("Error saving updated at:", error);
-  }
-};
-
-const deleteFacilitiesFromLocalStorage = async () => {
-  await getItems();
-};
-
-const items = computed<DashboardItem[]>(() => [
-  {
-    title: "Einrichtungen",
-    icon: "mdi-home",
-    id: 1,
-    divider: true,
-    sub_items: [
-      {
-        title: "Gesamt",
-        content: facilities.value.filter((facility: any) => facility.kind === "facility").length,
-        type: "facility",
-        query: "showAll",
-      },
-      {
-        title: "Online",
-        content: facilities.value.filter((facility: any) => facility.is_active === true && facility.kind === "facility").length,
-        type: "facility",
-        query: "active_facilities",
-      },
-      {
-        title: "Offline",
-        content: facilities.value.filter((facility: any) => facility.is_active === false && facility.kind === "facility").length,
-        type: "facility",
-        query: "inactive_facilities",
-      },
-      {
-        title: "Neu registrierte Einrichtungen*",
-        info: "*in den letzten 30 Tagen",
-        content: facilities.value.filter((facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= thirtyDaysAgo).length,
-        type: "facility",
-        query: "thirty_days_ago",
-      },
-    ],
-  },
-  {
-    title: "Import",
-    icon: "mdi-home-import-outline",
-    divider: true,
-    id: 2,
-    sub_items: [
-      {
-        title: "Importierte Profile",
-        content: facilities.value.filter((facility: any) => facility?.user?.imported === true && facility.kind === "facility").length,
-        type: "facility",
-        query: "imported_profiles",
-      },
-      {
-        title: "Inhaberschaften LK",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.imported === true && facility?.owner_requested_maintenance && facility.kind === "facility"
-        ).length,
-        type: "facility",
-        query: "successful_profile_takeovers",
-      },
-      {
-        title: "Inhaberschaften Nutzer",
-        content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.imported === true &&
-            facility?.owner_requested_maintenance === false &&
-            facility?.user?.onboarding_status === "completed" &&
-            facility.kind === "facility"
-        ).length,
-        type: "facility",
-        query: "user_maintenance_requested",
-      },
-      {
-        title: "Rückmeldung ausstehend",
-        content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.imported === true &&
-            facility?.user?.notification_after_manual_import_sent &&
-            facility?.user?.onboarding_token?.length &&
-            facility.kind === "facility"
-        ).length,
-        type: "facility",
-        query: "pending_profile_takeovers",
-      },
-      {
-        title: "Nicht gesendete Emails",
-        hasNoSpace: true,
-        content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.imported === true &&
-            !facility?.user?.notification_after_manual_import_sent &&
-            facility?.user?.onboarding_token?.length &&
-            facility.kind === "facility"
-        ).length,
-        type: "facility",
-        query: "mail_not_sent",
-      },
-    ],
-  },
-  {
-    title: "Verifizierungsanfragen",
-    icon: "mdi-check-decagram-outline",
-    id: 3,
-    divider: true,
-    sub_items: [
-      {
-        title: "In Prüfung",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === false && facility.kind === "facility"
-        ).length,
-        type: "users",
-        query: "pending",
-      },
-      {
-        title: "In Prüfung (importiert)",
-        info: "*in den letzten 7 Tagen",
-        info_content: facilities.value.filter((facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= sevenDaysAgo).length,
-        content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === false &&
-            facility?.user?.imported === true &&
-            facility?.user?.onboarding_status !== "completed" &&
-            facility.kind === "facility" &&
-            facility?.user?.care_facilities?.length !== 0
-        ).length,
-
-        type: "users",
-        query: "import_pending",
-      },
-      {
-        title: "in Prüfung (import abgeschlossen)",
-        content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === false &&
-            facility?.user?.imported === true &&
-            facility?.user?.onboarding_status === "completed" &&
-            facility.kind === "facility"
-        ).length,
-        type: "users",
-        query: "imported_pending",
-      },
-      {
-        title: "Freigeschaltet",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.is_active_on_health_scope === true && facility.kind === "facility" && facility?.user?.care_facilities?.length > 0
-        ).length,
-        type: "users",
-        query: "approved",
-      },
-    ],
-  },
-  {
-    title: "Datenaktualität",
-    icon: "mdi-playlist-check",
-    divider: true,
-    id: 4,
-    sub_items: [
-      {
-        title: "Nicht aktuell",
-        info: "+ 120 Tagen",
-        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate1).length,
-        query: "data_not_up_to_date_1",
-        type: "users",
-      },
-      {
-        title: "Nicht aktuell",
-        info: "+ 134 Tagen",
-        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate2).length,
-        query: "data_not_up_to_date_2",
-        type: "users",
-      },
-      {
-        title: "Nicht aktuell",
-        info: "+ 226 Tagen",
-        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate3).length,
-        query: "data_not_up_to_date_3",
-        type: "users",
-      },
-      {
-        title: "Nicht aktuell",
-        info: "+ 240 Tagen",
-        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate4).length,
-        query: "data_not_up_to_date_4",
-        type: "users",
-      },
-    ],
-  },
-  {
-    title: "Aktivität",
-    icon: "mdi-progress-check",
-    id: 5,
-    sub_items: [
-      {
-        title: "Aktive Veranstaltungen",
-        content: facilities.value.filter((facility: any) => facility?.kind === "event" && facility.is_active === true).length,
-        type: "event",
-        query: "active_events",
-      },
-      {
-        title: "Aktive Kurse",
-        content: facilities.value.filter((facility: any) => facility?.kind === "course" && facility.is_active === true).length,
-        type: "course",
-        query: "active_courses",
-      },
-      {
-        title: "Aktive Beiträge",
-        content: facilities.value.filter((facility: any) => facility?.kind === "news" && facility.is_active === true).length,
-        type: "news",
-        query: "active_news",
-      },
-    ],
-  },
-  {
-    title: "",
-    icon: "",
-    id: 6,
-    divider: false,
-    sub_items: [
-      {
-        title: "Veranstaltungen gesamt",
-        content: facilities.value.filter((facility: any) => facility?.kind === "event").length,
-        type: "event",
-        query: "showAll",
-        hasNoSpace: true,
-      },
-      {
-        title: "Kurse gesamt",
-        content: facilities.value.filter((facility: any) => facility?.kind === "course").length,
-        type: "course",
-        query: "showAll",
-        hasNoSpace: true,
-      },
-      {
-        title: "Beiträge gesamt",
-        content: facilities.value.filter((facility: any) => facility?.kind === "news").length,
-        type: "news",
-        query: "showAll",
-        hasNoSpace: true,
-      },
-    ],
-  },
-]);
+  return [
+    {
+      title: "Einrichtungen",
+      icon: "mdi-home",
+      id: 1,
+      divider: true,
+      sub_items: [
+        { title: "Gesamt", content: statistics.value.care_facility_count, type: "facility", query: "showAll" },
+        { title: "Online", content: statistics.value.care_facility_active_count, type: "facility", query: "active_facilities" },
+        { title: "Offline", content: statistics.value.care_facility_inactive_count, type: "facility", query: "inactive_facilities" },
+        {
+          title: "Neu registrierte *",
+          content: statistics.value.care_facility_created_last_thirty_days_count,
+          type: "facility",
+          query: "thirty_days_ago",
+          info: "*in den letzten 30 Tage",
+        },
+      ],
+    },
+    {
+      title: "Import",
+      icon: "mdi-home-import-outline",
+      id: 2,
+      divider: true,
+      sub_items: [
+        { title: "Importierte Profile", content: statistics.value.imported_profiles_count, type: "facility", query: "imported_profiles" },
+        { title: "Inhaberschaften LK", content: statistics.value.ownership_on_host_count, type: "facility", query: "successful_profile_takeovers" },
+        { title: "Inhaberschaften Nutzer", content: statistics.value.ownership_on_user_count, type: "facility", query: "user_maintenance_requested" },
+        { title: "Rückmeldung ausstehend", content: statistics.value.feedback_pending_count, type: "facility", query: "pending_profile_takeovers" },
+        {
+          title: "Nicht gesendete Emails",
+          content: statistics.value.feedback_pending_emails_count,
+          type: "facility",
+          query: "mail_not_sent",
+          hasNoSpace: true,
+        },
+      ],
+    },
+    {
+      title: "Verifizierungsanfragen",
+      icon: "mdi-check-decagram-outline",
+      id: 3,
+      divider: true,
+      sub_items: [
+        { title: "In Prüfung", content: statistics.value.verification_requests_count, type: "users", query: "pending" },
+        { title: "In Prüfung (importiert)", content: statistics.value.is_being_checked_on_imported_count, type: "users", query: "import_pending" },
+        {
+          title: "In Prüfung (import abgeschlossen)",
+          content: statistics.value.is_being_checked_on_imported_completed_count,
+          type: "users",
+          query: "imported_pending",
+        },
+        { title: "Freigeschaltet", content: statistics.value.user_is_active_on_health_scope_count, type: "users", query: "approved" },
+      ],
+    },
+    {
+      title: "Datenaktualität",
+      icon: "mdi-playlist-check",
+      id: 4,
+      divider: true,
+      sub_items: [
+        { title: "Nicht aktuell +120 Tage", content: statistics.value.facilities_not_up_to_date_120_count, query: "data_not_up_to_date_1", type: "users" },
+        { title: "Nicht aktuell +134 Tage", content: statistics.value.facilities_not_up_to_date_134_count, query: "data_not_up_to_date_2", type: "users" },
+        { title: "Nicht aktuell +226 Tage", content: statistics.value.facilities_not_up_to_date_226_count, query: "data_not_up_to_date_3", type: "users" },
+        { title: "Nicht aktuell +240 Tage", content: statistics.value.facilities_not_up_to_date_240_count, query: "data_not_up_to_date_4", type: "users" },
+      ],
+    },
+    {
+      title: "Aktivität",
+      icon: "mdi-progress-check",
+      id: 5,
+      sub_items: [
+        { title: "Aktive Veranstaltungen", content: statistics.value.active_events_count, type: "event", query: "active_events" },
+        { title: "Aktive Kurse", content: statistics.value.active_courses_count, type: "course", query: "active_courses" },
+        { title: "Aktive Beiträge", content: statistics.value.active_news_count, type: "news", query: "active_news" },
+      ],
+    },
+    {
+      title: "",
+      icon: "",
+      id: 6,
+      divider: false,
+      sub_items: [
+        { title: "Veranstaltungen gesamt", content: statistics.value.total_events_count, type: "event", query: "showAll", hasNoSpace: true },
+        { title: "Kurse gesamt", content: statistics.value.total_courses_count, type: "course", query: "showAll", hasNoSpace: true },
+        { title: "Beiträge gesamt", content: statistics.value.total_news_count, type: "news", query: "showAll", hasNoSpace: true },
+      ],
+    },
+  ];
+});
 
 onMounted(async () => {
   if (!useUser().isAdmin()) {
     router.push({ path: "/" });
   } else {
-    await getItems();
+    await getStatistics();
   }
 });
 </script>
