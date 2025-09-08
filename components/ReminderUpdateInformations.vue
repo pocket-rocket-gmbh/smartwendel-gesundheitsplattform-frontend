@@ -1,5 +1,4 @@
 <template>
-  <div></div>
   <v-dialog
     width="500"
     v-model="open"
