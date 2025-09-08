@@ -27,9 +27,7 @@
       :open="userLoginCount === 1 && !user?.currentUser?.password_changed_at"
       @changed="handleSaved()"
     />
-    <ReminderUpdateInformations
-      v-model:open="upToDateDialogOpen"
-    />
+    <ReminderUpdateInformations v-model:open="upToDateDialogOpen" />
     <div>
       <div v-if="showBar">
         <v-row align="center">
@@ -92,7 +90,7 @@
       </div>
       <v-btn
         v-if="facilityId && !user.isAdmin()"
-        :disabled="(facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope())"
+        :disabled="facilityId && setupFinished && !itemStatus && !user.isAdmin() && useUser().statusOnHealthScope()"
         elevation="0"
         variant="outlined"
         class="mt-5"
@@ -184,7 +182,7 @@ const notUpToDate = new Date();
 notUpToDate.setDate(notUpToDate.getDate() - 120);
 
 const checkifUpToDate = () => {
-  if (new Date(careFacilitiesLastUpdated.value) < notUpToDate) {
+  if (new Date(careFacilitiesLastUpdated.value) < notUpToDate && !user.isAdmin()) {
     setTimeout(() => {
       upToDateDialogOpen.value = true;
     }, 1000);
@@ -192,7 +190,6 @@ const checkifUpToDate = () => {
     upToDateDialogOpen.value = false;
   }
 };
-
 
 const openConfirmationDialog = (id: string) => {
   itemId.value = id;
@@ -278,7 +275,7 @@ const fields = [
     type: "button",
     tooltip: "Einrichtung anzehen",
     action: (item: any) => {
-      handleButtonClick(item.id);
+      handleButtonClick(item);
     },
   },
   {
@@ -449,9 +446,18 @@ const openAddFilesDialog = (id: string) => {
   addFilesDialogOpen.value = true;
 };
 
-const handleButtonClick = (id: string) => {
+const handleButtonClick = (item: any) => {
   event.stopPropagation();
-  goToFacility(id);
+  if (item?.preview_token) {
+    goToLink(item);
+  } else {
+    goToFacility(item.id);
+  }
+};
+
+const goToLink = (item: any) => {
+  const link = `${window.location.origin}/public/care_facilities/${item?.id}?token_id=${item?.preview_token}`;
+  return window.open(link, "_blank");
 };
 
 const goToFacility = (id: string) => {
@@ -484,7 +490,6 @@ onMounted(async () => {
   const facility = route.query.facility;
   if (!facility) return;
   openCreateEditDialog({ id: facility });
-
 });
 </script>
 <style lang="sass">
