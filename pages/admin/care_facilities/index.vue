@@ -182,7 +182,7 @@ const notUpToDate = new Date();
 notUpToDate.setDate(notUpToDate.getDate() - 120);
 
 const checkifUpToDate = () => {
-  if (new Date(careFacilitiesLastUpdated.value) < notUpToDate) {
+  if (new Date(careFacilitiesLastUpdated.value) < notUpToDate && !user.isAdmin()) {
     setTimeout(() => {
       upToDateDialogOpen.value = true;
     }, 1000);

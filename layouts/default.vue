@@ -1,5 +1,51 @@
 <template>
   <v-app v-if="!loading">
+    <v-dialog
+      width="500"
+      v-model="questionModalopen"
+      transition="dialog-bottom-transition"
+      class="mt-10"
+      persistent
+    >
+      <v-card class="dialog">
+        <v-card-text class="card-text">
+          <v-row>
+            <v-col>
+              <h2 class="mb-4">Mach gesundesWND noch besser!</h2>
+              <div class="general-font-size">
+                Teile deine Erfahrung mit uns – schnell und unkompliziert in nur 5 Minuten. Und mit etwas Glück gewinnst du einen von 8 Gutscheinen!
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-row no-gutters>
+            <v-col class="d-flex justify-start">
+              <v-btn
+                variant="flat"
+                @click="questionModalopen = false"
+              >
+                <span> Schließen </span>
+              </v-btn>
+            </v-col>
+            <v-col class="d-flex justify-end">
+              <v-btn
+                variant="outlined"
+                class="save-buttons"
+                elevation="0"
+                href="https://survey.lamapoll.de/Evaluation-GPP-Start/de"
+                target="_blank"
+                @click="questionModalopen = false"
+              >
+                Jetzt mitmachen
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <ClientOnly>
       <ClientSnackbar />
     </ClientOnly>
@@ -28,10 +74,18 @@ api.setEndpoint("tooltips");
 
 const loading = ref(true);
 
+const questionModalopen = ref(false);
+
 const setTimeOutForPageLoad = () => {
   setTimeout(() => {
     loading.value = false;
   }, 100);
+};
+
+const setTimeOutForPoupup = () => {
+  setTimeout(() => {
+    questionModalopen.value = true;
+  }, 25000);
 };
 
 const getTooltips = async () => {
@@ -59,16 +113,14 @@ const initialize = async () => {
 
 onMounted(async () => {
   setTimeOutForPageLoad();
+  setTimeOutForPoupup();
   document.addEventListener("scroll", handleScroll);
 
   appStore.loading = true;
   await initialize();
   await useFilterStore().loadAllResults();
 
-  await Promise.allSettled([
-    await useFilterStore().loadAllFacilityFilters(),
-    await useFilterStore().loadAllServiceFilters(),
-  ]);
+  await Promise.allSettled([await useFilterStore().loadAllFacilityFilters(), await useFilterStore().loadAllServiceFilters()]);
   appStore.loading = false;
 });
 
