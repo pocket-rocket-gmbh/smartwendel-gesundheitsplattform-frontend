@@ -2,7 +2,7 @@
   <div v-if="useUser().isAdmin()">
     <div class="d-flex align-center">
       <div class="general-font-size is-dark-grey font-weight-bold">Dashboard</div>
-      <div class="ml-3" v-if="!loading && updatedAt">
+      <!-- <div class="ml-3" v-if="!loading && updatedAt">
         <span> Letzte Aktualisierung: {{ updatedAt }}</span>
       </div>
 
@@ -38,16 +38,20 @@
           </v-col>
         </v-row>
         <v-divider v-if="item?.divider" class="my-3 mr-15"></v-divider>
-      </div>
+      </div> -->
     </div>
   </div>
+
   <div v-else>Du hast keine Berechtigung, diese Seite zu sehen.</div>
+  <div class="d-flex align-center justify-center mt-15">
+    <div class="text-h2">Dashboard wird überarbeitet und ist bald wieder verfügbar.</div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { setItem, getItem } from '@/utils/indexedDB';
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { setItem, getItem } from "@/utils/indexedDB";
 
 definePageMeta({
   layout: "admin",
@@ -55,7 +59,7 @@ definePageMeta({
 
 const router = useRouter();
 const loading = ref(false);
-const updatedAt = ref('');
+const updatedAt = ref("");
 const facilities = ref([]);
 
 const sevenDaysAgo = new Date();
@@ -87,7 +91,7 @@ type DashboardItem = {
   }[];
 };
 
-const isBrowser = typeof window !== 'undefined';
+const isBrowser = typeof window !== "undefined";
 
 const getItems = async () => {
   if (!isBrowser) return;
@@ -95,7 +99,7 @@ const getItems = async () => {
     setNow();
     await saveUpdatedAt();
 
-    const facilitiesFromDB = await getItem('facilities', 'all');
+    const facilitiesFromDB = await getItem("facilities", "all");
     if (facilitiesFromDB && facilities.value.length === 0) {
       loading.value = true;
       facilities.value = facilitiesFromDB;
@@ -103,7 +107,7 @@ const getItems = async () => {
       return;
     }
 
-    const updatedAtFromDB = await getItem('metadata', 'updatedAt');
+    const updatedAtFromDB = await getItem("metadata", "updatedAt");
     if (updatedAtFromDB) {
       updatedAt.value = updatedAtFromDB;
     }
@@ -135,7 +139,7 @@ const setNow = () => {
 const saveFacilities = async () => {
   if (!isBrowser) return;
   try {
-    await setItem('facilities', 'all', facilities.value);
+    await setItem("facilities", "all", facilities.value);
   } catch (error) {
     console.error("Error saving facilities:", error);
   }
@@ -144,7 +148,7 @@ const saveFacilities = async () => {
 const saveUpdatedAt = async () => {
   if (!isBrowser) return;
   try {
-    await setItem('metadata', 'updatedAt', updatedAt.value);
+    await setItem("metadata", "updatedAt", updatedAt.value);
   } catch (error) {
     console.error("Error saving updated at:", error);
   }
@@ -169,26 +173,20 @@ const items = computed<DashboardItem[]>(() => [
       },
       {
         title: "Online",
-        content: facilities.value.filter(
-          (facility: any) => facility.is_active === true && facility.kind === "facility"
-        ).length,
+        content: facilities.value.filter((facility: any) => facility.is_active === true && facility.kind === "facility").length,
         type: "facility",
         query: "active_facilities",
       },
       {
         title: "Offline",
-        content: facilities.value.filter(
-          (facility: any) => facility.is_active === false && facility.kind === "facility"
-        ).length,
+        content: facilities.value.filter((facility: any) => facility.is_active === false && facility.kind === "facility").length,
         type: "facility",
         query: "inactive_facilities",
       },
       {
         title: "Neu registrierte Einrichtungen*",
         info: "*in den letzten 30 Tagen",
-        content: facilities.value.filter(
-          (facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= thirtyDaysAgo
-        ).length,
+        content: facilities.value.filter((facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= thirtyDaysAgo).length,
         type: "facility",
         query: "thirty_days_ago",
       },
@@ -202,19 +200,14 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Importierte Profile",
-        content: facilities.value.filter(
-          (facility: any) => facility?.user?.imported === true && facility.kind === "facility"
-        ).length,
+        content: facilities.value.filter((facility: any) => facility?.user?.imported === true && facility.kind === "facility").length,
         type: "facility",
         query: "imported_profiles",
       },
       {
         title: "Inhaberschaften LK",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.imported === true &&
-            facility?.owner_requested_maintenance &&
-            facility.kind === "facility"
+          (facility: any) => facility?.user?.imported === true && facility?.owner_requested_maintenance && facility.kind === "facility"
         ).length,
         type: "facility",
         query: "successful_profile_takeovers",
@@ -225,8 +218,8 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.user?.imported === true &&
             facility?.owner_requested_maintenance === false &&
-            facility?.user?.onboarding_status === "completed"
-            && facility.kind === "facility"
+            facility?.user?.onboarding_status === "completed" &&
+            facility.kind === "facility"
         ).length,
         type: "facility",
         query: "user_maintenance_requested",
@@ -267,9 +260,7 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "In Prüfung",
         content: facilities.value.filter(
-          (facility: any) =>
-            facility?.user?.is_active_on_health_scope === false &&
-            facility?.user?.imported === false && facility.kind === "facility"
+          (facility: any) => facility?.user?.is_active_on_health_scope === false && facility?.user?.imported === false && facility.kind === "facility"
         ).length,
         type: "users",
         query: "pending",
@@ -277,13 +268,14 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "In Prüfung (importiert)",
         info: "*in den letzten 7 Tagen",
-        info_content: facilities.value.filter(
-          (facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= sevenDaysAgo
-        ).length,
+        info_content: facilities.value.filter((facility: any) => facility.kind === "facility" && new Date(facility.created_at) >= sevenDaysAgo).length,
         content: facilities.value.filter(
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
-            facility?.user?.imported === true && facility?.user?.onboarding_status !== "completed" && facility.kind === "facility" && facility?.user?.care_facilities?.length !== 0
+            facility?.user?.imported === true &&
+            facility?.user?.onboarding_status !== "completed" &&
+            facility.kind === "facility" &&
+            facility?.user?.care_facilities?.length !== 0
         ).length,
 
         type: "users",
@@ -295,19 +287,17 @@ const items = computed<DashboardItem[]>(() => [
           (facility: any) =>
             facility?.user?.is_active_on_health_scope === false &&
             facility?.user?.imported === true &&
-            facility?.user?.onboarding_status === "completed"
-            && facility.kind === "facility"
+            facility?.user?.onboarding_status === "completed" &&
+            facility.kind === "facility"
         ).length,
         type: "users",
         query: "imported_pending",
       },
       {
         title: "Freigeschaltet",
-        content:
-          facilities.value.filter(
-            (facility: any) =>
-              facility?.user?.is_active_on_health_scope === true && facility.kind === "facility" && facility?.user?.care_facilities?.length > 0
-          ).length,
+        content: facilities.value.filter(
+          (facility: any) => facility?.user?.is_active_on_health_scope === true && facility.kind === "facility" && facility?.user?.care_facilities?.length > 0
+        ).length,
         type: "users",
         query: "approved",
       },
@@ -322,40 +312,28 @@ const items = computed<DashboardItem[]>(() => [
       {
         title: "Nicht aktuell",
         info: "+ 120 Tagen",
-        content: facilities.value.filter(
-          (facility: any) =>
-           new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate1
-        ).length,
+        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate1).length,
         query: "data_not_up_to_date_1",
         type: "users",
       },
       {
         title: "Nicht aktuell",
         info: "+ 134 Tagen",
-        content: facilities.value.filter(
-          (facility: any) =>
-            new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate2
-        ).length,
+        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate2).length,
         query: "data_not_up_to_date_2",
         type: "users",
       },
       {
         title: "Nicht aktuell",
         info: "+ 226 Tagen",
-        content: facilities.value.filter(
-          (facility: any) =>
-           new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate3
-        ).length,
+        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate3).length,
         query: "data_not_up_to_date_3",
         type: "users",
       },
       {
         title: "Nicht aktuell",
         info: "+ 240 Tagen",
-        content: facilities.value.filter(
-          (facility: any) =>
-           new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate4
-        ).length,
+        content: facilities.value.filter((facility: any) => new Date(facility?.user?.last_care_facility_updated_at) < notUpToDate4).length,
         query: "data_not_up_to_date_4",
         type: "users",
       },
@@ -368,25 +346,19 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Aktive Veranstaltungen",
-        content: facilities.value.filter(
-          (facility: any) => facility?.kind === "event" && facility.is_active === true
-        ).length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "event" && facility.is_active === true).length,
         type: "event",
         query: "active_events",
       },
       {
         title: "Aktive Kurse",
-        content: facilities.value.filter(
-          (facility: any) => facility?.kind === "course" && facility.is_active === true
-        ).length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "course" && facility.is_active === true).length,
         type: "course",
         query: "active_courses",
       },
       {
         title: "Aktive Beiträge",
-        content: facilities.value.filter(
-          (facility: any) => facility?.kind === "news" && facility.is_active === true
-        ).length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "news" && facility.is_active === true).length,
         type: "news",
         query: "active_news",
       },
@@ -400,24 +372,21 @@ const items = computed<DashboardItem[]>(() => [
     sub_items: [
       {
         title: "Veranstaltungen gesamt",
-        content: facilities.value.filter((facility: any) => facility?.kind === "event")
-          .length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "event").length,
         type: "event",
         query: "showAll",
         hasNoSpace: true,
       },
       {
         title: "Kurse gesamt",
-        content: facilities.value.filter((facility: any) => facility?.kind === "course")
-          .length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "course").length,
         type: "course",
         query: "showAll",
         hasNoSpace: true,
       },
       {
         title: "Beiträge gesamt",
-        content: facilities.value.filter((facility: any) => facility?.kind === "news")
-          .length,
+        content: facilities.value.filter((facility: any) => facility?.kind === "news").length,
         type: "news",
         query: "showAll",
         hasNoSpace: true,
@@ -428,7 +397,7 @@ const items = computed<DashboardItem[]>(() => [
 
 onMounted(async () => {
   if (!useUser().isAdmin()) {
-    router.push({ path: '/' });
+    router.push({ path: "/" });
   } else {
     await getItems();
   }

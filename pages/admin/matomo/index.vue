@@ -1,5 +1,5 @@
 <template>
-  <embed class="matomo" src="https://matomo.pocket-rocket.io">
+  <embed class="matomo" src="https://rocketinsights.de">
 </template>
 <script lang="ts" setup>
   definePageMeta({
