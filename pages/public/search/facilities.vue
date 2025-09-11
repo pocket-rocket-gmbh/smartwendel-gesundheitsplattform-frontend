@@ -15,12 +15,10 @@
         </div>
         <div class="results">
           <div class="map-widget">
-            <v-skeleton-loader type="card" v-if="appStore.loading && !breakPoints.isMobile.value"></v-skeleton-loader>
+            <v-skeleton-loader type="card" v-if="appStore.loading"></v-skeleton-loader>
             <ClientMap
               :locations="locations"
-              v-if="
-                showMap && !appStore.loading && filterStore.filteredResults.length > 0
-              "
+              v-if="showMap && !appStore.loading && locations.length"
               ref="map"
               :auto-fit="false"
               :center-point="{
@@ -207,7 +205,7 @@ onMounted(async () => {
 
   await filterStore.loadAllFacilityFilters();
   filterStore.loadFilteredFacilityMainFilters();
-  showMap.value = !breakpoints.isMobile.value;
+
 });
 
 onBeforeUnmount(() => {
