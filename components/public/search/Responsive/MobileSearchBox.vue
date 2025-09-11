@@ -253,6 +253,7 @@ onMounted(() => {
 .basic-search-box
   background: linear-gradient(88.43deg, #91A80D 13.65%, #BAC323 35.37%, #9EA100 82.27%)
   padding: 1rem
+  margin-top: 1rem
 
   .more-filters
     display: flex
