@@ -122,7 +122,7 @@
             title="Registrieren"
             icon
             @click="goToRegister"
-          >            
+          >
             <img :src="regiterIcon" />
           </v-btn>
           <!-- Login -->
@@ -332,21 +332,24 @@
               <span>Veranstaltungen</span>
             </div>
           </div>
+
+          <div
+            href="/rules_of_conduct"
+            class="is-clickable categories-wrapper-mobile py-5"
+            :class="[currentRoute.includes('rules_of_conduct') ? 'is-visited' : '']"
+            @click.prevent="goTo('/rules_of_conduct')"
+          >
+            <div class="d-flex align-center general-font-size">
+              <v-icon
+                color="#8AB61D"
+                class="icons-menu mr-5"
+                style="height: 60px"
+                >mdi-note-check-outline</v-icon
+              >
+              <span>Nutzungsbedingungen</span>
+            </div>
+          </div>
         </template>
-      </div>
-      <div class="terms-of-use d-flex justify-start ga-7">
-        <v-icon
-          color="#8AB61D"
-          class="ml-2 py-5"
-          >mdi-note-check-outline</v-icon
-        >
-        <div
-          class="is-clickable general-font-size"
-          @click.prevent="goTo('/rules_of_conduct')"
-        >
-          Nutzungsbedingungen
-        </div>
-        <v-icon></v-icon>
       </div>
     </v-navigation-drawer>
   </div>
