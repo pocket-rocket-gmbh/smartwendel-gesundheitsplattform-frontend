@@ -43,3 +43,17 @@ Run `npm run dev` to start the Nuxt 3 development server in SSR mode
 ### Support
 Pocket Rocket GmbH
 admin@pocket-rocket.io
+
+## Deploy on Coolify
+
+The repo ships a multi-stage `Dockerfile` (Node 20 like on Heroku, Nitro node-server, runs as `node`) and a `.dockerignore`. Heroku keeps working unchanged (`npm run build` + `npm start`).
+
+1. **New Resource → Application → Dockerfile**, point it at this repo and the branch to deploy.
+2. **Port:** `3000` (the container listens on `0.0.0.0:3000`).
+3. **Environment variables:** copy from `.env.example`.
+   - `[BUILD]` variables (`API_BASE_URL`) need **"Build Variable"** enabled: `nuxt.config.ts` reads them during `nuxt build`. A change needs a rebuild, not just a restart.
+   - `[RUNTIME]` secrets are normal runtime variables in their `NUXT_` form (`NUXT_PUBLIC_API_USERNAME`, `NUXT_PUBLIC_API_PASSWORD`, `NUXT_REGISTER_TOKEN`, `NUXT_LOGIN_PASSWORD`).
+4. **Health check:** `GET /` on port 3000. Requests to `localhost` skip the HTTPS redirect, so the internal check gets a 200.
+5. Deploy. Coolify builds the image and starts `node .output/server/index.mjs`.
+
+The Docker build sets `CYPRESS_INSTALL_BINARY=0`, so `npm ci` skips the Cypress binary download.
