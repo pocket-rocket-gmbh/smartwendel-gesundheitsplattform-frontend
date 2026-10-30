@@ -46,7 +46,7 @@ admin@pocket-rocket.io
 
 ## Deploy on Coolify
 
-The repo ships a multi-stage `Dockerfile` (Node 20 like on Heroku, Nitro node-server, runs as `node`) and a `.dockerignore`. Heroku keeps working unchanged (`npm run build` + `npm start`).
+The repo ships a multi-stage `Dockerfile` (Node 24 like on Heroku, Nitro node-server, runs as `node`) and a `.dockerignore`. Heroku keeps working unchanged (`npm run build` + `npm start`).
 
 1. **New Resource → Application → Dockerfile**, point it at this repo and the branch to deploy.
 2. **Port:** `3000` (the container listens on `0.0.0.0:3000`).
